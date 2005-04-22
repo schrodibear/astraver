@@ -3,20 +3,14 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation.why", characters 3265-3282 *)
+(* Why obligation from file "why/separation.why", characters 2698-2715 *)
 Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (p1: ((memory) pointer)),
   forall (p2: ((memory) pointer)),
   forall (u1: pointer),
   forall (u2: pointer),
-  forall (Pre7: (forall (x_0:pointer),
-                 (x_0 = u1 \/ x_0 = u2 -> ((((valid alloc x_0) /\
-                  (valid alloc (acc p1 x_0))) /\
-                  (valid alloc (acc p2 x_0))) /\
-                  (valid_range alloc (acc p1 x_0) 0 5)) /\
-                  (valid_range alloc (acc p2 x_0) 0 5))) /\
-                (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
                 (separation1 p1 p2) /\
                 (separation_u2_u1 alloc p1 p2 u1 u2) /\
                 (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
@@ -30,11 +24,9 @@ Lemma f1_impl_po_1 :
                 (separation2 p2 p2) /\ (separation2 p1 p2) /\
                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                 (forall (index_34:pointer), (forall (index_35:pointer), True))),
-  (((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
-  (valid alloc (acc p2 u1))) /\ (valid_range alloc (acc p1 u1) 0 5)) /\
-  (valid_range alloc (acc p2 u1) 0 5)) /\ (valid1_range p2 5) /\
-  (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\
-  (separation2 p1 p2) /\ (separation2 p1 p1) /\
+  (valid alloc u1) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\ (separation2 p1 p2) /\
+  (separation2 p1 p1) /\
   (forall (index_28:pointer), (forall (index_29:pointer), True)) /\
   (forall (index_54:pointer), (forall (index_55:pointer), True)) /\
   (forall (index_60:pointer), (forall (index_61:pointer), True)) /\
@@ -47,7 +39,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 3285-3302 *)
+(* Why obligation from file "why/separation.why", characters 2718-2735 *)
 Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -57,13 +49,7 @@ Lemma f1_impl_po_2 :
   forall (u2: pointer),
   forall (v1: ((memory) Z)),
   forall (v2: ((memory) Z)),
-  forall (Pre7: (forall (x_0:pointer),
-                 (x_0 = u1 \/ x_0 = u2 -> ((((valid alloc x_0) /\
-                  (valid alloc (acc p1 x_0))) /\
-                  (valid alloc (acc p2 x_0))) /\
-                  (valid_range alloc (acc p1 x_0) 0 5)) /\
-                  (valid_range alloc (acc p2 x_0) 0 5))) /\
-                (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
                 (separation1 p1 p2) /\
                 (separation_u2_u1 alloc p1 p2 u1 u2) /\
                 (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
@@ -77,13 +63,9 @@ Lemma f1_impl_po_2 :
                 (separation2 p2 p2) /\ (separation2 p1 p2) /\
                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                 (forall (index_34:pointer), (forall (index_35:pointer), True))),
-  forall (Pre6: (((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
-                (valid alloc (acc p2 u1))) /\
-                (valid_range alloc (acc p1 u1) 0 5)) /\
-                (valid_range alloc (acc p2 u1) 0 5)) /\
-                (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\
-                (separation2 p1 p2) /\ (separation2 p1 p1) /\
+  forall (Pre6: (valid alloc u1) /\ (valid1_range p2 5) /\
+                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
+                (valid1 p1) /\ (separation2 p1 p2) /\ (separation2 p1 p1) /\
                 (forall (index_28:pointer), (forall (index_29:pointer), True)) /\
                 (forall (index_54:pointer), (forall (index_55:pointer), True)) /\
                 (forall (index_60:pointer), (forall (index_61:pointer), True)) /\
@@ -98,8 +80,8 @@ Lemma f1_impl_po_2 :
   forall (Post3: (((not_assigns alloc v2 v2_0 (pset_singleton u1)) /\
                  (not_assigns alloc v1 v1_0 (pset_singleton u1))) /\
                  (not_assigns alloc intP intP0
-                  (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 5)
-                   (pset_range (pset_singleton (acc p1 u1)) 0 5)))) /\
+                  (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
+                   (pset_range (pset_singleton (acc p1 u1)) 0 4)))) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
                  (forall (index_54:pointer),
@@ -112,11 +94,9 @@ Lemma f1_impl_po_2 :
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True))),
-  (((((valid alloc u2) /\ (valid alloc (acc p1 u2))) /\
-  (valid alloc (acc p2 u2))) /\ (valid_range alloc (acc p1 u2) 0 5)) /\
-  (valid_range alloc (acc p2 u2) 0 5)) /\ (valid1_range p2 5) /\
-  (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\
-  (separation2 p1 p2) /\ (separation2 p1 p1) /\
+  (valid alloc u2) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\ (separation2 p1 p2) /\
+  (separation2 p1 p1) /\
   (forall (index_28:pointer), (forall (index_29:pointer), True)) /\
   (forall (index_54:pointer), (forall (index_55:pointer), True)) /\
   (forall (index_60:pointer), (forall (index_61:pointer), True)) /\
@@ -129,7 +109,7 @@ Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36-4471 *)
+(* Why obligation from file "why/separation.why", characters 36-3904 *)
 Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -139,13 +119,7 @@ Lemma f1_impl_po_3 :
   forall (u2: pointer),
   forall (v1: ((memory) Z)),
   forall (v2: ((memory) Z)),
-  forall (Pre7: (forall (x_0:pointer),
-                 (x_0 = u1 \/ x_0 = u2 -> ((((valid alloc x_0) /\
-                  (valid alloc (acc p1 x_0))) /\
-                  (valid alloc (acc p2 x_0))) /\
-                  (valid_range alloc (acc p1 x_0) 0 5)) /\
-                  (valid_range alloc (acc p2 x_0) 0 5))) /\
-                (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
                 (separation1 p1 p2) /\
                 (separation_u2_u1 alloc p1 p2 u1 u2) /\
                 (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
@@ -159,13 +133,9 @@ Lemma f1_impl_po_3 :
                 (separation2 p2 p2) /\ (separation2 p1 p2) /\
                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                 (forall (index_34:pointer), (forall (index_35:pointer), True))),
-  forall (Pre6: (((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
-                (valid alloc (acc p2 u1))) /\
-                (valid_range alloc (acc p1 u1) 0 5)) /\
-                (valid_range alloc (acc p2 u1) 0 5)) /\
-                (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\
-                (separation2 p1 p2) /\ (separation2 p1 p1) /\
+  forall (Pre6: (valid alloc u1) /\ (valid1_range p2 5) /\
+                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
+                (valid1 p1) /\ (separation2 p1 p2) /\ (separation2 p1 p1) /\
                 (forall (index_28:pointer), (forall (index_29:pointer), True)) /\
                 (forall (index_54:pointer), (forall (index_55:pointer), True)) /\
                 (forall (index_60:pointer), (forall (index_61:pointer), True)) /\
@@ -180,8 +150,8 @@ Lemma f1_impl_po_3 :
   forall (Post3: (((not_assigns alloc v2 v2_0 (pset_singleton u1)) /\
                  (not_assigns alloc v1 v1_0 (pset_singleton u1))) /\
                  (not_assigns alloc intP intP0
-                  (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 5)
-                   (pset_range (pset_singleton (acc p1 u1)) 0 5)))) /\
+                  (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
+                   (pset_range (pset_singleton (acc p1 u1)) 0 4)))) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
                  (forall (index_54:pointer),
@@ -194,13 +164,9 @@ Lemma f1_impl_po_3 :
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True))),
-  forall (Pre5: (((((valid alloc u2) /\ (valid alloc (acc p1 u2))) /\
-                (valid alloc (acc p2 u2))) /\
-                (valid_range alloc (acc p1 u2) 0 5)) /\
-                (valid_range alloc (acc p2 u2) 0 5)) /\
-                (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1) /\
-                (separation2 p1 p2) /\ (separation2 p1 p1) /\
+  forall (Pre5: (valid alloc u2) /\ (valid1_range p2 5) /\
+                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
+                (valid1 p1) /\ (separation2 p1 p2) /\ (separation2 p1 p1) /\
                 (forall (index_28:pointer), (forall (index_29:pointer), True)) /\
                 (forall (index_54:pointer), (forall (index_55:pointer), True)) /\
                 (forall (index_60:pointer), (forall (index_61:pointer), True)) /\
@@ -215,8 +181,8 @@ Lemma f1_impl_po_3 :
   forall (Post5: (((not_assigns alloc v2_0 v2_1 (pset_singleton u2)) /\
                  (not_assigns alloc v1_0 v1_1 (pset_singleton u2))) /\
                  (not_assigns alloc intP0 intP1
-                  (pset_union (pset_range (pset_singleton (acc p2 u2)) 0 5)
-                   (pset_range (pset_singleton (acc p1 u2)) 0 5)))) /\
+                  (pset_union (pset_range (pset_singleton (acc p2 u2)) 0 4)
+                   (pset_range (pset_singleton (acc p1 u2)) 0 4)))) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
                  (forall (index_54:pointer),
@@ -234,10 +200,10 @@ Lemma f1_impl_po_3 :
   (not_assigns alloc v1 v1_1
    (pset_union (pset_singleton u2) (pset_singleton u1)))) /\
   (not_assigns alloc intP intP1
-   (pset_union (pset_range (pset_singleton (acc p2 u2)) 0 5)
-    (pset_union (pset_range (pset_singleton (acc p1 u2)) 0 5)
-     (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 5)
-      (pset_range (pset_singleton (acc p1 u1)) 0 5)))))) /\
+   (pset_union (pset_range (pset_singleton (acc p2 u2)) 0 4)
+    (pset_union (pset_range (pset_singleton (acc p1 u2)) 0 4)
+     (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
+      (pset_range (pset_singleton (acc p1 u1)) 0 4)))))) /\
   (forall (index_28:pointer), (forall (index_29:pointer), True)) /\
   (forall (index_54:pointer), (forall (index_55:pointer), True)) /\
   (forall (index_60:pointer), (forall (index_61:pointer), True)) /\
@@ -249,44 +215,44 @@ Proof.
 intuition.
 apply not_assigns_trans with v2_0.
 unfold not_assigns;intros.
-apply H47;auto.
+apply H38;auto.
+apply pset_union_elim2 with (pset_singleton u2);auto.
+unfold not_assigns;intros.
+apply H63;auto.
+apply pset_union_elim1 with (pset_singleton u1);auto.
+apply not_assigns_trans with v1_0.
+unfold not_assigns;intros.
+apply H43;auto.
 apply pset_union_elim2 with (pset_singleton u2);auto.
 unfold not_assigns;intros.
 apply H67;auto.
 apply pset_union_elim1 with (pset_singleton u1);auto.
-apply not_assigns_trans with v1_0.
-unfold not_assigns;intros.
-apply H48;auto.
-apply pset_union_elim2 with (pset_singleton u2);auto.
-unfold not_assigns;intros.
-apply H68;auto.
-apply pset_union_elim1 with (pset_singleton u1);auto.
 apply not_assigns_trans with intP0.
 unfold not_assigns;intros.
-apply H44;auto.
-generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 5) 
-(pset_union (pset_range (pset_singleton (u2 # p1)) 0 5)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5)))
-p H69);intro.
-apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p1)) 0 5);auto.
+apply H40;auto.
+generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 4) 
+(pset_union (pset_range (pset_singleton (u2 # p1)) 0 4)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4)))
+p H73);intro.
+apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p1)) 0 4);auto.
 unfold not_assigns;intros.
-apply H66;auto.
-generalize (pset_union_elim1 (pset_range (pset_singleton (u2 # p2)) 0 5) 
-(pset_union (pset_range (pset_singleton (u2 # p1)) 0 5)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5)))
-p H69);intro.
-generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 5) 
-(pset_union (pset_range (pset_singleton (u2 # p1)) 0 5)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5)))
-p H69);intro.
+apply H65;auto.
+generalize (pset_union_elim1 (pset_range (pset_singleton (u2 # p2)) 0 4) 
+(pset_union (pset_range (pset_singleton (u2 # p1)) 0 4)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4)))
+p H73);intro.
+generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 4) 
+(pset_union (pset_range (pset_singleton (u2 # p1)) 0 4)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4)))
+p H73);intro.
 generalize (pset_union_elim1 
-(pset_range (pset_singleton (u2 # p1)) 0 5)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5))
-p H71);intro.
+(pset_range (pset_singleton (u2 # p1)) 0 4)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4))
+p H75);intro.
 apply pset_union_intro;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41690-41707 *)
+(* Why obligation from file "why/separation.why", characters 40163-40180 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -303,16 +269,7 @@ Lemma f3_impl_po_1 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -416,11 +373,8 @@ Lemma f3_impl_po_1 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  (((((valid alloc u3) /\ (valid alloc (acc anonymous_2_p1 u3))) /\
-  (valid alloc (acc anonymous_2_p2 u3))) /\
-  (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -439,7 +393,7 @@ intuition;
 generalize (H1 u3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41713-41730 *)
+(* Why obligation from file "why/separation.why", characters 40186-40203 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -459,16 +413,7 @@ Lemma f3_impl_po_2 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -572,12 +517,7 @@ Lemma f3_impl_po_2 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -603,9 +543,9 @@ Lemma f3_impl_po_2 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -622,11 +562,8 @@ Lemma f3_impl_po_2 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc u4) /\ (valid alloc (acc anonymous_2_p1 u4))) /\
-  (valid alloc (acc anonymous_2_p2 u4))) /\
-  (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -644,7 +581,7 @@ Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41736-41753 *)
+(* Why obligation from file "why/separation.why", characters 40209-40226 *)
 Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -664,16 +601,7 @@ Lemma f3_impl_po_3 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -777,12 +705,7 @@ Lemma f3_impl_po_3 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -808,9 +731,9 @@ Lemma f3_impl_po_3 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -827,12 +750,7 @@ Lemma f3_impl_po_3 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -858,9 +776,9 @@ Lemma f3_impl_po_3 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -877,11 +795,8 @@ Lemma f3_impl_po_3 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w1) /\ (valid alloc (acc anonymous_2_p1 w1))) /\
-  (valid alloc (acc anonymous_2_p2 w1))) /\
-  (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -899,7 +814,7 @@ Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41759-41776 *)
+(* Why obligation from file "why/separation.why", characters 40232-40249 *)
 Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -919,16 +834,7 @@ Lemma f3_impl_po_4 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -1032,12 +938,7 @@ Lemma f3_impl_po_4 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1063,9 +964,9 @@ Lemma f3_impl_po_4 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1082,12 +983,7 @@ Lemma f3_impl_po_4 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1113,9 +1009,9 @@ Lemma f3_impl_po_4 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1132,12 +1028,7 @@ Lemma f3_impl_po_4 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1163,9 +1054,9 @@ Lemma f3_impl_po_4 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1182,11 +1073,8 @@ Lemma f3_impl_po_4 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w2) /\ (valid alloc (acc anonymous_2_p1 w2))) /\
-  (valid alloc (acc anonymous_2_p2 w2))) /\
-  (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -1204,7 +1092,7 @@ Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41782-41799 *)
+(* Why obligation from file "why/separation.why", characters 40255-40272 *)
 Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1224,16 +1112,7 @@ Lemma f3_impl_po_5 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -1337,12 +1216,7 @@ Lemma f3_impl_po_5 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1368,9 +1242,9 @@ Lemma f3_impl_po_5 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1387,12 +1261,7 @@ Lemma f3_impl_po_5 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1418,9 +1287,9 @@ Lemma f3_impl_po_5 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1437,12 +1306,7 @@ Lemma f3_impl_po_5 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1468,9 +1332,9 @@ Lemma f3_impl_po_5 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1487,12 +1351,7 @@ Lemma f3_impl_po_5 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1518,9 +1377,9 @@ Lemma f3_impl_po_5 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1537,11 +1396,8 @@ Lemma f3_impl_po_5 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w3) /\ (valid alloc (acc anonymous_2_p1 w3))) /\
-  (valid alloc (acc anonymous_2_p2 w3))) /\
-  (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -1559,7 +1415,7 @@ Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41805-41822 *)
+(* Why obligation from file "why/separation.why", characters 40278-40295 *)
 Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1579,16 +1435,7 @@ Lemma f3_impl_po_6 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -1692,12 +1539,7 @@ Lemma f3_impl_po_6 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1723,9 +1565,9 @@ Lemma f3_impl_po_6 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1742,12 +1584,7 @@ Lemma f3_impl_po_6 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1773,9 +1610,9 @@ Lemma f3_impl_po_6 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1792,12 +1629,7 @@ Lemma f3_impl_po_6 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1823,9 +1655,9 @@ Lemma f3_impl_po_6 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1842,12 +1674,7 @@ Lemma f3_impl_po_6 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1873,9 +1700,9 @@ Lemma f3_impl_po_6 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1892,12 +1719,7 @@ Lemma f3_impl_po_6 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -1923,9 +1745,9 @@ Lemma f3_impl_po_6 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -1942,11 +1764,8 @@ Lemma f3_impl_po_6 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w4) /\ (valid alloc (acc anonymous_2_p1 w4))) /\
-  (valid alloc (acc anonymous_2_p2 w4))) /\
-  (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -1964,7 +1783,7 @@ Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41828-41845 *)
+(* Why obligation from file "why/separation.why", characters 40301-40318 *)
 Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1984,16 +1803,7 @@ Lemma f3_impl_po_7 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -2097,12 +1907,7 @@ Lemma f3_impl_po_7 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2128,9 +1933,9 @@ Lemma f3_impl_po_7 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -2147,12 +1952,7 @@ Lemma f3_impl_po_7 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2178,9 +1978,9 @@ Lemma f3_impl_po_7 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -2197,12 +1997,7 @@ Lemma f3_impl_po_7 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2228,9 +2023,9 @@ Lemma f3_impl_po_7 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -2247,12 +2042,7 @@ Lemma f3_impl_po_7 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2278,9 +2068,9 @@ Lemma f3_impl_po_7 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -2297,12 +2087,7 @@ Lemma f3_impl_po_7 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2328,9 +2113,9 @@ Lemma f3_impl_po_7 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -2347,12 +2132,7 @@ Lemma f3_impl_po_7 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2378,9 +2158,9 @@ Lemma f3_impl_po_7 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -2397,11 +2177,8 @@ Lemma f3_impl_po_7 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w5) /\ (valid alloc (acc anonymous_2_p1 w5))) /\
-  (valid alloc (acc anonymous_2_p2 w5))) /\
-  (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -2419,7 +2196,7 @@ Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41851-41868 *)
+(* Why obligation from file "why/separation.why", characters 40324-40341 *)
 Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2439,16 +2216,7 @@ Lemma f3_impl_po_8 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -2552,12 +2320,7 @@ Lemma f3_impl_po_8 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2583,9 +2346,9 @@ Lemma f3_impl_po_8 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -2602,12 +2365,7 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2633,9 +2391,9 @@ Lemma f3_impl_po_8 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -2652,12 +2410,7 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2683,9 +2436,9 @@ Lemma f3_impl_po_8 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -2702,12 +2455,7 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2733,9 +2481,9 @@ Lemma f3_impl_po_8 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -2752,12 +2500,7 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2783,9 +2526,9 @@ Lemma f3_impl_po_8 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -2802,12 +2545,7 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2833,9 +2571,9 @@ Lemma f3_impl_po_8 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -2852,12 +2590,7 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre30: (((((valid alloc w5) /\
-                 (valid alloc (acc anonymous_2_p1 w5))) /\
-                 (valid alloc (acc anonymous_2_p2 w5))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -2883,9 +2616,9 @@ Lemma f3_impl_po_8 :
   forall (Post25: (((not_assigns alloc intP5 intP6
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w5))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -2902,11 +2635,8 @@ Lemma f3_impl_po_8 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w6) /\ (valid alloc (acc anonymous_2_p1 w6))) /\
-  (valid alloc (acc anonymous_2_p2 w6))) /\
-  (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w6) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -2924,7 +2654,7 @@ Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41874-41891 *)
+(* Why obligation from file "why/separation.why", characters 40347-40364 *)
 Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2944,16 +2674,7 @@ Lemma f3_impl_po_9 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -3057,12 +2778,7 @@ Lemma f3_impl_po_9 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3088,9 +2804,9 @@ Lemma f3_impl_po_9 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -3107,12 +2823,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3138,9 +2849,9 @@ Lemma f3_impl_po_9 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -3157,12 +2868,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3188,9 +2894,9 @@ Lemma f3_impl_po_9 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -3207,12 +2913,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3238,9 +2939,9 @@ Lemma f3_impl_po_9 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -3257,12 +2958,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3288,9 +2984,9 @@ Lemma f3_impl_po_9 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -3307,12 +3003,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3338,9 +3029,9 @@ Lemma f3_impl_po_9 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -3357,12 +3048,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre30: (((((valid alloc w5) /\
-                 (valid alloc (acc anonymous_2_p1 w5))) /\
-                 (valid alloc (acc anonymous_2_p2 w5))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3388,9 +3074,9 @@ Lemma f3_impl_po_9 :
   forall (Post25: (((not_assigns alloc intP5 intP6
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w5))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -3407,12 +3093,7 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre29: (((((valid alloc w6) /\
-                 (valid alloc (acc anonymous_2_p1 w6))) /\
-                 (valid alloc (acc anonymous_2_p2 w6))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3438,9 +3119,9 @@ Lemma f3_impl_po_9 :
   forall (Post27: (((not_assigns alloc intP6 intP7
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w6))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -3457,11 +3138,8 @@ Lemma f3_impl_po_9 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w7) /\ (valid alloc (acc anonymous_2_p1 w7))) /\
-  (valid alloc (acc anonymous_2_p2 w7))) /\
-  (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w7) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -3479,7 +3157,7 @@ Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41897-41914 *)
+(* Why obligation from file "why/separation.why", characters 40370-40387 *)
 Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -3499,16 +3177,7 @@ Lemma f3_impl_po_10 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -3612,12 +3281,7 @@ Lemma f3_impl_po_10 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3643,9 +3307,9 @@ Lemma f3_impl_po_10 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -3662,12 +3326,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3693,9 +3352,9 @@ Lemma f3_impl_po_10 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -3712,12 +3371,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3743,9 +3397,9 @@ Lemma f3_impl_po_10 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -3762,12 +3416,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3793,9 +3442,9 @@ Lemma f3_impl_po_10 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -3812,12 +3461,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3843,9 +3487,9 @@ Lemma f3_impl_po_10 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -3862,12 +3506,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3893,9 +3532,9 @@ Lemma f3_impl_po_10 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -3912,12 +3551,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre30: (((((valid alloc w5) /\
-                 (valid alloc (acc anonymous_2_p1 w5))) /\
-                 (valid alloc (acc anonymous_2_p2 w5))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3943,9 +3577,9 @@ Lemma f3_impl_po_10 :
   forall (Post25: (((not_assigns alloc intP5 intP6
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w5))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -3962,12 +3596,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre29: (((((valid alloc w6) /\
-                 (valid alloc (acc anonymous_2_p1 w6))) /\
-                 (valid alloc (acc anonymous_2_p2 w6))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -3993,9 +3622,9 @@ Lemma f3_impl_po_10 :
   forall (Post27: (((not_assigns alloc intP6 intP7
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w6))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -4012,12 +3641,7 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre28: (((((valid alloc w7) /\
-                 (valid alloc (acc anonymous_2_p1 w7))) /\
-                 (valid alloc (acc anonymous_2_p2 w7))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4043,9 +3667,9 @@ Lemma f3_impl_po_10 :
   forall (Post29: (((not_assigns alloc intP7 intP8
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w7))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -4062,11 +3686,8 @@ Lemma f3_impl_po_10 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w8) /\ (valid alloc (acc anonymous_2_p1 w8))) /\
-  (valid alloc (acc anonymous_2_p2 w8))) /\
-  (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w8) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -4084,7 +3705,7 @@ Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41920-41937 *)
+(* Why obligation from file "why/separation.why", characters 40393-40410 *)
 Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -4104,16 +3725,7 @@ Lemma f3_impl_po_11 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -4217,12 +3829,7 @@ Lemma f3_impl_po_11 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4248,9 +3855,9 @@ Lemma f3_impl_po_11 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -4267,12 +3874,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4298,9 +3900,9 @@ Lemma f3_impl_po_11 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -4317,12 +3919,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4348,9 +3945,9 @@ Lemma f3_impl_po_11 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -4367,12 +3964,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4398,9 +3990,9 @@ Lemma f3_impl_po_11 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -4417,12 +4009,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4448,9 +4035,9 @@ Lemma f3_impl_po_11 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -4467,12 +4054,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4498,9 +4080,9 @@ Lemma f3_impl_po_11 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -4517,12 +4099,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre30: (((((valid alloc w5) /\
-                 (valid alloc (acc anonymous_2_p1 w5))) /\
-                 (valid alloc (acc anonymous_2_p2 w5))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4548,9 +4125,9 @@ Lemma f3_impl_po_11 :
   forall (Post25: (((not_assigns alloc intP5 intP6
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w5))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -4567,12 +4144,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre29: (((((valid alloc w6) /\
-                 (valid alloc (acc anonymous_2_p1 w6))) /\
-                 (valid alloc (acc anonymous_2_p2 w6))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4598,9 +4170,9 @@ Lemma f3_impl_po_11 :
   forall (Post27: (((not_assigns alloc intP6 intP7
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w6))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -4617,12 +4189,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre28: (((((valid alloc w7) /\
-                 (valid alloc (acc anonymous_2_p1 w7))) /\
-                 (valid alloc (acc anonymous_2_p2 w7))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4648,9 +4215,9 @@ Lemma f3_impl_po_11 :
   forall (Post29: (((not_assigns alloc intP7 intP8
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w7))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -4667,12 +4234,7 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre27: (((((valid alloc w8) /\
-                 (valid alloc (acc anonymous_2_p1 w8))) /\
-                 (valid alloc (acc anonymous_2_p2 w8))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w8) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4698,9 +4260,9 @@ Lemma f3_impl_po_11 :
   forall (Post31: (((not_assigns alloc intP8 intP9
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w8))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
                    (pset_singleton w8))) /\
                   (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
@@ -4717,11 +4279,8 @@ Lemma f3_impl_po_11 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w9) /\ (valid alloc (acc anonymous_2_p1 w9))) /\
-  (valid alloc (acc anonymous_2_p2 w9))) /\
-  (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w9) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -4739,7 +4298,7 @@ Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41943-41961 *)
+(* Why obligation from file "why/separation.why", characters 40416-40434 *)
 Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -4759,16 +4318,7 @@ Lemma f3_impl_po_12 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -4872,12 +4422,7 @@ Lemma f3_impl_po_12 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4903,9 +4448,9 @@ Lemma f3_impl_po_12 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -4922,12 +4467,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -4953,9 +4493,9 @@ Lemma f3_impl_po_12 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -4972,12 +4512,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5003,9 +4538,9 @@ Lemma f3_impl_po_12 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -5022,12 +4557,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5053,9 +4583,9 @@ Lemma f3_impl_po_12 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -5072,12 +4602,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5103,9 +4628,9 @@ Lemma f3_impl_po_12 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -5122,12 +4647,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5153,9 +4673,9 @@ Lemma f3_impl_po_12 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -5172,12 +4692,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre30: (((((valid alloc w5) /\
-                 (valid alloc (acc anonymous_2_p1 w5))) /\
-                 (valid alloc (acc anonymous_2_p2 w5))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5203,9 +4718,9 @@ Lemma f3_impl_po_12 :
   forall (Post25: (((not_assigns alloc intP5 intP6
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w5))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -5222,12 +4737,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre29: (((((valid alloc w6) /\
-                 (valid alloc (acc anonymous_2_p1 w6))) /\
-                 (valid alloc (acc anonymous_2_p2 w6))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5253,9 +4763,9 @@ Lemma f3_impl_po_12 :
   forall (Post27: (((not_assigns alloc intP6 intP7
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w6))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -5272,12 +4782,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre28: (((((valid alloc w7) /\
-                 (valid alloc (acc anonymous_2_p1 w7))) /\
-                 (valid alloc (acc anonymous_2_p2 w7))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5303,9 +4808,9 @@ Lemma f3_impl_po_12 :
   forall (Post29: (((not_assigns alloc intP7 intP8
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w7))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -5322,12 +4827,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre27: (((((valid alloc w8) /\
-                 (valid alloc (acc anonymous_2_p1 w8))) /\
-                 (valid alloc (acc anonymous_2_p2 w8))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w8) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5353,9 +4853,9 @@ Lemma f3_impl_po_12 :
   forall (Post31: (((not_assigns alloc intP8 intP9
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w8))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
                    (pset_singleton w8))) /\
                   (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
@@ -5372,12 +4872,7 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre26: (((((valid alloc w9) /\
-                 (valid alloc (acc anonymous_2_p1 w9))) /\
-                 (valid alloc (acc anonymous_2_p2 w9))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w9) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre26: (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5403,9 +4898,9 @@ Lemma f3_impl_po_12 :
   forall (Post33: (((not_assigns alloc intP9 intP10
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w9))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
                    (pset_singleton w9))) /\
                   (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
@@ -5422,11 +4917,8 @@ Lemma f3_impl_po_12 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  (((((valid alloc w10) /\ (valid alloc (acc anonymous_2_p1 w10))) /\
-  (valid alloc (acc anonymous_2_p2 w10))) /\
-  (valid_range alloc (acc anonymous_2_p1 w10) 0 5)) /\
-  (valid_range alloc (acc anonymous_2_p2 w10) 0 5)) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\
   (separation2 anonymous_2_p1 anonymous_2_p2) /\
   (separation2 anonymous_2_p1 anonymous_2_p1) /\ (valid1 anonymous_2_p2) /\
   (valid1 anonymous_2_p1) /\
@@ -5444,7 +4936,7 @@ Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 4510-45712 *)
+(* Why obligation from file "why/separation.why", characters 3943-44185 *)
 Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -5464,16 +4956,7 @@ Lemma f3_impl_po_13 :
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (forall (x_0:pointer),
-                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
-                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
-                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
-                   x_0 = w10 -> ((((valid alloc x_0) /\
-                   (valid alloc (acc anonymous_2_p1 x_0))) /\
-                   (valid alloc (acc anonymous_2_p2 x_0))) /\
-                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
-                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
                  (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
@@ -5577,12 +5060,7 @@ Lemma f3_impl_po_13 :
                  (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
                  (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
                  (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
-  forall (Pre36: (((((valid alloc u3) /\
-                 (valid alloc (acc anonymous_2_p1 u3))) /\
-                 (valid alloc (acc anonymous_2_p2 u3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5608,9 +5086,9 @@ Lemma f3_impl_po_13 :
   forall (Post13: (((not_assigns alloc intP intP0
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -5627,12 +5105,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre35: (((((valid alloc u4) /\
-                 (valid alloc (acc anonymous_2_p1 u4))) /\
-                 (valid alloc (acc anonymous_2_p2 u4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5658,9 +5131,9 @@ Lemma f3_impl_po_13 :
   forall (Post15: (((not_assigns alloc intP0 intP1
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               u4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -5677,12 +5150,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre34: (((((valid alloc w1) /\
-                 (valid alloc (acc anonymous_2_p1 w1))) /\
-                 (valid alloc (acc anonymous_2_p2 w1))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5708,9 +5176,9 @@ Lemma f3_impl_po_13 :
   forall (Post17: (((not_assigns alloc intP1 intP2
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w1))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -5727,12 +5195,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre33: (((((valid alloc w2) /\
-                 (valid alloc (acc anonymous_2_p1 w2))) /\
-                 (valid alloc (acc anonymous_2_p2 w2))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5758,9 +5221,9 @@ Lemma f3_impl_po_13 :
   forall (Post19: (((not_assigns alloc intP2 intP3
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -5777,12 +5240,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre32: (((((valid alloc w3) /\
-                 (valid alloc (acc anonymous_2_p1 w3))) /\
-                 (valid alloc (acc anonymous_2_p2 w3))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5808,9 +5266,9 @@ Lemma f3_impl_po_13 :
   forall (Post21: (((not_assigns alloc intP3 intP4
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w3))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -5827,12 +5285,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre31: (((((valid alloc w4) /\
-                 (valid alloc (acc anonymous_2_p1 w4))) /\
-                 (valid alloc (acc anonymous_2_p2 w4))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5858,9 +5311,9 @@ Lemma f3_impl_po_13 :
   forall (Post23: (((not_assigns alloc intP4 intP5
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w4))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -5877,12 +5330,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre30: (((((valid alloc w5) /\
-                 (valid alloc (acc anonymous_2_p1 w5))) /\
-                 (valid alloc (acc anonymous_2_p2 w5))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5908,9 +5356,9 @@ Lemma f3_impl_po_13 :
   forall (Post25: (((not_assigns alloc intP5 intP6
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w5))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -5927,12 +5375,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre29: (((((valid alloc w6) /\
-                 (valid alloc (acc anonymous_2_p1 w6))) /\
-                 (valid alloc (acc anonymous_2_p2 w6))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -5958,9 +5401,9 @@ Lemma f3_impl_po_13 :
   forall (Post27: (((not_assigns alloc intP6 intP7
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w6))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -5977,12 +5420,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre28: (((((valid alloc w7) /\
-                 (valid alloc (acc anonymous_2_p1 w7))) /\
-                 (valid alloc (acc anonymous_2_p2 w7))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -6008,9 +5446,9 @@ Lemma f3_impl_po_13 :
   forall (Post29: (((not_assigns alloc intP7 intP8
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w7))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -6027,12 +5465,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre27: (((((valid alloc w8) /\
-                 (valid alloc (acc anonymous_2_p1 w8))) /\
-                 (valid alloc (acc anonymous_2_p2 w8))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w8) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -6058,9 +5491,9 @@ Lemma f3_impl_po_13 :
   forall (Post31: (((not_assigns alloc intP8 intP9
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w8))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
                    (pset_singleton w8))) /\
                   (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
@@ -6077,12 +5510,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre26: (((((valid alloc w9) /\
-                 (valid alloc (acc anonymous_2_p1 w9))) /\
-                 (valid alloc (acc anonymous_2_p2 w9))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w9) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre26: (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -6108,9 +5536,9 @@ Lemma f3_impl_po_13 :
   forall (Post33: (((not_assigns alloc intP9 intP10
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w9))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
                    (pset_singleton w9))) /\
                   (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
@@ -6127,12 +5555,7 @@ Lemma f3_impl_po_13 :
                   (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
-  forall (Pre25: (((((valid alloc w10) /\
-                 (valid alloc (acc anonymous_2_p1 w10))) /\
-                 (valid alloc (acc anonymous_2_p2 w10))) /\
-                 (valid_range alloc (acc anonymous_2_p1 w10) 0 5)) /\
-                 (valid_range alloc (acc anonymous_2_p2 w10) 0 5)) /\
-                 (valid1_range anonymous_2_p2 5) /\
+  forall (Pre25: (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
@@ -6158,9 +5581,9 @@ Lemma f3_impl_po_13 :
   forall (Post35: (((not_assigns alloc intP10 intP11
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w10))
-                                  0 5)
+                                  0 4)
                       (pset_range (pset_singleton (acc anonymous_2_p1 w10)) 0
-                       5))) /\
+                       4))) /\
                   (not_assigns alloc anonymous_2_v2_10 anonymous_2_v2_11
                    (pset_singleton w10))) /\
                   (not_assigns alloc anonymous_2_v1_10 anonymous_2_v1_11
@@ -6178,62 +5601,62 @@ Lemma f3_impl_po_13 :
                   (forall (index_34:pointer),
                    (forall (index_35:pointer), True))),
   (((not_assigns alloc intP intP11
-     (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w10)) 0 5)
-      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w10)) 0 5)
-       (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w9)) 0 5)
-        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0 5)
-         (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w8)) 0 5)
+     (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w10)) 0 4)
+      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w10)) 0 4)
+       (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w9)) 0 4)
+        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0 4)
+         (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w8)) 0 4)
           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0
-                       5)
+                       4)
            (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w7)) 0
-                        5)
+                        4)
             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w7))
-                         0 5)
+                         0 4)
              (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w6))
-                          0 5)
+                          0 4)
               (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w6))
-                           0 5)
+                           0 4)
                (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w5))
-                            0 5)
+                            0 4)
                 (pset_union (pset_range (pset_singleton (acc anonymous_2_p1
                                                          w5))
-                             0 5)
+                             0 4)
                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                           w4))
-                              0 5)
+                              0 4)
                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1
                                                            w4))
-                               0 5)
+                               0 4)
                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                             w3))
-                                0 5)
+                                0 4)
                     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1
                                                              w3))
-                                 0 5)
+                                 0 4)
                      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                               w2))
-                                  0 5)
+                                  0 4)
                       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1
                                                                w2))
-                                   0 5)
+                                   0 4)
                        (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                                 w1))
-                                    0 5)
+                                    0 4)
                         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1
                                                                  w1))
-                                     0 5)
+                                     0 4)
                          (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                                   u4))
-                                      0 5)
+                                      0 4)
                           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1
                                                                    u4))
-                                       0 5)
+                                       0 4)
                            (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
                                                                     u3))
-                                        0 5)
+                                        0 4)
                             (pset_range (pset_singleton (acc anonymous_2_p1
                                                          u3))
-                             0 5))))))))))))))))))))))))) /\
+                             0 4))))))))))))))))))))))))) /\
   (not_assigns alloc anonymous_2_v2 anonymous_2_v2_11
    (pset_union (pset_singleton w10)
     (pset_union (pset_singleton w9)
@@ -6268,7 +5691,7 @@ Lemma f3_impl_po_13 :
 Proof.
 Admitted.
 
-(* Why obligation from file "why/separation.why", characters 49523-49536 *)
+(* Why obligation from file "why/separation.why", characters 47996-48009 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -6301,7 +5724,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 49541-49568 *)
+(* Why obligation from file "why/separation.why", characters 48014-48041 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -6336,10 +5759,10 @@ Lemma f_impl_po_2 :
 Proof.
 intuition.
 subst.
-generalize (H2 ss alloc Pre4 );intuition.
+generalize (H6 ss alloc Pre4 );intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 49506-49568 *)
+(* Why obligation from file "why/separation.why", characters 47979-48041 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -6415,13 +5838,18 @@ rewrite acc_upd_eq;auto.
 assert (valid alloc s).
 valid.
 unfold separation1 in H3.
-generalize (H3 s alloc H33).
-intuition.
-unfold separation_v_s in H25.
-intuition.
+generalize (H4 s alloc H19).
+intro.
+rewrite <- shift_zero with (s#u).
+rewrite <- shift_zero with (s#t).
+apply neq_base_addr_neq_shift;auto.
+unfold separation_v_s in H16.
+rewrite <- shift_zero with v.
+rewrite <- shift_zero with (s#t).
+apply neq_base_addr_neq_shift;tauto.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 51216-51231 *)
+(* Why obligation from file "why/separation.why", characters 49689-49704 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
@@ -6438,7 +5866,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 50510-51847 *)
+(* Why obligation from file "why/separation.why", characters 48983-50320 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -6466,7 +5894,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation.why", characters 52880-52908 *)
+(* Why obligation from file "why/separation.why", characters 51353-51381 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
@@ -6485,7 +5913,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 52880-52908 *)
+(* Why obligation from file "why/separation.why", characters 51353-51381 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
@@ -6504,7 +5932,7 @@ Lemma h_impl_po_2 :
 Proof.
 intuition.
 Save.
-(* Why obligation from file "why/separation.why", characters 51885-53524 *)
+(* Why obligation from file "why/separation.why", characters 50358-51997 *)
 Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
