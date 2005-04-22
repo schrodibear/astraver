@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation.why", characters 3250-3267 *)
+(* Why obligation from file "why/separation.why", characters 3265-3282 *)
 Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (p1: ((memory) pointer)),
@@ -17,7 +17,8 @@ Lemma f1_impl_po_1 :
                   (valid_range alloc (acc p1 x_0) 0 5)) /\
                   (valid_range alloc (acc p2 x_0) 0 5))) /\
                 (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (separation_u2_u1 u1 u2) /\
+                (separation1 p1 p2) /\
+                (separation_u2_u1 alloc p1 p2 u1 u2) /\
                 (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
                 (valid1 p2) /\ (valid1 p1) /\ (separation2 p1 p2) /\
                 (separation2 p1 p1) /\
@@ -46,7 +47,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 3270-3287 *)
+(* Why obligation from file "why/separation.why", characters 3285-3302 *)
 Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -63,7 +64,8 @@ Lemma f1_impl_po_2 :
                   (valid_range alloc (acc p1 x_0) 0 5)) /\
                   (valid_range alloc (acc p2 x_0) 0 5))) /\
                 (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (separation_u2_u1 u1 u2) /\
+                (separation1 p1 p2) /\
+                (separation_u2_u1 alloc p1 p2 u1 u2) /\
                 (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
                 (valid1 p2) /\ (valid1 p1) /\ (separation2 p1 p2) /\
                 (separation2 p1 p1) /\
@@ -127,7 +129,7 @@ Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36-4456 *)
+(* Why obligation from file "why/separation.why", characters 36-4471 *)
 Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -144,7 +146,8 @@ Lemma f1_impl_po_3 :
                   (valid_range alloc (acc p1 x_0) 0 5)) /\
                   (valid_range alloc (acc p2 x_0) 0 5))) /\
                 (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (separation_u2_u1 u1 u2) /\
+                (separation1 p1 p2) /\
+                (separation_u2_u1 alloc p1 p2 u1 u2) /\
                 (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
                 (valid1 p2) /\ (valid1 p1) /\ (separation2 p1 p2) /\
                 (separation2 p1 p1) /\
@@ -283,7 +286,7 @@ p H71);intro.
 apply pset_union_intro;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 30983-31000 *)
+(* Why obligation from file "why/separation.why", characters 41690-41707 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -311,32 +314,47 @@ Lemma f3_impl_po_1 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -344,31 +362,60 @@ Lemma f3_impl_po_1 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   (((((valid alloc u3) /\ (valid alloc (acc anonymous_2_p1 u3))) /\
   (valid alloc (acc anonymous_2_p2 u3))) /\
   (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
@@ -392,7 +439,7 @@ intuition;
 generalize (H1 u3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31006-31023 *)
+(* Why obligation from file "why/separation.why", characters 41713-41730 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -423,32 +470,47 @@ Lemma f3_impl_po_2 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -456,31 +518,60 @@ Lemma f3_impl_po_2 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -553,7 +644,7 @@ Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31029-31046 *)
+(* Why obligation from file "why/separation.why", characters 41736-41753 *)
 Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -584,32 +675,47 @@ Lemma f3_impl_po_3 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -617,31 +723,60 @@ Lemma f3_impl_po_3 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -764,7 +899,7 @@ Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31052-31069 *)
+(* Why obligation from file "why/separation.why", characters 41759-41776 *)
 Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -795,32 +930,47 @@ Lemma f3_impl_po_4 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -828,31 +978,60 @@ Lemma f3_impl_po_4 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1025,7 +1204,7 @@ Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31075-31092 *)
+(* Why obligation from file "why/separation.why", characters 41782-41799 *)
 Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1056,32 +1235,47 @@ Lemma f3_impl_po_5 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -1089,31 +1283,60 @@ Lemma f3_impl_po_5 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1336,7 +1559,7 @@ Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31098-31115 *)
+(* Why obligation from file "why/separation.why", characters 41805-41822 *)
 Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1367,32 +1590,47 @@ Lemma f3_impl_po_6 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -1400,31 +1638,60 @@ Lemma f3_impl_po_6 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1697,7 +1964,7 @@ Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31121-31138 *)
+(* Why obligation from file "why/separation.why", characters 41828-41845 *)
 Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1728,32 +1995,47 @@ Lemma f3_impl_po_7 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -1761,31 +2043,60 @@ Lemma f3_impl_po_7 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -2108,7 +2419,7 @@ Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31144-31161 *)
+(* Why obligation from file "why/separation.why", characters 41851-41868 *)
 Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2139,32 +2450,47 @@ Lemma f3_impl_po_8 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -2172,31 +2498,60 @@ Lemma f3_impl_po_8 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -2569,7 +2924,7 @@ Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31167-31184 *)
+(* Why obligation from file "why/separation.why", characters 41874-41891 *)
 Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2600,32 +2955,47 @@ Lemma f3_impl_po_9 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -2633,31 +3003,60 @@ Lemma f3_impl_po_9 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -3080,7 +3479,7 @@ Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31190-31207 *)
+(* Why obligation from file "why/separation.why", characters 41897-41914 *)
 Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -3111,32 +3510,47 @@ Lemma f3_impl_po_10 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -3144,31 +3558,60 @@ Lemma f3_impl_po_10 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -3641,7 +4084,7 @@ Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31213-31230 *)
+(* Why obligation from file "why/separation.why", characters 41920-41937 *)
 Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -3672,32 +4115,47 @@ Lemma f3_impl_po_11 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -3705,31 +4163,60 @@ Lemma f3_impl_po_11 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -4252,7 +4739,7 @@ Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 31236-31254 *)
+(* Why obligation from file "why/separation.why", characters 41943-41961 *)
 Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -4283,32 +4770,47 @@ Lemma f3_impl_po_12 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -4316,31 +4818,60 @@ Lemma f3_impl_po_12 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -4913,7 +5444,7 @@ Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 4495-35005 *)
+(* Why obligation from file "why/separation.why", characters 4510-45712 *)
 Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -4944,32 +5475,47 @@ Lemma f3_impl_po_13 :
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
                  (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
-                 (separation_w3_u4 u4 w3) /\ (separation_w3_u3 u3 w3) /\
-                 (separation_u4_u3 u3 u4) /\ (separation_w1_u4 u4 w1) /\
-                 (separation_w1_u3 u3 w1) /\ (separation_w8_w7 w7 w8) /\
-                 (separation_w8_w6 w6 w8) /\ (separation_w8_w5 w5 w8) /\
-                 (separation_w8_w4 w4 w8) /\ (separation_w8_w3 w3 w8) /\
-                 (separation_w8_w2 w2 w8) /\ (separation_w8_w1 w1 w8) /\
+                 (separation_w3_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w3) /\
+                 (separation_w3_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w3) /\
+                 (separation_u4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 u4) /\
+                 (separation_w1_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w1) /\
+                 (separation_w1_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w1) /\
+                 (separation_w8_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w8) /\
+                 (separation_w8_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w8) /\
+                 (separation_w8_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w8) /\
+                 (separation_w8_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w8) /\
+                 (separation_w8_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w8) /\
+                 (separation_w8_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w8) /\
+                 (separation_w8_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w8) /\
                  (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
                  (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
                  (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
                  (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\ (separation_w6_w5 w5 w6) /\
-                 (separation_w6_w4 w4 w6) /\ (separation_w6_w3 w3 w6) /\
-                 (separation_w6_w2 w2 w6) /\ (separation_w6_w1 w1 w6) /\
-                 (separation_w8_u4 u4 w8) /\ (separation_w8_u3 u3 w8) /\
+                 (valid_range alloc w1 0 1) /\
+                 (separation_w6_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w6) /\
+                 (separation_w6_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w6) /\
+                 (separation_w6_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w6) /\
+                 (separation_w6_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w6) /\
+                 (separation_w6_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w6) /\
+                 (separation_w8_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w8) /\
+                 (separation_w8_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w8) /\
                  (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (separation2 anonymous_2_p1 anonymous_2_p1) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation_w4_w3 w3 w4) /\ (separation_w4_w2 w2 w4) /\
-                 (separation_w4_w1 w1 w4) /\ (separation_w6_u4 u4 w6) /\
-                 (separation_w6_u3 u3 w6) /\
+                 (separation_w4_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w4) /\
+                 (separation_w4_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w4) /\
+                 (separation_w4_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w4) /\
+                 (separation_w6_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w6) /\
+                 (separation_w6_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w6) /\
                  (forall (index_28:pointer),
                   (forall (index_29:pointer), True)) /\
-                 (separation_w2_w1 w1 w2) /\ (separation_w4_u4 u4 w4) /\
-                 (separation_w4_u3 u3 w4) /\ (separation_w2_u4 u4 w2) /\
-                 (valid_range alloc w10 0 1) /\ (separation_w2_u3 u3 w2) /\
+                 (separation_w2_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w2) /\
+                 (separation_w4_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w4) /\
+                 (separation_w4_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w4) /\
+                 (separation_w2_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w2) /\
+                 (valid_range alloc w10 0 1) /\
+                 (separation_w2_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w2) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_54:pointer),
                   (forall (index_55:pointer), True)) /\
@@ -4977,31 +5523,60 @@ Lemma f3_impl_po_13 :
                  (separation2 anonymous_2_p1 anonymous_2_p2) /\
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
-                 (separation_w9_w8 w8 w9) /\ (separation_w9_w7 w7 w9) /\
-                 (separation_w9_w6 w6 w9) /\ (separation_w9_w5 w5 w9) /\
-                 (separation_w10_w9 w9 w10) /\ (separation_w9_w4 w4 w9) /\
-                 (separation_w10_w8 w8 w10) /\ (separation_w9_w3 w3 w9) /\
-                 (separation_w10_w7 w7 w10) /\ (separation_w9_w2 w2 w9) /\
-                 (separation_w10_w6 w6 w10) /\ (separation_w9_w1 w1 w9) /\
-                 (separation_w10_w5 w5 w10) /\ (separation_w10_w4 w4 w10) /\
-                 (separation_w10_w3 w3 w10) /\ (separation_w10_w2 w2 w10) /\
+                 (separation_w9_w8 alloc anonymous_2_p1 anonymous_2_p2 w8 w9) /\
+                 (separation_w9_w7 alloc anonymous_2_p1 anonymous_2_p2 w7 w9) /\
+                 (separation_w9_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w9) /\
+                 (separation_w9_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w9) /\
+                 (separation_w10_w9 alloc anonymous_2_p1 anonymous_2_p2 w9
+                  w10) /\
+                 (separation_w9_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w9) /\
+                 (separation_w10_w8 alloc anonymous_2_p1 anonymous_2_p2 w8
+                  w10) /\
+                 (separation_w9_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w9) /\
+                 (separation_w10_w7 alloc anonymous_2_p1 anonymous_2_p2 w7
+                  w10) /\
+                 (separation_w9_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w9) /\
+                 (separation_w10_w6 alloc anonymous_2_p1 anonymous_2_p2 w6
+                  w10) /\
+                 (separation_w9_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w9) /\
+                 (separation_w10_w5 alloc anonymous_2_p1 anonymous_2_p2 w5
+                  w10) /\
+                 (separation_w10_w4 alloc anonymous_2_p1 anonymous_2_p2 w4
+                  w10) /\
+                 (separation_w10_w3 alloc anonymous_2_p1 anonymous_2_p2 w3
+                  w10) /\
+                 (separation_w10_w2 alloc anonymous_2_p1 anonymous_2_p2 w2
+                  w10) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_w10_w1 w1 w10) /\ (separation_w7_w6 w6 w7) /\
-                 (separation_w7_w5 w5 w7) /\ (separation_w7_w4 w4 w7) /\
-                 (separation_w7_w3 w3 w7) /\ (separation_w7_w2 w2 w7) /\
-                 (separation_w7_w1 w1 w7) /\ (separation_w9_u4 u4 w9) /\
-                 (separation_w9_u3 u3 w9) /\ (separation_w10_u4 u4 w10) /\
-                 (separation_w10_u3 u3 w10) /\ (separation_w5_w4 w4 w5) /\
-                 (separation_w5_w3 w3 w5) /\ (separation_w5_w2 w2 w5) /\
-                 (separation_w5_w1 w1 w5) /\ (separation_w7_u4 u4 w7) /\
-                 (separation_w7_u3 u3 w7) /\
+                 (separation_w10_w1 alloc anonymous_2_p1 anonymous_2_p2 w1
+                  w10) /\
+                 (separation_w7_w6 alloc anonymous_2_p1 anonymous_2_p2 w6 w7) /\
+                 (separation_w7_w5 alloc anonymous_2_p1 anonymous_2_p2 w5 w7) /\
+                 (separation_w7_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w7) /\
+                 (separation_w7_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w7) /\
+                 (separation_w7_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w7) /\
+                 (separation_w7_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w7) /\
+                 (separation_w9_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w9) /\
+                 (separation_w9_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w9) /\
+                 (separation_w10_u4 alloc anonymous_2_p1 anonymous_2_p2 u4
+                  w10) /\
+                 (separation_w10_u3 alloc anonymous_2_p1 anonymous_2_p2 u3
+                  w10) /\
+                 (separation_w5_w4 alloc anonymous_2_p1 anonymous_2_p2 w4 w5) /\
+                 (separation_w5_w3 alloc anonymous_2_p1 anonymous_2_p2 w3 w5) /\
+                 (separation_w5_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w5) /\
+                 (separation_w5_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w5) /\
+                 (separation_w7_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w7) /\
+                 (separation_w7_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w7) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_34:pointer),
                   (forall (index_35:pointer), True)) /\
-                 (separation_w3_w2 w2 w3) /\ (separation_w3_w1 w1 w3) /\
-                 (separation_w5_u4 u4 w5) /\ (separation_w5_u3 u3 w5)),
+                 (separation_w3_w2 alloc anonymous_2_p1 anonymous_2_p2 w2 w3) /\
+                 (separation_w3_w1 alloc anonymous_2_p1 anonymous_2_p2 w1 w3) /\
+                 (separation_w5_u4 alloc anonymous_2_p1 anonymous_2_p2 u4 w5) /\
+                 (separation_w5_u3 alloc anonymous_2_p1 anonymous_2_p2 u3 w5)),
   forall (Pre36: (((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -5693,7 +6268,7 @@ Lemma f3_impl_po_13 :
 Proof.
 Admitted.
 
-(* Why obligation from file "why/separation.why", characters 38641-38654 *)
+(* Why obligation from file "why/separation.why", characters 49523-49536 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -5701,7 +6276,7 @@ Lemma f_impl_po_1 :
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre19: (separation_ss_s s ss) /\ (separation2 t u) /\
+  forall (Pre19: (separation_ss_s alloc t u s ss) /\ (separation2 t u) /\
                  (separation2 t t) /\ (separation2 u u) /\
                  (separation2 t u) /\ (separation1 t u) /\ (valid1 u) /\
                  (valid1 t) /\ (valid_range alloc ss 0 1) /\
@@ -5714,7 +6289,8 @@ Lemma f_impl_po_1 :
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_v_s s v) /\ (separation_v_ss ss v) /\
+                 (separation_v_s alloc t u s v) /\
+                 (separation_v_ss alloc t u ss v) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
@@ -5725,7 +6301,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 38659-38686 *)
+(* Why obligation from file "why/separation.why", characters 49541-49568 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -5733,7 +6309,7 @@ Lemma f_impl_po_2 :
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre19: (separation_ss_s s ss) /\ (separation2 t u) /\
+  forall (Pre19: (separation_ss_s alloc t u s ss) /\ (separation2 t u) /\
                  (separation2 t t) /\ (separation2 u u) /\
                  (separation2 t u) /\ (separation1 t u) /\ (valid1 u) /\
                  (valid1 t) /\ (valid_range alloc ss 0 1) /\
@@ -5746,7 +6322,8 @@ Lemma f_impl_po_2 :
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_v_s s v) /\ (separation_v_ss ss v) /\
+                 (separation_v_s alloc t u s v) /\
+                 (separation_v_ss alloc t u ss v) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
@@ -5762,7 +6339,7 @@ subst.
 generalize (H2 ss alloc Pre4 );intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 38624-38686 *)
+(* Why obligation from file "why/separation.why", characters 49506-49568 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -5771,7 +6348,7 @@ Lemma f_impl_po_3 :
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre19: (separation_ss_s s ss) /\ (separation2 t u) /\
+  forall (Pre19: (separation_ss_s alloc t u s ss) /\ (separation2 t u) /\
                  (separation2 t t) /\ (separation2 u u) /\
                  (separation2 t u) /\ (separation1 t u) /\ (valid1 u) /\
                  (valid1 t) /\ (valid_range alloc ss 0 1) /\
@@ -5784,7 +6361,8 @@ Lemma f_impl_po_3 :
                  (forall (index_60:pointer),
                   (forall (index_61:pointer), True)) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_v_s s v) /\ (separation_v_ss ss v) /\
+                 (separation_v_s alloc t u s v) /\
+                 (separation_v_ss alloc t u ss v) /\
                  (forall (index_48:pointer),
                   (forall (index_49:pointer), True)) /\
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
@@ -5843,7 +6421,7 @@ unfold separation_v_s in H25.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 40334-40349 *)
+(* Why obligation from file "why/separation.why", characters 51216-51231 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
@@ -5860,7 +6438,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 39628-40965 *)
+(* Why obligation from file "why/separation.why", characters 50510-51847 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -5888,7 +6466,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41998-42026 *)
+(* Why obligation from file "why/separation.why", characters 52880-52908 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
@@ -5907,7 +6485,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 41998-42026 *)
+(* Why obligation from file "why/separation.why", characters 52880-52908 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
@@ -5926,7 +6504,7 @@ Lemma h_impl_po_2 :
 Proof.
 intuition.
 Save.
-(* Why obligation from file "why/separation.why", characters 41003-42642 *)
+(* Why obligation from file "why/separation.why", characters 51885-53524 *)
 Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),

@@ -99,6 +99,39 @@ let make_forall_range loc t b f =
 		      NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
     make_forall [c_int, i] (make_implies ineq (f ti vari))
      
+let rec tab_struct loc v1 v2 s ty n n1 n2=
+  (make_forall_range loc v2 s 
+     (fun t i -> 
+	local_separation loc n1 v1 (n2^"[i]") (indirection loc ty t)))
+
+and local_separation loc n1 v1 n2 v2 =
+  match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
+  with
+    | Tarray (ty, None), _ ->
+	error loc ("array size missing in `" ^ n1 ^ "'")
+    | _, Tarray (ty, None) ->
+	error loc ("array size missing in `" ^ n2 ^ "'")
+    | Tstruct n , Tarray (ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
+    | Tarray (ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
+    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
+	make_and
+	  (if compatible_type v1.nterm_type v2.nterm_type
+	   then
+	     (not_alias loc v1 v2)
+	   else
+	     NPtrue)
+	  (make_and 
+	     (make_forall_range loc v1 s1 
+		(fun t i -> local_separation loc (n1^"[i]") 
+		     (indirection loc ty1 t) n2 v2))
+	     (make_forall_range loc v2 s2  
+		(fun t i -> local_separation loc n1 v1 (n2^"[j]") 
+		     (indirection loc ty2 t))))
+    | _, _ -> NPtrue
+
+    
+
+
 let rec separation_intern2  n1 v1 =
   match v1.nterm_type.Ctypes.ctype_node with
     | Tarray (_,None) -> 
@@ -272,7 +305,7 @@ let separation_first mark diag v1 v2 =
 		  "separation_" ^ n1 ^ "_" ^ n2,
 		  make_forall 
 		    [ty,var] 
-		    (Cnorm.local_separation Loc.dummy n1 
+		    (local_separation Loc.dummy n1 
 		       (make_sub_term term ty1 v1) n2
 		       (make_sub_term term ty2 v2))))]
 	else
@@ -299,12 +332,12 @@ let separation_first mark diag v1 v2 =
 			(if diag 
 			 then 
 			   NPimplies (NPrel (term1,Neq,term2),
-				      (Cnorm.local_separation Loc.dummy n1 
+				      (local_separation Loc.dummy n1 
 					 (make_sub_term term1 ty1 v1)
 					 n2 
 					 (make_sub_term term2 ty2 v2)))
 			 else
-			   (Cnorm.local_separation Loc.dummy n1 
+			   (local_separation Loc.dummy n1 
 			      (make_sub_term term1 ty1 v1)
 			      n2 
 			      (make_sub_term term2 ty2 v2))))))]
