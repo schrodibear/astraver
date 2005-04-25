@@ -299,6 +299,10 @@ c/cparser.cmx: src/ptree.cmi src/loc.cmx c/ctypes.cmx c/creport.cmx \
     c/coptions.cmx c/clogic.cmi c/cerror.cmi c/cast.cmi c/cparser.cmi 
 c/cpp.cmo: src/loc.cmi c/coptions.cmi c/cpp.cmi 
 c/cpp.cmx: src/loc.cmx c/coptions.cmx c/cpp.cmi 
+c/cprint_annot.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi \
+    c/cenv.cmi c/cast.cmi 
+c/cprint_annot.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi \
+    c/cenv.cmx c/cast.cmi 
 c/cprint.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cenv.cmi \
     c/cast.cmi c/cprint.cmi 
 c/cprint.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi c/cenv.cmx \

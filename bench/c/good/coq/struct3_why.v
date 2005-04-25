@@ -69,7 +69,7 @@ Lemma g_impl_po_2 :
   (valid alloc0 caduceus_2).
 Proof.
 intuition; subst; auto.
-Admitted.
+Save.
 
 (* Why obligation from file "why/struct3.why", characters 389-446 *)
 Lemma g_impl_po_3 : 
@@ -106,5 +106,4 @@ Lemma g_impl_po_3 :
   (valid alloc0 u).
 Proof.
 intuition; subst; auto; caduceus.
-Admitted.
-
+Save.

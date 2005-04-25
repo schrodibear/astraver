@@ -1125,6 +1125,7 @@ rewrite H12.
 Admitted.
 
 
+
 (* Why obligation from file "why/sort.why", characters 4140-4237 *)
 Lemma sort4_4_impl_po_1 : 
   forall (t: pointer),
