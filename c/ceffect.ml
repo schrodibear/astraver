@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.93 2005-04-22 13:37:01 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.94 2005-05-02 08:50:16 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -543,7 +543,8 @@ let invariant_for_global loc v =
   let form =
     List.fold_left 
       (fun p x ->
-	 ("separation_"^v.var_name^"_"^x.var_name,
+	 ("separation_" ^ (ctype v.var_type) ^ "_" ^ (ctype x.var_type),
+	   "separation_"^v.var_name^"_"^x.var_name,
 	  Cnorm.separation loc v x,
 	  HeapVarSet.add v (HeapVarSet.singleton x)) :: p) 
       [] !global_var 
@@ -914,8 +915,8 @@ let decl d =
 	       let name1 = "valid_range_" ^ v.var_name in
 	       let (pre1,pre2) = validity t typ s in
 	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
-	       List.iter (fun (x,p,y) -> add_strong_invariant x p y;
-			    add_strong_invariant_2 x p [])
+	       List.iter (fun (x1,x2,p,y) -> add_strong_invariant x2 p y;
+			    add_strong_invariant_2 x1 p [])
 		 (invariant_for_global d.loc v);
 	   | _ -> ()
 	end;

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation3.why", characters 651-728 *)
+(* Why obligation from file "why/separation3.why", characters 1158-1235 *)
 Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -18,14 +18,19 @@ Lemma f2_impl_po_1 :
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_12:pointer),
                   (forall (index_13:pointer), True)) /\
-                 (separation_l_s0 alloc b c q r s0 l) /\ (valid1_range b 5)),
+                 (~((base_addr l) = (base_addr s0)) /\
+                 (~((base_addr s0) = (base_addr (acc q l))) /\
+                 ~((base_addr s0) = (base_addr (acc r l)))) /\
+                 ~((base_addr l) = (base_addr (acc b s0))) /\
+                 ~((base_addr l) = (base_addr (acc c s0)))) /\
+                 (valid1_range b 5)),
   (valid alloc s0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 736-763 *)
+(* Why obligation from file "why/separation3.why", characters 1243-1270 *)
 Lemma f2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -40,7 +45,12 @@ Lemma f2_impl_po_2 :
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_12:pointer),
                   (forall (index_13:pointer), True)) /\
-                 (separation_l_s0 alloc b c q r s0 l) /\ (valid1_range b 5)),
+                 (~((base_addr l) = (base_addr s0)) /\
+                 (~((base_addr s0) = (base_addr (acc q l))) /\
+                 ~((base_addr s0) = (base_addr (acc r l)))) /\
+                 ~((base_addr l) = (base_addr (acc b s0))) /\
+                 ~((base_addr l) = (base_addr (acc c s0)))) /\
+                 (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = (shift (acc b s0) 2)),
@@ -51,7 +61,7 @@ unfold valid1_range in H8.
 generalize (H8 s0 alloc Pre4); intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 634-763 *)
+(* Why obligation from file "why/separation3.why", characters 1141-1270 *)
 Lemma f2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -68,7 +78,12 @@ Lemma f2_impl_po_3 :
                  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                  (forall (index_12:pointer),
                   (forall (index_13:pointer), True)) /\
-                 (separation_l_s0 alloc b c q r s0 l) /\ (valid1_range b 5)),
+                 (~((base_addr l) = (base_addr s0)) /\
+                 (~((base_addr s0) = (base_addr (acc q l))) /\
+                 ~((base_addr s0) = (base_addr (acc r l)))) /\
+                 ~((base_addr l) = (base_addr (acc b s0))) /\
+                 ~((base_addr l) = (base_addr (acc c s0)))) /\
+                 (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = (shift (acc b s0) 2)),
@@ -95,7 +110,7 @@ intuition; subst; try caduceus.
 valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 2109-2186 *)
+(* Why obligation from file "why/separation3.why", characters 2616-2693 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -115,7 +130,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 2194-2221 *)
+(* Why obligation from file "why/separation3.why", characters 2701-2728 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -140,7 +155,7 @@ generalize (H12 s0 alloc Pre4);
  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 2092-2221 *)
+(* Why obligation from file "why/separation3.why", characters 2599-2728 *)
 Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -186,7 +201,7 @@ intuition.
 generalize (H10 s0 alloc Pre4);  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 3281-3305 *)
+(* Why obligation from file "why/separation3.why", characters 4297-4321 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -200,7 +215,11 @@ Lemma f_impl_po_1 :
                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                 (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (separation_l_s0 alloc b c q r s0 l)),
+                ~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))),
   forall (caduceus_2: pointer),
   forall (Post3: caduceus_2 = s0),
   (valid alloc caduceus_2).
@@ -208,7 +227,7 @@ Proof.
 intuition; subst; valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 3257-3305 *)
+(* Why obligation from file "why/separation3.why", characters 4273-4321 *)
 Lemma f_impl_po_2 : 
   forall (a: ((memory) Z)),
   forall (alloc: alloc_table),
@@ -223,7 +242,11 @@ Lemma f_impl_po_2 :
                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
                 (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (separation_l_s0 alloc b c q r s0 l)),
+                ~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))),
   forall (caduceus_2: pointer),
   forall (Post3: caduceus_2 = s0),
   forall (Pre3: (valid alloc caduceus_2)),
@@ -247,11 +270,9 @@ rewrite acc_upd_neq; caduceus.
 rewrite <- (shift_zero (l#q)).
 rewrite <- (shift_zero s0).
 apply neq_base_addr_neq_shift.
-red in H7.
-inversion_clear H7.
-inversion_clear H8.
-inversion_clear H7.
 auto.
-generalize (H0 l alloc);intuition.
+red in H0.
+apply H0.
+apply valid_range_valid with 0 1;auto with *.
 Save.
 

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/false.why", characters 373-429 *)
+(* Why obligation from file "why/false.why", characters 383-439 *)
 Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x_0: pointer),
@@ -13,12 +13,13 @@ Lemma false1_impl_po_1 :
   forall (Pre11: (valid_range alloc y_0 0 5) /\
                  (valid_range alloc x_0 0 4) /\ (separation2 y y) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_y_x x_0 y_0) /\ (valid1_range y 5) /\ (valid1 y)),
+                 ~((base_addr y_0) = (base_addr x_0)) /\
+                 (valid1_range y 5) /\ (valid1 y)),
   (valid alloc z).
 Proof.
 Admitted.
 
-(* Why obligation from file "why/false.why", characters 437-464 *)
+(* Why obligation from file "why/false.why", characters 447-474 *)
 Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (x_0: pointer),
@@ -28,7 +29,8 @@ Lemma false1_impl_po_2 :
   forall (Pre11: (valid_range alloc y_0 0 5) /\
                  (valid_range alloc x_0 0 4) /\ (separation2 y y) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_y_x x_0 y_0) /\ (valid1_range y 5) /\ (valid1 y)),
+                 ~((base_addr y_0) = (base_addr x_0)) /\
+                 (valid1_range y 5) /\ (valid1 y)),
   forall (Pre4: (valid alloc z)),
   forall (caduceus_5: pointer),
   forall (Post3: caduceus_5 = (shift (acc y z) 5)),
@@ -37,7 +39,7 @@ Proof.
 Admitted.
 
 
-(* Why obligation from file "why/false.why", characters 356-464 *)
+(* Why obligation from file "why/false.why", characters 366-474 *)
 Lemma false1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -48,7 +50,8 @@ Lemma false1_impl_po_3 :
   forall (Pre11: (valid_range alloc y_0 0 5) /\
                  (valid_range alloc x_0 0 4) /\ (separation2 y y) /\
                  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation_y_x x_0 y_0) /\ (valid1_range y 5) /\ (valid1 y)),
+                 ~((base_addr y_0) = (base_addr x_0)) /\
+                 (valid1_range y 5) /\ (valid1 y)),
   forall (Pre4: (valid alloc z)),
   forall (caduceus_5: pointer),
   forall (Post3: caduceus_5 = (shift (acc y z) 5)),
