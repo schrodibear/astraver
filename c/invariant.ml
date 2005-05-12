@@ -95,9 +95,14 @@ let make_forall_range loc t b f =
 	nterm_loc = loc;
 	nterm_type = t.nterm_type }
     in
-    let ineq = NPand (NPrel (nzero, Le, vari),
-		      NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
-    make_forall [c_int, i] (make_implies ineq (f ti vari))
+    let pred = (f ti vari) in
+    if pred = NPtrue
+    then 
+      NPtrue
+    else
+      let ineq = NPand (NPrel (nzero, Le, vari),
+			NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
+      make_forall [c_int, i] (make_implies ineq pred)
      
 let rec tab_struct loc v1 v2 s ty n n1 n2=
   (make_forall_range loc v2 s 
@@ -318,29 +323,28 @@ let separation_first mark diag v1 v2 =
 	  let var2 = default_var_info (fresh_index()) in
 	  let term1 = noattr_term ty (NTvar var1) in
 	  let term2 = noattr_term ty (NTvar var2) in
-	  noattr_located (
-	    Cast.Ninvariant_strong (
-	      "separation" ^ n1 ^ "_" ^ n2 , 
-	      NPapp(find_pred (pre),[])))::
-	    [noattr_located
-	       (Cast.Ninvariant_strong 
-		  ("separation_" ^ n1 ^ "_" ^ n2,
-		   make_forall 
-		     [ty,var1]
-		     (make_forall 
-			[ty,var2]
-			(if diag 
-			 then 
-			   NPimplies (NPrel (term1,Neq,term2),
-				      (local_separation Loc.dummy n1 
-					 (make_sub_term term1 ty1 v1)
-					 n2 
-					 (make_sub_term term2 ty2 v2)))
+	  let pred = (local_separation Loc.dummy n1 
+			(make_sub_term term1 ty1 v1)
+			n2 
+			(make_sub_term term2 ty2 v2)) in
+	  if pred = NPtrue then []
+	  else
+	    noattr_located (
+	      Cast.Ninvariant_strong (
+		"separation" ^ n1 ^ "_" ^ n2 , 
+		NPapp(find_pred (pre),[])))::
+	      [noattr_located
+		 (Cast.Ninvariant_strong 
+		    ("separation_" ^ n1 ^ "_" ^ n2,
+		     make_forall 
+		       [ty,var1]
+		       (make_forall 
+			  [ty,var2]
+			  (if diag 
+			   then 
+			     NPimplies (NPrel (term1,Neq,term2),pred)
 			 else
-			   (local_separation Loc.dummy n1 
-			      (make_sub_term term1 ty1 v1)
-			      n2 
-			      (make_sub_term term2 ty2 v2))))))]
+			   pred))))]
     | _ , _ -> []
 	  
 
