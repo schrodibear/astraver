@@ -67,7 +67,7 @@ Qed.
     using links in store [t], and this list of pointers is [l] *)
 
 Definition llist (a: alloc_table) (t: memory pointer) (p:pointer) (l:plist) :=
-  lpath a t p l null.
+  ~(In null l) /\ lpath a t p l null.
 
 Hint Unfold llist .
 
@@ -77,14 +77,15 @@ Hint Unfold llist .
 Lemma llist_null :
  forall (a: alloc_table) (t: memory pointer) (p:pointer), llist a t p nil -> p = null.
 Proof.
-unfold llist; inversion 1; trivial.
+unfold llist; intuition.
+inversion H1; trivial.
 Qed.
 
 Lemma llist_cons :
  forall (a: alloc_table) (t: memory pointer) (p1 p2:pointer) (l:plist),
    llist a t p1 (cons p2 l) -> p1 = p2 /\ llist a t (acc t p2) l.
 Proof.
-unfold llist; inversion 1; intuition.
+unfold llist; intuition; inversion H1; intuition.
 Qed.
 
 (** invariance of a list when updating a cell outside of this list *)
@@ -95,11 +96,12 @@ Lemma llist_pset_same :
    forall p1 p2:pointer,
      ~ In p1 l -> llist a (upd t p1 p2) p l.
 Proof.
-unfold llist; simple induction 1; intuition.
+unfold llist; intuition.
+induction H1; intuition.
 apply Path_cons; auto.
  rewrite acc_upd_neq; auto.
 auto with *.
-red; intro; apply H3; subst p0; auto with *.
+red; intro; apply H; subst p0; auto with *.
 Qed.
 Hint Resolve llist_pset_same .
 
@@ -112,11 +114,14 @@ Proof.
 simple induction l1; intuition.
 inversion H; subst.
 inversion H0; intuition.
-elim (null_not_valid a'); assumption.
+assert (p=null).
+apply llist_null with (1:=H).
+subst.
+inversion H4; auto.
+elim H3; subst; simpl; auto.
 inversion H0; subst.
 inversion H1; subst.
-inversion H0.
-elim (null_not_valid a); assumption.
+inversion H3.
 apply (f_equal (cons a0)).
 apply H with (acc t a0); auto.
 Qed.

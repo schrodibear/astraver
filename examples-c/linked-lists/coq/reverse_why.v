@@ -6,15 +6,12 @@ Require Export LinkedLists.
 
 (* Definition eq_list := (@eq (list pointer)). *)
 
-(* Why obligation from file "why/reverse.why", characters 335-889 *)
+(* Why obligation from file "why/reverse.why", characters 202-756 *)
 Lemma rev_impl_po_1 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
@@ -34,15 +31,12 @@ rewrite app_ass; auto.
 Qed.
 
 
-(* Why obligation from file "why/reverse.why", characters 821-834 *)
+(* Why obligation from file "why/reverse.why", characters 688-701 *)
 Lemma rev_impl_po_2 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
@@ -68,15 +62,12 @@ elim H; clear H; intuition.
 inversion H3; intuition.
 Qed.
 
-(* Why obligation from file "why/reverse.why", characters 837-854 *)
+(* Why obligation from file "why/reverse.why", characters 704-721 *)
 Lemma rev_impl_po_3 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
@@ -104,15 +95,12 @@ inversion H7;auto.
 elim Test2;auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 808-864 *)
+(* Why obligation from file "why/reverse.why", characters 675-731 *)
 Lemma rev_impl_po_4 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
@@ -174,15 +162,12 @@ apply llist_not_starting with alloc tl0; auto.
 rewrite <- H6; simpl; omega.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 335-889 *)
+(* Why obligation from file "why/reverse.why", characters 202-756 *)
 Lemma rev_impl_po_5 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
@@ -212,15 +197,12 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 335-889 *)
+(* Why obligation from file "why/reverse.why", characters 202-756 *)
 Lemma rev_impl_po_6 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
@@ -239,10 +221,7 @@ Lemma rev_impl_po_6 :
   (forall (result:pointer),
    (result = p2 ->
     (forall (l0:plist),
-     ((llist alloc tl p0 l0) -> (llist alloc tl0 result (rev l0)))) /\
-    (forall (struct_list:pointer),
-     ((valid alloc struct_list) ->
-      (valid_struct_list_tl (acc tl0 struct_list)))))).
+     ((llist alloc tl p0 l0) -> (llist alloc tl0 result (rev l0)))))).
 Proof.
 intuition.
 elim Pre8; clear Pre8; intuition.
@@ -257,15 +236,12 @@ generalize (H3 l0 H0); simpl; intro.
 rewrite <- H; auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 400-699 *)
+(* Why obligation from file "why/reverse.why", characters 267-566 *)
 Lemma rev_impl_po_7 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0) /\
-                 (forall (struct_list:pointer),
-                  ((valid alloc struct_list) ->
-                   (valid_struct_list_tl (acc tl struct_list))))),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
   forall (Post9: r = p0),
   forall (p: pointer),
