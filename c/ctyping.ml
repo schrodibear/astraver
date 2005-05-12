@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.93 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.94 2005-05-12 07:41:42 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -526,6 +526,8 @@ and type_expr_node loc env = function
 	| (Tint _ | Tenum _ | Tfloat _), (Tpointer _  | Tarray _) ->
 	    warning loc "comparison between pointer and integer";
 	    TEbinary (e1, pointer_op op, e2), c_int
+	| Tvar t1, Tvar t2 when t1 = t2 && (op = Beq || op = Bneq) ->
+	    TEbinary (e1, op, e2), c_int
 	| _ ->
 	    error loc "invalid operands to comparison"
       end

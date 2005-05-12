@@ -3,171 +3,14 @@
 
 Require Export caduceus_spec_why.
 Require Export G4.
-
-Require Export ZArith.
-Definition z (n:Z) : nat := Zabs_nat n.
-
-Definition reachable_ base c2 c1 c0 :=
-  reachable (quad (z base) (z c2) (z c1) (z c0)).
-
-Lemma reachable_3222 : reachable_ 3 2 2 2.
-Proof.
-  compute.
-  apply rt_refl; auto.
-Qed.
-
-Lemma z_succ : forall x, 0 <= x -> z (x+1) = S (z x).
-Admitted.
-
-Lemma z_pred : forall x, 0<x -> z x = S (z (x-1)).
-Admitted.
-
-Lemma reachable_0 : forall b c2 c1 c0,
-  0 <= b -> 0 <= c2 -> 0 <= c1 -> 0 < c0 -> 
-  reachable_ b c2 c1 c0 -> reachable_ (b+1) c2 c1 (c0-1).
-Proof.
-  unfold reachable_.
-  intros. rewrite (z_pred c0) in H3; auto.
-  rewrite (z_succ b); auto.
-  red. red. 
-  apply rt_trans with (quad (z b) (z c2) (z c1) (S (z (c0 - 1)))); auto.
-  apply rt_step. apply exp0.
-Qed.
-
-Lemma reachable_1 : forall b c2 c1,
-  0 <= b -> 0 <= c2 -> 0 < c1 -> 
-  reachable_ b c2 c1 0 -> reachable_ (b+1) c2 (c1-1) b.
-Proof.
-  unfold reachable_.
-  intros. rewrite (z_pred c1) in H2; auto.
-  rewrite (z_succ b); auto.
-  red. red. 
-  apply rt_trans with (quad (z b) (z c2) (S (z (c1 - 1))) 0); auto.
-  apply rt_step. apply exp1.
-Qed.
-
-Lemma reachable_2 : forall b c2,
-  0 <= b -> 0 < c2 -> 
-  reachable_ b c2 0 0 -> reachable_ (b+1) (c2-1) b b.
-Proof.
-  unfold reachable_.
-  intros. rewrite (z_pred c2) in H1; auto.
-  rewrite (z_succ b); auto.
-  red. red. 
-  apply rt_trans with (quad (z b) (S (z (c2 - 1))) 0 0); auto.
-  apply rt_step. apply exp2.
-Qed.
-
-Inductive Rn : item -> nat -> item -> Prop :=
-  | R0 : forall i, Rn i 0 i
-  | RS : forall i1 i2 i3 n, Rn i1 n i2 -> R i2 i3 -> Rn i1 (S n) i3.
-Hint Constructors Rn.
-
-Lemma Rstar_Rn : 
-  forall i1 i2, Rstar i1 i2 -> exists n, Rn i1 n i2.
-Proof.
-  induction 1.
-  exists (S O); subst.
-  apply RS with x; auto.
-  exists O; auto.
-  elim IHclos_refl_trans1; intros n1 H1.
-  elim IHclos_refl_trans2; intros n2 H2.
-  exists (plus n1 n2).
-  generalize z0 H2; clear H2; induction n2.
-  intros; rewrite <- plus_n_O.
-  inversion H2; subst; auto.
-  intros; rewrite <- plus_n_Sm.
-  inversion H2; subst; auto.
-  apply RS with i2; auto.
-Qed.
-
-Lemma Rn_unicity : forall i0 n i1 i2, Rn i0 n i1 -> Rn i0 n i2 -> i1=i2.
-Proof.
-  induction n; intros.
-  inversion H; inversion H0; subst; auto.
-  inversion H; inversion H0; subst.
-  assert (i4=i7).
-  apply IHn; auto.
-  subst.
-  apply next_unicity with i7; auto.
-Qed.
-
-Lemma Rn_split :
-  forall i0 n2 i1 n1, lt n1 n2 -> Rn i0 n2 i1 ->
-    exists i, Rn i0 n1 i /\ ~(final i).
-Proof.
-  induction n2; intros.
-  absurd (n1<0)%nat; omega.
-  inversion H0; subst.
-  assert (n1=n2 \/ (n1<n2)%nat). omega. 
-  decompose [or] H1; clear H1.
-  subst. exists i3; intuition.
-  generalize H4.
-  apply (final_no_future i3); auto.
-  elim (IHn2 i3 n1 H3 H2); intros.
-  exists x; intuition.
-Qed.
-
-Lemma final_length :
-  forall i0 i1 i2 n1 n2, Rn i0 n1 i1 -> Rn i0 n2 i2 -> final i1 -> le n2 n1.
-Proof.
-  intros.
-  assert (le n2 n1 \/ lt n1 n2). omega. intuition.
-  elim (Rn_split i0 n2 i2 n1); auto; intuition.
-  assert (x=i1). apply Rn_unicity with i0 n1; auto.
-  subst; intuition.
-Qed.
-
-Lemma final_unicity :
-  forall b1 b2, reachable (quad b1 0 0 0) -> reachable (quad b2 0 0 0) ->
-  b1 = b2.
-Proof.
-  unfold reachable; intros.
-  elim (Rstar_Rn _ _ H); intros; clear H.
-  elim (Rstar_Rn _ _ H0); intros; clear H0.
-  assert (le x x0). 
-  apply (final_length (quad 3 2 2 2) (quad b2 0 0 0) (quad b1 0 0 0)); auto.
-  econstructor; auto.
-  assert (le x0 x). 
-  apply (final_length (quad 3 2 2 2) (quad b1 0 0 0) (quad b2 0 0 0)); auto.
-  econstructor; auto.
-  assert (x=x0). omega.
-  assert (quad b1 0 0 0 = quad b2 0 0 0).
-  subst. apply Rn_unicity with (quad 3 2 2 2) x0; auto.
-  injection H4; intuition.
-Qed.
-
-Lemma reachable_end : forall b,
-  reachable (quad b 0 0 0) -> b = (3 * 2 ^ (3 * 2 ^ (3 ^3) + 3 ^3) - 1)%nat.
-Proof.
-  intros; apply final_unicity.
-  assumption.
-  exact G4_length.
-Qed.
-
-Lemma z_minus : forall x1 x2 x3, 0<=x1 -> 0<=x2 -> 0<=x3 ->
-  z x1 = (z x2 - z x3)%nat -> x1 = x2-x3.
-Admitted.
-
-Lemma reachable_end_ : forall b, 0<=b ->
-  reachable_ b 0 0 0 -> b = 3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1.
-Proof.
-  unfold reachable_.
-  replace (z 0) with O.
-  intros. generalize (reachable_end (z b) H0). clear H0.
-  intros.
-  apply z_minus.
-  auto.
-Print Zpower.
-
-Qed.
+Require Export G4z.
 
 (* Why obligation from file "why/g4.why", characters 323-1095 *)
 Lemma main_impl_po_1 : 
   forall (c2: Z),
   forall (Post20: c2 = 2),
   forall (c1: Z),
-0  forall (Post19: c1 = 2),
+  forall (Post19: c1 = 2),
   forall (c0: Z),
   forall (Post18: c0 = 2),
   forall (base1: Z),
@@ -319,12 +162,12 @@ Lemma main_impl_po_5 :
      (result = base2 -> result =
       (3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1))))).
 Proof.
-intuition.
+intros.
 assert (c0_1 = 0). omega.
 assert (c1_1 = 0). omega.
 assert (c2_1 = 0). omega.
 subst.
-apply reachable_end; auto.
+apply reachable_end_; intuition.
 Save.
 
 (* Why obligation from file "why/g4.why", characters 323-1095 *)
@@ -381,7 +224,8 @@ Lemma main_impl_po_7 :
    (result = base2 -> result =
     (3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1))).
 Proof.
-intuition.
+intros.
+absurd (1=0); omega.
 Save.
 
 (* Why obligation from file "why/g4.why", characters 390-534 *)

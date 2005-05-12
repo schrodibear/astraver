@@ -17,7 +17,7 @@ Inductive lpath (a: alloc_table) (t: memory pointer) : pointer -> plist -> point
   | Path_null : forall p:pointer, lpath a t p nil p
   | Path_cons :
       forall p1 p2:pointer,
-        valid a p1 ->
+        valid a p1 -> 
         forall l:list pointer,
           lpath a t (acc t p1) l p2 -> lpath a t p1 (cons p1 l) p2.
 
@@ -112,11 +112,11 @@ Proof.
 simple induction l1; intuition.
 inversion H; subst.
 inversion H0; intuition.
-inversion H1; elim H6; auto.
+elim (null_not_valid a'); assumption.
 inversion H0; subst.
 inversion H1; subst.
 inversion H0.
-inversion H3; elim H9; auto.
+elim (null_not_valid a); assumption.
 apply (f_equal (cons a0)).
 apply H with (acc t a0); auto.
 Qed.
@@ -348,7 +348,7 @@ subst l2; intuition.
 apply Cyclic with (@nil pointer) (l ++ p :: nil) (acc tl p); auto.
 inversion H6.
 do 2 rewrite H12; inversion H5; intuition.
-inversion H10; intuition.
+red; intro h. elim (null_not_valid a); rewrite <- h; auto.
 subst l2.
 apply lpath_add1; auto.
 destruct l; simpl; discriminate.
@@ -362,7 +362,7 @@ induction 1.
 inversion 1.
 inversion H1.
 subst; intuition.
-inversion H4; intuition.
+elim (null_not_valid a); assumption.
 intro; apply IHis_list.
 apply cyclic_acc; auto.
 Qed.

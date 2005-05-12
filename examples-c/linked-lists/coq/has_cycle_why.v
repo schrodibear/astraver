@@ -16,7 +16,7 @@ Definition has_cycle_variant (a : alloc_table)
 Definition has_cycle_order (v1 v2 : Has_cycle_variant) : Prop :=
   True.
 
-(* Why obligation from file "why/has_cycle.why", characters 237-237 *)
+(* Why obligation from file "why/has_cycle.why", characters 269-269 *)
 Lemma cyclic_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -34,8 +34,7 @@ subst; subst.
 inversion_clear H.
 inversion H2.
 intuition.
-inversion H.
-subst; auto.
+elim (null_not_valid alloc); assumption.
 discriminate Post9.
 discriminate Post9.
 Save.
@@ -49,7 +48,7 @@ apply finite_is_valid with tl; auto.
 subst.
 **)
 
-(* Why obligation from file "why/has_cycle.why", characters 272-286 *)
+(* Why obligation from file "why/has_cycle.why", characters 316-330 *)
 Lemma cyclic_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -67,7 +66,7 @@ elim Pre17; clear Pre17; intros pl H.
 elim (H l (@nil pointer)); auto.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 331-1019 *)
+(* Why obligation from file "why/has_cycle.why", characters 368-1133 *)
 Lemma cyclic_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -82,7 +81,7 @@ Lemma cyclic_impl_po_3 :
 Proof.
 Admitted.
 
-(* Why obligation from file "why/has_cycle.why", characters 639-884 *)
+(* Why obligation from file "why/has_cycle.why", characters 708-962 *)
 Lemma cyclic_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -112,7 +111,7 @@ elim (H l2_2 (x0 ++ x1)); intuition.
 apply lpath_append with l1_1; auto.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 900-919 *)
+(* Why obligation from file "why/has_cycle.why", characters 981-1000 *)
 Lemma cyclic_impl_po_5 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -143,7 +142,7 @@ intuition subst.
 elim H4; auto.
 inversion_clear H0; intuition.
 inversion H0; subst; auto.
-inversion H2; intuition.
+elim (null_not_valid alloc); assumption. 
 elim H5; auto.
 apply not_cyclic_and_is_list with alloc tl l; auto.
 inversion_clear H.
@@ -163,7 +162,7 @@ constructor; auto.
 rewrite H3; auto.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 957-971 *)
+(* Why obligation from file "why/has_cycle.why", characters 1056-1070 *)
 Lemma cyclic_impl_po_6 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -194,7 +193,7 @@ intuition.
 elim (H5 l1_1 x0); intuition.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 991-1005 *)
+(* Why obligation from file "why/has_cycle.why", characters 1090-1104 *)
 Lemma cyclic_impl_po_7 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -223,7 +222,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 980-1006 *)
+(* Why obligation from file "why/has_cycle.why", characters 1079-1105 *)
 Lemma cyclic_impl_po_8 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -249,7 +248,7 @@ Lemma cyclic_impl_po_8 :
   forall (Post4: l1_2 = (acc tl l1_1)),
   forall (Pre12: (valid alloc l2_2)),
   forall (aux_1: pointer),
-  forall (Post32: aux_1 = (acc tl l2_2)),
+  forall (Post33: aux_1 = (acc tl l2_2)),
   (valid alloc aux_1).
 Proof.
 intuition.
@@ -264,7 +263,7 @@ subst aux_1; constructor; auto.
 subst aux_1; intuition.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 980-1006 *)
+(* Why obligation from file "why/has_cycle.why", characters 1079-1105 *)
 Lemma cyclic_impl_po_9 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -290,17 +289,17 @@ Lemma cyclic_impl_po_9 :
   forall (Post4: l1_2 = (acc tl l1_1)),
   forall (Pre12: (valid alloc l2_2)),
   forall (aux_1: pointer),
-  forall (Post32: aux_1 = (acc tl l2_2)),
+  forall (Post33: aux_1 = (acc tl l2_2)),
   forall (Pre10: (valid alloc aux_1)),
   forall (result4: pointer),
-  forall (Post34: result4 = (acc tl aux_1)),
+  forall (Post35: result4 = (acc tl aux_1)),
   result4 = (acc tl (acc tl l2_2)).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 943-1008 *)
+(* Why obligation from file "why/has_cycle.why", characters 1030-1119 *)
 Lemma cyclic_impl_po_10 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -351,7 +350,7 @@ apply lpath_append with l1_1; auto.
 destruct l0; simpl in H8; discriminate H8.
 Admitted.
 
-(* Why obligation from file "why/has_cycle.why", characters 331-1019 *)
+(* Why obligation from file "why/has_cycle.why", characters 368-1133 *)
 Lemma cyclic_impl_po_11 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -382,7 +381,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 331-1019 *)
+(* Why obligation from file "why/has_cycle.why", characters 368-1133 *)
 Lemma cyclic_impl_po_12 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -408,11 +407,11 @@ inversion_clear H.
 inversion_clear H0; intuition idtac.
 apply Cyclic with x x0 l1_1; auto.
 inversion H0; intuition.
-subst l1_1; inversion H; intuition.
+rewrite H9 in H; elim (null_not_valid alloc); assumption.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 394-546 *)
+(* Why obligation from file "why/has_cycle.why", characters 437-595 *)
 Lemma cyclic_impl_po_13 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
