@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.9 2005-04-20 14:11:13 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.10 2005-05-12 14:09:39 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -151,6 +151,8 @@ let rec npredicate fmt = function
       fprintf fmt "\\old(%a)" npredicate p
   | NPat (p, l) ->
       fprintf fmt "\\at(%a, %s)" npredicate p l
+  | NPseparated (t1,t2) ->
+      fprintf fmt "\\separated (%a,%a)" nterm t1 nterm t2
   | NPvalid t ->
       fprintf fmt "\\valid(%a)" nterm t
   | NPvalid_index (t1, t2) ->

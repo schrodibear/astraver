@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.94 2005-05-02 08:50:16 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.95 2005-05-12 14:09:38 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -293,6 +293,19 @@ let rec predicate p =
     | NPforall (_, p) -> predicate p	
     | NPexists (_, p) -> predicate p
     | NPfresh t -> add_alloc (term t)
+    | NPseparated (t1,t2) -> 
+	let loc = t1.nterm_loc in
+	let t1 =
+	match t1.nterm_node with
+	  | NTvar t -> t
+	  | _ -> assert false
+	in
+	let t2 =
+ 	  match t2.nterm_node with
+	    | NTvar t -> t
+	    | _ -> assert false
+	in
+	    add_alloc (predicate (Cnorm.separation loc t1 t2))
     | NPvalid t -> add_alloc (term t)
     | NPvalid_index (t1,t2) -> add_alloc (union (term t1) (term t2))
     | NPvalid_range (t1,t2, t3) -> 
@@ -300,22 +313,6 @@ let rec predicate p =
     | NPold p -> predicate p
     | NPat (p,_) -> predicate p
     | NPnamed (_, p) -> predicate p
-
-let logic_type ls =
-  match ls with
-    | Clogic.NPredicate_reads(args,locs) -> locations locs
-    | Clogic.NPredicate_def(args,pred) -> predicate pred
-    | Clogic.NFunction(args,ret,locs) -> locations locs
-
-
-let option f = function None -> empty | Some x -> f x
-let ef_option f = function None -> ef_empty | Some x -> f x
-
-let variant (t,_) = term t
-
-let loop_annot a = 
-  let r = union (option predicate a.invariant) (option variant a.variant) in
-  { reads = r; assigns = empty (* TODO *) }
 
 (* table for weak invariants *)
 let weak_invariants = Hashtbl.create 97
@@ -364,6 +361,24 @@ let strong_invariants_for hvs =
        if HeapVarSet.subset e hvs then union e acc
        else acc) 
     strong_invariants empty
+
+
+let logic_type ls =
+  match ls with
+    | Clogic.NPredicate_reads(args,locs) -> locations locs
+    | Clogic.NPredicate_def(args,pred) -> predicate pred
+    | Clogic.NFunction(args,ret,locs) -> locations locs
+
+
+let option f = function None -> empty | Some x -> f x
+let ef_option f = function None -> ef_empty | Some x -> f x
+
+let variant (t,_) = term t
+
+let loop_annot a = 
+  let r = union (option predicate a.invariant) (option variant a.variant) in
+  { reads = r; assigns = empty (* TODO *) }
+
 
 let spec sp = 
   ef_union

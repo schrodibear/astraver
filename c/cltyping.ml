@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.77 2005-05-12 07:41:42 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.78 2005-05-12 14:09:39 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -247,7 +247,7 @@ and type_term_node loc env = function
 	| LTint, Tfloat _ -> Tunop (Uint_of_float, t), c_int
 	| _ -> warning loc "ignored cast in annotation"; t.term_node, tt
       end
-  | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
+  | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ | PLseparated _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse | PLnamed _ ->
       raise_located loc (AnyMessage "syntax error")
@@ -427,6 +427,18 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       (match t.term_type.ctype_node with
 	 | Tarray _ | Tpointer _ -> Pfresh(t)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
+  | PLseparated (t1,t2) ->
+      let t1loc = t1.lexpr_loc in
+      let t1 = type_term env t1 in 
+      let t2loc = t2.lexpr_loc in
+      let t2 = type_term env t2 in
+      Pseparated (
+      (match t1.term_type.ctype_node with
+	 | Tstruct _ -> t1
+	 | _ -> error t1loc "subscripted value is neither array nor pointer"),
+	(match t2.term_type.ctype_node with
+	 | Tstruct _ -> t2
+	 | _ -> error t2loc "subscripted value is neither array nor pointer"))
   | PLvalid (t) ->
       let tloc = t.lexpr_loc in
       let t = type_term env t in

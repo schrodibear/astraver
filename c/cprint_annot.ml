@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint_annot.ml,v 1.1 2005-04-25 12:26:39 hubert Exp $ i*)
+(*i $Id: cprint_annot.ml,v 1.2 2005-05-12 14:09:39 hubert Exp $ i*)
 
 (* Pretty-printer for typed AST *)
 
@@ -155,6 +155,8 @@ let rec predicate fmt = function
       fprintf fmt "\\old(%a)" predicate p
   | Pat (p, l) ->
       fprintf fmt "\\at(%a, %s)" predicate p l
+  | Pseparated (t1,t2) ->
+      fprintf fmt "\\separated(%a, %a)" term t1 term t2
   | Pvalid t ->
       fprintf fmt "\\valid(%a)" term t
   | Pvalid_index (t1, t2) ->
