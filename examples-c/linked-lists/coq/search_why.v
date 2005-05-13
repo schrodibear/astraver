@@ -4,7 +4,7 @@
 Require Export caduceus_why.
 Require Export LinkedLists.
 
-(* Why obligation from file "why/search.why", characters 149-405 *)
+(* Why obligation from file "why/search.why", characters 170-437 *)
 Lemma search_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -17,7 +17,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 156-279 *)
+(* Why obligation from file "why/search.why", characters 177-302 *)
 Lemma search_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -36,7 +36,7 @@ inversion Pre7; intuition.
 absurd (p1 = null); auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 383-397 *)
+(* Why obligation from file "why/search.why", characters 416-429 *)
 Lemma search_impl_po_3 : 
   forall (l: pointer),
   forall (v: Z),
@@ -59,7 +59,7 @@ inversion Pre7; intuition.
 absurd (p1 = null); auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 378-397 *)
+(* Why obligation from file "why/search.why", characters 411-429 *)
 Lemma search_impl_po_4 : 
   forall (l: pointer),
   forall (v: Z),
@@ -83,7 +83,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 149-405 *)
+(* Why obligation from file "why/search.why", characters 170-437 *)
 Lemma search_impl_po_5 : 
   forall (l: pointer),
   forall (v: Z),
@@ -108,7 +108,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 149-405 *)
+(* Why obligation from file "why/search.why", characters 170-437 *)
 Lemma search_impl_po_6 : 
   forall (l: pointer),
   forall (v: Z),
@@ -131,7 +131,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 299-320 *)
+(* Why obligation from file "why/search.why", characters 326-346 *)
 Lemma search_impl_po_7 : 
   forall (l: pointer),
   forall (alloc: alloc_table),

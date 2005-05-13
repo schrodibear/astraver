@@ -241,7 +241,7 @@ Lemma test2_impl_po_3 :
                 ((sum alloc intP t 0 n) + i2)),
   forall (Test1: i2 >= n),
   (sum alloc intP0 t 0 n) = ((sum alloc intP t 0 n) + n) /\
-  (assigns alloc intP intP0 (all_loc (pointer_loc t))).
+  (not_assigns alloc intP intP0 (pset_all (pset_singleton t))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

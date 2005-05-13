@@ -548,7 +548,8 @@ Admitted.
 
 (*Why predicate*) Definition valid1_range  [m1:((memory) pointer)] [size:Z]
   := ((p:pointer)
-      ((a:alloc_table) ((valid a p) -> (valid_range a (acc m1 p) `0` size)))).
+      ((a:alloc_table)
+       ((valid a p) -> (valid_range a (acc m1 p) `0` `size - 1`)))).
 
 (*Why predicate*) Definition separation1  [m1:((memory) pointer)]
   [m2:((memory) pointer)]
@@ -562,9 +563,8 @@ Admitted.
       ((a:alloc_table)
        ((valid a p) ->
         ((i:Z)
-         (`0 < i` ->
-          (`i < size` ->
-           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p))))))))).
+         (`0 <= i` /\ `i < size` ->
+          ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
 
 (*Why predicate*) Definition separation1_range  [m:((memory) pointer)]
   [size:Z]
@@ -573,13 +573,11 @@ Admitted.
        ((valid a p) ->
         ((i1:Z)
          ((i2:Z)
-          (`0 < i1` ->
-           (`i1 < size` ->
-            (`0 < i2` ->
-             (`i2 < size` ->
-              (`i1 <> i2` ->
-               ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
-                                                                (shift p i2)))))))))))))).
+          (`0 <= i1` /\ `i1 < size` ->
+           (`0 <= i2` /\ `i2 < size` ->
+            (`i1 <> i2` ->
+             ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
+                                                              (shift p i2)))))))))))).
 
 (*Why predicate*) Definition separation2  [m1:((memory) pointer)]
   [m2:((memory) pointer)]
@@ -594,9 +592,8 @@ Admitted.
       ((q:pointer)
        ((a:alloc_table)
         ((i:Z)
-         (`0 < i` ->
-          (`i < size` ->
-           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 q))))))))).
+         (`0 <= i` /\ `i < size` ->
+          ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 q)))))))).
 
 (*Why logic*) Definition on_heap : alloc_table -> pointer -> Prop.
 Admitted.

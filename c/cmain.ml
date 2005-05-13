@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.55 2005-04-22 13:37:01 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.56 2005-05-13 14:25:18 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -54,12 +54,11 @@ let interp_file (file,p) =
   why_spec
 
 let main () = 
+(*
   if not (parse_only || type_only || cpp_dump) then begin
     let theorysrc = Filename.concat Coptions.libdir "why/caduceus.why" in
-(*
     let theory = Lib.file "why" "caduceus.why" in
     file_copy_if_different theorysrc theory;
-*)
     let coqsrc = Filename.concat Coptions.libdir "coq/caduceus_why.v" in
     let coq = Lib.file "coq" "caduceus_why.v" in
     Lib.file_copy_if_different coqsrc coq;
@@ -67,6 +66,7 @@ let main () =
     let coq = Lib.file "coq" "caduceus_tactics.v" in
     Lib.file_copy_if_different coqtactics coq
   end;
+*)
   (* parsing *)
   let pfiles = List.map parse_file (files ()) in
   if parse_only then exit 0;
@@ -116,21 +116,25 @@ let main () =
       [] nfiles
   in
   (* Why specs *)
-  let file = Lib.file "why" "caduceus_spec" in
-  Pp.print_in_file 
-    (fun fmt -> 
-       fprintf fmt 
-	 "(* this file was automatically generated; do not edit *)@\n@\n";
-       fprintf fmt "(* heap variables *)@\n";
-       Hashtbl.iter 
-	 (fun v bt -> 
-	    let d = Param (false, v, Ref_type (Base_type bt)) in
-	    fprintf fmt "@[%a@]" fprintf_why_decls [d])
-	 Ceffect.heap_vars;
-       fprintf fmt "(* functions specifications *)@\n";
-       Output.fprintf_why_decls fmt why_specs) 
-    (file ^ ".tmp");
-  Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why");
+  List.iter
+    (fun f -> 
+       let f = Filename.chop_extension f in
+       let file = Lib.file "why" (f ^ "_spec") in
+       Pp.print_in_file 
+	 (fun fmt -> 
+	    fprintf fmt 
+	      "(* this file was automatically generated; do not edit *)@\n@\n";
+	    fprintf fmt "(* heap variables *)@\n";
+	    Hashtbl.iter 
+	      (fun v bt -> 
+		 let d = Param (false, v, Ref_type (Base_type bt)) in
+		 fprintf fmt "@[%a@]" fprintf_why_decls [d])
+	      Ceffect.heap_vars;
+	    fprintf fmt "(* functions specifications *)@\n";
+	    Output.fprintf_why_decls fmt why_specs) 
+	 (file ^ ".tmp");
+       Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why"))
+    (files ());
   (* makefile *)
   List.iter Cmake.makefile (files ())
        

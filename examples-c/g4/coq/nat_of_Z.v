@@ -1,5 +1,5 @@
 Require Export ZArith.
-Require Export caduceus_spec_why.
+Require Export g4_spec_why.
 Require Export G4.
 
 Definition n (z:Z) : nat := Zabs_nat z.

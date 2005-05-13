@@ -11,7 +11,7 @@ void swap(int t[],int i,int j) {
   t[j] = tmp;
 }
 
-//@ logic intmset mset(int t[],int i,int j) reads t[*]
+//@ logic intmset mset(int t[],int i,int j) reads t[..]
 
 /*@ predicate sorted(int t[],int i,int j) {
   @   \forall int k; i <= k < j => t[k] <= t[k+1]

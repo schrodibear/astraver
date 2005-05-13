@@ -1,8 +1,8 @@
-coq/caduceus_spec_why.vo: coq/caduceus_spec_why.v coq/caduceus_why.vo coq/caduceus_tactics.vo coq/Lex3.vo
 coq/caduceus_tactics.vo: coq/caduceus_tactics.v coq/caduceus_why.vo
 coq/caduceus_why.vo: coq/caduceus_why.v
+coq/g4_spec_why.vo: coq/g4_spec_why.v coq/caduceus_why.vo coq/caduceus_tactics.vo coq/Lex3.vo
 coq/G4.vo: coq/G4.v
-coq/g4_why.vo: coq/g4_why.v coq/caduceus_spec_why.vo coq/G4.vo coq/G4z.vo
-coq/G4z.vo: coq/G4z.v coq/G4.vo coq/nat_of_Z.vo
+coq/g4_why.vo: coq/g4_why.v coq/g4_spec_why.vo coq/G4.vo coq/G4z.vo
+coq/G4z.vo: coq/G4z.v coq/nat_of_Z.vo coq/G4.vo
 coq/Lex3.vo: coq/Lex3.v
-coq/nat_of_Z.vo: coq/nat_of_Z.v coq/caduceus_spec_why.vo coq/G4.vo
+coq/nat_of_Z.vo: coq/nat_of_Z.v coq/g4_spec_why.vo coq/G4.vo

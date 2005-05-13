@@ -74,10 +74,6 @@ Admitted.
   (j:Z)
   := 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) < (block_length a p).
 
-(*Why axiom*) Lemma null_not_valid :
-  (forall (a:alloc_table), ~(valid a null)).
-Admitted.
-
 (*Why axiom*) Lemma offset_shift :
   (forall (p:pointer),
    (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
