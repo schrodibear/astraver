@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.45 2005-05-12 14:09:38 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.46 2005-05-13 14:58:49 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -76,6 +76,7 @@ and lexpr_node =
   | PLexists of logic_type quantifiers * lexpr
   | PLvalid of lexpr
   | PLseparated of lexpr * lexpr
+  | PLfullseparated of lexpr * lexpr
   | PLvalid_index of lexpr * lexpr
   | PLvalid_range of lexpr * lexpr * lexpr
   | PLfresh of lexpr
@@ -125,7 +126,8 @@ type 'ctype predicate =
   | Pexists of 'ctype typed_quantifiers * 'ctype predicate
   | Pold of 'ctype predicate
   | Pat of 'ctype predicate * string
-  | Pseparated of 'ctype term * 'ctype term
+  | Pseparated of 'ctype term * 'ctype term  
+  | Pfullseparated of 'ctype term * 'ctype term
   | Pvalid of 'ctype term 
   | Pvalid_index of 'ctype term * 'ctype term
   | Pvalid_range of 'ctype term * 'ctype term * 'ctype term
@@ -199,7 +201,6 @@ type 'ctype npredicate =
   | NPexists of 'ctype typed_quantifiers * 'ctype npredicate
   | NPold of 'ctype npredicate
   | NPat of 'ctype npredicate * string
-  | NPseparated of 'ctype nterm * 'ctype nterm
   | NPvalid of 'ctype nterm 
   | NPvalid_index of 'ctype nterm * 'ctype nterm
   | NPvalid_range of 'ctype nterm * 'ctype nterm * 'ctype nterm

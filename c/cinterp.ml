@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.143 2005-05-12 14:09:38 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.144 2005-05-13 14:58:49 hubert Exp $ i*)
 
 
 open Format
@@ -296,17 +296,6 @@ let rec interp_predicate label old_label p =
 	interp_predicate (Some l) old_label p
     | NPfresh (t) ->
 	LPred("fresh",[interp_var (Some old_label) "alloc"; ft t])
-    | NPseparated (t1,t2) ->
-	let loc = t1.nterm_loc in
-	let t1 = match t1.nterm_node with
-	  | NTvar t -> t 
-	  | _ -> assert false 
-	in
-	let t2 = match t2.nterm_node with
-	  | NTvar t -> t 
-	  | _ -> assert false 
-	in
-	f (Cnorm.separation loc t1 t2)
     | NPvalid (t) ->
 	LPred("valid",[interp_var label "alloc"; ft t])
     | NPvalid_index (t,a) ->

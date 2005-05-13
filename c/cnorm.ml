@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.33 2005-05-12 14:09:39 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.34 2005-05-13 14:58:49 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -279,15 +279,17 @@ let rec tab_struct mark loc v1 v2 s ty n n1 n2=
        (fun t i -> 
 	  local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
 
-and local_separation mark loc n1 v1 n2 v2 =
+and local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
     | Tarray (ty, None), _ ->
 	error loc ("array size missing in `" ^ n1 ^ "'")
     | _, Tarray (ty, None) ->
 	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n , Tarray (ty,Some s) -> tab_struct mark loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> tab_struct mark loc v2 v1 s ty n n1 n2
+    | Tstruct n , Tarray (ty,Some s) -> 
+	tab_struct  mark loc v1 v2 s ty n n1 n2
+    | Tarray (ty,Some s) , Tstruct n -> 
+	tab_struct mark loc v2 v1 s ty n n1 n2
     | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
 	make_and
 	  (if compatible_type v1.nterm_type v2.nterm_type
@@ -300,16 +302,18 @@ and local_separation mark loc n1 v1 n2 v2 =
 		(fun t i -> local_separation mark loc (n1^"[i]") 
 		     (indirection loc ty1 t) n2 v2))
 	     (make_forall_range loc v2 s2  
-		(fun t i -> local_separation true loc n1 v1 (n2^"[j]") 
+		(fun t i -> local_separation true loc n1 v1 (n2^"[j]")
 		     (indirection loc ty2 t))))
-    | _, _ -> NPtrue
+     | _, _ -> NPtrue
 
     
 let separation loc v1 v2 =
   local_separation false loc v1.var_name (var_to_term loc v1) 
     v2.var_name (var_to_term loc v2)
 
-
+let fullseparation loc v1 v2 =
+  local_separation false loc v1.var_name (var_to_term loc v1) 
+    v2.var_name (var_to_term loc v2)
 
 
 let noption f o =
@@ -535,7 +539,24 @@ let rec predicate p =
 		t 
 	    | _ -> assert false
 	in
-	separation loc t1 t2 
+	separation loc t1 t2     
+    | Pfullseparated (t1,t2) ->
+	let loc = t1.term_loc in
+	let t1 =
+	  match t1.term_node with
+	    | Tvar t -> 	  
+		set_var_type (Var_info t) (c_array_size t.var_type Int64.one);
+		t
+	    | _ -> assert false 
+	in
+	let t2 =
+	  match t2.term_node with
+	    | Tvar t -> 	  
+		set_var_type (Var_info t) (c_array_size t.var_type Int64.one);
+		t 
+	    | _ -> assert false
+	in
+	fullseparation loc t1 t2 
     | Pvalid (t) -> NPvalid (term t) 
     | Pvalid_index (t1 , t2) -> NPvalid_index (term t1 , term t2) 
     | Pvalid_range (t1,t2,t3) -> NPvalid_range (term t1, term t2 , term t3)

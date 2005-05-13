@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.95 2005-05-12 14:09:38 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.96 2005-05-13 14:58:49 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -293,19 +293,6 @@ let rec predicate p =
     | NPforall (_, p) -> predicate p	
     | NPexists (_, p) -> predicate p
     | NPfresh t -> add_alloc (term t)
-    | NPseparated (t1,t2) -> 
-	let loc = t1.nterm_loc in
-	let t1 =
-	match t1.nterm_node with
-	  | NTvar t -> t
-	  | _ -> assert false
-	in
-	let t2 =
- 	  match t2.nterm_node with
-	    | NTvar t -> t
-	    | _ -> assert false
-	in
-	    add_alloc (predicate (Cnorm.separation loc t1 t2))
     | NPvalid t -> add_alloc (term t)
     | NPvalid_index (t1,t2) -> add_alloc (union (term t1) (term t2))
     | NPvalid_range (t1,t2, t3) -> 
