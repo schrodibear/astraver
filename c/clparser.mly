@@ -88,7 +88,7 @@ lexpr:
 | EXISTS ne_parameters SEMICOLON lexpr %prec prec_exists
       { info (PLexists ($2, $4)) }
 | SEPARATED LPAR lexpr COMMA lexpr RPAR { info (PLseparated ($3,$5)) }
-| FULLSEPARATED LPAR lexpr COMMA lexpr RPAR { info (PLseparated ($3,$5)) }
+| FULLSEPARATED LPAR lexpr COMMA lexpr RPAR { info (PLfullseparated ($3,$5)) }
 | VALID LPAR lexpr RPAR { info (PLvalid ($3)) }
 | VALID_INDEX LPAR lexpr COMMA lexpr RPAR { info (PLvalid_index ($3,$5)) }
 | VALID_RANGE LPAR lexpr COMMA lexpr COMMA lexpr RPAR 

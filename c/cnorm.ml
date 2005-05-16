@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.34 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.35 2005-05-16 09:44:35 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -253,6 +253,14 @@ let compatible_type ty1 ty2 =
     | _, Ctypes.Tvar _ | _, Tvoid | _, Tint _ | _, Tfloat _ -> false
     | _, _ -> true 
 
+let full_compatible_type ty1 ty2 = 
+  match ty1.Ctypes.ctype_node,ty2.Ctypes.ctype_node with
+    | Tfun _ , _  | Tenum _, _  
+    | Ctypes.Tvar _ , _ | Tvoid, _ | Tint _, _ | Tfloat _, _ -> false
+    | _, Tfun _ | _, Tenum _  
+    | _, Ctypes.Tvar _ | _, Tvoid | _, Tint _ | _, Tfloat _ -> false
+    | _, _ -> true
+
 (* assumes v2 is an array of objects of type ty *)
 let rec tab_struct mark loc v1 v2 s ty n n1 n2=
   let l = begin
@@ -311,8 +319,123 @@ let separation loc v1 v2 =
   local_separation false loc v1.var_name (var_to_term loc v1) 
     v2.var_name (var_to_term loc v2)
 
+let rec full_tab_struct mark loc v1 v2 s ty n n1 n2=
+  let l = begin
+    match  tag_type_definition n with
+      | TTStructUnion ((Tstruct _),fl) ->
+	  fl
+      | _ -> assert false
+  end in
+  if mark then
+    List.fold_left 
+      (fun p t -> 
+	 if  full_compatible_type t.var_type v2.nterm_type 
+	 then make_and p (not_alias loc v2 (in_struct v1 t))
+	 else p)
+      NPtrue l
+  else
+  make_and (List.fold_left 
+	      (fun p t -> 
+		 if  full_compatible_type t.var_type v2.nterm_type 
+		 then make_and p (not_alias loc v2 (in_struct v1 t))
+		 else p)
+	      NPtrue l)
+    (make_forall_range loc v2 s 
+       (fun t i -> 
+	  full_local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
+
+and full_local_separation  mark loc n1 v1 n2 v2 =
+  match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
+  with
+    | Tarray (ty, None), _ ->
+	error loc ("array size missing in `" ^ n1 ^ "'")
+    | _, Tarray (ty, None) ->
+	error loc ("array size missing in `" ^ n2 ^ "'")
+    | Tstruct n , Tarray (ty,Some s) -> 
+	full_tab_struct  mark loc v1 v2 s ty n n1 n2
+    | Tarray (ty,Some s) , Tstruct n -> 
+	full_tab_struct mark loc v2 v1 s ty n n1 n2
+    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
+	make_and
+	  (if full_compatible_type v1.nterm_type v2.nterm_type
+	   then
+	     (not_alias loc v1 v2)
+	   else
+	     NPtrue)
+	  (make_and 
+	     (make_forall_range loc v1 s1 
+		(fun t i -> full_local_separation mark loc (n1^"[i]") 
+		     (indirection loc ty1 t) n2 v2))
+	     (make_forall_range loc v2 s2  
+		(fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
+		     (indirection loc ty2 t))))
+    | Tpointer ty1 , Tpointer ty2 ->
+	if full_compatible_type v1.nterm_type v2.nterm_type
+	then
+	  (not_alias loc v1 v2)
+	else
+	  NPtrue
+    | Tarray (ty2,Some s2) ,  Tpointer ty1
+    | Tpointer ty1, Tarray (ty2,Some s2) ->
+	make_and
+	  (if full_compatible_type v1.nterm_type v2.nterm_type
+	   then
+	     (not_alias loc v1 v2)
+	   else
+	     NPtrue)
+	  (make_forall_range loc v2 s2  
+	     (fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
+		(indirection loc ty2 t)))
+    | Tstruct n, Tpointer ty  ->
+	 let l = begin
+	   match  tag_type_definition n with
+	     | TTStructUnion ((Tstruct _),fl) ->
+		 fl
+	     | _ -> assert false
+	 end in 
+	 (List.fold_left 
+	    (fun p t -> 
+	       make_and p (full_local_separation mark loc n2 v2 n1 
+			     (in_struct v1 t)))
+	    NPtrue l)
+    |  Tpointer ty, Tstruct n ->
+	 let l = begin
+	   match  tag_type_definition n with
+	     | TTStructUnion ((Tstruct _),fl) ->
+		 fl
+	     | _ -> assert false
+	 end in 
+	 (List.fold_left 
+	    (fun p t -> 
+	       make_and p (full_local_separation mark loc n1 v1 n2 
+			     (in_struct v2 t)))
+	    NPtrue l)
+    | Tstruct n1, Tstruct n2 ->
+	let l2 = begin
+	   match  tag_type_definition n2 with
+	     | TTStructUnion ((Tstruct _),fl) ->
+		 fl
+	     | _ -> assert false
+	 end in	
+	let l1 = begin
+	   match  tag_type_definition n1 with
+	     | TTStructUnion ((Tstruct _),fl) ->
+		 fl
+	     | _ -> assert false
+	end in
+	(List.fold_left 
+	    (fun p1 t1 ->
+	       (List.fold_left 
+		  (fun p2 t2 ->
+		     make_and p2 (full_local_separation mark loc n1 
+				    (in_struct v1 t1) 
+				    n2  (in_struct v2 t2)))
+		  p1 l2))
+		 NPtrue l1)
+    | _, _ -> NPtrue
+
 let fullseparation loc v1 v2 =
-  local_separation false loc v1.var_name (var_to_term loc v1) 
+  full_local_separation false loc v1.var_name (var_to_term loc v1) 
     v2.var_name (var_to_term loc v2)
 
 
