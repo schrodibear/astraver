@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.21 2005-02-16 13:14:28 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.22 2005-05-19 12:36:06 hubert Exp $ i*)
 
 open Ctypes
 
@@ -93,6 +93,7 @@ type fun_info =
       mutable has_assigns : bool;
       mutable fun_type : Ctypes.ctype;
       mutable args : var_info list;
+      mutable graph : fun_info list;
     }
 
 let default_fun_info x =
@@ -103,6 +104,7 @@ let default_fun_info x =
     has_assigns = false;
     fun_type = c_void;
     args = [];
+    graph = [];
   }
 
 

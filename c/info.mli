@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.18 2005-02-16 13:14:28 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.19 2005-05-19 12:36:06 hubert Exp $ i*)
 
 type var_info = private 
     {
@@ -66,6 +66,7 @@ type fun_info =
       mutable has_assigns : bool;
       mutable fun_type : Ctypes.ctype;
       mutable args : var_info list;
+      mutable graph : fun_info list;    
     }
 
 val default_fun_info : string -> fun_info

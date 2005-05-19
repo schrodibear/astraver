@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.58 2005-05-19 09:01:56 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.59 2005-05-19 12:36:06 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -265,7 +265,7 @@ and tdecl =
   | Ttypedecl of tctype
   | Tdecl of tctype * Info.var_info * texpr c_initializer option
   | Tfunspec of spec * tctype * Info.fun_info 
-  | Tfundef of spec * tctype * Info.fun_info * tstatement
+  | Tfundef of spec * tctype * Info.fun_info * tstatement 
 
 type tfile = tdecl located list
 

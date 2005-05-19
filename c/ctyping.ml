@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.95 2005-05-19 09:01:57 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.96 2005-05-19 12:36:06 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -935,7 +935,7 @@ let type_spec_decl loc ofs = function
       let ty = type_type loc (Env.empty ()) ty in
       let info = add_ghost loc x ty (default_var_info x) in 
       set_static info;
-      set_var_type (Var_info info) ty;
+      set_var_type (Var_info info) {ty with Ctypes.ctype_ghost = true};
       let cinit = 
 	match cinit with
 	  | None -> None

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.97 2005-05-19 09:01:56 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.98 2005-05-19 12:36:06 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -62,10 +62,10 @@ let memory_type t = ([t],"memory")
 
 let pointer_heap_array_var ty =
   match ty.ctype_node with
-    | Tarray (ty,_)
-    | Tpointer ty ->
-	let v,ty = pointer_heap_var ty in
-	let v = v^"P" in
+    | Tarray (ty',_)
+    | Tpointer ty' ->
+	let v,ty'' = pointer_heap_var ty' in
+	let v = if ty.ctype_ghost then "ghost_"^v^"P" else v^"P" in
 	let info = 
 	  match Cenv.add_sym Loc.dummy v 
 	    Ctypes.c_void (Var_info (default_var_info v)) 
@@ -73,7 +73,7 @@ let pointer_heap_array_var ty =
 	    | Var_info v -> v
 	    | Fun_info f -> assert false
 	in
-	(info, memory_type ty)
+	(info, memory_type ty'')
     | _ -> assert false (* location wrongly typed *)
 
 let heap_vars = Hashtbl.create 97

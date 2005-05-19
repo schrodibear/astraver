@@ -21,6 +21,7 @@ Save.
 (* Why obligation from file "why/ghost.why", characters 355-418 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (ghost_intP: ((memory) Z)),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (u: pointer),
@@ -35,9 +36,9 @@ Lemma g_impl_po_2 :
    (result = t ->
     ((forall (result0:Z),
       (result0 = (acc intP0 (shift u 1)) ->
-       (forall (intP1:((memory) Z)),
-        (intP1 = (upd intP0 result result0) -> (acc intP1 u) =
-         (acc intP u) /\ (acc intP1 t) = 3)) /\
+       (forall (ghost_intP0:((memory) Z)),
+        (ghost_intP0 = (upd ghost_intP result result0) -> (acc intP0 u) =
+         (acc intP u) /\ (acc ghost_intP0 t) = 3)) /\
        (valid alloc result))) /\
     (valid alloc (shift u 1))) /\ (valid alloc (shift u 1)))).
 Proof.
