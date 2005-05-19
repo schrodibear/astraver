@@ -3,3 +3,50 @@
 
 Require Export ghost_spec_why.
 
+(* Why obligation from file "why/ghost.why", characters 391-418 *)
+Lemma g_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (u: pointer),
+  forall (Pre8: (valid_range alloc u 0 5) /\ (valid_range alloc t 0 10) /\
+                ~((base_addr u) = (base_addr t))),
+  forall (caduceus_2: pointer),
+  forall (Post3: caduceus_2 = (shift u 1)),
+  (valid alloc caduceus_2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/ghost.why", characters 355-418 *)
+Lemma g_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (t: pointer),
+  forall (u: pointer),
+  forall (Pre8: (valid_range alloc u 0 5) /\ (valid_range alloc t 0 10) /\
+                ~((base_addr u) = (base_addr t))),
+  forall (caduceus_2: pointer),
+  forall (Post3: caduceus_2 = (shift u 1)),
+  forall (Pre3: (valid alloc caduceus_2)),
+  forall (intP0: ((memory) Z)),
+  forall (Post8: intP0 = (upd intP caduceus_2 3)),
+  (forall (result:pointer),
+   (result = t ->
+    ((forall (result0:Z),
+      (result0 = (acc intP0 (shift u 1)) ->
+       (forall (intP1:((memory) Z)),
+        (intP1 = (upd intP0 result result0) -> (acc intP1 u) =
+         (acc intP u) /\ (acc intP1 t) = 3)) /\
+       (valid alloc result))) /\
+    (valid alloc (shift u 1))) /\ (valid alloc (shift u 1)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

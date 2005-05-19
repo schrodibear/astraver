@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.79 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.80 2005-05-19 09:01:56 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -285,6 +285,36 @@ and type_terms loc env at tl =
 	raise_located loc PartialApp
   in
   type_list (at, tl)
+
+
+(* ghost *)
+
+let rec type_ghost_lvalue env t =
+  let t', ty =   type_ghost_lvalue_node t.lexpr_loc env t.lexpr_node in
+  { term_node = t'; term_loc = reloc t.lexpr_loc; term_type = ty }
+
+and type_ghost_lvalue_node loc env t =
+  match t with
+    | PLvar x ->
+	let v = 
+	  try find_ghost x.var_name
+	  with Not_found -> 
+            error loc ("unbound ghost variable " ^ x.var_name)
+	in 
+	Clogic.Tvar v, v.var_type
+    | PLarrget (t1, t2) ->
+	let t1 = type_ghost_lvalue env t1 in
+	(match t1.term_type.ctype_node with
+	   | Tarray (ty,_) | Tpointer ty ->
+	       let t2 = type_int_term env t2 in
+	       Tarrget (t1, t2), ty
+	   | _ ->
+	       error loc "subscripted value is neither array nor pointer")
+    | _ ->
+	error loc "not allowed as ghost left value"
+
+
+
 
 (* Typing logic types *)
 

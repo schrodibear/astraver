@@ -221,6 +221,7 @@ src/util.cmi: src/types.cmi src/rename.cmi src/ptree.cmi src/misc.cmi \
 src/vcg.cmi: src/types.cmi src/logic.cmi src/log.cmi src/loc.cmi \
     src/ident.cmi src/cc.cmi 
 src/wp.cmi: src/types.cmi src/env.cmi 
+c/cast_misc.cmi: c/cast.cmi 
 c/cast.cmi: src/loc.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cconst.cmi 
 c/cconst.cmi: src/loc.cmi 
 c/ceffect.cmi: c/output.cmi src/loc.cmi c/info.cmi c/clogic.cmi c/cast.cmi 
@@ -239,6 +240,8 @@ c/ctyping.cmi: c/cast.cmi
 c/info.cmi: c/ctypes.cmi 
 c/invariant.cmi: c/info.cmi c/ctypes.cmi c/creport.cmi c/cnorm.cmi \
     c/clogic.cmi c/cenv.cmi c/cast.cmi 
+c/cast_misc.cmo: c/ctypes.cmi c/cast.cmi c/cast_misc.cmi 
+c/cast_misc.cmx: c/ctypes.cmx c/cast.cmi c/cast_misc.cmi 
 c/cconst.cmo: c/creport.cmi c/cconst.cmi 
 c/cconst.cmx: c/creport.cmx c/cconst.cmi 
 c/ceffect.cmo: src/pp.cmi c/output.cmi src/loc.cmi c/invariant.cmi c/info.cmi \
@@ -256,11 +259,13 @@ c/cinit.cmo: src/loc.cmi c/info.cmi c/ctyping.cmi c/ctypes.cmi c/coptions.cmi \
 c/cinit.cmx: src/loc.cmx c/info.cmx c/ctyping.cmx c/ctypes.cmx c/coptions.cmx \
     c/clogic.cmi c/cenv.cmx c/cast.cmi c/cinit.cmi 
 c/cinterp.cmo: c/output.cmi src/loc.cmi c/info.cmi c/ctypes.cmi c/creport.cmi \
-    c/coptions.cmi c/cnorm.cmi c/clogic.cmi c/cinit.cmi c/cerror.cmi \
-    c/cenv.cmi c/ceffect.cmi c/cconst.cmi c/cast.cmi c/cinterp.cmi 
+    c/cprint.cmi c/coptions.cmi c/cnorm.cmi c/clogic.cmi c/cinit.cmi \
+    c/cerror.cmi c/cenv.cmi c/ceffect.cmi c/cconst.cmi c/cast.cmi \
+    c/cinterp.cmi 
 c/cinterp.cmx: c/output.cmx src/loc.cmx c/info.cmx c/ctypes.cmx c/creport.cmx \
-    c/coptions.cmx c/cnorm.cmx c/clogic.cmi c/cinit.cmx c/cerror.cmi \
-    c/cenv.cmx c/ceffect.cmx c/cconst.cmx c/cast.cmi c/cinterp.cmi 
+    c/cprint.cmx c/coptions.cmx c/cnorm.cmx c/clogic.cmi c/cinit.cmx \
+    c/cerror.cmi c/cenv.cmx c/ceffect.cmx c/cconst.cmx c/cast.cmi \
+    c/cinterp.cmi 
 c/clexer.cmo: src/loc.cmi c/ctypes.cmi c/creport.cmi c/cparser.cmi \
     c/clogic.cmi c/cllexer.cmo c/cerror.cmi c/cast.cmi 
 c/clexer.cmx: src/loc.cmx c/ctypes.cmx c/creport.cmx c/cparser.cmx \
@@ -269,8 +274,12 @@ c/cllexer.cmo: c/creport.cmi src/compat.cmo c/clparser.cmi c/clogic.cmi \
     c/cerror.cmi 
 c/cllexer.cmx: c/creport.cmx src/compat.cmx c/clparser.cmx c/clogic.cmi \
     c/cerror.cmi 
-c/clparser.cmo: c/info.cmi c/clogic.cmi c/cast.cmi c/clparser.cmi 
-c/clparser.cmx: c/info.cmx c/clogic.cmi c/cast.cmi c/clparser.cmi 
+c/clogic_misc.cmo: c/clogic_misc.cmi 
+c/clogic_misc.cmx: c/clogic_misc.cmi 
+c/clparser.cmo: c/info.cmi c/ctypes.cmi c/creport.cmi c/clogic.cmi \
+    c/cast_misc.cmi c/cast.cmi c/clparser.cmi 
+c/clparser.cmx: c/info.cmx c/ctypes.cmx c/creport.cmx c/clogic.cmi \
+    c/cast_misc.cmx c/cast.cmi c/clparser.cmi 
 c/cltyping.cmo: src/loc.cmi c/info.cmi src/env.cmi c/ctypes.cmi c/creport.cmi \
     c/clogic.cmi c/cerror.cmi c/cenv.cmi c/cast.cmi c/cltyping.cmi 
 c/cltyping.cmx: src/loc.cmx c/info.cmx src/env.cmx c/ctypes.cmx c/creport.cmx \
@@ -286,17 +295,19 @@ c/cmain.cmx: src/pp.cmx c/output.cmx src/loc.cmx src/lib.cmx c/invariant.cmx \
 c/cmake.cmo: src/pp.cmi c/coptions.cmi c/cmake.cmi 
 c/cmake.cmx: src/pp.cmx c/coptions.cmx c/cmake.cmi 
 c/cnorm.cmo: src/loc.cmi c/info.cmi c/ctyping.cmi c/ctypes.cmi c/creport.cmi \
-    c/coptions.cmi c/cltyping.cmi c/clogic.cmi c/cenv.cmi c/cconst.cmi \
-    c/cast.cmi c/cnorm.cmi 
+    c/cprint.cmi c/coptions.cmi c/cltyping.cmi c/clogic.cmi c/cenv.cmi \
+    c/cconst.cmi c/cast.cmi c/cnorm.cmi 
 c/cnorm.cmx: src/loc.cmx c/info.cmx c/ctyping.cmx c/ctypes.cmx c/creport.cmx \
-    c/coptions.cmx c/cltyping.cmx c/clogic.cmi c/cenv.cmx c/cconst.cmx \
-    c/cast.cmi c/cnorm.cmi 
+    c/cprint.cmx c/coptions.cmx c/cltyping.cmx c/clogic.cmi c/cenv.cmx \
+    c/cconst.cmx c/cast.cmi c/cnorm.cmi 
 c/coptions.cmo: src/version.cmo c/cversion.cmo c/coptions.cmi 
 c/coptions.cmx: src/version.cmx c/cversion.cmx c/coptions.cmi 
 c/cparser.cmo: src/ptree.cmi src/loc.cmi c/ctypes.cmi c/creport.cmi \
-    c/coptions.cmi c/clogic.cmi c/cerror.cmi c/cast.cmi c/cparser.cmi 
+    c/coptions.cmi c/clogic.cmi c/cerror.cmi c/cast_misc.cmi c/cast.cmi \
+    c/cparser.cmi 
 c/cparser.cmx: src/ptree.cmi src/loc.cmx c/ctypes.cmx c/creport.cmx \
-    c/coptions.cmx c/clogic.cmi c/cerror.cmi c/cast.cmi c/cparser.cmi 
+    c/coptions.cmx c/clogic.cmi c/cerror.cmi c/cast_misc.cmx c/cast.cmi \
+    c/cparser.cmi 
 c/cpp.cmo: src/loc.cmi c/coptions.cmi c/cpp.cmi 
 c/cpp.cmx: src/loc.cmx c/coptions.cmx c/cpp.cmi 
 c/cprint_annot.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi \

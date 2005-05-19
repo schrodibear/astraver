@@ -139,7 +139,8 @@ let add_init l =
 	       {ctype_node = Tvoid;
 		ctype_storage = No_storage;
 		ctype_const = false;
-		ctype_volatile = false},
+		ctype_volatile = false;
+		ctype_ghost = false},
 	       invariants_initially_established_info,
 	       {st_node = TSblock ([], assigns decl);
 		st_break = false;    

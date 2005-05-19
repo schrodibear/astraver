@@ -22,6 +22,7 @@ let noattr_type ty =
    ctype_storage = No_storage;
    ctype_const = false;
    ctype_volatile = false;
+   ctype_ghost = false;
   }
 
 let noattr_term ty t= 

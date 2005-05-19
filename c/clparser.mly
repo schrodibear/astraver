@@ -17,7 +17,7 @@
 /* Grammar for C annotations */
 
 %{
-
+  open Ctypes
   open Cast
   open Clogic
 
@@ -29,11 +29,25 @@
     | Dsimple 
     | Darray of ghost_decl * lexpr option
 
-  let ghost ty (id,gd,cinit) = 
-    match gd with
-      | Dsimple -> LDghost(ty,id,cinit)
-      | Darray _ -> assert false
+  let rec expr_of_lexpr e =
+    match e.lexpr_node with
+      | PLconstant c -> 
+	  { Cast.node = Cast.CEconstant c ; Cast.loc = e.lexpr_loc }
+      | _ -> Creport.error e.lexpr_loc "not a constant"
 
+  let option_app f = function None -> None | Some x -> Some (f x)
+
+  let rec ghost_type ty gd =
+    match gd with
+      | Dsimple -> ty
+      | Darray(gd,size) -> 
+	    Cast_misc.noattr 
+	      (Cast.CTarray (ghost_type ty gd, option_app expr_of_lexpr size))
+
+  let ghost ty (id,gd,cinit) =
+    let gty = ghost_type ty gd in
+    LDghost(gty,id,cinit)
+    
     
 %}
 
@@ -250,8 +264,11 @@ annotation:
 | loop_annot       { Aloop_annot $1 }
 | ASSERT lexpr     { Acode_annot (Assert $2) }
 | LABEL IDENTIFIER { Acode_annot (Label $2) }
-| SET IDENTIFIER EQUAL lexpr 
+| SET ghost_lvalue EQUAL lexpr 
                    { Acode_annot(GhostSet($2,$4)) }
+;
+
+ghost_lvalue: lexpr { $1 }
 ;
 
 effects:
@@ -295,8 +312,15 @@ decl:
 ;
 
 ghost_decl:
-| GHOST logic_type init_declarator_list 
+| GHOST type_specifier init_declarator_list 
       { List.map (ghost $2) $3 }
+;
+
+type_specifier:
+| CHAR { Cast_misc.noattr (CTint (Unsigned, Char)) }
+| INT { Cast_misc.noattr (CTint (Signed, Int)) }
+| FLOAT { Cast_misc.noattr (CTfloat Float) }
+| DOUBLE { Cast_misc.noattr (CTfloat Double) }
 ;
 
 parameters:

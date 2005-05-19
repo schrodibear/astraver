@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.57 2005-04-20 14:11:12 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.58 2005-05-19 09:01:56 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -128,12 +128,15 @@ type parsed_decl =
       Info.logic_info * (parsed_logic_type * string) list * parsed_predicate
   | LDaxiom of string * parsed_predicate
   | LDinvariant of string * parsed_predicate
-  | LDghost of parsed_logic_type * string * lexpr c_initializer option
+  | LDghost of cexpr ctype * string * lexpr c_initializer option
+
+type ghost_lvalue = lexpr
 
 type parsed_code_annot = 
   | Assert of parsed_predicate 
   | Label of string
-  | GhostSet of string * lexpr 
+  | GhostSet of ghost_lvalue * lexpr 
+
 
 
 type parsed_annot = 
@@ -249,7 +252,7 @@ and tstatement_node =
   | TSassert of predicate
   | TSlogic_label of string
   | TSspec of spec * tstatement
-  | TSset of (Info.var_info * tterm)
+  | TSset of (tterm * tterm)
 
 and tblock = tdecl located list * tstatement list
 

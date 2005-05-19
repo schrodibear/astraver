@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.94 2005-05-12 07:41:42 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.95 2005-05-19 09:01:57 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -261,7 +261,8 @@ let rec type_type loc env ty =
   { Ctypes.ctype_node = type_type_node loc env ty.Cast.ctype_node;
     ctype_storage = ty.Cast.ctype_storage ;
     ctype_const = ty.Cast.ctype_const ;
-    ctype_volatile = ty.Cast.ctype_volatile
+    ctype_volatile = ty.Cast.ctype_volatile;
+    ctype_ghost = false;
   }
 
 and type_type_node loc env = function
@@ -749,6 +750,7 @@ let or_status s1 s2 =
     continue = s1.continue || s2.continue;
     term = s1.term || s2.term }
 
+
 let rec type_statement env et s =
   let sn,st = type_statement_node s.loc env et s.node in
   { st_node = sn; 
@@ -834,8 +836,7 @@ and type_statement_node loc env et = function
   | CSannot (_, Label l) ->
       TSlogic_label l, mt_status
   | CSannot (_, GhostSet(x,t)) ->
-      TSset ((find_ghost x), 
-	    (type_term env t)), mt_status
+      TSset (type_ghost_lvalue env x,type_term env t), mt_status
   | CSspec (spec, s) ->
       let spec = type_spec env spec in
       let s,st = type_statement env et s in
@@ -931,7 +932,7 @@ let type_spec_decl loc ofs = function
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
   | LDghost (ty,x,cinit) -> 
-      let ty = type_logic_type (Env.empty ()) ty in
+      let ty = type_type loc (Env.empty ()) ty in
       let info = add_ghost loc x ty (default_var_info x) in 
       set_static info;
       set_var_type (Var_info info) ty;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.11 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.12 2005-05-19 09:01:57 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -26,6 +26,7 @@ open Info
 open Pp
 
 let rec ctype fmt ty =
+  (if ty.ctype_ghost then fprintf fmt "ghost "else ());
   ctype_node fmt ty.Ctypes.ctype_node
 
 and ctype_node fmt = function

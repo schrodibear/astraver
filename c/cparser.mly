@@ -191,8 +191,6 @@
     let vl = List.exists ((=) Svolatile) specs in
     let sg = sign specs in
     let lg = length specs in
-    let noattr n = { ctype_node = n; ctype_storage = No_storage;
-		     ctype_const = false; ctype_volatile = false } in
     let rec base_type tyo = function
       | [] -> 
 	  (match tyo with 
@@ -212,9 +210,9 @@
 	  base_type tyo sp
     and full_type ty = function
       | Dsimple -> ty
-      | Dpointer d -> full_type (noattr (CTpointer ty)) d
-      | Darray (d, so) -> full_type (noattr (CTarray (ty, so))) d
-      | Dfunction (d, pl) -> full_type (noattr (CTfun (params pl, ty))) d
+      | Dpointer d -> full_type (Cast_misc.noattr (CTpointer ty)) d
+      | Darray (d, so) -> full_type (Cast_misc.noattr (CTarray (ty, so))) d
+      | Dfunction (d, pl) -> full_type (Cast_misc.noattr (CTfun (params pl, ty))) d
     and params pl = 
       List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
     and fields fl =

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.96 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.97 2005-05-19 09:01:56 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -764,12 +764,9 @@ let rec invariant_for_constant loc t lvalue initializers =
 	      List.fold_left 
 		(fun (acc,init) f -> 
 		   let tyf = f.var_type in
-		   let tyf =  { 
-		     Ctypes.ctype_node = tyf.Ctypes.ctype_node;
-		     Ctypes.ctype_storage = tyf.Ctypes.ctype_storage;
+		   let tyf =  { tyf with
 		     Ctypes.ctype_const = tyf.Ctypes.ctype_const 
 					  || t.Ctypes.ctype_const;
-		     Ctypes.ctype_volatile = tyf.Ctypes.ctype_volatile;
 		   }  in 
 		   let block, init' =
 		     invariant_for_constant loc tyf 
@@ -805,11 +802,7 @@ let rec invariant_for_constant loc t lvalue initializers =
 		(noattr loc ty 
 		   (NTstar 
 		      (noattr loc 
-			 {Ctypes.ctype_node = (Tpointer ty);
-			  Ctypes.ctype_storage = ty.Ctypes.ctype_storage;
-			  Ctypes.ctype_const = ty.Ctypes.ctype_const;
-			  Ctypes.ctype_volatile = ty.Ctypes.ctype_volatile;
-			 }
+			 {ty with Ctypes.ctype_node = (Tpointer ty) }
 			 (NTbinop (lvalue,Clogic.Badd, ts))))) init 
 	    in
 	    init_cells (Int64.add i Int64.one) (NPand (block,b),init')

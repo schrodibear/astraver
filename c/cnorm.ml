@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.35 2005-05-16 09:44:35 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.36 2005-05-19 09:01:56 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -87,6 +87,7 @@ let rec ctype (t : tctype) : nctype =
     ctype_storage = t.Ctypes.ctype_storage;
     ctype_const = t.Ctypes.ctype_const;
     ctype_volatile = t.Ctypes.ctype_volatile;
+    ctype_ghost = t.Ctypes.ctype_ghost;
   }
 
 
@@ -503,10 +504,12 @@ and expr_node loc ty t =
 	  else t'
       | TEarrget (lvalue,texpr) -> 
 	  (* t[e] -> *(t+e) *)
+	  let ty = { ty with Ctypes.ctype_node = Tpointer ty; 
+		       ctype_ghost = lvalue.texpr_type.ctype_ghost } in
 	  NEstar(
 	    {
-	      nexpr_node =NEbinary(expr lvalue, Badd_pointer_int, expr texpr);
-	      nexpr_type = noattr (Tpointer ty);
+	      nexpr_node = NEbinary(expr lvalue, Badd_pointer_int, expr texpr);
+	      nexpr_type = ty ;
 	      nexpr_loc = loc;
 	    })
       | TEseq (texpr1,texpr2) -> NEseq ((expr texpr1) , (expr texpr2))
@@ -765,7 +768,8 @@ let noattr2 loc ty e =
 let noattr3 tyn = { Ctypes.ctype_node = tyn; 
 		   Ctypes.ctype_storage = No_storage;
 		   Ctypes.ctype_const = false;
-		   Ctypes.ctype_volatile = false }
+		   Ctypes.ctype_volatile = false;
+		  Ctypes.ctype_ghost = false}
 
 let alloca loc n =
   {nexpr_node = NEcall ((noattr2  loc 
@@ -775,12 +779,7 @@ let alloca loc n =
 				    noattr3 (Tpointer (noattr3 Tvoid))))) 
 			   (NEvar  (Fun_info (default_fun_info "alloca")))), 
 			[{ nexpr_node = NEconstant  (IntConstant n);
-			   nexpr_type = { Ctypes.ctype_node =  
-					    Tint (Signed,Ctypes.Int);
-					  Ctypes.ctype_storage = No_storage;
-					  Ctypes.ctype_const = false;
-					  Ctypes.ctype_volatile = false;
-					};
+			   nexpr_type =  noattr3 (Tint (Signed,Ctypes.Int));
 			   nexpr_loc  = loc }]);
    nexpr_type = noattr3 (Tpointer (noattr3 Tvoid));
    nexpr_loc  = loc
@@ -949,19 +948,19 @@ let rec expr_of_term (t : nterm) : nexpr =
 	| NTif (t1,t2,t3)-> NEcond 
 	      (expr_of_term t1,expr_of_term t2,expr_of_term t3)
 	| NTold t -> error t.nterm_loc 
-	      "old can't be used with ghost variables"
+	      "old can't be used here"
 	| NTat (t , s)-> error t.nterm_loc 
-	      "@ can't be used with ghost variables"
+	      "@ can't be used here"
 	| NTbase_addr t -> error t.nterm_loc 
-	      "base_addr can't be used with ghost variables"
+	      "base_addr can't be used here"
 	| NTblock_length t -> error t.nterm_loc 
-	      "block_length can't be used with ghost variables"
+	      "block_length can't be used here"
 	| NTresult -> error t.nterm_loc 
-	      "result can't be used with ghost variables"
+	      "result can't be used here"
 	| NTnull -> NEconstant (IntConstant "0")
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
 	| NTrange _ -> 
-	    error t.nterm_loc "range cannot by used with ghost variables"
+	    error t.nterm_loc "range cannot by used here"
     end;
     nexpr_type = t.nterm_type;
     nexpr_loc  = t.nterm_loc
@@ -1071,10 +1070,10 @@ and statement s =
   | TSassert p -> NSassert (predicate p)
   | TSlogic_label  string -> NSlogic_label string
   | TSspec (s, tstatement) -> NSspec (spec s, statement tstatement)
-  | TSset (x, t) -> NSexpr (noattr2 s.st_loc x.var_type 
-			      (NEassign (noattr2 s.st_loc x.var_type 
-					   (NEvar (Var_info x)),
-			      (expr_of_term (term t)))))
+  | TSset (x, t) -> 
+      NSexpr (noattr2 s.st_loc x.term_type 
+		(NEassign 
+		   (expr_of_term (term x),expr_of_term (term t))))
   in
   { nst_node = nst;
     nst_break = s.st_break;
@@ -1134,6 +1133,8 @@ let global_decl e1 =
 	  | Some (Iexpr t) -> Some(Iexpr (expr_of_term (term t)))
 	  | _ -> assert false
       in
+      Info.set_var_type (Var_info x) 
+	{x.var_type with Ctypes.ctype_ghost = true};
       Info.set_assigned x;
       Ndecl(x.var_type,x,cinit)
       

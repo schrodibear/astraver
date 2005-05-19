@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.144 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.145 2005-05-19 09:01:56 hubert Exp $ i*)
 
 
 open Format
@@ -37,8 +37,11 @@ let rec global_var_for_type t =
 
 let global_var_for_array_type t =
   match t.ctype_node with
-    | Tpointer ty | Tarray(ty,_) -> global_var_for_type ty
+    | Tpointer ty | Tarray(ty,_) -> 
+	let name = global_var_for_type ty in
+	if t.ctype_ghost then (eprintf "ghost :%a@." Cprint.ctype t;"ghost_" ^ name) else (eprintf "non ghost :  %a@." Cprint.ctype t;name)
     | _ -> assert false
+
 
 let interp_int_rel = function
   | Lt -> "lt_int"
@@ -156,7 +159,7 @@ let rec interp_term label old_label t =
 	LApp("acc",[interp_var label var;te])
     | NTstar t1 -> 
 	let te1 = f t1 in
-	let var = global_var_for_type t.nterm_type in
+	let var = global_var_for_array_type t1.nterm_type in
 	LApp("acc",[interp_var label var;te1])
     | NTunop (Utilde, t) -> 
 	LApp ("bw_compl", [f t])
@@ -494,7 +497,7 @@ let rec interp_expr e =
 	Output.make_app "acc_" [Var(var);te]
     | NEstar e1 -> 
 	let te1 = interp_expr e1 in
-	let var = global_var_for_type e.nexpr_type in
+	let var = global_var_for_array_type e1.nexpr_type in
 	make_app "acc_" [Var var;te1]
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
@@ -629,20 +632,8 @@ and interp_lvalue e =
     | NEvar (Fun_info v) -> assert false
     | NEunary(Ustar,e1) -> assert false
     | NEstar(e1) ->
-	let var = global_var_for_type e.nexpr_type in
+	let var = global_var_for_array_type e1.nexpr_type in
 	HeapRef(var,interp_expr e1)
-(*
-    | NEarrget(e1,e2) ->
-	let te1 = interp_expr e1 and te2 = interp_expr e2 in
-	let var = global_var_for_type e.nexpr_type in
-	HeapRef(var,build_complex_app (Var "shift_")
-		  [interp_expr e1; interp_expr e2])
-*)
-(*
-    | NEdot ({texpr_node = NEunary (Ustar, e1)}, f) ->
-	assert false
-    | NEdot (e1,f)
-*)
     | NEarrow (e1,f) ->
 	HeapRef(f.var_unique_name, interp_expr e1)
     | _ -> 
@@ -779,27 +770,27 @@ let collect_locations before acc loc =
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
     | NTstar e ->
-	let var = global_var_for_type t.nterm_type in
+	let var = global_var_for_array_type e.nterm_type in
 	let m = interp_var (Some before) var in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
     | NTrange (e, None, None) ->
-	let var = global_var_for_type t.nterm_type in
+	let var = global_var_for_array_type e.nterm_type in
 	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
     | NTrange (e, None, Some a) ->
-	let var = global_var_for_type t.nterm_type in
+	let var = global_var_for_array_type e.nterm_type in
 	Pset (LApp ("pset_acc_range_left", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
     | NTrange (e, Some a, None) ->
-	let var = global_var_for_type t.nterm_type in
+	let var = global_var_for_array_type e.nterm_type in
 	Pset (LApp ("pset_acc_range_right", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
     | NTrange (e, Some a, Some b) ->
-	let var = global_var_for_type t.nterm_type in
+	let var = global_var_for_array_type e.nterm_type in
 	Pset (LApp ("pset_acc_range", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a;

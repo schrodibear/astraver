@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.10 2005-02-14 13:17:16 filliatr Exp $ i*)
+(*i $Id: ctypes.ml,v 1.11 2005-05-19 09:01:57 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -46,6 +46,7 @@ and ctype = {
   ctype_storage : storage_class;
   ctype_const : bool;
   ctype_volatile : bool;
+  ctype_ghost : bool;
 }
 
 
@@ -53,7 +54,9 @@ and ctype = {
 let noattr tyn = { ctype_node = tyn; 
 		   ctype_storage = No_storage;
 		   ctype_const = false;
-		   ctype_volatile = false }
+		   ctype_volatile = false; 
+		   ctype_ghost = false;
+		 }
 let c_void = noattr Tvoid
 let c_int = noattr (Tint (Signed, Int))
 let c_char = noattr (Tint (Unsigned, Char))
