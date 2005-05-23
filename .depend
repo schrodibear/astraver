@@ -262,13 +262,11 @@ c/cinit.cmo: src/loc.cmi c/info.cmi c/ctyping.cmi c/ctypes.cmi c/coptions.cmi \
 c/cinit.cmx: src/loc.cmx c/info.cmx c/ctyping.cmx c/ctypes.cmx c/coptions.cmx \
     c/clogic.cmi c/cenv.cmx c/cast.cmi c/cinit.cmi 
 c/cinterp.cmo: c/output.cmi src/loc.cmi c/info.cmi c/ctypes.cmi c/creport.cmi \
-    c/cprint.cmi c/coptions.cmi c/cnorm.cmi c/clogic.cmi c/cinit.cmi \
-    c/cerror.cmi c/cenv.cmi c/ceffect.cmi c/cconst.cmi c/cast.cmi \
-    c/cinterp.cmi 
+    c/coptions.cmi c/cnorm.cmi c/clogic.cmi c/cinit.cmi c/cerror.cmi \
+    c/cenv.cmi c/ceffect.cmi c/cconst.cmi c/cast.cmi c/cinterp.cmi 
 c/cinterp.cmx: c/output.cmx src/loc.cmx c/info.cmx c/ctypes.cmx c/creport.cmx \
-    c/cprint.cmx c/coptions.cmx c/cnorm.cmx c/clogic.cmi c/cinit.cmx \
-    c/cerror.cmi c/cenv.cmx c/ceffect.cmx c/cconst.cmx c/cast.cmi \
-    c/cinterp.cmi 
+    c/coptions.cmx c/cnorm.cmx c/clogic.cmi c/cinit.cmx c/cerror.cmi \
+    c/cenv.cmx c/ceffect.cmx c/cconst.cmx c/cast.cmi c/cinterp.cmi 
 c/clexer.cmo: src/loc.cmi c/ctypes.cmi c/creport.cmi c/cparser.cmi \
     c/clogic.cmi c/cllexer.cmo c/cerror.cmi c/cast.cmi 
 c/clexer.cmx: src/loc.cmx c/ctypes.cmx c/creport.cmx c/cparser.cmx \

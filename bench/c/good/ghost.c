@@ -22,18 +22,19 @@ void g (){
   /*@ set t[0] = u[1]*/
 }
 
-
+/*
 struct S {
   int a;
   int b;
 }
 
-/*@ ghost struct S tab[6] */
+ ghost struct S tab[6] 
 
 
-/*@ ensures tab[0].a == 1  */
+ ensures tab[0].a == 1  
 void h (){
   struct S a ;
   a.a = 1;
-  /*@ set tab[0] = a*/
+   set tab[0] = a
 }
+*/

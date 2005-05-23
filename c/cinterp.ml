@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.145 2005-05-19 09:01:56 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.146 2005-05-23 14:12:53 hubert Exp $ i*)
 
 
 open Format
@@ -39,7 +39,7 @@ let global_var_for_array_type t =
   match t.ctype_node with
     | Tpointer ty | Tarray(ty,_) -> 
 	let name = global_var_for_type ty in
-	if t.ctype_ghost then (eprintf "ghost :%a@." Cprint.ctype t;"ghost_" ^ name) else (eprintf "non ghost :  %a@." Cprint.ctype t;name)
+	if t.ctype_ghost then "ghost_" ^ name else name
     | _ -> assert false
 
 

@@ -8,4 +8,3 @@ Require Export Caduceus.
   := (valid_range alloc t_0 i j) /\
      (forall (n:Z),
       (i <= n /\ n <= j -> (valid_range alloc (acc intPP (shift t_0 n)) k l))).
-

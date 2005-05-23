@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.37 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.38 2005-05-23 14:12:53 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -25,71 +25,6 @@ open Ctypes
 open Cast
 open Clogic
 open Int64
-
-
-
-let rec ctype (t : tctype) : nctype =
-  let nctype =
-    match t.Ctypes.ctype_node with
-      | Tvoid -> Tvoid
-      | Tint (sign ,i) -> Tint (sign , (*cinteger *)i) 
-      | Tfloat cfloat -> Tfloat cfloat
-      | Ctypes.Tvar string -> Ctypes.Tvar string
-      | Tarray (t,op) -> Tarray(ctype t,op) 
-      | Tpointer t -> Tpointer (ctype t)
-      | Tstruct ( string ) ->Tstruct (string)
-	  (*match l with 
-	     | Tag -> Tstruct (string,Tag)
-	     | Decl l ->
-		 Tstruct ( 
-		   string,
-		   Decl (
-		     (List.map (fun (t,s,op) -> (ctype t,s,noption eval_const_expr op))) 
-		     l))*) 
-      | Tunion (string)-> Tunion (string)
-	  (*match l with 
-	    | Tag -> Tunion (string,Tag)
-	    | Decl l ->
-		Tunion ( 
-		  string,
-		  Decl (
-		    (List.map (fun (t,s,op) -> (ctype t,s,noption eval_const_expr op))) 
-			  l))*)
-      | Tfun (l ,c)-> Tfun (List.map ctype l, ctype c)
-      | Tenum (string) ->Tenum string
-	  (*match l with 
-	    | Tag -> Tenum (string,Tag)
-	    | Decl l -> 
-		Tenum 
-		  (string,
-		   Decl (List.map 
-			   (fun(s,op) -> 
-			      (s,noption eval_const_expr op)) l))*)
-(*
-      let _ = 
-	List.fold_left 
-	  (fun n (f,op) -> 
-	     let i = default_var_info f in
-	     let n' = match op with
-	       | None -> n
-	       | Some e -> eval_const_expr e 
-	     in
-	     set_const_value i n'; 
-	     ignore (add_sym loc f ty (Var_info i)); 
-	     Int64.add n' Int64.one) 
-	  Int64.zero fl
-      in
-*)
-
-  in
-  { 
-    Ctypes.ctype_node = nctype;
-    ctype_storage = t.Ctypes.ctype_storage;
-    ctype_const = t.Ctypes.ctype_const;
-    ctype_volatile = t.Ctypes.ctype_volatile;
-    ctype_ghost = t.Ctypes.ctype_ghost;
-  }
-
 
 (* Automatic invariants expressing validity of local/global variables *)
 
@@ -180,7 +115,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	       let tf = 
 		 { nterm_node = NTarrow (t, f); 
 		   nterm_loc = loc;
-		   nterm_type = ctype f.var_type } 
+		   nterm_type = f.var_type } 
 	       in
 	       make_and acc (valid_for tf))
 	    fl 
@@ -473,7 +408,7 @@ let ne_star loc ty e =
 
 
 let rec expr t =
-  let ty = ctype t.texpr_type in
+  let ty = t.texpr_type in
   { nexpr_node = expr_node t.texpr_loc ty t.texpr_node;
     nexpr_type = ty ;
     nexpr_loc = t.texpr_loc;
@@ -543,7 +478,7 @@ and expr_node loc ty t =
 						   (expr texpr3))
       | TEsizeof (tctype,n) ->
 	  NEconstant (IntConstant (Int64.to_string n))
-      | TEcast (tctype ,texpr) -> NEcast (ctype tctype, expr texpr)
+      | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
   
 let nt_arrow t f =
   match t.nterm_node with
@@ -604,7 +539,7 @@ let rec term_node loc t =
   | Tblock_length t -> NTblock_length (term t)
   | Tresult -> NTresult
   | Tnull -> NTnull
-  | Tcast (ty, t) -> NTcast (ctype ty, term t)
+  | Tcast (ty, t) -> NTcast (ty, term t)
   | Trange (t1, t2, t3) -> NTrange (term t1, term_option t2, term_option t3)
 
 and term t = 
@@ -642,10 +577,10 @@ let rec predicate p =
     | Pnot p1 -> NPnot (predicate p1)
     | Pif (t,p1,p2) -> NPif (term t,predicate p1 ,predicate p2)
     | Pforall (typed_quantifiers, p) -> NPforall (
-	(List.map (fun (x,y) -> ((ctype x),y)) typed_quantifiers),
+	(List.map (fun (x,y) -> (x,y)) typed_quantifiers),
 	(predicate p))
     | Pexists (typed_quantifiers, p) -> NPexists (
-	(List.map (fun (x,y) -> ((ctype x),y)) typed_quantifiers),
+	(List.map (fun (x,y) -> (x,y)) typed_quantifiers),
 	(predicate p)) 
     | Pold p -> NPold (predicate p)
     | Pat (p, s) -> NPat ((predicate p),s)
@@ -700,14 +635,14 @@ let loop_annot a =
 let logic_symbol l =
   match l with
     | Predicate_reads(param_list,loc_list) ->
-	NPredicate_reads(List.map (fun (v,t) -> (v,ctype t)) param_list,
+	NPredicate_reads(List.map (fun (v,t) -> (v,t)) param_list,
 			List.map nlocation loc_list)
     | Predicate_def  (param_list , p ) ->
-	NPredicate_def(List.map (fun (v,t) -> (v,ctype t)) param_list,
+	NPredicate_def(List.map (fun (v,t) -> (v,t)) param_list,
 		      predicate p)
     | Function (l1 , c , l2) -> NFunction (
-	List.map (fun (var,c) -> (var,ctype c)) l1,
-	ctype c,
+	List.map (fun (var,c) -> (var,c)) l1,
+	c,
 	List.map nlocation l2)
 
 let rec c_initializer c = match c with
@@ -1088,8 +1023,8 @@ let global_decl e1 =
   | Tlogic(info, l) -> Nlogic (info , logic_symbol l)
   | Taxiom (s, p) -> Naxiom (s, predicate p)
   | Tinvariant(s, p) -> Ninvariant (s, predicate p)
-  | Ttypedef (t, s) -> Ntypedef((ctype t),s)
-  | Ttypedecl t -> Ntypedecl (ctype t)
+  | Ttypedef (t, s) -> Ntypedef(t,s)
+  | Ttypedecl t -> Ntypedecl (t)
   | Tdecl (t, v, c) -> 
       let t =
 	if (* not ??? *) v.var_is_assigned && Coptions.closed_program then   
@@ -1105,10 +1040,10 @@ let global_decl e1 =
 	end
       else Ndecl(t,v,c_initializer_option c)
   | Tfunspec (s, t, f) -> 
-      set_var_type (Fun_info f) (ctype f.fun_type);
+      set_var_type (Fun_info f) (f.fun_type);
       List.iter (fun arg -> 
-		   set_var_type (Var_info arg) (ctype arg.var_type)) f.args;
-      Nfunspec (spec s,ctype t,f)
+		   set_var_type (Var_info arg) (arg.var_type)) f.args;
+      Nfunspec (spec s,t,f)
 
   | Tfundef (s, t, f, st) ->
       let validity_for_struct = 
@@ -1122,10 +1057,10 @@ let global_decl e1 =
 						   nterm_loc = Loc.dummy},acc)
 	       | _ -> acc) 
 	  NPtrue f.args in
-      set_var_type (Fun_info f) (ctype f.fun_type);
+      set_var_type (Fun_info f) (f.fun_type);
       List.iter (fun arg -> 
-		   set_var_type (Var_info arg) (ctype arg.var_type)) f.args;
-      Nfundef (spec ~add:validity_for_struct s,ctype t,f,statement st)
+		   set_var_type (Var_info arg) (arg.var_type)) f.args;
+      Nfundef (spec ~add:validity_for_struct s,t,f,statement st)
   | Tghost(x,cinit) ->
       let cinit = 
 	match cinit with
