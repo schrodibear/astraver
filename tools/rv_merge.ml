@@ -31,7 +31,8 @@ let copy_goals c =
   try
     while true do let s = input_line c in printf "%s\n" s done
   with End_of_file -> 
-    close_in c
+    close_in c;
+    printf "\n\n"
 
 let () =
   printf "(\n";

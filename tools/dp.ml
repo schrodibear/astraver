@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.9 2005-03-15 08:37:46 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.10 2005-05-25 13:03:53 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -37,12 +37,16 @@ let nvalid = ref 0
 let ninvalid = ref 0
 let ntimeout = ref 0
 
+let is_valid () = printf "."; incr nvalid
+let is_invalid () = printf "*"; incr ninvalid
+let is_timeout () = printf "#"; incr ntimeout
+
 let call cmd =
   if !debug then begin eprintf "calling: %s\n" cmd; flush stderr end;
   let out = Sys.command cmd in
-  if out = 0 then begin printf "."; incr nvalid end
-  else if out = 1 then begin printf "*"; incr ninvalid end
-  else begin printf "#"; incr ntimeout end;
+  if out = 0 then is_valid ()
+  else if out = 1 then is_invalid ()
+  else is_timeout ();
   flush stdout
 
 let call_cvcl f =
@@ -62,8 +66,19 @@ let call_harvey f =
     let rec iter i =
       let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
       if Sys.file_exists fi then begin
-	let cmd = sprintf "timeout %d rv %s > out 2>&1 && grep \"Proof obligation in\" out | grep -q \"is valid\"" !timeout fi in
-	call cmd;
+	let out = 
+	  Sys.command (sprintf "timeout %d rv %s > out 2>&1" !timeout fi) 
+	in
+	if out <> 0 then 
+	  is_timeout ()
+	else begin
+	  let out = 
+	    Sys.command 
+	      "grep \"Proof obligation in\" out | grep -q \"is valid\"" 
+	  in
+	  if out = 0 then is_valid () else is_invalid ()
+	end;
+	flush stdout;
 	iter (i+1)
       end
     in

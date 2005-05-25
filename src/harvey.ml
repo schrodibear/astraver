@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.24 2005-02-14 08:57:43 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.25 2005-05-25 13:03:52 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -61,7 +61,7 @@ let prefix id =
   else if id == t_mul_int then "*"
   else if id == t_div_int then "int_div"
   else if id == t_mod_int then "int_mod"
-  else if id == t_neg_int then "-"
+  else if id == t_neg_int then assert false
   (* real ops *)
   else if id == t_add_real 
        || id == t_sub_real 
@@ -90,6 +90,8 @@ let rec print_term fmt = function
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
       fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
 	print_term c
+  | Tapp (id, [a], _) when id == t_neg_int ->
+      fprintf fmt "@[(- 0 %a)@]" print_term a
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, tl, _) ->
