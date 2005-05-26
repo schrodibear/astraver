@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.13 2005-03-08 10:24:53 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.14 2005-05-26 13:20:15 hubert Exp $ i*)
 
 (*s environment variables *)
 
@@ -26,6 +26,7 @@ val whylib : string
 val parse_only : bool
 val type_only : bool
 val print_norm : bool
+val print_graph : bool
 val debug : bool
 val verbose : bool
 val werror : bool

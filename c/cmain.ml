@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.57 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.58 2005-05-26 13:20:15 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -75,6 +75,7 @@ let main () =
   if type_only then exit 0;
   (* function graph *)
   List.iter (fun (f,p) -> Cgraph.file p) tfiles ;
+  if print_graph then Cprint_graph.print_graph ();  
   (* initialisation of global variables *)
   let tfiles = List.map (fun (f,p) -> (f,Cinit.add_init p)) tfiles in
   (* normalisation *)

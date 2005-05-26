@@ -187,6 +187,8 @@ let is_sym = Hashtbl.mem sym_t
 
 let find_sym = Hashtbl.find sym_t
 
+let iter_sym f =  Hashtbl.iter f sym_t
+
 let add_sym l x ty info = 
   let n = unique_name x in
   mark_as_used n; 

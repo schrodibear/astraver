@@ -19,7 +19,7 @@ val pointer_or_array_type : ctype -> bool
 
 val add_sym : Loc.t -> string -> ctype -> env_info -> env_info
 val find_sym : string -> env_info
-
+val iter_sym : (Lib.Sset.elt -> Info.env_info -> unit) -> unit
 val add_typedef : Loc.t -> string -> ctype -> unit
 val find_typedef : string -> ctype
 
