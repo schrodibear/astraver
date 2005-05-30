@@ -268,7 +268,6 @@ Lemma push_impl_po_1 :
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/queue.why", characters 3815-3837 *)
@@ -421,7 +420,6 @@ Lemma test_impl_po_1 :
   (acc last q) < (acc length q)) /\ (valid_range alloc q 0 1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/queue.why", characters 5775-5816 *)

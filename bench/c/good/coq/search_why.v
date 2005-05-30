@@ -3,14 +3,14 @@
 
 Require Export search_spec_why.
 
-(* Why obligation from file "why/search.why", characters 448-531 *)
+(* Why obligation from file "why/search.why", characters 460-543 *)
 Lemma index2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post7: i = 0),
   forall (Variant1: Z),
@@ -25,14 +25,14 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 546-566 *)
+(* Why obligation from file "why/search.why", characters 558-578 *)
 Lemma index2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post7: i = 0),
   forall (Variant1: Z),
@@ -54,14 +54,14 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 581-601 *)
+(* Why obligation from file "why/search.why", characters 593-613 *)
 Lemma index2_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post7: i = 0),
   forall (Variant1: Z),
@@ -87,14 +87,14 @@ subst; auto.
 apply H0 with k; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 198-610 *)
+(* Why obligation from file "why/search.why", characters 210-622 *)
 Lemma index2_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post7: i = 0),
   forall (Variant1: Z),
@@ -111,14 +111,14 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 253-402 *)
+(* Why obligation from file "why/search.why", characters 265-414 *)
 Lemma index2_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post7: i = 0),
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
@@ -126,7 +126,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 1250-1333 *)
+(* Why obligation from file "why/search.why", characters 1262-1345 *)
 Lemma index_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -148,7 +148,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 1348-1354 *)
+(* Why obligation from file "why/search.why", characters 1360-1366 *)
 Lemma index_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -179,7 +179,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 1373-1393 *)
+(* Why obligation from file "why/search.why", characters 1385-1405 *)
 Lemma index_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -212,7 +212,7 @@ subst; auto.
 apply H0 with k;auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 1000-1402 *)
+(* Why obligation from file "why/search.why", characters 1012-1414 *)
 Lemma index_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -240,7 +240,7 @@ subst.
 apply H0 with i0; auto with *.
 Save.
 
-(* Why obligation from file "why/search.why", characters 1055-1204 *)
+(* Why obligation from file "why/search.why", characters 1067-1216 *)
 Lemma index_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -253,5 +253,16 @@ Lemma index_impl_po_5 :
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
 Proof.
 intuition.
+Save.
+
+(* Why obligation from file "why/search.why", characters 1842-1946 *)
+Lemma test_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Pre3: (valid_range alloc t 0 3)),
+  (valid_range alloc t 0 4).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

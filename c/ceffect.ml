@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.98 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.99 2005-05-30 08:57:11 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -837,8 +837,9 @@ let rec validity x ty size =
 	let varj = { nterm_node = NTvar j; 
 		     nterm_loc = x.nterm_loc;
 		     nterm_type = c_int } in	  
-	let term_sup = { nterm_node = NTconstant (IntConstant 
-						    (Int64.to_string size)); 
+	let term_sup = { nterm_node = 
+   	                   NTconstant (IntConstant 
+					 (Int64.to_string (Int64.pred size))); 
 			 nterm_loc = x.nterm_loc;
 			 nterm_type = c_int } in
 	let ineq = NPand 
@@ -878,8 +879,9 @@ let rec validity x ty size =
 	NPapp (snd (find_pred name), [x])
 *)			
     | _ ->  
-	let term_sup = { nterm_node = NTconstant (IntConstant 
-						    (Int64.to_string size)); 
+	let term_sup = { nterm_node = 
+	                   NTconstant 
+	                     (IntConstant (Int64.to_string (Int64.pred size)));
 			 nterm_loc = x.nterm_loc;
 			 nterm_type = c_int } in
       NPvalid_range (x, Cnorm.nzero,term_sup), NPtrue

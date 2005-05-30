@@ -9,7 +9,7 @@
 int index(int t[], int n, int v) {
   int i = 0;
   /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
-    variant n - i */ 
+      variant n - i */ 
   while (i < n) {
     if (t[i] == v) break;
     i++;
@@ -19,16 +19,22 @@ int index(int t[], int n, int v) {
 
 /* same thing, with a return instead of a break */
 
-/*@ requires \valid_range(t,0,n)
+/*@ requires \valid_range(t,0,n-1)
   @ ensures 0 <= \result < n => t[\result] == v 
   @*/
 int index2(int t[], int n, int v) {
   int i = 0;
   /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
-    variant n - i */
+      variant n - i */
   while (i < n) {
     if (t[i] == v) return i;
     i++;
   }
   return n;
+}
+
+int t[4];
+
+void test() {
+  index(t, 4, 12);
 }

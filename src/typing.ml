@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.112 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.113 2005-05-30 08:57:11 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -315,7 +315,7 @@ let check_no_effect loc ef =
 
 let warning_no_post loc x = 
   if not !c_file then begin
-    wprintf loc "no postcondition for exception %a; false inserted@\n" 
+    wprintf loc "no postcondition for exception %a; true inserted@\n" 
       Ident.print x;
     if werror then exit 1
   end
