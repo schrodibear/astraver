@@ -1,7 +1,7 @@
 
 /* search for a value in an array */
 
-/*@ requires \valid_range(t,0,n)
+/*@ requires \valid_range(t,0,n-1)
   @ ensures 
   @   (0 <= \result < n => t[\result] == v) &&
   @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
