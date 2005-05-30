@@ -52,12 +52,12 @@ let rec predicate_for name t =
 	  if pre = NPtrue 
 	  then
 	    NPand ((NPvalid t),(NPvalid_range (t,(int_nconstant "0"), 
-			  (int_nconstant (Int64.to_string s)))))
+			  (int_nconstant (Int64.to_string (Int64.pred s))))))
 	  else
 	    NPand (NPvalid t, 
 		   (NPand 
 		      ((NPvalid_range (t,(int_nconstant "0"), 
-			  (int_nconstant (Int64.to_string s)))),
+			  (int_nconstant (Int64.to_string (Int64.pred s))))),
 		      (NPforall ([noattr_type (Tint (Signed, Ctypes.Int)), i], 
 				NPimplies (ineq, pre))))))
      | _ -> NPtrue
