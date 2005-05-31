@@ -58,7 +58,7 @@ unsigned int get_char(unsigned int i)
 /*@ requires next_node < max_nodes_nb
   @ assigns next_node
   @ ensures
-  @   \exists int k; \result == nodes_list + k &&
+  @   \result == nodes_list + \old(next_node) &&
   @   next_node == \old(next_node) + 1
   */
 node *get_fresh_node()
@@ -71,6 +71,12 @@ node *get_fresh_node()
 }
 
 /* target research function */
+/*@ requires
+  @   0 <= c < alphabet_sz &&
+  @   \exists int k; (\valid_index(nodes_list,k) && t == nodes_list + k)
+  @ ensures
+  @   \exists int k; (\valid_index(nodes_list,k) && \result == nodes_list + k)
+  */
 node *target(node *t,unsigned int c)
 { return t->sons[c]; }
 
