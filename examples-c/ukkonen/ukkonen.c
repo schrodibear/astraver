@@ -28,7 +28,7 @@ node *nodes_list;
 
 /* index of the next free node */
 unsigned int next_node;
-/*@ invariant next_node_sup: next_node < max_node_nb */
+/*@ invariant next_node_sup: next_node < max_nodes_nb */
 
 /* word we are working on */
 unsigned int *current_word;
@@ -52,11 +52,11 @@ unsigned int get_char(unsigned int i)
 { return current_word[i]; }
 
 /* fresh node allocation function */
-/*@ requires next_node < max_node_nb
+/*@ requires next_node < max_nodes_nb
   @ assigns next_node
   @ ensures
   @   \exists int k; \result == nodes_list + k &&
-  @   next_node == \old(\next_node) + 1
+  @   next_node == \old(next_node) + 1
   */
 node *get_fresh_node()
 {
