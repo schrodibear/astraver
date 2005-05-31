@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.47 2005-04-14 14:58:15 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.48 2005-05-31 07:55:33 filliatr Exp $ i*)
 
 open Format
 
@@ -54,7 +54,7 @@ let c_file = ref false
 type coq_version = V7 | V8
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib
+  | SmtLib | Isabelle
 let prover_ = ref (match Version.coqversion with "v8" -> Coq V8 | _ -> Coq V7)
 
 (*s extracting the Mizar environ from a file *)
@@ -141,6 +141,7 @@ Prover selection:
   --hol-light selects HOL Light prover
   --mizar     selects Mizar prover
   --harvey    selects haRVey prover
+  --isabelle  selects Isabelle prover
   --simplify  selects Simplify prover
   --cvcl      selects CVC Lite prover
   --smtlib    selects the SMT-LIB format
@@ -192,6 +193,7 @@ let files =
     | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
+    | ("-isabelle" | "--isabelle") :: args -> prover_ := Isabelle; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
     | ("-fpi" | "--fpi") :: args -> fpi_ := true; parse args

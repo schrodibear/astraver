@@ -3,7 +3,7 @@
 
 Require Export average_spec_why.
 
-(* Why obligation from file "why/average.why", characters 440-468 *)
+(* Why obligation from file "why/average.why", characters 488-489 *)
 Lemma average_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -18,17 +18,20 @@ Lemma average_impl_po_1 :
   forall (i2: Z),
   forall (sum1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min alloc intP t i2)) <= sum1),
   forall (Test2: i2 < n),
-  forall (aux_1: pointer),
-  forall (Post13: aux_1 = (shift t i2)),
-  (valid alloc aux_1).
+  (forall (result:pointer),
+   (result = (shift t i2) ->
+    (forall (result0:Z),
+     (result0 = (acc intP result) -> (sum1 + result0) =
+      (sum1 + (acc intP (shift t i2))))) /\
+    (valid alloc result))).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 440-468 *)
+(* Why obligation from file "why/average.why", characters 464-595 *)
 Lemma average_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -43,19 +46,19 @@ Lemma average_impl_po_2 :
   forall (i2: Z),
   forall (sum1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min alloc intP t i2)) <= sum1),
   forall (Test2: i2 < n),
-  forall (aux_1: pointer),
-  forall (Post13: aux_1 = (shift t i2)),
-  forall (Pre2: (valid alloc aux_1)),
-  forall (result1: Z),
-  forall (Post15: result1 = (acc intP aux_1)),
-  (sum1 + result1) = (sum1 + (acc intP (shift t i2))).
+  forall (sum2: Z),
+  forall (Post3: sum2 = (sum1 + (acc intP (shift t i2)))),
+  forall (i3: Z),
+  forall (Post4: i3 = (i2 + 1)),
+  ((0 <= i3 /\ i3 <= n) /\ (i3 * (min alloc intP t i3)) <= sum2) /\
+  (Zwf 0 (n - i3) (n - i2)).
 Proof.
 intuition; subst; auto.
 Qed.
 
-(* Why obligation from file "why/average.why", characters 417-498 *)
+(* Why obligation from file "why/average.why", characters 266-605 *)
 Lemma average_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -70,14 +73,11 @@ Lemma average_impl_po_3 :
   forall (i2: Z),
   forall (sum1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
-  forall (Test2: i2 < n),
-  forall (sum2: Z),
-  forall (Post3: sum2 = (sum1 + (acc intP (shift t i2)))),
-  forall (i3: Z),
-  forall (Post4: i3 = (i2 + 1)),
-  ((0 <= i3 /\ i3 <= n) /\ (i3 * (min intP t i3)) <= sum2) /\
-  (Zwf 0 (n - i3) (n - i2)).
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min alloc intP t i2)) <= sum1),
+  forall (Test1: i2 >= n),
+  (forall (result:Z),
+   (result = ((Zdiv sum1 n)) -> (min alloc intP t n) <= result)) /\
+  ~(n = 0).
 Proof.
 intuition.
 subst.
@@ -94,7 +94,7 @@ omega.
 rewrite Z_div_plus; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 241-505 *)
+(* Why obligation from file "why/average.why", characters 323-419 *)
 Lemma average_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -105,58 +105,39 @@ Lemma average_impl_po_4 :
   forall (Post6: sum = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (sum1: Z),
-  forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
-  forall (Test1: i2 >= n),
-  (forall (result:Z), (result = ((Zdiv sum1 n)) -> (min intP t n) <= result)) /\
-  ~(n = 0).
+  (0 <= i1 /\ i1 <= n) /\ (i1 * (min alloc intP t i1)) <= sum.
 Proof.
 intuition.
 subst; omega.
 Qed.
 
-(* Why obligation from file "why/average.why", characters 292-378 *)
-Lemma average_impl_po_5 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre7: (valid_range alloc t 0 n) /\ n > 0),
-  forall (sum: Z),
-  forall (Post6: sum = 0),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  (0 <= i1 /\ i1 <= n) /\ (i1 * (min intP t i1)) <= sum.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 765-792 *)
+(* Why obligation from file "why/average.why", characters 902-916 *)
 Lemma min_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  (valid alloc (shift t 0)).
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  (valid alloc t).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 1015-1099 *)
+(* Why obligation from file "why/average.why", characters 1177-1264 *)
 Lemma min_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   forall (Variant1: Z),
@@ -222,16 +203,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1119-1147 *)
+(* Why obligation from file "why/average.why", characters 1287-1315 *)
 Lemma min_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   forall (Variant1: Z),
@@ -242,24 +223,24 @@ Lemma min_impl_po_3 :
   forall (Test4: i2 < n),
   forall (Pre5: (valid alloc (shift t i2))),
   forall (Test3: (acc intP (shift t i2)) < tmp1),
-  forall (aux_3: pointer),
-  forall (Post16: aux_3 = (shift t i2)),
-  (valid alloc aux_3).
+  forall (aux_2: pointer),
+  forall (Post18: aux_2 = (shift t i2)),
+  (valid alloc aux_2).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1119-1147 *)
+(* Why obligation from file "why/average.why", characters 1287-1315 *)
 Lemma min_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   forall (Variant1: Z),
@@ -270,27 +251,27 @@ Lemma min_impl_po_4 :
   forall (Test4: i2 < n),
   forall (Pre5: (valid alloc (shift t i2))),
   forall (Test3: (acc intP (shift t i2)) < tmp1),
-  forall (aux_3: pointer),
-  forall (Post16: aux_3 = (shift t i2)),
-  forall (Pre2: (valid alloc aux_3)),
+  forall (aux_2: pointer),
+  forall (Post18: aux_2 = (shift t i2)),
+  forall (Pre2: (valid alloc aux_2)),
   forall (result2: Z),
-  forall (Post18: result2 = (acc intP aux_3)),
+  forall (Post20: result2 = (acc intP aux_2)),
   result2 = (acc intP (shift t i2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1112-1147 *)
+(* Why obligation from file "why/average.why", characters 1280-1315 *)
 Lemma min_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   forall (Variant1: Z),
@@ -311,16 +292,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1160-1160 *)
+(* Why obligation from file "why/average.why", characters 1331-1331 *)
 Lemma min_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   forall (Variant1: Z),
@@ -341,16 +322,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 855-1199 *)
+(* Why obligation from file "why/average.why", characters 993-1376 *)
 Lemma min_impl_po_7 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   forall (Variant1: Z),
@@ -365,16 +346,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 906-973 *)
+(* Why obligation from file "why/average.why", characters 1050-1129 *)
 Lemma min_impl_po_8 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (Pre9: (valid alloc (shift t 0))),
+  forall (Pre9: n > 0 /\ (valid_range alloc t 0 n)),
+  forall (Pre8: (valid alloc t)),
   forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t 0))),
+  forall (Post8: tmp = (acc intP t)),
   forall (i1: Z),
   forall (Post1: i1 = 1),
   (1 <= i1 /\ i1 <= n) /\ (is_min alloc intP t i1 tmp).

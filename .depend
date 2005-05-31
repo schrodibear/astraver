@@ -44,6 +44,12 @@ src/holl.cmx: src/vcg.cmx src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx \
     src/ident.cmx src/error.cmi src/env.cmx src/cc.cmi src/holl.cmi 
 src/ident.cmo: src/ident.cmi 
 src/ident.cmx: src/ident.cmi 
+src/isabelle.cmo: src/vcg.cmi src/regen.cmi src/pp.cmi src/misc.cmi \
+    src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi \
+    src/cc.cmi src/isabelle.cmi 
+src/isabelle.cmx: src/vcg.cmx src/regen.cmx src/pp.cmx src/misc.cmx \
+    src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
+    src/cc.cmi src/isabelle.cmi 
 src/lib.cmo: src/lib.cmi 
 src/lib.cmx: src/lib.cmi 
 src/linenum.cmo: src/linenum.cmi 
@@ -60,16 +66,16 @@ src/main.cmo: src/wp.cmi src/vcg.cmi src/util.cmi src/typing.cmi \
     src/types.cmi src/smtlib.cmi src/simplify.cmi src/report.cmi src/red.cmi \
     src/pvs.cmi src/ptree.cmi src/parser.cmi src/options.cmi src/ocaml.cmi \
     src/monad.cmi src/mlize.cmi src/mizar.cmi src/misc.cmi src/ltyping.cmi \
-    src/logic.cmi src/loc.cmi src/ident.cmi src/holl.cmi src/harvey.cmi \
-    src/fpi.cmi src/error.cmi src/env.cmi src/cvcl.cmi src/coq.cmi src/cc.cmi \
-    src/ast.cmi src/annot.cmi 
+    src/logic.cmi src/loc.cmi src/isabelle.cmi src/ident.cmi src/holl.cmi \
+    src/harvey.cmi src/fpi.cmi src/error.cmi src/env.cmi src/cvcl.cmi \
+    src/coq.cmi src/cc.cmi src/ast.cmi src/annot.cmi 
 src/main.cmx: src/wp.cmx src/vcg.cmx src/util.cmx src/typing.cmx \
     src/types.cmi src/smtlib.cmx src/simplify.cmx src/report.cmx src/red.cmx \
     src/pvs.cmx src/ptree.cmi src/parser.cmx src/options.cmx src/ocaml.cmx \
     src/monad.cmx src/mlize.cmx src/mizar.cmx src/misc.cmx src/ltyping.cmx \
-    src/logic.cmi src/loc.cmx src/ident.cmx src/holl.cmx src/harvey.cmx \
-    src/fpi.cmx src/error.cmi src/env.cmx src/cvcl.cmx src/coq.cmx src/cc.cmi \
-    src/ast.cmi src/annot.cmx 
+    src/logic.cmi src/loc.cmx src/isabelle.cmx src/ident.cmx src/holl.cmx \
+    src/harvey.cmx src/fpi.cmx src/error.cmi src/env.cmx src/cvcl.cmx \
+    src/coq.cmx src/cc.cmi src/ast.cmi src/annot.cmx 
 src/misc.cmo: src/types.cmi src/ptree.cmi src/options.cmi src/logic.cmi \
     src/loc.cmi src/ident.cmi src/effect.cmi src/cc.cmi src/ast.cmi \
     src/misc.cmi 
@@ -190,6 +196,7 @@ src/error.cmi: src/ident.cmi
 src/fpi.cmi: src/vcg.cmi 
 src/harvey.cmi: src/vcg.cmi src/logic.cmi src/env.cmi 
 src/holl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
+src/isabelle.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/logic.cmi: src/ident.cmi 
 src/ltyping.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/env.cmi src/effect.cmi src/ast.cmi 

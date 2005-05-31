@@ -23,8 +23,8 @@ int min(int t[],int n) {
 }
 
 
-/*@ logic int min(int t[],int n) reads t[*] */
-/*@ logic int max(int t[],int n) reads t[*] */
+/*@ logic int min(int t[],int n) reads t[..] */
+/*@ logic int max(int t[],int n) reads t[..] */
 
 /*@ axiom min_is_min:
   @    \forall int t[]; \forall int n; n > 0 => is_min(t,n,min(t,n))

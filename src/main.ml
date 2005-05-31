@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.77 2005-04-14 14:58:15 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.78 2005-05-31 07:55:33 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -34,7 +34,7 @@ open Logic
 
 let typed_progs = ref [] (* for the GUI *)
 
-let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp f_cvc f_smt x = 
+let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp f_cvc f_smt f_isabelle x = 
   match prover with
   | Pvs -> f_pvs x
   | Coq _ -> f_coq x
@@ -44,6 +44,7 @@ let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp f_cvc f_smt x =
   | Simplify -> f_smp x
   | CVCLite -> f_cvc x
   | SmtLib -> f_smt x
+  | Isabelle -> f_isabelle x
 
 let reset () =
   typed_progs := [];
@@ -58,6 +59,7 @@ let reset () =
   | Simplify -> Simplify.reset ()
   | CVCLite -> Cvcl.reset ()
   | SmtLib -> Smtlib.reset ()
+  | Isabelle -> Isabelle.reset ()
 
 let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
@@ -68,6 +70,7 @@ let push_obligations ol = match prover with
   | Simplify -> Simplify.push_obligations ol
   | CVCLite -> Cvcl.push_obligations ol
   | SmtLib -> Smtlib.push_obligations ol
+  | Isabelle -> Isabelle.push_obligations ol
 
 let prover_is_coq = match prover with Coq _ -> true | _ -> false
 
@@ -83,6 +86,7 @@ let push_parameter id v tv = match prover with
   | Pvs -> if is_pure_type_scheme v then Pvs.push_parameter id tv
   | Coq _ -> if is_pure_type_scheme v || valid then Coq.push_parameter id tv
   | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
+  | Isabelle -> if is_pure_type_scheme v then Isabelle.push_parameter id tv
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
   | Harvey | Simplify | SmtLib -> () (* nothing to do? *)
   | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
@@ -91,6 +95,7 @@ let push_logic id t = match prover with
   | Pvs -> Pvs.push_logic id t
   | Coq _ -> Coq.push_logic id t
   | HolLight -> Holl.push_logic id t
+  | Isabelle -> Isabelle.push_logic id t
   | Mizar -> Mizar.push_logic id t
   | Harvey | Simplify | SmtLib -> () (* nothing to do? *)
   | CVCLite -> Cvcl.push_logic id t
@@ -99,6 +104,7 @@ let push_axiom id p = match prover with
   | Pvs -> Pvs.push_axiom id p
   | Coq _ -> Coq.push_axiom id p
   | HolLight -> Holl.push_axiom id p
+  | Isabelle -> Isabelle.push_axiom id p
   | Mizar -> Mizar.push_axiom id p
   | Harvey -> Harvey.push_axiom id p
   | Simplify -> Simplify.push_axiom id p
@@ -109,6 +115,7 @@ let push_predicate id p = match prover with
   | Pvs -> Pvs.push_predicate id p
   | Coq _ -> Coq.push_predicate id p
   | HolLight -> Holl.push_predicate id p
+  | Isabelle -> Isabelle.push_predicate id p
   | Mizar -> Mizar.push_predicate id p
   | Harvey -> Harvey.push_predicate id p
   | Simplify -> Simplify.push_predicate id p
@@ -130,6 +137,7 @@ let output fwe =
     | Simplify -> Simplify.output_file fwe
     | CVCLite -> Cvcl.output_file fwe
     | SmtLib -> Smtlib.output_file fwe
+    | Isabelle -> Isabelle.output_file fwe
   end;
   if fpi then Fpi.output fwe
 
