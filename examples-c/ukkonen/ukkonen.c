@@ -32,7 +32,10 @@ unsigned int next_node;
 
 /* word we are working on */
 unsigned int *current_word;
-/*@ invariant valid_word: \valid_range(current_word,0,max_string_sz-1) */
+/*@ invariant valid_word: \valid_range(current_word,0,max_string_sz-1) &&
+  @ \forall int k; \valid_index(current_word,k) =>
+  @   (0 <= current_word[k] < alphabet_sz)
+  */
 
 /* WARNING:
  * max_nodes_nb, alphabet_sz, nodes_list, next_node,
