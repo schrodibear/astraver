@@ -173,7 +173,7 @@ invariant is made of eight assertions:
   root, is reachable from $t$ or $p$.
 \item[I2] means that conversely, each (non-null) node reachable from $t$
   or $p$ was initially reachable from \verb|root|. This is true only
-  for non-null nodes, because \verb|null| may not be reachable from
+  for non-null nodes, because \verb|null| may be not reachable from
   \verb|root| if the graph is cyclic.
 \item[I3] means that for initially unreachable nodes, the mark
   remains unchanged.
@@ -317,7 +317,7 @@ next(c,l,r,p) = \\
 0~\verb|then|~select(l,p)~\verb|else|~select(r,p)
 \end{array}
 \]
-It may be surprised at first that the \verb|clr_list| predicate
+It may be surprising at first that the \verb|clr_list| predicate
 defined here has six arguments instead of two, as declared in
 Section~\ref{sec:invariant}. This is the effect of the \texttt{reads}
 clause, explained first in Section~\ref{sec:spec}. As already said,
@@ -413,7 +413,7 @@ termination of the while loop. In \caduceus{}, one can annotate a
 loop by a \emph{variant}: an expression which decreases with respect
 to some well-founded ordering. It is not hard to find such a
 measure for the Schorr-Waite algorithm. There is a triple of natural
-numbers which decrease lexicographically at each iteration:
+numbers which decreases lexicographically at each iteration:
 %\begin{enumerate}
 %\item 
 the number of unmarked reachable nodes;
@@ -426,7 +426,7 @@ There is a minor issue: in our modeling, there is no assumption on
 the finiteness of the memory, so indeed nothing says that the set of
 reachable nodes is finite. So this is an extra assumption we have
 to insert in the pre-condition. The additional annotations for
-termination are given Figure~\ref{fig:term}, where in Coq we define
+termination are given in Figure~\ref{fig:term}, where in Coq we define
 \[
 \begin{array}{l}
 \verb|reachable_elements|(a,l,r, root, s) = \\ %\\\qquad\qquad\qquad 
@@ -458,7 +458,7 @@ corresponding lemmas amount to 317 lines of definitions and 589 lines
 of proof tactics. The generated verification conditions amount to 985
 lines, and 2411 lines of tactics were inserted manually to prove
 them. Approximately 40\% of the work was devoted to the termination proof,
-both in term of lines of Coq text and of time spent: proving the
+both in terms of lines of Coq text and of time spent: proving the
 obligations without termination required around 3 weeks, and the
 termination proof required 2 more weeks.
 

@@ -121,7 +121,7 @@ The paper has a number of minor errors which can be fixed easily.
 
 TODO In section 4, the first sentence: The function is now formally specified. It is not clear which function is bein specified.
 
-TODO In section 4.4 second paragraph. "It may be surprised"  should read "It may be surprising" 
+DONE In section 4.4 second paragraph. "It may be surprised"  should read "It may be surprising" 
 
 
 -- Summary:
@@ -323,15 +323,15 @@ TODO page 3, left col., 3.1: discuss briefly this restriction (what would
 
   be different without it?!
 
-TODO page 4, left col.: to explore -> to be explored;
+DONE page 4, left col.: to explore -> to be explored;
 
-TODO   is explored -> has been explored;
+DONE is explored -> has been explored;
 
-TODO   this is not -> it is not;
+DONE   this is not -> it is not;
 
-TODO   latter -> later
+DONE   latter -> later
 
-TODO page 4, right col.: indeed mean -> indeed means
+DONE page 4, right col.: indeed mean -> indeed means
 
 TODO page 5, left col. line 3 (and later): make clear what you mean by 'an
 
@@ -349,7 +349,7 @@ TODO   seems to be a self-contradiction (at least if the design of the
 
 TODO   invariant is considered to be part of the proof)! 
 
-TODO page 5, right col., 4.1: 'on Figure ...' -> 'in Figure ...' (here and
+DONE page 5, right col., 4.1: 'on Figure ...' -> 'in Figure ...' (here and
 
 TODO   later)
 
@@ -359,11 +359,11 @@ TODO   links': I don't really understand this, because the link from p or t
 
 TODO   is modified but is still 'normal'!?
 
-TODO   children -> child (twice)
+DONE   children -> child (twice)
 
-TODO page 6, right col., bottom: may not be -> may be not (because of
+DONE page 6, right col., bottom: may not be -> may be not (because of
 
-TODO   different semantics)
+DONE   different semantics)
 
 TODO page 7, right col., lines 13-14: why did your attempts (using
 
@@ -377,7 +377,7 @@ TODO   also at the beginning of 4.4: it would be useful to roughly describe
 
 TODO   the functionality, strengths and weaknesses of Simplify;
 
-TODO page 7, right col.: surprised -> surprising
+DONE? page 7, right col.: surprised -> surprising
 
 TODO page 8, left col.: 'the most important one is ...': why is this the
 
@@ -393,19 +393,19 @@ TODO   you have started until the final proof went through; some comments
 
 TODO   in this direction would also be instructive! 
 
-TODO page 8, right col.: decrease -> decreases;
+DONE page 8, right col.: decrease -> decreases;
 
-TODO   given Figure 6 -> given in Figure 6;
+DONE   given Figure 6 -> given in Figure 6;
 
 TODO   artifact of the Cadeus ...? what do you mean here?
 
-TODO page 9, left col.: in term of -> in terms of
+DONE page 9, left col.: in term of -> in terms of
 
 TODO   '2411 lines of tactics were inserted manually': this sounds quite a
 
 TODO   lot, and probably only takes into account the final successful run!?
 
-TODO page 9, left col.: well-founded relation -> well-founded relations
+DONE page 9, left col.: well-founded relation -> well-founded relations
 
 TODO page 9, left col. second half: the claim 'But as far as we know ...'
 
@@ -415,15 +415,15 @@ TODO   done in the future with other approaches, even if it has  not been
 
 TODO   done previously); perhaps you should weaken that a bit; 
 
-TODO page 9, left col.: does not any -> does not do any
+DONE page 9, left col.: does not any -> does not do any
 
 TODO page 9, right col., line 3: 'the Caduceus approach': in this paper
 
 TODO   this is undefined!
 
-TODO   defined -> defining
+DONE   defined -> defining
 
-TODO   this are -> these are
+????   this are -> these are
 
 TODO page 9, right col, first paragr.: 'This would require to define
 
@@ -431,21 +431,21 @@ TODO   predicates ... only in higher-order logical frameworks': this is
 
 TODO   quite unclear! why?
 
-TODO   major goal -> major goals
+DONE   major goal -> major goals
 
-TODO   than automatic provers -> than those of automatic provers
+DONE   than automatic provers -> than those of automatic provers
 
-TODO   the develop -> to develop
+DONE   the develop -> to develop
 
-TODO   fail -> fails
+DONE   fail -> fails
 
-TODO   ask -> asked
+DONE   ask -> asked
 
-TODO   to embedded -> on embedded
+DONE   to embedded -> on embedded
 
 TODO page 9, right col, line 3 from bottom: 'solutions': for what?
 
-TODO page 10, left col.: its fruitful -> his fruitful
+DONE page 10, left col.: its fruitful -> his fruitful
 
 TODO   [3]: page numbers are missing
 
@@ -619,13 +619,13 @@ TODO  o the font and size of several words (e.g., Caduceus, cons) is a bit
 
    off and needs to be revisited.
 
-TODO  o lisp => Lisp
+DONE  o lisp => Lisp
 
 TODO  o explain what "m:1" means in C for old C hackers that have forgotten
 
    about such.
 
-TODO  o first order => first-order
+DONE  o first order => first-order
 
 TODO  o "With respect to the most recent formal..." most recent wrt what?
 

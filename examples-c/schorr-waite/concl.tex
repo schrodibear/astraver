@@ -14,7 +14,7 @@ for refinement, and we believe that it could probably also proved by
 others as well. The important point is that termination is smoothly
 integrated in our methodology, thanks to the powerful clause
 \texttt{variant} we have, allowing to use arbitrary well-founded
-relation.
+relations.
 
 Regarding the absence of invalid pointer dereferencing, it has to be
 said that advanced static analysis techniques are able to establish it
@@ -25,7 +25,7 @@ we know, only our approach is able to handle both the pointer
 dereferencing checks and the validity of behavioral properties given
 by the user. Notice that with \caduceus, as shown in
 Section~\ref{sec:simplify}, absence of invalid pointer dereferencing
-is established automatically, even if \caduceus{} does not any kind of
+is established automatically, even if \caduceus{} does not do any kind of
 reachability analysis by itself.
 
 Finally, we emphasize again that we use a generic tool for arbitrary C
@@ -36,7 +36,7 @@ language would be enough, in particular because it is first-order, but
 we finally succeeded.  We claim this is a very successful case study,
 which provides a clear evidence that the \caduceus{} approach is
 powerful. We think that the ability of using predicates in annotations
-which are only defined on the prover side is fundamental. As said
+which are only defining on the prover side is fundamental. As said
 before, our specification language is inspired from JML annotation
 language for Java. But with JML, as far as we know, it is not possible
 to declare predicates without also defined them as Java methods: this
@@ -60,18 +60,18 @@ improvement clearly emphasized by this case study is the ability to
 perform proofs with \emph{cooperation} between automatic provers and
 interactive ones. Interactive provers are nice because they are very
 expressive and allow to prove manually difficult goals, but their
-automatic tactics are less powerful than automatic provers. This is
+automatic tactics are less powerful than those of automatic provers. This is
 especially true for Coq, because any decision procedure in it needs to
 provide a checkable proof trace, making its integration very
-difficult. So one of the major goal of our research is now the develop
+difficult. So one of the major goals of our research is now to develop
 a platform for verification where automatic theorem proving will be
-used as far as possible, and only when this fail the user would be ask
+used as far as possible, and only when this fails the user would be asked
 for manual interaction.
 
 This case study was motivated by Bornat's assertion given at the
 beginning. But the Schorr-Waite program is not representative of the
 kind of C program we are really interested in. We focus in particular
-to embedded industrial C programs, where a high level of confidence is
+on embedded industrial C programs, where a high level of confidence is
 required: \caduceus{} is currently under experimentation at Axalto
 (smart cards) and Dassault Aviation (aeronautics). For this goal,
 several improvements to the \caduceus{} tool are in progress. There
