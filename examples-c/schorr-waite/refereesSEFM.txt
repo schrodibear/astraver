@@ -729,7 +729,7 @@ TODO  o a very bad misrepresentation of the main related work on JML and
 
    paragraph in the conclusion about JML.
 
-
+   CLAUDE : parler du \reach de JML ?
 
 
 
