@@ -23,7 +23,13 @@ typedef struct struct_node
 node *nodes_list;
 /*@ invariant valid_nodes: \valid_range(nodes_list,0,max_nodes_nb-1) */
 /*@ invariant valid_sons: \forall int k; \valid_index(nodes_list,k)
-  @   => \valid_range(nodes_list[k].sons,0,alphabet_sz-1)
+  @   => \valid_range(nodes_list[k].sons,0,alphabet_sz-1) */
+/*@ invariant valid_links:
+  @   \forall int j; \forall int k;
+  @     (\valid_index(nodes_list,j) && \valid_index(nodes_list[j].sons,k))
+  @     => (\exists int l; nodes_list[j].sons[k] != \null
+  @         => (\valid_index(nodes_list,l) &&
+  @             nodes_list[j].sons[k] == nodes_list + l))
   */
 
 /* index of the next free node */
@@ -55,7 +61,7 @@ unsigned int get_char(unsigned int i)
 { return current_word[i]; }
 
 /* fresh node allocation function */
-/*@ requires next_node < max_nodes_nb
+/*@ requires next_node < max_nodes_nb - 1
   @ assigns next_node
   @ ensures
   @   \result == nodes_list + \old(next_node) &&
@@ -72,12 +78,13 @@ node *get_fresh_node()
 
 /* target research function */
 /*@ requires
-  @   0 <= c < alphabet_sz &&
+  @   0 <= c < alphabet_sz && \valid(t) &&
   @   \exists int k; (\valid_index(nodes_list,k) && t == nodes_list + k)
   @ ensures
-  @   \exists int k; (\valid_index(nodes_list,k) && \result == nodes_list + k)
+  @   \result != \null => (\exists int k;
+  @     (\valid_index(nodes_list,k) && \result == nodes_list + k))
   */
-node *target(node *t,unsigned int c)
+node *target(node *t, unsigned int c)
 { return t->sons[c]; }
 
 /* suffix head research function */
