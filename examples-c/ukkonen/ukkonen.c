@@ -27,9 +27,9 @@ node *nodes_list;
 /*@ invariant valid_links:
   @   \forall int j; \forall int k;
   @     (\valid_index(nodes_list,j) && \valid_index(nodes_list[j].sons,k))
-  @     => (\exists int l; nodes_list[j].sons[k] != \null
-  @         => (\valid_index(nodes_list,l) &&
-  @             nodes_list[j].sons[k] == nodes_list + l))
+  @      => (\exists int l; (\valid_index(nodes_list,l) &&
+  @          (nodes_list[j].sons[k] != \null
+  @           => nodes_list[j].sons[k] == nodes_list + l)))
   */
 
 /* index of the next free node */
@@ -39,7 +39,7 @@ unsigned int next_node;
 /* word we are working on */
 unsigned int *current_word;
 /*@ invariant valid_word: \valid_range(current_word,0,max_string_sz-1) &&
-  @ \forall int k; \valid_index(current_word,k) =>
+  @   \forall int k; \valid_index(current_word,k) =>
   @   (0 <= current_word[k] < alphabet_sz)
   */
 
@@ -54,7 +54,7 @@ unsigned int *current_word;
 /*@ requires
   @   \valid_index(current_word,i)
   @ ensures
-  @   0 <= \result <= alphabet_sz &&
+  @   0 <= \result < alphabet_sz &&
   @   \result == current_word[i]
   */
 unsigned int get_char(unsigned int i)
@@ -81,15 +81,27 @@ node *get_fresh_node()
   @   0 <= c < alphabet_sz && \valid(t) &&
   @   \exists int k; (\valid_index(nodes_list,k) && t == nodes_list + k)
   @ ensures
-  @   \result != \null => (\exists int k;
+  @   \valid(\result) && \result != \null => (\exists int k;
   @     (\valid_index(nodes_list,k) && \result == nodes_list + k))
   */
 node *target(node *t, unsigned int c)
 { return t->sons[c]; }
 
 /* suffix head research function */
+/*@ requires
+  @   \valid(m) && \valid(r) && \valid_index(current_word,i) &&
+  @   \exists int k; (\valid_index(nodes_list,k) && m == nodes_list + k)
+  @ assigns *r,m,i
+  @ ensures
+  @   \valid_index(current_word,i) &&
+  @   \exists int k; (\valid_index(nodes_list,k) && *r == nodes_list + k)
+  */
 unsigned int locate_head(node *m, unsigned int i, node **r)
 {
+  /*@ invariant \valid_index(current_word,i) && \valid(m) &&
+    @   \exists int k; (\valid_index(nodes_list,k) && m == nodes_list + k)
+    @ variant max_string_sz - i
+    @*/
   while(get_char(i) != 0)
   {
     node *t = target(m,get_char(i));
@@ -102,6 +114,12 @@ unsigned int locate_head(node *m, unsigned int i, node **r)
 }
 
 /* node's son insertion function */
+/*@ requires
+  @   \valid(f) && \valid(s) && \valid_index(current_word,i) &&
+  @   \exists int j; (\valid_index(nodes_list,j) && f == nodes_list + j) &&
+  @   \exists int k; (\valid_index(nodes_list,k) && s == nodes_list + k)
+  @ assigns f->sons[..]
+  @*/
 void insert_son(node *f, node *s, unsigned int i)
 { f->sons[get_char(i)] = s; }
 
