@@ -123,17 +123,26 @@ void insert_son(node *f, node *s, unsigned int i)
 { f->sons[get_char(i)] = s; }
 
 /* suffix tree construction function */
+/*@ assigns nodes_list,next_node
+  @ ensures valid_node(\result)
+  @*/
 node *build_suffix_tree()
 {
   node *m = get_fresh_node();
   unsigned int i;
   if(m == NULL) return NULL;
-  for(i = 0; get_char(i) != 0; i++)
+  /*@ invariant \valid_index(current_word,i)
+    @ variant max_string_sz - i
+    @*/
+  for(i = 0; i < max_string_sz; i++)
   {
     unsigned int k;
     node *p = locate_head(m,i,&k);
     unsigned int j;
-    for(j = k; get_char(j) != 0; j++)
+    /*@ invariant \valid_index(current_word,j) && valid_node(p)
+      @ variant max_string_sz - j
+      @*/
+    for(j = k; j < max_string_sz; j++)
     {
       node *q = get_fresh_node();
       insert_son(p,q,j);
