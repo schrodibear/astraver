@@ -22,15 +22,21 @@ typedef struct struct_node
 /* list of all available nodes */
 node *nodes_list;
 /*@ invariant valid_nodes: \valid_range(nodes_list,0,max_nodes_nb-1) */
-/*@ invariant valid_sons: \forall int k; \valid_index(nodes_list,k)
-  @   => \valid_range(nodes_list[k].sons,0,alphabet_sz-1) */
-/*@ invariant valid_links:
-  @   \forall int j; \forall int k;
-  @     (\valid_index(nodes_list,j) && \valid_index(nodes_list[j].sons,k))
-  @      => (\exists int l; (\valid_index(nodes_list,l) &&
-  @          (nodes_list[j].sons[k] != \null
-  @           => nodes_list[j].sons[k] == nodes_list + l)))
-  */
+/*@ predicate valid_node(node *p)
+  @ { \exists int k; \valid_index(nodes_list,k) && p == nodes_list + k }
+  @*/
+/*@ invariant valid_sons_range: \forall node *t; valid_node(t)
+  @   => \valid_range(t->sons,0,alphabet_sz-1) */
+/*@ predicate valid_sons(node *p)
+  @ { \forall int k; 0 <= k < alphabet_sz
+  @     => (p->sons[k] == \null || valid_node(p->sons[k])) }
+  @*/
+/*@ axiom node_validity:
+  @   \forall node *t; valid_node(t) => \valid(t)
+  @*/
+/*@ invariant valid_sons_links:
+  @   \forall node *t; valid_node(t) => valid_sons(t)
+  @*/
 
 /* index of the next free node */
 unsigned int next_node;
@@ -41,7 +47,7 @@ unsigned int *current_word;
 /*@ invariant valid_word: \valid_range(current_word,0,max_string_sz-1) &&
   @   \forall int k; \valid_index(current_word,k) =>
   @   (0 <= current_word[k] < alphabet_sz)
-  */
+  @*/
 
 /* WARNING:
  * max_nodes_nb, alphabet_sz, nodes_list, next_node,
@@ -56,7 +62,7 @@ unsigned int *current_word;
   @ ensures
   @   0 <= \result < alphabet_sz &&
   @   \result == current_word[i]
-  */
+  @*/
 unsigned int get_char(unsigned int i)
 { return current_word[i]; }
 
@@ -66,7 +72,7 @@ unsigned int get_char(unsigned int i)
   @ ensures
   @   \result == nodes_list + \old(next_node) &&
   @   next_node == \old(next_node) + 1
-  */
+  @*/
 node *get_fresh_node()
 {
   node *n = &(nodes_list[next_node]);
@@ -77,47 +83,40 @@ node *get_fresh_node()
 }
 
 /* target research function */
-/*@ requires
-  @   0 <= c < alphabet_sz && \valid(t) &&
-  @   \exists int k; (\valid_index(nodes_list,k) && t == nodes_list + k)
-  @ ensures
-  @   \valid(\result) && \result != \null => (\exists int k;
-  @     (\valid_index(nodes_list,k) && \result == nodes_list + k))
-  */
+/*@ requires 0 <= c < alphabet_sz && valid_node(t)
+  @ ensures \result != \null => valid_node(\result)
+  @*/
 node *target(node *t, unsigned int c)
 { return t->sons[c]; }
 
 /* suffix head research function */
 /*@ requires
-  @   \valid(m) && \valid(r) && \valid_index(current_word,i) &&
-  @   \exists int k; (\valid_index(nodes_list,k) && m == nodes_list + k)
-  @ assigns *r,m,i
-  @ ensures
-  @   \valid_index(current_word,i) &&
-  @   \exists int k; (\valid_index(nodes_list,k) && *r == nodes_list + k)
-  */
-unsigned int locate_head(node *m, unsigned int i, node **r)
+  @   valid_node(m) && \valid(r) && \valid_index(current_word,i) &&
+  @   \base_addr(r) != \base_addr(current_word)
+  @ assigns *r
+  @ ensures \valid_index(current_word,*r) && valid_node(\result)
+  @*/
+node *locate_head(node *m, unsigned int i, unsigned int *r)
 {
-  /*@ invariant \valid_index(current_word,i) && \valid(m) &&
-    @   \exists int k; (\valid_index(nodes_list,k) && m == nodes_list + k)
+  /*@ invariant \valid_index(current_word,i) && valid_node(m)
     @ variant max_string_sz - i
     @*/
-  while(get_char(i) != 0)
+  while(i < (max_string_sz - 1))
   {
     node *t = target(m,get_char(i));
     if(t == NULL) break;
     m = t;
     i++;
   }
-  *r = m;
-  return i;
+  *r = i;
+  return m;
 }
 
 /* node's son insertion function */
 /*@ requires
-  @   \valid(f) && \valid(s) && \valid_index(current_word,i) &&
-  @   \exists int j; (\valid_index(nodes_list,j) && f == nodes_list + j) &&
-  @   \exists int k; (\valid_index(nodes_list,k) && s == nodes_list + k)
+  @   valid_node(f) &&
+  @   valid_node(s) &&
+  @   \valid_index(current_word,i)
   @ assigns f->sons[..]
   @*/
 void insert_son(node *f, node *s, unsigned int i)
@@ -131,8 +130,8 @@ node *build_suffix_tree()
   if(m == NULL) return NULL;
   for(i = 0; get_char(i) != 0; i++)
   {
-    node *p = NULL;
-    unsigned int k = locate_head(m,i,&p);
+    unsigned int k;
+    node *p = locate_head(m,i,&k);
     unsigned int j;
     for(j = k; get_char(j) != 0; j++)
     {
