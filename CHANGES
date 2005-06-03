@@ -1,6 +1,8 @@
 
- 
+version 1.80, June 3rd, 2005
+============================
   o Isabelle/HOL output (--isabelle option) contribution by Yasuhiko Minamide
+  o HOL 4 output (--hol4 option) contribution by Seungkeol Choe
   o SMT-LIB format output (--smtlib option)
  
 version 1.75, March 15th, 2005

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.8 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: regen.mli,v 1.9 2005-06-03 11:56:17 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -51,6 +51,9 @@ module type S = sig
 
   (* what to print at the beginning of file when first created *)
   val first_time : formatter -> unit
+
+  (* what to print at the end of file when first created *)
+  val first_time_trailer : formatter -> unit
 
   (* how to recognize the end of an element to erase / overwrite *)
   val not_end_of_element : element_id -> string -> bool

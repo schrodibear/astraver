@@ -2,7 +2,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; p_po_1, Why obligation from file "loop0.mlw", characters 316-327
+;; p_po_1, Why obligation from file "loop0.mlw", characters 316-326
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (Variant1)
@@ -14,7 +14,7 @@
 (IMPLIES (EQ x1 (- x0 1))
 (AND (AND (<= 0 x1) (<= x1 x)) (AND (<= 0 x0) (< x1 x0))))))))))))
 
-;; p_po_2, Why obligation from file "loop0.mlw", characters 248-335
+;; p_po_2, Why obligation from file "loop0.mlw", characters 248-331
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (Variant1)
@@ -22,6 +22,6 @@
 (IMPLIES (EQ Variant1 x0)
 (IMPLIES (AND (<= 0 x0) (<= x0 x)) (IMPLIES (<= x0 0) (EQ x0 0))))))))
 
-;; p_po_3, Why obligation from file "loop0.mlw", characters 281-297
+;; p_po_3, Why obligation from file "loop0.mlw", characters 281-293
 (FORALL (x) (IMPLIES (>= x 0) (AND (<= 0 x) (<= x x))))
 

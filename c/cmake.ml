@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.10 2005-05-31 07:55:33 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.11 2005-06-03 11:56:16 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -34,7 +34,8 @@ let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
 let cvcl_all fmt f = fprintf fmt "cvcl/%s_why.cvc.all" f
 let harvey_all fmt f = fprintf fmt "harvey/%s_why.all.rv" f
 let smtlib_all fmt f = fprintf fmt "smtlib/%s_why.smt" f
-let isabelle fmt f = fprintf fmt "isabelle/%s_why.thy" f
+let isabelle fmt f = 
+  fprintf fmt "isabelle/%s_why.thy isabelle/%s_spec_why.thy" f f
 
 let print_files = print_list (fun fmt () -> fprintf fmt "\\@\n  ")
 
@@ -65,10 +66,12 @@ let generic f targets =
        fprintf fmt "\t$(WHY) -pvs -dir pvs $(CADULIB)/why/caduceus.why@\n@\n";
        
        fprintf fmt "isabelle: %a@\n@\n" (print_files isabelle) targets;
-       fprintf fmt "isabelle/%%_why.thy: why/%%_spec.why why/%%.why@\n";
-       fprintf fmt "\t$(WHY) -isabelle -dir isabelle $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why@\n@\n";
+       fprintf fmt "isabelle/%%_why.thy: isabelle/%%_spec_why.thy why/%%.why@\n";
+       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory $*_spec_why $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why@\n";
+       fprintf fmt "\tcp -f %s/isabelle/caduceus_why.thy isabelle/@\n@\n" 
+	 Coptions.libdir;
        fprintf fmt "isabelle/%%_spec_why.thy: why/%%_spec.why@\n";
-       fprintf fmt "\t$(WHY) -isabelle -dir isabelle $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory caduceus_why $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
 
        fprintf fmt "simplify: %a@\n" (print_files simplify_all) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)@\n@\n";

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.11 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.12 2005-06-03 11:56:17 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -53,6 +53,9 @@ module type S = sig
 
   (* what to print at the beginning of file when first created *)
   val first_time : formatter -> unit
+
+  (* what to print at the end of file when first created *)
+  val first_time_trailer : formatter -> unit
 
   (* how to recognize the end of an element to erase / overwrite *)
   val not_end_of_element : element_id -> string -> bool
@@ -140,7 +143,8 @@ module Make(X : S) = struct
 
   let first_time fmt =
     X.first_time fmt;
-    Queue.iter (fun (_,e) -> X.print_element fmt e) elem_q
+    Queue.iter (fun (_,e) -> X.print_element fmt e) elem_q;
+    X.first_time_trailer fmt
 
   let output_file ?(margin=78) f =
     if Sys.file_exists f then begin

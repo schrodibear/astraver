@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.21 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.22 2005-06-03 11:56:17 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -350,6 +350,8 @@ environ
 
 begin :: proof obligations start here
 " (match mizar_environ with None -> environ | Some s -> s)
+
+  let first_time_trailer fmt = ()
 
   let edit_below = Str.regexp "[ ]*:: EDIT BELOW THIS LINE[ ]*"
   let not_end_of_element _ s = not (Str.string_match edit_below s 0)

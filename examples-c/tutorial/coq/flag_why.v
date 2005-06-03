@@ -83,9 +83,9 @@ Lemma flag_impl_po_2 :
         (forall (intP:((memory) Z)),
          (((acc intP (shift t result2)) = (acc intP0 (shift t result0)) /\
           (acc intP (shift t result0)) = (acc intP0 (shift t result2))) /\
-          (assigns alloc intP0 intP
-           (union_loc (pointer_loc (shift t result0))
-            (pointer_loc (shift t result2)))) ->
+          (not_assigns alloc intP0 intP
+           (pset_union (pset_singleton (shift t result0))
+            (pset_singleton (shift t result2)))) ->
           ((((((((forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k))))) /\
           0 <= b2) /\ b2 <= i) /\ i <= r1) /\ r1 <= n) /\
@@ -232,8 +232,9 @@ Lemma flag_impl_po_4 :
   (forall (intP:((memory) Z)),
    (((acc intP (shift t result4)) = (acc intP0 (shift t i1)) /\
     (acc intP (shift t i1)) = (acc intP0 (shift t result4))) /\
-    (assigns alloc intP0 intP
-     (union_loc (pointer_loc (shift t i1)) (pointer_loc (shift t result4)))) ->
+    (not_assigns alloc intP0 intP
+     (pset_union (pset_singleton (shift t i1))
+      (pset_singleton (shift t result4)))) ->
     ((((((((forall (k:Z),
             (0 <= k /\ k < n -> (isColor (acc intP (shift t k))))) /\
     0 <= b1) /\ b1 <= i1) /\ i1 <= r2) /\ r2 <= n) /\
@@ -363,7 +364,7 @@ Lemma flag_impl_po_6 :
    (exists r:Z, ((isMonochrome alloc intP0 t 0 (b - 1) BLUE) /\
     (isMonochrome alloc intP0 t b (r - 1) WHITE)) /\
     (isMonochrome alloc intP0 t r (n - 1) RED))) /\
-  (assigns alloc intP intP0 (range_loc t 0 (n - 1))).
+  (not_assigns alloc intP intP0 (pset_range (pset_singleton t) 0 (n - 1))).
 Proof.
 intuition.
 assert (i1=r1).

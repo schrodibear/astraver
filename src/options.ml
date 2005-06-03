@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.48 2005-05-31 07:55:33 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.49 2005-06-03 11:56:17 filliatr Exp $ i*)
 
 open Format
 
@@ -30,6 +30,7 @@ let coq_tactic_ = ref None
 let coq_preamble_ = ref None
 let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
+let isabelle_base_theory_ = ref "Main"
 let no_simplify_prelude_ = ref false
 let no_cvcl_prelude_ = ref false
 let simplify_typing_ = ref false
@@ -54,7 +55,7 @@ let c_file = ref false
 type coq_version = V7 | V8
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle
+  | SmtLib | Isabelle | Hol4
 let prover_ = ref (match Version.coqversion with "v8" -> Coq V8 | _ -> Coq V7)
 
 (*s extracting the Mizar environ from a file *)
@@ -142,6 +143,7 @@ Prover selection:
   --mizar     selects Mizar prover
   --harvey    selects haRVey prover
   --isabelle  selects Isabelle prover
+  --hol4      selects HOL4 prover
   --simplify  selects Simplify prover
   --cvcl      selects CVC Lite prover
   --smtlib    selects the SMT-LIB format
@@ -171,6 +173,10 @@ Mizar-specific options:
   --mizar-environ-from <file>
               gets Mizar `environ' from <file>
 
+Isabelle/HOL-specific options:
+  --isabelle-base-theory <theory>
+              sets the Isabelle/HOL base theory
+
 Misc options:
   --ocaml        Ocaml code output
   --ocaml-annot  Show all annotations in ocaml code
@@ -194,6 +200,7 @@ let files =
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
     | ("-isabelle" | "--isabelle") :: args -> prover_ := Isabelle; parse args
+    | ("-hol4" | "--hol4") :: args -> prover_ := Hol4; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
     | ("-fpi" | "--fpi") :: args -> fpi_ := true; parse args
@@ -231,6 +238,10 @@ let files =
       :: f :: args -> mizar_environ_ := Some (mizar_environ_from f); parse args
     | ("-mizarenvironfrom" | "--mizarenvironfrom" | 
        "-mizar-environ-from"|"--mizar-environ-from") :: [] ->
+	usage (); exit 1
+    | ("-isabelle-base-theory" | "--isabelle-base-theory") 
+      :: s :: args -> isabelle_base_theory_ := s; parse args
+    | ("-isabelle-base-theory" | "--isabelle-base-theory")::[] ->
 	usage (); exit 1
     | ("--no-simplify-prelude" | "-no-simplify-prelude") :: args ->
 	no_simplify_prelude_ := true; parse args
@@ -290,6 +301,7 @@ let pvs_preamble = match !pvs_preamble_ with
   | Some s -> s
 
 let mizar_environ = !mizar_environ_
+let isabelle_base_theory = !isabelle_base_theory_
 let no_simplify_prelude = !no_simplify_prelude_
 let no_cvcl_prelude = !no_cvcl_prelude_
 let simplify_typing = !simplify_typing_

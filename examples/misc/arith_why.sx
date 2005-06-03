@@ -11,7 +11,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; mult_po_1, Why obligation from file "arith.mlw", characters 358-368
+;; mult_po_1, Why obligation from file "arith.mlw", characters 358-367
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -29,7 +29,7 @@
 (IMPLIES (AND (>= a1 0) (EQ (+ p1 (* a1 b1)) (* x y)))
 (IMPLIES (NEQ a1 0) (NEQ 2 0)))))))))))))))))
 
-;; mult_po_2, Why obligation from file "arith.mlw", characters 374-386
+;; mult_po_2, Why obligation from file "arith.mlw", characters 374-385
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -56,7 +56,7 @@
 (IMPLIES (EQ b (* 2 b1))
 (AND (AND (>= a 0) (EQ (+ p2 (* a b)) (* x y))) (AND (<= 0 a1) (< a a1)))))))))))))))))))))))))))
 
-;; mult_po_3, Why obligation from file "arith.mlw", characters 386-386
+;; mult_po_3, Why obligation from file "arith.mlw", characters 385-385
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -83,25 +83,7 @@
 (IMPLIES (EQ b (* 2 b1))
 (AND (AND (>= a 0) (EQ (+ p1 (* a b)) (* x y))) (AND (<= 0 a1) (< a a1)))))))))))))))))))))))))))
 
-;; mult_po_4, Why obligation from file "arith.mlw", characters 400-406
-(FORALL (x)
-(FORALL (y)
-(IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (a)
-(IMPLIES (EQ a x)
-(FORALL (b)
-(IMPLIES (EQ b y)
-(FORALL (p)
-(IMPLIES (EQ p 0)
-(FORALL (Variant1)
-(FORALL (a1)
-(FORALL (b1)
-(FORALL (p1)
-(IMPLIES (EQ Variant1 a1)
-(IMPLIES (AND (>= a1 0) (EQ (+ p1 (* a1 b1)) (* x y)))
-(IMPLIES (NEQ a1 0) (FORALL (p2) (NEQ 2 0))))))))))))))))))
-
-;; mult_po_5, Why obligation from file "arith.mlw", characters 268-436
+;; mult_po_4, Why obligation from file "arith.mlw", characters 268-432
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -120,7 +102,7 @@
 (IMPLIES (EQ a1 0)
 (FORALL (result) (IMPLIES (EQ result p1) (EQ result (* x y))))))))))))))))))))
 
-;; mult_po_6, Why obligation from file "arith.mlw", characters 304-333
+;; mult_po_5, Why obligation from file "arith.mlw", characters 304-330
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

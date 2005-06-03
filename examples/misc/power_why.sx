@@ -16,7 +16,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; power1_po_1, Why obligation from file "power.mlw", characters 553-565
+;; power1_po_1, Why obligation from file "power.mlw", characters 553-564
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)
@@ -40,7 +40,7 @@
 (AND (AND (EQ (Zpower x n) (* y2 (Zpower m n1))) (>= n1 0))
 (AND (<= 0 n0) (< n1 n0)))))))))))))))))))))))
 
-;; power1_po_2, Why obligation from file "power.mlw", characters 565-565
+;; power1_po_2, Why obligation from file "power.mlw", characters 564-564
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)
@@ -64,7 +64,7 @@
 (AND (AND (EQ (Zpower x n) (* y1 (Zpower m n1))) (>= n1 0))
 (AND (<= 0 n0) (< n1 n0)))))))))))))))))))))))
 
-;; power1_po_3, Why obligation from file "power.mlw", characters 427-616
+;; power1_po_3, Why obligation from file "power.mlw", characters 427-612
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)
@@ -79,7 +79,7 @@
 (IMPLIES (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
 (IMPLIES (<= n0 0) (EQ y1 (Zpower x n)))))))))))))))
 
-;; power1_po_4, Why obligation from file "power.mlw", characters 461-506
+;; power1_po_4, Why obligation from file "power.mlw", characters 461-505
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)

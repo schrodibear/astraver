@@ -16,7 +16,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; f91_po_1, Why obligation from file "mac_carthy.mlw", characters 131-263
+;; f91_po_1, Why obligation from file "mac_carthy.mlw", characters 131-262
 (FORALL (Variant1)
 (FORALL (n0)
 (IMPLIES (EQ Variant1 (max 0 (- 101 n0)))
@@ -25,7 +25,7 @@
 (IMPLIES (EQ result0 (+ n0 11))
 (AND (<= 0 Variant1) (< (max 0 (- 101 result0)) Variant1))))))))
 
-;; f91_po_2, Why obligation from file "mac_carthy.mlw", characters 131-263
+;; f91_po_2, Why obligation from file "mac_carthy.mlw", characters 131-262
 (FORALL (Variant1)
 (FORALL (n0)
 (IMPLIES (EQ Variant1 (max 0 (- 101 n0)))
@@ -37,7 +37,7 @@
 (IMPLIES (EQ result0 aux_3)
 (AND (<= 0 Variant1) (< (max 0 (- 101 result0)) Variant1))))))))))
 
-;; f91_po_3, Why obligation from file "mac_carthy.mlw", characters 158-178
+;; f91_po_3, Why obligation from file "mac_carthy.mlw", characters 158-177
 (FORALL (Variant1)
 (FORALL (n0)
 (IMPLIES (EQ Variant1 (max 0 (- 101 n0)))
@@ -51,7 +51,7 @@
 (OR (AND (<= n0 100) (EQ result0 91))
 (AND (>= n0 101) (EQ result0 (- n0 10))))))))))))
 
-;; f91_po_4, Why obligation from file "mac_carthy.mlw", characters 190-196
+;; f91_po_4, Why obligation from file "mac_carthy.mlw", characters 190-194
 (FORALL (Variant1)
 (FORALL (n0)
 (IMPLIES (EQ Variant1 (max 0 (- 101 n0)))

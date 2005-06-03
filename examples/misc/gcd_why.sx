@@ -30,7 +30,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; gcd1_po_1, Why obligation from file "gcd.mlw", characters 391-403
+;; gcd1_po_1, Why obligation from file "gcd.mlw", characters 391-402
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -50,7 +50,7 @@
 (AND (AND (< 0 x2) (AND (< 0 y1) (EQ (gcd x2 y1) (gcd a b))))
 (AND (<= 0 (max x1 y1)) (< (max x2 y1) (max x1 y1))))))))))))))))))))
 
-;; gcd1_po_2, Why obligation from file "gcd.mlw", characters 419-431
+;; gcd1_po_2, Why obligation from file "gcd.mlw", characters 419-430
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -70,7 +70,7 @@
 (AND (AND (< 0 x1) (AND (< 0 y2) (EQ (gcd x1 y2) (gcd a b))))
 (AND (<= 0 (max x1 y1)) (< (max x1 y2) (max x1 y1))))))))))))))))))))
 
-;; gcd1_po_3, Why obligation from file "gcd.mlw", characters 262-441
+;; gcd1_po_3, Why obligation from file "gcd.mlw", characters 262-437
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -86,7 +86,7 @@
 (IMPLIES (EQ x1 y1)
 (FORALL (result) (IMPLIES (EQ result x1) (EQ result (gcd a b)))))))))))))))))
 
-;; gcd1_po_4, Why obligation from file "gcd.mlw", characters 299-338
+;; gcd1_po_4, Why obligation from file "gcd.mlw", characters 299-337
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -95,7 +95,7 @@
 (FORALL (y)
 (IMPLIES (EQ y b) (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b)))))))))))
 
-;; gcd2_po_1, Why obligation from file "gcd.mlw", characters 723-730
+;; gcd2_po_1, Why obligation from file "gcd.mlw", characters 723-729
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
@@ -110,7 +110,7 @@
 (IMPLIES (AND (<= 0 x1) (AND (<= 0 y1) (EQ (gcd x1 y1) (gcd a b))))
 (IMPLIES (NEQ y1 0) (NEQ y1 0))))))))))))))
 
-;; gcd2_po_2, Why obligation from file "gcd.mlw", characters 741-777
+;; gcd2_po_2, Why obligation from file "gcd.mlw", characters 741-774
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
@@ -134,7 +134,7 @@
 (AND (AND (<= 0 x2) (AND (<= 0 y2) (EQ (gcd x2 y2) (gcd a b))))
 (AND (<= 0 y1) (< y2 y1)))))))))))))))))))))))
 
-;; gcd2_po_3, Why obligation from file "gcd.mlw", characters 617-787
+;; gcd2_po_3, Why obligation from file "gcd.mlw", characters 617-783
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
@@ -150,7 +150,7 @@
 (IMPLIES (EQ y1 0)
 (FORALL (result) (IMPLIES (EQ result x1) (EQ result (gcd a b)))))))))))))))))
 
-;; gcd2_po_4, Why obligation from file "gcd.mlw", characters 653-694
+;; gcd2_po_4, Why obligation from file "gcd.mlw", characters 653-693
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))

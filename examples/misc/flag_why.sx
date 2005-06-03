@@ -16,7 +16,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; dutch_flag_po_1, Why obligation from file "flag.mlw", characters 771-786
+;; dutch_flag_po_1, Why obligation from file "flag.mlw", characters 771-785
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -38,7 +38,7 @@
          (AND (EQ (monochrome t0 r1 N red) |@true|) (EQ (array_length t0) N))))))
 (IMPLIES (< i1 r1) (AND (<= 0 i1) (< i1 (array_length t0)))))))))))))))))))
 
-;; dutch_flag_po_2, Why obligation from file "flag.mlw", characters 813-818
+;; dutch_flag_po_2, Why obligation from file "flag.mlw", characters 813-817
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -62,7 +62,7 @@
 (IMPLIES (AND (<= 0 i1) (< i1 (array_length t0)))
 (IMPLIES (EQ (select t0 i1) blue) (AND (<= 0 b1) (< b1 (array_length t0)))))))))))))))))))))
 
-;; dutch_flag_po_3, Why obligation from file "flag.mlw", characters 828-842
+;; dutch_flag_po_3, Why obligation from file "flag.mlw", characters 828-841
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -94,7 +94,7 @@
 (FORALL (aux_1)
 (IMPLIES (EQ aux_1 b1) (AND (<= 0 aux_1) (< aux_1 (array_length t0)))))))))))))))))))))))))))))
 
-;; dutch_flag_po_4, Why obligation from file "flag.mlw", characters 828-842
+;; dutch_flag_po_4, Why obligation from file "flag.mlw", characters 828-841
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -148,7 +148,7 @@
 (AND (<= 0 (- r1 i1)) (< (- r1 i) (- r1 i1))))))))))
 (AND (<= 0 result0) (< result0 (array_length t1)))))))))))))))))))))))))))))))))))))
 
-;; dutch_flag_po_5, Why obligation from file "flag.mlw", characters 945-956
+;; dutch_flag_po_5, Why obligation from file "flag.mlw", characters 945-955
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -183,7 +183,7 @@
 (AND (EQ (monochrome t0 r1 N red) |@true|) (EQ (array_length t0) N))))))
 (AND (<= 0 (- r1 i1)) (< (- r1 i2) (- r1 i1))))))))))))))))))))))))))
 
-;; dutch_flag_po_6, Why obligation from file "flag.mlw", characters 1008-1013
+;; dutch_flag_po_6, Why obligation from file "flag.mlw", characters 1008-1012
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -211,7 +211,7 @@
 (FORALL (r2)
 (IMPLIES (EQ r2 (- r1 1)) (AND (<= 0 r2) (< r2 (array_length t0)))))))))))))))))))))))))
 
-;; dutch_flag_po_7, Why obligation from file "flag.mlw", characters 1023-1037
+;; dutch_flag_po_7, Why obligation from file "flag.mlw", characters 1023-1036
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -247,7 +247,7 @@
 (FORALL (aux_5)
 (IMPLIES (EQ aux_5 r2) (AND (<= 0 aux_5) (< aux_5 (array_length t0)))))))))))))))))))))))))))))))))
 
-;; dutch_flag_po_8, Why obligation from file "flag.mlw", characters 1023-1037
+;; dutch_flag_po_8, Why obligation from file "flag.mlw", characters 1023-1036
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -301,7 +301,7 @@
 (AND (<= 0 (- r1 i1)) (< (- r2 i1) (- r1 i1))))))
 (AND (<= 0 result0) (< result0 (array_length t1)))))))))))))))))))))))))))))))))))))))))
 
-;; dutch_flag_po_9, Why obligation from file "flag.mlw", characters 532-1162
+;; dutch_flag_po_9, Why obligation from file "flag.mlw", characters 532-1161
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)
@@ -326,7 +326,7 @@
 (AND (EQ (monochrome t0 b1 r1 white) |@true|)
 (EQ (monochrome t0 r1 N red) |@true|)))))))))))))))))))
 
-;; dutch_flag_po_10, Why obligation from file "flag.mlw", characters 572-739
+;; dutch_flag_po_10, Why obligation from file "flag.mlw", characters 572-738
 (FORALL (t)
 (IMPLIES (EQ (array_length t) N)
 (FORALL (b)

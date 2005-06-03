@@ -8,7 +8,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; sqrt_po_1, Why obligation from file "sqrt_dicho.mlw", characters 326-346
+;; sqrt_po_1, Why obligation from file "sqrt_dicho.mlw", characters 326-345
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -24,7 +24,7 @@
 (IMPLIES (AND (<= (* inf1 inf1) x) (AND (< x (* sup1 sup1)) (< inf1 sup1)))
 (IMPLIES (NEQ (+ inf1 1) sup1) (NEQ 2 0)))))))))))))))
 
-;; sqrt_po_2, Why obligation from file "sqrt_dicho.mlw", characters 375-386
+;; sqrt_po_2, Why obligation from file "sqrt_dicho.mlw", characters 375-383
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -47,7 +47,7 @@
 (AND (AND (<= (* inf1 inf1) x) (AND (< x (* sup2 sup2)) (< inf1 sup2)))
 (AND (<= 0 (- sup1 inf1)) (< (- sup2 inf1) (- sup1 inf1)))))))))))))))))))))))
 
-;; sqrt_po_3, Why obligation from file "sqrt_dicho.mlw", characters 392-403
+;; sqrt_po_3, Why obligation from file "sqrt_dicho.mlw", characters 392-400
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -70,7 +70,7 @@
 (AND (AND (<= (* inf2 inf2) x) (AND (< x (* sup1 sup1)) (< inf2 sup1)))
 (AND (<= 0 (- sup1 inf1)) (< (- sup1 inf2) (- sup1 inf1)))))))))))))))))))))))
 
-;; sqrt_po_4, Why obligation from file "sqrt_dicho.mlw", characters 185-409
+;; sqrt_po_4, Why obligation from file "sqrt_dicho.mlw", characters 185-405
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -89,7 +89,7 @@
 (IMPLIES (EQ result inf1)
 (AND (<= (* result result) x) (< x (* (+ result 1) (+ result 1))))))))))))))))))))
 
-;; sqrt_po_5, Why obligation from file "sqrt_dicho.mlw", characters 235-287
+;; sqrt_po_5, Why obligation from file "sqrt_dicho.mlw", characters 235-284
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)

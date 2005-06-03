@@ -38,18 +38,22 @@ src/harvey.cmo: src/vcg.cmi src/report.cmi src/pp.cmi src/options.cmi \
 src/harvey.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
     src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi \
     src/env.cmx src/harvey.cmi 
+src/hol4.cmo: src/vcg.cmi src/pp.cmi src/misc.cmi src/logic.cmi src/loc.cmi \
+    src/ident.cmi src/error.cmi src/env.cmi src/cc.cmi src/hol4.cmi 
+src/hol4.cmx: src/vcg.cmx src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx \
+    src/ident.cmx src/error.cmi src/env.cmx src/cc.cmi src/hol4.cmi 
 src/holl.cmo: src/vcg.cmi src/pp.cmi src/misc.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/error.cmi src/env.cmi src/cc.cmi src/holl.cmi 
 src/holl.cmx: src/vcg.cmx src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx \
     src/ident.cmx src/error.cmi src/env.cmx src/cc.cmi src/holl.cmi 
 src/ident.cmo: src/ident.cmi 
 src/ident.cmx: src/ident.cmi 
-src/isabelle.cmo: src/vcg.cmi src/regen.cmi src/pp.cmi src/misc.cmi \
-    src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi \
-    src/cc.cmi src/isabelle.cmi 
-src/isabelle.cmx: src/vcg.cmx src/regen.cmx src/pp.cmx src/misc.cmx \
-    src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
-    src/cc.cmi src/isabelle.cmi 
+src/isabelle.cmo: src/vcg.cmi src/regen.cmi src/pp.cmi src/options.cmi \
+    src/misc.cmi src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi \
+    src/env.cmi src/cc.cmi src/isabelle.cmi 
+src/isabelle.cmx: src/vcg.cmx src/regen.cmx src/pp.cmx src/options.cmx \
+    src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi \
+    src/env.cmx src/cc.cmi src/isabelle.cmi 
 src/lib.cmo: src/lib.cmi 
 src/lib.cmx: src/lib.cmi 
 src/linenum.cmo: src/linenum.cmi 
@@ -195,6 +199,7 @@ src/env.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
 src/error.cmi: src/ident.cmi 
 src/fpi.cmi: src/vcg.cmi 
 src/harvey.cmi: src/vcg.cmi src/logic.cmi src/env.cmi 
+src/hol4.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/holl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/isabelle.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/logic.cmi: src/ident.cmi 
