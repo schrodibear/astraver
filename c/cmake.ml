@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.12 2005-06-07 11:25:47 nguenot Exp $ i*)
+(*i $Id: cmake.ml,v 1.13 2005-06-07 13:04:35 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -49,35 +49,44 @@ let generic f targets =
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
+
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
-       fprintf fmt "coq/%%_why.v: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export %s_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f f;
+
        fprintf fmt "coq/%%_spec_why.v: why/%%_spec.why@\n";
        fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Caduceus.\" $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+
+       fprintf fmt "coq/%%_why.v: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export %s_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f f;
+
        fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
        
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;
-       fprintf fmt "pvs/%%_why.pvs: pvs/%s_spec_why.pvs why/%%.why@\n" f;
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f f;
+
        fprintf fmt "pvs/%%_spec_why.pvs: why/%%_spec.why@\n";
        fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing caduceus_why\" $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+
+       fprintf fmt "pvs/%%_why.pvs: pvs/%s_spec_why.pvs why/%%.why@\n" f;
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f f;
+
        fprintf fmt "pvs/caduceus_why.pvs:@\n";
        fprintf fmt "\t$(WHY) -pvs -dir pvs $(CADULIB)/why/caduceus.why@\n@\n";
        
        fprintf fmt "isabelle: %a@\n@\n" (print_files isabelle) targets;
+
+       fprintf fmt "isabelle/%%_spec_why.thy: why/%%_spec.why@\n";
+       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory caduceus_why $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+
        fprintf fmt "isabelle/%%_why.thy: isabelle/%s_spec_why.thy why/%%.why@\n" f;
        fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory %s_spec_why $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n" f f;
        fprintf fmt "\tcp -f %s/isabelle/caduceus_why.thy isabelle/@\n@\n" 
 	 Coptions.libdir;
-       fprintf fmt "isabelle/%%_spec_why.thy: why/%%_spec.why@\n";
-       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory caduceus_why $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
 
        fprintf fmt "simplify: %a@\n" (print_files simplify_all) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx.all: simplify/%%_why.sx@\n";
        fprintf fmt "\t@@cat simplify/caduceus_why.sx simplify/%s_spec_why.sx $< > $@@@\n@\n" f;
-       fprintf fmt "simplify/%%_why.sx: why/%%_spec.why why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why@\n@\n";
+       fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl_all) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout 10 $^)@\n@\n";
