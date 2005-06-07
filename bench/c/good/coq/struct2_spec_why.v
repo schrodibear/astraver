@@ -3,8 +3,9 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_U_S  (alloc:alloc_table)
-  (b:((memory) pointer)) (s0:pointer) (d:((memory) pointer)) (u:pointer)
+(*Why predicate*) Definition separation_U_S  (u:pointer)
+  (d:((memory) pointer)) (s0:pointer) (b:((memory) pointer))
+  (alloc:alloc_table)
   := ~((base_addr u) = (base_addr s0)) /\
      ~((base_addr s0) = (base_addr (acc d u))) /\
      ~((base_addr u) = (base_addr (acc b s0))).

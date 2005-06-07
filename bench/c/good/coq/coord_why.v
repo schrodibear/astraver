@@ -8,7 +8,7 @@ Lemma g_impl_po_1 :
   forall (index: Z),
   forall (alloc: alloc_table),
   forall (tab: pointer),
-  forall (Pre5: (0 <= index /\ index < 3) /\ (valid_range alloc tab 0 3)),
+  forall (Pre5: (0 <= index /\ index < 3) /\ (valid_range alloc tab 0 2)),
   (valid alloc (shift tab index)).
 Proof.
 intros.

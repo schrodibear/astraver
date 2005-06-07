@@ -7,7 +7,7 @@ Require Export ref_glob_spec_why.
 Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x: pointer),
-  forall (Pre4: (valid_range alloc x 0 1)),
+  forall (Pre4: (valid_range alloc x 0 0)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   (valid alloc caduceus_1).
@@ -21,7 +21,7 @@ Lemma f1_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (x: pointer),
-  forall (Pre4: (valid_range alloc x 0 1)),
+  forall (Pre4: (valid_range alloc x 0 0)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   forall (Pre3: (valid alloc caduceus_1)),
@@ -40,7 +40,7 @@ Qed.
 Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x: pointer),
-  forall (Pre4: (valid_range alloc x 0 1)),
+  forall (Pre4: (valid_range alloc x 0 0)),
   (valid alloc x).
 Proof.
 intuition.
@@ -55,7 +55,7 @@ Lemma f4_impl_po_1 :
   forall (c2: ((memory) pointer)),
   forall (plas: pointer),
   forall (Pre11: (valid alloc plas) /\ (valid1_range c2 1) /\
-                 (valid1_range c1 1) /\ (separation1 c1 c2) /\ (valid1 c2) /\
+                 (valid1_range c1 1) /\ (separation1 c2 c1) /\ (valid1 c2) /\
                  (valid1 c1)),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
@@ -74,7 +74,7 @@ Lemma f4_impl_po_2 :
   forall (intP: ((memory) Z)),
   forall (plas: pointer),
   forall (Pre11: (valid alloc plas) /\ (valid1_range c2 1) /\
-                 (valid1_range c1 1) /\ (separation1 c1 c2) /\ (valid1 c2) /\
+                 (valid1_range c1 1) /\ (separation1 c2 c1) /\ (valid1 c2) /\
                  (valid1 c1)),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),

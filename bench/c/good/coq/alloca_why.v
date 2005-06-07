@@ -130,7 +130,7 @@ Lemma h_impl_po_1 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (u: pointer),
-  forall (Pre18: (acc intP (shift u 2)) = 12 /\ (valid_range alloc u 0 4)),
+  forall (Pre18: (acc intP (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   4 >= 1.
 Proof.
 intuition.
@@ -142,7 +142,7 @@ Lemma h_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (u: pointer),
-  forall (Pre18: (acc intP (shift u 2)) = 12 /\ (valid_range alloc u 0 4)),
+  forall (Pre18: (acc intP (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (Pre17: 4 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
@@ -166,7 +166,7 @@ Lemma h_impl_po_3 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (u: pointer),
-  forall (Pre18: (acc intP (shift u 2)) = 12 /\ (valid_range alloc u 0 4)),
+  forall (Pre18: (acc intP (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (Pre17: 4 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),

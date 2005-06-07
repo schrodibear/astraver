@@ -3,16 +3,16 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_anonymous_0_int  (alloc:alloc_table)
-  (v:pointer) (x:((memory) pointer)) (tab:pointer)
+(*Why predicate*) Definition separation_anonymous_0_int  (tab:pointer)
+  (x:((memory) pointer)) (v:pointer) (alloc:alloc_table)
   := ~((base_addr tab) = (base_addr v)) /\
      (forall (index_3:Z),
       (0 <= index_3 /\ index_3 < 5 ->
        ~((base_addr v) = (base_addr (acc x (shift tab index_3)))))).
 
-(*Why predicate*) Definition separation_anonymous_0_s1  (alloc:alloc_table)
-  (t:((memory) pointer)) (u:((memory) pointer)) (s:pointer)
-  (x:((memory) pointer)) (tab:pointer)
+(*Why predicate*) Definition separation_anonymous_0_s1  (tab:pointer)
+  (x:((memory) pointer)) (s:pointer) (u:((memory) pointer))
+  (t:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr tab) = (base_addr s)) /\
      (forall (index_6:Z),
       (0 <= index_6 /\ index_6 < 5 ->
@@ -20,9 +20,9 @@ Require Export Caduceus.
      ~((base_addr tab) = (base_addr (acc t s))) /\
      ~((base_addr tab) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_anonymous_1_anonymous_0  (alloc:alloc_table)
-  (x:((memory) pointer)) (tab:pointer) (p1:((memory) pointer))
-  (p2:((memory) pointer)) (u1:pointer)
+(*Why predicate*) Definition separation_anonymous_1_anonymous_0  (u1:pointer)
+  (p2:((memory) pointer)) (p1:((memory) pointer)) (tab:pointer)
+  (x:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr u1) = (base_addr tab)) /\
      (~((base_addr tab) = (base_addr (acc p1 u1))) /\
      ~((base_addr tab) = (base_addr (acc p2 u1)))) /\
@@ -30,32 +30,34 @@ Require Export Caduceus.
       (0 <= index_7 /\ index_7 < 5 ->
        ~((base_addr u1) = (base_addr (acc x (shift tab index_7)))))).
 
-(*Why predicate*) Definition separation_anonymous_1_anonymous_1  (alloc:alloc_table)
-  (p1:((memory) pointer)) (p2:((memory) pointer)) (u1:pointer) (u2:pointer)
+(*Why predicate*) Definition separation_anonymous_1_anonymous_1  (u2:pointer)
+  (u1:pointer) (p2:((memory) pointer)) (p1:((memory) pointer))
+  (alloc:alloc_table)
   := ~((base_addr u2) = (base_addr u1)) /\
      (~((base_addr u1) = (base_addr (acc p1 u2))) /\
      ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
      ~((base_addr u2) = (base_addr (acc p1 u1))) /\
      ~((base_addr u2) = (base_addr (acc p2 u1))).
 
-(*Why predicate*) Definition separation_anonymous_1_int  (alloc:alloc_table)
-  (v:pointer) (p1:((memory) pointer)) (p2:((memory) pointer)) (u1:pointer)
+(*Why predicate*) Definition separation_anonymous_1_int  (u1:pointer)
+  (p2:((memory) pointer)) (p1:((memory) pointer)) (v:pointer)
+  (alloc:alloc_table)
   := ~((base_addr u1) = (base_addr v)) /\
      ~((base_addr v) = (base_addr (acc p1 u1))) /\
      ~((base_addr v) = (base_addr (acc p2 u1))).
 
-(*Why predicate*) Definition separation_anonymous_1_s1  (alloc:alloc_table)
-  (t:((memory) pointer)) (u:((memory) pointer)) (s:pointer)
-  (p1:((memory) pointer)) (p2:((memory) pointer)) (u1:pointer)
+(*Why predicate*) Definition separation_anonymous_1_s1  (u1:pointer)
+  (p2:((memory) pointer)) (p1:((memory) pointer)) (s:pointer)
+  (u:((memory) pointer)) (t:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr u1) = (base_addr s)) /\
      (~((base_addr s) = (base_addr (acc p1 u1))) /\
      ~((base_addr s) = (base_addr (acc p2 u1)))) /\
      ~((base_addr u1) = (base_addr (acc t s))) /\
      ~((base_addr u1) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_anonymous_2_anonymous_0  (alloc:alloc_table)
-  (x:((memory) pointer)) (tab:pointer) (anonymous_2_p1:((memory) pointer))
-  (anonymous_2_p2:((memory) pointer)) (u3:pointer)
+(*Why predicate*) Definition separation_anonymous_2_anonymous_0  (u3:pointer)
+  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
+  (tab:pointer) (x:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr u3) = (base_addr tab)) /\
      (~((base_addr tab) = (base_addr (acc anonymous_2_p1 u3))) /\
      ~((base_addr tab) = (base_addr (acc anonymous_2_p2 u3)))) /\
@@ -63,50 +65,50 @@ Require Export Caduceus.
       (0 <= index_15 /\ index_15 < 5 ->
        ~((base_addr u3) = (base_addr (acc x (shift tab index_15)))))).
 
-(*Why predicate*) Definition separation_anonymous_2_anonymous_1  (alloc:alloc_table)
-  (p1:((memory) pointer)) (p2:((memory) pointer)) (u1:pointer)
-  (anonymous_2_p1:((memory) pointer)) (anonymous_2_p2:((memory) pointer))
-  (u3:pointer)
+(*Why predicate*) Definition separation_anonymous_2_anonymous_1  (u3:pointer)
+  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
+  (u1:pointer) (p2:((memory) pointer)) (p1:((memory) pointer))
+  (alloc:alloc_table)
   := ~((base_addr u3) = (base_addr u1)) /\
      (~((base_addr u1) = (base_addr (acc anonymous_2_p1 u3))) /\
      ~((base_addr u1) = (base_addr (acc anonymous_2_p2 u3)))) /\
      ~((base_addr u3) = (base_addr (acc p1 u1))) /\
      ~((base_addr u3) = (base_addr (acc p2 u1))).
 
-(*Why predicate*) Definition separation_anonymous_2_anonymous_2  (alloc:alloc_table)
-  (anonymous_2_p1:((memory) pointer)) (anonymous_2_p2:((memory) pointer))
-  (u3:pointer) (u4:pointer)
+(*Why predicate*) Definition separation_anonymous_2_anonymous_2  (u4:pointer)
+  (u3:pointer) (anonymous_2_p2:((memory) pointer))
+  (anonymous_2_p1:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr u4) = (base_addr u3)) /\
      (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
      ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
      ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
      ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3))).
 
-(*Why predicate*) Definition separation_anonymous_2_int  (alloc:alloc_table)
-  (v:pointer) (anonymous_2_p1:((memory) pointer))
-  (anonymous_2_p2:((memory) pointer)) (u3:pointer)
+(*Why predicate*) Definition separation_anonymous_2_int  (u3:pointer)
+  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
+  (v:pointer) (alloc:alloc_table)
   := ~((base_addr u3) = (base_addr v)) /\
      ~((base_addr v) = (base_addr (acc anonymous_2_p1 u3))) /\
      ~((base_addr v) = (base_addr (acc anonymous_2_p2 u3))).
 
-(*Why predicate*) Definition separation_anonymous_2_s1  (alloc:alloc_table)
-  (t:((memory) pointer)) (u:((memory) pointer)) (s:pointer)
-  (anonymous_2_p1:((memory) pointer)) (anonymous_2_p2:((memory) pointer))
-  (u3:pointer)
+(*Why predicate*) Definition separation_anonymous_2_s1  (u3:pointer)
+  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
+  (s:pointer) (u:((memory) pointer)) (t:((memory) pointer))
+  (alloc:alloc_table)
   := ~((base_addr u3) = (base_addr s)) /\
      (~((base_addr s) = (base_addr (acc anonymous_2_p1 u3))) /\
      ~((base_addr s) = (base_addr (acc anonymous_2_p2 u3)))) /\
      ~((base_addr u3) = (base_addr (acc t s))) /\
      ~((base_addr u3) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_int_s1  (alloc:alloc_table)
-  (t:((memory) pointer)) (u:((memory) pointer)) (s:pointer) (v:pointer)
+(*Why predicate*) Definition separation_int_s1  (v:pointer) (s:pointer)
+  (u:((memory) pointer)) (t:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr v) = (base_addr s)) /\
      ~((base_addr v) = (base_addr (acc t s))) /\
      ~((base_addr v) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_s1_s1  (alloc:alloc_table)
-  (t:((memory) pointer)) (u:((memory) pointer)) (s:pointer) (ss:pointer)
+(*Why predicate*) Definition separation_s1_s1  (ss:pointer) (s:pointer)
+  (u:((memory) pointer)) (t:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr ss) = (base_addr s)) /\
      (~((base_addr s) = (base_addr (acc t ss))) /\
      ~((base_addr s) = (base_addr (acc u ss)))) /\

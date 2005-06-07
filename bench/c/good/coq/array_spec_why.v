@@ -3,8 +3,8 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition valid_dim2  (alloc:alloc_table)
-  (intPP:((memory) pointer)) (t_0:pointer) (i:Z) (j:Z) (k:Z) (l:Z)
+(*Why predicate*) Definition valid_dim2  (intPP:((memory) pointer))
+  (alloc:alloc_table) (t_0:pointer) (i:Z) (j:Z) (k:Z) (l:Z)
   := (valid_range alloc t_0 i j) /\
      (forall (n:Z),
       (i <= n /\ n <= j -> (valid_range alloc (acc intPP (shift t_0 n)) k l))).

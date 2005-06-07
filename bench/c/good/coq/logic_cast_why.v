@@ -7,7 +7,7 @@ Require Export logic_cast_spec_why.
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_range alloc t 0 4)),
+  forall (Pre7: (valid_range alloc t 0 3)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   forall (Variant1: Z),
@@ -27,7 +27,7 @@ Save.
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_range alloc t 0 4)),
+  forall (Pre7: (valid_range alloc t 0 3)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   forall (Variant1: Z),
@@ -51,7 +51,7 @@ Save.
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_range alloc t 0 4)),
+  forall (Pre7: (valid_range alloc t 0 3)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   0 <= I1 /\ I1 <= 4.

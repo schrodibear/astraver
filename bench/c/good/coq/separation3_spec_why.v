@@ -3,9 +3,9 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_L_S  (alloc:alloc_table)
-  (b:((memory) pointer)) (c:((memory) pointer)) (q:((memory) pointer))
-  (r:((memory) pointer)) (s0:pointer) (l:pointer)
+(*Why predicate*) Definition separation_L_S  (l:pointer) (s0:pointer)
+  (r:((memory) pointer)) (q:((memory) pointer)) (c:((memory) pointer))
+  (b:((memory) pointer)) (alloc:alloc_table)
   := ~((base_addr l) = (base_addr s0)) /\
      (~((base_addr s0) = (base_addr (acc q l))) /\
      ~((base_addr s0) = (base_addr (acc r l)))) /\

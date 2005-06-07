@@ -8,7 +8,7 @@ Lemma f_impl_po_1 :
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 1) /\
+  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 0) /\
                 (valid1_range b 5)),
   (valid alloc s0).
 Proof.
@@ -20,7 +20,7 @@ Lemma f_impl_po_2 :
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 1) /\
+  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 0) /\
                 (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_2: pointer),
@@ -41,7 +41,7 @@ Lemma g_impl_po_1 :
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 1) /\ (valid1 b) /\ (valid1 d) /\
+  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
   (valid alloc u).
 Proof.
@@ -54,7 +54,7 @@ Lemma g_impl_po_2 :
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 1) /\ (valid1 b) /\ (valid1 d) /\
+  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
   forall (Pre4: (valid alloc u)),
   (valid alloc (acc d u)).
@@ -68,7 +68,7 @@ Lemma g_impl_po_3 :
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 1) /\ (valid1 b) /\ (valid1 d) /\
+  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
   forall (Pre4: (valid alloc u)),
   forall (Pre6: (valid alloc (acc d u))),

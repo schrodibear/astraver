@@ -13,9 +13,9 @@ Lemma V4A_impl_po_1 :
   forall (alloc: alloc_table),
   forall (Pre34: ((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
-                 (valid_range alloc Ch_Pn 0 4) /\
+                 (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
-                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 4) /\
+                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
                  (valid1 VC)),
   (valid alloc Parametre).
 Proof.
@@ -32,9 +32,9 @@ Lemma V4A_impl_po_2 :
   forall (alloc: alloc_table),
   forall (Pre34: ((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
-                 (valid_range alloc Ch_Pn 0 4) /\
+                 (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
-                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 4) /\
+                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
                  (valid1 VC)),
   forall (Pre8: (valid alloc Parametre)),
   forall (caduceus_18: pointer),
@@ -55,9 +55,9 @@ Lemma V4A_impl_po_3 :
   forall (intP: ((memory) Z)),
   forall (Pre34: ((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
-                 (valid_range alloc Ch_Pn 0 4) /\
+                 (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
-                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 4) /\
+                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
                  (valid1 VC)),
   forall (Pre8: (valid alloc Parametre)),
   forall (caduceus_18: pointer),
@@ -81,9 +81,9 @@ Lemma V4A_impl_po_4 :
   forall (intP: ((memory) Z)),
   forall (Pre34: ((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
-                 (valid_range alloc Ch_Pn 0 4) /\
+                 (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
-                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 4) /\
+                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
                  (valid1 VC)),
   forall (Pre8: (valid alloc Parametre)),
   forall (caduceus_18: pointer),
@@ -108,9 +108,9 @@ Lemma V4A_impl_po_5 :
   forall (intP: ((memory) Z)),
   forall (Pre34: ((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
-                 (valid_range alloc Ch_Pn 0 4) /\
+                 (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
-                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 4) /\
+                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
                  (valid1 VC)),
   forall (Pre8: (valid alloc Parametre)),
   forall (caduceus_18: pointer),
@@ -143,9 +143,9 @@ Lemma V4A_impl_po_6 :
   forall (intP: ((memory) Z)),
   forall (Pre34: ((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
-                 (valid_range alloc Ch_Pn 0 4) /\
+                 (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
-                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 4) /\
+                 (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
                  (valid1 VC)),
   forall (Pre8: (valid alloc Parametre)),
   forall (caduceus_18: pointer),

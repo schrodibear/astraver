@@ -53,7 +53,7 @@ Lemma g_impl_po_1 :
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1) /\
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 0) /\
                  (valid1 t) /\ (separation2 t t)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
@@ -68,7 +68,7 @@ Lemma g_impl_po_2 :
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1) /\
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 0) /\
                  (valid1 t) /\ (separation2 t t)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
@@ -86,7 +86,7 @@ Lemma g_impl_po_3 :
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1) /\
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 0) /\
                  (valid1 t) /\ (separation2 t t)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
@@ -109,7 +109,7 @@ Lemma g_impl_po_4 :
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (x: ((memory) Z)),
-  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1) /\
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 0) /\
                  (valid1 t) /\ (separation2 t t)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),

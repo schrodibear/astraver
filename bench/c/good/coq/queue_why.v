@@ -8,7 +8,7 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (alloc: alloc_table),
   forall (q: pointer),
   forall (t: pointer),
-  forall (Pre34: (valid_range alloc t 0 5) /\ (valid_range alloc q 0 1) /\
+  forall (Pre34: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0) /\
                  ~((base_addr q) = (base_addr t))),
   forall (caduceus_11: pointer),
   forall (Post3: caduceus_11 = t),
@@ -31,7 +31,7 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (length: ((memory) Z)),
   forall (q: pointer),
   forall (t: pointer),
-  forall (Pre34: (valid_range alloc t 0 5) /\ (valid_range alloc q 0 1) /\
+  forall (Pre34: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0) /\
                  ~((base_addr q) = (base_addr t))),
   forall (caduceus_11: pointer),
   forall (Post3: caduceus_11 = t),
@@ -115,7 +115,7 @@ Lemma pop_impl_po_1 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
-                 (valid_range alloc q 0 1)),
+                 (valid_range alloc q 0 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -134,7 +134,7 @@ Lemma pop_impl_po_2 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
-                 (valid_range alloc q 0 1)),
+                 (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_1: pointer),
   forall (Post21: caduceus_1 = (acc contents q)),
@@ -162,7 +162,7 @@ Lemma pop_impl_po_3 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
-                 (valid_range alloc q 0 1)),
+                 (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_1: pointer),
   forall (Post21: caduceus_1 = (acc contents q)),
@@ -264,7 +264,7 @@ Lemma push_impl_po_1 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
-                 (valid_range alloc q 0 1)),
+                 (valid_range alloc q 0 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -283,7 +283,7 @@ Lemma push_impl_po_2 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
-                 (valid_range alloc q 0 1)),
+                 (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
   forall (Post9: caduceus_6 = (acc contents q)),
@@ -311,7 +311,7 @@ Lemma push_impl_po_3 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
-                 (valid_range alloc q 0 1)),
+                 (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
   forall (Post9: caduceus_6 = (acc contents q)),
@@ -413,11 +413,11 @@ Lemma test_impl_po_1 :
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
-                (valid_range alloc q 0 1)),
+                (valid_range alloc q 0 0)),
   ((acc empty q) = 0 /\
   ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
   (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <= (acc last q) /\
-  (acc last q) < (acc length q)) /\ (valid_range alloc q 0 1).
+  (acc last q) < (acc length q)) /\ (valid_range alloc q 0 0).
 Proof.
 intuition.
 Save.
@@ -438,12 +438,12 @@ Lemma test_impl_po_2 :
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
-                (valid_range alloc q 0 1)),
+                (valid_range alloc q 0 0)),
   forall (Pre3: ((acc empty q) = 0 /\
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
-                (valid_range alloc q 0 1)),
+                (valid_range alloc q 0 0)),
   forall (empty0: ((memory) Z)),
   forall (first0: ((memory) Z)),
   forall (full0: ((memory) Z)),

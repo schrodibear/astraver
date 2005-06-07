@@ -71,15 +71,15 @@ src/main.cmo: src/wp.cmi src/vcg.cmi src/util.cmi src/typing.cmi \
     src/pvs.cmi src/ptree.cmi src/parser.cmi src/options.cmi src/ocaml.cmi \
     src/monad.cmi src/mlize.cmi src/mizar.cmi src/misc.cmi src/ltyping.cmi \
     src/logic.cmi src/loc.cmi src/isabelle.cmi src/ident.cmi src/holl.cmi \
-    src/harvey.cmi src/fpi.cmi src/error.cmi src/env.cmi src/cvcl.cmi \
-    src/coq.cmi src/cc.cmi src/ast.cmi src/annot.cmi 
+    src/hol4.cmi src/harvey.cmi src/fpi.cmi src/error.cmi src/env.cmi \
+    src/cvcl.cmi src/coq.cmi src/cc.cmi src/ast.cmi src/annot.cmi 
 src/main.cmx: src/wp.cmx src/vcg.cmx src/util.cmx src/typing.cmx \
     src/types.cmi src/smtlib.cmx src/simplify.cmx src/report.cmx src/red.cmx \
     src/pvs.cmx src/ptree.cmi src/parser.cmx src/options.cmx src/ocaml.cmx \
     src/monad.cmx src/mlize.cmx src/mizar.cmx src/misc.cmx src/ltyping.cmx \
     src/logic.cmi src/loc.cmx src/isabelle.cmx src/ident.cmx src/holl.cmx \
-    src/harvey.cmx src/fpi.cmx src/error.cmi src/env.cmx src/cvcl.cmx \
-    src/coq.cmx src/cc.cmi src/ast.cmi src/annot.cmx 
+    src/hol4.cmx src/harvey.cmx src/fpi.cmx src/error.cmi src/env.cmx \
+    src/cvcl.cmx src/coq.cmx src/cc.cmi src/ast.cmi src/annot.cmx 
 src/misc.cmo: src/types.cmi src/ptree.cmi src/options.cmi src/logic.cmi \
     src/loc.cmi src/ident.cmi src/effect.cmi src/cc.cmi src/ast.cmi \
     src/misc.cmi 

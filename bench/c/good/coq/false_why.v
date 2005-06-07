@@ -10,8 +10,8 @@ Lemma false1_impl_po_1 :
   forall (y: ((memory) pointer)),
   forall (y_0: pointer),
   forall (z: pointer),
-  forall (Pre11: (valid_range alloc y_0 0 5) /\
-                 (valid_range alloc x_0 0 4) /\
+  forall (Pre11: (valid_range alloc y_0 0 4) /\
+                 (valid_range alloc x_0 0 3) /\
                  ~((base_addr y_0) = (base_addr x_0)) /\
                  (valid1_range y 5) /\ (valid1 y)),
   (valid alloc z).
@@ -25,8 +25,8 @@ Lemma false1_impl_po_2 :
   forall (y: ((memory) pointer)),
   forall (y_0: pointer),
   forall (z: pointer),
-  forall (Pre11: (valid_range alloc y_0 0 5) /\
-                 (valid_range alloc x_0 0 4) /\
+  forall (Pre11: (valid_range alloc y_0 0 4) /\
+                 (valid_range alloc x_0 0 3) /\
                  ~((base_addr y_0) = (base_addr x_0)) /\
                  (valid1_range y 5) /\ (valid1 y)),
   forall (Pre4: (valid alloc z)),
@@ -45,8 +45,8 @@ Lemma false1_impl_po_3 :
   forall (y: ((memory) pointer)),
   forall (y_0: pointer),
   forall (z: pointer),
-  forall (Pre11: (valid_range alloc y_0 0 5) /\
-                 (valid_range alloc x_0 0 4) /\
+  forall (Pre11: (valid_range alloc y_0 0 4) /\
+                 (valid_range alloc x_0 0 3) /\
                  ~((base_addr y_0) = (base_addr x_0)) /\
                  (valid1_range y 5) /\ (valid1 y)),
   forall (Pre4: (valid alloc z)),

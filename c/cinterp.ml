@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.146 2005-05-23 14:12:53 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.147 2005-06-07 11:25:47 nguenot Exp $ i*)
 
 
 open Format
@@ -37,6 +37,8 @@ let rec global_var_for_type t =
 
 let global_var_for_array_type t =
   match t.ctype_node with
+    | Tpointer {ctype_node=Tstruct _} | Tarray({ctype_node=Tstruct _}, _) -> 
+	if t.ctype_ghost then "ghost_pointerP" else "pointerP"
     | Tpointer ty | Tarray(ty,_) -> 
 	let name = global_var_for_type ty in
 	if t.ctype_ghost then "ghost_" ^ name else name

@@ -66,7 +66,7 @@ Save.
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre4: (valid_range alloc t 0 2)),
+  forall (Pre4: (valid_range alloc t 0 1)),
   (valid_index alloc t 0).
 Proof.
 intuition.

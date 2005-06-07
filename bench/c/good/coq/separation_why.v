@@ -11,15 +11,15 @@ Lemma f1_impl_po_1 :
   forall (u1: pointer),
   forall (u2: pointer),
   forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (~((base_addr u2) = (base_addr u1)) /\
+                (separation1 p2 p1) /\ (~((base_addr u2) = (base_addr u1)) /\
                 (~((base_addr u1) = (base_addr (acc p1 u2))) /\
                 ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
                 ~((base_addr u2) = (base_addr (acc p1 u1))) /\
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
-                (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
+                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
   (valid alloc u1) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
-  (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1).
+  (separation1 p2 p1) /\ (valid1 p2) /\ (valid1 p1).
 Proof.
 intuition.
 Save.
@@ -35,15 +35,15 @@ Lemma f1_impl_po_2 :
   forall (v1: ((memory) Z)),
   forall (v2: ((memory) Z)),
   forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (~((base_addr u2) = (base_addr u1)) /\
+                (separation1 p2 p1) /\ (~((base_addr u2) = (base_addr u1)) /\
                 (~((base_addr u1) = (base_addr (acc p1 u2))) /\
                 ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
                 ~((base_addr u2) = (base_addr (acc p1 u1))) /\
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
-                (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
+                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
   forall (Pre6: (valid alloc u1) /\ (valid1_range p2 5) /\
-                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
+                (valid1_range p1 5) /\ (separation1 p2 p1) /\ (valid1 p2) /\
                 (valid1 p1)),
   forall (intP0: ((memory) Z)),
   forall (v1_0: ((memory) Z)),
@@ -54,7 +54,7 @@ Lemma f1_impl_po_2 :
                   (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
                    (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
   (valid alloc u2) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
-  (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1).
+  (separation1 p2 p1) /\ (valid1 p2) /\ (valid1 p1).
 Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
@@ -70,15 +70,15 @@ Lemma f1_impl_po_3 :
   forall (v1: ((memory) Z)),
   forall (v2: ((memory) Z)),
   forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (~((base_addr u2) = (base_addr u1)) /\
+                (separation1 p2 p1) /\ (~((base_addr u2) = (base_addr u1)) /\
                 (~((base_addr u1) = (base_addr (acc p1 u2))) /\
                 ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
                 ~((base_addr u2) = (base_addr (acc p1 u1))) /\
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
-                (valid_range alloc u2 0 1) /\ (valid_range alloc u1 0 1) /\
+                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
   forall (Pre6: (valid alloc u1) /\ (valid1_range p2 5) /\
-                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
+                (valid1_range p1 5) /\ (separation1 p2 p1) /\ (valid1 p2) /\
                 (valid1 p1)),
   forall (intP0: ((memory) Z)),
   forall (v1_0: ((memory) Z)),
@@ -89,7 +89,7 @@ Lemma f1_impl_po_3 :
                   (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
                    (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
   forall (Pre5: (valid alloc u2) /\ (valid1_range p2 5) /\
-                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
+                (valid1_range p1 5) /\ (separation1 p2 p1) /\ (valid1 p2) /\
                 (valid1 p1)),
   forall (intP1: ((memory) Z)),
   forall (v1_1: ((memory) Z)),
@@ -228,11 +228,11 @@ Lemma f3_impl_po_1 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -268,7 +268,7 @@ Lemma f3_impl_po_1 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -315,13 +315,13 @@ Lemma f3_impl_po_1 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -509,7 +509,7 @@ Lemma f3_impl_po_1 :
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
   (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;
 generalize (H1 u3);intuition.
@@ -597,11 +597,11 @@ Lemma f3_impl_po_2 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -637,7 +637,7 @@ Lemma f3_impl_po_2 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -684,13 +684,13 @@ Lemma f3_impl_po_2 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -879,7 +879,7 @@ Lemma f3_impl_po_2 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -894,7 +894,7 @@ Lemma f3_impl_po_2 :
                    (pset_singleton u3))),
   (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
@@ -981,11 +981,11 @@ Lemma f3_impl_po_3 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -1021,7 +1021,7 @@ Lemma f3_impl_po_3 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -1068,13 +1068,13 @@ Lemma f3_impl_po_3 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -1263,7 +1263,7 @@ Lemma f3_impl_po_3 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -1279,7 +1279,7 @@ Lemma f3_impl_po_3 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -1294,7 +1294,7 @@ Lemma f3_impl_po_3 :
                    (pset_singleton u4))),
   (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
@@ -1381,11 +1381,11 @@ Lemma f3_impl_po_4 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -1421,7 +1421,7 @@ Lemma f3_impl_po_4 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -1468,13 +1468,13 @@ Lemma f3_impl_po_4 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -1663,7 +1663,7 @@ Lemma f3_impl_po_4 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -1679,7 +1679,7 @@ Lemma f3_impl_po_4 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -1695,7 +1695,7 @@ Lemma f3_impl_po_4 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -1710,7 +1710,7 @@ Lemma f3_impl_po_4 :
                    (pset_singleton w1))),
   (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
@@ -1797,11 +1797,11 @@ Lemma f3_impl_po_5 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -1837,7 +1837,7 @@ Lemma f3_impl_po_5 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -1884,13 +1884,13 @@ Lemma f3_impl_po_5 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -2079,7 +2079,7 @@ Lemma f3_impl_po_5 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -2095,7 +2095,7 @@ Lemma f3_impl_po_5 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -2111,7 +2111,7 @@ Lemma f3_impl_po_5 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -2127,7 +2127,7 @@ Lemma f3_impl_po_5 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -2142,7 +2142,7 @@ Lemma f3_impl_po_5 :
                    (pset_singleton w2))),
   (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
@@ -2229,11 +2229,11 @@ Lemma f3_impl_po_6 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -2269,7 +2269,7 @@ Lemma f3_impl_po_6 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -2316,13 +2316,13 @@ Lemma f3_impl_po_6 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -2511,7 +2511,7 @@ Lemma f3_impl_po_6 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -2527,7 +2527,7 @@ Lemma f3_impl_po_6 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -2543,7 +2543,7 @@ Lemma f3_impl_po_6 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -2559,7 +2559,7 @@ Lemma f3_impl_po_6 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -2575,7 +2575,7 @@ Lemma f3_impl_po_6 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -2590,7 +2590,7 @@ Lemma f3_impl_po_6 :
                    (pset_singleton w3))),
   (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
@@ -2677,11 +2677,11 @@ Lemma f3_impl_po_7 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -2717,7 +2717,7 @@ Lemma f3_impl_po_7 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -2764,13 +2764,13 @@ Lemma f3_impl_po_7 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -2959,7 +2959,7 @@ Lemma f3_impl_po_7 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -2975,7 +2975,7 @@ Lemma f3_impl_po_7 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -2991,7 +2991,7 @@ Lemma f3_impl_po_7 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -3007,7 +3007,7 @@ Lemma f3_impl_po_7 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -3023,7 +3023,7 @@ Lemma f3_impl_po_7 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -3039,7 +3039,7 @@ Lemma f3_impl_po_7 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -3054,7 +3054,7 @@ Lemma f3_impl_po_7 :
                    (pset_singleton w4))),
   (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
@@ -3141,11 +3141,11 @@ Lemma f3_impl_po_8 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -3181,7 +3181,7 @@ Lemma f3_impl_po_8 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -3228,13 +3228,13 @@ Lemma f3_impl_po_8 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -3423,7 +3423,7 @@ Lemma f3_impl_po_8 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -3439,7 +3439,7 @@ Lemma f3_impl_po_8 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -3455,7 +3455,7 @@ Lemma f3_impl_po_8 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -3471,7 +3471,7 @@ Lemma f3_impl_po_8 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -3487,7 +3487,7 @@ Lemma f3_impl_po_8 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -3503,7 +3503,7 @@ Lemma f3_impl_po_8 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -3519,7 +3519,7 @@ Lemma f3_impl_po_8 :
   forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
@@ -3534,7 +3534,7 @@ Lemma f3_impl_po_8 :
                    (pset_singleton w5))),
   (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
@@ -3621,11 +3621,11 @@ Lemma f3_impl_po_9 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -3661,7 +3661,7 @@ Lemma f3_impl_po_9 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -3708,13 +3708,13 @@ Lemma f3_impl_po_9 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -3903,7 +3903,7 @@ Lemma f3_impl_po_9 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -3919,7 +3919,7 @@ Lemma f3_impl_po_9 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -3935,7 +3935,7 @@ Lemma f3_impl_po_9 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -3951,7 +3951,7 @@ Lemma f3_impl_po_9 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -3967,7 +3967,7 @@ Lemma f3_impl_po_9 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -3983,7 +3983,7 @@ Lemma f3_impl_po_9 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -3999,7 +3999,7 @@ Lemma f3_impl_po_9 :
   forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
@@ -4015,7 +4015,7 @@ Lemma f3_impl_po_9 :
   forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_7: ((memory) Z)),
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
@@ -4030,7 +4030,7 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w6))),
   (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
@@ -4117,11 +4117,11 @@ Lemma f3_impl_po_10 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -4157,7 +4157,7 @@ Lemma f3_impl_po_10 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -4204,13 +4204,13 @@ Lemma f3_impl_po_10 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -4399,7 +4399,7 @@ Lemma f3_impl_po_10 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -4415,7 +4415,7 @@ Lemma f3_impl_po_10 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -4431,7 +4431,7 @@ Lemma f3_impl_po_10 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -4447,7 +4447,7 @@ Lemma f3_impl_po_10 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -4463,7 +4463,7 @@ Lemma f3_impl_po_10 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -4479,7 +4479,7 @@ Lemma f3_impl_po_10 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -4495,7 +4495,7 @@ Lemma f3_impl_po_10 :
   forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
@@ -4511,7 +4511,7 @@ Lemma f3_impl_po_10 :
   forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_7: ((memory) Z)),
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
@@ -4527,7 +4527,7 @@ Lemma f3_impl_po_10 :
   forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_8: ((memory) Z)),
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
@@ -4542,7 +4542,7 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w7))),
   (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
@@ -4629,11 +4629,11 @@ Lemma f3_impl_po_11 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -4669,7 +4669,7 @@ Lemma f3_impl_po_11 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -4716,13 +4716,13 @@ Lemma f3_impl_po_11 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -4911,7 +4911,7 @@ Lemma f3_impl_po_11 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -4927,7 +4927,7 @@ Lemma f3_impl_po_11 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -4943,7 +4943,7 @@ Lemma f3_impl_po_11 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -4959,7 +4959,7 @@ Lemma f3_impl_po_11 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -4975,7 +4975,7 @@ Lemma f3_impl_po_11 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -4991,7 +4991,7 @@ Lemma f3_impl_po_11 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -5007,7 +5007,7 @@ Lemma f3_impl_po_11 :
   forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
@@ -5023,7 +5023,7 @@ Lemma f3_impl_po_11 :
   forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_7: ((memory) Z)),
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
@@ -5039,7 +5039,7 @@ Lemma f3_impl_po_11 :
   forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_8: ((memory) Z)),
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
@@ -5055,7 +5055,7 @@ Lemma f3_impl_po_11 :
   forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_9: ((memory) Z)),
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
@@ -5070,7 +5070,7 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w8))),
   (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
@@ -5157,11 +5157,11 @@ Lemma f3_impl_po_12 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -5197,7 +5197,7 @@ Lemma f3_impl_po_12 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -5244,13 +5244,13 @@ Lemma f3_impl_po_12 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -5439,7 +5439,7 @@ Lemma f3_impl_po_12 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -5455,7 +5455,7 @@ Lemma f3_impl_po_12 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -5471,7 +5471,7 @@ Lemma f3_impl_po_12 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -5487,7 +5487,7 @@ Lemma f3_impl_po_12 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -5503,7 +5503,7 @@ Lemma f3_impl_po_12 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -5519,7 +5519,7 @@ Lemma f3_impl_po_12 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -5535,7 +5535,7 @@ Lemma f3_impl_po_12 :
   forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
@@ -5551,7 +5551,7 @@ Lemma f3_impl_po_12 :
   forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_7: ((memory) Z)),
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
@@ -5567,7 +5567,7 @@ Lemma f3_impl_po_12 :
   forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_8: ((memory) Z)),
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
@@ -5583,7 +5583,7 @@ Lemma f3_impl_po_12 :
   forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_9: ((memory) Z)),
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
@@ -5599,7 +5599,7 @@ Lemma f3_impl_po_12 :
   forall (Pre26: (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_10: ((memory) Z)),
   forall (anonymous_2_v2_10: ((memory) Z)),
   forall (intP10: ((memory) Z)),
@@ -5614,7 +5614,7 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w9))),
   (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
   (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
 Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
@@ -5701,11 +5701,11 @@ Lemma f3_impl_po_13 :
                  ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 1) /\ (valid_range alloc w8 0 1) /\
-                 (valid_range alloc w7 0 1) /\ (valid_range alloc w6 0 1) /\
-                 (valid_range alloc w5 0 1) /\ (valid_range alloc w4 0 1) /\
-                 (valid_range alloc w3 0 1) /\ (valid_range alloc w2 0 1) /\
-                 (valid_range alloc w1 0 1) /\
+                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                 (valid_range alloc w1 0 0) /\
                  (~((base_addr w6) = (base_addr w5)) /\
                  (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
@@ -5741,7 +5741,7 @@ Lemma f3_impl_po_13 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 1) /\ (valid_range alloc u3 0 1) /\
+                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (~((base_addr w4) = (base_addr w3)) /\
                  (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
@@ -5788,13 +5788,13 @@ Lemma f3_impl_po_13 :
                  ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 1) /\
+                 (valid_range alloc w10 0 0) /\
                  (~((base_addr w2) = (base_addr u3)) /\
                  (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
+                 (separation1 anonymous_2_p2 anonymous_2_p1) /\
                  (~((base_addr w9) = (base_addr w8)) /\
                  (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
                  ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
@@ -5983,7 +5983,7 @@ Lemma f3_impl_po_13 :
   forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
@@ -5999,7 +5999,7 @@ Lemma f3_impl_po_13 :
   forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
@@ -6015,7 +6015,7 @@ Lemma f3_impl_po_13 :
   forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
@@ -6031,7 +6031,7 @@ Lemma f3_impl_po_13 :
   forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
@@ -6047,7 +6047,7 @@ Lemma f3_impl_po_13 :
   forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
@@ -6063,7 +6063,7 @@ Lemma f3_impl_po_13 :
   forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
@@ -6079,7 +6079,7 @@ Lemma f3_impl_po_13 :
   forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
@@ -6095,7 +6095,7 @@ Lemma f3_impl_po_13 :
   forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_7: ((memory) Z)),
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
@@ -6111,7 +6111,7 @@ Lemma f3_impl_po_13 :
   forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_8: ((memory) Z)),
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
@@ -6127,7 +6127,7 @@ Lemma f3_impl_po_13 :
   forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_9: ((memory) Z)),
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
@@ -6143,7 +6143,7 @@ Lemma f3_impl_po_13 :
   forall (Pre26: (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_10: ((memory) Z)),
   forall (anonymous_2_v2_10: ((memory) Z)),
   forall (intP10: ((memory) Z)),
@@ -6159,7 +6159,7 @@ Lemma f3_impl_po_13 :
   forall (Pre25: (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+                 (separation1 anonymous_2_p2 anonymous_2_p1)),
   forall (anonymous_2_v1_11: ((memory) Z)),
   forall (anonymous_2_v2_11: ((memory) Z)),
   forall (intP11: ((memory) Z)),
@@ -6267,10 +6267,10 @@ Lemma f_impl_po_1 :
                  ~((base_addr s) = (base_addr (acc u ss)))) /\
                  ~((base_addr ss) = (base_addr (acc t s))) /\
                  ~((base_addr ss) = (base_addr (acc u s)))) /\
-                 (separation1 t u) /\ (valid1 u) /\ (valid1 t) /\
-                 (valid_range alloc ss 0 1) /\ (valid1_range u 3) /\
-                 (valid1_range t 2) /\ (valid_range alloc v 0 4) /\
-                 (valid_range alloc s 0 1) /\
+                 (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                 (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                 (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                 (valid_range alloc s 0 0) /\
                  (~((base_addr v) = (base_addr s)) /\
                  ~((base_addr v) = (base_addr (acc t s))) /\
                  ~((base_addr v) = (base_addr (acc u s)))) /\
@@ -6295,10 +6295,10 @@ Lemma f_impl_po_2 :
                  ~((base_addr s) = (base_addr (acc u ss)))) /\
                  ~((base_addr ss) = (base_addr (acc t s))) /\
                  ~((base_addr ss) = (base_addr (acc u s)))) /\
-                 (separation1 t u) /\ (valid1 u) /\ (valid1 t) /\
-                 (valid_range alloc ss 0 1) /\ (valid1_range u 3) /\
-                 (valid1_range t 2) /\ (valid_range alloc v 0 4) /\
-                 (valid_range alloc s 0 1) /\
+                 (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                 (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                 (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                 (valid_range alloc s 0 0) /\
                  (~((base_addr v) = (base_addr s)) /\
                  ~((base_addr v) = (base_addr (acc t s))) /\
                  ~((base_addr v) = (base_addr (acc u s)))) /\
@@ -6329,10 +6329,10 @@ Lemma f_impl_po_3 :
                  ~((base_addr s) = (base_addr (acc u ss)))) /\
                  ~((base_addr ss) = (base_addr (acc t s))) /\
                  ~((base_addr ss) = (base_addr (acc u s)))) /\
-                 (separation1 t u) /\ (valid1 u) /\ (valid1 t) /\
-                 (valid_range alloc ss 0 1) /\ (valid1_range u 3) /\
-                 (valid1_range t 2) /\ (valid_range alloc v 0 4) /\
-                 (valid_range alloc s 0 1) /\
+                 (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                 (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                 (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                 (valid_range alloc s 0 0) /\
                  (~((base_addr v) = (base_addr s)) /\
                  ~((base_addr v) = (base_addr (acc t s))) /\
                  ~((base_addr v) = (base_addr (acc u s)))) /\
@@ -6388,7 +6388,7 @@ Save.
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
-  forall (Pre2: (valid_range alloc v 0 4)),
+  forall (Pre2: (valid_range alloc v 0 3)),
   (valid alloc v).
 Proof.
 intuition.
@@ -6401,7 +6401,7 @@ Lemma h_impl_po_1 :
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre4: (valid1 x) /\ (valid1_range x 1) /\
-                (valid_range alloc tab 0 5)),
+                (valid_range alloc tab 0 4)),
   (valid alloc tab).
 Proof.
 intuition.
@@ -6413,7 +6413,7 @@ Lemma h_impl_po_2 :
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre4: (valid1 x) /\ (valid1_range x 1) /\
-                (valid_range alloc tab 0 5)),
+                (valid_range alloc tab 0 4)),
   forall (Pre1: (valid alloc tab)),
   (valid alloc (acc x tab)).
 Proof.

@@ -10,10 +10,10 @@ Lemma getcell_impl_po_1 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (valid_range alloc t 0 3) /\
+                (valid_range alloc t 0 2) /\
                 (forall (counter:Z),
-                 (0 <= counter /\ counter < 3 ->
-                  (valid_range alloc (shift t counter) 0 3)))),
+                 (0 <= counter /\ counter < 2 ->
+                  (valid_range alloc (shift t counter) 0 2)))),
   (valid alloc (shift t 1)).
 Proof.
 intuition; subst; auto with *.
@@ -26,10 +26,10 @@ Lemma getcell_impl_po_2 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (valid_range alloc t 0 3) /\
+                (valid_range alloc t 0 2) /\
                 (forall (counter:Z),
-                 (0 <= counter /\ counter < 3 ->
-                  (valid_range alloc (shift t counter) 0 3)))),
+                 (0 <= counter /\ counter < 2 ->
+                  (valid_range alloc (shift t counter) 0 2)))),
   forall (Pre2: (valid alloc (shift t 1))),
   (valid alloc (shift (acc intPP (shift t 1)) 2)).
 Proof.

@@ -3,6 +3,6 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_int_int  (Ch_Pn:pointer)
-  (SPMEP:pointer) := ~((base_addr SPMEP) = (base_addr Ch_Pn)).
+(*Why predicate*) Definition separation_int_int  (SPMEP:pointer)
+  (Ch_Pn:pointer) := ~((base_addr SPMEP) = (base_addr Ch_Pn)).
 
