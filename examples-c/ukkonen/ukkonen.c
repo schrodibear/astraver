@@ -30,7 +30,7 @@ unsigned int next_node;
  */
 
 /*@ predicate valid_node(node *p)
-  @ { \exists int k; \valid_index(nodes_list,k) && p == nodes_list + k }
+  @ { \exists int k; (0 <= k < max_nodes_nb) && p == nodes_list + k }
   @*/
 
 /*@ predicate valid_sons(node *p)
@@ -52,17 +52,24 @@ unsigned int next_node;
   @   \forall node *t; valid_node(t) => \valid(t)
   @*/
 
-/* source word and related invariant
- ***********************************
+/* source word and related invariants
+ ************************************
  */
 
 /* word we are working on */
 unsigned int *current_word;
 
-/*@ invariant valid_word: \valid_range(current_word,0,max_string_sz-1) &&
-  @   (\forall int k; \valid_index(current_word,k) =>
-  @     (0 <= current_word[k] < alphabet_sz)) &&
-  @   (\exists int n; 0 <= n < max_string_sz && current_word[n] == 0)
+/*@ invariant valid_word_range: \valid_range(current_word,0,max_string_sz-1) */
+/*@ invariant valid_word_chars:
+  @   \forall int k; 0 <= k < max_string_sz
+  @     => (0 <= current_word[k] < alphabet_sz)
+  @*/
+/*@ invariant valid_word_end:
+  @   \exists int n; 0 <= n < max_string_sz && current_word[n] == 0
+  @*/
+/*@ invariant end_mark_in_limit:
+  @   \forall int n; (0 <= n < max_string_sz && current_word[n] != 0)
+  @     => 0 <= n < max_string_sz - 1
   @*/
 
 /* WARNING:
@@ -83,7 +90,7 @@ unsigned int *current_word;
 /* word's character retrieving function */
 /****************************************/
 /*@ requires
-  @   \valid_index(current_word,i)
+  @   0 <= i < max_string_sz
   @ ensures
   @   0 <= \result < alphabet_sz &&
   @   \result == current_word[i]
@@ -93,7 +100,8 @@ unsigned int get_char(unsigned int i)
 
 /* fresh node allocation function */
 /**********************************/
-/*@ requires 0 <= next_node < max_nodes_nb - 1
+/*@ requires
+  @   0 <= next_node < max_nodes_nb - 1
   @ assigns next_node
   @ ensures
   @   \result == nodes_list + \old(next_node) &&
@@ -110,8 +118,10 @@ node *get_fresh_node()
 
 /* target research function */
 /****************************/
-/*@ requires 0 <= c < alphabet_sz && valid_node(t)
-  @ ensures \result != \null => valid_node(\result)
+/*@ requires
+  @   0 <= c < alphabet_sz && valid_node(t)
+  @ ensures
+  @   \result != \null => valid_node(\result)
   @*/
 node *target(node *t, unsigned int c)
 { return t->sons[c]; }
@@ -119,10 +129,12 @@ node *target(node *t, unsigned int c)
 /* suffix head research function */
 /*********************************/
 /*@ requires
-  @   valid_node(m) && \valid(r) && 0 <= i < max_string_sz &&
+  @   valid_node(m) && \valid(r) &&
+  @   0 <= i < max_string_sz &&
   @   \base_addr(r) != \base_addr(current_word)
   @ assigns *r
-  @ ensures 0 <= *r < max_string_sz && valid_node(\result)
+  @ ensures
+  @   0 <= *r < max_string_sz && valid_node(\result)
   @*/
 node *locate_head(node *m, unsigned int i, unsigned int *r)
 {
@@ -144,49 +156,55 @@ node *locate_head(node *m, unsigned int i, unsigned int *r)
 /*********************************/
 /*@ requires
   @   valid_node(f) && valid_node(s) &&
-  @   \valid_index(current_word,i)
+  @   0 <= i < max_string_sz
   @ assigns f->sons[..]
   @ ensures valid_node(f)
   @*/
 void insert_son(node *f, node *s, unsigned int i)
 { f->sons[get_char(i)] = s; }
 
-/*@ predicate all_invariants() 
+/* suffix tree construction function */
+/*************************************/
+
+/*@ predicate loops_invariant() 
   @ {
   @   \valid_range(nodes_list,0,max_nodes_nb-1) &&
   @   \valid_range(current_word,0,max_string_sz-1) &&
-  @   (\forall int k; (\valid_index(current_word,k) =>
-  @     (0 <= current_word[k] < alphabet_sz))) &&
+  @   (\forall int k; (0 <= k < max_string_sz) =>
+  @     (0 <= current_word[k] < alphabet_sz)) &&
   @   (\forall node *t; valid_node(t) => valid_sons(t)) &&
-  @   (\forall node *t; valid_node(t) => \valid_range(t->sons,0,alphabet_sz-1))
+  @   (\forall node *t; valid_node(t) =>
+  @     \valid_range(t->sons,0,alphabet_sz-1))
   @ }
   @*/
 
-/* suffix tree construction function */
-/*************************************/
-/*@ requires 0 <= max_string_sz && next_node == 0 && max_nodes_nb > 1 
-  @ ensures valid_node(\result)
+/*@ requires
+  @   0 < max_string_sz &&
+  @   next_node == 0 &&
+  @   max_nodes_nb > 1
+  @ ensures
+  @   valid_node(\result)
   @*/
 node *build_suffix_tree()
 {
   node *m = get_fresh_node();
-  unsigned int i = 0;
-  /*@ invariant 0 <= next_node <= i * max_string_sz &&
-    @   0 <= i < max_string_sz &&
-    @   all_invariants()
-    @ loop_assigns nodes_list[..].sons, nodes_list[..].exit, next_node, i
+  unsigned int i;
+  unsigned int k;
+  /*@ invariant
+    @   0 <= next_node <= 2 + i * max_string_sz &&
+    @   0 <= i < max_string_sz && loops_invariant()
+    @ loop_assigns nodes_list[..].sons[..],nodes_list[..].exit,next_node,i
     @ variant max_string_sz - i
     @*/
   for(i = 0; get_char(i) != 0; i++)
   {
-    unsigned int k;
     node *p = locate_head(m,i,&k);
-    unsigned int j = 0;
-    /*@ label L */
-    /*@ invariant 0 <= next_node - \at(next_node,L) <= j &&
-      @   0 <= j < max_string_sz && valid_node(p) &&
-      @   all_invariants()
-      @ loop_assigns nodes_list[..].sons, next_node, j
+    unsigned int j;
+    /*@ label suffix_add_beginning */
+    /*@ invariant
+      @   next_node - \at(next_node,suffix_add_beginning) == j - k &&
+      @   k <= j < max_string_sz - 2 && valid_node(p) && loops_invariant()
+      @ loop_assigns nodes_list[..].sons[..],next_node,j
       @ variant max_string_sz - j
       @*/
     for(j = k; get_char(j) != 0; j++)
