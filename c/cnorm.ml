@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.38 2005-05-23 14:12:53 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.39 2005-06-09 08:31:22 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -795,45 +795,6 @@ let rec init_expr loc t lvalue initializers =
     | Ctypes.Tvar _ -> assert false
     | Tvoid -> assert false
 
-and nlocated s l l2 = 
-  match l with 
-    | [] -> NSblock l2
-    | {node = Tdecl (t,v,init); loc = l}::decl -> 
-	if var_is_referenced_or_struct_or_union v
-	then
-	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
-	begin match init with
-	  | None ->
-	      let declar = nlocated s decl l2 in
-	      NSdecl(v.var_type,v,None,copyattr s declar)
-	  | Some c ->
-	      match v.var_type.Ctypes.ctype_node with
-		| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
-		    let declar = nlocated s decl l2 in
-		    begin match c with
-		      | Iexpr e ->
-			  NSdecl(v.var_type, v, Some (Iexpr (expr e)),
-				 copyattr s declar)
-		      | _ -> assert false
-		    end
-		| Tarray (_, Some length) -> 
-		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
-		    let declar,_ = init_expr l v.var_type lvalue [c] in
-		     NSdecl(v.var_type,v,
-			    Some (Iexpr (alloca l (Int64.to_string length))),
-			    let rest = copyattr s (nlocated s decl l2) in
-			    copyattr s (NSblock (declar @ [rest])))
-		| Tarray _ | Tstruct _ | Tunion _ -> 
-		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
-		    let declar,_ = init_expr l v.var_type lvalue [c] in
-		    NSdecl(v.var_type,v,
-			   Some (Iexpr (alloca l "1")),
-			   let rest = copyattr s (nlocated s decl l2) in
-			   copyattr s (NSblock (declar @ [rest])))
-		| Tvoid | Ctypes.Tvar _ | Tfun _ -> assert false		      
-	end
-    | _  -> assert false
-
 let rec expr_of_term (t : nterm) : nexpr = 
  {
   nexpr_node = 
@@ -991,7 +952,7 @@ and statement s =
 	     (expr texpr3),
 	      (statement tstatement))
   | TSblock (l1,l2) -> 
-      nlocated s l1 (List.map statement l2)
+      local_decl s l1 l2
   | TSreturn option -> NSreturn (noption expr option)
   | TSbreak -> NSbreak
   | TScontinue -> NScontinue
@@ -1017,6 +978,45 @@ and statement s =
     nst_term = s.st_term;
     nst_loc = s.st_loc;
   }
+
+and local_decl s l l2 = 
+  match l with 
+    | [] -> NSblock (List.map statement l2)
+    | {node = Tdecl (t,v,init); loc = l}::decl -> 
+	if var_is_referenced_or_struct_or_union v then
+	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	begin match init with
+	  | None ->
+	      let declar = local_decl s decl l2 in
+	      NSdecl(v.var_type,v,None,copyattr s declar)
+	  | Some c ->
+	      match v.var_type.Ctypes.ctype_node with
+		| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
+		    let declar = local_decl s decl l2 in
+		    begin match c with
+		      | Iexpr e ->
+			  NSdecl(v.var_type, v, Some (Iexpr (expr e)),
+				 copyattr s declar)
+		      | _ -> assert false
+		    end
+		| Tarray (_, Some length) -> 
+		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
+		    let declar,_ = init_expr l v.var_type lvalue [c] in
+		     NSdecl(v.var_type,v,
+			    Some (Iexpr (alloca l (Int64.to_string length))),
+			    let rest = copyattr s (local_decl s decl l2) in
+			    copyattr s (NSblock (declar @ [rest])))
+		| Tarray _ | Tstruct _ | Tunion _ -> 
+		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
+		    let declar,_ = init_expr l v.var_type lvalue [c] in
+		    NSdecl(v.var_type,v,
+			   Some (Iexpr (alloca l "1")),
+			   let rest = copyattr s (local_decl s decl l2) in
+			   copyattr s (NSblock (declar @ [rest])))
+		| Tvoid | Ctypes.Tvar _ | Tfun _ -> assert false		      
+	end
+    | _  -> assert false
+
 
 let global_decl e1 =
   match e1 with    

@@ -55,7 +55,7 @@ Lemma f4_impl_po_1 :
   forall (c2: ((memory) pointer)),
   forall (plas: pointer),
   forall (Pre11: (valid alloc plas) /\ (valid1_range c2 1) /\
-                 (valid1_range c1 1) /\ (separation1 c2 c1) /\ (valid1 c2) /\
+                 (valid1_range c1 1) /\ (separation1 c1 c2) /\ (valid1 c2) /\
                  (valid1 c1)),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
@@ -74,7 +74,7 @@ Lemma f4_impl_po_2 :
   forall (intP: ((memory) Z)),
   forall (plas: pointer),
   forall (Pre11: (valid alloc plas) /\ (valid1_range c2 1) /\
-                 (valid1_range c1 1) /\ (separation1 c2 c1) /\ (valid1 c2) /\
+                 (valid1_range c1 1) /\ (separation1 c1 c2) /\ (valid1 c2) /\
                  (valid1 c1)),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),

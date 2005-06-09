@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.22 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.23 2005-06-09 08:31:22 filliatr Exp $ i*)
 
 open Ctypes
 
@@ -126,7 +126,10 @@ let var_type d =
     | Var_info v -> v.var_type
     | Fun_info f -> f.fun_type
 
-let set_var_type d ty = 
-  match d with
-    | Var_info v -> v.var_type <- ty
-    | Fun_info f -> f.fun_type <- ty
+let set_var_type d ty = match d with
+  | Var_info v ->   
+      Coptions.lprintf "set_var_type %s <- %a@." v.var_name Ctypes.ctype ty;
+      v.var_type <- ty
+  | Fun_info f -> 
+      Coptions.lprintf "set_var_type %s <- %a@." f.fun_name Ctypes.ctype ty;
+      f.fun_type <- ty

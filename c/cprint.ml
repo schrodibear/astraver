@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.12 2005-05-19 09:01:57 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.13 2005-06-09 08:31:22 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -24,23 +24,6 @@ open Clogic
 open Cast
 open Info
 open Pp
-
-let rec ctype fmt ty =
-  (if ty.ctype_ghost then fprintf fmt "ghost "else ());
-  ctype_node fmt ty.Ctypes.ctype_node
-
-and ctype_node fmt = function
-  | Tvoid -> fprintf fmt "void"
-  | Tint _ -> fprintf fmt "int"
-  | Tfloat _ -> fprintf fmt "float"
-  | Ctypes.Tvar s -> fprintf fmt "%s" s
-  | Tarray (ty, None) -> fprintf fmt "%a[]" ctype ty
-  | Tarray (ty, Some n) -> fprintf fmt "%a[%Ld]" ctype ty n
-  | Tpointer ty -> fprintf fmt "%a*" ctype ty
-  | Tstruct s -> fprintf fmt "struct %s" s
-  | Tunion s -> fprintf fmt "union %s" s
-  | Tenum s -> fprintf fmt "enum %s" s
-  | Tfun _ -> fprintf fmt "<fun>"
 
 let declare_struct fmt s (_,fields) =
   fprintf fmt "@[<hov 2>struct %s {@\n" s;

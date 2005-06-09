@@ -3,9 +3,9 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_int_int  (y_0:pointer) (x_0:pointer)
+(*Why predicate*) Definition separation_int_int  (x_0:pointer) (y_0:pointer)
   := ~((base_addr y_0) = (base_addr x_0)).
 
-(*Why predicate*) Definition separation_int_u  (x_0:pointer) (zz:pointer)
+(*Why predicate*) Definition separation_int_u  (zz:pointer) (x_0:pointer)
   := ~((base_addr x_0) = (base_addr zz)).
 

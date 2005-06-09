@@ -101,7 +101,7 @@ Lemma f3_impl_po_1 :
   forall (c: ((memory) pointer)),
   forall (s0: pointer),
   forall (Pre12: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
-                 (separation1 c b) /\ (valid1_range c 5) /\
+                 (separation1 b c) /\ (valid1_range c 5) /\
                  (valid1_range b 5)),
   (valid alloc s0).
 Proof.
@@ -115,7 +115,7 @@ Lemma f3_impl_po_2 :
   forall (c: ((memory) pointer)),
   forall (s0: pointer),
   forall (Pre12: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
-                 (separation1 c b) /\ (valid1_range c 5) /\
+                 (separation1 b c) /\ (valid1_range c 5) /\
                  (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_5: pointer),
@@ -135,7 +135,7 @@ Lemma f3_impl_po_3 :
   forall (intP: ((memory) Z)),
   forall (s0: pointer),
   forall (Pre12: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
-                 (separation1 c b) /\ (valid1_range c 5) /\
+                 (separation1 b c) /\ (valid1_range c 5) /\
                  (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_5: pointer),

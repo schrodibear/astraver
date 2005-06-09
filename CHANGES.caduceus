@@ -1,6 +1,8 @@
 Note: These are the changes for Caduceus.
 
 
+ o fixed bug with local variables used with & and within annotations
+
 version 0.79, April 22th, 2005
 ==============================
  o improved invariants related to separation

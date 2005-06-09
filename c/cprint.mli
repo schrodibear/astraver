@@ -14,15 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.mli,v 1.3 2005-02-17 16:09:31 hubert Exp $ i*)
+(*i $Id: cprint.mli,v 1.4 2005-06-09 08:31:22 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
 open Format
 open Clogic
 open Cast
-
-val ctype : formatter -> Ctypes.ctype -> unit
 
 val nexpr : formatter -> nexpr -> unit
 

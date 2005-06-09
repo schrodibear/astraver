@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.11 2005-05-19 09:01:57 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.12 2005-06-09 08:31:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -96,5 +96,23 @@ let push () = match !stack with
 let pop () = match !stack with
   | _ :: s -> stack := s
   | [] -> assert false
+
+let rec ctype fmt ty =
+  (if ty.ctype_ghost then fprintf fmt "ghost "else ());
+  ctype_node fmt ty.ctype_node
+
+and ctype_node fmt = function
+  | Tvoid -> fprintf fmt "void"
+  | Tint _ -> fprintf fmt "int"
+  | Tfloat _ -> fprintf fmt "float"
+  | Tvar s -> fprintf fmt "%s" s
+  | Tarray (ty, None) -> fprintf fmt "%a[]" ctype ty
+  | Tarray (ty, Some n) -> fprintf fmt "%a[%Ld]" ctype ty n
+  | Tpointer ty -> fprintf fmt "%a*" ctype ty
+  | Tstruct s -> fprintf fmt "struct %s" s
+  | Tunion s -> fprintf fmt "union %s" s
+  | Tenum s -> fprintf fmt "enum %s" s
+  | Tfun _ -> fprintf fmt "<fun>"
+
 
       
