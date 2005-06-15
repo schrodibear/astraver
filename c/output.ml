@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.25 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: output.ml,v 1.26 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 open Format;;
 
@@ -576,6 +576,7 @@ type why_decl =
   | Logic of bool * string * why_type         (*r logic decl in why *)
   | Axiom of string * assertion         (*r Axiom *)
   | Predicate of bool * string * (string * base_type) list * assertion  
+  | Function of bool * string * (string * base_type) list * base_type * term
 
 type prover_decl =
   | Parameter  of string * why_type    (*r Parameter *)
@@ -593,6 +594,7 @@ let get_why_id d =
     | Def(id,_) -> id
     | Axiom(id,_) -> id
     | Predicate(_,id,_,_) -> id
+    | Function(_,id,_,_,_) -> id
       
 let iter_why_decl f d =
   match d with
@@ -603,6 +605,10 @@ let iter_why_decl f d =
     | Predicate(_,id,args,p) -> 
 	List.iter (fun (_,t) -> iter_base_type f t) args;
 	iter_assertion f p
+    | Function(_,id,args,t,p) -> 
+	List.iter (fun (_,t) -> iter_base_type f t) args;
+	iter_base_type f t;
+	iter_term f p
     
 let get_prover_id d =
   match d with
@@ -677,10 +683,18 @@ let fprintf_why_decl form d =
     | Predicate(b,id,[],p) -> assert false
     | Predicate(b,id,a::args,p) ->
 	fprintf form "@[<hv 1>%spredicate %s(%a"
-	  (if b then "external" else "") id 
+	  (if b then "external " else "") id 
 	  fprint_logic_arg a;
 	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
 	fprintf form ") =@ %a@]@.@." fprintf_assertion p
+    | Function(_,_,[],_,_) -> assert false
+    | Function(b,id,a::args,t,e) ->
+	fprintf form "@[<hv 1>%sfunction %s(%a"
+	  (if b then "external " else "") id 
+	  fprint_logic_arg a;
+	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
+	fprintf form ") : %a =@ %a@]@.@." fprintf_base_type t 
+	  fprintf_term e
 
 
 let iter_prover_decl f d =

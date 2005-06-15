@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.39 2005-06-09 08:31:22 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.40 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -644,6 +644,8 @@ let logic_symbol l =
 	List.map (fun (var,c) -> (var,c)) l1,
 	c,
 	List.map nlocation l2)
+    | Function_def (param_list, t, e) ->
+	NFunction_def (param_list, t, term e)
 
 let rec c_initializer c = match c with
   | Iexpr e ->  Iexpr (expr e)

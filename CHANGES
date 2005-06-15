@@ -1,4 +1,9 @@
 
+  o a missing exceptional postcondition is now given the default value "false"
+    instead of "true" (i.e. the corresponding exception cannot be raised)
+  o new declaration "function" to define a logic function
+    e.g. function f(x:int, y:int) : int = x+y
+
 version 1.80, June 3rd, 2005
 ============================
   o Isabelle/HOL output (--isabelle option) contribution by Yasuhiko Minamide

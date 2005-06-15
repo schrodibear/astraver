@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.48 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.49 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -100,6 +100,13 @@ let generalize_predicate_def (bl,p) =
   let l = find_predicate_vars l p in
   { scheme_vars = l; scheme_type = (bl,p) }
 
+let generalize_function_def (bl,t,e) = 
+  let l = 
+    List.fold_left (fun acc (_,pt) -> find_pure_type_vars acc pt) [] bl 
+  in
+  let l = find_pure_type_vars l t in
+  { scheme_vars = l; scheme_type = (bl,t,e) }
+
 (* specialization *)
 
 let new_type_var =
@@ -179,6 +186,12 @@ let subst_predicate_def s (bl,p) =
   bl, subst_predicate s p
 
 let specialize_predicate_def = specialize_scheme subst_predicate_def
+
+let subst_function_def s (bl,t,e) =
+  let bl = List.map (fun (x,pt) -> (x, subst_pure_type s pt)) bl in
+  bl, subst_pure_type s t, e
+
+let specialize_function_def = specialize_scheme subst_function_def
 
 (* Environments for imperative programs.
  *

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.46 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.47 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -155,6 +155,7 @@ type ('term,'ctype) logic_symbol =
   | Predicate_reads of (Info.var_info * 'ctype) list * 'term location list
   | Predicate_def of (Info.var_info * 'ctype) list * 'ctype predicate 
   | Function of (Info.var_info * 'ctype) list * 'ctype * 'term location list
+  | Function_def of (Info.var_info * 'ctype) list * 'ctype * 'term
 
 (*
 
@@ -211,5 +212,6 @@ type ('term,'ctype) nlogic_symbol =
   | NPredicate_reads of (Info.var_info * 'ctype) list * 'term location list
   | NPredicate_def of (Info.var_info * 'ctype) list * 'ctype npredicate 
   | NFunction of (Info.var_info * 'ctype) list * 'ctype * 'term location list
+  | NFunction_def of (Info.var_info * 'ctype) list * 'ctype * 'term
 
 

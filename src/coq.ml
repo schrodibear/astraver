@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.131 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.132 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -684,6 +684,7 @@ and print_list_par sep pr fmt l =
 
 let v8 = match prover with Coq V8 -> true | _ -> false
 
+let print_term = if v8 then print_term_v8 else print_term_v7
 let print_predicate = if v8 then print_predicate_v8 else print_predicate_v7
 let print_sequent = if v8 then print_sequent_v8 else print_sequent_v7
 let print_cc_type = if v8 then print_cc_type_v8 else print_cc_type_v7
@@ -771,6 +772,27 @@ let reprint_predicate fmt id p =
 let print_predicate fmt id p = reprint_predicate fmt id p
 
 
+let reprint_function fmt id p =
+  let (l,(bl,t,e)) = Env.specialize_function_def p in
+  let print_poly fmt x = 
+    if v8 then fprintf fmt "(A%d:Set)" x.tag else fprintf fmt "[A%d:Set]" x.tag
+  in
+  let print_binder fmt (x,pt) = 
+    if v8 then 
+      fprintf fmt "(%a:%a)" Ident.print x print_pure_type pt
+    else
+      fprintf fmt "[%a:%a]" Ident.print x print_pure_type pt
+  in
+  fprintf fmt
+     "@[<hov 2>(*Why function*) Definition %s %a %a@ := @[%a@].@]@\n" 
+    id 
+    (print_list space print_poly) l
+    (print_list space print_binder) bl
+    print_term e 
+
+let print_function fmt id p = reprint_function fmt id p
+
+
 
 open Regen
 
@@ -784,6 +806,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
+      | Function (id, f) -> print_function fmt id f
     end;
     fprintf fmt "@\n"
       
@@ -793,6 +816,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
+    | Function (id, f) -> reprint_function fmt id f
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -826,6 +850,9 @@ let push_axiom id p =
 let push_predicate id p =
   Gen.add_elem (Pr, id) (Predicate (id, p))
 
+let push_function id f =
+  Gen.add_elem (Pr, id) (Function (id, f))
+
 let _ = 
   Gen.add_regexp 
     "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
@@ -840,7 +867,9 @@ let _ =
   Gen.add_regexp 
     "(\\*Why logic\\*) Definition[ ]+\\([^ ]*\\)[ ]*:[ ]*" Lg;
   Gen.add_regexp 
-    "(\\*Why predicate\\*) Definition[ ]+\\([^ ]*\\) " Pr
+    "(\\*Why predicate\\*) Definition[ ]+\\([^ ]*\\) " Pr;
+  Gen.add_regexp 
+    "(\\*Why function\\*) Definition[ ]+\\([^ ]*\\) " Fun
 
 (* validations *)
 

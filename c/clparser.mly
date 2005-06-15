@@ -301,6 +301,8 @@ decl:
     { LDlogic (Info.default_logic_info $3, $2, $5, []) }
 | LOGIC logic_type IDENTIFIER LPAR parameters RPAR READS locations 
     { LDlogic (Info.default_logic_info $3, $2, $5, $8) }
+| LOGIC logic_type IDENTIFIER LPAR parameters RPAR LBRACE lexpr RBRACE 
+    { LDlogic_def (Info.default_logic_info $3, $2, $5, $8) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR 
     { LDpredicate_reads (Info.default_logic_info $2, $4, []) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR READS locations 

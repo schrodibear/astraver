@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.22 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.23 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -319,6 +319,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate _ -> assert false (*TODO*)
+      | Function _ -> assert false (*TODO*)
     end;
     fprintf fmt "@\n"
       
@@ -328,6 +329,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate _ -> assert false (*TODO*)
+    | Function _ -> assert false (*TODO*)
 
   let re_oblig_loc = Str.regexp " :: Why obligation from .*"
 

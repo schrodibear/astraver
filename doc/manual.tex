@@ -190,14 +190,6 @@ The input file contains the following kinds of declaration:
     $x_1,\dots,x_n$ are already defined on the prover side (and thus
     nothing is produced).
 
-  \item\indextt{axiom} 
-    \te{axiom} $x$ \te{:} \textsl{predicate}
-
-    Declares an axiom of name $x$. Example:
-\begin{verbatim}
-     axiom max_1 : forall x:int. forall y:int. max(x,y) >= x
-\end{verbatim}
-
   \item\indextt{predicate}
     \te{predicate} $p$\te{(} $x_1:\tau_1$, \dots, $x_n:\tau_n$
     \te{) =} \textsl{predicate}
@@ -205,6 +197,23 @@ The input file contains the following kinds of declaration:
     Defines a predicate $p$. Examples:
 \begin{verbatim}
      predicate ge0(x:int, y:int) = x >= y >= 0
+\end{verbatim}
+
+  \item\indextt{function}
+    \te{function} $f$\te{(} $x_1:\tau_1$, \dots, $x_n:\tau_n$
+    \te{) :} $\tau$ \te{=} \textsl{term}
+
+    Defines a logic function $f$. Example:
+\begin{verbatim}
+     function f(x:int, y:int) : int = x + y
+\end{verbatim}
+
+  \item\indextt{axiom} 
+    \te{axiom} $x$ \te{:} \textsl{predicate}
+
+    Declares an axiom of name $x$. Example:
+\begin{verbatim}
+     axiom max_1 : forall x:int. forall y:int. max(x,y) >= x
 \end{verbatim}
 
 \end{itemize}
@@ -1243,6 +1252,10 @@ Syntax of input files is given in Figure~\ref{fig:input}.
       & $|$ & \te{predicate} \nt{identifier}
               \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
               \te{)} \te{=} \nt{predicate} \\ \indextt{predicate}
+      & $|$ & \te{function} \nt{identifier}
+              \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
+              \te{)} \te{:} \nt{primitive\_type} 
+              \te{=} \nt{term} \\ \indextt{function}
    \\[0.1em]
 
   \nt{logic\_type}

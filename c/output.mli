@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.12 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: output.mli,v 1.13 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 type constant =
   | Prim_int of int64
@@ -152,6 +152,7 @@ type why_decl =
   | Logic of bool * string * why_type  (*r logic decl in why *)
   | Axiom of string * assertion            (*r Axiom *)
   | Predicate of bool * string * (string * base_type) list * assertion  
+  | Function of bool * string * (string * base_type) list * base_type * term
 
 type prover_decl =
   | Parameter  of string * why_type       (*r Parameter *)

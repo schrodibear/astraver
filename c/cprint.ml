@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.13 2005-06-09 08:31:22 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.14 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -174,6 +174,9 @@ let nlogic_symbol fmt li = function
   | NFunction (pl, ty, locs) ->
       fprintf fmt "/*@@ @[logic %a %s(%a) reads %a@] */@\n" ctype ty 
 	li.logic_name logic_parameters pl locations locs
+  | NFunction_def (pl, ty, t) ->
+      fprintf fmt "/*@@ @[logic %a %s(%a) { %a }@] */@\n" ctype ty 
+	li.logic_name logic_parameters pl nterm t
 	
 let spec fmt = function
   | { requires = None; assigns = None; ensures = None; decreases = None } ->

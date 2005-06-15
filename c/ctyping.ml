@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.96 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.97 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -921,6 +921,12 @@ let type_spec_decl loc ofs = function
       let ll = List.map (type_location ofs env') ll in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
+  | LDlogic_def (id, ty, pl, t) ->
+      let ty = type_logic_type (Env.empty ()) ty in
+      let pl,env' = type_logic_parameters (Env.empty ()) pl in
+      let t = with_offset ofs (type_term env') t in
+      Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
+      Tlogic (id, Function_def (pl, ty, t))
   | LDpredicate_reads (id, pl, ll) ->
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
       let ll = List.map (type_location ofs env') ll in

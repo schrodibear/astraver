@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.79 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.80 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -115,6 +115,18 @@ let push_predicate id p = match prover with
   | Simplify -> Simplify.push_predicate id p
   | CVCLite -> Cvcl.push_predicate id p
   | SmtLib -> Smtlib.push_predicate id p
+
+let push_function id p = match prover with
+  | Pvs -> () (* Pvs.push_function id p *)
+  | Coq _ -> Coq.push_function id p
+  | HolLight -> () (* Holl.push_function id p *)
+  | Isabelle -> () (* Isabelle.push_function id p *)
+  | Hol4 -> () (* Hol4.push_function id p *)
+  | Mizar -> () (* Mizar.push_function id p *)
+  | Harvey -> () (* Harvey.push_function id p *)
+  | Simplify -> Simplify.push_function id p
+  | CVCLite -> () (* Cvcl.push_function id p *)
+  | SmtLib -> () (* Smtlib.push_function id p *)
 
 let output fwe = 
   if wol then begin
@@ -244,6 +256,19 @@ let interp_decl d =
       let p = Ltyping.predicate lab env lenv' p in
       let p = generalize_predicate_def (pl,p) in
       push_predicate (Ident.string id) p
+  | Function_def (loc, id, pl, ty, e) ->
+      if is_logic id lenv then raise_located loc (Clash id);
+      let t = Function (List.map snd pl, ty) in
+      let t = generalize_logic_type t in
+      add_global_logic id t;
+      let lenv' = 
+	List.fold_right 
+	  (fun (x,pt) -> add_logic ~generalize:false x (PureType pt)) pl lenv 
+      in
+      let e,ty' = Ltyping.term lab env lenv' e in
+      if ty <> ty' then Ltyping.expected_type loc (PureType ty);
+      let f = generalize_function_def (pl,ty,e) in
+      push_function (Ident.string id) f
   | Axiom (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
       let p = generalize_predicate p in

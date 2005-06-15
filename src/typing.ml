@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.113 2005-05-30 08:57:11 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.114 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -315,7 +315,7 @@ let check_no_effect loc ef =
 
 let warning_no_post loc x = 
   if not !c_file then begin
-    wprintf loc "no postcondition for exception %a; true inserted@\n" 
+    wprintf loc "no postcondition for exception %a; false inserted@\n" 
       Ident.print x;
     if werror then exit 1
   end
@@ -331,7 +331,7 @@ let saturation loc e (a,al) =
       x, List.assoc x al 
     with Not_found -> 
       warning_no_post loc x;
-      x, default_post 
+      x, anonymous Loc.dummy Pfalse (* default_post *)
   in
   (a, List.map set_post xs)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.9 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: regen.mli,v 1.10 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -30,6 +30,7 @@ type element_kind =
   | Lg
   | Ax
   | Pr
+  | Fun
 
 type element_id = element_kind * string
 
@@ -39,6 +40,7 @@ type element =
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
+  | Function of string * function_def Env.scheme
 
 module type S = sig
  

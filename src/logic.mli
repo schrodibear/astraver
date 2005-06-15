@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.26 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.27 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -79,3 +79,5 @@ type logic_type =
   | Function of pure_type list * pure_type
 
 type predicate_def = (Ident.t * pure_type) list * predicate
+
+type function_def = (Ident.t * pure_type) list * pure_type * term

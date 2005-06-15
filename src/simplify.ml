@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.32 2005-02-03 13:38:49 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.33 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -31,6 +31,7 @@ type elem =
   | Oblig of obligation 
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
+  | FunctionDef of string * function_def Env.scheme
 
 let queue = Queue.create ()
 
@@ -41,6 +42,8 @@ let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
 let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
 let push_predicate id p = Queue.add (Predicate (id, p)) queue
+
+let push_function id p = Queue.add (FunctionDef (id, p)) queue
 
 let defpred = Hashtbl.create 97
 
@@ -250,7 +253,7 @@ let push_foralls p =
   push [] p, !change
 
 let print_axiom fmt id p =
-  fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@]@\n" id;
+  fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@\n" id;
   let p = p.Env.scheme_type in
   fprintf fmt " @[<hov 2>%a@]" (print_predicate true) p;
   let p,c = push_foralls p in
@@ -264,10 +267,20 @@ let print_predicate fmt id p =
     (print_predicate false) p;
   Hashtbl.add defpred (Ident.create id) ()
 
+let print_function fmt id p =
+  let (bl,_,e) = p.Env.scheme_type in
+  fprintf fmt "@[(BG_PUSH@\n ;; Why function %s@\n" id;
+  fprintf fmt "  @[(FORALL (%a) (EQ (%s %a) %a))@])@]@\n@\n"
+    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    id
+    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    print_term e
+
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
+  | FunctionDef (id, f) -> print_function fmt id f
 
 (* for each function symbol [f : t1,...,tn -> t] where [t] is an abstract type
    we generate an axiom 

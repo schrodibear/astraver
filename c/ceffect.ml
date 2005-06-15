@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.99 2005-05-30 08:57:11 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.100 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -355,6 +355,7 @@ let logic_type ls =
     | Clogic.NPredicate_reads(args,locs) -> locations locs
     | Clogic.NPredicate_def(args,pred) -> predicate pred
     | Clogic.NFunction(args,ret,locs) -> locations locs
+    | Clogic.NFunction_def(args,ret,t) -> term t
 
 
 let option f = function None -> empty | Some x -> f x

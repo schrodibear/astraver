@@ -3,3 +3,6 @@
 
 Require Export Caduceus.
 
+
+(*Why function*) Definition f  (x:Z) := (x + 1).
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.59 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.60 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -121,6 +121,9 @@ type parsed_decl =
   | LDlogic of 
       Info.logic_info * parsed_logic_type * (parsed_logic_type * string) list
       * parsed_term location list
+  | LDlogic_def of 
+      Info.logic_info * parsed_logic_type * (parsed_logic_type * string) list
+      * parsed_term
   | LDpredicate_reads of 
       Info.logic_info * (parsed_logic_type * string) list 
       * parsed_term location list

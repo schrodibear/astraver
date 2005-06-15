@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.147 2005-06-07 11:25:47 nguenot Exp $ i*)
+(*i $Id: cinterp.ml,v 1.148 2005-06-15 07:08:28 filliatr Exp $ i*)
 
 
 open Format
@@ -1358,6 +1358,11 @@ let cinterp_logic_symbol id ls =
 	    id.logic_args local_type
 	in
 	Logic(false,id.logic_name,final_type)
+    | NFunction_def(args,t,e) ->
+	let e = interp_term None "" e in
+	let t = [], Ceffect.interp_type t in
+	let args = interp_predicate_args id args in
+	Output.Function(false,id.logic_name,args,t,e)
 	  
 let interp_axiom p =
   let a = interp_predicate None "" p

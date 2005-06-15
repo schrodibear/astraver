@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.30 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.31 2005-06-15 07:08:29 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -108,12 +108,15 @@ val generalize_logic_type : logic_type -> logic_type scheme
 val generalize_type_v : type_v -> type_info scheme
 val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme
+val generalize_function_def : function_def -> function_def scheme
 
 val specialize_type_scheme : type_info scheme -> type_var list * type_v
 val specialize_logic_type : logic_type scheme -> type_var list * logic_type
 val specialize_predicate : predicate scheme -> type_var list * predicate
 val specialize_predicate_def : 
   predicate_def scheme -> type_var list * predicate_def
+val specialize_function_def : 
+  function_def scheme -> type_var list * function_def
 
 val find_logic : Ident.t -> logical_env -> type_var list * logic_type
 

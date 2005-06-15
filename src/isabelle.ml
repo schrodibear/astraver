@@ -317,6 +317,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
+      | Function _ -> assert false (*TODO*)
     end;
     fprintf fmt "@\n"
       
@@ -326,6 +327,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
+    | Function _ -> assert false (*TODO*)
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
