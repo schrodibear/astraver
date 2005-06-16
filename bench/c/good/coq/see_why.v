@@ -3,19 +3,35 @@
 
 Require Export see_spec_why.
 
-(* Why obligation from file "why/see.why", characters 279-319 *)
+(* Why obligation from file "why/see.why", characters 35-195 *)
+Lemma f_impl_po_1 : 
+  forall (b: Z),
+  forall (b0: Z),
+  forall (Post1: b0 = (1 - b)),
+  forall (result0: Z),
+  forall (Post2: result0 = b0),
+  (* File \"see.c\", line 9, characters 13-45 *) (result0 = b0 /\ b0 =
+  (1 - b)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/see.why", characters 330-370 *)
 Lemma k_impl_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),
   forall (b2: Z),
   forall (caduceus_1: Z),
-  forall (Post10: caduceus_1 = b2 /\ b2 = (1 - b0)),
+  forall (Post10: (* File \"see.c\", line 9, characters 13-45 *)
+                  (caduceus_1 = b2 /\ b2 = (1 - b0))),
   forall (b3: Z),
   forall (aux_1: Z),
-  forall (Post13: aux_1 = b3 /\ b3 = (1 - b2)),
+  forall (Post13: (* File \"see.c\", line 9, characters 13-45 *) (aux_1 =
+                  b3 /\ b3 = (1 - b2))),
   forall (result0: Z),
   forall (Post5: result0 = (caduceus_1 + aux_1)),
-  result0 = 1.
+  (* File \"see.c\", line 15, characters 13-20 *) result0 = 1.
 Proof.
 intuition.
 Save.

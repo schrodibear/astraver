@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.33 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.34 2005-06-16 07:30:34 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -193,9 +193,9 @@ let rec print_predicate pos fmt p =
   | Pfpi _ ->
       failwith "fpi not supported with Simplify"
   | Pnamed (n, p) when pos ->
-      fprintf fmt "@[(LBLPOS@ %s@ %a)@]" n pp p
+      fprintf fmt "@[(LBLPOS@ |%s|@ %a)@]" n pp p
   | Pnamed (n, p) ->
-      fprintf fmt "@[(LBLNEG@ %s@ %a)@]" n pp p
+      fprintf fmt "@[(LBLNEG@ |%s|@ %a)@]" n pp p
 
 let cc_external_type = function
   | Cc.TTpure ty -> external_type ty

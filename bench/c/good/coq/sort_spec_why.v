@@ -4,5 +4,7 @@
 Require Export Caduceus.
 
 (*Why predicate*) Definition swap_ord  (a2:Z) (b2:Z) (a1:Z) (b1:Z)
-  := ((a1 <= b1 -> a2 = a1 /\ b2 = b1)) /\ ((a1 > b1 -> a2 = b1 /\ b2 = a1)).
+  := (* File \"sort.c\", line 48, characters 5-84 *)
+     (((a1 <= b1 -> a2 = a1 /\ b2 = b1)) /\
+     ((a1 > b1 -> a2 = b1 /\ b2 = a1))).
 

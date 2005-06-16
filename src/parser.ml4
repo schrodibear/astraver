@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.101 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.102 2005-06-16 07:30:34 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -111,6 +111,7 @@ let block_statement = gec "block_statement"
 let handler = gec "handler"
 let relation = gec "relation"
 let ident = gec "ident"
+let ident_or_string = gec "ident_or_string"
 let qualid_ident = gec "qualid_ident"
 let invariant = gec "invariant"
 let variant = gec "variant"
@@ -194,6 +195,10 @@ EXTEND
   [ [ id = LIDENT -> Ident.create id
     | id = UIDENT -> Ident.create id ] ]
   ;
+  ident_or_string:
+  [ [ id = ident -> Ident.string id
+    | s = STRING -> s ] ]
+  ;
   qualid_ident:
   [ [ id = ident ->
 	id
@@ -212,8 +217,8 @@ EXTEND
     | f = FLOAT -> let (f,i,e) = Float_lexer.split f in ConstFloat (f,i,e) ] ]
   ;
   lexpr:
-  [ [ ":"; id = ident; ":"; a = lexpr -> 
-	mk_pp loc (PPnamed (Ident.string id, a))
+  [ [ ":"; id = ident_or_string; ":"; a = lexpr -> 
+	mk_pp loc (PPnamed (id, a))
     | a = lexpr00 -> a ] ]
   ;
   lexpr00:  

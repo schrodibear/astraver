@@ -13,7 +13,7 @@ Lemma f_impl_po_1 :
   forall (Post1: mutable_x1 = (mutable_x + y)),
   forall (result0: Z),
   forall (Post2: result0 = mutable_x1),
-  result0 = (x + y).
+  (* File \"param.c\", line 1, characters 13-27 *) result0 = (x + y).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

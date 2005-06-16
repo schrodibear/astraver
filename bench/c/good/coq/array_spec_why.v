@@ -5,6 +5,7 @@ Require Export Caduceus.
 
 (*Why predicate*) Definition valid_dim2  (alloc:alloc_table)
   (intPP:((memory) pointer)) (t_0:pointer) (i:Z) (j:Z) (k:Z) (l:Z)
-  := (valid_range alloc t_0 i j) /\
+  := (* File \"array.c\", line 8, characters 7-86 *)
+     ((valid_range alloc t_0 i j) /\
      (forall (n:Z),
-      (i <= n /\ n <= j -> (valid_range alloc (acc intPP (shift t_0 n)) k l))).
+      (i <= n /\ n <= j -> (valid_range alloc (acc intPP (shift t_0 n)) k l)))).

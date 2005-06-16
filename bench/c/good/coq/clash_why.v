@@ -156,7 +156,8 @@ Lemma f_impl_po_1 :
   forall (Post4: y_0_1 = 1),
   forall (result1: Z),
   forall (Post5: result1 = y_0_1),
-  ((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2)).
+  (* File \"clash.c\", line 12, characters 13-62 *)
+  (((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2))).
 Proof.
 intuition.
 Save.
@@ -169,24 +170,25 @@ Lemma f_impl_po_2 :
   forall (Post1: y_0_1 = 2),
   forall (result1: Z),
   forall (Post2: result1 = y_0_1),
-  ((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2)).
+  (* File \"clash.c\", line 12, characters 13-62 *)
+  (((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1376-1399 *)
+(* Why obligation from file "why/clash.why", characters 1430-1453 *)
 Lemma g_impl_po_1 : 
   forall (y: Z),
   forall (y_0_1: Z),
   forall (Post1: y_0_1 = 0),
   forall (result0: Z),
   forall (Post2: result0 = y_0_1),
-  result0 = 0 /\ y = y.
+  (* File \"clash.c\", line 5, characters 13-41 *) (result0 = 0 /\ y = y).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1674-1697 *)
+(* Why obligation from file "why/clash.why", characters 1781-1804 *)
 Lemma h_impl_po_1 : 
   forall (x: Z),
   forall (y_0_1: Z),
@@ -196,12 +198,13 @@ Lemma h_impl_po_1 :
   forall (Post3: y_1_1 = 1),
   forall (result2: Z),
   forall (Post4: result2 = y_1_1),
-  ((x = 0 -> result2 = 1)) /\ ((x <> 0 -> result2 = 2)).
+  (* File \"clash.c\", line 27, characters 13-65 *)
+  (((x = 0 -> result2 = 1)) /\ ((x <> 0 -> result2 = 2))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1716-1717 *)
+(* Why obligation from file "why/clash.why", characters 1823-1824 *)
 Lemma h_impl_po_2 : 
   forall (x: Z),
   forall (y_0_1: Z),
@@ -209,7 +212,8 @@ Lemma h_impl_po_2 :
   forall (Test1: x <> 0),
   forall (result1: Z),
   forall (Post2: result1 = y_0_1),
-  ((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2)).
+  (* File \"clash.c\", line 27, characters 13-65 *)
+  (((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2))).
 Proof.
 intuition.
 Save.

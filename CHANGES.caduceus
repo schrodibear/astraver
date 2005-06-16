@@ -1,6 +1,8 @@
 Note: These are the changes for Caduceus.
 
 
+ o labels inserted in Why code to trace the origin of each annotation
+   in the C source
  o new declaration to define a logic function
    e.g. /*@ logic int f(int x, int y) { x+y } */
  o fixed bug with local variables used with & and within annotations

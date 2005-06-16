@@ -87,7 +87,7 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	make why/$*.why
 	make -f $*.makefile coq
 
-.PHONY: simplify coq harvey
+.PHONY: simplify coq harvey cvcl
 
 clean:
 	rm -f why/*.why coq/*.vo \

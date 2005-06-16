@@ -3,24 +3,26 @@
 
 Require Export copy_spec_why.
 
-(* Why obligation from file "why/copy.why", characters 342-446 *)
+(* Why obligation from file "why/copy.why", characters 394-498 *)
 Lemma copy_impl_po_1 : 
   forall (t1: pointer),
   forall (t2: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2))),
+  forall (Pre8: (* File \"copy.c\", line 4, characters 14-98 *)
+                (((valid_range alloc t1 0 n) /\
+                (valid_range alloc t2 0 n)) /\
+                ~((base_addr t1) = (base_addr t2)))),
   forall (i: Z),
   forall (Post9: i = n),
   forall (Variant1: Z),
   forall (i1: Z),
   forall (intP0: ((memory) Z)),
   forall (Pre7: Variant1 = i1),
-  forall (Pre6: i1 <= n /\
+  forall (Pre6: (* File \"copy.c\", line 10, characters 17-70 *) (i1 <= n /\
                 (forall (k:Z),
                  (i1 <= k /\ k < n -> (acc intP0 (shift t2 k)) =
-                  (acc intP0 (shift t1 k))))),
+                  (acc intP0 (shift t1 k)))))),
   forall (Test2: true = true),
   forall (caduceus: Z),
   forall (Post4: caduceus = i1),
@@ -34,7 +36,8 @@ Lemma copy_impl_po_1 :
       ((forall (result0:Z),
         (result0 = (acc intP0 (shift t1 i2)) ->
          (forall (intP:((memory) Z)),
-          (intP = (upd intP0 result result0) -> (i2 <= n /\
+          (intP = (upd intP0 result result0) ->
+           (* File \"copy.c\", line 10, characters 17-70 *) (i2 <= n /\
            (forall (k:Z),
             (i2 <= k /\ k < n -> (acc intP (shift t2 k)) =
              (acc intP (shift t1 k))))) /\
@@ -42,6 +45,7 @@ Lemma copy_impl_po_1 :
          (valid alloc result))) /\
       (valid alloc (shift t1 i2))) /\ (valid alloc (shift t1 i2)))))) /\
   ((result1 <= 0 ->
+    (* File \"copy.c\", line 6, characters 13-56 *)
     (forall (k:Z),
      (0 <= k /\ k < n -> (acc intP0 (shift t2 k)) = (acc intP0 (shift t1 k)))))).
 Proof.
@@ -51,20 +55,22 @@ assert (k=i1-1 \/ i1<=k).
 intuition; subst; caduceus.
 Save.
 
-(* Why obligation from file "why/copy.why", characters 520-688 *)
+(* Why obligation from file "why/copy.why", characters 572-799 *)
 Lemma copy_impl_po_2 : 
   forall (t1: pointer),
   forall (t2: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2))),
+  forall (Pre8: (* File \"copy.c\", line 4, characters 14-98 *)
+                (((valid_range alloc t1 0 n) /\
+                (valid_range alloc t2 0 n)) /\
+                ~((base_addr t1) = (base_addr t2)))),
   forall (i: Z),
   forall (Post9: i = n),
-  i <= n /\
+  (* File \"copy.c\", line 10, characters 17-70 *) (i <= n /\
   (forall (k:Z),
-   (i <= k /\ k < n -> (acc intP (shift t2 k)) = (acc intP (shift t1 k)))).
+   (i <= k /\ k < n -> (acc intP (shift t2 k)) = (acc intP (shift t1 k))))).
 Proof.
 intuition.
 Save.

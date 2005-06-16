@@ -14,18 +14,21 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.10 2005-05-25 13:03:53 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.11 2005-06-16 07:30:34 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
 open Printf
 
 let timeout = ref 10
+let eclauses = ref 2000 (* E prover max nb of clauses *)
 let debug = ref false
 let files = Queue.create ()
 
 let spec = 
   [ "-timeout", Arg.Int ((:=) timeout), "<int>  set the timeout (in seconds)";
+    "-eclauses", Arg.Int ((:=) eclauses), 
+    "<int>  set the max nb of clauses for the E prover";
     "-debug", Arg.Set debug, "set the debug flag" ]
 let usage = "usage: dp [options] files.{cvc,cvc.all,sx,sx.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
@@ -67,7 +70,7 @@ let call_harvey f =
       let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
       if Sys.file_exists fi then begin
 	let out = 
-	  Sys.command (sprintf "timeout %d rv %s > out 2>&1" !timeout fi) 
+	  Sys.command (sprintf "timeout %d rv -e\"-T %d\" %s > out 2>&1" !timeout !eclauses fi) 
 	in
 	if out <> 0 then 
 	  is_timeout ()

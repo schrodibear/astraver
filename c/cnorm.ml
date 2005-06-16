@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.40 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.41 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -51,25 +51,34 @@ let tpred t = match t.nterm_node with
   | _ ->
       { t with nterm_node = NTbinop (t, Bsub, int_nconstant "1") }
 
-let make_and p1 p2 = match p1, p2 with
+let make_and p1 p2 = match p1.npred_node, p2.npred_node with
   | NPtrue, _ -> p2
   | _, NPtrue -> p1
-  | _ -> NPand (p1, p2)
+  | _ -> { p1 with npred_node = NPand (p1, p2) }
 
-let make_implies p1 = function
-  | NPtrue -> NPtrue
-  | p2 -> NPimplies (p1, p2)
+let dummy_pred p = { npred_node = p; npred_loc = Loc.dummy }
+let nprel (t1, r, t2) = dummy_pred (NPrel (t1, r, t2))
+let npand (p1, p2) = make_and p1 p2
+let npvalid t = dummy_pred (NPvalid t)
+let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
+let npfresh t = dummy_pred (NPfresh t)
+let nptrue = dummy_pred NPtrue
+let npapp (f, l) = dummy_pred (NPapp (f, l))
 
-let make_forall q = function
-  | NPtrue -> NPtrue
-  | p -> NPforall (q, p)
+let make_implies p1 p2 = match p2.npred_node with
+  | NPtrue -> { p1 with npred_node = NPtrue }
+  | _ -> { p1 with npred_node = NPimplies (p1, p2) }
+
+let make_forall q p = match p.npred_node with
+  | NPtrue -> { p with npred_node = NPtrue }
+  | _ -> { p with npred_node = NPforall (q, p) }
 
 let make_valid_range_from_0 t ts=
   if ts = Int64.one
   then
-    NPvalid t
+    npvalid t
   else
-    NPvalid_range (t, nzero, int_nconstant (Int64.to_string (Int64.pred ts)))
+    npvalid_range (t, nzero, int_nconstant (Int64.to_string (Int64.pred ts)))
 
 
 let fresh_index = 
@@ -102,8 +111,8 @@ let make_forall_range loc t b f =
 	nterm_loc = loc;
 	nterm_type = t.nterm_type }
     in
-    let ineq = NPand (NPrel (nzero, Le, vari),
-		      NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
+    let ineq = npand (nprel (nzero, Le, vari),
+		      nprel (vari, Lt, int_nconstant (Int64.to_string b))) in
     make_forall [c_int, i] (make_implies ineq (f ti vari))
 
 let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
@@ -120,8 +129,8 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	       make_and acc (valid_for tf))
 	    fl 
 	    (if valid_for_current then 
-	       if fresh then NPand(NPvalid t, NPfresh t) else NPvalid t 
-	     else NPtrue)
+	       if fresh then npand(npvalid t, npfresh t) else npvalid t 
+	     else nptrue)
       | TTIncomplete ->
 	  error loc ("`" ^ name ^ "' has incomplete type")
       | _ ->
@@ -138,7 +147,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	let valid_form =
 	  make_and
 	    vrange
-	    (if fresh then NPfresh t else NPtrue)
+	    (if fresh then npfresh t else nptrue)
 	in		   
 	begin match ty.Ctypes.ctype_node with
 	  | Tstruct n ->	      
@@ -151,7 +160,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 			(indirection loc ty t)))
 	end
     | _ -> 
-	NPtrue
+	nptrue
   in
   valid_for t
 
@@ -160,7 +169,7 @@ let not_alias loc x y =
   let ba t = { nterm_node = NTbase_addr t; 
 	       nterm_loc = loc;
 	       nterm_type = c_addr } in 
-  NPrel (ba x, Neq, ba y)
+  nprel (ba x, Neq, ba y)
 
 
 let var_to_term loc v =
@@ -211,14 +220,14 @@ let rec tab_struct mark loc v1 v2 s ty n n1 n2=
 	 if  compatible_type t.var_type v2.nterm_type 
 	 then make_and p (not_alias loc v2 (in_struct v1 t))
 	 else p)
-      NPtrue l
+      nptrue l
   else
   make_and (List.fold_left 
 	      (fun p t -> 
 		 if  compatible_type t.var_type v2.nterm_type 
 		 then make_and p (not_alias loc v2 (in_struct v1 t))
 		 else p)
-	      NPtrue l)
+	      nptrue l)
     (make_forall_range loc v2 s 
        (fun t i -> 
 	  local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
@@ -240,7 +249,7 @@ and local_separation  mark loc n1 v1 n2 v2 =
 	   then
 	     (not_alias loc v1 v2)
 	   else
-	     NPtrue)
+	     nptrue)
 	  (make_and 
 	     (make_forall_range loc v1 s1 
 		(fun t i -> local_separation mark loc (n1^"[i]") 
@@ -248,7 +257,7 @@ and local_separation  mark loc n1 v1 n2 v2 =
 	     (make_forall_range loc v2 s2  
 		(fun t i -> local_separation true loc n1 v1 (n2^"[j]")
 		     (indirection loc ty2 t))))
-     | _, _ -> NPtrue
+     | _, _ -> nptrue
 
     
 let separation loc v1 v2 =
@@ -268,14 +277,14 @@ let rec full_tab_struct mark loc v1 v2 s ty n n1 n2=
 	 if  full_compatible_type t.var_type v2.nterm_type 
 	 then make_and p (not_alias loc v2 (in_struct v1 t))
 	 else p)
-      NPtrue l
+      nptrue l
   else
   make_and (List.fold_left 
 	      (fun p t -> 
 		 if  full_compatible_type t.var_type v2.nterm_type 
 		 then make_and p (not_alias loc v2 (in_struct v1 t))
 		 else p)
-	      NPtrue l)
+	      nptrue l)
     (make_forall_range loc v2 s 
        (fun t i -> 
 	  full_local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
@@ -297,7 +306,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	   then
 	     (not_alias loc v1 v2)
 	   else
-	     NPtrue)
+	     nptrue)
 	  (make_and 
 	     (make_forall_range loc v1 s1 
 		(fun t i -> full_local_separation mark loc (n1^"[i]") 
@@ -310,7 +319,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	then
 	  (not_alias loc v1 v2)
 	else
-	  NPtrue
+	  nptrue
     | Tarray (ty2,Some s2) ,  Tpointer ty1
     | Tpointer ty1, Tarray (ty2,Some s2) ->
 	make_and
@@ -318,7 +327,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	   then
 	     (not_alias loc v1 v2)
 	   else
-	     NPtrue)
+	     nptrue)
 	  (make_forall_range loc v2 s2  
 	     (fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
 		(indirection loc ty2 t)))
@@ -333,7 +342,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	    (fun p t -> 
 	       make_and p (full_local_separation mark loc n2 v2 n1 
 			     (in_struct v1 t)))
-	    NPtrue l)
+	    nptrue l)
     |  Tpointer ty, Tstruct n ->
 	 let l = begin
 	   match  tag_type_definition n with
@@ -345,7 +354,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	    (fun p t -> 
 	       make_and p (full_local_separation mark loc n1 v1 n2 
 			     (in_struct v2 t)))
-	    NPtrue l)
+	    nptrue l)
     | Tstruct n1, Tstruct n2 ->
 	let l2 = begin
 	   match  tag_type_definition n2 with
@@ -367,8 +376,8 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 				    (in_struct v1 t1) 
 				    n2  (in_struct v2 t2)))
 		  p1 l2))
-		 NPtrue l1)
-    | _, _ -> NPtrue
+		 nptrue l1)
+    | _, _ -> nptrue
 
 let fullseparation loc v1 v2 =
   full_local_separation false loc v1.var_name (var_to_term loc v1) 
@@ -564,8 +573,11 @@ let nvariant v =
   match v with (t, sopt) -> (term t,sopt)
 
 	
-let rec predicate p = 
-  match p with
+let rec predicate p =
+  { npred_node = predicate_node p.pred_node;
+    npred_loc = p.pred_loc }
+
+and predicate_node = function
     | Pfalse -> NPfalse
     | Ptrue -> NPtrue 
     | Papp (info,l) -> NPapp (info, List.map term l)
@@ -600,7 +612,7 @@ let rec predicate p =
 		t 
 	    | _ -> assert false
 	in
-	separation loc t1 t2     
+	(separation loc t1 t2).npred_node
     | Pfullseparated (t1,t2) ->
 	let loc = t1.term_loc in
 	let t1 =
@@ -617,7 +629,7 @@ let rec predicate p =
 		t 
 	    | _ -> assert false
 	in
-	fullseparation loc t1 t2 
+	(fullseparation loc t1 t2).npred_node
     | Pvalid (t) -> NPvalid (term t) 
     | Pvalid_index (t1 , t2) -> NPvalid_index (term t1 , term t2) 
     | Pvalid_range (t1,t2,t3) -> NPvalid_range (term t1, term t2 , term t3)
@@ -661,12 +673,12 @@ let ilist = function
 
 let variant v = let (x,y) = v in ((term x), y)
 
-let spec ?(add=NPtrue) s = 
+let spec ?(add=nptrue) s = 
   let pred = match s.requires with 
     | None -> add
-    | Some pred -> NPand (add,(predicate pred))
+    | Some pred -> npand (add,(predicate pred))
   in
-  let pred = if pred = NPtrue then None else Some pred in
+  let pred = if pred = nptrue then None else Some pred in
   { 
     requires = pred;
     assigns  = noption (List.map (fun x -> nlocation x)) s.assigns;
@@ -1053,12 +1065,12 @@ let global_decl e1 =
 	  (fun acc y ->
 	     let x = y.var_type in
 	     match x.Ctypes.ctype_node with
-	       | Tstruct _ | Tunion _ -> NPand (NPvalid 
+	       | Tstruct _ | Tunion _ -> npand (npvalid 
 						  {nterm_node = NTvar y;
 						   nterm_type = x;
 						   nterm_loc = Loc.dummy},acc)
 	       | _ -> acc) 
-	  NPtrue f.args in
+	  nptrue f.args in
       set_var_type (Fun_info f) (f.fun_type);
       List.iter (fun arg -> 
 		   set_var_type (Var_info arg) (arg.var_type)) f.args;

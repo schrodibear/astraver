@@ -3,12 +3,12 @@
 
 Require Export call_spec_why.
 
-(* Why obligation from file "why/call.why", characters 153-199 *)
+(* Why obligation from file "why/call.why", characters 202-248 *)
 Lemma f_impl_po_1 : 
   forall (y: Z),
   forall (ddd: Z),
   forall (z: Z),
-  forall (Pre1: y = ddd),
+  forall (Pre1: (* File \"call.c\", line 11, characters 14-22 *) y = ddd),
   forall (u: Z),
   forall (Post4: u = z),
   forall (caduceus: Z),
@@ -17,12 +17,12 @@ Lemma f_impl_po_1 :
   forall (Post1: u1 = (caduceus + 1)),
   forall (result0: Z),
   forall (Post2: result0 = caduceus),
-  result0 = z.
+  (* File \"call.c\", line 11, characters 48-60 *) result0 = z.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/call.why", characters 344-378 *)
+(* Why obligation from file "why/call.why", characters 442-476 *)
 Lemma main_impl_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),
@@ -30,7 +30,10 @@ Lemma main_impl_po_1 :
   forall (Post6: x1 = (x0 + 1)),
   forall (result1: Z),
   forall (Post7: result1 = x1),
-  (forall (result:Z), (result = 2 -> result = 2)) /\ 1 = result1.
+  (forall (result:Z),
+   ((* File \"call.c\", line 11, characters 48-60 *) result = 2 ->
+    (* File \"call.c\", line 18, characters 13-19 *) result = 2)) /\
+  (* File \"call.c\", line 11, characters 14-22 *) 1 = result1.
 Proof.
 intuition.
 Save.

@@ -17,10 +17,12 @@ let split_decl e ((invs,inits) as acc) =
 
 let split_decls d = List.fold_right split_decl d ([],[])
 
+let dummy_pred p = { pred_node = p; pred_loc = Loc.dummy }
+
 let rec combine_inv = function
-  | [] -> Ptrue
+  | [] -> dummy_pred Ptrue
   | a::[] -> a
-  | a::l -> Pand (a, combine_inv l)
+  | a::l -> { a with pred_node = Pand (a, combine_inv l) }
 
 
 let noattr loc ty e =

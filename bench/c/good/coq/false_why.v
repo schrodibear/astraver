@@ -61,7 +61,9 @@ Lemma false1_impl_po_3 :
      (intP = (upd intP0 result 1) ->
       (forall (result:pointer),
        (result = (shift y_0 5) ->
-        (forall (intP0:((memory) Z)), (intP0 = (upd intP result 2) -> False)) /\
+        (forall (intP0:((memory) Z)),
+         (intP0 = (upd intP result 2) ->
+          (* File \"false.c\", line 15, characters 13-19 *) False)) /\
         (valid alloc result))))) /\
     (valid alloc result))).
 Proof.

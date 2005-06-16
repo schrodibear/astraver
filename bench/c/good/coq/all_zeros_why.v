@@ -3,42 +3,46 @@
 
 Require Export all_zeros_spec_why.
 
-(* Why obligation from file "why/all_zeros.why", characters 489-573 *)
+(* Why obligation from file "why/all_zeros.why", characters 612-696 *)
 Lemma all_zeros_0_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (* File \"all_zeros.c\", line 24, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (k1: Z),
   forall (Post2: k1 = 0),
   forall (Variant1: Z),
   forall (k2: Z),
   forall (Pre5: Variant1 = (n - k2)),
-  forall (Pre4: (0 <= k2 /\ k2 <= n) /\
+  forall (Pre4: (* File \"all_zeros.c\", line 28, characters 17-64 *) ((0 <=
+                k2 /\ k2 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0))),
+                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0)))),
   forall (Test4: k2 < n),
   (valid alloc (shift t k2)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", characters 588-607 *)
+(* Why obligation from file "why/all_zeros.why", characters 711-730 *)
 Lemma all_zeros_0_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (* File \"all_zeros.c\", line 24, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (k1: Z),
   forall (Post2: k1 = 0),
   forall (Variant1: Z),
   forall (k2: Z),
   forall (Pre5: Variant1 = (n - k2)),
-  forall (Pre4: (0 <= k2 /\ k2 <= n) /\
+  forall (Pre4: (* File \"all_zeros.c\", line 28, characters 17-64 *) ((0 <=
+                k2 /\ k2 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0))),
+                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0)))),
   forall (Test4: k2 < n),
   forall (Pre3: (valid alloc (shift t k2))),
   forall (Test3: (acc intP (shift t k2)) <> 0),
@@ -46,35 +50,39 @@ Lemma all_zeros_0_impl_po_2 :
   forall (Post5: result2 = 0),
   (forall (result:Z),
    (result = result2 ->
-    (result <> 0 <->
-     (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) = 0))))).
+    (* File \"all_zeros.c\", line 25, characters 13-57 *)
+    ((result <> 0 <->
+      (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) = 0)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", characters 622-622 *)
+(* Why obligation from file "why/all_zeros.why", characters 745-745 *)
 Lemma all_zeros_0_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (* File \"all_zeros.c\", line 24, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (k1: Z),
   forall (Post2: k1 = 0),
   forall (Variant1: Z),
   forall (k2: Z),
   forall (Pre5: Variant1 = (n - k2)),
-  forall (Pre4: (0 <= k2 /\ k2 <= n) /\
+  forall (Pre4: (* File \"all_zeros.c\", line 28, characters 17-64 *) ((0 <=
+                k2 /\ k2 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0))),
+                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0)))),
   forall (Test4: k2 < n),
   forall (Pre3: (valid alloc (shift t k2))),
   forall (Test2: (acc intP (shift t k2)) = 0),
   forall (result2: unit),
   forall (Post4: result2 = tt),
   (forall (k:Z),
-   (k = (k2 + 1) -> ((0 <= k /\ k <= n) /\
-    (forall (i:Z), (0 <= i /\ i < k -> (acc intP (shift t i)) = 0))) /\
+   (k = (k2 + 1) ->
+    (* File \"all_zeros.c\", line 28, characters 17-64 *) ((0 <= k /\ k <=
+    n) /\ (forall (i:Z), (0 <= i /\ i < k -> (acc intP (shift t i)) = 0))) /\
     (Zwf 0 (n - k) (n - k2)))).
 Proof.
 intuition; subst.
@@ -82,62 +90,68 @@ assert (i=k2 \/ i<k2). omega. intuition.
 subst; intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", characters 221-665 *)
+(* Why obligation from file "why/all_zeros.why", characters 279-788 *)
 Lemma all_zeros_0_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (* File \"all_zeros.c\", line 24, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (k1: Z),
   forall (Post2: k1 = 0),
   forall (Variant1: Z),
   forall (k2: Z),
   forall (Pre5: Variant1 = (n - k2)),
-  forall (Pre4: (0 <= k2 /\ k2 <= n) /\
+  forall (Pre4: (* File \"all_zeros.c\", line 28, characters 17-64 *) ((0 <=
+                k2 /\ k2 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0))),
+                 (0 <= i /\ i < k2 -> (acc intP (shift t i)) = 0)))),
   forall (Test1: k2 >= n),
   (forall (result:Z),
    (result = 1 ->
-    (result <> 0 <->
-     (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) = 0))))).
+    (* File \"all_zeros.c\", line 25, characters 13-57 *)
+    ((result <> 0 <->
+      (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) = 0)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", characters 276-443 *)
+(* Why obligation from file "why/all_zeros.why", characters 334-566 *)
 Lemma all_zeros_0_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (* File \"all_zeros.c\", line 24, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (k1: Z),
   forall (Post2: k1 = 0),
-  (0 <= k1 /\ k1 <= n) /\
-  (forall (i:Z), (0 <= i /\ i < k1 -> (acc intP (shift t i)) = 0)).
+  (* File \"all_zeros.c\", line 28, characters 17-64 *) ((0 <= k1 /\ k1 <=
+  n) /\ (forall (i:Z), (0 <= i /\ i < k1 -> (acc intP (shift t i)) = 0))).
 Proof.
 intuition.
 unfold valid_range in Pre6; intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", characters 1086-1226 *)
+(* Why obligation from file "why/all_zeros.why", characters 1324-1464 *)
 Lemma all_zeros_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre7: (valid_range alloc t 0 n)),
+  forall (Pre7: (* File \"all_zeros.c\", line 4, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (mutable_n: Z),
   forall (Post6: mutable_n = n),
   forall (Variant1: Z),
   forall (mutable_n1: Z),
   forall (Pre4: Variant1 = mutable_n1),
-  forall (Pre3: mutable_n1 <= mutable_n /\
+  forall (Pre3: (* File \"all_zeros.c\", line 7, characters 17-71 *)
+                (mutable_n1 <= mutable_n /\
                 (forall (i:Z),
                  (mutable_n1 <= i /\ i < mutable_n ->
-                  (acc intP (shift t i)) = 0))),
+                  (acc intP (shift t i)) = 0)))),
   forall (Test2: true = true),
   forall (mutable_n2: Z),
   forall (Post2: mutable_n2 = (mutable_n1 - 1)),
@@ -145,15 +159,18 @@ Lemma all_zeros_impl_po_1 :
   forall (Post3: result1 = mutable_n2),
   (((result1 >= 0 /\ (acc intP (shift t mutable_n2)) = 0 ->
      (forall (result:unit),
-      (result = tt -> (mutable_n2 <= mutable_n /\
+      (result = tt ->
+       (* File \"all_zeros.c\", line 7, characters 17-71 *) (mutable_n2 <=
+       mutable_n /\
        (forall (i:Z),
         (mutable_n2 <= i /\ i < mutable_n -> (acc intP (shift t i)) = 0))) /\
        (Zwf 0 mutable_n2 mutable_n1))))) /\
   ((result1 < 0 \/ result1 >= 0 /\ (acc intP (shift t mutable_n2)) <> 0 ->
     (forall (result:Z),
      (mutable_n2 < 0 /\ result = 1 \/ mutable_n2 >= 0 /\ result = 0 ->
-      (result <> 0 <->
-       (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) = 0)))))))) /\
+      (* File \"all_zeros.c\", line 5, characters 13-57 *)
+      ((result <> 0 <->
+        (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) = 0))))))))) /\
   ((result1 >= 0 -> (valid alloc (shift t mutable_n2)) /\
     (valid alloc (shift t mutable_n2)))).
 Proof.
@@ -162,18 +179,20 @@ assert (i=mutable_n1-1 \/ mutable_n1<=i). omega. intuition.
 subst; intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", characters 1488-1666 *)
+(* Why obligation from file "why/all_zeros.why", characters 1726-1964 *)
 Lemma all_zeros_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre7: (valid_range alloc t 0 n)),
+  forall (Pre7: (* File \"all_zeros.c\", line 4, characters 14-33 *)
+                (valid_range alloc t 0 n)),
   forall (mutable_n: Z),
   forall (Post6: mutable_n = n),
-  mutable_n <= mutable_n /\
+  (* File \"all_zeros.c\", line 7, characters 17-71 *) (mutable_n <=
+  mutable_n /\
   (forall (i:Z),
-   (mutable_n <= i /\ i < mutable_n -> (acc intP (shift t i)) = 0)).
+   (mutable_n <= i /\ i < mutable_n -> (acc intP (shift t i)) = 0))).
 Proof.
 intuition.
 Save.

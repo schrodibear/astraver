@@ -4,13 +4,14 @@
 Require Export assigns_spec_why.
 
 
-(* Why obligation from file "why/assigns.why", characters 309-418 *)
+(* Why obligation from file "why/assigns.why", characters 364-473 *)
 Lemma erase_impl_po_1 : 
   forall (p: pointer),
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre7: size >= 0 /\ (valid_range alloc p 0 (size - 1))),
+  forall (Pre7: (* File \"assigns.c\", line 4, characters 14-51 *) (size >=
+                0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (mutable_p: pointer),
   forall (Post10: mutable_p = p),
   forall (mutable_size: Z),
@@ -22,9 +23,10 @@ Lemma erase_impl_po_1 :
   forall (Pre6: Variant1 = mutable_size1),
   forall (Pre5: (not_assigns alloc intP intP0
                  (pset_range (pset_singleton mutable_p) 0 (mutable_size - 1))) /\
-                (0 <= mutable_size1 /\ mutable_size1 <= mutable_size) /\
+                (* File \"assigns.c\", line 8, characters 7-62 *) ((0 <=
+                mutable_size1 /\ mutable_size1 <= mutable_size) /\
                 mutable_p1 = (shift (shift mutable_p mutable_size)
-                              (Zopp mutable_size1))),
+                              (Zopp mutable_size1)))),
   forall (Test2: true = true),
   forall (caduceus: Z),
   forall (Post4: caduceus = mutable_size1),
@@ -41,9 +43,10 @@ Lemma erase_impl_po_1 :
          (mutable_p0 = (shift mutable_p1 1) ->
           ((not_assigns alloc intP intP1
             (pset_range (pset_singleton mutable_p) 0 (mutable_size - 1))) /\
-          (0 <= mutable_size2 /\ mutable_size2 <= mutable_size) /\
+          (* File \"assigns.c\", line 8, characters 7-62 *) ((0 <=
+          mutable_size2 /\ mutable_size2 <= mutable_size) /\
           mutable_p0 = (shift (shift mutable_p mutable_size)
-                        (Zopp mutable_size2))) /\
+                        (Zopp mutable_size2)))) /\
           (Zwf 0 mutable_size2 mutable_size1))))) /\
       (valid alloc result))))) /\
   ((result1 = 0 ->
@@ -62,21 +65,23 @@ autorewrite with caduceus.
 replace  (- (mutable_size1 - 1)) with (-mutable_size1+1); auto with *.
 Save.
 
-(* Why obligation from file "why/assigns.why", characters 484-854 *)
+(* Why obligation from file "why/assigns.why", characters 539-970 *)
 Lemma erase_impl_po_2 : 
   forall (p: pointer),
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre7: size >= 0 /\ (valid_range alloc p 0 (size - 1))),
+  forall (Pre7: (* File \"assigns.c\", line 4, characters 14-51 *) (size >=
+                0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (mutable_p: pointer),
   forall (Post10: mutable_p = p),
   forall (mutable_size: Z),
   forall (Post9: mutable_size = size),
   (not_assigns alloc intP intP
    (pset_range (pset_singleton mutable_p) 0 (mutable_size - 1))) /\
-  (0 <= mutable_size /\ mutable_size <= mutable_size) /\
-  mutable_p = (shift (shift mutable_p mutable_size) (Zopp mutable_size)).
+  (* File \"assigns.c\", line 8, characters 7-62 *) ((0 <= mutable_size /\
+  mutable_size <= mutable_size) /\
+  mutable_p = (shift (shift mutable_p mutable_size) (Zopp mutable_size))).
 Proof.
 intuition.
 subst; autorewrite with caduceus.

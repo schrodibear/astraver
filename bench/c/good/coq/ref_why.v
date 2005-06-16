@@ -10,10 +10,9 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ref.why", characters 110-151 *)
+(* Why obligation from file "why/ref.why", characters 118-132 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
   forall (Pre7: 1 >= 1),
   forall (alloc0: alloc_table),
   forall (i: pointer),
@@ -21,14 +20,7 @@ Lemma f_impl_po_2 :
                  (block_length alloc0 i) = 1 /\
                  (valid_range alloc0 i 0 (1 - 1)) /\ (fresh alloc i) /\
                  (on_stack alloc0 i) /\ (alloc_stack i alloc alloc0)),
-  forall (Pre6: (valid alloc0 i)),
-  forall (intP0: ((memory) Z)),
-  forall (Post9: (acc intP0 i) = 1 /\
-                 (not_assigns alloc0 intP intP0 (pset_singleton i))),
-  forall (Pre5: (valid alloc0 i)),
-  forall (result0: Z),
-  forall (Post2: result0 = (acc intP0 i)),
-  result0 = 1 /\ (not_assigns alloc intP intP0 pset_empty).
+  (* File \"ref.c\", line 4, characters 14-23 *) (valid alloc0 i).
 Proof.
 intuition.
 subst; auto.
@@ -43,16 +35,58 @@ generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
 tauto.
 Save.
 
-(* Why obligation from file "why/ref.why", characters 278-432 *)
+(* Why obligation from file "why/ref.why", characters 110-151 *)
+Lemma f_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre7: 1 >= 1),
+  forall (alloc0: alloc_table),
+  forall (i: pointer),
+  forall (Post5: (valid alloc0 i) /\ (offset i) = 0 /\
+                 (block_length alloc0 i) = 1 /\
+                 (valid_range alloc0 i 0 (1 - 1)) /\ (fresh alloc i) /\
+                 (on_stack alloc0 i) /\ (alloc_stack i alloc alloc0)),
+  forall (Pre6: (* File \"ref.c\", line 4, characters 14-23 *)
+                (valid alloc0 i)),
+  forall (intP0: ((memory) Z)),
+  forall (Post9: (* File \"ref.c\", line 6, characters 13-20 *)
+                 (acc intP0 i) = 1 /\
+                 (not_assigns alloc0 intP intP0 (pset_singleton i))),
+  forall (Pre5: (valid alloc0 i)),
+  forall (result0: Z),
+  forall (Post2: result0 = (acc intP0 i)),
+  (* File \"ref.c\", line 13, characters 13-25 *) result0 = 1 /\
+  (not_assigns alloc intP intP0 pset_empty).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/ref.why", characters 419-437 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
+  forall (Pre4: (* File \"ref.c\", line 4, characters 14-23 *)
+                (valid alloc p)),
+  (valid alloc p).
+Proof.
+intuition; subst; caduceus.
+Save.
+
+(* Why obligation from file "why/ref.why", characters 330-580 *)
+Lemma g_impl_po_2 : 
+  forall (p: pointer),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
+  forall (Pre4: (* File \"ref.c\", line 4, characters 14-23 *)
+                (valid alloc p)),
   forall (Pre3: (valid alloc p)),
   forall (intP0: ((memory) Z)),
   forall (Post3: intP0 = (upd intP p 1)),
-  (acc intP0 p) = 1 /\ (not_assigns alloc intP intP0 (pset_singleton p)).
+  (* File \"ref.c\", line 6, characters 13-20 *) (acc intP0 p) = 1 /\
+  (not_assigns alloc intP intP0 (pset_singleton p)).
 Proof.
-intuition; subst; caduceus.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

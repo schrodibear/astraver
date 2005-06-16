@@ -31,14 +31,14 @@ Lemma f_impl_po_2 :
   forall (Pre7: (valid alloc0 a)),
   forall (result1: Z),
   forall (Post5: result1 = (acc y0 a)),
-  result1 = 2.
+  (* File \"struct3.c\", line 4, characters 13-25 *) result1 = 2.
 Proof.
 intuition; subst; auto;
 caduceus;
 red;auto.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 314-333 *)
+(* Why obligation from file "why/struct3.why", characters 365-384 *)
 Lemma g_impl_po_1 : 
   forall (s: ((memory) pointer)),
   forall (Pre18: (valid1 s) /\ (separation2 s s)),
@@ -47,7 +47,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 422-446 *)
+(* Why obligation from file "why/struct3.why", characters 473-497 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: ((memory) pointer)),
@@ -71,7 +71,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 389-446 *)
+(* Why obligation from file "why/struct3.why", characters 440-497 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (s: ((memory) pointer)),
@@ -99,7 +99,9 @@ Lemma g_impl_po_3 :
    (result = (acc s u) ->
     (forall (y0:((memory) Z)),
      (y0 = (upd y result 3) ->
-      (((forall (result:Z), (result = (acc y0 (acc s u)) -> result = 3)) /\
+      (((forall (result:Z),
+         (result = (acc y0 (acc s u)) ->
+          (* File \"struct3.c\", line 13, characters 13-25 *) result = 3)) /\
       (valid alloc0 u)) /\ (valid alloc0 (acc s u))) /\
       (valid alloc0 (acc s u)))) /\
     (valid alloc0 result))) /\

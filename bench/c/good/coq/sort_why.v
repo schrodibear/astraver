@@ -43,10 +43,14 @@ Lemma sort4_1_impl_po_1 :
                               (forall (b:Z),
                                (b = c ->
                                 (forall (c:Z),
-                                 (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                                 (c = tmp ->
+                                  (* File \"sort.c\", line 13, characters 14-30 *)
+                                  ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                           ((b <= c ->
                             (forall (result:unit),
-                             (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                             (result = tt ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))))))) /\
                   ((b1 <= d ->
                     (forall (result:unit),
                      (result = tt ->
@@ -56,10 +60,14 @@ Lemma sort4_1_impl_po_1 :
                           (forall (b:Z),
                            (b = c ->
                             (forall (c:Z),
-                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                             (c = tmp ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                       ((b1 <= c ->
                         (forall (result:unit),
-                         (result = tt -> (a <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))) /\
+                         (result = tt ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b1 /\ b1 <= c) /\ c <= d))))))))))))))))) /\
           ((a1 <= c ->
             (forall (result:unit),
              (result = tt ->
@@ -76,10 +84,14 @@ Lemma sort4_1_impl_po_1 :
                           (forall (b:Z),
                            (b = c ->
                             (forall (c:Z),
-                             (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                             (c = tmp ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a1 <= b /\ b <= c) /\ c <= d))))))))) /\
                       ((b <= c ->
                         (forall (result:unit),
-                         (result = tt -> (a1 <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                         (result = tt ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a1 <= b /\ b <= c) /\ c <= d))))))))))))) /\
               ((b1 <= d ->
                 (forall (result:unit),
                  (result = tt ->
@@ -89,10 +101,14 @@ Lemma sort4_1_impl_po_1 :
                       (forall (b:Z),
                        (b = c ->
                         (forall (c:Z),
-                         (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                         (c = tmp ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a1 <= b /\ b <= c) /\ c <= d))))))))) /\
                   ((b1 <= c ->
                     (forall (result:unit),
-                     (result = tt -> (a1 <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 13, characters 14-30 *)
+                      ((a1 <= b1 /\ b1 <= c) /\ c <= d))))))))))))))))))))) /\
   ((c <= d ->
     (forall (result:unit),
      (result = tt ->
@@ -116,10 +132,14 @@ Lemma sort4_1_impl_po_1 :
                           (forall (b:Z),
                            (b = c ->
                             (forall (c:Z),
-                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                             (c = tmp ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                       ((b <= c ->
                         (forall (result:unit),
-                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                         (result = tt ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))))))) /\
               ((b1 <= d ->
                 (forall (result:unit),
                  (result = tt ->
@@ -129,10 +149,14 @@ Lemma sort4_1_impl_po_1 :
                       (forall (b:Z),
                        (b = c ->
                         (forall (c:Z),
-                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                         (c = tmp ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                   ((b1 <= c ->
                     (forall (result:unit),
-                     (result = tt -> (a <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 13, characters 14-30 *) ((a <=
+                      b1 /\ b1 <= c) /\ c <= d))))))))))))))))) /\
       ((a1 <= c ->
         (forall (result:unit),
          (result = tt ->
@@ -149,10 +173,14 @@ Lemma sort4_1_impl_po_1 :
                       (forall (b:Z),
                        (b = c ->
                         (forall (c:Z),
-                         (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                         (c = tmp ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a1 <= b /\ b <= c) /\ c <= d))))))))) /\
                   ((b <= c ->
                     (forall (result:unit),
-                     (result = tt -> (a1 <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 13, characters 14-30 *)
+                      ((a1 <= b /\ b <= c) /\ c <= d))))))))))))) /\
           ((b1 <= d ->
             (forall (result:unit),
              (result = tt ->
@@ -161,10 +189,15 @@ Lemma sort4_1_impl_po_1 :
                  (tmp = b1 ->
                   (forall (b:Z),
                    (b = c ->
-                    (forall (c:Z), (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                    (forall (c:Z),
+                     (c = tmp ->
+                      (* File \"sort.c\", line 13, characters 14-30 *)
+                      ((a1 <= b /\ b <= c) /\ c <= d))))))))) /\
               ((b1 <= c ->
                 (forall (result:unit),
-                 (result = tt -> (a1 <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))).
+                 (result = tt ->
+                  (* File \"sort.c\", line 13, characters 14-30 *) ((a1 <=
+                  b1 /\ b1 <= c) /\ c <= d))))))))))))))))).
 Proof.
 intuition.
 Save.
@@ -205,10 +238,14 @@ Lemma sort4_1_impl_po_2 :
                               (forall (b:Z),
                                (b = c ->
                                 (forall (c:Z),
-                                 (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                                 (c = tmp ->
+                                  (* File \"sort.c\", line 13, characters 14-30 *)
+                                  ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                           ((b <= c ->
                             (forall (result:unit),
-                             (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                             (result = tt ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))))))) /\
                   ((b <= d ->
                     (forall (result:unit),
                      (result = tt ->
@@ -218,10 +255,14 @@ Lemma sort4_1_impl_po_2 :
                           (forall (b:Z),
                            (b = c ->
                             (forall (c:Z),
-                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                             (c = tmp ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                       ((b <= c ->
                         (forall (result:unit),
-                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))) /\
+                         (result = tt ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))))))))))) /\
           ((a <= c ->
             (forall (result:unit),
              (result = tt ->
@@ -238,10 +279,14 @@ Lemma sort4_1_impl_po_2 :
                           (forall (b:Z),
                            (b = c ->
                             (forall (c:Z),
-                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                             (c = tmp ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                       ((b <= c ->
                         (forall (result:unit),
-                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                         (result = tt ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))))))) /\
               ((b <= d ->
                 (forall (result:unit),
                  (result = tt ->
@@ -251,10 +296,14 @@ Lemma sort4_1_impl_po_2 :
                       (forall (b:Z),
                        (b = c ->
                         (forall (c:Z),
-                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                         (c = tmp ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                   ((b <= c ->
                     (forall (result:unit),
-                     (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 13, characters 14-30 *) ((a <=
+                      b /\ b <= c) /\ c <= d))))))))))))))))))))) /\
   ((c <= d ->
     (forall (result:unit),
      (result = tt ->
@@ -278,10 +327,14 @@ Lemma sort4_1_impl_po_2 :
                           (forall (b:Z),
                            (b = c ->
                             (forall (c:Z),
-                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                             (c = tmp ->
+                              (* File \"sort.c\", line 13, characters 14-30 *)
+                              ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                       ((b <= c ->
                         (forall (result:unit),
-                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                         (result = tt ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))))))) /\
               ((b <= d ->
                 (forall (result:unit),
                  (result = tt ->
@@ -291,10 +344,14 @@ Lemma sort4_1_impl_po_2 :
                       (forall (b:Z),
                        (b = c ->
                         (forall (c:Z),
-                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                         (c = tmp ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                   ((b <= c ->
                     (forall (result:unit),
-                     (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 13, characters 14-30 *) ((a <=
+                      b /\ b <= c) /\ c <= d))))))))))))))))) /\
       ((a <= c ->
         (forall (result:unit),
          (result = tt ->
@@ -311,10 +368,14 @@ Lemma sort4_1_impl_po_2 :
                       (forall (b:Z),
                        (b = c ->
                         (forall (c:Z),
-                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                         (c = tmp ->
+                          (* File \"sort.c\", line 13, characters 14-30 *)
+                          ((a <= b /\ b <= c) /\ c <= d))))))))) /\
                   ((b <= c ->
                     (forall (result:unit),
-                     (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 13, characters 14-30 *) ((a <=
+                      b /\ b <= c) /\ c <= d))))))))))))) /\
           ((b <= d ->
             (forall (result:unit),
              (result = tt ->
@@ -323,48 +384,55 @@ Lemma sort4_1_impl_po_2 :
                  (tmp = b ->
                   (forall (b:Z),
                    (b = c ->
-                    (forall (c:Z), (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                    (forall (c:Z),
+                     (c = tmp ->
+                      (* File \"sort.c\", line 13, characters 14-30 *) ((a <=
+                      b /\ b <= c) /\ c <= d))))))))) /\
               ((b <= c ->
                 (forall (result:unit),
-                 (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))).
+                 (result = tt ->
+                  (* File \"sort.c\", line 13, characters 14-30 *) ((a <=
+                  b /\ b <= c) /\ c <= d))))))))))))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1526-1609 *)
+(* Why obligation from file "why/sort.why", characters 1659-1742 *)
 Lemma sort4_3_impl_po_1 : 
   forall (a: pointer),
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
   forall (alloc: alloc_table),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   (valid alloc a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1526-1609 *)
+(* Why obligation from file "why/sort.why", characters 1659-1742 *)
 Lemma sort4_3_impl_po_2 : 
   forall (a: pointer),
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
   forall (alloc: alloc_table),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (Pre11: (valid alloc a)),
   (valid alloc b).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1684-1716 *)
+(* Why obligation from file "why/sort.why", characters 1817-1849 *)
 Lemma sort4_3_impl_po_3 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -372,10 +440,11 @@ Lemma sort4_3_impl_po_3 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (Pre11: (valid alloc a)),
   forall (Pre12: (valid alloc b)),
   forall (Test2: (acc intP a) > (acc intP b)),
@@ -389,6 +458,7 @@ Lemma sort4_3_impl_po_3 :
   forall (Post54: intP0 = (upd intP a aux_2)),
   (forall (intP1:((memory) Z)),
    (intP1 = (upd intP0 b tmp1) ->
+    (* File \"sort.c\", line 58, characters 33-69 *)
     (swap_ord (acc intP1 a) (acc intP1 b) (acc intP a) (acc intP b)) /\
     (not_assigns alloc intP intP1
      (pset_union (pset_singleton b) (pset_singleton a))))) /\
@@ -409,7 +479,7 @@ generalize (pset_singleton_elim _ _ H11).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1778-1778 *)
+(* Why obligation from file "why/sort.why", characters 1911-1911 *)
 Lemma sort4_3_impl_po_4 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -417,15 +487,17 @@ Lemma sort4_3_impl_po_4 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (Pre11: (valid alloc a)),
   forall (Pre12: (valid alloc b)),
   forall (Test1: (acc intP a) <= (acc intP b)),
   forall (result0: unit),
   forall (Post1: result0 = tt),
+  (* File \"sort.c\", line 58, characters 33-69 *)
   (swap_ord (acc intP a) (acc intP b) (acc intP a) (acc intP b)) /\
   (not_assigns alloc intP intP
    (pset_union (pset_singleton b) (pset_singleton a))).
@@ -434,7 +506,7 @@ intuition.
 red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1999-2081 *)
+(* Why obligation from file "why/sort.why", characters 2191-2273 *)
 Lemma sort4_3_impl_po_5 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -442,12 +514,14 @@ Lemma sort4_3_impl_po_5 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
@@ -457,7 +531,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1999-2081 *)
+(* Why obligation from file "why/sort.why", characters 2191-2273 *)
 Lemma sort4_3_impl_po_6 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -465,12 +539,14 @@ Lemma sort4_3_impl_po_6 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
@@ -480,7 +556,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2152-2184 *)
+(* Why obligation from file "why/sort.why", characters 2344-2376 *)
 Lemma sort4_3_impl_po_7 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -488,12 +564,14 @@ Lemma sort4_3_impl_po_7 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
@@ -510,6 +588,7 @@ Lemma sort4_3_impl_po_7 :
   forall (Post62: intP1 = (upd intP0 c aux_4)),
   (forall (intP:((memory) Z)),
    (intP = (upd intP1 d tmp2) ->
+    (* File \"sort.c\", line 60, characters 33-69 *)
     (swap_ord (acc intP c) (acc intP d) (acc intP0 c) (acc intP0 d)) /\
     (not_assigns alloc intP0 intP
      (pset_union (pset_singleton d) (pset_singleton c))))) /\
@@ -530,7 +609,7 @@ generalize (pset_singleton_elim _ _ H13).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2243-2243 *)
+(* Why obligation from file "why/sort.why", characters 2435-2435 *)
 Lemma sort4_3_impl_po_8 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -538,12 +617,14 @@ Lemma sort4_3_impl_po_8 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
@@ -552,6 +633,7 @@ Lemma sort4_3_impl_po_8 :
   forall (Test3: (acc intP0 c) <= (acc intP0 d)),
   forall (result1: unit),
   forall (Post9: result1 = tt),
+  (* File \"sort.c\", line 60, characters 33-69 *)
   (swap_ord (acc intP0 c) (acc intP0 d) (acc intP0 c) (acc intP0 d)) /\
   (not_assigns alloc intP0 intP0
    (pset_union (pset_singleton d) (pset_singleton c))).
@@ -559,7 +641,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2461-2543 *)
+(* Why obligation from file "why/sort.why", characters 2711-2793 *)
 Lemma sort4_3_impl_po_9 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -567,17 +649,20 @@ Lemma sort4_3_impl_po_9 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
@@ -586,7 +671,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2461-2543 *)
+(* Why obligation from file "why/sort.why", characters 2711-2793 *)
 Lemma sort4_3_impl_po_10 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -594,17 +679,20 @@ Lemma sort4_3_impl_po_10 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
@@ -614,7 +702,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2614-2646 *)
+(* Why obligation from file "why/sort.why", characters 2864-2896 *)
 Lemma sort4_3_impl_po_11 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -622,17 +710,20 @@ Lemma sort4_3_impl_po_11 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
@@ -649,6 +740,7 @@ Lemma sort4_3_impl_po_11 :
   forall (Post70: intP2 = (upd intP1 a aux_6)),
   (forall (intP:((memory) Z)),
    (intP = (upd intP2 c tmp3) ->
+    (* File \"sort.c\", line 62, characters 33-69 *)
     (swap_ord (acc intP a) (acc intP c) (acc intP1 a) (acc intP1 c)) /\
     (not_assigns alloc intP1 intP
      (pset_union (pset_singleton c) (pset_singleton a))))) /\
@@ -669,7 +761,7 @@ generalize (pset_singleton_elim _ _ H15).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2705-2705 *)
+(* Why obligation from file "why/sort.why", characters 2955-2955 *)
 Lemma sort4_3_impl_po_12 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -677,17 +769,20 @@ Lemma sort4_3_impl_po_12 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
@@ -696,6 +791,7 @@ Lemma sort4_3_impl_po_12 :
   forall (Test5: (acc intP1 a) <= (acc intP1 c)),
   forall (result2: unit),
   forall (Post17: result2 = tt),
+  (* File \"sort.c\", line 62, characters 33-69 *)
   (swap_ord (acc intP1 a) (acc intP1 c) (acc intP1 a) (acc intP1 c)) /\
   (not_assigns alloc intP1 intP1
    (pset_union (pset_singleton c) (pset_singleton a))).
@@ -703,7 +799,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2923-3005 *)
+(* Why obligation from file "why/sort.why", characters 3231-3313 *)
 Lemma sort4_3_impl_po_13 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -711,22 +807,26 @@ Lemma sort4_3_impl_po_13 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
@@ -735,7 +835,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2923-3005 *)
+(* Why obligation from file "why/sort.why", characters 3231-3313 *)
 Lemma sort4_3_impl_po_14 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -743,22 +843,26 @@ Lemma sort4_3_impl_po_14 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
@@ -768,7 +872,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3076-3108 *)
+(* Why obligation from file "why/sort.why", characters 3384-3416 *)
 Lemma sort4_3_impl_po_15 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -776,22 +880,26 @@ Lemma sort4_3_impl_po_15 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
@@ -808,6 +916,7 @@ Lemma sort4_3_impl_po_15 :
   forall (Post78: intP3 = (upd intP2 b aux_8)),
   (forall (intP:((memory) Z)),
    (intP = (upd intP3 d tmp4) ->
+    (* File \"sort.c\", line 64, characters 33-69 *)
     (swap_ord (acc intP b) (acc intP d) (acc intP2 b) (acc intP2 d)) /\
     (not_assigns alloc intP2 intP
      (pset_union (pset_singleton d) (pset_singleton b))))) /\
@@ -828,7 +937,7 @@ generalize (pset_singleton_elim _ _ H17).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3167-3167 *)
+(* Why obligation from file "why/sort.why", characters 3475-3475 *)
 Lemma sort4_3_impl_po_16 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -836,22 +945,26 @@ Lemma sort4_3_impl_po_16 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
@@ -860,6 +973,7 @@ Lemma sort4_3_impl_po_16 :
   forall (Test7: (acc intP2 b) <= (acc intP2 d)),
   forall (result3: unit),
   forall (Post25: result3 = tt),
+  (* File \"sort.c\", line 64, characters 33-69 *)
   (swap_ord (acc intP2 b) (acc intP2 d) (acc intP2 b) (acc intP2 d)) /\
   (not_assigns alloc intP2 intP2
    (pset_union (pset_singleton d) (pset_singleton b))).
@@ -867,7 +981,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3385-3467 *)
+(* Why obligation from file "why/sort.why", characters 3751-3833 *)
 Lemma sort4_3_impl_po_17 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -875,27 +989,32 @@ Lemma sort4_3_impl_po_17 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
-  forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+  forall (Post74: (* File \"sort.c\", line 64, characters 33-69 *)
+                  (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
                   (not_assigns alloc intP2 intP3
                    (pset_union (pset_singleton d) (pset_singleton b)))),
@@ -904,7 +1023,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3385-3467 *)
+(* Why obligation from file "why/sort.why", characters 3751-3833 *)
 Lemma sort4_3_impl_po_18 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -912,27 +1031,32 @@ Lemma sort4_3_impl_po_18 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
-  forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+  forall (Post74: (* File \"sort.c\", line 64, characters 33-69 *)
+                  (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
                   (not_assigns alloc intP2 intP3
                    (pset_union (pset_singleton d) (pset_singleton b)))),
@@ -942,7 +1066,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3538-3570 *)
+(* Why obligation from file "why/sort.why", characters 3904-3936 *)
 Lemma sort4_3_impl_po_19 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -950,27 +1074,32 @@ Lemma sort4_3_impl_po_19 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
-  forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+  forall (Post74: (* File \"sort.c\", line 64, characters 33-69 *)
+                  (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
                   (not_assigns alloc intP2 intP3
                    (pset_union (pset_singleton d) (pset_singleton b)))),
@@ -987,6 +1116,7 @@ Lemma sort4_3_impl_po_19 :
   forall (Post86: intP4 = (upd intP3 b aux_10)),
   (forall (intP:((memory) Z)),
    (intP = (upd intP4 c tmp5) ->
+    (* File \"sort.c\", line 66, characters 33-69 *)
     (swap_ord (acc intP b) (acc intP c) (acc intP3 b) (acc intP3 c)) /\
     (not_assigns alloc intP3 intP
      (pset_union (pset_singleton c) (pset_singleton b))))) /\
@@ -1007,7 +1137,7 @@ generalize (pset_singleton_elim _ _ H19).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3629-3629 *)
+(* Why obligation from file "why/sort.why", characters 3995-3995 *)
 Lemma sort4_3_impl_po_20 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -1015,27 +1145,32 @@ Lemma sort4_3_impl_po_20 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
-  forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+  forall (Post74: (* File \"sort.c\", line 64, characters 33-69 *)
+                  (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
                   (not_assigns alloc intP2 intP3
                    (pset_union (pset_singleton d) (pset_singleton b)))),
@@ -1044,6 +1179,7 @@ Lemma sort4_3_impl_po_20 :
   forall (Test9: (acc intP3 b) <= (acc intP3 c)),
   forall (result4: unit),
   forall (Post33: result4 = tt),
+  (* File \"sort.c\", line 66, characters 33-69 *)
   (swap_ord (acc intP3 b) (acc intP3 c) (acc intP3 b) (acc intP3 c)) /\
   (not_assigns alloc intP3 intP3
    (pset_union (pset_singleton c) (pset_singleton b))).
@@ -1051,7 +1187,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1493-3826 *)
+(* Why obligation from file "why/sort.why", characters 1626-4250 *)
 Lemma sort4_3_impl_po_21 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -1059,37 +1195,44 @@ Lemma sort4_3_impl_po_21 :
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (* File \"sort.c\", line 53, characters 14-126 *)
+                 ((((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
-                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
-                 ~(c = d)),
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\
+                 ~(c = d))),
   forall (intP0: ((memory) Z)),
-  forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+  forall (Post50: (* File \"sort.c\", line 58, characters 33-69 *)
+                  (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
                   (not_assigns alloc intP intP0
                    (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
-  forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+  forall (Post58: (* File \"sort.c\", line 60, characters 33-69 *)
+                  (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
                   (not_assigns alloc intP0 intP1
                    (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
-  forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+  forall (Post66: (* File \"sort.c\", line 62, characters 33-69 *)
+                  (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
                   (not_assigns alloc intP1 intP2
                    (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
-  forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+  forall (Post74: (* File \"sort.c\", line 64, characters 33-69 *)
+                  (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
                   (not_assigns alloc intP2 intP3
                    (pset_union (pset_singleton d) (pset_singleton b)))),
   forall (intP4: ((memory) Z)),
-  forall (Post82: (swap_ord (acc intP4 b) (acc intP4 c) (acc intP3 b)
+  forall (Post82: (* File \"sort.c\", line 66, characters 33-69 *)
+                  (swap_ord (acc intP4 b) (acc intP4 c) (acc intP3 b)
                    (acc intP3 c)) /\
                   (not_assigns alloc intP3 intP4
                    (pset_union (pset_singleton c) (pset_singleton b)))),
-  ((acc intP4 a) <= (acc intP4 b) /\ (acc intP4 b) <= (acc intP4 c)) /\
-  (acc intP4 c) <= (acc intP4 d).
+  (* File \"sort.c\", line 55, characters 13-33 *) (((acc intP4 a) <=
+  (acc intP4 b) /\ (acc intP4 b) <= (acc intP4 c)) /\ (acc intP4 c) <=
+  (acc intP4 d)).
 Proof.
 unfold swap_ord;intuition.
 rewrite H22;auto.
@@ -1126,33 +1269,36 @@ Admitted.
 
 
 
-(* Why obligation from file "why/sort.why", characters 4140-4237 *)
+(* Why obligation from file "why/sort.why", characters 4670-4767 *)
 Lemma sort4_4_impl_po_1 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
-  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre66: (* File \"sort.c\", line 18, characters 14-33 *)
+                 (valid_range alloc t 0 4)),
   (valid alloc t).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 4140-4237 *)
+(* Why obligation from file "why/sort.why", characters 4670-4767 *)
 Lemma sort4_4_impl_po_2 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
-  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre66: (* File \"sort.c\", line 18, characters 14-33 *)
+                 (valid_range alloc t 0 4)),
   forall (Pre11: (valid alloc t)),
   (valid alloc (shift t 1)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 4308-4353 *)
+(* Why obligation from file "why/sort.why", characters 4838-4883 *)
 Lemma sort4_4_impl_po_3 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre66: (* File \"sort.c\", line 18, characters 14-33 *)
+                 (valid_range alloc t 0 4)),
   forall (Pre11: (valid alloc t)),
   forall (Pre13: (valid alloc (shift t 1))),
   forall (Test2: (acc intP t) > (acc intP (shift t 1))),
@@ -1251,7 +1397,8 @@ Lemma sort4_4_impl_po_3 :
                                                                     upd intP0
                                                                     result
                                                                     tmp) ->
-                                                                    ((
+                                                                    (* File \"sort.c\", line 19, characters 13-41 *)
+                                                                    (((
                                                                     acc intP
                                                                     t) <=
                                                                     (
@@ -1273,7 +1420,7 @@ Lemma sort4_4_impl_po_3 :
                                                                     (
                                                                     acc intP
                                                                     (
-                                                                    shift t 3)))) /\
+                                                                    shift t 3))))) /\
                                                                     (
                                                                     valid alloc
                                                                     result))))) /\
@@ -1294,7 +1441,8 @@ Lemma sort4_4_impl_po_3 :
                                                                (shift t 2)) ->
                                                               (forall (result:unit),
                                                                (result = tt ->
-                                                                ((acc intP t) <=
+                                                                (* File \"sort.c\", line 19, characters 13-41 *)
+                                                                (((acc intP t) <=
                                                                 (acc intP
                                                                  (shift t 1)) /\
                                                                 (acc intP
@@ -1304,7 +1452,7 @@ Lemma sort4_4_impl_po_3 :
                                                                 (acc intP
                                                                  (shift t 2)) <=
                                                                 (acc intP
-                                                                 (shift t 3))))))) /\
+                                                                 (shift t 3)))))))) /\
                                                             (valid alloc
                                                              (shift t 1))) /\
                                                             (valid alloc
@@ -1343,7 +1491,8 @@ Lemma sort4_4_impl_po_3 :
                                                                (intP = (
                                                                 upd intP0
                                                                 result tmp) ->
-                                                                ((acc intP t) <=
+                                                                (* File \"sort.c\", line 19, characters 13-41 *)
+                                                                (((acc intP t) <=
                                                                 (acc intP
                                                                  (shift t 1)) /\
                                                                 (acc intP
@@ -1353,7 +1502,7 @@ Lemma sort4_4_impl_po_3 :
                                                                 (acc intP
                                                                  (shift t 2)) <=
                                                                 (acc intP
-                                                                 (shift t 3)))) /\
+                                                                 (shift t 3))))) /\
                                                               (valid alloc
                                                                result))))) /\
                                                           (valid alloc result))) /\
@@ -1365,12 +1514,13 @@ Lemma sort4_4_impl_po_3 :
                                                (acc intP (shift t 2)) ->
                                                (forall (result:unit),
                                                 (result = tt ->
-                                                 ((acc intP t) <=
+                                                 (* File \"sort.c\", line 19, characters 13-41 *)
+                                                 (((acc intP t) <=
                                                  (acc intP (shift t 1)) /\
                                                  (acc intP (shift t 1)) <=
                                                  (acc intP (shift t 2))) /\
                                                  (acc intP (shift t 2)) <=
-                                                 (acc intP (shift t 3))))))) /\
+                                                 (acc intP (shift t 3)))))))) /\
                                              (valid alloc (shift t 1))) /\
                                              (valid alloc (shift t 1))) /\
                                              (valid alloc (shift t 2))) /\
@@ -1422,7 +1572,8 @@ Lemma sort4_4_impl_po_3 :
                                                                   (intP = (
                                                                    upd intP0
                                                                    result tmp) ->
-                                                                   ((
+                                                                   (* File \"sort.c\", line 19, characters 13-41 *)
+                                                                   (((
                                                                    acc intP t) <=
                                                                    (acc intP
                                                                     (
@@ -1438,7 +1589,7 @@ Lemma sort4_4_impl_po_3 :
                                                                     shift t 2)) <=
                                                                    (acc intP
                                                                     (
-                                                                    shift t 3)))) /\
+                                                                    shift t 3))))) /\
                                                                  (valid alloc
                                                                   result))))) /\
                                                              (valid alloc
@@ -1451,12 +1602,13 @@ Lemma sort4_4_impl_po_3 :
                                                   (acc intP (shift t 2)) ->
                                                   (forall (result:unit),
                                                    (result = tt ->
-                                                    ((acc intP t) <=
+                                                    (* File \"sort.c\", line 19, characters 13-41 *)
+                                                    (((acc intP t) <=
                                                     (acc intP (shift t 1)) /\
                                                     (acc intP (shift t 1)) <=
                                                     (acc intP (shift t 2))) /\
                                                     (acc intP (shift t 2)) <=
-                                                    (acc intP (shift t 3))))))) /\
+                                                    (acc intP (shift t 3)))))))) /\
                                                 (valid alloc (shift t 1))) /\
                                                 (valid alloc (shift t 1))) /\
                                                 (valid alloc (shift t 2))) /\
@@ -1485,12 +1637,13 @@ Lemma sort4_4_impl_po_3 :
                                                   (forall (intP:((memory) Z)),
                                                    (intP = (upd intP0 result
                                                             tmp) ->
-                                                    ((acc intP t) <=
+                                                    (* File \"sort.c\", line 19, characters 13-41 *)
+                                                    (((acc intP t) <=
                                                     (acc intP (shift t 1)) /\
                                                     (acc intP (shift t 1)) <=
                                                     (acc intP (shift t 2))) /\
                                                     (acc intP (shift t 2)) <=
-                                                    (acc intP (shift t 3)))) /\
+                                                    (acc intP (shift t 3))))) /\
                                                   (valid alloc result))))) /\
                                               (valid alloc result))) /\
                                            (valid alloc (shift t 2))) /\
@@ -1498,12 +1651,14 @@ Lemma sort4_4_impl_po_3 :
                                  (((acc intP (shift t 1)) <=
                                    (acc intP (shift t 2)) ->
                                    (forall (result:unit),
-                                    (result = tt -> ((acc intP t) <=
+                                    (result = tt ->
+                                     (* File \"sort.c\", line 19, characters 13-41 *)
+                                     (((acc intP t) <=
                                      (acc intP (shift t 1)) /\
                                      (acc intP (shift t 1)) <=
                                      (acc intP (shift t 2))) /\
                                      (acc intP (shift t 2)) <=
-                                     (acc intP (shift t 3))))))) /\
+                                     (acc intP (shift t 3)))))))) /\
                                  (valid alloc (shift t 1))) /\
                                  (valid alloc (shift t 1))) /\
                                  (valid alloc (shift t 2))) /\
@@ -1567,7 +1722,8 @@ Lemma sort4_4_impl_po_3 :
                                                                (intP = (
                                                                 upd intP0
                                                                 result tmp) ->
-                                                                ((acc intP t) <=
+                                                                (* File \"sort.c\", line 19, characters 13-41 *)
+                                                                (((acc intP t) <=
                                                                 (acc intP
                                                                  (shift t 1)) /\
                                                                 (acc intP
@@ -1577,7 +1733,7 @@ Lemma sort4_4_impl_po_3 :
                                                                 (acc intP
                                                                  (shift t 2)) <=
                                                                 (acc intP
-                                                                 (shift t 3)))) /\
+                                                                 (shift t 3))))) /\
                                                               (valid alloc
                                                                result))))) /\
                                                           (valid alloc result))) /\
@@ -1589,12 +1745,13 @@ Lemma sort4_4_impl_po_3 :
                                                (acc intP (shift t 2)) ->
                                                (forall (result:unit),
                                                 (result = tt ->
-                                                 ((acc intP t) <=
+                                                 (* File \"sort.c\", line 19, characters 13-41 *)
+                                                 (((acc intP t) <=
                                                  (acc intP (shift t 1)) /\
                                                  (acc intP (shift t 1)) <=
                                                  (acc intP (shift t 2))) /\
                                                  (acc intP (shift t 2)) <=
-                                                 (acc intP (shift t 3))))))) /\
+                                                 (acc intP (shift t 3)))))))) /\
                                              (valid alloc (shift t 1))) /\
                                              (valid alloc (shift t 1))) /\
                                              (valid alloc (shift t 2))) /\
@@ -1621,12 +1778,13 @@ Lemma sort4_4_impl_po_3 :
                                               (result = (shift t 2) ->
                                                (forall (intP:((memory) Z)),
                                                 (intP = (upd intP0 result tmp) ->
-                                                 ((acc intP t) <=
+                                                 (* File \"sort.c\", line 19, characters 13-41 *)
+                                                 (((acc intP t) <=
                                                  (acc intP (shift t 1)) /\
                                                  (acc intP (shift t 1)) <=
                                                  (acc intP (shift t 2))) /\
                                                  (acc intP (shift t 2)) <=
-                                                 (acc intP (shift t 3)))) /\
+                                                 (acc intP (shift t 3))))) /\
                                                (valid alloc result))))) /\
                                            (valid alloc result))) /\
                                         (valid alloc (shift t 2))) /\
@@ -1634,12 +1792,13 @@ Lemma sort4_4_impl_po_3 :
                               (((acc intP (shift t 1)) <=
                                 (acc intP (shift t 2)) ->
                                 (forall (result:unit),
-                                 (result = tt -> ((acc intP t) <=
-                                  (acc intP (shift t 1)) /\
+                                 (result = tt ->
+                                  (* File \"sort.c\", line 19, characters 13-41 *)
+                                  (((acc intP t) <= (acc intP (shift t 1)) /\
                                   (acc intP (shift t 1)) <=
                                   (acc intP (shift t 2))) /\
                                   (acc intP (shift t 2)) <=
-                                  (acc intP (shift t 3))))))) /\
+                                  (acc intP (shift t 3)))))))) /\
                               (valid alloc (shift t 1))) /\
                               (valid alloc (shift t 1))) /\
                               (valid alloc (shift t 2))) /\
@@ -1683,12 +1842,13 @@ Lemma sort4_4_impl_po_3 :
                                                   (forall (intP:((memory) Z)),
                                                    (intP = (upd intP0 result
                                                             tmp) ->
-                                                    ((acc intP t) <=
+                                                    (* File \"sort.c\", line 19, characters 13-41 *)
+                                                    (((acc intP t) <=
                                                     (acc intP (shift t 1)) /\
                                                     (acc intP (shift t 1)) <=
                                                     (acc intP (shift t 2))) /\
                                                     (acc intP (shift t 2)) <=
-                                                    (acc intP (shift t 3)))) /\
+                                                    (acc intP (shift t 3))))) /\
                                                   (valid alloc result))))) /\
                                               (valid alloc result))) /\
                                            (valid alloc (shift t 2))) /\
@@ -1696,12 +1856,14 @@ Lemma sort4_4_impl_po_3 :
                                  (((acc intP (shift t 1)) <=
                                    (acc intP (shift t 2)) ->
                                    (forall (result:unit),
-                                    (result = tt -> ((acc intP t) <=
+                                    (result = tt ->
+                                     (* File \"sort.c\", line 19, characters 13-41 *)
+                                     (((acc intP t) <=
                                      (acc intP (shift t 1)) /\
                                      (acc intP (shift t 1)) <=
                                      (acc intP (shift t 2))) /\
                                      (acc intP (shift t 2)) <=
-                                     (acc intP (shift t 3))))))) /\
+                                     (acc intP (shift t 3)))))))) /\
                                  (valid alloc (shift t 1))) /\
                                  (valid alloc (shift t 1))) /\
                                  (valid alloc (shift t 2))) /\
@@ -1726,22 +1888,24 @@ Lemma sort4_4_impl_po_3 :
                                   (result = (shift t 2) ->
                                    (forall (intP:((memory) Z)),
                                     (intP = (upd intP0 result tmp) ->
-                                     ((acc intP t) <=
+                                     (* File \"sort.c\", line 19, characters 13-41 *)
+                                     (((acc intP t) <=
                                      (acc intP (shift t 1)) /\
                                      (acc intP (shift t 1)) <=
                                      (acc intP (shift t 2))) /\
                                      (acc intP (shift t 2)) <=
-                                     (acc intP (shift t 3)))) /\
+                                     (acc intP (shift t 3))))) /\
                                    (valid alloc result))))) /\
                                (valid alloc result))) /\
                             (valid alloc (shift t 2))) /\
                             (valid alloc (shift t 2)))))))) /\
                   (((acc intP (shift t 1)) <= (acc intP (shift t 2)) ->
                     (forall (result:unit),
-                     (result = tt -> ((acc intP t) <=
-                      (acc intP (shift t 1)) /\ (acc intP (shift t 1)) <=
-                      (acc intP (shift t 2))) /\ (acc intP (shift t 2)) <=
-                      (acc intP (shift t 3))))))) /\
+                     (result = tt ->
+                      (* File \"sort.c\", line 19, characters 13-41 *)
+                      (((acc intP t) <= (acc intP (shift t 1)) /\
+                      (acc intP (shift t 1)) <= (acc intP (shift t 2))) /\
+                      (acc intP (shift t 2)) <= (acc intP (shift t 3)))))))) /\
                   (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
                   (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))))))) /\
               (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
@@ -1755,12 +1919,13 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/sort.why", characters 4458-4458 *)
+(* Why obligation from file "why/sort.why", characters 4988-4988 *)
 Lemma sort4_4_impl_po_4 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre66: (* File \"sort.c\", line 18, characters 14-33 *)
+                 (valid_range alloc t 0 4)),
   forall (Pre11: (valid alloc t)),
   forall (Pre13: (valid alloc (shift t 1))),
   forall (Test1: (acc intP t) <= (acc intP (shift t 1))),
@@ -1843,7 +2008,8 @@ Lemma sort4_4_impl_po_4 :
                                                                     upd intP0
                                                                     result
                                                                     tmp) ->
-                                                                    ((
+                                                                    (* File \"sort.c\", line 19, characters 13-41 *)
+                                                                    (((
                                                                     acc intP
                                                                     t) <=
                                                                     (
@@ -1865,7 +2031,7 @@ Lemma sort4_4_impl_po_4 :
                                                                     (
                                                                     acc intP
                                                                     (
-                                                                    shift t 3)))) /\
+                                                                    shift t 3))))) /\
                                                                     (
                                                                     valid alloc
                                                                     result))))) /\
@@ -1882,7 +2048,8 @@ Lemma sort4_4_impl_po_4 :
                                                            (shift t 2)) ->
                                                           (forall (result:unit),
                                                            (result = tt ->
-                                                            ((acc intP t) <=
+                                                            (* File \"sort.c\", line 19, characters 13-41 *)
+                                                            (((acc intP t) <=
                                                             (acc intP
                                                              (shift t 1)) /\
                                                             (acc intP
@@ -1892,7 +2059,7 @@ Lemma sort4_4_impl_po_4 :
                                                             (acc intP
                                                              (shift t 2)) <=
                                                             (acc intP
-                                                             (shift t 3))))))) /\
+                                                             (shift t 3)))))))) /\
                                                         (valid alloc
                                                          (shift t 1))) /\
                                                         (valid alloc
@@ -1928,7 +2095,8 @@ Lemma sort4_4_impl_po_4 :
                                                            (intP = (upd intP0
                                                                     result
                                                                     tmp) ->
-                                                            ((acc intP t) <=
+                                                            (* File \"sort.c\", line 19, characters 13-41 *)
+                                                            (((acc intP t) <=
                                                             (acc intP
                                                              (shift t 1)) /\
                                                             (acc intP
@@ -1938,7 +2106,7 @@ Lemma sort4_4_impl_po_4 :
                                                             (acc intP
                                                              (shift t 2)) <=
                                                             (acc intP
-                                                             (shift t 3)))) /\
+                                                             (shift t 3))))) /\
                                                           (valid alloc result))))) /\
                                                       (valid alloc result))) /\
                                                    (valid alloc (shift t 2))) /\
@@ -1946,12 +2114,14 @@ Lemma sort4_4_impl_po_4 :
                                          (((acc intP (shift t 1)) <=
                                            (acc intP (shift t 2)) ->
                                            (forall (result:unit),
-                                            (result = tt -> ((acc intP t) <=
+                                            (result = tt ->
+                                             (* File \"sort.c\", line 19, characters 13-41 *)
+                                             (((acc intP t) <=
                                              (acc intP (shift t 1)) /\
                                              (acc intP (shift t 1)) <=
                                              (acc intP (shift t 2))) /\
                                              (acc intP (shift t 2)) <=
-                                             (acc intP (shift t 3))))))) /\
+                                             (acc intP (shift t 3)))))))) /\
                                          (valid alloc (shift t 1))) /\
                                          (valid alloc (shift t 1))) /\
                                          (valid alloc (shift t 2))) /\
@@ -2003,7 +2173,8 @@ Lemma sort4_4_impl_po_4 :
                                                               (intP = (
                                                                upd intP0
                                                                result tmp) ->
-                                                               ((acc intP t) <=
+                                                               (* File \"sort.c\", line 19, characters 13-41 *)
+                                                               (((acc intP t) <=
                                                                (acc intP
                                                                 (shift t 1)) /\
                                                                (acc intP
@@ -2013,7 +2184,7 @@ Lemma sort4_4_impl_po_4 :
                                                                (acc intP
                                                                 (shift t 2)) <=
                                                                (acc intP
-                                                                (shift t 3)))) /\
+                                                                (shift t 3))))) /\
                                                              (valid alloc
                                                               result))))) /\
                                                          (valid alloc result))) /\
@@ -2025,12 +2196,13 @@ Lemma sort4_4_impl_po_4 :
                                               (acc intP (shift t 2)) ->
                                               (forall (result:unit),
                                                (result = tt ->
-                                                ((acc intP t) <=
+                                                (* File \"sort.c\", line 19, characters 13-41 *)
+                                                (((acc intP t) <=
                                                 (acc intP (shift t 1)) /\
                                                 (acc intP (shift t 1)) <=
                                                 (acc intP (shift t 2))) /\
                                                 (acc intP (shift t 2)) <=
-                                                (acc intP (shift t 3))))))) /\
+                                                (acc intP (shift t 3)))))))) /\
                                             (valid alloc (shift t 1))) /\
                                             (valid alloc (shift t 1))) /\
                                             (valid alloc (shift t 2))) /\
@@ -2057,12 +2229,13 @@ Lemma sort4_4_impl_po_4 :
                                              (result = (shift t 2) ->
                                               (forall (intP:((memory) Z)),
                                                (intP = (upd intP0 result tmp) ->
-                                                ((acc intP t) <=
+                                                (* File \"sort.c\", line 19, characters 13-41 *)
+                                                (((acc intP t) <=
                                                 (acc intP (shift t 1)) /\
                                                 (acc intP (shift t 1)) <=
                                                 (acc intP (shift t 2))) /\
                                                 (acc intP (shift t 2)) <=
-                                                (acc intP (shift t 3)))) /\
+                                                (acc intP (shift t 3))))) /\
                                               (valid alloc result))))) /\
                                           (valid alloc result))) /\
                                        (valid alloc (shift t 2))) /\
@@ -2070,12 +2243,13 @@ Lemma sort4_4_impl_po_4 :
                              (((acc intP (shift t 1)) <=
                                (acc intP (shift t 2)) ->
                                (forall (result:unit),
-                                (result = tt -> ((acc intP t) <=
-                                 (acc intP (shift t 1)) /\
+                                (result = tt ->
+                                 (* File \"sort.c\", line 19, characters 13-41 *)
+                                 (((acc intP t) <= (acc intP (shift t 1)) /\
                                  (acc intP (shift t 1)) <=
                                  (acc intP (shift t 2))) /\
                                  (acc intP (shift t 2)) <=
-                                 (acc intP (shift t 3))))))) /\
+                                 (acc intP (shift t 3)))))))) /\
                              (valid alloc (shift t 1))) /\
                              (valid alloc (shift t 1))) /\
                              (valid alloc (shift t 2))) /\
@@ -2136,7 +2310,8 @@ Lemma sort4_4_impl_po_4 :
                                                            (intP = (upd intP0
                                                                     result
                                                                     tmp) ->
-                                                            ((acc intP t) <=
+                                                            (* File \"sort.c\", line 19, characters 13-41 *)
+                                                            (((acc intP t) <=
                                                             (acc intP
                                                              (shift t 1)) /\
                                                             (acc intP
@@ -2146,7 +2321,7 @@ Lemma sort4_4_impl_po_4 :
                                                             (acc intP
                                                              (shift t 2)) <=
                                                             (acc intP
-                                                             (shift t 3)))) /\
+                                                             (shift t 3))))) /\
                                                           (valid alloc result))))) /\
                                                       (valid alloc result))) /\
                                                    (valid alloc (shift t 2))) /\
@@ -2154,12 +2329,14 @@ Lemma sort4_4_impl_po_4 :
                                          (((acc intP (shift t 1)) <=
                                            (acc intP (shift t 2)) ->
                                            (forall (result:unit),
-                                            (result = tt -> ((acc intP t) <=
+                                            (result = tt ->
+                                             (* File \"sort.c\", line 19, characters 13-41 *)
+                                             (((acc intP t) <=
                                              (acc intP (shift t 1)) /\
                                              (acc intP (shift t 1)) <=
                                              (acc intP (shift t 2))) /\
                                              (acc intP (shift t 2)) <=
-                                             (acc intP (shift t 3))))))) /\
+                                             (acc intP (shift t 3)))))))) /\
                                          (valid alloc (shift t 1))) /\
                                          (valid alloc (shift t 1))) /\
                                          (valid alloc (shift t 2))) /\
@@ -2185,12 +2362,13 @@ Lemma sort4_4_impl_po_4 :
                                           (result = (shift t 2) ->
                                            (forall (intP:((memory) Z)),
                                             (intP = (upd intP0 result tmp) ->
-                                             ((acc intP t) <=
+                                             (* File \"sort.c\", line 19, characters 13-41 *)
+                                             (((acc intP t) <=
                                              (acc intP (shift t 1)) /\
                                              (acc intP (shift t 1)) <=
                                              (acc intP (shift t 2))) /\
                                              (acc intP (shift t 2)) <=
-                                             (acc intP (shift t 3)))) /\
+                                             (acc intP (shift t 3))))) /\
                                            (valid alloc result))))) /\
                                        (valid alloc result))) /\
                                     (valid alloc (shift t 2))) /\
@@ -2198,12 +2376,13 @@ Lemma sort4_4_impl_po_4 :
                           (((acc intP (shift t 1)) <=
                             (acc intP (shift t 2)) ->
                             (forall (result:unit),
-                             (result = tt -> ((acc intP t) <=
-                              (acc intP (shift t 1)) /\
+                             (result = tt ->
+                              (* File \"sort.c\", line 19, characters 13-41 *)
+                              (((acc intP t) <= (acc intP (shift t 1)) /\
                               (acc intP (shift t 1)) <=
                               (acc intP (shift t 2))) /\
                               (acc intP (shift t 2)) <=
-                              (acc intP (shift t 3))))))) /\
+                              (acc intP (shift t 3)))))))) /\
                           (valid alloc (shift t 1))) /\
                           (valid alloc (shift t 1))) /\
                           (valid alloc (shift t 2))) /\
@@ -2244,12 +2423,13 @@ Lemma sort4_4_impl_po_4 :
                                              (result = (shift t 2) ->
                                               (forall (intP:((memory) Z)),
                                                (intP = (upd intP0 result tmp) ->
-                                                ((acc intP t) <=
+                                                (* File \"sort.c\", line 19, characters 13-41 *)
+                                                (((acc intP t) <=
                                                 (acc intP (shift t 1)) /\
                                                 (acc intP (shift t 1)) <=
                                                 (acc intP (shift t 2))) /\
                                                 (acc intP (shift t 2)) <=
-                                                (acc intP (shift t 3)))) /\
+                                                (acc intP (shift t 3))))) /\
                                               (valid alloc result))))) /\
                                           (valid alloc result))) /\
                                        (valid alloc (shift t 2))) /\
@@ -2257,12 +2437,13 @@ Lemma sort4_4_impl_po_4 :
                              (((acc intP (shift t 1)) <=
                                (acc intP (shift t 2)) ->
                                (forall (result:unit),
-                                (result = tt -> ((acc intP t) <=
-                                 (acc intP (shift t 1)) /\
+                                (result = tt ->
+                                 (* File \"sort.c\", line 19, characters 13-41 *)
+                                 (((acc intP t) <= (acc intP (shift t 1)) /\
                                  (acc intP (shift t 1)) <=
                                  (acc intP (shift t 2))) /\
                                  (acc intP (shift t 2)) <=
-                                 (acc intP (shift t 3))))))) /\
+                                 (acc intP (shift t 3)))))))) /\
                              (valid alloc (shift t 1))) /\
                              (valid alloc (shift t 1))) /\
                              (valid alloc (shift t 2))) /\
@@ -2286,20 +2467,23 @@ Lemma sort4_4_impl_po_4 :
                               (result = (shift t 2) ->
                                (forall (intP:((memory) Z)),
                                 (intP = (upd intP0 result tmp) ->
-                                 ((acc intP t) <= (acc intP (shift t 1)) /\
+                                 (* File \"sort.c\", line 19, characters 13-41 *)
+                                 (((acc intP t) <= (acc intP (shift t 1)) /\
                                  (acc intP (shift t 1)) <=
                                  (acc intP (shift t 2))) /\
                                  (acc intP (shift t 2)) <=
-                                 (acc intP (shift t 3)))) /\
+                                 (acc intP (shift t 3))))) /\
                                (valid alloc result))))) /\
                            (valid alloc result))) /\
                         (valid alloc (shift t 2))) /\
                         (valid alloc (shift t 2)))))))) /\
               (((acc intP (shift t 1)) <= (acc intP (shift t 2)) ->
                 (forall (result:unit),
-                 (result = tt -> ((acc intP t) <= (acc intP (shift t 1)) /\
+                 (result = tt ->
+                  (* File \"sort.c\", line 19, characters 13-41 *)
+                  (((acc intP t) <= (acc intP (shift t 1)) /\
                   (acc intP (shift t 1)) <= (acc intP (shift t 2))) /\
-                  (acc intP (shift t 2)) <= (acc intP (shift t 3))))))) /\
+                  (acc intP (shift t 2)) <= (acc intP (shift t 3)))))))) /\
               (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
               (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))))))) /\
           (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.80 2005-05-19 09:01:56 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.81 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -375,7 +375,16 @@ let compat_pointers ty1 ty2 =
 
 (* Typing predicates *)
 
-let rec type_predicate env p0 = match p0.lexpr_node with
+let rec type_term env t =
+  let t', ty = type_term_node t.lexpr_loc env t.lexpr_node in
+  { term_node = t'; term_loc = reloc t.lexpr_loc; term_type = ty }
+
+
+let rec type_predicate env p0 = 
+  let p' = type_predicate_node env p0 in
+  { pred_node = p'; pred_loc = reloc p0.lexpr_loc }
+
+and type_predicate_node env p0 = match p0.lexpr_node with
   | PLfalse -> Pfalse
   | PLtrue -> Ptrue
   | PLrel ({lexpr_node = PLrel (_, _, t2)} as p1, op, t3) ->
@@ -433,7 +442,8 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       Piff (type_predicate env p1, type_predicate env p2) 
   | PLnot p -> 
       (match type_predicate env p with
-	 | Prel (t, Neq, z) when z == zero -> Prel (t, Eq, zero)
+	 | { pred_node = Prel (t, Neq, z) } when z == zero -> 
+	     Prel (t, Eq, zero)
 	 | p -> Pnot p)
   | PLapp (p, tl) ->
       (try

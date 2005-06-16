@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.100 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.101 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 open Cast
+open Cnorm
 open Coptions
 open Clogic
 open Creport
@@ -274,8 +275,8 @@ let assign_location loc =
 	  assigns = add_pointer_var t1.nterm_type empty }
 ***)	  
 
-let rec predicate p = 
-  match p with
+let rec predicate p =  
+  match p.npred_node with
     | NPtrue -> empty
     | NPfalse -> empty
     | NPapp (id, tl) -> 
@@ -316,7 +317,7 @@ let add_weak_invariant id p =
 let strong_invariants = Hashtbl.create 97
 
 let add_strong_invariant id p vars =
-  if p <> NPtrue then
+  if p.npred_node <> NPtrue then
   let ef = predicate p in
   Hashtbl.add strong_invariants id (p,ef,vars)
 
@@ -328,7 +329,7 @@ let mem_strong_invariant_2 id =
 let add_strong_invariant_2 id p args =
   if not (mem_strong_invariant_2 id) 
   then
-    if p <> NPtrue then
+    if p.npred_node <> NPtrue then
       let ef = predicate p in
       Hashtbl.add strong_invariants_2 id (p,ef,args)      
 
@@ -758,7 +759,7 @@ let rec invariant_for_constant loc t lvalue initializers =
  match t.Ctypes.ctype_node with
     | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
 	let x,l = pop_initializer loc t initializers in
-	NPrel ( lvalue,Eq,x), l
+	nprel ( lvalue,Eq,x), l
     | Tstruct n ->
 	begin match tag_type_definition n with
 	  | TTStructUnion (Tstruct (_), fl) ->
@@ -774,10 +775,10 @@ let rec invariant_for_constant loc t lvalue initializers =
 		       (Cnorm.in_struct lvalue f) init
 		   in 
 		   if tyf.Ctypes.ctype_const then
-		     (NPand (acc,block),init')
+		     (npand (acc,block),init')
 		   else
 		     (acc,init'))
-		(NPtrue,initializers)  fl
+		(nptrue,initializers)  fl
 	  | _ ->
 	      assert false
 	end
@@ -806,9 +807,9 @@ let rec invariant_for_constant loc t lvalue initializers =
 			 {ty with Ctypes.ctype_node = (Tpointer ty) }
 			 (NTbinop (lvalue,Clogic.Badd, ts))))) init 
 	    in
-	    init_cells (Int64.add i Int64.one) (NPand (block,b),init')
+	    init_cells (Int64.add i Int64.one) (npand (block,b),init')
 	in
-	init_cells Int64.zero (NPtrue,initializers)
+	init_cells Int64.zero (nptrue,initializers)
     | Tarray (ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
@@ -826,6 +827,8 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
   | Tarray (ty', _) -> has_constant_values ty'
   | Tunion _ | Tfun _ | Tvar _ -> false
 
+let diff loc x y = 
+  nprel ( x, Neq,  y)
 	  
 let rec validity x ty size =
   match ty.Ctypes.ctype_node with
@@ -843,33 +846,34 @@ let rec validity x ty size =
 					 (Int64.to_string (Int64.pred size))); 
 			 nterm_loc = x.nterm_loc;
 			 nterm_type = c_int } in
-	let ineq = NPand 
-		     (NPrel (Cnorm.nzero, Le, vari),
-		      NPrel (vari, Lt, 
+	let ineq = npand 
+		     (nprel (Cnorm.nzero, Le, vari),
+		      nprel (vari, Lt, 
 			       term_sup)) in	
-	let jneq = NPand 
-		     (NPrel (Cnorm.nzero, Le, varj),
-		      NPrel (varj, Lt, 
+	let jneq = npand 
+		     (nprel (Cnorm.nzero, Le, varj),
+		      nprel (varj, Lt, 
 			     term_sup)) in
 	let (pre1,pre2) = validity 
 			(noattr x.nterm_loc ty 
 			   (NTbinop (x,Clogic.Badd,vari)))
 					     ty' size' in
-	(NPand (
-	  NPvalid_range (x, Cnorm.nzero,term_sup),
-	  NPforall (
-	    [c_int,i],
-	    NPimplies(ineq,pre1))),
-	  NPforall (
-	    (c_int,j)::[(c_int,i)],
-	    NPimplies(NPand (NPand (ineq,jneq),
-			     Invariant.diff x.nterm_loc vari varj),
-		      NPand (Invariant.diff x.nterm_loc 
-			       (noattr x.nterm_loc ty 
-				  (NTbinop (x,Clogic.Badd,vari)))
-			       (noattr x.nterm_loc ty 
-				  (NTbinop (x,Clogic.Badd,varj))),
-			       pre2))))
+	(npand (
+	  npvalid_range (x, Cnorm.nzero,term_sup),
+	  make_forall 
+	    [c_int,i]
+	    (make_implies ineq pre1)),
+	 make_forall 
+	   [(c_int,j); (c_int,i)]
+	   (make_implies
+	      (npand (npand (ineq,jneq),
+		      diff x.nterm_loc vari varj))
+	      (npand (diff x.nterm_loc 
+			(noattr x.nterm_loc ty 
+			   (NTbinop (x,Clogic.Badd,vari)))
+			(noattr x.nterm_loc ty 
+			   (NTbinop (x,Clogic.Badd,varj))),
+		      pre2))))
 (*    | Tstruct (n) ->
 	let term_sup = { nterm_node = NTconstant (IntConstant 
 						    (Int64.to_string size)); 
@@ -885,7 +889,7 @@ let rec validity x ty size =
 	                     (IntConstant (Int64.to_string (Int64.pred size)));
 			 nterm_loc = x.nterm_loc;
 			 nterm_type = c_int } in
-      NPvalid_range (x, Cnorm.nzero,term_sup), NPtrue
+      npvalid_range (x, Cnorm.nzero,term_sup), nptrue
 
 let decl d =
   match d.Cast.node with

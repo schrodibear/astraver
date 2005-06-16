@@ -36,7 +36,7 @@ let rec predicate_for name t =
   match t.nterm_type.ctype_node with
     | Tstruct (n) ->
 	(*	NPand *)
-	NPvalid t
+	npvalid t
 	  (*,
  	    NPapp (find_pred ("valid_" ^ n), [t]))*)
     | Tarray (ty, None) ->
@@ -44,41 +44,31 @@ let rec predicate_for name t =
     | Tarray (ty, Some s) ->
 	  let i = default_var_info "counter" in
 	  let vari = noattr_term c_int (NTvar i) in
-	  let ineq = NPand 
-		       (NPrel (nzero, Le, vari),
-			NPrel (vari, Lt, 
+	  let ineq = npand
+		       (nprel (nzero, Le, vari),
+			nprel (vari, Lt, 
 			       int_nconstant (Int64.to_string s))) in
 	  let pre = predicate_for name vari in
-	  if pre = NPtrue 
+	  if pre = nptrue 
 	  then
-	    NPand ((NPvalid t),(NPvalid_range (t,(int_nconstant "0"), 
+	    npand ((npvalid t),(npvalid_range (t,(int_nconstant "0"), 
 			  (int_nconstant (Int64.to_string (Int64.pred s))))))
 	  else
-	    NPand (NPvalid t, 
-		   (NPand 
-		      ((NPvalid_range (t,(int_nconstant "0"), 
+	    npand (npvalid t, 
+		   (npand 
+		      ((npvalid_range (t,(int_nconstant "0"), 
 			  (int_nconstant (Int64.to_string (Int64.pred s))))),
-		      (NPforall ([noattr_type (Tint (Signed, Ctypes.Int)), i], 
-				NPimplies (ineq, pre))))))
-     | _ -> NPtrue
+		      (make_forall 
+			 [noattr_type (Tint (Signed, Ctypes.Int)), i]
+			 (make_implies ineq pre)))))
+     | _ -> nptrue
 
 
 let not_alias loc x y = 
   let ba t = { nterm_node = NTbase_addr t; 
 	       nterm_loc = loc;
 	       nterm_type = c_addr } in 
-  NPrel (ba x, Neq, ba y)
-
-let diff loc x y = 
-  NPrel ( x, Neq,  y)
-
-let make_implies p1 = function
-  | NPtrue -> NPtrue
-  | p2 -> NPimplies (p1, p2)
-
-let make_forall q = function
-  | NPtrue -> NPtrue
-  | p -> NPforall (q, p)
+  nprel (ba x, Neq, ba y)
 
 let fresh_index = 
   let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
@@ -97,12 +87,12 @@ let make_forall_range loc t b f =
 	nterm_type = t.nterm_type }
     in
     let pred = (f ti vari) in
-    if pred = NPtrue
+    if pred = nptrue
     then 
-      NPtrue
+      nptrue
     else
-      let ineq = NPand (NPrel (nzero, Le, vari),
-			NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
+      let ineq = npand (nprel (nzero, Le, vari),
+			nprel (vari, Lt, int_nconstant (Int64.to_string b))) in
       make_forall [c_int, i] (make_implies ineq pred)
      
 let rec tab_struct loc v1 v2 s ty n n1 n2=
@@ -125,7 +115,7 @@ and local_separation loc n1 v1 n2 v2 =
 	   then
 	     (not_alias loc v1 v2)
 	   else
-	     NPtrue)
+	     nptrue)
 	  (make_and 
 	     (make_forall_range loc v1 s1 
 		(fun t i -> local_separation loc (n1^"[i]") 
@@ -133,7 +123,7 @@ and local_separation loc n1 v1 n2 v2 =
 	     (make_forall_range loc v2 s2  
 		(fun t i -> local_separation loc n1 v1 (n2^"[j]") 
 		     (indirection loc ty2 t))))
-    | _, _ -> NPtrue
+    | _, _ -> nptrue
 
     
 
@@ -153,9 +143,9 @@ let rec separation_intern2  n1 v1 =
 		     (fun t1 i1 ->
 			make_forall_range Loc.dummy v1 s
 			  (fun t2 i2 -> 
-			     if i1 = nzero && i2 = nzero then NPtrue 
+			     if i1 = nzero && i2 = nzero then nptrue 
 			     else
-			       make_implies (NPrel (i1, Neq, i2)) 
+			       make_implies (nprel (i1, Neq, i2)) 
 				 (not_alias Loc.dummy t1 t2))))
 	      | Tarray (_,_)->  
 		  make_and
@@ -163,18 +153,18 @@ let rec separation_intern2  n1 v1 =
 		       (fun t1 i1 ->
 			  make_forall_range Loc.dummy v1 s
 			    (fun t2 i2 -> 
-			       if i1 = nzero && i2 = nzero then NPtrue 
+			       if i1 = nzero && i2 = nzero then nptrue 
 			       else
-				 make_implies (NPrel (i1, Neq, i2)) 
+				 make_implies (nprel (i1, Neq, i2)) 
 				   (not_alias Loc.dummy t1 t2))))
 		    (make_forall_range Loc.dummy v1 s 
 		       (fun t i -> 
 			  separation_intern2 n1 
 			    (noattr_term ty t.nterm_node)))    
-	      | _ -> NPtrue
+	      | _ -> nptrue
 	  end
     | _ -> 
-	NPtrue
+	nptrue
 
 (*let rec separation loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
@@ -257,7 +247,7 @@ let separation_first mark diag v1 v2 =
 	[noattr_located (
 	   Cast.Ninvariant_strong (
 	     "separation" ^ n1 ^ "_" ^ n2 , 
-	     NPapp(find_pred (pre), 
+	     npapp(find_pred (pre), 
 		   (*(create_term n1)::[(create_term n2)]*) [])))]
     | Tarray (ty,Some s) , Tstruct _ -> 
 	if compatible_type ty v2.var_type then
@@ -268,7 +258,7 @@ let separation_first mark diag v1 v2 =
 	  [noattr_located 
 	     (Cast.Ninvariant_strong (
 		"separation_" ^ n1 ^ "_" ^ n2,
-		NPapp
+		npapp
 		  (find_pred (pre ), 
 		   [noattr_term 
 		      (noattr_type (Tint (Signed,Int)))
@@ -284,7 +274,7 @@ let separation_first mark diag v1 v2 =
 	  [noattr_located
 	     (Cast.Ninvariant_strong (
 		"separation_" ^ n1 ^ "_" ^ n2,
-		NPapp(
+		npapp(
 		  find_pred (pre), 
 		  (*(create_term n2)::(create_term n1)::*)
 		    [noattr_term 
@@ -305,7 +295,7 @@ let separation_first mark diag v1 v2 =
 	  noattr_located (
 	    Cast.Ninvariant_strong (
 	      "internal_separation" ^ n1 ^ "_" ^ n2 , 
-	      NPapp(find_pred (pre),[])))::
+	      npapp(find_pred (pre),[])))::
 	    [noattr_located
 	       (Cast.Ninvariant_strong (
 		  "separation_" ^ n1 ^ "_" ^ n2,
@@ -328,12 +318,12 @@ let separation_first mark diag v1 v2 =
 			(make_sub_term term1 ty1 v1)
 			n2 
 			(make_sub_term term2 ty2 v2)) in
-	  if pred = NPtrue then []
+	  if pred = nptrue then []
 	  else
 	    noattr_located (
 	      Cast.Ninvariant_strong (
 		"separation" ^ n1 ^ "_" ^ n2 , 
-		NPapp(find_pred (pre),[])))::
+		npapp(find_pred (pre),[])))::
 	      [noattr_located
 		 (Cast.Ninvariant_strong 
 		    ("separation_" ^ n1 ^ "_" ^ n2,
@@ -343,7 +333,7 @@ let separation_first mark diag v1 v2 =
 			  [ty,var2]
 			  (if diag 
 			   then 
-			     NPimplies (NPrel (term1,Neq,term2),pred)
+			     make_implies (nprel (term1,Neq,term2)) pred
 			 else
 			   pred))))]
     | _ , _ -> []
@@ -374,7 +364,7 @@ let rec separation_intern n =
 		  Cenv.add_pred (pre)  ([], info);
 		  [noattr_located (Cast.Ninvariant_strong (
 				    "internal_separation_" ^ n1 ^ "_array1" , 
-				   NPapp(
+				   npapp(
 				     find_pred (pre ),
 				     (*(create_term n1)::*)
 				     [noattr_term (noattr_type 
@@ -389,7 +379,7 @@ let rec separation_intern n =
 		 Cenv.add_pred (pre)  ([], info);
 		 noattr_located (Cast.Ninvariant_strong (
 				   "internal_separation_" ^ n1 ^ "_array1" , 
-				   NPapp(
+				   npapp(
 				     find_pred (pre ),
 				     (*(create_term n1)::*)
 				      [noattr_term (noattr_type 
@@ -437,7 +427,7 @@ let add_predicates l =
 		 Cenv.add_pred (pre)  ([], info);
 		 [noattr_located (
 		    Cast.Ninvariant_strong (
-		      "valid" ^ n,NPapp(find_pred (pre),[])))]
+		      "valid" ^ n,npapp(find_pred (pre),[])))]
 	     | Tarray(ty, Some s)->
 		 let n1 = f.var_unique_name in
 		 let pre = "%valid1_" ^ n1 in 
@@ -450,11 +440,11 @@ let add_predicates l =
 		 Cenv.add_pred (pre2)  ([], info2);
 		 noattr_located (
 		 Cast.Ninvariant_strong ("valid_array"^ n1,
-					 NPapp(find_pred (pre),[])))::
+					 npapp(find_pred (pre),[])))::
 		   noattr_located (
 		     Cast.Ninvariant_strong 
 		       ("valid_range" ^ n1,
-			NPapp(find_pred (pre2),
+			npapp(find_pred (pre2),
 			      [noattr_term (noattr_type (Tint (Signed,Int))) 
 				(NTconstant 
 				   (IntConstant (Int64.to_string s)))])))::

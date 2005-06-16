@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.148 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.149 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 
 open Format
@@ -235,7 +235,7 @@ let is_internal_pred s = String.length s >= 1 && String.sub s 0 1 = "%"
 let rec interp_predicate label old_label p =
   let f = interp_predicate label old_label in
   let ft = interp_term label old_label in
-  match p with
+  match p.npred_node with
     | NPtrue -> 
 	LTrue
     | NPexists (l, p) -> 
@@ -309,6 +309,13 @@ let rec interp_predicate label old_label p =
 	LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
     | NPnamed (n, p) ->
 	LNamed (n, f p)
+
+let interp_predicate label old_label p = 
+  let w = interp_predicate label old_label p in
+  if p.npred_loc = Loc.dummy then
+    w
+  else
+    LNamed ("\"" ^ String.escaped (Loc.string p.npred_loc) ^ "\"", w)
 
 let interp_predicate_opt label old_label pred =
   match pred with
@@ -968,7 +975,7 @@ let alloc_on_stack loc v t =
     Cnorm.make_and 
       (List.fold_left (fun x v2 -> Cnorm.make_and x 
 			   (Cnorm.separation loc v v2)) 
-	 NPtrue !Ceffect.global_var)
+	 Cnorm.nptrue !Ceffect.global_var)
       (Cnorm.valid_for_type ~fresh:true loc v.var_name t)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.47 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.48 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -111,7 +111,12 @@ and 'ctype term_node =
 
 (* typed predicates *)
 
-type 'ctype predicate =
+type 'ctype predicate = {
+  pred_node : 'ctype predicate_node;
+  pred_loc : Loc.t;
+}
+
+and 'ctype predicate_node = 
   | Pfalse
   | Ptrue
   | Papp of Info.logic_info * 'ctype term list
@@ -187,7 +192,12 @@ and 'ctype nterm_node =
   | NTcast of 'ctype * 'ctype nterm
   | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option
 
-type 'ctype npredicate =
+type 'ctype npredicate = {
+  npred_node : 'ctype npredicate_node;
+  npred_loc : Loc.t
+}
+
+and 'ctype npredicate_node =
   | NPfalse
   | NPtrue
   | NPapp of Info.logic_info * 'ctype nterm list

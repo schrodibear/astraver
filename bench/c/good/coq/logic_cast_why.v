@@ -3,7 +3,7 @@
 
 Require Export logic_cast_spec_why.
 
-(* Why obligation from file "why/logic_cast.why", characters 329-357 *)
+(* Why obligation from file "why/logic_cast.why", characters 412-440 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
@@ -13,7 +13,8 @@ Lemma f_impl_po_1 :
   forall (Variant1: Z),
   forall (I2: Z),
   forall (Pre6: Variant1 = (4 - I2)),
-  forall (Pre5: 0 <= I2 /\ I2 <= 4),
+  forall (Pre5: (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <=
+                I2 /\ I2 <= 4)),
   forall (Test2: I2 < 4),
   forall (caduceus_1: pointer),
   forall (Post5: caduceus_1 = (shift t I2)),
@@ -23,7 +24,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 292-357 *)
+(* Why obligation from file "why/logic_cast.why", characters 375-440 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
@@ -34,7 +35,8 @@ Lemma f_impl_po_2 :
   forall (I2: Z),
   forall (intP0: ((memory) Z)),
   forall (Pre6: Variant1 = (4 - I2)),
-  forall (Pre5: 0 <= I2 /\ I2 <= 4),
+  forall (Pre5: (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <=
+                I2 /\ I2 <= 4)),
   forall (Test2: I2 < 4),
   forall (caduceus_1: pointer),
   forall (Post5: caduceus_1 = (shift t I2)),
@@ -42,19 +44,21 @@ Lemma f_impl_po_2 :
   forall (intP1: ((memory) Z)),
   forall (Post16: intP1 = (upd intP0 caduceus_1 I2)),
   (forall (I:Z),
-   (I = (I2 + 1) -> (0 <= I /\ I <= 4) /\ (Zwf 0 (4 - I) (4 - I2)))).
+   (I = (I2 + 1) ->
+    (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <= I /\ I <= 4) /\
+    (Zwf 0 (4 - I) (4 - I2)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 229-259 *)
+(* Why obligation from file "why/logic_cast.why", characters 239-334 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
   forall (Pre7: (valid_range alloc t 0 3)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
-  0 <= I1 /\ I1 <= 4.
+  (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <= I1 /\ I1 <= 4).
 Proof.
 intuition.
 Save.

@@ -3,3 +3,33 @@
 
 Require Export sizeof_spec_why.
 
+(* Why obligation from file "why/sizeof.why", characters 36-139 *)
+Lemma f1_impl_po_1 : 
+  forall (result: Z),
+  forall (Post1: result = 4),
+  (* File \"sizeof.c\", line 2, characters 13-25 *) result = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sizeof.why", characters 178-283 *)
+Lemma f2_impl_po_1 : 
+  forall (result: Z),
+  forall (Post1: result = 34),
+  (* File \"sizeof.c\", line 5, characters 13-26 *) result = 34.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sizeof.why", characters 322-425 *)
+Lemma f3_impl_po_1 : 
+  forall (result: Z),
+  forall (Post1: result = 4),
+  (* File \"sizeof.c\", line 9, characters 13-25 *) result = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.10 2004-03-04 12:49:44 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.11 2005-06-16 07:30:34 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
@@ -55,23 +55,34 @@ let safe_linenum f b = try linenum f b with _ -> (1,1)
 
 open Format
 
-let report fmt (b,e) = match !file with
+let gen_report fmt (b,e) = match !file with
   | None ->
-      fprintf fmt "Standard input, characters %d-%d:\n" b e
+      fprintf fmt "Standard input, characters %d-%d" b e
   | Some f ->
       (try
          let (f,l,cl) = Linenum.from_char f b in
-         fprintf fmt "File \"%s\", line %d, characters %d-%d:@\n" 
+         fprintf fmt "File \"%s\", line %d, characters %d-%d" 
 	   f l cl (cl+e-b)
        with ex ->
 	 eprintf "%s\n" (Printexc.to_string ex);
-	 fprintf fmt "File \"%s\", characters %d-%d:@\n" f b e)
+	 fprintf fmt "File \"%s\", characters %d-%d" f b e)
+
+let report fmt loc = fprintf fmt "%a:@\n" gen_report loc
 
 let report_obligation fmt (b,e) = match !file with
   | None -> 
       fprintf fmt "Why obligation from standard input, characters %d-%d" b e
   | Some f ->
       fprintf fmt "Why obligation from file \"%s\", characters %d-%d" f b e
+
+let string =
+  let buf = Buffer.create 1024 in
+  fun loc ->
+    let fmt = Format.formatter_of_buffer buf in
+    Format.fprintf fmt "%a@?" gen_report loc;
+    let s = Buffer.contents buf in
+    Buffer.reset buf;
+    s
 
 (*s Line number *)
 

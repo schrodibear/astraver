@@ -1,6 +1,7 @@
 
-/* these programs _are_ incorrect
-   they are here to test the consistence of the theory */
+/* These programs _are_ incorrect i.e. the corresponding proof obligations
+   should _not_ be provable.
+   They are here to test the consistence of the theory. */
 
 struct u{int x;};
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.14 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.15 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -106,7 +106,7 @@ let relation = function
   | Eq -> "=="
   | Neq -> "!="
  
-let rec npredicate fmt = function
+let rec npredicate fmt p = match p.npred_node with
   | NPfalse ->
       fprintf fmt "false"
   | NPtrue ->

@@ -3,64 +3,70 @@
 
 Require Import continue_spec_why.
 
-(* Why obligation from file "why/continue.why", characters 269-275 *)
+(* Why obligation from file "why/continue.why", characters 339-345 *)
 Lemma f1_impl_po_1 : 
   forall (n: Z),
   forall (Post7: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
-  forall (Pre2: 0 <= n1),
+  forall (Pre2: (* File \"continue.c\", line 8, characters 17-23 *) 0 <= n1),
   forall (Test4: n1 > 0),
   forall (Test3: n1 = 5),
   forall (n2: Z),
   forall (Post4: n2 = 0),
-  (forall (result:unit), (result = tt -> 0 <= n2 /\ (Zwf 0 n2 n1))).
+  (forall (result:unit),
+   (result = tt ->
+    (* File \"continue.c\", line 8, characters 17-23 *) 0 <= n2 /\
+    (Zwf 0 n2 n1))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 301-321 *)
+(* Why obligation from file "why/continue.why", characters 371-391 *)
 Lemma f1_impl_po_2 : 
   forall (n: Z),
   forall (Post7: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
-  forall (Pre2: 0 <= n1),
+  forall (Pre2: (* File \"continue.c\", line 8, characters 17-23 *) 0 <= n1),
   forall (Test4: n1 > 0),
   forall (Test2: n1 <> 5),
   forall (n2: Z),
   forall (Post3: n2 = (n1 - 1)),
-  0 <= n2 /\ (Zwf 0 n2 n1).
+  (* File \"continue.c\", line 8, characters 17-23 *) 0 <= n2 /\
+  (Zwf 0 n2 n1).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 134-379 *)
+(* Why obligation from file "why/continue.why", characters 134-449 *)
 Lemma f1_impl_po_3 : 
   forall (n: Z),
   forall (Post7: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
-  forall (Pre2: 0 <= n1),
+  forall (Pre2: (* File \"continue.c\", line 8, characters 17-23 *) 0 <= n1),
   forall (Test1: n1 <= 0),
-  (forall (result:Z), (result = n1 -> result = 0)).
+  (forall (result:Z),
+   (result = n1 ->
+    (* File \"continue.c\", line 4, characters 13-25 *) result = 0)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 177-188 *)
+(* Why obligation from file "why/continue.why", characters 187-250 *)
 Lemma f1_impl_po_4 : 
   forall (n: Z),
   forall (Post7: n = 10),
-  0 <= n.
+  (* File \"continue.c\", line 8, characters 17-23 *) 0 <= n.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 731-737 *)
+(* Why obligation from file "why/continue.why", characters 924-930 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -69,19 +75,22 @@ Lemma f2_impl_po_1 :
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (10 - i2)),
-  forall (Pre2: i2 <= 10),
+  forall (Pre2: (* File \"continue.c\", line 20, characters 17-24 *) i2 <= 10),
   forall (Test4: i2 < 10),
   forall (Test3: i2 = 5),
   forall (i3: Z),
   forall (Post5: i3 = 6),
   (forall (result:unit),
    (result = tt ->
-    (forall (i:Z), (i = (i3 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))))).
+    (forall (i:Z),
+     (i = (i3 + 1) ->
+      (* File \"continue.c\", line 20, characters 17-24 *) i <= 10 /\
+      (Zwf 0 (10 - i) (10 - i2)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 755-755 *)
+(* Why obligation from file "why/continue.why", characters 948-948 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -90,17 +99,20 @@ Lemma f2_impl_po_2 :
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (10 - i2)),
-  forall (Pre2: i2 <= 10),
+  forall (Pre2: (* File \"continue.c\", line 20, characters 17-24 *) i2 <= 10),
   forall (Test4: i2 < 10),
   forall (Test2: i2 <> 5),
   forall (result2: unit),
   forall (Post4: result2 = tt),
-  (forall (i:Z), (i = (i2 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))).
+  (forall (i:Z),
+   (i = (i2 + 1) ->
+    (* File \"continue.c\", line 20, characters 17-24 *) i <= 10 /\
+    (Zwf 0 (10 - i) (10 - i2)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 589-846 *)
+(* Why obligation from file "why/continue.why", characters 711-1039 *)
 Lemma f2_impl_po_3 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -109,32 +121,35 @@ Lemma f2_impl_po_3 :
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (10 - i2)),
-  forall (Pre2: i2 <= 10),
+  forall (Pre2: (* File \"continue.c\", line 20, characters 17-24 *) i2 <= 10),
   forall (Test1: i2 >= 10),
-  (forall (result:Z), (result = i2 -> result = 10)).
+  (forall (result:Z),
+   (result = i2 ->
+    (* File \"continue.c\", line 16, characters 13-26 *) result = 10)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 633-645 *)
+(* Why obligation from file "why/continue.why", characters 765-830 *)
 Lemma f2_impl_po_4 : 
   forall (i: Z),
   forall (Post9: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  i1 <= 10.
+  (* File \"continue.c\", line 20, characters 17-24 *) i1 <= 10.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1228-1234 *)
+(* Why obligation from file "why/continue.why", characters 1555-1561 *)
 Lemma f3_impl_po_1 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (7 - i2)),
-  forall (Pre2: i2 <= 7 /\ i2 <> 6),
+  forall (Pre2: (* File \"continue.c\", line 31, characters 17-33 *) (i2 <=
+                7 /\ i2 <> 6)),
   forall (Test4: i2 < 6),
   forall (Test3: i2 = 5),
   forall (i3: Z),
@@ -142,48 +157,56 @@ Lemma f3_impl_po_1 :
   (forall (result:unit),
    (result = tt ->
     (forall (i:Z),
-     (i = (i3 + 1) -> (i <= 7 /\ i <> 6) /\ (Zwf 0 (7 - i) (7 - i2)))))).
+     (i = (i3 + 1) ->
+      (* File \"continue.c\", line 31, characters 17-33 *) (i <= 7 /\ i <> 6) /\
+      (Zwf 0 (7 - i) (7 - i2)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1252-1252 *)
+(* Why obligation from file "why/continue.why", characters 1579-1579 *)
 Lemma f3_impl_po_2 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (7 - i2)),
-  forall (Pre2: i2 <= 7 /\ i2 <> 6),
+  forall (Pre2: (* File \"continue.c\", line 31, characters 17-33 *) (i2 <=
+                7 /\ i2 <> 6)),
   forall (Test4: i2 < 6),
   forall (Test2: i2 <> 5),
   forall (result2: unit),
   forall (Post4: result2 = tt),
   (forall (i:Z),
-   (i = (i2 + 1) -> (i <= 7 /\ i <> 6) /\ (Zwf 0 (7 - i) (7 - i2)))).
+   (i = (i2 + 1) ->
+    (* File \"continue.c\", line 31, characters 17-33 *) (i <= 7 /\ i <> 6) /\
+    (Zwf 0 (7 - i) (7 - i2)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1069-1343 *)
+(* Why obligation from file "why/continue.why", characters 1315-1670 *)
 Lemma f3_impl_po_3 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (7 - i2)),
-  forall (Pre2: i2 <= 7 /\ i2 <> 6),
+  forall (Pre2: (* File \"continue.c\", line 31, characters 17-33 *) (i2 <=
+                7 /\ i2 <> 6)),
   forall (Test1: i2 >= 6),
-  (forall (result:Z), (result = i2 -> result = 7)).
+  (forall (result:Z),
+   (result = i2 ->
+    (* File \"continue.c\", line 27, characters 13-25 *) result = 7)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1112-1143 *)
+(* Why obligation from file "why/continue.why", characters 1368-1462 *)
 Lemma f3_impl_po_4 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  i1 <= 7 /\ i1 <> 6.
+  (* File \"continue.c\", line 31, characters 17-33 *) (i1 <= 7 /\ i1 <> 6).
 Proof.
 intuition.
 Save.

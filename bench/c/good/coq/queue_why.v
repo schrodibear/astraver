@@ -78,14 +78,15 @@ Lemma invariants_initially_established_impl_po_2 :
                                        (result = q ->
                                         (forall (full0:((memory) Z)),
                                          (full0 = (upd full result 1) ->
-                                          ((valid_range alloc
-                                            (acc contents0 q) 0
-                                            ((acc length0 q) - 1)) /\
+                                          (* File \"queue.c\", line 14, characters 5-105 *)
+                                          (((valid_range alloc
+                                             (acc contents0 q) 0
+                                             ((acc length0 q) - 1)) /\
                                           0 <= (acc first0 q) /\
                                           (acc first0 q) <
                                           (acc length0 q)) /\ 0 <=
                                           (acc last0 q) /\ (acc last0 q) <
-                                          (acc length0 q))) /\
+                                          (acc length0 q)))) /\
                                         (valid alloc result))))) /\
                                     (valid alloc result))))) /\
                                 (valid alloc result))))) /\
@@ -102,7 +103,7 @@ caduceus;unfold valid_range in *|- *;intuition.
 Save.
 
 
-(* Why obligation from file "why/queue.why", characters 1568-1587 *)
+(* Why obligation from file "why/queue.why", characters 1737-1756 *)
 Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -111,17 +112,19 @@ Lemma pop_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre23: ((acc empty q) = 0 /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre23: ((* File \"queue.c\", line 33, characters 14-22 *)
+                  (acc empty q) = 0 /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))) /\
                  (valid_range alloc q 0 0)),
   (valid alloc q).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 1720-1743 *)
+(* Why obligation from file "why/queue.why", characters 1889-1912 *)
 Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -130,10 +133,12 @@ Lemma pop_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre23: ((acc empty q) = 0 /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre23: ((* File \"queue.c\", line 33, characters 14-22 *)
+                  (acc empty q) = 0 /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))) /\
                  (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_1: pointer),
@@ -147,7 +152,7 @@ subst;auto.
 Save.
 
 
-(* Why obligation from file "why/queue.why", characters 1793-2048 *)
+(* Why obligation from file "why/queue.why", characters 1962-2217 *)
 Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -158,10 +163,12 @@ Lemma pop_impl_po_3 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre23: ((acc empty q) = 0 /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre23: ((* File \"queue.c\", line 33, characters 14-22 *)
+                  (acc empty q) = 0 /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))) /\
                  (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_1: pointer),
@@ -197,8 +204,9 @@ Lemma pop_impl_po_3 :
                         (forall (empty0:((memory) Z)),
                          (empty0 = (upd empty result result1) ->
                           (forall (result:Z),
-                           (result = result0 -> ((acc full0 q) = 0 /\
-                            result =
+                           (result = result0 ->
+                            (* File \"queue.c\", line 35, characters 13-60 *)
+                            ((acc full0 q) = 0 /\ result =
                             (acc intP (shift (acc contents q) (acc first q)))) /\
                             (((not_assigns alloc full full0
                                (pset_singleton q)) /\
@@ -206,11 +214,12 @@ Lemma pop_impl_po_3 :
                              (pset_singleton q))) /\
                             (not_assigns alloc empty empty0
                              (pset_singleton q))) /\
-                            ((valid_range alloc (acc contents q) 0
-                              ((acc length q) - 1)) /\
+                            (* File \"queue.c\", line 14, characters 5-105 *)
+                            (((valid_range alloc (acc contents q) 0
+                               ((acc length q) - 1)) /\
                             0 <= (acc first1 q) /\ (acc first1 q) <
                             (acc length q)) /\ 0 <= (acc last q) /\
-                            (acc last q) < (acc length q))))) /\
+                            (acc last q) < (acc length q)))))) /\
                         (valid alloc result))) /\
                      (valid alloc q)) /\ (valid alloc q))))) /\
                  (valid alloc result))))) /\
@@ -230,16 +239,19 @@ Lemma pop_impl_po_3 :
                     (forall (empty0:((memory) Z)),
                      (empty0 = (upd empty result result1) ->
                       (forall (result:Z),
-                       (result = result0 -> ((acc full0 q) = 0 /\ result =
+                       (result = result0 ->
+                        (* File \"queue.c\", line 35, characters 13-60 *)
+                        ((acc full0 q) = 0 /\ result =
                         (acc intP (shift (acc contents q) (acc first q)))) /\
                         (((not_assigns alloc full full0 (pset_singleton q)) /\
                         (not_assigns alloc first first0 (pset_singleton q))) /\
                         (not_assigns alloc empty empty0 (pset_singleton q))) /\
-                        ((valid_range alloc (acc contents q) 0
-                          ((acc length q) - 1)) /\
+                        (* File \"queue.c\", line 14, characters 5-105 *)
+                        (((valid_range alloc (acc contents q) 0
+                           ((acc length q) - 1)) /\
                         0 <= (acc first0 q) /\ (acc first0 q) <
                         (acc length q)) /\ 0 <= (acc last q) /\
-                        (acc last q) < (acc length q))))) /\
+                        (acc last q) < (acc length q)))))) /\
                     (valid alloc result))) /\
                  (valid alloc q)) /\ (valid alloc q))))) /\
              (valid alloc result)))))))) /\
@@ -251,7 +263,7 @@ rewrite acc_upd_eq in H8;auto.
 omega.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3671-3690 *)
+(* Why obligation from file "why/queue.why", characters 4072-4091 *)
 Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -260,17 +272,19 @@ Lemma push_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre23: ((acc full q) = 0 /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre23: ((* File \"queue.c\", line 20, characters 14-21 *)
+                  (acc full q) = 0 /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))) /\
                  (valid_range alloc q 0 0)),
   (valid alloc q).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3815-3837 *)
+(* Why obligation from file "why/queue.why", characters 4216-4238 *)
 Lemma push_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -279,10 +293,12 @@ Lemma push_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre23: ((acc full q) = 0 /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre23: ((* File \"queue.c\", line 20, characters 14-21 *)
+                  (acc full q) = 0 /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))) /\
                  (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
@@ -295,7 +311,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3883-4076 *)
+(* Why obligation from file "why/queue.why", characters 4284-4477 *)
 Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
@@ -307,10 +323,12 @@ Lemma push_impl_po_3 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre23: ((acc full q) = 0 /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre23: ((* File \"queue.c\", line 20, characters 14-21 *)
+                  (acc full q) = 0 /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))) /\
                  (valid_range alloc q 0 0)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
@@ -345,6 +363,7 @@ Lemma push_impl_po_3 :
                        (acc first q) <> (acc last1 q) /\ result0 = 0 ->
                        (forall (full0:((memory) Z)),
                         (full0 = (upd full result result0) ->
+                         (* File \"queue.c\", line 22, characters 13-54 *)
                          ((acc empty0 q) = 0 /\
                          (acc intP0 (shift (acc contents q) (acc last q))) =
                          c) /\
@@ -354,11 +373,12 @@ Lemma push_impl_po_3 :
                                            (acc last q))))) /\
                          (not_assigns alloc full full0 (pset_singleton q))) /\
                          (not_assigns alloc empty empty0 (pset_singleton q))) /\
-                         ((valid_range alloc (acc contents q) 0
-                           ((acc length q) - 1)) /\
+                         (* File \"queue.c\", line 14, characters 5-105 *)
+                         (((valid_range alloc (acc contents q) 0
+                            ((acc length q) - 1)) /\
                          0 <= (acc first q) /\ (acc first q) <
                          (acc length q)) /\ 0 <= (acc last1 q) /\
-                         (acc last1 q) < (acc length q))) /\
+                         (acc last1 q) < (acc length q)))) /\
                        (valid alloc result))) /\
                     (valid alloc q)) /\ (valid alloc q))))) /\
                 (valid alloc result))))) /\
@@ -376,18 +396,20 @@ Lemma push_impl_po_3 :
                   ((acc first q) = (acc last0 q) /\ result0 = 1 \/
                    (acc first q) <> (acc last0 q) /\ result0 = 0 ->
                    (forall (full0:((memory) Z)),
-                    (full0 = (upd full result result0) -> ((acc empty0 q) =
-                     0 /\ (acc intP0 (shift (acc contents q) (acc last q))) =
-                     c) /\
+                    (full0 = (upd full result result0) ->
+                     (* File \"queue.c\", line 22, characters 13-54 *)
+                     ((acc empty0 q) = 0 /\
+                     (acc intP0 (shift (acc contents q) (acc last q))) = c) /\
                      ((((not_assigns alloc last last0 (pset_singleton q)) /\
                      (not_assigns alloc intP intP0
                       (pset_singleton (shift (acc contents q) (acc last q))))) /\
                      (not_assigns alloc full full0 (pset_singleton q))) /\
                      (not_assigns alloc empty empty0 (pset_singleton q))) /\
-                     ((valid_range alloc (acc contents q) 0
-                       ((acc length q) - 1)) /\
+                     (* File \"queue.c\", line 14, characters 5-105 *)
+                     (((valid_range alloc (acc contents q) 0
+                        ((acc length q) - 1)) /\
                      0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
-                     0 <= (acc last0 q) /\ (acc last0 q) < (acc length q))) /\
+                     0 <= (acc last0 q) /\ (acc last0 q) < (acc length q)))) /\
                    (valid alloc result))) /\
                 (valid alloc q)) /\ (valid alloc q))))) /\
             (valid alloc result)))))))) /\
@@ -399,7 +421,7 @@ rewrite acc_upd_eq in H8;auto.
 omega.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 5792-5811 *)
+(* Why obligation from file "why/queue.why", characters 6425-6444 *)
 Lemma test_impl_po_1 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -409,20 +431,23 @@ Lemma test_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre5: ((((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
-                ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre5: ((* File \"queue.c\", line 45, characters 14-48 *)
+                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
+                (* File \"queue.c\", line 14, characters 5-105 *)
+                (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
-                (acc last q) /\ (acc last q) < (acc length q)) /\
+                (acc last q) /\ (acc last q) < (acc length q))) /\
                 (valid_range alloc q 0 0)),
-  ((acc empty q) = 0 /\
-  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
+  ((* File \"queue.c\", line 33, characters 14-22 *) (acc empty q) = 0 /\
+  (* File \"queue.c\", line 14, characters 5-105 *)
+  (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
   (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <= (acc last q) /\
-  (acc last q) < (acc length q)) /\ (valid_range alloc q 0 0).
+  (acc last q) < (acc length q))) /\ (valid_range alloc q 0 0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 5775-5816 *)
+(* Why obligation from file "why/queue.why", characters 6408-6449 *)
 Lemma test_impl_po_2 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -434,35 +459,43 @@ Lemma test_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre5: ((((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
-                ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre5: ((* File \"queue.c\", line 45, characters 14-48 *)
+                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
+                (* File \"queue.c\", line 14, characters 5-105 *)
+                (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
-                (acc last q) /\ (acc last q) < (acc length q)) /\
+                (acc last q) /\ (acc last q) < (acc length q))) /\
                 (valid_range alloc q 0 0)),
-  forall (Pre3: ((acc empty q) = 0 /\
-                ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+  forall (Pre3: ((* File \"queue.c\", line 33, characters 14-22 *)
+                 (acc empty q) = 0 /\
+                (* File \"queue.c\", line 14, characters 5-105 *)
+                (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
-                (acc last q) /\ (acc last q) < (acc length q)) /\
+                (acc last q) /\ (acc last q) < (acc length q))) /\
                 (valid_range alloc q 0 0)),
   forall (empty0: ((memory) Z)),
   forall (first0: ((memory) Z)),
   forall (full0: ((memory) Z)),
   forall (caduceus_1: Z),
-  forall (Post4: ((acc full0 q) = 0 /\ caduceus_1 =
+  forall (Post4: (* File \"queue.c\", line 35, characters 13-60 *)
+                 ((acc full0 q) = 0 /\ caduceus_1 =
                  (acc intP (shift (acc contents q) (acc first q)))) /\
                  (((not_assigns alloc full full0 (pset_singleton q)) /\
                  (not_assigns alloc first first0 (pset_singleton q))) /\
                  (not_assigns alloc empty empty0 (pset_singleton q))) /\
-                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+                 (* File \"queue.c\", line 14, characters 5-105 *)
+                 (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first0 q) /\ (acc first0 q) < (acc length q)) /\
-                 0 <= (acc last q) /\ (acc last q) < (acc length q)),
+                 0 <= (acc last q) /\ (acc last q) < (acc length q))),
   forall (result: unit),
   forall (Post1: result = tt),
   (forall (result:Z),
-   (result = (acc empty0 q1) -> result = (acc empty q1) /\
-    ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
+   (result = (acc empty0 q1) ->
+    (* File \"queue.c\", line 46, characters 13-39 *) result = (acc empty q1) /\
+    (* File \"queue.c\", line 14, characters 5-105 *)
+    (((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
     (acc first0 q) /\ (acc first0 q) < (acc length q)) /\ 0 <=
-    (acc last q) /\ (acc last q) < (acc length q))) /\
+    (acc last q) /\ (acc last q) < (acc length q)))) /\
   (valid alloc q1).
 Proof.
 intuition.

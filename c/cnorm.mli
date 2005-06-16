@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.7 2005-04-22 14:06:36 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.8 2005-06-16 07:30:33 filliatr Exp $ i*)
 
 open Cast
 
@@ -36,8 +36,22 @@ val valid_for_type :
 val separation :
     Loc.t -> Info.var_info -> Info.var_info -> Ctypes.ctype Clogic.npredicate
 
-val make_and : npredicate -> npredicate -> npredicate
-
 val file : tdecl located list -> ndecl located list
 
 val in_struct :  nterm -> Info.var_info -> nterm 
+
+(* smart constructors for predicates *)
+
+val make_and : npredicate -> npredicate -> npredicate
+val make_forall : nctype Clogic.typed_quantifiers -> npredicate -> npredicate
+val make_implies : npredicate -> npredicate -> npredicate
+
+val nptrue : npredicate
+val npand : npredicate * npredicate -> npredicate
+val nprel : nterm * Clogic.relation * nterm -> npredicate
+val npvalid : nterm -> npredicate
+val npvalid_range : nterm * nterm * nterm -> npredicate
+val npapp : Info.logic_info * nterm list -> npredicate
+
+
+

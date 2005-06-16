@@ -5,3 +5,34 @@ Require Export clash_redef_spec_why.
 
 
 
+(* Why obligation from file "why/clash_redef.why", characters 154-174 *)
+Lemma f3_impl_po_1 : 
+  forall (p1: pointer),
+  forall (alloc: alloc_table),
+  forall (Pre4: (* File \"clash_redef.c\", line 7, characters 14-24 *)
+                (valid alloc p1)),
+  (valid alloc p1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/clash_redef.why", characters 56-260 *)
+Lemma f3_impl_po_2 : 
+  forall (p1: pointer),
+  forall (p2_0: pointer),
+  forall (alloc: alloc_table),
+  forall (p2: ((memory) pointer)),
+  forall (Pre4: (* File \"clash_redef.c\", line 7, characters 14-24 *)
+                (valid alloc p1)),
+  forall (Pre3: (valid alloc p1)),
+  forall (p2_1: ((memory) pointer)),
+  forall (Post4: p2_1 = (upd p2 p1 p2_0)),
+  forall (result0: Z),
+  forall (Post3: result0 = 0),
+  (* File \"clash_redef.c\", line 8, characters 13-25 *) result0 = 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

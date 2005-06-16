@@ -3,7 +3,7 @@
 
 Require Export ifs_spec_why.
 
-(* Why obligation from file "why/ifs.why", characters 432-452 *)
+(* Why obligation from file "why/ifs.why", characters 485-505 *)
 Lemma V4A_impl_po_1 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -11,8 +11,8 @@ Lemma V4A_impl_po_1 :
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
-  forall (Pre34: ((valid alloc Parametre) /\
-                 (valid_range alloc Pn_Bac 0 4)) /\
+  forall (Pre34: (* File \"ifs.c\", line 16, characters 14-61 *)
+                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\
                  (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
                  (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
@@ -22,7 +22,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 487-978 *)
+(* Why obligation from file "why/ifs.why", characters 540-1031 *)
 Lemma V4A_impl_po_2 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -30,8 +30,8 @@ Lemma V4A_impl_po_2 :
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
-  forall (Pre34: ((valid alloc Parametre) /\
-                 (valid_range alloc Pn_Bac 0 4)) /\
+  forall (Pre34: (* File \"ifs.c\", line 16, characters 14-61 *)
+                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\
                  (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
                  (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
@@ -44,7 +44,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 487-978 *)
+(* Why obligation from file "why/ifs.why", characters 540-1031 *)
 Lemma V4A_impl_po_3 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -53,8 +53,8 @@ Lemma V4A_impl_po_3 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
-                 (valid_range alloc Pn_Bac 0 4)) /\
+  forall (Pre34: (* File \"ifs.c\", line 16, characters 14-61 *)
+                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\
                  (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
                  (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
@@ -70,7 +70,7 @@ apply valid_range_valid_shift with 0 4;auto;
 omega.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 487-978 *)
+(* Why obligation from file "why/ifs.why", characters 540-1031 *)
 Lemma V4A_impl_po_4 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -79,8 +79,8 @@ Lemma V4A_impl_po_4 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
-                 (valid_range alloc Pn_Bac 0 4)) /\
+  forall (Pre34: (* File \"ifs.c\", line 16, characters 14-61 *)
+                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\
                  (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
                  (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
@@ -97,7 +97,7 @@ generalize (valid_anonymous_0_CPRE_VC_pointer alloc VC Parametre H);
 unfold valid_anonymous_0_CPRE_VC;tauto.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 460-979 *)
+(* Why obligation from file "why/ifs.why", characters 513-1032 *)
 Lemma V4A_impl_po_5 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -106,8 +106,8 @@ Lemma V4A_impl_po_5 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
-                 (valid_range alloc Pn_Bac 0 4)) /\
+  forall (Pre34: (* File \"ifs.c\", line 16, characters 14-61 *)
+                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\
                  (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
                  (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\
@@ -131,7 +131,7 @@ intuition;subst;unfold valid1 in H8;intuition.
 Save.
 
 
-(* Why obligation from file "why/ifs.why", characters 460-979 *)
+(* Why obligation from file "why/ifs.why", characters 513-1032 *)
 Lemma V4A_impl_po_6 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -141,8 +141,8 @@ Lemma V4A_impl_po_6 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
-                 (valid_range alloc Pn_Bac 0 4)) /\
+  forall (Pre34: (* File \"ifs.c\", line 16, characters 14-61 *)
+                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\
                  (valid_range alloc Ch_Pn 0 3) /\
                  ~((base_addr SPMEP) = (base_addr Ch_Pn)) /\
                  (valid1_range VC 4) /\ (valid_range alloc SPMEP 0 3) /\

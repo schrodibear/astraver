@@ -13,7 +13,9 @@ Lemma f1_impl_po_1 :
   forall (Post10: y1 = 1),
   forall (y2: Z),
   forall (Post11: y2 = 4),
-  (forall (result:Z), (result = y2 -> (x = 4 -> result = 2))).
+  (forall (result:Z),
+   (result = y2 ->
+    (* File \"switch.c\", line 1, characters 13-31 *) ((x = 4 -> result = 2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -28,7 +30,9 @@ Lemma f1_impl_po_2 :
   forall (Test6: caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4),
   forall (y1: Z),
   forall (Post8: y1 = 2),
-  (forall (result:Z), (result = y1 -> (x = 4 -> result = 2))).
+  (forall (result:Z),
+   (result = y1 ->
+    (* File \"switch.c\", line 1, characters 13-31 *) ((x = 4 -> result = 2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -44,7 +48,9 @@ Lemma f1_impl_po_3 :
   forall (Test4: caduceus_1 = 3),
   forall (y1: Z),
   forall (Post6: y1 = 3),
-  (forall (result:Z), (result = y1 -> (x = 4 -> result = 2))).
+  (forall (result:Z),
+   (result = y1 ->
+    (* File \"switch.c\", line 1, characters 13-31 *) ((x = 4 -> result = 2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -66,7 +72,10 @@ Lemma f1_impl_po_4 :
   forall (Post3: y2 = 5),
   (forall (result:unit),
    (result = tt ->
-    (forall (result:Z), (result = y2 -> (x = 4 -> result = 2))))).
+    (forall (result:Z),
+     (result = y2 ->
+      (* File \"switch.c\", line 1, characters 13-31 *)
+      ((x = 4 -> result = 2)))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -87,13 +96,17 @@ Lemma f1_impl_po_5 :
   forall (result3: unit),
   forall (Post1: result3 = tt),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))).
+   (result = tt ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 1, characters 13-31 *)
+      ((x = 4 -> result = 2)))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1168-1191 *)
+(* Why obligation from file "why/switch.why", characters 1222-1245 *)
 Lemma f1a_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -104,13 +117,17 @@ Lemma f1a_impl_po_1 :
   forall (y2: Z),
   forall (Post13: y2 = 4),
   (forall (y:Z),
-   (y = 5 -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))).
+   (y = 5 ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 23, characters 13-31 *)
+      ((x = 4 -> result = 2)))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1303-1323 *)
+(* Why obligation from file "why/switch.why", characters 1357-1377 *)
 Lemma f1a_impl_po_2 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -121,13 +138,16 @@ Lemma f1a_impl_po_2 :
   forall (Post9: y1 = 2),
   forall (result2: Z),
   forall (Post10: result2 = y1),
-  (forall (result:Z), (result = result2 -> (x = 4 -> result = 2))).
+  (forall (result:Z),
+   (result = result2 ->
+    (* File \"switch.c\", line 23, characters 13-31 *)
+    ((x = 4 -> result = 2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1411-1431 *)
+(* Why obligation from file "why/switch.why", characters 1465-1485 *)
 Lemma f1a_impl_po_3 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -139,13 +159,16 @@ Lemma f1a_impl_po_3 :
   forall (Post6: y1 = 3),
   forall (result3: Z),
   forall (Post7: result3 = y1),
-  (forall (result:Z), (result = result3 -> (x = 4 -> result = 2))).
+  (forall (result:Z),
+   (result = result3 ->
+    (* File \"switch.c\", line 23, characters 13-31 *)
+    ((x = 4 -> result = 2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1786-1801 *)
+(* Why obligation from file "why/switch.why", characters 1840-1855 *)
 Lemma f1a_impl_po_4 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -160,13 +183,17 @@ Lemma f1a_impl_po_4 :
   (forall (result:unit),
    (result = tt ->
     (forall (y:Z),
-     (y = 5 -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))))).
+     (y = 5 ->
+      (forall (result:Z),
+       (result = y ->
+        (* File \"switch.c\", line 23, characters 13-31 *)
+        ((x = 4 -> result = 2)))))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1823-1823 *)
+(* Why obligation from file "why/switch.why", characters 1877-1877 *)
 Lemma f1a_impl_po_5 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -182,13 +209,17 @@ Lemma f1a_impl_po_5 :
   (forall (result:unit),
    (result = tt ->
     (forall (y:Z),
-     (y = 5 -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))))).
+     (y = 5 ->
+      (forall (result:Z),
+       (result = y ->
+        (* File \"switch.c\", line 23, characters 13-31 *)
+        ((x = 4 -> result = 2)))))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2248-2263 *)
+(* Why obligation from file "why/switch.why", characters 2357-2372 *)
 Lemma f2_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -210,13 +241,19 @@ Lemma f2_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
@@ -226,13 +263,19 @@ Lemma f2_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))))))) /\
   ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\ caduceus_1 <>
     4 ->
     (forall (result:unit),
@@ -247,13 +290,19 @@ Lemma f2_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
@@ -263,18 +312,24 @@ Lemma f2_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y1 -> result = 4)))))))))))))))).
+                (forall (result:Z),
+                 (result = y1 ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2281-2281 *)
+(* Why obligation from file "why/switch.why", characters 2390-2390 *)
 Lemma f2_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -297,13 +352,19 @@ Lemma f2_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
@@ -313,13 +374,19 @@ Lemma f2_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))))))) /\
   ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\ caduceus_1 <>
     4 ->
     (forall (result:unit),
@@ -334,13 +401,19 @@ Lemma f2_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
@@ -350,18 +423,24 @@ Lemma f2_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))))))).
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 45, characters 13-23 *) result =
+                  4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3319-3334 *)
+(* Why obligation from file "why/switch.why", characters 3479-3494 *)
 Lemma f3_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -380,13 +459,19 @@ Lemma f3_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
@@ -395,13 +480,19 @@ Lemma f3_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))))))) /\
   ((caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 3 ->
     (forall (result:unit),
      (result = tt ->
@@ -413,13 +504,19 @@ Lemma f3_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
@@ -428,18 +525,24 @@ Lemma f3_impl_po_1 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y1 -> result = 4)))))))))))))))).
+                (forall (result:Z),
+                 (result = y1 ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3352-3352 *)
+(* Why obligation from file "why/switch.why", characters 3512-3512 *)
 Lemma f3_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -459,13 +562,19 @@ Lemma f3_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
@@ -474,13 +583,19 @@ Lemma f3_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))))))) /\
   ((caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 3 ->
     (forall (result:unit),
      (result = tt ->
@@ -492,13 +607,19 @@ Lemma f3_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
@@ -507,18 +628,24 @@ Lemma f3_impl_po_2 :
              (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))) /\
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y -> result = 4)))))))))))))))).
+                (forall (result:Z),
+                 (result = y ->
+                  (* File \"switch.c\", line 64, characters 13-23 *) result =
+                  4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3999-4005 *)
+(* Why obligation from file "why/switch.why", characters 4210-4216 *)
 Lemma f4_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -528,12 +655,15 @@ Lemma f4_impl_po_1 :
   forall (Test4: caduceus_1 = 0),
   forall (Test3: x = 0),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y -> result = 0)))).
+   (result = tt ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 82, characters 13-23 *) result = 0)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4016-4016 *)
+(* Why obligation from file "why/switch.why", characters 4227-4227 *)
 Lemma f4_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -547,12 +677,15 @@ Lemma f4_impl_po_2 :
   (forall (y:Z),
    (y = 1 ->
     (forall (result:unit),
-     (result = tt -> (forall (result:Z), (result = y -> result = 0)))))).
+     (result = tt ->
+      (forall (result:Z),
+       (result = y ->
+        (* File \"switch.c\", line 82, characters 13-23 *) result = 0)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4048-4048 *)
+(* Why obligation from file "why/switch.why", characters 4259-4259 *)
 Lemma f4_impl_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -563,12 +696,15 @@ Lemma f4_impl_po_3 :
   forall (result0: unit),
   forall (Post2: result0 = tt),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y -> result = 0)))).
+   (result = tt ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 82, characters 13-23 *) result = 0)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4540-4546 *)
+(* Why obligation from file "why/switch.why", characters 4802-4808 *)
 Lemma f5_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -585,12 +721,15 @@ Lemma f5_impl_po_1 :
      (y = 1 ->
       (forall (result:unit),
        (result = tt ->
-        (forall (result:Z), (result = y -> (x = 1 -> result = 1))))))))).
+        (forall (result:Z),
+         (result = y ->
+          (* File \"switch.c\", line 94, characters 13-31 *)
+          ((x = 1 -> result = 1)))))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4473-4566 *)
+(* Why obligation from file "why/switch.why", characters 4735-4828 *)
 Lemma f5_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -608,7 +747,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4473-4566 *)
+(* Why obligation from file "why/switch.why", characters 4735-4828 *)
 Lemma f5_impl_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -623,12 +762,15 @@ Lemma f5_impl_po_3 :
    (y = 1 ->
     (forall (result:unit),
      (result = tt ->
-      (forall (result:Z), (result = y -> (x = 1 -> result = 1))))))).
+      (forall (result:Z),
+       (result = y ->
+        (* File \"switch.c\", line 94, characters 13-31 *)
+        ((x = 1 -> result = 1)))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4699-4699 *)
+(* Why obligation from file "why/switch.why", characters 4961-4961 *)
 Lemma f5_impl_po_4 : 
   forall (x: Z),
   forall (y: Z),
@@ -639,12 +781,16 @@ Lemma f5_impl_po_4 :
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y -> (x = 1 -> result = 1))))).
+   (result = tt ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 94, characters 13-31 *)
+      ((x = 1 -> result = 1)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5013-5028 *)
+(* Why obligation from file "why/switch.why", characters 5330-5345 *)
 Lemma f6_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -656,12 +802,15 @@ Lemma f6_impl_po_1 :
   forall (Post2: y1 = 1),
   (forall (result:unit),
    (result = tt ->
-    (forall (result:Z), (result = y1 -> (x = 2 -> result = 1))))).
+    (forall (result:Z),
+     (result = y1 ->
+      (* File \"switch.c\", line 106, characters 13-31 *)
+      ((x = 2 -> result = 1)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5046-5046 *)
+(* Why obligation from file "why/switch.why", characters 5363-5363 *)
 Lemma f6_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -672,12 +821,16 @@ Lemma f6_impl_po_2 :
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y -> (x = 2 -> result = 1))))).
+   (result = tt ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 106, characters 13-31 *)
+      ((x = 2 -> result = 1)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5337-5352 *)
+(* Why obligation from file "why/switch.why", characters 5710-5725 *)
 Lemma f7_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -689,12 +842,15 @@ Lemma f7_impl_po_1 :
   forall (Post2: y1 = 1),
   (forall (result:unit),
    (result = tt ->
-    (forall (result:Z), (result = y1 -> (x = A -> result = 1))))).
+    (forall (result:Z),
+     (result = y1 ->
+      (* File \"switch.c\", line 119, characters 13-31 *)
+      ((x = A -> result = 1)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5361-5361 *)
+(* Why obligation from file "why/switch.why", characters 5734-5734 *)
 Lemma f7_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -705,7 +861,11 @@ Lemma f7_impl_po_2 :
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y -> (x = A -> result = 1))))).
+   (result = tt ->
+    (forall (result:Z),
+     (result = y ->
+      (* File \"switch.c\", line 119, characters 13-31 *)
+      ((x = A -> result = 1)))))).
 Proof.
 intuition.
 Save.

@@ -162,12 +162,12 @@ src/smtlib.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
     src/env.cmx src/cc.cmi src/smtlib.cmi 
 src/typing.cmo: src/util.cmi src/types.cmi src/report.cmi src/rename.cmi \
     src/ptree.cmi src/options.cmi src/misc.cmi src/ltyping.cmi src/logic.cmi \
-    src/ident.cmi src/error.cmi src/env.cmi src/effect.cmi src/ast.cmi \
-    src/annot.cmi src/typing.cmi 
+    src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi src/effect.cmi \
+    src/ast.cmi src/annot.cmi src/typing.cmi 
 src/typing.cmx: src/util.cmx src/types.cmi src/report.cmx src/rename.cmx \
     src/ptree.cmi src/options.cmx src/misc.cmx src/ltyping.cmx src/logic.cmi \
-    src/ident.cmx src/error.cmi src/env.cmx src/effect.cmx src/ast.cmi \
-    src/annot.cmx src/typing.cmi 
+    src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx src/effect.cmx \
+    src/ast.cmi src/annot.cmx src/typing.cmi 
 src/util.cmo: src/types.cmi src/rename.cmi src/ptree.cmi src/pp.cmi \
     src/options.cmi src/misc.cmi src/logic.cmi src/ident.cmi src/env.cmi \
     src/effect.cmi src/cc.cmi src/ast.cmi src/util.cmi 

@@ -3,11 +3,11 @@
 
 Require Export enum_spec_why.
 
-(* Why obligation from file "why/enum.why", characters 33-82 *)
+(* Why obligation from file "why/enum.why", characters 35-134 *)
 Lemma f_impl_po_1 : 
   forall (result: unit),
   forall (Post1: result = tt),
-  y = 4.
+  (* File \"enum.c\", line 4, characters 13-19 *) y = 4.
 Proof.
 rewrite enum_E_y; intuition.
 Save.

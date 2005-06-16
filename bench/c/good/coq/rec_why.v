@@ -3,23 +3,25 @@
 
 Require Export rec_spec_why.
 
-(* Why obligation from file "why/rec.why", characters 74-132 *)
+(* Why obligation from file "why/rec.why", characters 121-179 *)
 Lemma f_impl_po_1 : 
   forall (x: Z),
-  forall (Pre3: x >= 0),
-  (x <> 0 -> (x - 1) >= 0).
+  forall (Pre3: (* File \"rec.c\", line 4, characters 14-20 *) x >= 0),
+  (x <> 0 -> (* File \"rec.c\", line 4, characters 14-20 *) (x - 1) >= 0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/rec.why", characters 33-162 *)
+(* Why obligation from file "why/rec.why", characters 33-256 *)
 Lemma f_impl_po_2 : 
   forall (x: Z),
-  forall (Pre3: x >= 0),
-  forall (Pre2: (x <> 0 -> (x - 1) >= 0)),
+  forall (Pre3: (* File \"rec.c\", line 4, characters 14-20 *) x >= 0),
+  forall (Pre2: (x <> 0 ->
+                 (* File \"rec.c\", line 4, characters 14-20 *) (x - 1) >= 0)),
   forall (result: Z),
-  forall (Post1: x = 0 /\ result = 0 \/ x <> 0 /\ result = 0),
-  result = 0.
+  forall (Post1: x = 0 /\ result = 0 \/ x <> 0 /\
+                 (* File \"rec.c\", line 4, characters 62-74 *) result = 0),
+  (* File \"rec.c\", line 4, characters 62-74 *) result = 0.
 Proof.
 intuition.
 Save.

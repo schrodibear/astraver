@@ -18,8 +18,9 @@ Lemma f1_impl_po_1 :
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
-  (valid alloc u1) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
-  (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1).
+  (* File \"separation.c\", line 46, characters 5-14 *) (valid alloc u1) /\
+  (valid1_range p2 5) /\ (valid1_range p1 5) /\ (separation1 p1 p2) /\
+  (valid1 p2) /\ (valid1 p1).
 Proof.
 intuition.
 Save.
@@ -42,7 +43,8 @@ Lemma f1_impl_po_2 :
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
-  forall (Pre6: (valid alloc u1) /\ (valid1_range p2 5) /\
+  forall (Pre6: (* File \"separation.c\", line 46, characters 5-14 *)
+                (valid alloc u1) /\ (valid1_range p2 5) /\
                 (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
                 (valid1 p1)),
   forall (intP0: ((memory) Z)),
@@ -53,8 +55,9 @@ Lemma f1_impl_po_2 :
                  (not_assigns alloc intP intP0
                   (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
                    (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
-  (valid alloc u2) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
-  (separation1 p1 p2) /\ (valid1 p2) /\ (valid1 p1).
+  (* File \"separation.c\", line 46, characters 5-14 *) (valid alloc u2) /\
+  (valid1_range p2 5) /\ (valid1_range p1 5) /\ (separation1 p1 p2) /\
+  (valid1 p2) /\ (valid1 p1).
 Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
@@ -77,7 +80,8 @@ Lemma f1_impl_po_3 :
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
-  forall (Pre6: (valid alloc u1) /\ (valid1_range p2 5) /\
+  forall (Pre6: (* File \"separation.c\", line 46, characters 5-14 *)
+                (valid alloc u1) /\ (valid1_range p2 5) /\
                 (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
                 (valid1 p1)),
   forall (intP0: ((memory) Z)),
@@ -88,7 +92,8 @@ Lemma f1_impl_po_3 :
                  (not_assigns alloc intP intP0
                   (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
                    (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
-  forall (Pre5: (valid alloc u2) /\ (valid1_range p2 5) /\
+  forall (Pre5: (* File \"separation.c\", line 46, characters 5-14 *)
+                (valid alloc u2) /\ (valid1_range p2 5) /\
                 (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
                 (valid1 p1)),
   forall (intP1: ((memory) Z)),
@@ -507,9 +512,10 @@ Lemma f3_impl_po_1 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc u3) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;
 generalize (H1 u3);intuition.
@@ -876,7 +882,8 @@ Lemma f3_impl_po_2 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -892,9 +899,10 @@ Lemma f3_impl_po_2 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc u4) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
@@ -1260,7 +1268,8 @@ Lemma f3_impl_po_3 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -1276,7 +1285,8 @@ Lemma f3_impl_po_3 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -1292,9 +1302,10 @@ Lemma f3_impl_po_3 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w1) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
@@ -1660,7 +1671,8 @@ Lemma f3_impl_po_4 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -1676,7 +1688,8 @@ Lemma f3_impl_po_4 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -1692,7 +1705,8 @@ Lemma f3_impl_po_4 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -1708,9 +1722,10 @@ Lemma f3_impl_po_4 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w2) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
@@ -2076,7 +2091,8 @@ Lemma f3_impl_po_5 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2092,7 +2108,8 @@ Lemma f3_impl_po_5 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2108,7 +2125,8 @@ Lemma f3_impl_po_5 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2124,7 +2142,8 @@ Lemma f3_impl_po_5 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2140,9 +2159,10 @@ Lemma f3_impl_po_5 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w3) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
@@ -2508,7 +2528,8 @@ Lemma f3_impl_po_6 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2524,7 +2545,8 @@ Lemma f3_impl_po_6 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2540,7 +2562,8 @@ Lemma f3_impl_po_6 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2556,7 +2579,8 @@ Lemma f3_impl_po_6 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2572,7 +2596,8 @@ Lemma f3_impl_po_6 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2588,9 +2613,10 @@ Lemma f3_impl_po_6 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w4) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
@@ -2956,7 +2982,8 @@ Lemma f3_impl_po_7 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2972,7 +2999,8 @@ Lemma f3_impl_po_7 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -2988,7 +3016,8 @@ Lemma f3_impl_po_7 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3004,7 +3033,8 @@ Lemma f3_impl_po_7 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3020,7 +3050,8 @@ Lemma f3_impl_po_7 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3036,7 +3067,8 @@ Lemma f3_impl_po_7 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3052,9 +3084,10 @@ Lemma f3_impl_po_7 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w5) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
@@ -3420,7 +3453,8 @@ Lemma f3_impl_po_8 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3436,7 +3470,8 @@ Lemma f3_impl_po_8 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3452,7 +3487,8 @@ Lemma f3_impl_po_8 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3468,7 +3504,8 @@ Lemma f3_impl_po_8 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3484,7 +3521,8 @@ Lemma f3_impl_po_8 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3500,7 +3538,8 @@ Lemma f3_impl_po_8 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3516,7 +3555,8 @@ Lemma f3_impl_po_8 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3532,9 +3572,10 @@ Lemma f3_impl_po_8 :
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
                    (pset_singleton w5))),
-  (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w6) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
@@ -3900,7 +3941,8 @@ Lemma f3_impl_po_9 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3916,7 +3958,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3932,7 +3975,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3948,7 +3992,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3964,7 +4009,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3980,7 +4026,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -3996,7 +4043,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4012,7 +4060,8 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
                    (pset_singleton w5))),
-  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4028,9 +4077,10 @@ Lemma f3_impl_po_9 :
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
                    (pset_singleton w6))),
-  (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w7) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
@@ -4396,7 +4446,8 @@ Lemma f3_impl_po_10 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4412,7 +4463,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4428,7 +4480,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4444,7 +4497,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4460,7 +4514,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4476,7 +4531,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4492,7 +4548,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4508,7 +4565,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
                    (pset_singleton w5))),
-  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4524,7 +4582,8 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
                    (pset_singleton w6))),
-  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4540,9 +4599,10 @@ Lemma f3_impl_po_10 :
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
                    (pset_singleton w7))),
-  (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w8) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
@@ -4908,7 +4968,8 @@ Lemma f3_impl_po_11 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4924,7 +4985,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4940,7 +5002,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4956,7 +5019,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4972,7 +5036,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -4988,7 +5053,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5004,7 +5070,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5020,7 +5087,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
                    (pset_singleton w5))),
-  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5036,7 +5104,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
                    (pset_singleton w6))),
-  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5052,7 +5121,8 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
                    (pset_singleton w7))),
-  forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre27: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5068,9 +5138,10 @@ Lemma f3_impl_po_11 :
                    (pset_singleton w8))) /\
                   (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
                    (pset_singleton w8))),
-  (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w9) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
@@ -5436,7 +5507,8 @@ Lemma f3_impl_po_12 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5452,7 +5524,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5468,7 +5541,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5484,7 +5558,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5500,7 +5575,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5516,7 +5592,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5532,7 +5609,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5548,7 +5626,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
                    (pset_singleton w5))),
-  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5564,7 +5643,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
                    (pset_singleton w6))),
-  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5580,7 +5660,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
                    (pset_singleton w7))),
-  forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre27: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5596,7 +5677,8 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w8))) /\
                   (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
                    (pset_singleton w8))),
-  forall (Pre26: (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre26: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5612,9 +5694,10 @@ Lemma f3_impl_po_12 :
                    (pset_singleton w9))) /\
                   (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
                    (pset_singleton w9))),
-  (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
-  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
-  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p1 anonymous_2_p2).
+  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w10) /\
+  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
+  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+  (separation1 anonymous_2_p1 anonymous_2_p2).
 Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
@@ -5980,7 +6063,8 @@ Lemma f3_impl_po_13 :
                  ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
                  ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -5996,7 +6080,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton u3))) /\
                   (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
                    (pset_singleton u3))),
-  forall (Pre35: (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6012,7 +6097,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton u4))) /\
                   (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
                    (pset_singleton u4))),
-  forall (Pre34: (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6028,7 +6114,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w1))) /\
                   (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
                    (pset_singleton w1))),
-  forall (Pre33: (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6044,7 +6131,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w2))) /\
                   (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
                    (pset_singleton w2))),
-  forall (Pre32: (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6060,7 +6148,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w3))) /\
                   (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
                    (pset_singleton w3))),
-  forall (Pre31: (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6076,7 +6165,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w4))) /\
                   (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
                    (pset_singleton w4))),
-  forall (Pre30: (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6092,7 +6182,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w5))) /\
                   (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
                    (pset_singleton w5))),
-  forall (Pre29: (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6108,7 +6199,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w6))) /\
                   (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
                    (pset_singleton w6))),
-  forall (Pre28: (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6124,7 +6216,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w7))) /\
                   (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
                    (pset_singleton w7))),
-  forall (Pre27: (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre27: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6140,7 +6233,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w8))) /\
                   (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
                    (pset_singleton w8))),
-  forall (Pre26: (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre26: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6156,7 +6250,8 @@ Lemma f3_impl_po_13 :
                    (pset_singleton w9))) /\
                   (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
                    (pset_singleton w9))),
-  forall (Pre25: (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
+  forall (Pre25: (* File \"separation.c\", line 81, characters 5-14 *)
+                 (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
                  (valid1_range anonymous_2_p1 5) /\
                  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
                  (separation1 anonymous_2_p1 anonymous_2_p2)),
@@ -6358,7 +6453,9 @@ Lemma f_impl_po_3 :
             (forall (intP:((memory) Z)),
              (intP = (upd intP0 result 3) ->
               (((forall (result:Z),
-                 (result = (acc intP (acc t s)) -> result = 1)) /\
+                 (result = (acc intP (acc t s)) ->
+                  (* File \"separation.c\", line 11, characters 13-25 *)
+                  result = 1)) /\
               (valid alloc s)) /\ (valid alloc (acc t s))) /\
               (valid alloc (acc t s)))) /\
             (valid alloc result))))) /\
@@ -6384,7 +6481,7 @@ rewrite <- shift_zero with (s#t).
 apply neq_base_addr_neq_shift;tauto.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 158844-158859 *)
+(* Why obligation from file "why/separation.why", characters 158899-158914 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
@@ -6395,7 +6492,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/separation.why", characters 159009-159037 *)
+(* Why obligation from file "why/separation.why", characters 159064-159092 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
@@ -6407,7 +6504,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 159009-159037 *)
+(* Why obligation from file "why/separation.why", characters 159064-159092 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),

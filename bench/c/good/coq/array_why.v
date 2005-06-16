@@ -3,12 +3,13 @@
 
 Require Export array_spec_why.
 
-(* Why obligation from file "why/array.why", characters 349-452 *)
+(* Why obligation from file "why/array.why", characters 403-506 *)
 Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (Pre5: ((valid_index alloc t 1) /\
+  forall (Pre5: (* File \"array.c\", line 4, characters 14-55 *)
+                ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
                 (valid_range alloc t 0 2) /\
                 (forall (counter:Z),
@@ -19,12 +20,13 @@ Proof.
 intuition; subst; auto with *.
 Save.
 
-(* Why obligation from file "why/array.why", characters 349-452 *)
+(* Why obligation from file "why/array.why", characters 403-506 *)
 Lemma getcell_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (Pre5: ((valid_index alloc t 1) /\
+  forall (Pre5: (* File \"array.c\", line 4, characters 14-55 *)
+                ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
                 (valid_range alloc t 0 2) /\
                 (forall (counter:Z),
