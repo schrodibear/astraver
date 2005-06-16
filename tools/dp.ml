@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.11 2005-06-16 07:30:34 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.12 2005-06-16 13:36:14 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -63,7 +63,7 @@ let call_simplify f =
        !timeout f)
 
 let call_harvey f =
-  let out = Sys.command (sprintf "rvc %s > /dev/null 2>&1" f) in
+  let out = Sys.command (sprintf "rvc -e -t %s > /dev/null 2>&1" f) in
   if out = 0 then begin 
     let f = Filename.chop_suffix f ".rv" in
     let rec iter i =
@@ -87,7 +87,7 @@ let call_harvey f =
     in
     iter 0
   end
-  else begin eprintf "rvc failed!" end
+  else begin eprintf "rvc failed!\n"; flush stderr end
 
 let split f =
   printf "%s: " f; flush stdout;

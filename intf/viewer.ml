@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: viewer.ml,v 1.8 2003-12-16 10:04:09 filliatr Exp $ i*)
+(*i $Id: viewer.ml,v 1.9 2005-06-16 13:36:14 filliatr Exp $ i*)
 
 open Format
 open Options
@@ -43,7 +43,7 @@ let _ =
     List.iter deal_file Options.files;
     typed_progs := List.rev !typed_progs
   with e ->
-    Main.explain_exception err_formatter e;
+    Report.explain_exception err_formatter e;
     pp_print_newline err_formatter ();
     exit 1
 
@@ -86,7 +86,7 @@ module Tree = struct
     | Seq bl -> statements bl
     | Try (e, pl) -> e :: List.map snd pl
     | Raise _ 
-    | Var _ | Acc _ | Expression _ | Absurd -> []
+    | Var _ | Acc _ | Expression _ | Absurd | Any _ -> []
 
 end
 

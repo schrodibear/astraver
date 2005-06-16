@@ -257,12 +257,12 @@ c/cast_misc.cmo: c/ctypes.cmi c/cast.cmi c/cast_misc.cmi
 c/cast_misc.cmx: c/ctypes.cmx c/cast.cmi c/cast_misc.cmi 
 c/cconst.cmo: c/creport.cmi c/cconst.cmi 
 c/cconst.cmx: c/creport.cmx c/cconst.cmi 
-c/ceffect.cmo: src/pp.cmi c/output.cmi src/loc.cmi c/invariant.cmi c/info.cmi \
-    c/ctypes.cmi c/creport.cmi c/coptions.cmi c/cnorm.cmi c/clogic.cmi \
-    c/cinit.cmi c/cenv.cmi c/cast.cmi c/ceffect.cmi 
-c/ceffect.cmx: src/pp.cmx c/output.cmx src/loc.cmx c/invariant.cmx c/info.cmx \
-    c/ctypes.cmx c/creport.cmx c/coptions.cmx c/cnorm.cmx c/clogic.cmi \
-    c/cinit.cmx c/cenv.cmx c/cast.cmi c/ceffect.cmi 
+c/ceffect.cmo: src/pp.cmi c/output.cmi src/loc.cmi c/info.cmi c/ctypes.cmi \
+    c/creport.cmi c/coptions.cmi c/cnorm.cmi c/clogic.cmi c/cinit.cmi \
+    c/cenv.cmi c/cast.cmi c/ceffect.cmi 
+c/ceffect.cmx: src/pp.cmx c/output.cmx src/loc.cmx c/info.cmx c/ctypes.cmx \
+    c/creport.cmx c/coptions.cmx c/cnorm.cmx c/clogic.cmi c/cinit.cmx \
+    c/cenv.cmx c/cast.cmi c/ceffect.cmi 
 c/cenv.cmo: src/lib.cmi c/info.cmi c/ctypes.cmi c/creport.cmi c/coptions.cmi \
     c/cenv.cmi 
 c/cenv.cmx: src/lib.cmx c/info.cmx c/ctypes.cmx c/creport.cmx c/coptions.cmx \
@@ -357,10 +357,12 @@ c/output.cmo: src/loc.cmi c/creport.cmi c/output.cmi
 c/output.cmx: src/loc.cmx c/creport.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 
 intf/navig.cmx: intf/navig.cmi 
-intf/viewer.cmo: src/util.cmi src/options.cmi intf/navig.cmi src/main.cmo \
-    src/log.cmi src/loc.cmi intf/hilight.cmo src/env.cmi src/ast.cmi 
-intf/viewer.cmx: src/util.cmx src/options.cmx intf/navig.cmx src/main.cmx \
-    src/log.cmi src/loc.cmx intf/hilight.cmx src/env.cmx src/ast.cmi 
+intf/viewer.cmo: src/util.cmi src/report.cmi src/options.cmi intf/navig.cmi \
+    src/main.cmo src/log.cmi src/loc.cmi intf/hilight.cmo src/env.cmi \
+    src/ast.cmi 
+intf/viewer.cmx: src/util.cmx src/report.cmx src/options.cmx intf/navig.cmx \
+    src/main.cmx src/log.cmi src/loc.cmx intf/hilight.cmx src/env.cmx \
+    src/ast.cmi 
 tools/cvcl_split.cmo: tools/cvcl_split.cmi 
 tools/cvcl_split.cmx: tools/cvcl_split.cmi 
 tools/dp.cmo: tools/simplify_split.cmi tools/cvcl_split.cmi 

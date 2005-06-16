@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.25 2005-05-25 13:03:52 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.26 2005-06-16 13:36:14 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -74,13 +74,25 @@ let prefix id =
     Report.raise_unlocated (AnyMessage "haRVey does not support reals")
   else assert false
 
+(* we need to rename a few identifiers *)
+
+let is_harvey_keyword =
+  let ht = Hashtbl.create 17 in
+  List.iter (fun kw -> Hashtbl.add ht kw ()) 
+    ["true"; "false"; "le"; "lt"];
+  Hashtbl.mem ht
+
+let ident fmt id =
+  let s = Ident.string id in
+  if is_harvey_keyword s then fprintf fmt "harvey_%s" s else Ident.print fmt id
+
 let rec print_term fmt = function
   | Tvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Tconst (ConstInt n) -> 
       fprintf fmt "%d" n
   | Tconst (ConstBool b) -> 
-      fprintf fmt "%b" b
+      fprintf fmt "harvey_%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat _) ->
@@ -96,7 +108,7 @@ let rec print_term fmt = function
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	Ident.print id (print_list space print_term) tl
+	ident id (print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -109,7 +121,7 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "false"
   | Pvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->
@@ -120,7 +132,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, _) -> 
-      fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" ident id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(->@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
@@ -137,11 +149,11 @@ let rec print_predicate fmt = function
   | Forall (_,id,n,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(forall %a@ %a)@]" Ident.print id' print_predicate p'
+      fprintf fmt "@[(forall %a@ %a)@]" ident id' print_predicate p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(exists %a@ %a)@]" Ident.print id' print_predicate p'
+      fprintf fmt "@[(exists %a@ %a)@]" ident id' print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported with haRVey"
   | Pnamed (_, p) -> (* TODO: print name *)
@@ -155,9 +167,10 @@ let print_axiom fmt id p =
 
 let print_predicate_def fmt id p =
   let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[(forall %a (<-> (%s %a)@ @[%a@]))@]@\n@\n" 
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl id
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+  fprintf fmt "@[;; Why predicate %s@\n" id;
+  fprintf fmt "(forall %a (<-> (%s %a)@ @[%a@]))@]@\n@\n" 
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl id
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
     print_predicate p;
   Hashtbl.add defpred (Ident.create id) ()
 
@@ -165,9 +178,11 @@ let print_elem fmt = function
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate_def fmt id p
 
-let output_theory fmt =
+let output_theory fmt f =
   fprintf fmt "(@\n@[";
+  fprintf fmt "(theory %s_why@\n(extends)@\n(axioms@\n" f;
   Queue.iter (print_elem fmt) theory;
+  fprintf fmt "))@\n";
   fprintf fmt "@]@\n) ;; END THEORY@\n"
 
 let output_sequent fmt (ctx, c) = match ctx with
@@ -217,7 +232,10 @@ let output_file f =
   let fname = f ^ "_why.rv" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
-  if Options.no_harvey_prelude then fprintf fmt "()@\n" else output_theory fmt;
+  if Options.no_harvey_prelude then 
+    fprintf fmt "()@\n" 
+  else 
+    output_theory fmt (Filename.basename f);
   Queue.iter (output_obligation fmt) oblig;
   pp_print_flush fmt ();
   close_out cout

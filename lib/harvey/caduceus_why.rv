@@ -473,5 +473,4 @@
 		     (neq (acc intP (shift src i)) 0))))))
 ))
 
-)
-
+) ;; END THEORY

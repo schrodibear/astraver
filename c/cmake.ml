@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.13 2005-06-07 13:04:35 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.14 2005-06-16 13:36:13 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -98,7 +98,7 @@ let generic f targets =
        fprintf fmt "harvey: %a@\n" (print_files harvey_all) targets;
        fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout 10 $^)@\n@\n";
        fprintf fmt "harvey/%%_why.all.rv: harvey/%%_why.rv@\n";
-       fprintf fmt "\t@@rv_merge harvey/caduceus_why.rv harvey/%s_spec_why.rv $< > $@@@\n@\n" f;
+       fprintf fmt "\t@@rv_merge $(CADULIB)/harvey/caduceus_why.rv harvey/%s_spec_why.rv $< > $@@@\n@\n" f;
        fprintf fmt "harvey/%%_why.rv: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        

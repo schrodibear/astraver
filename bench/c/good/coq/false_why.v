@@ -63,7 +63,7 @@ Lemma false1_impl_po_3 :
        (result = (shift y_0 5) ->
         (forall (intP0:((memory) Z)),
          (intP0 = (upd intP result 2) ->
-          (* File \"false.c\", line 15, characters 13-19 *) False)) /\
+          (* File \"false.c\", line 16, characters 13-19 *) False)) /\
         (valid alloc result))))) /\
     (valid alloc result))).
 Proof.
