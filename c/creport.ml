@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.14 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.15 2005-06-17 12:57:15 marche Exp $ i*)
 
 open Format
 open Cerror
@@ -105,9 +105,17 @@ let raise_locop locop e = raise (Error (option_app reloc locop, e))
 let unsupported loc s = raise (Error (Some (reloc loc), Unsupported s))
 
 let error l s = raise (Error (Some (reloc l), AnyMessage s))
-let warning l s = 
-  let l = reloc l in
-  Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s;
-  if Coptions.werror then exit 1
 
+let wtbl = Hashtbl.create 17;;
+
+let warning l s = 
+  let n = try Hashtbl.find wtbl s with Not_found -> 0 in
+  if n <= 2 then
+    begin
+      Hashtbl.add wtbl s (n+1);
+      let l = reloc l in
+      Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s;
+      if n = 2 then Format.eprintf "(this repeated warning will not appear anymore)@.";
+      if Coptions.werror then exit 1
+    end
 

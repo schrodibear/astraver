@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.25 2004-12-01 17:10:02 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.26 2005-06-17 12:57:15 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -213,7 +213,7 @@ let rec print_cc_type fmt = function
   | TTarray v -> 
       fprintf fmt "(@[ARRAY INT OF %a@])" print_cc_type v
   | TTarrow ((_,CC_var_binder t1), t2) -> 
-      fprintf fmt "[%a ->@ %a]" print_cc_type t1 print_cc_type t2
+      fprintf fmt "(%a ->@ %a)" print_cc_type t1 print_cc_type t2
   | _ -> 
       assert false
 
@@ -233,15 +233,15 @@ let rec print_logic_type fmt = function
   | Predicate [] ->
       fprintf fmt "BOOLEAN"
   | Predicate [pt] ->
-      fprintf fmt "[%a -> BOOLEAN]" print_pure_type pt
+      fprintf fmt "(%a -> BOOLEAN)" print_pure_type pt
   | Predicate pl ->
-      fprintf fmt "[[%a] -> BOOLEAN]" (print_list comma print_pure_type) pl
+      fprintf fmt "((%a) -> BOOLEAN)" (print_list comma print_pure_type) pl
   | Function ([], pt) ->
       print_pure_type fmt pt
   | Function ([pt1], pt2) ->
-      fprintf fmt "[%a -> %a]" print_pure_type pt1 print_pure_type pt2
+      fprintf fmt "(%a -> %a)" print_pure_type pt1 print_pure_type pt2
   | Function (pl, pt) ->
-      fprintf fmt "[[%a] -> %a]" 
+      fprintf fmt "((%a) -> %a)" 
 	(print_list comma print_pure_type) pl print_pure_type pt
 
 module Mono = struct
@@ -290,14 +290,14 @@ let print_elem fmt = function
 
 let prelude_done = ref false
 let prelude fmt = 
-  if not !prelude_done then begin
+  if not !prelude_done && not no_cvcl_prelude then begin
     prelude_done := true;
     fprintf fmt "
 UNIT: TYPE;
 tt: UNIT;
-sqrt_real: [REAL -> REAL];
-int_of_real: [REAL -> INT];
-mod_int: [[INT, INT] -> INT];
+sqrt_real: REAL -> REAL;
+int_of_real: REAL -> INT;
+mod_int: (INT, INT) -> INT;
 "
   end
 
