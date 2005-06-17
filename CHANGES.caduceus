@@ -1,7 +1,7 @@
 Note: These are the changes for Caduceus.
 
 
- o avoiding repetition of the same warning
+ o repetition of the same warning avoided
  o labels inserted in Why code to trace the origin of each annotation
    in the C source
  o new declaration to define a logic function
