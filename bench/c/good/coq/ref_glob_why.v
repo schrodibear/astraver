@@ -81,7 +81,6 @@ Lemma f4_impl_po_1 :
   (valid alloc plas).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "why/ref_glob.why", characters 872-899 *)
@@ -100,29 +99,7 @@ Lemma f4_impl_po_2 :
   (valid alloc caduceus_1).
 Proof.
 intuition.
-subst.
-rewrite H11;auto.
-generalize (H2 plas alloc H).
-intro.
-apply pset_singleton_intro.
-generalize (neq_base_addr_neq_shift (plas#c1) (plas#c2) 0 0 H4).
-repeat rewrite shift_zero;auto.
 subst;auto.
-subst.
-red.
-intros.
-rewrite H11;auto.
-rewrite H8;auto.
-rewrite acc_upd_neq;auto.
-intro;subst.
-generalize (pset_union_elim1 _  _ _  H6);auto.
-apply not_not_in_pset_singleton.
-generalize (pset_union_elim2 _  _ _  H6);auto.
-generalize (pset_union_elim1 _ _ _ H6);auto.
-subst;auto.
-subst.
-unfold valid1 in H5.
-intuition.
 Save.
 
 (* Why obligation from file "why/ref_glob.why", characters 834-899 *)
@@ -166,7 +143,29 @@ Lemma f4_impl_po_3 :
   (valid alloc plas).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+rewrite H11;auto.
+generalize (H2 plas alloc H).
+intro.
+apply pset_singleton_intro.
+generalize (neq_base_addr_neq_shift (plas#c1) (plas#c2) 0 0 H4).
+repeat rewrite shift_zero;auto.
+subst;auto.
+subst.
+red.
+intros.
+rewrite H11;auto.
+rewrite H8;auto.
+rewrite acc_upd_neq;auto.
+intro;subst.
+generalize (pset_union_elim1 _  _ _  H6);auto.
+apply not_not_in_pset_singleton.
+generalize (pset_union_elim2 _  _ _  H6);auto.
+generalize (pset_union_elim1 _ _ _ H6);auto.
+subst;auto.
+subst.
+unfold valid1 in H5.
+intuition.
 Save.
 
 (* Why obligation from file "why/ref_glob.why", characters 1395-1413 *)
@@ -178,7 +177,6 @@ Lemma g_impl_po_1 :
   (valid alloc p).
 Proof.
 intuition.
-subst; caduceus.
 Save.
 
 (* Why obligation from file "why/ref_glob.why", characters 1301-1566 *)
@@ -195,7 +193,7 @@ Lemma g_impl_po_2 :
   (not_assigns alloc intP intP0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; caduceus.
 Save.
 
 (* Why obligation from file "why/ref_glob.why", characters 1761-1776 *)
@@ -222,10 +220,7 @@ Lemma h_impl_po_2 :
   forall (Post3: caduceus_1 = (acc intPP p)),
   (valid alloc caduceus_1).
 Proof.
-intuition;subst;caduceus.
-red;intros.
-rewrite acc_upd_neq;auto.
-generalize (pset_singleton_elim _ _ H2);auto.
+intuition;subst;auto.
 Save.
 
 (* Why obligation from file "why/ref_glob.why", characters 1744-1808 *)
@@ -246,7 +241,9 @@ Lemma h_impl_po_3 :
   (acc intP0 (acc intPP p)) = 2 /\
   (not_assigns alloc intP intP0 (pset_singleton (acc intPP p))).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; caduceus.
+red;intros.
+rewrite acc_upd_neq;auto.
+generalize (pset_singleton_elim _ _ H2);auto.
 Save.
 

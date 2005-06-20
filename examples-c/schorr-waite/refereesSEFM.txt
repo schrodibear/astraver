@@ -377,7 +377,7 @@ TODO   also at the beginning of 4.4: it would be useful to roughly describe
 
 TODO   the functionality, strengths and weaknesses of Simplify;
 
-DONE? page 7, right col.: surprised -> surprising
+DONE page 7, right col.: surprised -> surprising
 
 TODO page 8, left col.: 'the most important one is ...': why is this the
 
@@ -423,7 +423,7 @@ TODO   this is undefined!
 
 DONE   defined -> defining
 
-????   this are -> these are
+DONE   this are -> these are
 
 TODO page 9, right col, first paragr.: 'This would require to define
 

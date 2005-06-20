@@ -23,13 +23,12 @@ int f() {
 int g() {
   int t[] = {4,5};
   int x = 45;
-  /*
-  int *t = alloca(2);
-  *(t+0) = 4;
-  *(t+1) = 5;
-  int x;
-  x = 45;
-  
-  */
   return t[0];
+}
+
+
+/*@ ensures \result == 12 */
+int h() {
+  int u[3] = { 3,4,5 };
+  return u[0] + u[1] + u[2];
 }

@@ -3,13 +3,13 @@
 
 Require Import pointer_spec_why.
 
-(* Why obligation from file "why/pointer.why", characters 355-400 *)
+(* Why obligation from file "why/pointer.why", characters 341-386 *)
 Lemma array1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
-  forall (Pre4: (valid_index alloc t 2) /\ (valid_range alloc t 0 5) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
+  forall (Pre4: (* File \"pointer.c\", line 42, characters 14-31 *)
+                (valid_index alloc t 2) /\ (valid_range alloc t 0 4)),
   forall (p1: pointer),
   forall (Post1: p1 = (shift t 2)),
   forall (caduceus: pointer),
@@ -23,26 +23,32 @@ Lemma array1_impl_po_1 :
     (forall (intP0:((memory) Z)),
      (intP0 = (upd intP result1 result) ->
       (forall (result0:Z),
-       (result0 = result -> result0 = 1 /\
-        (forall (index_0:pointer), (forall (index_1:pointer), True)))))) /\
+       (result0 = result ->
+        (* File \"pointer.c\", line 42, characters 40-52 *) result0 = 1)))) /\
     (valid alloc result1))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; intuition.
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/pointer.why", characters 833-869 *)
+(* Why obligation from file "why/pointer.why", characters 725-743 *)
 Lemma f2_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
+  forall (Pre8: (* File \"pointer.c\", line 12, characters 14-23 *)
+                (valid alloc x)),
+  (valid alloc x).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/pointer.why", characters 789-825 *)
+Lemma f2_impl_po_2 : 
+  forall (x: pointer),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre8: (valid alloc x) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
+  forall (Pre8: (* File \"pointer.c\", line 12, characters 14-23 *)
+                (valid alloc x)),
   forall (Pre7: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post8: intP0 = (upd intP x 0)),
@@ -51,16 +57,16 @@ Lemma f2_impl_po_1 :
   (valid alloc caduceus1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; trivial.
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 877-932 *)
-Lemma f2_impl_po_2 : 
+(* Why obligation from file "why/pointer.why", characters 833-888 *)
+Lemma f2_impl_po_3 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre8: (valid alloc x) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
+  forall (Pre8: (* File \"pointer.c\", line 12, characters 14-23 *)
+                (valid alloc x)),
   forall (Pre7: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post8: intP0 = (upd intP x 0)),
@@ -74,20 +80,32 @@ Lemma f2_impl_po_2 :
   forall (Post13: intP1 = (upd intP0 caduceus1 caduceus2)),
   forall (result1: Z),
   forall (Post5: result1 = caduceus2),
-  ((acc intP1 x) = 1 /\ result1 = 1) /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)).
+  (* File \"pointer.c\", line 13, characters 13-36 *) ((acc intP1 x) = 1 /\
+  result1 = 1).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; auto.
+caduceus.
+caduceus.
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1279-1301 *)
+(* Why obligation from file "why/pointer.why", characters 1144-1162 *)
 Lemma f_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
+  forall (Pre8: (* File \"pointer.c\", line 4, characters 14-23 *)
+                (valid alloc x)),
+  (valid alloc x).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/pointer.why", characters 1208-1230 *)
+Lemma f_impl_po_2 : 
+  forall (x: pointer),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre8: (valid alloc x) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
+  forall (Pre8: (* File \"pointer.c\", line 4, characters 14-23 *)
+                (valid alloc x)),
   forall (Pre7: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post8: intP0 = (upd intP x 0)),
@@ -96,16 +114,16 @@ Lemma f_impl_po_1 :
   (valid alloc caduceus1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; trivial.
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1309-1378 *)
-Lemma f_impl_po_2 : 
+(* Why obligation from file "why/pointer.why", characters 1238-1307 *)
+Lemma f_impl_po_3 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre8: (valid alloc x) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
+  forall (Pre8: (* File \"pointer.c\", line 4, characters 14-23 *)
+                (valid alloc x)),
   forall (Pre7: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post8: intP0 = (upd intP x 0)),
@@ -119,139 +137,138 @@ Lemma f_impl_po_2 :
   forall (Post13: intP1 = (upd intP0 caduceus1 (1 + caduceus2))),
   forall (result1: Z),
   forall (Post5: result1 = caduceus2),
-  ((acc intP1 x) = 1 /\ result1 = 0) /\
-  (not_assigns alloc intP intP1 (pset_singleton x)) /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)).
+  (* File \"pointer.c\", line 6, characters 13-36 *) ((acc intP1 x) = 1 /\
+  result1 = 0) /\ (not_assigns alloc intP intP1 (pset_singleton x)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; auto.
+caduceus.
+caduceus.
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1720-1735 *)
+(* Why obligation from file "why/pointer.why", characters 1619-1634 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (r: pointer),
-  forall (Pre4: (valid alloc r) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
-  (valid alloc r) /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)).
+  forall (Pre4: (* File \"pointer.c\", line 22, characters 14-23 *)
+                (valid alloc r)),
+  (* File \"pointer.c\", line 4, characters 14-23 *) (valid alloc r).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1611-1836 *)
+(* Why obligation from file "why/pointer.why", characters 1525-1724 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (r: pointer),
-  forall (Pre4: (valid alloc r) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
-  forall (Pre3: (valid alloc r) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True))),
+  forall (Pre4: (* File \"pointer.c\", line 22, characters 14-23 *)
+                (valid alloc r)),
+  forall (Pre3: (* File \"pointer.c\", line 4, characters 14-23 *)
+                (valid alloc r)),
   forall (intP0: ((memory) Z)),
   forall (result: Z),
-  forall (Post2: ((acc intP0 r) = 1 /\ result = 0) /\
-                 (not_assigns alloc intP intP0 (pset_singleton r)) /\
-                 (forall (index_0:pointer), (forall (index_1:pointer), True))),
-  (acc intP0 r) = 1 /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)).
+  forall (Post2: (* File \"pointer.c\", line 6, characters 13-36 *)
+                 ((acc intP0 r) = 1 /\ result = 0) /\
+                 (not_assigns alloc intP intP0 (pset_singleton r))),
+  (* File \"pointer.c\", line 23, characters 13-20 *) (acc intP0 r) = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1970-1989 *)
+(* Why obligation from file "why/pointer.why", characters 1802-1821 *)
 Lemma h_impl_po_1 : 
-  forall (Pre12: (forall (index_0:pointer), (forall (index_1:pointer), True))),
   1 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 2058-2085 *)
+(* Why obligation from file "why/pointer.why", characters 1897-1911 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (Pre12: (forall (index_0:pointer), (forall (index_1:pointer), True))),
-  forall (Pre11: 1 >= 1),
+  forall (intP: ((memory) Z)),
+  forall (Pre10: 1 >= 1),
   forall (alloc0: alloc_table),
   forall (z: pointer),
-  forall (Post8: (valid alloc0 z) /\ (offset z) = 0 /\
+  forall (Post7: (valid alloc0 z) /\ (offset z) = 0 /\
                  (block_length alloc0 z) = 1 /\
                  (valid_range alloc0 z 0 (1 - 1)) /\ (fresh alloc z) /\
                  (on_stack alloc0 z) /\ (alloc_stack z alloc alloc0)),
-  forall (Pre6: (valid alloc0 z)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (acc intPP z)),
-  (valid alloc0 caduceus_2).
+  forall (Pre9: (valid alloc0 z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post11: intP0 = (upd intP z 0)),
+  (* File \"pointer.c\", line 4, characters 14-23 *) (valid alloc0 z).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Qed.
 
-(* Why obligation from file "why/pointer.why", characters 2021-2085 *)
+(* Why obligation from file "why/pointer.why", characters 1880-1959 *)
 Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (intPP: ((memory) pointer)),
-  forall (Pre12: (forall (index_0:pointer), (forall (index_1:pointer), True))),
-  forall (Pre11: 1 >= 1),
+  forall (Pre10: 1 >= 1),
   forall (alloc0: alloc_table),
   forall (z: pointer),
-  forall (Post8: (valid alloc0 z) /\ (offset z) = 0 /\
+  forall (Post7: (valid alloc0 z) /\ (offset z) = 0 /\
                  (block_length alloc0 z) = 1 /\
                  (valid_range alloc0 z 0 (1 - 1)) /\ (fresh alloc z) /\
                  (on_stack alloc0 z) /\ (alloc_stack z alloc alloc0)),
-  forall (Pre6: (valid alloc0 z)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (acc intPP z)),
-  forall (Pre5: (valid alloc0 caduceus_2)),
+  forall (Pre9: (valid alloc0 z)),
   forall (intP0: ((memory) Z)),
-  forall (Post12: intP0 = (upd intP caduceus_2 0)),
-  (forall (result:Z),
-   (forall (intP:((memory) Z)),
-    (((acc intP z) = 1 /\ result = 0) /\
-     (not_assigns alloc0 intP0 intP (pset_singleton z)) /\
-     (forall (index_0:pointer), (forall (index_1:pointer), True)) ->
-     (forall (result0:Z),
-      (result0 = (result + (acc intP z)) -> result0 = 1 /\
-       (forall (index_0:pointer), (forall (index_1:pointer), True)))) /\
-     (valid alloc0 z)))) /\
-  (valid alloc0 z) /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)).
+  forall (Post11: intP0 = (upd intP z 0)),
+  forall (Pre8: (* File \"pointer.c\", line 4, characters 14-23 *)
+                (valid alloc0 z)),
+  forall (intP1: ((memory) Z)),
+  forall (caduceus_1: Z),
+  forall (Post14: (* File \"pointer.c\", line 6, characters 13-36 *)
+                  ((acc intP1 z) = 1 /\ caduceus_1 = 0) /\
+                  (not_assigns alloc0 intP0 intP1 (pset_singleton z))),
+  forall (Pre7: (valid alloc0 z)),
+  forall (result0: Z),
+  forall (Post3: result0 = (caduceus_1 + (acc intP1 z))),
+  (* File \"pointer.c\", line 36, characters 13-25 *) result0 = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 2613-2631 *)
+(* Why obligation from file "why/pointer.why", characters 2285-2297 *)
 Lemma struct1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre9: (valid alloc s) /\ (valid_range alloc s 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (valid1_range x 1) /\ (valid1 x) /\ (separation2 x x)),
+  forall (Pre9: (* File \"pointer.c\", line 53, characters 14-23 *)
+                (valid alloc s) /\ (valid_range alloc s 0 0) /\
+                (valid1_range x 1) /\ (valid1 x)),
+  (valid alloc s).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/pointer.why", characters 2329-2347 *)
+Lemma struct1_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (x: ((memory) pointer)),
+  forall (Pre9: (* File \"pointer.c\", line 53, characters 14-23 *)
+                (valid alloc s) /\ (valid_range alloc s 0 0) /\
+                (valid1_range x 1) /\ (valid1 x)),
   forall (Pre8: (valid alloc s)),
   forall (p: pointer),
   forall (Post7: p = (acc x s)),
   (valid alloc p).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst.
+generalize (H3 _ _ H); trivial.
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 2663-2687 *)
-Lemma struct1_impl_po_2 : 
+(* Why obligation from file "why/pointer.why", characters 2379-2403 *)
+Lemma struct1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre9: (valid alloc s) /\ (valid_range alloc s 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (valid1_range x 1) /\ (valid1 x) /\ (separation2 x x)),
+  forall (Pre9: (* File \"pointer.c\", line 53, characters 14-23 *)
+                (valid alloc s) /\ (valid_range alloc s 0 0) /\
+                (valid1_range x 1) /\ (valid1 x)),
   forall (Pre8: (valid alloc s)),
   forall (p: pointer),
   forall (Post7: p = (acc x s)),
@@ -262,20 +279,19 @@ Lemma struct1_impl_po_2 :
   forall (Post5: caduceus_1 = s),
   (valid alloc caduceus_1).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 2640-2687 *)
-Lemma struct1_impl_po_3 : 
+(* Why obligation from file "why/pointer.why", characters 2356-2403 *)
+Lemma struct1_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (x: ((memory) pointer)),
   forall (y: ((memory) Z)),
-  forall (Pre9: (valid alloc s) /\ (valid_range alloc s 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (valid1_range x 1) /\ (valid1 x) /\ (separation2 x x)),
+  forall (Pre9: (* File \"pointer.c\", line 53, characters 14-23 *)
+                (valid alloc s) /\ (valid_range alloc s 0 0) /\
+                (valid1_range x 1) /\ (valid1 x)),
   forall (Pre8: (valid alloc s)),
   forall (p: pointer),
   forall (Post7: p = (acc x s)),
@@ -288,11 +304,10 @@ Lemma struct1_impl_po_3 :
   forall (y0: ((memory) Z)),
   forall (Post13: y0 = (upd y caduceus_1 2)),
   (forall (result:Z),
-   (result = (acc intP0 p) -> result >= 1 /\
-    (forall (index_0:pointer), (forall (index_1:pointer), True)))) /\
+   (result = (acc intP0 p) ->
+    (* File \"pointer.c\", line 53, characters 33-45 *) result >= 1)) /\
   (valid alloc p).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; caduceus.
 Save.
 

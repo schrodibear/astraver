@@ -94,7 +94,6 @@ Lemma g_impl_po_1 :
   (valid alloc x).
 Proof.
 intuition.
-subst; caduceus.
 Save.
 
 
@@ -112,7 +111,7 @@ Lemma g_impl_po_2 :
   (not_assigns alloc intP intP0 (pset_singleton x)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; caduceus.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 957-972 *)

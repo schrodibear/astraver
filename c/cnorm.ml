@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.41 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.42 2005-06-20 12:17:47 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -757,8 +757,8 @@ let rec init_expr loc t lvalue initializers =
 	let x,l = pop_initializer loc t initializers in
 	(match x with 
 	  | Some x ->
-	      [{nst_node = NSexpr (noattr2 loc t 
-				     (NEassign((expr lvalue),(expr x))));
+	      [{nst_node = 
+		   NSexpr (noattr2 loc t (NEassign(expr lvalue, expr x)));
 		nst_break = false;    
 		nst_continue = false; 
 		nst_return = false;   
@@ -1014,12 +1014,15 @@ and local_decl s l l2 =
 		      | _ -> assert false
 		    end
 		| Tarray (_, Some length) -> 
-		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
-		    let declar,_ = init_expr l v.var_type lvalue [c] in
-		     NSdecl(v.var_type,v,
-			    Some (Iexpr (alloca l (Int64.to_string length))),
-			    let rest = copyattr s (local_decl s decl l2) in
-			    copyattr s (NSblock (declar @ [rest])))
+		    let lvalue = noattr l v.var_type (TEvar (Var_info v)) in
+		    let declar,_ = 
+		      without_dereference v
+			(init_expr l v.var_type lvalue) [c] 
+		    in
+		    NSdecl(v.var_type,v,
+			   None,
+			   let rest = copyattr s (local_decl s decl l2) in
+			   copyattr s (NSblock (declar @ [rest])))
 		| Tarray _ | Tstruct _ | Tunion _ -> 
 		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
 		    let declar,_ = init_expr l v.var_type lvalue [c] in

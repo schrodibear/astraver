@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
 
 
+ o fixed bug with local variables used with & and initializers
  o repetition of the same warning avoided
  o labels inserted in Why code to trace the origin of each annotation
    in the C source

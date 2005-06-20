@@ -1,5 +1,6 @@
 
   o support for CVC Lite syntax 2.0.0, old syntax not supported anymore
+  o support for haRVey 0.5.6
   o a predicate label can be a string (e.g. :"bla bla":pred)
   o a missing exceptional postcondition is now given the default value "false"
     instead of "true" (i.e. the corresponding exception cannot be raised)

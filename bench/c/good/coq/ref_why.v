@@ -23,16 +23,6 @@ Lemma f_impl_po_2 :
   (* File \"ref.c\", line 4, characters 14-23 *) (valid alloc0 i).
 Proof.
 intuition.
-subst; auto.
-red.
-intros.
-red in H7.
-apply H7.
-apply alloc_stack_valid with i alloc;auto.
-apply pset_singleton_intro.
-intro;subst.
-generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
-tauto.
 Save.
 
 (* Why obligation from file "why/ref.why", characters 110-151 *)
@@ -59,7 +49,16 @@ Lemma f_impl_po_3 :
   (not_assigns alloc intP intP0 pset_empty).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; auto.
+red.
+intros.
+red in H7.
+apply H7.
+apply alloc_stack_valid with i alloc;auto.
+apply pset_singleton_intro.
+intro;subst.
+generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
+tauto.
 Save.
 
 (* Why obligation from file "why/ref.why", characters 419-437 *)
@@ -86,7 +85,6 @@ Lemma g_impl_po_2 :
   (* File \"ref.c\", line 6, characters 13-20 *) (acc intP0 p) = 1 /\
   (not_assigns alloc intP intP0 (pset_singleton p)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; caduceus.
 Save.
 

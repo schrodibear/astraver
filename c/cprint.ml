@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.15 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.16 2005-06-20 12:17:47 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -326,10 +326,12 @@ let rec nstatement fmt s = match s.nst_node with
   | NSblock b ->
       fprintf fmt "@[{@\n  @[%a@]@\n}@]" nblock b
   | NSdecl (ty, vi, None,rem) ->
-      fprintf fmt "%a %s;@\n" ctype ty vi.var_unique_name;
-      nstatement fmt rem
+      fprintf fmt "@[<hov 2>{@\n%a %s;@\n" ctype ty vi.var_unique_name;
+      nstatement fmt rem;
+      fprintf fmt "}@\n@]"
   | NSdecl (ty, vi, Some i, rem) ->
-      fprintf fmt "@[<hov 2>{@\n%a %s = %a;@\n" ctype ty vi.var_unique_name c_initializer i;
+      fprintf fmt "@[<hov 2>{@\n%a %s = %a;@\n" ctype ty vi.var_unique_name 
+	c_initializer i;
       nstatement fmt rem;
       fprintf fmt "}@\n@]"
 

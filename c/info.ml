@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.23 2005-06-09 08:31:22 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.24 2005-06-20 12:17:47 hubert Exp $ i*)
 
 open Ctypes
 
@@ -51,6 +51,17 @@ let set_assigned v = v.var_is_assigned <- true
 let unset_assigned v = v.var_is_assigned <- false
 
 let set_is_referenced v = v.var_is_referenced <- true
+
+let without_dereference v f x =
+  let old = v.var_is_referenced in
+  try
+    v.var_is_referenced <- false;
+    let y = f x in
+    v.var_is_referenced <- old;
+    y
+  with e ->
+    v.var_is_referenced <- old;
+    raise e
 
 let set_static v = v.var_is_static <- true
 

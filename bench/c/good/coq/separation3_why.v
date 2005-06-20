@@ -231,6 +231,6 @@ apply neq_base_addr_neq_shift.
 auto.
 red in H0.
 apply H0.
-apply valid_range_valid with 0 1;auto with *.
+apply valid_range_valid with 0 0;auto with *.
 Save.
 

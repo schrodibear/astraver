@@ -251,11 +251,9 @@ intro.
 rewrite <- H13 in H12.
 elim (H9 H12).
 subst.
-apply valid_range_valid_shift with 0 4;auto.
-apply alloc_stack_valid_range with t alloc ;auto.
+apply alloc_stack_valid with t alloc; auto.
 subst.
-apply valid_range_valid_shift with 0 4;auto.
-apply alloc_stack_valid_range with t alloc ;auto.
+apply alloc_stack_valid with t alloc; auto.
 subst.
 apply valid_range_valid_shift with 0 (4-1);auto.
 omega.
