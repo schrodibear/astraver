@@ -1,4 +1,6 @@
 
+version 1.81, June 20th, 2005
+=============================
   o support for CVC Lite syntax 2.0.0, old syntax not supported anymore
   o support for haRVey 0.5.6
   o a predicate label can be a string (e.g. :"bla bla":pred)
