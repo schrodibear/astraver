@@ -48,7 +48,7 @@ unsigned int next_node;
   @   \forall node *t; valid_node(t) => valid_sons(t)
   @*/
 
-/*@ axiom node_validity:
+/*@ invariant node_validity:
   @   \forall node *t; valid_node(t) => \valid(t)
   @*/
 
@@ -161,7 +161,7 @@ node *locate_head(node *m, unsigned int i, unsigned int *r)
   @ ensures valid_node(f)
   @*/
 void insert_son(node *f, node *s, unsigned int i)
-{ f->sons[get_char(i)] = s; }
+{/*@ assert 0 */ f->sons[get_char(i)] = s; }
 
 /* suffix tree construction function */
 /*************************************/
@@ -190,6 +190,7 @@ node *build_suffix_tree()
   node *m = get_fresh_node();
   unsigned int i;
   unsigned int k;
+  /*@ assert 0 */
   /*@ invariant
     @   0 <= next_node <= 2 + i * max_string_sz &&
     @   0 <= i < max_string_sz && loops_invariant()
