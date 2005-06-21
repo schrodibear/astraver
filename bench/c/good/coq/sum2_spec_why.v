@@ -10,6 +10,7 @@ Admitted.
 (*Why axiom*) Lemma sum1 :
   (forall (alloc:alloc_table),
    (forall (intP:((memory) Z)),
+    (* File \"sum2.c\", line 12, characters 7-46 *)
     (forall (t:pointer), (forall (i:Z), (sum alloc intP t i i) = 0)))).
 Admitted.
 
