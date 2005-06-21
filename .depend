@@ -357,6 +357,10 @@ c/output.cmo: src/loc.cmi c/creport.cmi c/output.cmi
 c/output.cmx: src/loc.cmx c/creport.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 
 intf/navig.cmx: intf/navig.cmi 
+intf/stat.cmo: src/report.cmi src/options.cmi src/main.cmo src/loc.cmi \
+    src/env.cmi src/ast.cmi 
+intf/stat.cmx: src/report.cmx src/options.cmx src/main.cmx src/loc.cmx \
+    src/env.cmx src/ast.cmi 
 intf/viewer.cmo: src/util.cmi src/report.cmi src/options.cmi intf/navig.cmi \
     src/main.cmo src/log.cmi src/loc.cmi intf/hilight.cmo src/env.cmi \
     src/ast.cmi 

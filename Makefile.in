@@ -140,7 +140,18 @@ bin/caduceus.static: $(CCMX)
 	strip $@
 
 # graphical interface
-GCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
+WVCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
+WVCMX = $(WVCMO:.cmo=.cmx)
+
+bin/why-viewer.opt: $(WVCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
+	strip $@
+
+bin/why-viewer.byte: $(WVCMO)
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
+
+# graphical interface
+GCMO = $(CMO) intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
 bin/gwhy.opt: $(GCMX)
