@@ -1,4 +1,8 @@
 
+  o support for declaration "function" with Isabelle/CVC/harvey/PVS
+  o new declaration "goal" to declare a proof obligation
+    e.g. goal foo : forall x:int. x = x+0
+
 version 1.81, June 20th, 2005
 =============================
   o support for CVC Lite syntax 2.0.0, old syntax not supported anymore
@@ -16,7 +20,7 @@ version 1.80, June 3rd, 2005
   o SMT-LIB format output (--smtlib option)
  
 version 1.75, March 15th, 2005
-=============================
+==============================
   o fixed installation issue with Coq 8.0pl2 
   o new option -where to print Why's library path
 

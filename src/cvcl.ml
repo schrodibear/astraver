@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.26 2005-06-17 12:57:15 marche Exp $ i*)
+(*i $Id: cvcl.ml,v 1.27 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -37,6 +37,7 @@ type elem =
   | Oblig of obligation 
   | Axiom of string * predicate Env.scheme
   | PredicateDef of string * predicate_def Env.scheme
+  | FunctionDef of string * function_def Env.scheme
 
 let queue = Queue.create ()
 
@@ -51,6 +52,8 @@ let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
 let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
 let push_predicate id p = Queue.add (PredicateDef (id, p)) queue
+
+let push_function id p = Queue.add (FunctionDef (id, p)) queue
 
 (*s Pretty print *)
 
@@ -89,7 +92,7 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "BOOLEAN"
   | PTreal -> fprintf fmt "REAL"
   | PTunit -> fprintf fmt "UNIT"
-  | PTarray pt -> fprintf fmt "ARRAY INT OF %a" print_pure_type pt
+  | PTarray pt -> fprintf fmt "(ARRAY INT OF %a)" print_pure_type pt
   | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
@@ -269,6 +272,16 @@ module Mono = struct
 	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
       print_predicate p
 
+  let print_function_def_instance fmt id i (bl,t,e) =
+    fprintf fmt "@[%%%% Why function %s@]@\n" id;
+    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+      id instance i
+      print_logic_type (Function (List.map snd bl, t))
+      (print_list comma 
+	 (fun fmt (x,pt) -> 
+	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
+      print_term e
+
   let print_axiom_instance fmt id i p =
     fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
     fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
@@ -285,6 +298,7 @@ let print_elem fmt = function
   | Oblig o -> Output.print_obligation fmt o
   | Axiom (id, p) -> Output.print_axiom fmt id p
   | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
+  | FunctionDef (id, p) -> Output.print_function_def fmt id p
   | Logic (id, t) -> Output.print_logic fmt id t
   | Parameter (id, t) -> Output.print_parameter fmt id t
 

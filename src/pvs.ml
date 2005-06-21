@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.60 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.61 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -269,6 +269,11 @@ module Mono = struct
     fprintf fmt "  %s%a(@[%a@]) : bool = @[%a@]@\n@\n"
       id instance i (print_list comma print_logic_binder) bl print_predicate p
 
+  let print_function_def_instance fmt id i (bl,t,e) =
+    fprintf fmt "  %s%a(@[%a@]) : %a = @[%a@]@\n@\n"
+      id instance i (print_list comma print_logic_binder) bl 
+      print_pure_type t print_term e
+
   let print_obligation fmt (loc,id,s) =
     fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation loc;
     fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
@@ -293,6 +298,7 @@ type elem =
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | PredicateDef of string * predicate_def Env.scheme
+  | FunctionDef of string * function_def Env.scheme
 
 let queue = Queue.create ()
 
@@ -308,6 +314,8 @@ let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
 let push_predicate id p = Queue.add (PredicateDef (id, p)) queue
 
+let push_function id p = Queue.add (FunctionDef (id, p)) queue
+
 let output_elem fmt = function
   | Verbatim s -> fprintf fmt "  %s@\n@\n" s
   | Obligations ol -> print_obligations fmt ol
@@ -315,6 +323,7 @@ let output_elem fmt = function
   | Logic (id, t) -> Output.print_logic fmt id t
   | Axiom (id, p) -> Output.print_axiom fmt id p
   | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
+  | FunctionDef (id, p) -> Output.print_function_def fmt id p
 
 (* declaring predefined symbols *)
 let predefined_symbols fmt = 

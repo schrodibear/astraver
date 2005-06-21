@@ -682,6 +682,14 @@ Admitted.
      ((alloc_stack p a1 a2) -> ((q:pointer) ((valid a1 q) -> (valid a2 q))))))).
 Admitted.
 
+(*Why axiom*) Lemma alloc_stack_valid_index :
+  ((p:pointer)
+   ((a1:alloc_table)
+    ((a2:alloc_table)
+     ((alloc_stack p a1 a2) ->
+      ((q:pointer) ((i:Z) ((valid_index a1 q i) -> (valid_index a2 q i)))))))).
+Admitted.
+
 (*Why axiom*) Lemma alloc_stack_valid_range :
   ((p:pointer)
    ((a1:alloc_table)

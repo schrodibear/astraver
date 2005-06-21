@@ -278,12 +278,11 @@ let print_axiom fmt id p =
 
 let reprint_obligation fmt (loc,id,s) =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
-  fprintf fmt "lemma %s: %a;@\n" id print_sequent s
+  fprintf fmt "(*Why goal*) lemma %s: %a;@\n" id print_sequent s
 
 let print_obligation fmt o = 
   reprint_obligation fmt o;
   fprintf fmt "(* FILL PROOF HERE *)@\n@\n"
-
 
 let reprint_predicate fmt id p =
   let (l,(bl,p)) = Env.specialize_predicate_def p in
@@ -303,6 +302,24 @@ let reprint_predicate fmt id p =
 
 let print_predicate fmt id p = reprint_predicate fmt id p
 
+let reprint_function fmt id p =
+  let (l,(bl,t,e)) = Env.specialize_function_def p in
+  let print_binder_type fmt (x,pt) = 
+      fprintf fmt "%a" print_pure_type pt in
+  let print_binder fmt (x,pt) = 
+      fprintf fmt "%a" Ident.print x in
+  fprintf fmt
+     "@[<hov 2>(*Why function*) constdefs %s :: @[\"[%a] => %a\"@]@]@\n" 
+    id 
+    (print_list comma print_binder_type) bl print_pure_type t;
+  fprintf fmt
+     "@[<hov 2>     \"%s %a == @[%a@]\"@];@\n" 
+    id 
+    (print_list space print_binder) bl
+    print_term e 
+
+let print_function fmt id p = reprint_function fmt id p
+
 let theory_name = ref ""
 
 open Regen
@@ -317,7 +334,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
-      | Function _ -> assert false (*TODO*)
+      | Function (id, f) -> print_function fmt id f
     end;
     fprintf fmt "@\n"
       
@@ -327,7 +344,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
-    | Function _ -> assert false (*TODO*)
+    | Function (id, f) -> reprint_function fmt id f
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -362,9 +379,14 @@ let push_axiom id p =
 let push_predicate id p =
   Gen.add_elem (Pr, id) (Predicate (id, p))
 
+let push_function id p =
+  Gen.add_elem (Fun, id) (Function (id, p))
+
 let _ = 
   Gen.add_regexp 
     "lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
+  Gen.add_regexp 
+    "(\\*Why goal\\*) lemma[ ]+\\([^ ]*\\)[ ]*:[ ]*" Oblig;
   Gen.add_regexp 
     "(\\*Why\\*) consts[ ]+\\([^ ]*\\)[ ]*::[ ]*" Param;
   Gen.add_regexp 
@@ -372,7 +394,9 @@ let _ =
   Gen.add_regexp 
     "(\\*Why logic\\*) consts[ ]+\\([^ ]*\\)[ ]*::[ ]*" Lg;
   Gen.add_regexp 
-    "(\\*Why predicate\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Pr
+    "(\\*Why predicate\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Pr;
+  Gen.add_regexp 
+    "(\\*Why function\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Fun
 
 let output_file fwe =
   let f = fwe ^ "_why.thy" in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.102 2005-06-16 07:30:34 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.103 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -589,6 +589,8 @@ i*)
     | "function"; id = ident; "("; bl = LIST0 logic_binder SEP ","; ")"; ":";
         t = primitive_type; "="; p = lexpr ->
 	Function_def (make_loc loc, id, bl, t, p)
+    | "goal"; id = ident; ":"; p = lexpr ->
+	Assert (make_loc loc, id, p)
   ] ]
   ;
   logic_binder:

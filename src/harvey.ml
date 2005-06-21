@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.26 2005-06-16 13:36:14 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.27 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -29,6 +29,7 @@ open Pp
 type elem = 
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
+  | FunctionDef of string * function_def Env.scheme
 
 let theory = Queue.create ()
 let oblig = Queue.create ()
@@ -41,7 +42,7 @@ let push_axiom id p = Queue.add (Axiom (id, p)) theory
 
 let push_predicate id p = Queue.add (Predicate (id, p)) theory
 
-let defpred = Hashtbl.create 97
+let push_function id p = Queue.add (FunctionDef (id, p)) theory
 
 (*s Pretty print *)
 
@@ -171,12 +172,20 @@ let print_predicate_def fmt id p =
   fprintf fmt "(forall %a (<-> (%s %a)@ @[%a@]))@]@\n@\n" 
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl id
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
-    print_predicate p;
-  Hashtbl.add defpred (Ident.create id) ()
+    print_predicate p
+
+let print_function_def fmt id p =
+  let (bl,_,e) = p.Env.scheme_type in
+  fprintf fmt "@[;; Why function %s@\n" id;
+  fprintf fmt "(forall %a (= (%s %a)@ @[%a@]))@]@\n@\n" 
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl id
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
+    print_term e
 
 let print_elem fmt = function
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate_def fmt id p
+  | FunctionDef (id, f) -> print_function_def fmt id f
 
 let output_theory fmt f =
   fprintf fmt "(@\n@[";
@@ -223,8 +232,8 @@ let prepare_sequent (ctx, c) = filter_context ctx, c
 let output_obligation fmt (loc, o, s) = 
   try
     let s = prepare_sequent s in
-    fprintf fmt "@[;; %a@]@\n" Loc.report_obligation loc;
-    output_sequent fmt s
+    fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation loc;
+    fprintf fmt "@[%a@]@\n" output_sequent s
   with NotFirstOrder ->
     unlocated_wprintf "obligation %s is not first-order@\n" o
 

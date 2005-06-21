@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.8 2004-07-21 08:07:09 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.9 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -122,6 +122,8 @@ let report fmt = function
   | MutableMutable ->
       fprintf fmt 
 	"A mutable type cannot contain another mutable type or a function"
+  | PolymorphicGoal ->
+      fprintf fmt "A goal cannot be polymorphic"
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

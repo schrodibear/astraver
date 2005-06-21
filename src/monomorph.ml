@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.3 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.4 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -33,6 +33,8 @@ module type S = sig
     formatter -> string -> instance -> logic_type -> unit
   val print_predicate_def_instance : 
     formatter -> string -> instance -> predicate_def -> unit
+  val print_function_def_instance : 
+    formatter -> string -> instance -> function_def -> unit
   val print_axiom_instance :
     formatter -> string -> instance -> predicate -> unit
   val print_obligation : formatter -> obligation -> unit
@@ -62,6 +64,11 @@ module IterIT = struct
   let predicate_def f g (bl,p) =
     List.iter (fun (_,pt) -> g pt) bl;
     predicate f g p
+
+  let function_def f g (bl,t,e) =
+    List.iter (fun (_,pt) -> g pt) bl;
+    g t;
+    term f e
 	
   let logic_type g = function
     | Function (l, pt) -> List.iter g l; g pt
@@ -163,6 +170,11 @@ module GenSubst(S : Substitution) = struct
 
   let predicate_def s (bl,p) = 
     List.map (fun (x,pt) -> (x, pure_type s pt)) bl, predicate s p
+
+  let function_def s (bl,t,e) = 
+    List.map (fun (x,pt) -> (x, pure_type s pt)) bl, 
+    pure_type s t,
+    term s e
 
 end
 
@@ -294,7 +306,8 @@ module Make(X : S) = struct
 
   type logic_symbol = 
     | Uninterp of logic_type scheme
-    | Defined of predicate_def scheme
+    | PredicateDef of predicate_def scheme
+    | FunctionDef of function_def scheme
 	
   let logic_symbols = Hashtbl.create 97
 			
@@ -320,11 +333,16 @@ module Make(X : S) = struct
 	    let s = List.combine t.scheme_vars i in
 	    let t = SubstV.logic_type s t.scheme_type in
 	    print_logic_instance fmt (Ident.string id) i t
-	| Defined p ->
+	| PredicateDef p ->
 	    assert (List.length p.scheme_vars = List.length i);
 	    let s = List.combine p.scheme_vars i in
 	    let p = SubstV.predicate_def s p.scheme_type in
  	    print_predicate_def_instance fmt (Ident.string id) i p
+	| FunctionDef p ->
+	    assert (List.length p.scheme_vars = List.length i);
+	    let s = List.combine p.scheme_vars i in
+	    let p = SubstV.function_def s p.scheme_type in
+ 	    print_function_def_instance fmt (Ident.string id) i p
     end
       
   (* predicates definitions *)
@@ -332,6 +350,10 @@ module Make(X : S) = struct
   and print_predicate_def_instance fmt id i ((bl,p) as d) =
     IterIT.predicate_def (declare_logic fmt) (declare_type fmt) d;
     X.print_predicate_def_instance fmt id i d
+
+  and print_function_def_instance fmt id i ((bl,t,e) as d) =
+    IterIT.function_def (declare_logic fmt) (declare_type fmt) d;
+    X.print_function_def_instance fmt id i d
       
   let print_predicate_def fmt id p0 =
     let (bl,_) = p0.scheme_type in
@@ -339,7 +361,15 @@ module Make(X : S) = struct
     if p0.scheme_vars = [] then
       print_predicate_def_instance fmt id [] p0.scheme_type
     else 
-      Hashtbl.add logic_symbols (Ident.create id) (Defined p0)
+      Hashtbl.add logic_symbols (Ident.create id) (PredicateDef p0)
+
+  let print_function_def fmt id p0 =
+    let (bl,_,_) = p0.scheme_type in
+    assert (bl <> []);
+    if p0.scheme_vars = [] then
+      print_function_def_instance fmt id [] p0.scheme_type
+    else 
+      Hashtbl.add logic_symbols (Ident.create id) (FunctionDef p0)
 
   (* axioms *)
 

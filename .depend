@@ -287,8 +287,6 @@ c/cllexer.cmo: c/creport.cmi src/compat.cmo c/clparser.cmi c/clogic.cmi \
     c/cerror.cmi 
 c/cllexer.cmx: c/creport.cmx src/compat.cmx c/clparser.cmx c/clogic.cmi \
     c/cerror.cmi 
-c/clogic_misc.cmo: c/clogic_misc.cmi 
-c/clogic_misc.cmx: c/clogic_misc.cmi 
 c/clparser.cmo: c/info.cmi c/ctypes.cmi c/creport.cmi c/clogic.cmi \
     c/cast_misc.cmi c/cast.cmi c/clparser.cmi 
 c/clparser.cmx: c/info.cmx c/ctypes.cmx c/creport.cmx c/clogic.cmi \

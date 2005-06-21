@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.23 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.24 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -281,7 +281,7 @@ let rec print_thesis fmt = function
 
 let reprint_obligation fmt (loc,id,s) =
   fprintf fmt "@[ :: %a @]@\n" Loc.report_obligation loc;
-  fprintf fmt "@[ theorem %s:@\n @[%a@]@]@\n" id print_sequent s
+  fprintf fmt "@[ (*Why goal*) theorem %s:@\n @[%a@]@]@\n" id print_sequent s
 
 let print_obligation fmt ((_,_,(_,t)) as o) = 
   reprint_obligation fmt o;
@@ -371,6 +371,8 @@ let push_parameter id v =
 let _ = 
   Gen.add_regexp 
     " theorem[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
+  Gen.add_regexp 
+    "(\\*Why goal\\*) theorem[ ]+\\([^ ]*\\)[ ]*:[ ]*" Oblig;
   Gen.add_regexp 
     "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param
 

@@ -25,21 +25,24 @@ pvs:
 	../bin/why.opt --pvs -d -V test.mlw
 	pvs -batch -v 3 -l batch.el
 
+isabelle:
+	../bin/why.opt --isabelle -d -V test.mlw
+
 c-pvs:
 	../bin/why.opt --pvs -d -V ctest.c
 	pvs -batch -v 3 -l batch.el
 
 harvey:
 	../bin/why.opt --harvey -d -V test.mlw
-	for f in test*.rv; do rvc $$f; done
+	../bin/dp.opt test_why.rv
 
 simplify:
 	../bin/why.opt --simplify -d -V test.mlw
-	Simplify test_why.sx
+	../bin/dp.opt test_why.sx
 
 cvcl:
 	../bin/why.opt --cvcl -d -V test.mlw
-	cvcl < test_why.cvc
+	../bin/dp.opt test_why.cvc
 
 mizar:
 	../bin/why.opt --mizar -d -V test.mlw
@@ -51,5 +54,5 @@ hol:
 test:
 	../bin/why.opt --coq-v8 -d -V --coq-tactic magic test.mlw
 #	../bin/why.opt --coq-v8 -d -V --valid --coq-tactic magic test.mlw
-	coqc -R ../lib/coq Coq.why test_why.v
-	coqc -R ../lib/coq Coq.why test_valid.v
+	coqc -I ../lib/coq test_why.v
+	coqc -I ../lib/coq test_valid.v

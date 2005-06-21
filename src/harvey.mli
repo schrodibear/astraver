@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.mli,v 1.4 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: harvey.mli,v 1.5 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 open Vcg
 
@@ -25,6 +25,8 @@ val push_obligations : obligation list -> unit
 val push_axiom : string -> Logic.predicate Env.scheme -> unit
 
 val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
+
+val push_function : string -> Logic.function_def Env.scheme -> unit
 
 val output_file : string -> unit
 

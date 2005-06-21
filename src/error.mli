@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: error.mli,v 1.19 2003-09-24 15:23:09 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.20 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -61,3 +61,4 @@ type t =
   | ExceptionArgument of Ident.t * bool
   | CannotBeRaised of Ident.t
   | MutableMutable
+  | PolymorphicGoal

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.132 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.133 2005-06-21 07:45:03 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -694,7 +694,13 @@ let _ = Vcg.log_print_function := print_sequent
       
 let reprint_obligation fmt (loc,id,s) =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
-  fprintf fmt "@[<hov 2>Lemma %s : @\n%a.@]@\n" id print_sequent s
+  fprintf fmt "@[<hov 2>(*Why goal*) Lemma %s : @\n%a.@]@\n" id print_sequent s
+
+let print_obligation fmt o = 
+  reprint_obligation fmt o;
+  fprintf fmt "Proof.@\n";
+  option_iter (fun t -> fprintf fmt "%s.@\n" t) coq_tactic;
+  fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
 
 let print_obligation fmt o = 
   reprint_obligation fmt o;
@@ -851,11 +857,13 @@ let push_predicate id p =
   Gen.add_elem (Pr, id) (Predicate (id, p))
 
 let push_function id f =
-  Gen.add_elem (Pr, id) (Function (id, f))
+  Gen.add_elem (Fun, id) (Function (id, f))
 
 let _ = 
   Gen.add_regexp 
     "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
+  Gen.add_regexp 
+    "(\\*Why goal\\*) Lemma[ ]+\\([^ ]*\\)[ ]*:[ ]*" Oblig;
   Gen.add_regexp 
     "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*" Valid;
   Gen.add_regexp 

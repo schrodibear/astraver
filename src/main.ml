@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.80 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.81 2005-06-21 07:45:04 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -117,15 +117,15 @@ let push_predicate id p = match prover with
   | SmtLib -> Smtlib.push_predicate id p
 
 let push_function id p = match prover with
-  | Pvs -> () (* Pvs.push_function id p *)
+  | Pvs -> Pvs.push_function id p
   | Coq _ -> Coq.push_function id p
   | HolLight -> () (* Holl.push_function id p *)
-  | Isabelle -> () (* Isabelle.push_function id p *)
+  | Isabelle -> Isabelle.push_function id p
   | Hol4 -> () (* Hol4.push_function id p *)
   | Mizar -> () (* Mizar.push_function id p *)
-  | Harvey -> () (* Harvey.push_function id p *)
+  | Harvey -> Harvey.push_function id p
   | Simplify -> Simplify.push_function id p
-  | CVCLite -> () (* Cvcl.push_function id p *)
+  | CVCLite -> Cvcl.push_function id p
   | SmtLib -> () (* Smtlib.push_function id p *)
 
 let output fwe = 
@@ -273,6 +273,11 @@ let interp_decl d =
       let p = Ltyping.predicate lab env lenv p in
       let p = generalize_predicate p in
       push_axiom (Ident.string id) p
+  | Ptree.Assert (loc, id, p) ->
+      let p = Ltyping.predicate lab env lenv p in
+      if (generalize_predicate p).scheme_vars <> [] then 
+	raise_located loc PolymorphicGoal;
+      push_obligations [(loc, Ident.string id, ([], p))]
 
 (*s Processing of a channel / a file. *)
 

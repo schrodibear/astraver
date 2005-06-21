@@ -1,0 +1,10 @@
+Caduceus XXX is released. Changes are the following:
+
+======================================================================
+======================================================================
+
+Documentation, source and binary distributions are available at
+http://caduceus.lri.fr/
+
+-- 
+The Caduceus development team
