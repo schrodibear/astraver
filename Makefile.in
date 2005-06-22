@@ -35,8 +35,8 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
 INCLUDES = -I src -I c -I intf -I tools
-BFLAGS   = -dtypes -g $(INCLUDES) -I +camlp4 -I +lablgtk2
-OFLAGS   = -dtypes $(INCLUDES) -I +camlp4 -I +lablgtk2
+BFLAGS   = -dtypes -g $(INCLUDES) -I +camlp4 -I +lablgtk2 -I +threads
+OFLAGS   = -dtypes $(INCLUDES) -I +camlp4 -I +lablgtk2 -I +threads
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -155,8 +155,10 @@ bin/why-viewer.byte: $(WVCMO)
 GCMO = $(CMO) intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
+gwhy: bin/gwhy.$(OCAMLBEST)
+
 bin/gwhy.opt: $(GCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
 	strip $@
 
 bin/gwhy.byte: $(GCMO)

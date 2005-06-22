@@ -4,7 +4,7 @@
 Require Export false_spec_why.
 
 (* Why obligation from file "why/false.why", characters 260-316 *)
-Lemma false1_impl_po_1 : 
+(*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x_0: pointer),
   forall (y: ((memory) pointer)),
@@ -19,7 +19,7 @@ Proof.
 Admitted.
 
 (* Why obligation from file "why/false.why", characters 324-351 *)
-Lemma false1_impl_po_2 : 
+(*Why goal*) Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (x_0: pointer),
   forall (y: ((memory) pointer)),
@@ -38,7 +38,7 @@ Admitted.
 
 
 (* Why obligation from file "why/false.why", characters 243-351 *)
-Lemma false1_impl_po_3 : 
+(*Why goal*) Lemma false1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (x_0: pointer),

@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.2 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.3 2005-06-22 14:59:42 filliatr Exp $ i*)
 
-open Format
+open Printf
 open Options
 open Ast
 open Env
@@ -27,8 +27,8 @@ let _ =
   try
     Main.main ()
   with e ->
-    Report.explain_exception err_formatter e;
-    pp_print_newline err_formatter ();
+    Report.explain_exception Format.err_formatter e;
+    Format.pp_print_newline Format.err_formatter ();
     exit 1
 
 (* GTK *)
@@ -115,11 +115,8 @@ module Model = struct
 	 let row_n = model#append ~parent:row () in
 	 Hashtbl.add orows s row_n;
 	 model#set ~row:row_n ~column:name n;
-	 model#set ~row:row_n ~column:simplify 
-	   (match Dispatcher.call_prover s Dispatcher.Simplify with
-	      | Calldp.Valid -> `YES
-	      | _ -> `STOP);
-	 model#set ~row:row_n ~column:harvey `STOP;
+	 model#set ~row:row_n ~column:simplify `EXECUTE;
+	 model#set ~row:row_n ~column:harvey `EXECUTE;
       );
     model
       
@@ -137,19 +134,22 @@ module View = struct
 	 ~renderer:(renderer, ["text", Model.name])
 	 ())
     in
-    let _ = view#append_column
-      (GTree.view_column ~title:"Simplify" 
-	 ~renderer:(icon_renderer, ["stock_id", Model.simplify])
-	 ())
+    let vc_simplify = 
+      GTree.view_column ~title:"Simplify" 
+	~renderer:(icon_renderer, ["stock_id", Model.simplify]) ()
     in
-    let _ = view#append_column
-      (GTree.view_column ~title:"haRVey" 
-	 ~renderer:(icon_renderer, ["stock_id", Model.harvey])
-	 ())
+    vc_simplify#set_clickable true;
+    let _ = view#append_column vc_simplify in
+    let vc_harvey = 
+      GTree.view_column ~title:"haRVey" 
+	~renderer:(icon_renderer, ["stock_id", Model.harvey]) ()
     in
-    ()
+    vc_harvey#set_clickable true;
+    let _ = view#append_column vc_harvey in
+    vc_simplify, vc_harvey
 
 end
+
 
 let main () = 
   let w = GWindow.window 
@@ -190,7 +190,29 @@ let main () =
   let view = GTree.view ~model ~packing:hp#add1 () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
-  View.add_columns ~view ~model;
+  let vc_simplify,vc_harvey = View.add_columns ~view ~model in
+
+  (* run a prover on all obligations and update the model *)
+  let run_prover p column_p () =
+    Dispatcher.iter
+      (fun (_,s,_) ->
+	 let row = Hashtbl.find Model.orows s in
+	 let r = Dispatcher.call_prover s p in
+	 model#set ~row ~column:column_p
+	   (match r with Calldp.Valid -> `YES | _ -> `STOP))
+  in
+
+  (* run Simplify on all proof obligations *)
+  (* ???? why can't I make a function for this callback? *)
+  let _ = vc_simplify#connect#clicked 
+    (run_prover Dispatcher.Simplify Model.simplify)
+    (* (fun () -> ignore (Thread.create (run_prover Dispatcher.Simplify Model.simplify) ())) *)
+  in
+  (* run Harvey on all proof obligations *)
+  let _ = vc_harvey#connect#clicked
+    (run_prover Dispatcher.Harvey Model.harvey)
+  in
+
   let _ = view#misc#connect#realize ~callback:view#expand_all in
 
   (* vertical paned *)

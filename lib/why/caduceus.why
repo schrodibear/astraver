@@ -510,5 +510,12 @@ parameter alloca_parameter : n:int ->
 	  and fresh(alloc@,result) and on_stack(alloc,result) 
 	  and alloc_stack (result,alloc@,alloc) }
 
+parameter malloc_parameter : n:int -> 
+	{ n >= 1 }
+	pointer writes alloc
+	{ valid(alloc,result) and offset(result) = 0 and 	
+	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)
+	  and fresh(alloc@,result) and on_heap(alloc,result) }
+
 
 
