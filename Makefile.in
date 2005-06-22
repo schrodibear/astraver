@@ -158,7 +158,7 @@ GCMX = $(GCMO:.cmo=.cmx)
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
 	strip $@
 
 bin/gwhy.byte: $(GCMO)

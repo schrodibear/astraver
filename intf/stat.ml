@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.3 2005-06-22 14:59:42 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.4 2005-06-22 15:07:43 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -205,12 +205,15 @@ let main () =
   (* run Simplify on all proof obligations *)
   (* ???? why can't I make a function for this callback? *)
   let _ = vc_simplify#connect#clicked 
-    (run_prover Dispatcher.Simplify Model.simplify)
-    (* (fun () -> ignore (Thread.create (run_prover Dispatcher.Simplify Model.simplify) ())) *)
+    (fun () -> 
+       ignore 
+	 (Thread.create (run_prover Dispatcher.Simplify Model.simplify) ()))
   in
   (* run Harvey on all proof obligations *)
   let _ = vc_harvey#connect#clicked
-    (run_prover Dispatcher.Harvey Model.harvey)
+    (fun () -> 
+       ignore 
+	 (Thread.create (run_prover Dispatcher.Harvey Model.harvey) ()))
   in
 
   let _ = view#misc#connect#realize ~callback:view#expand_all in
@@ -276,4 +279,5 @@ let main () =
 let _ = 
   ignore (GtkMain.Main.init ());
   main () ;
-  GMain.Main.main ()
+  GtkThread.main ()
+  (*GMain.Main.main ()*)
