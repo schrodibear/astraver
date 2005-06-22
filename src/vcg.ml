@@ -592,7 +592,7 @@ let rec split_list n1 l2 =
     | [] -> assert false
     | x :: r2 -> let l1,r2 = split_list (n1 - 1) r2 in x :: l1, r2
 
-let conj = match prover with
+let conj = match prover () with
   | Coq V7 -> Ident.create "conj ? ?"
   | _ -> Ident.create "conj"
 

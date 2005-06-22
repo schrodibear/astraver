@@ -4,7 +4,7 @@
 Require Export search_spec_why.
 
 (* Why obligation from file "why/search.why", characters 577-660 *)
-Lemma index2_impl_po_1 : 
+(*Why goal*) Lemma index2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -28,7 +28,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 675-695 *)
-Lemma index2_impl_po_2 : 
+(*Why goal*) Lemma index2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -60,7 +60,7 @@ subst; auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 710-730 *)
-Lemma index2_impl_po_3 : 
+(*Why goal*) Lemma index2_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -95,7 +95,7 @@ apply H0 with k; auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 265-739 *)
-Lemma index2_impl_po_4 : 
+(*Why goal*) Lemma index2_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -122,7 +122,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 320-531 *)
-Lemma index2_impl_po_5 : 
+(*Why goal*) Lemma index2_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -139,7 +139,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 1562-1645 *)
-Lemma index_impl_po_1 : 
+(*Why goal*) Lemma index_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -163,7 +163,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 1660-1666 *)
-Lemma index_impl_po_2 : 
+(*Why goal*) Lemma index_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -197,7 +197,7 @@ subst; auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 1685-1705 *)
-Lemma index_impl_po_3 : 
+(*Why goal*) Lemma index_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -232,7 +232,7 @@ apply H0 with k;auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 1250-1714 *)
-Lemma index_impl_po_4 : 
+(*Why goal*) Lemma index_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -263,7 +263,7 @@ apply H0 with i0; auto with *.
 Save.
 
 (* Why obligation from file "why/search.why", characters 1305-1516 *)
-Lemma index_impl_po_5 : 
+(*Why goal*) Lemma index_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
@@ -280,7 +280,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 2196-2300 *)
-Lemma test_impl_po_1 : 
+(*Why goal*) Lemma test_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
   forall (Pre3: (valid_range alloc t 0 3)),

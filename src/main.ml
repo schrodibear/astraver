@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.81 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.82 2005-06-22 06:53:57 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -38,7 +38,7 @@ let reset () =
   typed_progs := [];
   Vcg.logs := []; 
   Fpi.reset ();
-  match prover with
+  match prover () with
   | Pvs -> Pvs.reset ()
   | Coq _ -> Coq.reset ()
   | HolLight -> Holl.reset ()
@@ -49,8 +49,9 @@ let reset () =
   | SmtLib -> Smtlib.reset ()
   | Isabelle -> Isabelle.reset ()
   | Hol4 -> Hol4.reset ()
+  | Dispatcher -> ()
 
-let push_obligations ol = match prover with
+let push_obligations ol = match prover () with
   | Pvs -> Pvs.push_obligations ol
   | Coq _ -> Coq.push_obligations ol
   | HolLight -> Holl.push_obligations ol
@@ -61,8 +62,9 @@ let push_obligations ol = match prover with
   | SmtLib -> Smtlib.push_obligations ol
   | Isabelle -> Isabelle.push_obligations ol
   | Hol4 -> Hol4.push_obligations ol
+  | Dispatcher -> Dispatcher.push_obligations ol
 
-let prover_is_coq = match prover with Coq _ -> true | _ -> false
+let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
 let push_validation id tt v = 
   if valid && prover_is_coq then Coq.push_validation id tt v
@@ -72,7 +74,7 @@ let is_pure_type_scheme s =
     | Set -> assert false
     | TypeV v -> is_pure_type_v v
 
-let push_parameter id v tv = match prover with
+let push_parameter id v tv = match prover () with
   | Pvs -> if is_pure_type_scheme v then Pvs.push_parameter id tv
   | Coq _ -> if is_pure_type_scheme v || valid then Coq.push_parameter id tv
   | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
@@ -81,8 +83,9 @@ let push_parameter id v tv = match prover with
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
   | Harvey | Simplify | SmtLib -> () (* nothing to do? *)
   | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
+  | Dispatcher -> ()
 
-let push_logic id t = match prover with
+let push_logic id t = match prover () with
   | Pvs -> Pvs.push_logic id t
   | Coq _ -> Coq.push_logic id t
   | HolLight -> Holl.push_logic id t
@@ -91,8 +94,9 @@ let push_logic id t = match prover with
   | Mizar -> Mizar.push_logic id t
   | Harvey | Simplify | SmtLib -> () (* nothing to do? *)
   | CVCLite -> Cvcl.push_logic id t
+  | Dispatcher -> Dispatcher.push_logic id t
 
-let push_axiom id p = match prover with
+let push_axiom id p = match prover () with
   | Pvs -> Pvs.push_axiom id p
   | Coq _ -> Coq.push_axiom id p
   | HolLight -> Holl.push_axiom id p
@@ -103,8 +107,9 @@ let push_axiom id p = match prover with
   | Simplify -> Simplify.push_axiom id p
   | CVCLite -> Cvcl.push_axiom id p
   | SmtLib -> Smtlib.push_axiom id p
+  | Dispatcher -> Dispatcher.push_axiom id p
 
-let push_predicate id p = match prover with
+let push_predicate id p = match prover () with
   | Pvs -> Pvs.push_predicate id p
   | Coq _ -> Coq.push_predicate id p
   | HolLight -> Holl.push_predicate id p
@@ -115,8 +120,9 @@ let push_predicate id p = match prover with
   | Simplify -> Simplify.push_predicate id p
   | CVCLite -> Cvcl.push_predicate id p
   | SmtLib -> Smtlib.push_predicate id p
+  | Dispatcher -> Dispatcher.push_predicate id p
 
-let push_function id p = match prover with
+let push_function id p = match prover () with
   | Pvs -> Pvs.push_function id p
   | Coq _ -> Coq.push_function id p
   | HolLight -> () (* Holl.push_function id p *)
@@ -127,6 +133,7 @@ let push_function id p = match prover with
   | Simplify -> Simplify.push_function id p
   | CVCLite -> Cvcl.push_function id p
   | SmtLib -> () (* Smtlib.push_function id p *)
+  | Dispatcher -> Dispatcher.push_function id p
 
 let output fwe = 
   if wol then begin
@@ -134,7 +141,7 @@ let output fwe =
     output_value cout !Vcg.logs;    close_out cout
   end else if ocaml then 
     Options.output Ocaml.output 
-  else begin match prover with
+  else begin match prover () with
     | Pvs -> Pvs.output_file fwe
     | Coq _ -> Coq.output_file fwe
     | HolLight -> Holl.output_file fwe
@@ -145,6 +152,7 @@ let output fwe =
     | SmtLib -> Smtlib.output_file fwe
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
+    | Dispatcher -> ()
   end;
   if fpi then Fpi.output fwe
 

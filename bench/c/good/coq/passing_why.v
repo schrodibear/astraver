@@ -4,7 +4,7 @@
 Require Export passing_spec_why.
 
 (* Why obligation from file "why/passing.why", characters 144-162 *)
-Lemma f_impl_po_1 : 
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (Pre4: (* File \"passing.c\", line 21, characters 14-31 *)
@@ -17,7 +17,7 @@ rewrite <- shift_zero;apply valid_index_valid_shift;auto.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 37-315 *)
-Lemma f_impl_po_2 : 
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -34,7 +34,7 @@ subst; caduceus.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 448-463 *)
-Lemma g2_impl_po_1 : 
+(*Why goal*) Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (r: pointer),
   forall (Pre5: (* File \"passing.c\", line 13, characters 14-23 *)
@@ -45,7 +45,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 466-481 *)
-Lemma g2_impl_po_2 : 
+(*Why goal*) Lemma g2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (r: pointer),
@@ -64,7 +64,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 354-561 *)
-Lemma g2_impl_po_3 : 
+(*Why goal*) Lemma g2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (r: pointer),
@@ -86,7 +86,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 694-712 *)
-Lemma g_impl_po_1 : 
+(*Why goal*) Lemma g_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (Pre4: (* File \"passing.c\", line 8, characters 14-23 *)
@@ -98,7 +98,7 @@ Save.
 
 
 (* Why obligation from file "why/passing.why", characters 601-864 *)
-Lemma g_impl_po_2 : 
+(*Why goal*) Lemma g_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -115,7 +115,7 @@ subst; caduceus.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 957-972 *)
-Lemma main_impl_po_1 : 
+(*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
   forall (Pre4: (valid_range alloc t 0 1)),
@@ -125,7 +125,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 905-1062 *)
-Lemma main_impl_po_2 : 
+(*Why goal*) Lemma main_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),

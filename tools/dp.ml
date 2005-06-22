@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.12 2005-06-16 13:36:14 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.13 2005-06-22 06:53:57 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
 open Printf
+open Calldp
 
 let timeout = ref 10
 let eclauses = ref 2000 (* E prover max nb of clauses *)
@@ -33,7 +34,10 @@ let spec =
 let usage = "usage: dp [options] files.{cvc,cvc.all,sx,sx.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
 
-let () = Cvcl_split.debug := !debug; Simplify_split.debug := !debug
+let () = 
+  Cvcl_split.debug := !debug; 
+  Simplify_split.debug := !debug;
+  Calldp.debug := !debug
 
 (* stats *)
 let nvalid = ref 0
@@ -44,50 +48,21 @@ let is_valid () = printf "."; incr nvalid
 let is_invalid () = printf "*"; incr ninvalid
 let is_timeout () = printf "#"; incr ntimeout
 
-let call cmd =
-  if !debug then begin eprintf "calling: %s\n" cmd; flush stderr end;
-  let out = Sys.command cmd in
-  if out = 0 then is_valid ()
-  else if out = 1 then is_invalid ()
-  else is_timeout ();
+let wrapper r = 
+  begin match r with
+    | Valid -> is_valid ()
+    | Invalid | CannotDecide -> is_invalid ()
+    | Timeout -> is_timeout ()
+  end;
   flush stdout
 
-let call_cvcl f =
-  call
-    (sprintf "ulimit -t %d; cvcl < %s > out 2>&1 && grep -q -w Valid out" 
-       !timeout f)
-
-let call_simplify f =
-  call
-    (sprintf "ulimit -t %d; Simplify %s > out 2>&1 && grep -q -w Valid out" 
-       !timeout f)
-
-let call_harvey f =
-  let out = Sys.command (sprintf "rvc -e -t %s > /dev/null 2>&1" f) in
-  if out = 0 then begin 
-    let f = Filename.chop_suffix f ".rv" in
-    let rec iter i =
-      let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
-      if Sys.file_exists fi then begin
-	let out = 
-	  Sys.command (sprintf "timeout %d rv -e\"-T %d\" %s > out 2>&1" !timeout !eclauses fi) 
-	in
-	if out <> 0 then 
-	  is_timeout ()
-	else begin
-	  let out = 
-	    Sys.command 
-	      "grep \"Proof obligation in\" out | grep -q \"is valid\"" 
-	  in
-	  if out = 0 then is_valid () else is_invalid ()
-	end;
-	flush stdout;
-	iter (i+1)
-      end
-    in
-    iter 0
-  end
-  else begin eprintf "rvc failed!\n"; flush stderr end
+let call_cvcl f = 
+  wrapper (Calldp.cvcl ~timeout:!timeout ~filename:f ())
+let call_simplify f = 
+  wrapper (Calldp.simplify ~timeout:!timeout ~filename:f ())
+let call_harvey f = 
+  List.iter wrapper 
+    (Calldp.harvey ~timeout:!timeout ~eclauses:!eclauses ~filename:f ())
 
 let split f =
   printf "%s: " f; flush stdout;

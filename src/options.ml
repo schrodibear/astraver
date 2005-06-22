@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.49 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.50 2005-06-22 06:53:57 filliatr Exp $ i*)
 
 open Format
 
@@ -55,7 +55,7 @@ let c_file = ref false
 type coq_version = V7 | V8
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4
+  | SmtLib | Isabelle | Hol4 | Dispatcher
 let prover_ = ref (match Version.coqversion with "v8" -> Coq V8 | _ -> Coq V7)
 
 (*s extracting the Mizar environ from a file *)
@@ -282,6 +282,10 @@ let files =
   in
   parse (List.tl (Array.to_list Sys.argv))
 
+(* Are we the GUI? (set in intf/stat.ml) *)
+
+let gui = ref false
+
 (*s Finally, we dereference all the refs *)
 
 let verbose = !verbose_
@@ -289,11 +293,11 @@ let debug = !debug_
 let parse_only = !parse_only_
 let type_only = !type_only_
 let wp_only = !wp_only_
-let prover = !prover_
+let prover () = if !gui then Dispatcher else !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with
-  | None when prover = Coq V7 -> "Require Why."
+  | None when prover () = Coq V7 -> "Require Why."
   | None -> "Require Import Why."
   | Some s -> s
 let pvs_preamble = match !pvs_preamble_ with
@@ -339,10 +343,6 @@ let if_verbose_3 f x y z = if verbose then f x y z
 let if_debug f x = if debug then f x
 let if_debug_2 f x y = if debug then f x y
 let if_debug_3 f x y z = if debug then f x y z
-
-(* GUI *)
-
-let gui = ref false
 
 (* compatibility checks *)
 let () = if fpi && valid then begin

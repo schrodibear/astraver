@@ -96,6 +96,7 @@ CMO = src/lib.cmo src/compat.cmo \
 	   src/monomorph.cmo src/pvs.cmo src/hol4.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo src/cvcl.cmo \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
+	   tools/calldp.cmo src/dispatcher.cmo \
            src/isabelle.cmo src/ocaml.cmo src/fpi.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 
@@ -168,7 +169,8 @@ bin/why2html.byte: tools/why2html.ml
 bin/why2html.opt: tools/why2html.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
-DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo tools/dp.cmo
+DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo \
+        tools/calldp.cmo tools/dp.cmo
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/dp.byte: $(DPCMO)
@@ -258,6 +260,9 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
+	if test -f bin/gwhy.$(OCAMLBEST); then \
+	  cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \
+	fi
 
 install-lib: 
 	mkdir -p $(LIBDIR)/caduceus/why

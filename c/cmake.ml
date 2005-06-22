@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.14 2005-06-16 13:36:13 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.15 2005-06-22 06:53:57 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -44,6 +44,7 @@ let generic f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "WHY=why %s@\n@\n" Coptions.why_opt;	    
+       fprintf fmt "GWHY=gwhy %s@\n@\n" Coptions.why_opt;	    
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib@\n@\n";
@@ -106,6 +107,12 @@ let generic f targets =
        fprintf fmt "@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       
+       fprintf fmt "stat: %s@\n" 
+	 (match targets with f::_ -> f^".stat" | [] -> "");
+       fprintf fmt "@\n";
+       fprintf fmt "%%.stat: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "include %s.depend@\n@\n" f;
        fprintf fmt "depend %s.depend: coq/%s_spec_why.v %a@\n" f f 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.1 2005-06-21 14:54:17 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.2 2005-06-22 06:53:57 filliatr Exp $ i*)
 
 open Format
 open Options
@@ -23,25 +23,9 @@ open Env
 
 let _ = gui := true
 
-let typed_progs = ref []
-
-let deal_file f =
-  Loc.set_file f;
-  Main.reset ();
-  let cin = open_in f in 
-  (*c_file := Filename.check_suffix f ".c";*)
-  let parsef = (*if !c_file then Main.c_parser else *) Main.ml_parser in
-  let p = parsef cin in
-  if parse_only then exit 0;
-  List.iter Main.interp_decl p;
-  typed_progs := (f, List.rev !Main.typed_progs) :: !typed_progs;
-  close_in cin
-
 let _ =
-  if files = [] then begin eprintf "usage: gwhy files@."; exit 1 end;
   try
-    List.iter deal_file Options.files;
-    typed_progs := List.rev !typed_progs
+    Main.main ()
   with e ->
     Report.explain_exception err_formatter e;
     pp_print_newline err_formatter ();
@@ -101,22 +85,42 @@ module Model = struct
   let name = cols#add string
   let simplify = cols#add GtkStock.conv
   let harvey = cols#add GtkStock.conv
+
+  let decomp_name =
+    let r = Str.regexp "\\(.*\\)_po_\\([0-9]+\\)" in
+    fun s ->
+      if Str.string_match r s 0 then
+	Str.matched_group 1 s, Str.matched_group 2 s
+      else
+	s, "1"
+
+  (* obligation -> its model row *)
+  let orows = Hashtbl.create 97
     
   let create_model () =
     let model = GTree.tree_store cols in
-    List.iter toplevel ~f:
-      begin fun (month_name, month) ->
-	let row = model#append () in
-	model#set ~row ~column:name month_name;
-	List.iter month ~f:
-          begin fun n ->
-            let row = model#append ~parent:row () in
-            let set column = model#set ~row ~column in
-            set name n;
-	    set simplify (if Random.bool () then `YES else `STOP);
-	    set harvey (if Random.bool () then `YES else `STOP)
-          end;
-      end;
+    let rows = Hashtbl.create 17 in
+    Dispatcher.iter
+      (fun (_,s,_) ->
+	 let f,n = decomp_name s in
+	 let row =
+	   try 
+	     Hashtbl.find rows f
+	   with Not_found ->
+	     let row = model#append () in
+	     Hashtbl.add rows f row;
+	     model#set ~row ~column:name f;
+	     row
+	 in
+	 let row_n = model#append ~parent:row () in
+	 Hashtbl.add orows s row_n;
+	 model#set ~row:row_n ~column:name n;
+	 model#set ~row:row_n ~column:simplify 
+	   (match Dispatcher.call_prover s Dispatcher.Simplify with
+	      | Calldp.Valid -> `YES
+	      | _ -> `STOP);
+	 model#set ~row:row_n ~column:harvey `STOP;
+      );
     model
       
 end

@@ -20,6 +20,10 @@ src/cvcl.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/parser.cmx \
     src/options.cmx src/monomorph.cmx src/misc.cmx src/ltyping.cmx \
     src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
     src/cc.cmi src/cvcl.cmi 
+src/dispatcher.cmo: src/vcg.cmi src/simplify.cmi src/logic.cmi src/harvey.cmi \
+    src/env.cmi tools/calldp.cmi src/dispatcher.cmi 
+src/dispatcher.cmx: src/vcg.cmx src/simplify.cmx src/logic.cmi src/harvey.cmx \
+    src/env.cmx tools/calldp.cmx src/dispatcher.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/types.cmi src/report.cmi src/misc.cmi src/logic.cmi \
@@ -72,14 +76,16 @@ src/main.cmo: src/wp.cmi src/vcg.cmi src/util.cmi src/typing.cmi \
     src/monad.cmi src/mlize.cmi src/mizar.cmi src/misc.cmi src/ltyping.cmi \
     src/logic.cmi src/loc.cmi src/isabelle.cmi src/ident.cmi src/holl.cmi \
     src/hol4.cmi src/harvey.cmi src/fpi.cmi src/error.cmi src/env.cmi \
-    src/cvcl.cmi src/coq.cmi src/cc.cmi src/ast.cmi src/annot.cmi 
+    src/dispatcher.cmi src/cvcl.cmi src/coq.cmi src/cc.cmi src/ast.cmi \
+    src/annot.cmi 
 src/main.cmx: src/wp.cmx src/vcg.cmx src/util.cmx src/typing.cmx \
     src/types.cmi src/smtlib.cmx src/simplify.cmx src/report.cmx src/red.cmx \
     src/pvs.cmx src/ptree.cmi src/parser.cmx src/options.cmx src/ocaml.cmx \
     src/monad.cmx src/mlize.cmx src/mizar.cmx src/misc.cmx src/ltyping.cmx \
     src/logic.cmi src/loc.cmx src/isabelle.cmx src/ident.cmx src/holl.cmx \
     src/hol4.cmx src/harvey.cmx src/fpi.cmx src/error.cmi src/env.cmx \
-    src/cvcl.cmx src/coq.cmx src/cc.cmi src/ast.cmi src/annot.cmx 
+    src/dispatcher.cmx src/cvcl.cmx src/coq.cmx src/cc.cmi src/ast.cmi \
+    src/annot.cmx 
 src/misc.cmo: src/types.cmi src/ptree.cmi src/options.cmi src/logic.cmi \
     src/loc.cmi src/ident.cmi src/effect.cmi src/cc.cmi src/ast.cmi \
     src/misc.cmi 
@@ -193,6 +199,7 @@ src/ast.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/ident.cmi
 src/cc.cmi: src/logic.cmi src/ident.cmi 
 src/coq.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/cvcl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
+src/dispatcher.cmi: src/vcg.cmi src/logic.cmi src/env.cmi tools/calldp.cmi 
 src/effect.cmi: src/logic.cmi src/ident.cmi 
 src/env.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
     src/ast.cmi 
@@ -357,19 +364,21 @@ c/output.cmo: src/loc.cmi c/creport.cmi c/output.cmi
 c/output.cmx: src/loc.cmx c/creport.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 
 intf/navig.cmx: intf/navig.cmi 
-intf/stat.cmo: src/report.cmi src/options.cmi src/main.cmo src/loc.cmi \
-    src/env.cmi src/ast.cmi 
-intf/stat.cmx: src/report.cmx src/options.cmx src/main.cmx src/loc.cmx \
-    src/env.cmx src/ast.cmi 
+intf/stat.cmo: src/report.cmi src/options.cmi src/main.cmo src/env.cmi \
+    src/dispatcher.cmi src/ast.cmi 
+intf/stat.cmx: src/report.cmx src/options.cmx src/main.cmx src/env.cmx \
+    src/dispatcher.cmx src/ast.cmi 
 intf/viewer.cmo: src/util.cmi src/report.cmi src/options.cmi intf/navig.cmi \
     src/main.cmo src/log.cmi src/loc.cmi intf/hilight.cmo src/env.cmi \
     src/ast.cmi 
 intf/viewer.cmx: src/util.cmx src/report.cmx src/options.cmx intf/navig.cmx \
     src/main.cmx src/log.cmi src/loc.cmx intf/hilight.cmx src/env.cmx \
     src/ast.cmi 
+tools/calldp.cmo: tools/calldp.cmi 
+tools/calldp.cmx: tools/calldp.cmi 
 tools/cvcl_split.cmo: tools/cvcl_split.cmi 
 tools/cvcl_split.cmx: tools/cvcl_split.cmi 
-tools/dp.cmo: tools/simplify_split.cmi tools/cvcl_split.cmi 
-tools/dp.cmx: tools/simplify_split.cmx tools/cvcl_split.cmx 
+tools/dp.cmo: tools/simplify_split.cmi tools/cvcl_split.cmi tools/calldp.cmi 
+tools/dp.cmx: tools/simplify_split.cmx tools/cvcl_split.cmx tools/calldp.cmx 
 tools/simplify_split.cmo: tools/simplify_split.cmi 
 tools/simplify_split.cmx: tools/simplify_split.cmi 

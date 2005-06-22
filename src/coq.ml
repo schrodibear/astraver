@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.133 2005-06-21 07:45:03 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.134 2005-06-22 06:53:57 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -682,7 +682,7 @@ and print_list_par sep pr fmt l =
 
 (* printers selection *)
 
-let v8 = match prover with Coq V8 -> true | _ -> false
+let v8 = match prover () with Coq V8 -> true | _ -> false
 
 let print_term = if v8 then print_term_v8 else print_term_v7
 let print_predicate = if v8 then print_predicate_v8 else print_predicate_v7
