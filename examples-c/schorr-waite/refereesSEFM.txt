@@ -103,7 +103,7 @@ OTHER COMMENTS FOR THE AUTHOR(S):
 
 
 
-TODO The authors should comment on the cost of switching verification tools
+DONE The authors should comment on the cost of switching verification tools
 (e.g., from Simplify to Coq). I suspect it is not as straightfoward as
 the paper seems to indicate.
 
@@ -333,25 +333,25 @@ DONE   latter -> later
 
 DONE page 4, right col.: indeed mean -> indeed means
 
-TODO page 5, left col. line 3 (and later): make clear what you mean by 'an
+DONE page 5, left col. line 3 (and later): make clear what you mean by 'an
 
-TODO   expression ... is valid'! do you mean something like 'admissible' or
+     expression ... is valid'! do you mean something like 'admissible' or
 
-TODO   'defined'?
+     'defined'?
 
-TODO page 5, left col., line 15: 'of the function': which function do you
+DONE page 5, left col., line 15: 'of the function': which function do you
 
-TODO   mean?
+     mean?
 
-TODO page 5, left col., bottom: 'The design ... proof itself.': this claim
+DONE page 5, left col., bottom: 'The design ... proof itself.': this claim
 
-TODO   seems to be a self-contradiction (at least if the design of the
+     seems to be a self-contradiction (at least if the design of the
 
-TODO   invariant is considered to be part of the proof)! 
+     invariant is considered to be part of the proof)! 
 
 DONE page 5, right col., 4.1: 'on Figure ...' -> 'in Figure ...' (here and
 
-TODO   later)
+     later)
 
 TODO page 5, right col., 4.1: 'The normal arrows correspond to unmodified
 
@@ -611,7 +611,7 @@ There are a few small problems with the presentation which are
 
 stylistic:
 
-TODO  o never use citations as nouns (e.g., "we refer to [8,9] for more
+DONE  o never use citations as nouns (e.g., "we refer to [8,9] for more
 
    information").
 
@@ -641,23 +641,23 @@ DONE  o "is the most difficult part of the verification process" =>
 
 DONE  o "...which is limited to first-order..." (rewrite/reword for clairity)
 
-TODO  o "...obligation is indeed not..." (cut "indeed")\
+DONE  o "...obligation is indeed not..." (cut "indeed")\
 
-TODO  o "So finally Simplify solves..." (rewrite/reword for clarity)
+DONE  o "So finally Simplify solves..." (rewrite/reword for clarity)
 
-TODO  o "We have not only...." (rewrite/reword for clarity)
+DONE  o "We have not only...." (rewrite/reword for clarity)
 
-TODO  o "Note that with Caduceus, as shown..." (a few spelling and grammar
+DONE  o "Note that with Caduceus, as shown..." (a few spelling and grammar
 
    errors are in this and adjacent sentences)
 
-TODO  o ESC/Java does not generate annotations; Daikon and Houdini do.
+DONE  o ESC/Java does not generate annotations; Daikon and Houdini do.
 
 
 
 The medium-level problems I have with the paper are:
 
-TODO  o if you support PVS and were worried about the size and complexity
+DONE  o if you support PVS and were worried about the size and complexity
 
    of the resulting manual verification, why in the world use the Coq
 

@@ -36,15 +36,23 @@ Once a C program is annotated, verification is done by running
 compiler, but resulting in the generation of so-called
 \emph{verification conditions}: first-order predicate logic formulas
 whose validity implies the soundness of the program with respect to
-the absence of threat and to the behavioral  properties given as
+the absence of threat and to the behavioral properties given as
 annotations. At this point, a general purpose theorem prover must be
 used to establish those verification conditions.  An original
 \caduceus{} feature is its independence with respect to the prover. It
 currently supports Coq~\cite{CoqProofAssistant} and PVS~\cite{PVS}
 interactive proof assistants, and Simplify~\cite{simplify},
 haRVey~\cite{ranise03harvey} and CVC-lite~\cite{barrett04cav}
-automatic provers. New provers may easily be added via suitable
-pretty-printers.
+automatic provers. Coherence between all prover outputs is obtained
+because each verification condition is first produced in a common logical
+setting: first-order logic with equality and arithmetic on integers
+and reals, which can be syntactically embedded into the logic of each
+of the former provers. Switching from a prover to another is trivial,
+but on the other hand there is no way to make several provers cooperate
+on solving the same goal (we come back to this issue in
+Section~\ref{sec:conclusion}).  This means also that a new prover may
+easily be added via a suitable pretty-printer, as soon as it supports
+first-order quantication, built-in equality, and arithmetic.
 
 To perform proof of the verification conditions with an
 interactive prover, the user needs to understand the

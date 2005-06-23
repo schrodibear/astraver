@@ -10,8 +10,7 @@ conditions that are actually not provable: as usual with a Hoare-like
 system, when there are loops like the \verb|while| of Schorr-Waite, it
 is mandatory (except in simple cases) to manually add a loop
 invariant. The design of a suitable loop invariant is the most
-difficult part of this verification process, more difficult than
-performing the proof itself. Fortunately for us, suitable loop
+difficult part of this verification process. Fortunately for us, suitable loop
 invariants were proposed by previous works on Schorr-Waite algorithm.
 However, some difficulties remain. The main one is that we need to
 express this loop invariant in the \caduceus{} syntax, which is
@@ -135,7 +134,7 @@ types or logical types. Here we declare
 //@ predicate in_list(node p,plist l)\end{slshape}
 \end{alltt}
 
-\pagebreak
+%\pagebreak
 
 \begin{alltt}\begin{slshape}
 /*@ predicate 
@@ -282,9 +281,10 @@ remaining obligations for validity of pointer dereferencing: we have
 certified the absence of threat. 
 
 At this point, any of our attempts to add axioms for solving the
-remaining obligations failed. These obligations are apparently too
-difficult, so we switch to an interactive prover: the Coq proof
-assistant. 
+remaining obligations failed. We also tried our other supported
+automatic provers haRVey and CVC-lite, but they are even worse than
+Simplify. These obligations are apparently too difficult, so we switched
+to an interactive prover: the Coq proof assistant.
 
 \subsection{Verification with the Coq interactive prover}
 \label{sec:coq}
@@ -355,10 +355,13 @@ void schorr_waite(node root) \{
 \end{figure*}
 
 The next step is to define the reachability predicate in Coq. We
-proceeded in a slightly different way than Mehta and
-Nipkow~\cite{mehta03cade}: we introduce a more general predicate
-\verb|path| which also makes precise the path between nodes. It is
-defined by three clauses:
+proceed in a slightly different way than Mehta and
+Nipkow~\cite{mehta03cade}, who use a set-theory like axiomatization:
+we use inductively defined predicates, which are more suitable for
+Coq. 
+
+We first introduce a more general predicate \verb|path| which also
+makes precise the path between nodes. It is defined by three clauses:
 \[
 \begin{array}{l}
 \verb|path|(a,l,r, p, p, nil)  \\
@@ -445,11 +448,11 @@ equality reasoning. The verification that the measure decreases at
 each iteration is added to the obligations corresponding to
 preservation of the loop invariant. 
 
-The well-foundedness obligation is indeed not passed to
-automatic provers like Simplify because it is a second-order
-formula. So finally Simplify solves 8 of the 13 obligations, which is
-a quite good score but of course the 5 remaining obligations are by
-far the most difficult.
+The well-foundedness obligation is not passed to automatic provers
+like Simplify because it is a second-order formula. So finally, the
+Simplify prover solves 8 of the 13 obligations, which is a quite good
+score but of course the 5 remaining obligations are by far the most
+difficult.
 
 With Coq, we completed all the obligations including the
 well-foundedness. Here are a few numbers about the whole Coq proof: 

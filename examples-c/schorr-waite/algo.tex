@@ -263,7 +263,7 @@ of a C function, whose implementation will be given later: such
 predicates have to be `implemented' later, either by giving
 additional \caduceus{} annotations (such as \verb|axioms|) or in the
 back-end prover. For the reachability predicate, we write
-\pagebreak
+%\pagebreak
 \begin{alltt}\begin{slshape}
 /*@ predicate 
   @   reachable(node p1, node p2) 
@@ -305,7 +305,7 @@ atom, then it should be understood as the boolean $e\neq 0$, so that
 one can equivalently write \verb|! x->m| or \verb|x->m == 0|. 
 Notice that we use a standard first-order logic: every function is
 total (like in JML, i.e. no 3-valued logic) so that an expression
-\verb|p->f| is valid even if \verb|p| is \verb|null|, but no
+\verb|p->f| is meaningfull even if \verb|p| is \verb|null|, but no
 property of it is known (very similarly to division by zero for
 example). 
 
@@ -340,7 +340,7 @@ wrong pointer dereferencing can occur. Second, we also talk about the
 non-reachable nodes of the graph: we are also able to show that they
 are not traversed and not modified. In Section~\ref{sec:termination},
 we will add more annotations in order to establish the termination of the
-function.
+\verb|schorr_waite| function.
 
 
 %%% Local Variables: 

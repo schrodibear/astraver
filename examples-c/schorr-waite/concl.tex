@@ -2,7 +2,7 @@
 \label{sec:conclusion}
 
 We presented a machine-checked full verification of the Schorr-Waite
-algorithm, directly on a real C source version of it. We have not only
+algorithm, directly on a real C source version of it. We 
 proved the behavioral properties of it, like previous
 works~\cite{bornat00mpc,mehta03cade,abrial03fme}, but we have also
 proved that no invalid pointer dereferencing may occur, and the
@@ -52,7 +52,9 @@ those have to be specified in JML itself, which is not obvious for
 inductively defined predicates like \verb|reachable| or \verb|clr_list|.
 Second, JML has some limitations, such as forbidding the use of
 \verb|\old| in loop invariants (this limitation has notified to the JML 
-mailing list, and is expected to be relaxed in a near future). 
+mailing list, and is expected to be relaxed in a near future). So
+making the similar case study in JAVA/JML remains a non-trivial
+challenge. 
 
 There are still many potential improvements in our approach. One
 improvement clearly emphasized by this case study is the ability to
@@ -65,7 +67,10 @@ provide a checkable proof trace, making its integration very
 difficult. So one of the major goals of our research is now to develop
 a platform for verification where automatic theorem proving will be
 used as far as possible, and only when this fails the user would be asked
-for manual interaction.
+for manual interaction. Since \caduceus{} also supports the interactive
+prover PVS, making the proofs with PVS, which is known to have more
+efficient automatic reasoning than Coq, could be a good alternative
+(but unfortunately we are not experienced PVS users ourselves).
 
 This case study was motivated by Bornat's assertion given at the
 beginning. But the Schorr-Waite program is not representative of the
@@ -75,12 +80,12 @@ required: \caduceus{} is currently under experimentation at Axalto
 (smart cards) and Dassault Aviation (aeronautics). For this goal,
 several improvements to the \caduceus{} tool are in progress. There
 are scaling up issues for dealing with code of large size. Automatic
-annotation of programs is an important need (\`a la ESC/Java for
-example). Properties of separation of data appear to be crucial for
-large programs. We are currently investigating solutions, in
-particular by integration of advanced static analysis techniques, and
-ideas from separation logic~\cite{reynolds02lics}. Generally speaking
-adding static analysis techniques to our setting is a major goal.
+annotation of programs is an important need. Properties of separation
+of data appear to be crucial for large programs. We are currently
+investigating solutions, in particular by integration of advanced
+static analysis techniques, and ideas from separation
+logic~\cite{reynolds02lics}. Generally speaking adding static analysis
+techniques to our setting is a major goal.
 
 Among more academic future work, we wonder what would be the next
 ``mountain to climb'' for pointer program verification? We think that
