@@ -615,7 +615,7 @@ DONE  o never use citations as nouns (e.g., "we refer to [8,9] for more
 
    information").
 
-TODO  o the font and size of several words (e.g., Caduceus, cons) is a bit
+DONE  o the font and size of several words (e.g., Caduceus, cons) is a bit
 
    off and needs to be revisited.
 
@@ -663,11 +663,11 @@ DONE  o if you support PVS and were worried about the size and complexity
 
    backend?
 
-TODO  o if you support Harvey and CVC-lite, why use Simplify, given the
+DONE  o if you support Harvey and CVC-lite, why use Simplify, given the
 
    latter's well-known problems with soundness and stability?
 
-TODO  o you mention that the loop variant can be an arbitrary well-founded
+DONE  o you mention that the loop variant can be an arbitrary well-founded
 
    relation
 
