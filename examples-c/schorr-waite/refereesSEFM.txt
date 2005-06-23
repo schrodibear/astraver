@@ -355,43 +355,43 @@ DONE page 5, right col., 4.1: 'on Figure ...' -> 'in Figure ...' (here and
 
 TODO page 5, right col., 4.1: 'The normal arrows correspond to unmodified
 
-TODO   links': I don't really understand this, because the link from p or t
+     links': I don't really understand this, because the link from p or t
 
-TODO   is modified but is still 'normal'!?
+     is modified but is still 'normal'!?
 
 DONE   children -> child (twice)
 
 DONE page 6, right col., bottom: may not be -> may be not (because of
 
-DONE   different semantics)
+     different semantics)
 
 TODO page 7, right col., lines 13-14: why did your attempts (using
 
-TODO   Simplify) fail? this is important because one could argue that you
+     Simplify) fail? this is important because one could argue that you
 
-TODO   just haven't tried hard enough; or are there any principal/essential
+     just haven't tried hard enough; or are there any principal/essential
 
-TODO   problems that cannot be overcome with Simplify?
+     problems that cannot be overcome with Simplify?
 
 TODO   also at the beginning of 4.4: it would be useful to roughly describe
 
-TODO   the functionality, strengths and weaknesses of Simplify;
+     the functionality, strengths and weaknesses of Simplify;
 
 DONE page 7, right col.: surprised -> surprising
 
 TODO page 8, left col.: 'the most important one is ...': why is this the
 
-TODO   most important one?
+     most important one?
 
 TODO page 8, left col.: 'With those definitions and lemmas, we are able
 
-TODO   ... in Coq.: what you do not tell is how many fruitless efforts
+     ... in Coq.: what you do not tell is how many fruitless efforts
 
-TODO   (inappropriate definitions, false lemmas, inappropriate lemmas etc.)
+    (inappropriate definitions, false lemmas, inappropriate lemmas etc.)
 
-TODO   you have started until the final proof went through; some comments
+    you have started until the final proof went through; some comments
 
-TODO   in this direction would also be instructive! 
+    in this direction would also be instructive! 
 
 DONE page 8, right col.: decrease -> decreases;
 
@@ -403,23 +403,23 @@ DONE page 9, left col.: in term of -> in terms of
 
 TODO   '2411 lines of tactics were inserted manually': this sounds quite a
 
-TODO   lot, and probably only takes into account the final successful run!?
+    lot, and probably only takes into account the final successful run!?
 
 DONE page 9, left col.: well-founded relation -> well-founded relations
 
 TODO page 9, left col. second half: the claim 'But as far as we know ...'
 
-TODO   seems to be (too) strong (since you don't know what can still be
+     seems to be (too) strong (since you don't know what can still be
 
-TODO   done in the future with other approaches, even if it has  not been
+    done in the future with other approaches, even if it has  not been
 
-TODO   done previously); perhaps you should weaken that a bit; 
+    done previously); perhaps you should weaken that a bit; 
 
 DONE page 9, left col.: does not any -> does not do any
 
 TODO page 9, right col., line 3: 'the Caduceus approach': in this paper
 
-TODO   this is undefined!
+      this is undefined!
 
 DONE   defined -> defining
 
@@ -427,9 +427,9 @@ DONE   this are -> these are
 
 TODO page 9, right col, first paragr.: 'This would require to define
 
-TODO   predicates ... only in higher-order logical frameworks': this is
+     predicates ... only in higher-order logical frameworks': this is
 
-TODO   quite unclear! why?
+     quite unclear! why?
 
 DONE   major goal -> major goals
 
@@ -447,7 +447,7 @@ TODO page 9, right col, line 3 from bottom: 'solutions': for what?
 
 DONE page 10, left col.: its fruitful -> his fruitful
 
-TODO   [3]: page numbers are missing
+DONE   [3]: page numbers are missing
 
 
 -- Summary:
