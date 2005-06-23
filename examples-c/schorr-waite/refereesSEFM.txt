@@ -119,7 +119,7 @@ The paper has a number of minor errors which can be fixed easily.
 
 
 
-TODO In section 4, the first sentence: The function is now formally specified. It is not clear which function is bein specified.
+DONE In section 4, the first sentence: The function is now formally specified. It is not clear which function is bein specified.
 
 DONE In section 4.4 second paragraph. "It may be surprised"  should read "It may be surprising" 
 
