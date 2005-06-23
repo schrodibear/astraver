@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.82 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.83 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -281,7 +281,7 @@ let interp_decl d =
       let p = Ltyping.predicate lab env lenv p in
       let p = generalize_predicate p in
       push_axiom (Ident.string id) p
-  | Ptree.Assert (loc, id, p) ->
+  | Goal (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
       if (generalize_predicate p).scheme_vars <> [] then 
 	raise_located loc PolymorphicGoal;

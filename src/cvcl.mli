@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.mli,v 1.2 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: cvcl.mli,v 1.3 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Vcg
 
@@ -30,3 +30,4 @@ val push_obligations : obligation list -> unit
 
 val output_file : string -> unit
 
+val prelude_done : bool ref

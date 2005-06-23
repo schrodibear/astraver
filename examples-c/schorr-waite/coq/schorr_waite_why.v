@@ -5,18 +5,19 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
-Lemma schorr_waite_impl_po_1 : 
+(* Why obligation from file "why/schorr_waite.why", characters 463-4312 *)
+(*Why goal*) Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -26,18 +27,19 @@ Proof.
 intros; apply order_mark_m_and_c_and_stack_wf.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 409-620 *)
-Lemma schorr_waite_impl_po_2 : 
+(* Why obligation from file "why/schorr_waite.why", characters 470-681 *)
+(*Why goal*) Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -50,11 +52,12 @@ Lemma schorr_waite_impl_po_2 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -88,7 +91,7 @@ Lemma schorr_waite_impl_po_2 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
 Proof.
 (* validity of access t->m in the condition of while *)
@@ -104,18 +107,19 @@ assumption.
 left; exists (@nil pointer); constructor.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3041-3163 *)
-Lemma schorr_waite_impl_po_3 : 
+(* Why obligation from file "why/schorr_waite.why", characters 3172-3294 *)
+(*Why goal*) Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -128,11 +132,12 @@ Lemma schorr_waite_impl_po_3 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -166,7 +171,7 @@ Lemma schorr_waite_impl_po_3 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   (~(t1 = null) -> (valid alloc t1)).
@@ -184,18 +189,19 @@ assumption.
 left; exists (@nil pointer); constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3193-3250 *)
-Lemma schorr_waite_impl_po_4 : 
+(* Why obligation from file "why/schorr_waite.why", characters 3324-3381 *)
+(*Why goal*) Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -208,11 +214,12 @@ Lemma schorr_waite_impl_po_4 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -246,7 +253,7 @@ Lemma schorr_waite_impl_po_4 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -270,18 +277,19 @@ right; exists (@nil pointer); constructor.
 clear Test6; intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3423-3447 *)
-Lemma schorr_waite_impl_po_5 : 
+(* Why obligation from file "why/schorr_waite.why", characters 3554-3578 *)
+(*Why goal*) Lemma schorr_waite_impl_po_5 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -294,11 +302,12 @@ Lemma schorr_waite_impl_po_5 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -332,7 +341,7 @@ Lemma schorr_waite_impl_po_5 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -354,18 +363,19 @@ Proof.
 intros; subst;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3400-3447 *)
-Lemma schorr_waite_impl_po_6 : 
+(* Why obligation from file "why/schorr_waite.why", characters 3531-3578 *)
+(*Why goal*) Lemma schorr_waite_impl_po_6 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -378,11 +388,12 @@ Lemma schorr_waite_impl_po_6 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -416,7 +427,7 @@ Lemma schorr_waite_impl_po_6 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -434,6 +445,7 @@ Lemma schorr_waite_impl_po_6 :
   forall (Pre31: (valid alloc caduceus_7)),
   forall (r1: ((memory) pointer)),
   forall (Post66: r1 = (upd r0 caduceus_7 q)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
   (((* I1 *)
     (forall (x:pointer),
      ((reachable alloc l r root x) -> (reachable alloc l0 r1 t2 x) \/
@@ -1140,18 +1152,19 @@ auto.
 Save.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3629-3665 *)
-Lemma schorr_waite_impl_po_7 : 
+(* Why obligation from file "why/schorr_waite.why", characters 3760-3796 *)
+(*Why goal*) Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -1164,11 +1177,12 @@ Lemma schorr_waite_impl_po_7 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -1202,7 +1216,7 @@ Lemma schorr_waite_impl_po_7 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -1226,18 +1240,19 @@ Qed.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3629-3665 *)
-Lemma schorr_waite_impl_po_8 : 
+(* Why obligation from file "why/schorr_waite.why", characters 3760-3796 *)
+(*Why goal*) Lemma schorr_waite_impl_po_8 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -1250,11 +1265,12 @@ Lemma schorr_waite_impl_po_8 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -1288,7 +1304,7 @@ Lemma schorr_waite_impl_po_8 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -1315,6 +1331,7 @@ Lemma schorr_waite_impl_po_8 :
        (result = p1 ->
         (forall (c:((memory) Z)),
          (c = (upd c0 result 1) ->
+          (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
           (((* I1 *)
             (forall (x:pointer),
              ((reachable alloc l r root x) -> (reachable alloc l1 r1 t2 x) \/
@@ -2239,18 +2256,19 @@ left.
 unfold reachable; exists (@nil pointer);constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3940-3952 *)
-Lemma schorr_waite_impl_po_9 : 
+(* Why obligation from file "why/schorr_waite.why", characters 4071-4083 *)
+(*Why goal*) Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -2263,11 +2281,12 @@ Lemma schorr_waite_impl_po_9 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -2301,7 +2320,7 @@ Lemma schorr_waite_impl_po_9 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -2315,18 +2334,19 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3991-4015 *)
-Lemma schorr_waite_impl_po_10 : 
+(* Why obligation from file "why/schorr_waite.why", characters 4122-4146 *)
+(*Why goal*) Lemma schorr_waite_impl_po_10 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -2339,11 +2359,12 @@ Lemma schorr_waite_impl_po_10 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -2377,7 +2398,7 @@ Lemma schorr_waite_impl_po_10 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -2395,18 +2416,19 @@ Proof.
 intros;subst;tauto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3968-4015 *)
-Lemma schorr_waite_impl_po_11 : 
+(* Why obligation from file "why/schorr_waite.why", characters 4099-4146 *)
+(*Why goal*) Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -2419,11 +2441,12 @@ Lemma schorr_waite_impl_po_11 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -2457,7 +2480,7 @@ Lemma schorr_waite_impl_po_11 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
@@ -2481,6 +2504,7 @@ Lemma schorr_waite_impl_po_11 :
        (result = p2 ->
         (forall (c:((memory) Z)),
          (c = (upd c0 result 0) ->
+          (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
           (((* I1 *)
             (forall (x:pointer),
              ((reachable alloc l r root x) -> (reachable alloc l1 r0 t2 x) \/
@@ -3192,18 +3216,19 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
-Lemma schorr_waite_impl_po_12 : 
+(* Why obligation from file "why/schorr_waite.why", characters 463-4312 *)
+(*Why goal*) Lemma schorr_waite_impl_po_12 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -3216,11 +3241,12 @@ Lemma schorr_waite_impl_po_12 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -3254,7 +3280,7 @@ Lemma schorr_waite_impl_po_12 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
   forall (c1: ((memory) Z)),
@@ -3263,7 +3289,8 @@ Lemma schorr_waite_impl_po_12 :
   forall (p2: pointer),
   forall (r1: ((memory) pointer)),
   forall (t2: pointer),
-  forall (Post36: (((* I1 *)
+  forall (Post36: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                  (((* I1 *)
                     (forall (x:pointer),
                      ((reachable alloc l r root x) ->
                       (reachable alloc l1 r1 t2 x) \/
@@ -3316,18 +3343,19 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
-Lemma schorr_waite_impl_po_13 : 
+(* Why obligation from file "why/schorr_waite.why", characters 463-4312 *)
+(*Why goal*) Lemma schorr_waite_impl_po_13 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
@@ -3340,11 +3368,12 @@ Lemma schorr_waite_impl_po_13 :
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
+  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+                 (((* I1 *)
+                   (forall (x:pointer),
+                    ((reachable alloc l r root x) ->
+                     (reachable alloc l0 r0 t1 x) \/
+                     (reachable alloc l0 r0 p1 x))) /\
                  (* I2 *)
                  (forall (x:pointer),
                   (~(x = null) ->
@@ -3378,14 +3407,15 @@ Lemma schorr_waite_impl_po_13 :
                        (acc r p2) = (acc r0 p2))))))) /\
                   (* I8 *)
                   (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test1: p1 = null /\ (t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0)),
-  ((forall (x:pointer), (acc l x) = (acc l0 x) /\ (acc r x) = (acc r0 x)) /\
+  (* File \"schorr_waite.c\", line 63, characters 5-202 *)
+  (((forall (x:pointer), (acc l x) = (acc l0 x) /\ (acc r x) = (acc r0 x)) /\
   (forall (x:pointer),
    ((valid alloc x) /\ (reachable alloc l0 r0 root x) -> (acc m0 x) <> 0))) /\
   (forall (x:pointer),
-   (~(reachable alloc l0 r0 root x) -> (acc m0 x) = (acc m x))).
+   (~(reachable alloc l0 r0 root x) -> (acc m0 x) = (acc m x)))).
 Proof.
 (* post-condition of the function *)
 intros.
@@ -3508,27 +3538,29 @@ auto.
 apply H2;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 658-2929 *)
-Lemma schorr_waite_impl_po_14 : 
+(* Why obligation from file "why/schorr_waite.why", characters 719-3060 *)
+(*Why goal*) Lemma schorr_waite_impl_po_14 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (c: ((memory) Z)),
   forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
+  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
+                 ((forall (x:pointer),
+                   (~(x = null) /\ (reachable alloc l r root x) ->
+                    (valid alloc x) /\ (acc m x) = 0)) /\
                  (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
+                  (reachable_elements alloc l r root root l_0)))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
-  ((* I1 *)
-   (forall (x:pointer),
-    ((reachable alloc l r root x) -> (reachable alloc l r t x) \/
-     (reachable alloc l r p x))) /\
+  (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+  (((* I1 *)
+    (forall (x:pointer),
+     ((reachable alloc l r root x) -> (reachable alloc l r t x) \/
+      (reachable alloc l r p x))) /\
   (* I2 *)
   (forall (x:pointer),
    (~(x = null) ->
@@ -3554,7 +3586,7 @@ Lemma schorr_waite_impl_po_14 :
       (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r p2))))))) /\
    (* I8 *)
    (forall (x:pointer),
-    (~(reachable alloc l r root x) -> (acc m x) = (acc m x)))).
+    (~(reachable alloc l r root x) -> (acc m x) = (acc m x))))).
 Proof.
 
 (* loop invariant true at the beginning *)

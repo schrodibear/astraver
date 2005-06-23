@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.15 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.16 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -47,6 +47,7 @@ let generic f targets =
        fprintf fmt "GWHY=gwhy %s@\n@\n" Coptions.why_opt;	    
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
+       fprintf fmt "COQDEP=coqdep -I `coqc -where`/user-contrib@\n@\n";	    
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
@@ -112,12 +113,12 @@ let generic f targets =
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";
        fprintf fmt "%%.stat: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) --split $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "include %s.depend@\n@\n" f;
        fprintf fmt "depend %s.depend: coq/%s_spec_why.v %a@\n" f f 
 	 (print_files coq_v) targets;
-       fprintf fmt "\t-coqdep -I coq coq/*.v > %s.depend@\n@\n" f;
+       fprintf fmt "\t-$(COQDEP) -I coq coq/*.v > %s.depend@\n@\n" f;
        fprintf fmt "clean:@\n";
        fprintf fmt "\trm -f coq/*.vo@\n@\n";
     )

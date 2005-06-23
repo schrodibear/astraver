@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.1 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.2 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Vcg
 
@@ -27,6 +27,6 @@ val push_axiom : string -> Logic.predicate Env.scheme -> unit
 
 val iter : (obligation -> unit) -> unit
 
-type prover = Simplify | Harvey
+type prover = Simplify | Harvey | Cvcl
 
 val call_prover : obligation:string -> prover -> Calldp.prover_result

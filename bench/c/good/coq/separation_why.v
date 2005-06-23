@@ -4,7 +4,7 @@
 Require Export separation_spec_why.
 
 (* Why obligation from file "why/separation.why", characters 638-655 *)
-Lemma f1_impl_po_1 : 
+(*Why goal*) Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (p1: ((memory) pointer)),
   forall (p2: ((memory) pointer)),
@@ -26,7 +26,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 658-675 *)
-Lemma f1_impl_po_2 : 
+(*Why goal*) Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (p1: ((memory) pointer)),
@@ -63,7 +63,7 @@ intuition;generalize (H3 u2);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 36-1184 *)
-Lemma f1_impl_po_3 : 
+(*Why goal*) Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (p1: ((memory) pointer)),
@@ -155,7 +155,7 @@ apply pset_union_intro;intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153717-153734 *)
-Lemma f3_impl_po_1 : 
+(*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -522,7 +522,7 @@ generalize (H1 u3);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153740-153757 *)
-Lemma f3_impl_po_2 : 
+(*Why goal*) Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -908,7 +908,7 @@ intuition;generalize (H3 u4);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153763-153780 *)
-Lemma f3_impl_po_3 : 
+(*Why goal*) Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -1311,7 +1311,7 @@ intuition;generalize (H3 w1);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153786-153803 *)
-Lemma f3_impl_po_4 : 
+(*Why goal*) Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -1731,7 +1731,7 @@ intuition;generalize (H3 w2);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153809-153826 *)
-Lemma f3_impl_po_5 : 
+(*Why goal*) Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -2168,7 +2168,7 @@ intuition;generalize (H3 w3);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153832-153849 *)
-Lemma f3_impl_po_6 : 
+(*Why goal*) Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -2622,7 +2622,7 @@ intuition;generalize (H3 w4);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153855-153872 *)
-Lemma f3_impl_po_7 : 
+(*Why goal*) Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -3093,7 +3093,7 @@ intuition;generalize (H3 w5);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153878-153895 *)
-Lemma f3_impl_po_8 : 
+(*Why goal*) Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -3581,7 +3581,7 @@ intuition;generalize (H3 w6);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153901-153918 *)
-Lemma f3_impl_po_9 : 
+(*Why goal*) Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -4086,7 +4086,7 @@ intuition;generalize (H3 w7);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153924-153941 *)
-Lemma f3_impl_po_10 : 
+(*Why goal*) Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -4608,7 +4608,7 @@ intuition;generalize (H3 w8);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153947-153964 *)
-Lemma f3_impl_po_11 : 
+(*Why goal*) Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -5147,7 +5147,7 @@ intuition;generalize (H3 w9);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 153970-153988 *)
-Lemma f3_impl_po_12 : 
+(*Why goal*) Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -5703,7 +5703,7 @@ intuition;generalize (H3 w10);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 1223-157003 *)
-Lemma f3_impl_po_13 : 
+(*Why goal*) Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
@@ -6350,7 +6350,7 @@ Proof.
 Admitted.
 
 (* Why obligation from file "why/separation.why", characters 158457-158470 *)
-Lemma f_impl_po_1 : 
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (ss: pointer),
@@ -6378,7 +6378,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 158475-158502 *)
-Lemma f_impl_po_2 : 
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (ss: pointer),
@@ -6411,7 +6411,7 @@ generalize (H4 ss alloc Pre4 );intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 158440-158502 *)
-Lemma f_impl_po_3 : 
+(*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
@@ -6482,7 +6482,7 @@ apply neq_base_addr_neq_shift;tauto.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 158899-158914 *)
-Lemma g_impl_po_1 : 
+(*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
   forall (Pre2: (valid_range alloc v 0 3)),
@@ -6493,7 +6493,7 @@ Save.
 
 
 (* Why obligation from file "why/separation.why", characters 159064-159092 *)
-Lemma h_impl_po_1 : 
+(*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
@@ -6505,7 +6505,7 @@ intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 159064-159092 *)
-Lemma h_impl_po_2 : 
+(*Why goal*) Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),

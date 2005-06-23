@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.2 2005-06-22 14:59:42 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.3 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -52,7 +52,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey
+type prover = Simplify | Harvey | Cvcl
 
 let push_elem p e = match p, e with
   | Simplify, Logic _ -> ()
@@ -63,16 +63,22 @@ let push_elem p e = match p, e with
   | Harvey, Axiom (id, a) -> Harvey.push_axiom id a
   | Harvey, PredicateDef (id, p) -> Harvey.push_predicate id p
   | Harvey, FunctionDef (id, f) -> Harvey.push_function id f
+  | Cvcl, Logic (id, d) -> Cvcl.push_logic id d
+  | Cvcl, Axiom (id, a) -> Cvcl.push_axiom id a
+  | Cvcl, PredicateDef (id, p) -> Cvcl.push_predicate id p
+  | Cvcl, FunctionDef (id, f) -> Cvcl.push_function id f
 
 let push_obligation p o = match p with
   | Simplify -> Simplify.push_obligations [o]
   | Harvey -> Harvey.push_obligations [o]
+  | Cvcl -> Cvcl.push_obligations [o]
 
 (* output_file is a CRITICAL SECTION *)
 let output_file p (elems,o) =
   begin match p with
     | Simplify -> Simplify.reset () 
     | Harvey -> Harvey.reset () 
+    | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
   end;
   List.iter (push_elem p) elems;
   push_obligation p o;
@@ -80,10 +86,14 @@ let output_file p (elems,o) =
   match p with
     | Simplify -> Simplify.output_file f; f ^ "_why.sx"
     | Harvey -> Harvey.output_file f; f ^ "_why.rv"
+    | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
 
 open Printf
 
-let prover_name = function Simplify -> "Simplify" | Harvey -> "haRVey"
+let prover_name = function 
+  | Simplify -> "Simplify" 
+  | Harvey -> "haRVey"
+  | Cvcl -> "CVC Lite"
 
 let call_prover ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -96,7 +106,9 @@ let call_prover ~obligation:o p =
 	Calldp.simplify ~filename () 
     | Harvey -> 
 	(match Calldp.harvey ~filename () with [r] -> r | _ -> assert false)
+    | Cvcl ->
+	Calldp.cvcl ~filename ()
   in
-  if not debug then Sys.remove filename;
+  if not debug then begin try Sys.remove filename with _ -> () end;
   r
 

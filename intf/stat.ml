@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.4 2005-06-22 15:07:43 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.5 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -83,8 +83,10 @@ module Model = struct
       
   let cols = new GTree.column_list
   let name = cols#add string
+  let fullname = cols#add string
   let simplify = cols#add GtkStock.conv
   let harvey = cols#add GtkStock.conv
+  let cvcl = cols#add GtkStock.conv
 
   let decomp_name =
     let r = Str.regexp "\\(.*\\)_po_\\([0-9]+\\)" in
@@ -94,6 +96,10 @@ module Model = struct
       else
 	s, "1"
 
+  (* all obligations *)
+  let obligs = Hashtbl.create 97
+  let find_oblig = Hashtbl.find obligs
+
   (* obligation -> its model row *)
   let orows = Hashtbl.create 97
     
@@ -101,7 +107,8 @@ module Model = struct
     let model = GTree.tree_store cols in
     let rows = Hashtbl.create 17 in
     Dispatcher.iter
-      (fun (_,s,_) ->
+      (fun ((_,s,_) as o) ->
+	 Hashtbl.add obligs s o;
 	 let f,n = decomp_name s in
 	 let row =
 	   try 
@@ -115,8 +122,10 @@ module Model = struct
 	 let row_n = model#append ~parent:row () in
 	 Hashtbl.add orows s row_n;
 	 model#set ~row:row_n ~column:name n;
-	 model#set ~row:row_n ~column:simplify `EXECUTE;
-	 model#set ~row:row_n ~column:harvey `EXECUTE;
+	 model#set ~row:row_n ~column:fullname s;
+	 model#set ~row:row_n ~column:simplify `REMOVE;
+	 model#set ~row:row_n ~column:harvey `REMOVE;
+	 model#set ~row:row_n ~column:cvcl `REMOVE;
       );
     model
       
@@ -146,10 +155,79 @@ module View = struct
     in
     vc_harvey#set_clickable true;
     let _ = view#append_column vc_harvey in
-    vc_simplify, vc_harvey
+
+    let vc_cvcl = 
+      GTree.view_column ~title:"CVC Lite" 
+	~renderer:(icon_renderer, ["stock_id", Model.cvcl]) ()
+    in
+    vc_cvcl#set_clickable true;
+    let _ = view#append_column vc_cvcl in
+
+    vc_simplify, vc_harvey, vc_cvcl
 
 end
 
+(* run a prover on all obligations and update the model *)
+let run_prover p column_p (model : GTree.tree_store) () =
+  Dispatcher.iter
+    (fun (_,s,_) ->
+       let row = Hashtbl.find Model.orows s in
+       model#set ~row ~column:column_p `EXECUTE;
+       let r = Dispatcher.call_prover s p in
+       model#set ~row ~column:column_p
+	 (match r with 
+	    | Calldp.Valid -> `YES 
+	    | Calldp.ProverFailure _ -> `PREFERENCES
+	    | Calldp.Timeout -> `CUT
+	    | _ -> `STOP))
+
+module Printer = struct
+  
+  open Pp
+  open Misc
+  open Util
+  open Vcg
+  open Format
+  open Logic
+  open Cc
+
+  let rec intros ctx = function
+    | Forall (true, id, n, t, p) ->
+	let id' = Ident.next_away id (predicate_vars p) in
+	let p' = subst_in_predicate (subst_onev n id') p in
+	let ctx', concl' = intros (Svar (id', TTpure t) :: ctx) p' in
+	ctx', concl'
+    | Pimplies (true, a, b) -> 
+	let h = fresh_hyp () in 
+	let ctx', concl' = intros (Spred (h, a) :: ctx) b in
+	ctx', concl'
+    | c -> 
+	ctx, c
+
+  let print_predicate = Coq.print_predicate_v8
+  let print_cc_type = Coq.print_cc_type_v8
+
+  let print_oblig fmt (ctx,concl) =
+    let ctx, concl = intros ctx concl in
+    let print_hyp fmt = function
+      | Svar (id, t) -> 
+	  fprintf fmt "@[%a: %a@]" Ident.print id print_cc_type t
+      | Spred (id, p) -> 
+	  fprintf fmt "@[<hov 2>%a:@ %a@]" Ident.print id print_predicate p
+    in
+    fprintf fmt "@[@\n%a@\n----@\n%a@\n@]" (print_list newline print_hyp) ctx
+      print_predicate concl
+      
+  let text_of_obligation =
+    let buf = Buffer.create 4096 in
+    fun (_,s,p) ->
+      let fmt = Format.formatter_of_buffer buf in
+      Format.fprintf fmt "@[%s@\n@\n@[%a@]@]@." s print_oblig p;
+      let text = Buffer.contents buf in
+      Buffer.reset buf;
+      text
+
+end
 
 let main () = 
   let w = GWindow.window 
@@ -190,30 +268,27 @@ let main () =
   let view = GTree.view ~model ~packing:hp#add1 () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
-  let vc_simplify,vc_harvey = View.add_columns ~view ~model in
-
-  (* run a prover on all obligations and update the model *)
-  let run_prover p column_p () =
-    Dispatcher.iter
-      (fun (_,s,_) ->
-	 let row = Hashtbl.find Model.orows s in
-	 let r = Dispatcher.call_prover s p in
-	 model#set ~row ~column:column_p
-	   (match r with Calldp.Valid -> `YES | _ -> `STOP))
-  in
+  let vc_simplify,vc_harvey,vc_cvcl = View.add_columns ~view ~model in
 
   (* run Simplify on all proof obligations *)
   (* ???? why can't I make a function for this callback? *)
   let _ = vc_simplify#connect#clicked 
     (fun () -> 
        ignore 
-	 (Thread.create (run_prover Dispatcher.Simplify Model.simplify) ()))
+	 (Thread.create (run_prover Dispatcher.Simplify Model.simplify model) 
+	    ()))
   in
   (* run Harvey on all proof obligations *)
   let _ = vc_harvey#connect#clicked
     (fun () -> 
        ignore 
-	 (Thread.create (run_prover Dispatcher.Harvey Model.harvey) ()))
+	 (Thread.create (run_prover Dispatcher.Harvey Model.harvey model) ()))
+  in
+  (* run CVC Lite on all proof obligations *)
+  let _ = vc_cvcl#connect#clicked
+    (fun () -> 
+       ignore 
+	 (Thread.create (run_prover Dispatcher.Cvcl Model.cvcl model) ()))
   in
 
   let _ = view#misc#connect#realize ~callback:view#expand_all in
@@ -251,17 +326,34 @@ let main () =
 		     ignore (status_context#push s));
   flash_info := !display_info (* fun s -> status_context#flash ~delay:10 s *);
 
-  (* lower text view: annotations *)
+  (* lower text view: source code *)
   let tv2 = GText.view ~packing:(sw2#add) () in
   let _ = tv2#misc#modify_font !lower_view_general_font in
   let _ = tv2#set_editable false in
   let tb2 = tv2#buffer in
 
-  (* upper text view: source code *)
+  (* upper text view: obligation *)
   let buf1 = GText.buffer () in 
   let tv1 = GText.view ~buffer:buf1 ~packing:(sw1#add) () in
   let _ = tv1#misc#modify_font !upper_view_general_font in
   let _ = tv1#set_editable false in
+
+  (* obligation selection *)
+  let _ = 
+    view#selection#connect#after#changed ~callback:
+      begin fun () ->
+	List.iter 
+          (fun p -> 
+	     let row = model#get_iter p in
+	     let s = model#get ~row ~column:Model.fullname in
+	     let text =
+	       try let o = Model.find_oblig s in Printer.text_of_obligation o
+	       with Not_found -> ""
+	     in
+	     buf1#set_text text)
+	  view#selection#get_selected_rows;
+      end
+  in
 
   (* Remove default pango menu for textviews *)
   ignore (tv1#event#connect#button_press ~callback:
@@ -273,7 +365,6 @@ let main () =
   buf1#place_cursor ~where:buf1#start_iter;
 
   w#add_accel_group accel_group;
-
   w#show ()
 
 let _ = 

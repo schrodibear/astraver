@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.103 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.104 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -795,7 +795,7 @@ let print_decl fmt = function
 	(print_list comma Ident.print) ids
   | Axiom (_, id, p) ->
       fprintf fmt "axiom %a : <...>" Ident.print id
-  | Assert (_, id, p) ->
+  | Goal (_, id, p) ->
       fprintf fmt "assert %a : <...>" Ident.print id
   | Predicate_def (_, id, _, _) ->
       fprintf fmt "predicate %a <...>" Ident.print id

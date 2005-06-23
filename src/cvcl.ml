@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.27 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.28 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -40,8 +40,6 @@ type elem =
   | FunctionDef of string * function_def Env.scheme
 
 let queue = Queue.create ()
-
-let reset () = Queue.clear queue
 
 let push_parameter id v = Queue.add (Parameter (id, v)) queue
 
@@ -314,6 +312,8 @@ int_of_real: REAL -> INT;
 mod_int: (INT, INT) -> INT;
 "
   end
+
+let reset () = Queue.clear queue; Output.reset ()
 
 let predicate_of_string s =
   let st = Stream.of_string s in

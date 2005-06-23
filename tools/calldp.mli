@@ -14,14 +14,26 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.mli,v 1.1 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: calldp.mli,v 1.2 2005-06-23 12:52:04 filliatr Exp $ i*)
 
-type prover_result = Valid | Invalid | CannotDecide | Timeout
+(* Call external decision procedures on a single input file *)
 
-val simplify : ?timeout:int -> filename:string -> unit -> prover_result
+(* The input files contain only on proof obligation, apart from the case of 
+   harvey where it may contain several proof obligations (used in dp) *)
+
+type prover_result = 
+  | Valid | Invalid | CannotDecide | Timeout | ProverFailure of string
+
+val simplify : 
+  ?timeout:int -> filename:string -> unit -> 
+  prover_result
+
 val harvey : 
   ?timeout:int -> ?eclauses:int -> filename:string -> unit -> 
   prover_result list
-val cvcl : ?timeout:int -> filename:string -> unit -> prover_result
+
+val cvcl : 
+  ?timeout:int -> filename:string -> unit -> 
+  prover_result
 
 val debug : bool ref

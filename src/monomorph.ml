@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.4 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.5 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -460,6 +460,12 @@ module Make(X : S) = struct
     IterIT.sequent (declare_logic fmt) (declare_type fmt) s;
     instantiate_axioms fmt;
     X.print_obligation fmt ob
+
+  let reset () =
+    Htypes.clear declared_types;
+    Hinstance.clear declared_logic;
+    Hashtbl.clear logic_symbols;
+    Hashtbl.clear axioms
 
 end
 

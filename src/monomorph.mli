@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.mli,v 1.2 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: monomorph.mli,v 1.3 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)
@@ -48,4 +48,6 @@ module Make(X : S) : sig
     formatter -> string -> predicate_def Env.scheme -> unit
   val print_function_def : 
     formatter -> string -> function_def Env.scheme -> unit
+
+  val reset : unit -> unit
 end

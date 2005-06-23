@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.30 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.31 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -97,7 +97,7 @@ let while_post_block env inv (phi,_,r) e =
     | None -> 
 	anonymous e.info.loc decphi, ql
     | Some i -> 
-	{ a_value = pand i.a_value decphi; 
+	{ a_value = pand ~is_wp:true i.a_value decphi; 
 	  a_name = Name (post_name_from i.a_name);
 	  a_loc = e.info.loc }, ql
 

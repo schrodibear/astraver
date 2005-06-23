@@ -14,32 +14,38 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.1 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.2 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 open Printf
 
-type prover_result = Valid | Invalid | CannotDecide | Timeout
+type prover_result = 
+  | Valid | Invalid | CannotDecide | Timeout | ProverFailure of string
 
 type prover_caller = timeout:int -> filename:string -> prover_result
 
 let debug = ref false
 
-let call cmd =
+let call cmd file =
   if !debug then begin eprintf "calling: %s\n" cmd; flush stderr end;
   let out = Sys.command cmd in
+  begin try Sys.remove file with _ -> () end; 
   if out = 0 then Valid
   else if out = 1 then Invalid
   else Timeout
 
 let cvcl ?(timeout=10) ~filename:f () =
+  let out = Filename.temp_file "out" "" in
   call
-    (sprintf "ulimit -t %d; cvcl < %s > out 2>&1 && grep -q -w Valid out" 
-       timeout f)
+    (sprintf "ulimit -t %d; cvcl < %s > %s 2>&1 && grep -q -w Valid %s" 
+       timeout f out out)
+    out
 
 let simplify ?(timeout=10) ~filename:f () =
+  let out = Filename.temp_file "out" "" in
   call
-    (sprintf "ulimit -t %d; Simplify %s > out 2>&1 && grep -q -w Valid out" 
-       timeout f)
+    (sprintf "ulimit -t %d; Simplify %s > %s 2>&1 && grep -q -w Valid %s" 
+       timeout f out out)
+    out
 
 let harvey ?(timeout=10) ?(eclauses=2000) ~filename:f () =
   let out = Sys.command (sprintf "rvc -e -t %s > /dev/null 2>&1" f) in
@@ -70,4 +76,4 @@ let harvey ?(timeout=10) ?(eclauses=2000) ~filename:f () =
     iter 0;
     List.rev !results
   end
-  else failwith "rvc failed"
+  else [ProverFailure "rvc failed"]

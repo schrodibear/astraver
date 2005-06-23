@@ -21,10 +21,10 @@ src/cvcl.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/parser.cmx \
     src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
     src/cc.cmi src/cvcl.cmi 
 src/dispatcher.cmo: src/vcg.cmi src/simplify.cmi src/options.cmi \
-    src/logic.cmi src/harvey.cmi src/env.cmi tools/calldp.cmi \
+    src/logic.cmi src/harvey.cmi src/env.cmi src/cvcl.cmi tools/calldp.cmi \
     src/dispatcher.cmi 
 src/dispatcher.cmx: src/vcg.cmx src/simplify.cmx src/options.cmx \
-    src/logic.cmi src/harvey.cmx src/env.cmx tools/calldp.cmx \
+    src/logic.cmi src/harvey.cmx src/env.cmx src/cvcl.cmx tools/calldp.cmx \
     src/dispatcher.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
@@ -366,10 +366,14 @@ c/output.cmo: src/loc.cmi c/creport.cmi c/output.cmi
 c/output.cmx: src/loc.cmx c/creport.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 
 intf/navig.cmx: intf/navig.cmi 
-intf/stat.cmo: src/report.cmi src/options.cmi src/main.cmo src/env.cmi \
-    src/dispatcher.cmi tools/calldp.cmi src/ast.cmi 
-intf/stat.cmx: src/report.cmx src/options.cmx src/main.cmx src/env.cmx \
-    src/dispatcher.cmx tools/calldp.cmx src/ast.cmi 
+intf/stat.cmo: src/vcg.cmi src/util.cmi src/report.cmi src/pp.cmi \
+    src/options.cmi src/misc.cmi src/main.cmo src/logic.cmi src/ident.cmi \
+    src/env.cmi src/dispatcher.cmi src/coq.cmi src/cc.cmi tools/calldp.cmi \
+    src/ast.cmi 
+intf/stat.cmx: src/vcg.cmx src/util.cmx src/report.cmx src/pp.cmx \
+    src/options.cmx src/misc.cmx src/main.cmx src/logic.cmi src/ident.cmx \
+    src/env.cmx src/dispatcher.cmx src/coq.cmx src/cc.cmi tools/calldp.cmx \
+    src/ast.cmi 
 intf/viewer.cmo: src/util.cmi src/report.cmi src/options.cmi intf/navig.cmi \
     src/main.cmo src/log.cmi src/loc.cmi intf/hilight.cmo src/env.cmi \
     src/ast.cmi 

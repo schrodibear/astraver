@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.13 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.14 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -53,6 +53,7 @@ let wrapper r =
     | Valid -> is_valid ()
     | Invalid | CannotDecide -> is_invalid ()
     | Timeout -> is_timeout ()
+    | ProverFailure _ -> printf "!"
   end;
   flush stdout
 

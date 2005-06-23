@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.25 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.26 2005-06-23 12:52:04 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -126,6 +126,6 @@ type decl =
   | Function_def 
       of Loc.t * Ident.t * (Ident.t * pure_type) list * pure_type * lexpr
   | Axiom of Loc.t * Ident.t * lexpr
-  | Assert of Loc.t * Ident.t * lexpr
+  | Goal of Loc.t * Ident.t * lexpr
 
 type file = decl list
