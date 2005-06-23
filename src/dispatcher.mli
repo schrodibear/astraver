@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.2 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.3 2005-06-23 14:28:44 filliatr Exp $ i*)
 
 open Vcg
 
@@ -29,4 +29,5 @@ val iter : (obligation -> unit) -> unit
 
 type prover = Simplify | Harvey | Cvcl
 
-val call_prover : obligation:string -> prover -> Calldp.prover_result
+val call_prover : 
+  obligation:string -> ?timeout:int -> prover -> Calldp.prover_result

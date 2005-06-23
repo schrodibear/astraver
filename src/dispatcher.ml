@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.3 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.4 2005-06-23 14:28:44 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -95,7 +95,7 @@ let prover_name = function
   | Harvey -> "haRVey"
   | Cvcl -> "CVC Lite"
 
-let call_prover ~obligation:o p =
+let call_prover ~obligation:o ?timeout p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
   let filename = output_file p so in
   if debug then begin
@@ -103,11 +103,12 @@ let call_prover ~obligation:o p =
   end;
   let r = match p with
     | Simplify -> 
-	Calldp.simplify ~filename () 
+	Calldp.simplify ?timeout ~filename () 
     | Harvey -> 
-	(match Calldp.harvey ~filename () with [r] -> r | _ -> assert false)
+	(match Calldp.harvey ?timeout ~filename () with 
+	   | [r] -> r | _ -> assert false)
     | Cvcl ->
-	Calldp.cvcl ~filename ()
+	Calldp.cvcl ?timeout ~filename ()
   in
   if not debug then begin try Sys.remove filename with _ -> () end;
   r

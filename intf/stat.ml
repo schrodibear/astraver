@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.5 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.6 2005-06-23 14:28:44 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -167,13 +167,16 @@ module View = struct
 
 end
 
+let timeout = ref 10
+let set_timeout v = timeout := v
+
 (* run a prover on all obligations and update the model *)
 let run_prover p column_p (model : GTree.tree_store) () =
   Dispatcher.iter
     (fun (_,s,_) ->
        let row = Hashtbl.find Model.orows s in
        model#set ~row ~column:column_p `EXECUTE;
-       let r = Dispatcher.call_prover s p in
+       let r = Dispatcher.call_prover ~obligation:s ~timeout:!timeout p in
        model#set ~row ~column:column_p
 	 (match r with 
 	    | Calldp.Valid -> `YES 
@@ -315,16 +318,28 @@ let main () =
 	    ~packing:(fr2#add) () 
   in
 
-  (* status bar (at bottom) *)
-  let status_bar = GMisc.statusbar ~packing:vbox#pack () in
+  (* bottom line *)
+  let hbox = GPack.hbox ~packing:vbox#pack () in
+  (* status bar *)
+  let status_bar = 
+    GMisc.statusbar ~packing:(hbox#pack ~fill:true ~expand:true) () 
+  in
   status_bar#misc#modify_font !statusbar_font ;
   let status_context = status_bar#new_context "messages" in
-  ignore (status_context#push "Ready");
-  ignore (status_context#push "Ready");
+  ignore (status_context#push "Welcome to the Why GUI");
   display_info := (fun s -> 
 		     status_context#pop ();
 		     ignore (status_context#push s));
   flash_info := !display_info (* fun s -> status_context#flash ~delay:10 s *);
+  (* timeout set *)
+  let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
+  let timeout = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
+  timeout#adjustment#set_bounds ~lower:0. ~upper:999. ~step_incr:1. ();
+  timeout#adjustment#set_value 10.;
+  let _ = 
+    timeout#connect#value_changed ~callback:
+      (fun () -> set_timeout timeout#value_as_int)
+  in
 
   (* lower text view: source code *)
   let tv2 = GText.view ~packing:(sw2#add) () in
