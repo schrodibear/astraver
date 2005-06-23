@@ -10,12 +10,12 @@ conditions that are actually not provable: as usual with a Hoare-like
 system, when there are loops like the \verb|while| of Schorr-Waite, it
 is mandatory (except in simple cases) to manually add a loop
 invariant. The design of a suitable loop invariant is the most
-difficult part of the verification process, more difficult than
+difficult part of this verification process, more difficult than
 performing the proof itself. Fortunately for us, suitable loop
 invariants were proposed by previous works on Schorr-Waite algorithm.
 However, some difficulties remain. The main one is that we need to
 express this loop invariant in the \caduceus{} syntax, which is
-limited to first-order. Hence, the higher-order specifications
+limited to a first-order logic. Hence, the higher-order specifications
 of~\cite{mehta03cade} are not allowed by \caduceus.
 % Also, since we proved a little bit more than
 % previous works, namely the absence of invalid pointer dereferencing,

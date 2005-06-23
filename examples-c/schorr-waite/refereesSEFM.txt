@@ -621,25 +621,25 @@ TODO  o the font and size of several words (e.g., Caduceus, cons) is a bit
 
 DONE  o lisp => Lisp
 
-TODO  o explain what "m:1" means in C for old C hackers that have forgotten
+DONE  o explain what "m:1" means in C for old C hackers that have forgotten
 
    about such.
 
 DONE  o first order => first-order
 
-TODO  o "With respect to the most recent formal..." most recent wrt what?
+DONE  o "With respect to the most recent formal..." most recent wrt what?
 
-   In the same paragraph, why are the mentioned preconditions not 
+DONE   In the same paragraph, why are the mentioned preconditions not 
 
    actually presented in the paper?
 
-TODO  o "is the most difficult part of the verification process" =>
+DONE  o "is the most difficult part of the verification process" =>
 
    "is the most difficult part of this verification process" (this is
 
    an overly strong claim)
 
-TODO  o "...which is limited to first-order..." (rewrite/reword for clairity)
+DONE  o "...which is limited to first-order..." (rewrite/reword for clairity)
 
 TODO  o "...obligation is indeed not..." (cut "indeed")\
 
@@ -709,7 +709,7 @@ TODO  o you have defined a number of datatypes that related to specification
 
    support?  some discussion about these issues is warranted.
 
-TODO  o a very bad misrepresentation of the main related work on JML and
+DONE  o a very bad misrepresentation of the main related work on JML and
 
    verification tools supporting such.  In particular, there seems to
 

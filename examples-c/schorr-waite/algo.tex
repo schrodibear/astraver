@@ -188,15 +188,16 @@ value is the \textsf{cons} of lists. In C, these \textsf{cons}
 structures can be defined as
 \begin{alltt}
 typedef struct struct_node \{
-  unsigned int m:1, c:1;
+  unsigned int m:1, c:1; /* booleans */
   struct struct_node *l, *r;
 \} * node;
 \end{alltt}
 where $l$ and $r$ are respectively pointers to the left and to the
-right child (they may be set to NULL). The boolean field $m$ is a
+right child (they may be set to NULL). Fields $m$ and $c$ are integers
+over 1 bit, intended to represent booleans. The field $m$ is a
 mark: initially, all nodes of the graph will be assumed unmarked, and
 at the end of the traversal, they will have to be all marked. The
-boolean field $c$ is used internally by the algorithm, to denote which
+field $c$ is used internally by the algorithm, to denote which
 of the child is currently been explored.
  
 \begin{figure*}
@@ -329,10 +330,12 @@ graph has been traversed. The third assertion says that for the nodes
 which were not reachable, their mark is not changed by the algorithm,
 that is the unreachable nodes are not traversed by the algorithm.
 
-With respect to the most recent formal specification given in
+With respect to the formal specification given by
+Bornat~\cite{bornat00mpc} or the similar one in
 Isabelle/HOL~\cite{mehta03cade}, we added two things: first the
 pre-condition that all pointers of the graph are regularly
-allocated at the beginning, so that we are now able to prove that no
+allocated (which is the meaning of \verb|\valid|) at the beginning, so
+that we are now able to prove that no 
 wrong pointer dereferencing can occur. Second, we also talk about the
 non-reachable nodes of the graph: we are also able to show that they
 are not traversed and not modified. In Section~\ref{sec:termination},
