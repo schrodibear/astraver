@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.6 2005-06-23 14:28:44 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.7 2005-06-24 15:05:57 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -334,7 +334,7 @@ let main () =
   (* timeout set *)
   let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
   let timeout = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
-  timeout#adjustment#set_bounds ~lower:0. ~upper:999. ~step_incr:1. ();
+  timeout#adjustment#set_bounds ~lower:1. ~upper:999. ~step_incr:1. ();
   timeout#adjustment#set_value 10.;
   let _ = 
     timeout#connect#value_changed ~callback:
