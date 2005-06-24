@@ -184,13 +184,13 @@ difficult to establish.
 \end{figure*}
 
 In the version considered here, as in~\cite{bornat00mpc, mehta03cade}, we
-assume that the nodes have at most two children (extension to an
+assume that the nodes have at most two children\footnote{extension to an
 arbitrary number of children is essentially the same, provided that this
-number is bounded by a value $N$ ans that the $c$ field below is large
-enough to represent $N$ different values). The case of two children is
+number is bounded by a value $N$ ans that the $c$ field is large
+enough to represent $N$ different values}. The case of two children is
 the situation in a garbage collector of a pure Lisp interpreter, where
-the only memory allocated value is the \textsf{cons} of lists.  In C,
-these \textsf{cons} structures can be defined as
+the only memory allocated value is the $cons$ of lists.  In C,
+these $cons$ structures can be defined as
 \begin{alltt}
 typedef struct struct_node \{
   unsigned int m:1, c:1; /* booleans */
@@ -198,12 +198,12 @@ typedef struct struct_node \{
 \} * node;
 \end{alltt}
 where $l$ and $r$ are respectively pointers to the left and to the
-right child (they can be NULL). Fields $m$ and $c$ are integers
+right child (they can be set to NULL). Fields $m$ and $c$ are integers
 over 1 bit, to encode booleans. The field $m$ is a
 mark: initially, all nodes of the graph will be assumed unmarked, and
 at the end of the traversal, they will have to be all marked. The
-field $c$ is used internally by the algorithm, to denote which
-of the children is currently been explored.
+field $c$ is used internally, to denote which
+of the children is currently being explored.
  
 \begin{figure*}
 \begin{alltt}\begin{slshape}
@@ -238,13 +238,13 @@ course any graph could be given. $t$ is the next node to
 be explored and $p$ is the head of the backtracking stack. `push' marks a
 new node and then explores the left child. `swing' occurs when the left
 child has been explored: the search continues to the right child. `pop' is used
-when the right child is been explored: the search goes back up.        
+when the right child has been explored: the search goes back up.        
 
 
 \subsection{Formal specification of the algorithm}
 \label{sec:spec}
 
-The first step in the formal verification process is to give a formal
+The first step in this formal verification process is to give a formal
 specification to the \verb|schorr_waite| function. The informal
 specification says that every node in the graph, reachable from the
 root node, must be marked. Moreover the graph structure must be
@@ -252,7 +252,7 @@ restored to its initial state.
 
 So it appears immediately that to formally specify the algorithm, one
 needs to talk about reachability of some node from another in the
-graph. Indeed reasoning about reachability is the main part of all the
+graph. Indeed reasoning about reachability is the main part of this
 verification, as already noticed by previous studies of the
 Schorr-Waite algorithm.
 
@@ -280,9 +280,9 @@ This declares a binary predicate on nodes, but nothing yet is
 said about its semantics. The \texttt{reads} clause that follows the predicate
 declaration above gives information on which data the predicate
 depends on: in this case, it does depend on \verb|p1| and
-\verb|p2| but also on the child of \verb|p1|. This may be confusing
+\verb|p2| but also on the children of \verb|p1|. This may be confusing
 at first, because in fact this predicate depends not only on the
-child of \verb|p1|, but also the grand child and so on. To
+children of \verb|p1|, but also the grand children and so on. To
 really understand the meaning of the \texttt{reads} clause, one needs
 to remember that we use the component-as-array modeling: this
 declaration indeed means that this predicate will have, on the prover

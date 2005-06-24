@@ -7,10 +7,10 @@ work begins: we need to prove that the implementation of
 Figure~\ref{fig:code} indeed satisfies this specification. If one runs
 the \caduceus{} tool on that annotated code, it generates verification
 conditions that are actually not provable: as usual with a Hoare-like
-system, when there are loops like the \verb|while| of Schorr-Waite, it
+system, when there are loops like the \verb|while| loop, it
 is mandatory (except in simple cases) to manually add a \emph{loop
   invariant}, that is an assertion preserved by each iteration of the
-loop.. The design of a suitable loop invariant is the most difficult
+loop. The design of a suitable loop invariant is the most difficult
 part of this verification process, but suitable loop invariants were
 already proposed.  However, some difficulties remain, the main one is
 that we need to express this loop invariant in the \caduceus{} syntax,
@@ -130,9 +130,9 @@ predicate already introduced, which can take as arguments either C
 types or logical types. Here we declare
 \begin{alltt}\begin{slshape}
 //@ logic plist cons(node p, plist l) 
-//@ predicate in_list(node p,plist l)
+//@ predicate in_list(node p, plist l)
 /*@ predicate 
-  @   pair_in_list(node p1,node p2,
+  @   pair_in_list(node p1, node p2,
   @                plist l) */\end{slshape}
 \end{alltt}
 which first introduces the logical type \verb|plist| for finite lists
@@ -159,7 +159,7 @@ unmarked nodes; and
   @   reads p->c,p->l,p->r */\end{slshape}
 \end{alltt}
 specifies that \verb|stack| is the list of pointers obtained from $p$ as
-described on Figure~\ref{fig:stack}.
+described on Figure~\ref{fig:stack}. The precise definition of it will be given in Section~\ref{sec:coq}.
 
 In Figure~\ref{fig:loopinv}, we use the \caduceus{} notation to name
 formulas with double-colons. The loop
@@ -175,7 +175,7 @@ invariant is made of eight assertions:
   remains unchanged.
 \item[I4a] defines the backtracking stack as on
   Figure~\ref{fig:stack}, using the \verb|clr_list| predicate declared
-  before. The precise definition of it will be given in Section~\ref{sec:coq}.
+  before. 
 \item[I4b] means that all nodes in the \texttt{stack} are marked.
 \item[I4c] is the trickiest annotation: it means that
   any valid node, initially reachable from root, 
@@ -317,7 +317,7 @@ definition.
 
 Due to lack of space, we do not present any Coq code here, but only
 approximations to ease reading. The whole development can be found
-from the \caduceus{} web page~\cite{Caduceus}. The fist step is to
+from the \caduceus{} web page~\cite{Caduceus}. The first step is to
 define the reachability predicate in Coq. We proceed in a slightly
 different way than Mehta and Nipkow~\cite{mehta03cade}, who use a
 set-theoretic axiomatization: we use inductively defined predicates,
@@ -372,16 +372,15 @@ the Prolog-like clauses:
 \[
 \begin{array}{l}
 \verb|clr_list|(a,c,l,r, p, nil).  \\
-\verb|clr_list|(a,c,l,r,p,cons(p,s)) \verb|:-| \verb|valid|(a,p),\\
-  \verb|    clr_list|(a,next(c,l,r,p),s).
+\verb|clr_list|(a,c,l,r,p,cons(p,s)) \verb|:-| \\
+\qquad\qquad \verb|valid|(a,p), \verb|clr_list|(a,next(c,l,r,p),s).
 \end{array}
 \]
 where 
 \[
 \begin{array}{l}
-next(c,l,r,p) = \\
-\quad \verb|if|~select(c,p) =
-0~\verb|then|~select(l,p)~\verb|else|~select(r,p)
+next(c,l,r,p) := \verb|if|~select(c,p) = 0 ~\verb|then| ~ select(l,p)\\
+\qquad\qquad\qquad\qquad \verb|else|~select(r,p)
 \end{array}
 \]
 A few lemmas are proved before proving the obligations, the main one,
@@ -389,7 +388,7 @@ reused several times in the proofs, is to show that when $p_2$ is
 reachable from $p_1$, there is a path which has no cycle:
 \[
 \begin{array}{l}
-\forall a, p_1, p_2, l, r, s,~\verb|path|(a,l,r,p_1,p_2,s) \rightarrow
+\forall a, l, r, p_1, p_2, s,~\verb|path|(a,l,r,p_1,p_2,s) \rightarrow
  \\\qquad
   \exists s', s' \subseteq s \land \verb|no_rep|(s') \land
   \verb|path|(a,l,r,p_1, p_2, s') 
@@ -431,8 +430,8 @@ to insert in the pre-condition. The additional annotations for
 termination are given in Figure~\ref{fig:term}, where in Coq we define
 \[
 \begin{array}{l}
-\verb|reachable_elements|(a,l,r, root, s) = \\ %\\\qquad\qquad\qquad 
-\verb|   | \forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
+\verb|reachable_elements|(a,l,r, root, s) := \\ 
+\qquad\qquad\qquad \forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
 \end{array}
 \]
 The \verb|weight| function and the \url{order_mark_m_and_c_and_stack}
@@ -476,7 +475,7 @@ preliminaries will be included in the next version of Coq. Compared to
 the similar proof in Isabelle/HOL~\cite{mehta03cade}, we have roughly
 three times more lines of proofs: we believe that this is due to the
 weakness of automatic tactics of Coq (but also remember that we have
-the additional proof of termination).
+the additional proofs of termination and absence of threats).
 
 
 %%% Local Variables: 

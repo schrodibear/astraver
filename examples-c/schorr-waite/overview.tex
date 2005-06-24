@@ -44,13 +44,13 @@ used to establish those verification conditions.  An original
 currently supports Coq~\cite{CoqProofAssistant} and PVS~\cite{PVS}
 interactive proof assistants, and Simplify~\cite{simplify},
 haRVey~\cite{ranise03harvey} and CVC-lite~\cite{barrett04cav}
-automatic provers. Coherence between all prover outputs is obtained
-because each verification condition is first produced in a common logical
+automatic provers. Coherence between all prover outputs is obtained by
+first producing each verification condition in a common logical
 setting: first-order logic with equality and arithmetic on integers
 and reals, which can be syntactically embedded into the logic of each
 of the former provers. Switching from a prover to another is trivial,
-but on the other hand there is no way to make several provers cooperate
-on solving the same goal (we come back to this issue in
+but on the other hand there is no way to make several provers
+cooperate on solving the same goal (we come back to this issue in
 Section~\ref{sec:conclusion}).  This means also that a new prover may
 easily be added via a suitable pretty-printer, as soon as it supports
 first-order quantication, built-in equality, and arithmetic.
