@@ -109,7 +109,7 @@ the paper seems to indicate.
 
 
 
-TODO On page 8, they claim that their approach is different from that reported in [13]. A few details on the difference and why this is important should be added.
+DONE On page 8, they claim that their approach is different from that reported in [13]. A few details on the difference and why this is important should be added.
 
 
 
@@ -315,11 +315,11 @@ OTHER COMMENTS FOR THE AUTHOR(S):
 
 
 
-TODO page2 2-4: give at least an informal description of the Schorr-Waite
+DONE page2 2-4: give at least an informal description of the Schorr-Waite
 
   algorithm (for the sake of readability)! 
 
-TODO page 3, left col., 3.1: discuss briefly this restriction (what would
+DONE page 3, left col., 3.1: discuss briefly this restriction (what would
 
   be different without it?!
 
@@ -353,7 +353,7 @@ DONE page 5, right col., 4.1: 'on Figure ...' -> 'in Figure ...' (here and
 
      later)
 
-TODO page 5, right col., 4.1: 'The normal arrows correspond to unmodified
+DONE page 5, right col., 4.1: 'The normal arrows correspond to unmodified
 
      links': I don't really understand this, because the link from p or t
 
@@ -365,7 +365,7 @@ DONE page 6, right col., bottom: may not be -> may be not (because of
 
      different semantics)
 
-TODO page 7, right col., lines 13-14: why did your attempts (using
+DONE page 7, right col., lines 13-14: why did your attempts (using
 
      Simplify) fail? this is important because one could argue that you
 
@@ -373,17 +373,17 @@ TODO page 7, right col., lines 13-14: why did your attempts (using
 
      problems that cannot be overcome with Simplify?
 
-TODO   also at the beginning of 4.4: it would be useful to roughly describe
+DONE  also at the beginning of 4.4: it would be useful to roughly describe
 
      the functionality, strengths and weaknesses of Simplify;
 
 DONE page 7, right col.: surprised -> surprising
 
-TODO page 8, left col.: 'the most important one is ...': why is this the
+DONE page 8, left col.: 'the most important one is ...': why is this the
 
      most important one?
 
-TODO page 8, left col.: 'With those definitions and lemmas, we are able
+DONE page 8, left col.: 'With those definitions and lemmas, we are able
 
      ... in Coq.: what you do not tell is how many fruitless efforts
 
@@ -397,17 +397,17 @@ DONE page 8, right col.: decrease -> decreases;
 
 DONE   given Figure 6 -> given in Figure 6;
 
-TODO   artifact of the Cadeus ...? what do you mean here?
+DONE   artifact of the Cadeus ...? what do you mean here?
 
 DONE page 9, left col.: in term of -> in terms of
 
-TODO   '2411 lines of tactics were inserted manually': this sounds quite a
+DONE   '2411 lines of tactics were inserted manually': this sounds quite a
 
     lot, and probably only takes into account the final successful run!?
 
 DONE page 9, left col.: well-founded relation -> well-founded relations
 
-TODO page 9, left col. second half: the claim 'But as far as we know ...'
+DONE page 9, left col. second half: the claim 'But as far as we know ...'
 
      seems to be (too) strong (since you don't know what can still be
 
@@ -417,7 +417,7 @@ TODO page 9, left col. second half: the claim 'But as far as we know ...'
 
 DONE page 9, left col.: does not any -> does not do any
 
-TODO page 9, right col., line 3: 'the Caduceus approach': in this paper
+DONE page 9, right col., line 3: 'the Caduceus approach': in this paper
 
       this is undefined!
 
@@ -425,7 +425,7 @@ DONE   defined -> defining
 
 DONE   this are -> these are
 
-TODO page 9, right col, first paragr.: 'This would require to define
+DONE page 9, right col, first paragr.: 'This would require to define
 
      predicates ... only in higher-order logical frameworks': this is
 
@@ -443,7 +443,7 @@ DONE   ask -> asked
 
 DONE   to embedded -> on embedded
 
-TODO page 9, right col, line 3 from bottom: 'solutions': for what?
+DONE page 9, right col, line 3 from bottom: 'solutions': for what?
 
 DONE page 10, left col.: its fruitful -> his fruitful
 
@@ -675,7 +675,7 @@ DONE  o you mention that the loop variant can be an arbitrary well-founded
 
 The big problems with the paper are:
 
-TODO  o a crucial lack of details about some important aspects of the
+DONE  o a crucial lack of details about some important aspects of the
 
    problem and solution which are fobbed off on the reader.  E.g., I
 
@@ -693,11 +693,11 @@ TODO  o a crucial lack of details about some important aspects of the
 
    reachable).  This is a serious problem.
 
-TODO  o while there is a verification involving loop invariants, you
+DONE  o while there is a verification involving loop invariants, you
 
    do not define the semantics of such anywhere.
 
-TODO  o you have defined a number of datatypes that related to specification
+DONE  o you have defined a number of datatypes that related to specification
 
    constructs (e.g., loop invariants) but they are not presented in the
 

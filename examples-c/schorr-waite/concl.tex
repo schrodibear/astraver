@@ -13,15 +13,15 @@ termination is indeed established in~\cite{abrial03fme} as a condition
 for refinement, and we believe that it could probably also proved by
 others as well. The important point is that termination is smoothly
 integrated in our methodology, thanks to the powerful clause
-\texttt{variant} we have, allowing to use arbitrary well-founded
-relations.
+\texttt{variant}, which allows the use of an arbitrary well-founded
+relation.
 
 Regarding the absence of invalid pointer dereferencing, it has to be
 said that advanced static analysis techniques are able to establish it
 also. The Schorr-Waite algorithm is one of the examples automatically
 handled by the TVLA approach~\cite{sagiv02toplas,reps03esop}, where a powerful
-analysis of reachability in pointer structures is done. But as far as
-we know, only our approach is able to handle both the pointer
+analysis of reachability in pointer structures is done. But until now,
+as far as we know, only our approach is able to handle both the pointer
 dereferencing checks and the validity of behavioral properties given
 by the user. Notice that with \caduceus, as shown in
 Section~\ref{sec:simplify}, absence of invalid pointer dereferencing
@@ -34,8 +34,8 @@ additionally gives the choice of the back-end prover. At the
 beginning, it was not clear whether the \caduceus{} specification
 language would be enough, in particular because it is first-order, but
 we finally succeeded.  We claim this is a very successful case study,
-which provides a clear evidence that the \caduceus{} approach is
-powerful. 
+which provides a clear evidence that the \caduceus{}
+methodology~\cite{filliatre04icfem} is powerful.
 
 Since we proposed a specification language inspired from JML, and
 since we also develop a similar
@@ -81,8 +81,8 @@ required: \caduceus{} is currently under experimentation at Axalto
 several improvements to the \caduceus{} tool are in progress. There
 are scaling up issues for dealing with code of large size. Automatic
 annotation of programs is an important need. Properties of separation
-of data appear to be crucial for large programs. We are currently
-investigating solutions, in particular by integration of advanced
+of data appear to be crucial for large programs: we are currently
+investigating improvements, in particular by integration of advanced
 static analysis techniques, and ideas from separation
 logic~\cite{reynolds02lics}. Generally speaking adding static analysis
 techniques to our setting is a major goal.

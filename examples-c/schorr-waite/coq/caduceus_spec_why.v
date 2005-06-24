@@ -19,8 +19,6 @@ Defined.
 exact in_list.
 Defined.
 
-(*Why predicate*) Definition internal_separation_struct_node  (struct_node:pointer)
-  := True.
 
 (*Why logic*) Definition pair_in_list : pointer -> pointer -> plist -> Prop.
 exact pair_in_list.
@@ -48,8 +46,6 @@ constructor.
 Qed.
 
 
-(*Why axiom*) Lemma separation_struct_node_struct_node :
-  (forall (struct_node:pointer), (forall (struct_node1:pointer), True)).
 Admitted.
 
 (*Why logic*) Definition unmarked_reachable :
@@ -58,47 +54,18 @@ Admitted.
 exact unmarked_reachable.
 Defined.
 
-(*Why predicate*) Definition valid_struct_node_c  (c:Z) := True.
 
-(*Why axiom*) Lemma valid_struct_node_c_pointer :
-  (forall (alloc:alloc_table),
-   (forall (c:((memory) Z)),
-    (forall (struct_node:pointer),
-     ((valid alloc struct_node) -> (valid_struct_node_c (acc c struct_node)))))).
 Admitted.
 
-(*Why predicate*) Definition valid_struct_node_l  (l:pointer) := True.
 
-(*Why axiom*) Lemma valid_struct_node_l_pointer :
-  (forall (alloc:alloc_table),
-   (forall (l:((memory) pointer)),
-    (forall (struct_node:pointer),
-     ((valid alloc struct_node) -> (valid_struct_node_l (acc l struct_node)))))).
 Admitted.
 
-(*Why predicate*) Definition valid_struct_node_m  (m:Z) := True.
 
-(*Why axiom*) Lemma valid_struct_node_m_pointer :
-  (forall (alloc:alloc_table),
-   (forall (m:((memory) Z)),
-    (forall (struct_node:pointer),
-     ((valid alloc struct_node) -> (valid_struct_node_m (acc m struct_node)))))).
 Admitted.
 
-(*Why axiom*) Lemma valid_struct_node_pointer :
-  (forall (alloc:alloc_table),
-   (forall (struct_node:pointer),
-    ((valid alloc struct_node) ->
-     (internal_separation_struct_node struct_node)))).
 Admitted.
 
-(*Why predicate*) Definition valid_struct_node_r  (r:pointer) := True.
 
-(*Why axiom*) Lemma valid_struct_node_r_pointer :
-  (forall (alloc:alloc_table),
-   (forall (r:((memory) pointer)),
-    (forall (struct_node:pointer),
-     ((valid alloc struct_node) -> (valid_struct_node_r (acc r struct_node)))))).
 Admitted.
 
 (*Why logic*) Definition weight :

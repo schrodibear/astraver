@@ -1,15 +1,4 @@
 
-\section{The Schorr-Waite algorithm and its formal specification}
-\label{sec:algo}
-
-The Schorr-Waite algorithm performs a depth-first traversal of a
-directed graph, starting from a specific node of the graph called the
-root. Its main characteristic is that it directly uses the pointers of
-the graph to implement backtracking. This is why its soundness is
-quite difficult to establish. 
-
-\subsection{The C source code}
-
 \begin{figure*}[t]
 \begin{alltt}
 void schorr_waite(node root) \{
@@ -29,25 +18,38 @@ void schorr_waite(node root) \{
   \}
 \}
 \end{alltt}
+\vspace*{-5mm}
 \caption{C version of the Schorr-Waite algorithm}
 \label{fig:code}
 \end{figure*}
 
+\section{The Schorr-Waite algorithm}
+\label{sec:algo}
+
+The Schorr-Waite algorithm performs a depth-first traversal of a
+directed graph, starting from a specific node of the graph called the
+root. Its main characteristic is that it directly uses the pointers of
+the graph to implement backtracking. This is why its soundness is
+difficult to establish. 
+
+\subsection{The C source code}
+
 \begin{figure*}
+\newcommand{\NULL}{{\tiny NULL}}
 \vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
 %\fbox{
 \begin{picture}(180,65)(-80,115)
-\put(-80,180){\rnode{null}{\makebox(0,0)[l]{\tiny NULL}}}
+\put(-80,180){\rnode{null}{\makebox(0,0)[l]{\NULL}}}
 \put(-80,160){\unode{n0}}
 \put(-70,140){\unode{n1}}
 \put(-90,140){\unode{n2}}
 \put(-100,180){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(-100,160){\rnode{t}{\makebox(0,0)[r]{$t$}}}
-\put(-100,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
-\put(-80,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-100,120){\rnode{null2}{\makebox(0,0)[c]{\NULL}}}
+\put(-80,120){\rnode{null3}{\makebox(0,0)[c]{\NULL}}}
 \put(-60,160){\rnode{fig1}}
 \put(-75,130){\rnode{n11}}
 \put(-65,130){\rnode{n12}}
@@ -57,17 +59,17 @@ void schorr_waite(node root) \{
 \ncline{n0}{n2}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncline[nodesep=1mm]{p}{null}
-\ncline[nodesepA=1mm]{t}{n0}
+\ncline[nodesep=1mm,linewidth=1]{p}{null}
+\ncline[nodesepA=1mm,linewidth=1]{t}{n0}
 \put(-30,160){\rnode{fig2}}
-\put(0,180){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(0,180){\rnode{null}{\makebox(0,0)[b]{\NULL}}}
 \put(0,160){\mnode{n0}}
 \put(10,140){\unode{n1}}
 \put(-10,140){\unode{n2}}
 \put(-20,155){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(-30,140){\rnode{t}{\makebox(0,0)[r]{$t$}}}
-\put(-20,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
-\put(0,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-20,120){\rnode{null2}{\makebox(0,0)[c]{\NULL}}}
+\put(0,120){\rnode{null3}{\makebox(0,0)[c]{\NULL}}}
 \put(5,130){\rnode{n11}}
 \put(15,130){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
@@ -76,19 +78,19 @@ void schorr_waite(node root) \{
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-50]{p}{n0}
-\ncline[nodesepA=1mm]{t}{n2}
+\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-50,linewidth=1]{p}{n0}
+\ncline[nodesepA=1mm,linewidth=1]{t}{n2}
 \ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{push}
 \put(20,160){\rnode{fig2}}
 \put(50,160){\rnode{fig3}}
-\put(80,180){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(80,180){\rnode{null}{\makebox(0,0)[b]{\NULL}}}
 \put(80,160){\mnode{n0}}
 \put(90,140){\unode{n1}}
 \put(70,140){\mnode{n2}}
 \put(50,135){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(40,120){\rnode{t}{\makebox(0,0)[r]{$t$}}}
-\put(60,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
-\put(80,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(60,120){\rnode{null2}{\makebox(0,0)[c]{\NULL}}}
+\put(80,120){\rnode{null3}{\makebox(0,0)[c]{\NULL}}}
 \put(95,130){\rnode{n11}}
 \put(85,130){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
@@ -97,8 +99,8 @@ void schorr_waite(node root) \{
 \ncarc[arcangleA=140,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-40]{p}{n2}
-\ncline[nodesepA=1mm,nodesepB=3mm]{t}{null2}
+\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-40,linewidth=1]{p}{n2}
+\ncline[nodesepA=1mm,nodesepB=3mm,linewidth=1]{t}{null2}
 \ncline[linewidth=2mm,linecolor=gray]{fig2}{fig3}\Aput{push}
 \put(100,160){\rnode{fig3}}
 \put(130,160){\rnode{fig4}}
@@ -109,14 +111,14 @@ void schorr_waite(node root) \{
 %\vspace*{5mm}
 %\fbox{
 \begin{picture}(180,65)(-80,30)
-\put(-80,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(-80,80){\rnode{null}{\makebox(0,0)[b]{\NULL}}}
 \put(-80,60){\mnode{n0}}
 \put(-70,40){\unode{n1}}
 \put(-90,40){\mnode{n2}}
 \put(-110,50){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(-60,20){\rnode{t}{\makebox(0,0)[l]{$t$}}}
-\put(-100,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
-\put(-80,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-100,20){\rnode{null2}{\makebox(0,0)[c]{\NULL}}}
+\put(-80,20){\rnode{null3}{\makebox(0,0)[c]{\NULL}}}
 \put(-75,30){\rnode{n11}}
 \put(-65,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
@@ -124,19 +126,19 @@ void schorr_waite(node root) \{
 \ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncarc[arcangleA=-120,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
-\ncline[nodesepA=1mm]{p}{n2}
-\ncline[nodesepA=1mm,nodesepB=3mm]{t}{null3}
+\ncline[nodesepA=1mm,linewidth=1]{p}{n2}
+\ncline[nodesepA=1mm,nodesepB=3mm,linewidth=1]{t}{null3}
 \ncline[nodesepB=1mm]{n2}{null2}
 \put(-60,60){\rnode{fig4}}
 \put(-30,60){\rnode{fig5}}
-\put(0,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(0,80){\rnode{null}{\makebox(0,0)[b]{\NULL}}}
 \put(0,60){\mnode{n0}}
 \put(10,40){\unode{n1}}
 \put(-10,40){\mnode{n2}}
 \put(-20,50){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(20,20){\rnode{t}{\makebox(0,0)[l]{$t$}}}
-\put(-20,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(0,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(-20,20){\rnode{null2}{\makebox(0,0)[t]{\NULL}}}
+\put(0,20){\rnode{null3}{\makebox(0,0)[t]{\NULL}}}
 \put(5,30){\rnode{n11}}
 \put(15,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
@@ -144,20 +146,20 @@ void schorr_waite(node root) \{
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-40]{p}{n0}
-\ncarc[nodesepA=1mm]{t}{n2}
+\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-40,linewidth=1]{p}{n0}
+\ncarc[nodesepA=1mm,linewidth=1]{t}{n2}
 \ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncline[linewidth=2mm,linecolor=gray]{fig4}{fig5}\Aput{pop}
 \put(20,60){\rnode{fig5}}
 \put(50,60){\rnode{fig6}}
-\put(80,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(80,80){\rnode{null}{\makebox(0,0)[b]{\NULL}}}
 \put(80,60){\mnode{n0}}
 \put(90,40){\unode{n1}}
 \put(70,40){\mnode{n2}}
 \put(60,50){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(110,30){\rnode{t}{\makebox(0,0)[l]{$t$}}}
-\put(60,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(80,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(60,20){\rnode{null2}{\makebox(0,0)[t]{\NULL}}}
+\put(80,20){\rnode{null3}{\makebox(0,0)[t]{\NULL}}}
 \put(95,30){\rnode{n11}}
 \put(85,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
@@ -166,8 +168,8 @@ void schorr_waite(node root) \{
 \ncline{n0}{n2}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncline[nodesepA=1mm]{p}{n0}
-\ncline[nodesepA=1mm]{t}{n1}
+\ncline[nodesepA=1mm,linewidth=1]{p}{n0}
+\ncline[nodesepA=1mm,linewidth=1]{t}{n1}
 \ncarc[nodesepB=1mm,arcangleA=-120,linewidth=1]{n0}{null}
 \ncline[linewidth=2mm,linecolor=gray]{fig5}{fig6}\Aput{swing}
 \put(110,60){\rnode{fig6}}
@@ -181,11 +183,14 @@ void schorr_waite(node root) \{
 \label{fig:algo}
 \end{figure*}
 
-In the version we consider here, we assume that the nodes have
-at most two child, which is the situation for example in a garbage
-collector of a pure Lisp interpreter, where the only memory allocated
-value is the \textsf{cons} of lists. In C, these \textsf{cons}
-structures can be defined as
+In the version considered here, as in~\cite{bornat00mpc, mehta03cade}, we
+assume that the nodes have at most two children (extension to an
+arbitrary number of children is essentially the same, provided that this
+number is bounded by a value $N$ ans that the $c$ field below is large
+enough to represent $N$ different values). The case of two children is
+the situation in a garbage collector of a pure Lisp interpreter, where
+the only memory allocated value is the \textsf{cons} of lists.  In C,
+these \textsf{cons} structures can be defined as
 \begin{alltt}
 typedef struct struct_node \{
   unsigned int m:1, c:1; /* booleans */
@@ -193,12 +198,12 @@ typedef struct struct_node \{
 \} * node;
 \end{alltt}
 where $l$ and $r$ are respectively pointers to the left and to the
-right child (they may be set to NULL). Fields $m$ and $c$ are integers
-over 1 bit, intended to represent booleans. The field $m$ is a
+right child (they can be NULL). Fields $m$ and $c$ are integers
+over 1 bit, to encode booleans. The field $m$ is a
 mark: initially, all nodes of the graph will be assumed unmarked, and
 at the end of the traversal, they will have to be all marked. The
 field $c$ is used internally by the algorithm, to denote which
-of the child is currently been explored.
+of the children is currently been explored.
  
 \begin{figure*}
 \begin{alltt}\begin{slshape}
@@ -216,6 +221,7 @@ void schorr_waite(node root) \{
   ...
 \}
 \end{alltt}
+\vspace*{-5mm}
 \caption{Specification of Schorr-Waite algorithm in the \caduceus{}
   syntax}
 \label{fig:spec}
@@ -253,16 +259,17 @@ Schorr-Waite algorithm.
 At this point, the \caduceus{} methodology is quite different from the
 JML one: in JML, one would need to provide a so-called \emph{pure}
 (i.e. side-effect free) method defining reachability and using it in
-annotations. This is convenient for runtime assertion checking, but
-for formal verification it is not, because we need to reason (e.g.
-by induction) about reachability, not only compute with it. In the
-\caduceus{} methodology, such a logical notion must be declared, by a
-\verb|predicate| annotation, and supposed to be defined or axiomatized
-in the back-end prover. This is very similar to a forward declaration
-of a C function, whose implementation will be given later: such
-predicates have to be `implemented' later, either by giving
-additional \caduceus{} annotations (such as \verb|axioms|) or in the
-back-end prover. For the reachability predicate, we write
+annotations. 
+%This is convenient for runtime assertion checking, but
+%for formal verification it is not, because we need to reason (e.g.
+%by induction) about reachability, not only compute with it. 
+In the \caduceus{} methodology, such a logical notion must be
+declared, by a \verb|predicate| annotation, and supposed to be defined
+or axiomatized later. This is very similar to a
+forward declaration of a C function, whose implementation will be
+given later: such predicates have to be `implemented' later, either by
+giving additional \caduceus{} annotations (such as \verb|axioms|) or
+in the back-end prover. For the reachability predicate, we write
 %\pagebreak
 \begin{alltt}\begin{slshape}
 /*@ predicate 
@@ -305,7 +312,7 @@ atom, then it should be understood as the boolean $e\neq 0$, so that
 one can equivalently write \verb|! x->m| or \verb|x->m == 0|. 
 Notice that we use a standard first-order logic: every function is
 total (like in JML, i.e. no 3-valued logic) so that an expression
-\verb|p->f| is meaningfull even if \verb|p| is \verb|null|, but no
+\verb|p->f| is defined even if \verb|p| is \verb|null|, but no
 property of it is known (very similarly to division by zero for
 example). 
 
@@ -320,9 +327,9 @@ The post-condition is a conjunct of three assertions. The built-in
 construct $\old(e)$ in \caduceus{}, inspired from the JML one, denotes
 the value of expression $e$ before the execution of the function. So
 the first assertion means that for all nodes (even the non-reachable
-ones), the child are the same after the run of the algorithm, as
+ones), the children are the same after the run of the algorithm, as
 they were before. This is of course very important to specify, because
-during the execution the child are modified, so one wants to prove
+during the execution the children are modified, so one wants to prove
 that the initial graph structure is restored. The second
 assertion specifies that any non-null node $x$ reachable from the
 root is now marked. So this specifies that the whole 
@@ -339,7 +346,7 @@ that we are now able to prove that no
 wrong pointer dereferencing can occur. Second, we also talk about the
 non-reachable nodes of the graph: we are also able to show that they
 are not traversed and not modified. In Section~\ref{sec:termination},
-we will add more annotations in order to establish the termination of the
+we add more annotations in order to establish the termination of the
 \verb|schorr_waite| function.
 
 

@@ -5,7 +5,6 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 463-4312 *)
 (*Why goal*) Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -27,7 +26,6 @@ Proof.
 intros; apply order_mark_m_and_c_and_stack_wf.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 470-681 *)
 (*Why goal*) Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -107,7 +105,6 @@ assumption.
 left; exists (@nil pointer); constructor.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3172-3294 *)
 (*Why goal*) Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -189,7 +186,6 @@ assumption.
 left; exists (@nil pointer); constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3324-3381 *)
 (*Why goal*) Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -277,7 +273,6 @@ right; exists (@nil pointer); constructor.
 clear Test6; intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3554-3578 *)
 (*Why goal*) Lemma schorr_waite_impl_po_5 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -363,7 +358,6 @@ Proof.
 intros; subst;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3531-3578 *)
 (*Why goal*) Lemma schorr_waite_impl_po_6 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -1152,7 +1146,6 @@ auto.
 Save.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3760-3796 *)
 (*Why goal*) Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -1240,7 +1233,6 @@ Qed.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3760-3796 *)
 (*Why goal*) Lemma schorr_waite_impl_po_8 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2256,7 +2248,6 @@ left.
 unfold reachable; exists (@nil pointer);constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 4071-4083 *)
 (*Why goal*) Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2334,7 +2325,6 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 4122-4146 *)
 (*Why goal*) Lemma schorr_waite_impl_po_10 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2416,7 +2406,6 @@ Proof.
 intros;subst;tauto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 4099-4146 *)
 (*Why goal*) Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3216,7 +3205,6 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 463-4312 *)
 (*Why goal*) Lemma schorr_waite_impl_po_12 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3343,7 +3331,6 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 463-4312 *)
 (*Why goal*) Lemma schorr_waite_impl_po_13 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3538,7 +3525,6 @@ auto.
 apply H2;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 719-3060 *)
 (*Why goal*) Lemma schorr_waite_impl_po_14 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3626,5 +3612,1190 @@ intros (Q1,Q2).
 inversion reach2;subst;auto.
 simpl in H1; tauto.
 simpl in H1; tauto.
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
+Lemma schorr_waite_impl_po_1 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  (well_founded order_mark_m_and_c_and_stack).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 409-620 *)
+Lemma schorr_waite_impl_po_2 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3041-3163 *)
+Lemma schorr_waite_impl_po_3 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  (~(t1 = null) -> (valid alloc t1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3193-3250 *)
+Lemma schorr_waite_impl_po_4 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  (valid alloc p1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3423-3447 *)
+Lemma schorr_waite_impl_po_5 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test4: (acc c0 p1) <> 0),
+  forall (q: pointer),
+  forall (Post31: q = t1),
+  forall (t2: pointer),
+  forall (Post26: t2 = p1),
+  forall (p2: pointer),
+  forall (Post27: p2 = (acc r0 p1)),
+  forall (caduceus_7: pointer),
+  forall (Post30: caduceus_7 = t2),
+  (valid alloc caduceus_7).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3400-3447 *)
+Lemma schorr_waite_impl_po_6 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test4: (acc c0 p1) <> 0),
+  forall (q: pointer),
+  forall (Post31: q = t1),
+  forall (t2: pointer),
+  forall (Post26: t2 = p1),
+  forall (p2: pointer),
+  forall (Post27: p2 = (acc r0 p1)),
+  forall (caduceus_7: pointer),
+  forall (Post30: caduceus_7 = t2),
+  forall (Pre31: (valid alloc caduceus_7)),
+  forall (r1: ((memory) pointer)),
+  forall (Post66: r1 = (upd r0 caduceus_7 q)),
+  (((* I1 *)
+    (forall (x:pointer),
+     ((reachable alloc l r root x) -> (reachable alloc l0 r1 t2 x) \/
+      (reachable alloc l0 r1 p2 x))) /\
+  (* I2 *)
+  (forall (x:pointer),
+   (~(x = null) ->
+    ((reachable alloc l0 r1 t2 x) \/ (reachable alloc l0 r1 p2 x) ->
+     (reachable alloc l r root x))))) /\
+  (* I0 *)
+  (exists stack:plist, (((((* I3 *) (clr_list alloc c0 l0 r1 p2 stack) /\
+   (* I4 *)
+   (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:pointer),
+    (((valid alloc x) /\ (reachable alloc l r root x)) /\ (acc m0 x) = 0 ->
+     (unmarked_reachable alloc m0 l0 r1 t2 x) \/
+     (exists y:pointer, (in_list y stack) /\
+      (unmarked_reachable alloc m0 l0 r1 (acc r1 y) x))))) /\
+   (* I6 *)
+   (forall (x:pointer),
+    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\ (acc l0 x) = (acc l x)))) /\
+   (* I7 *)
+   (forall (p1:pointer),
+    (forall (p2:pointer),
+     ((pair_in_list p1 p2 (cons t2 stack)) ->
+      (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\ (acc r p2) = p1)) /\
+      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
+   (* I8 *)
+   (forall (x:pointer),
+    (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))) /\
+  (order_mark_m_and_c_and_stack (weight alloc m0 c0 l0 r1 p2 t2)
+   (weight alloc m0 c0 l0 r0 p1 t1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3629-3665 *)
+Lemma schorr_waite_impl_po_7 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test3: (acc c0 p1) = 0),
+  forall (q: pointer),
+  forall (Post25: q = t1),
+  forall (t2: pointer),
+  forall (Post14: t2 = (acc r0 p1)),
+  forall (caduceus_6: pointer),
+  forall (Post18: caduceus_6 = p1),
+  forall (Pre19: (valid alloc p1)),
+  forall (aux_1: pointer),
+  forall (Post17: aux_1 = (acc l0 p1)),
+  (valid alloc caduceus_6).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3629-3665 *)
+Lemma schorr_waite_impl_po_8 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test3: (acc c0 p1) = 0),
+  forall (q: pointer),
+  forall (Post25: q = t1),
+  forall (t2: pointer),
+  forall (Post14: t2 = (acc r0 p1)),
+  forall (caduceus_6: pointer),
+  forall (Post18: caduceus_6 = p1),
+  forall (Pre19: (valid alloc p1)),
+  forall (aux_1: pointer),
+  forall (Post17: aux_1 = (acc l0 p1)),
+  forall (Pre17: (valid alloc caduceus_6)),
+  forall (r1: ((memory) pointer)),
+  forall (Post58: r1 = (upd r0 caduceus_6 aux_1)),
+  (forall (result:pointer),
+   (result = p1 ->
+    (forall (l1:((memory) pointer)),
+     (l1 = (upd l0 result q) ->
+      (forall (result:pointer),
+       (result = p1 ->
+        (forall (c:((memory) Z)),
+         (c = (upd c0 result 1) ->
+          (((* I1 *)
+            (forall (x:pointer),
+             ((reachable alloc l r root x) -> (reachable alloc l1 r1 t2 x) \/
+              (reachable alloc l1 r1 p1 x))) /\
+          (* I2 *)
+          (forall (x:pointer),
+           (~(x = null) ->
+            ((reachable alloc l1 r1 t2 x) \/ (reachable alloc l1 r1 p1 x) ->
+             (reachable alloc l r root x))))) /\
+          (* I0 *)
+          (exists stack:plist,
+           (((((* I3 *) (clr_list alloc c l1 r1 p1 stack) /\
+           (* I4 *)
+           (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+           (* I5 *)
+           (forall (x:pointer),
+            (((valid alloc x) /\ (reachable alloc l r root x)) /\
+             (acc m0 x) = 0 -> (unmarked_reachable alloc m0 l1 r1 t2 x) \/
+             (exists y:pointer, (in_list y stack) /\
+              (unmarked_reachable alloc m0 l1 r1 (acc r1 y) x))))) /\
+           (* I6 *)
+           (forall (x:pointer),
+            (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
+             (acc l1 x) = (acc l x)))) /\
+           (* I7 *)
+           (forall (p1:pointer),
+            (forall (p2:pointer),
+             ((pair_in_list p1 p2 (cons t2 stack)) ->
+              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
+                (acc r p2) = p1)) /\
+              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
+           (* I8 *)
+           (forall (x:pointer),
+            (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))) /\
+          (order_mark_m_and_c_and_stack (weight alloc m0 c l1 r1 p1 t2)
+           (weight alloc m0 c0 l0 r0 p1 t1)))) /\
+        (valid alloc result))))) /\
+    (valid alloc result))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3940-3952 *)
+Lemma schorr_waite_impl_po_9 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (q: pointer),
+  forall (Post13: q = p1),
+  forall (p2: pointer),
+  forall (Post2: p2 = t1),
+  (valid alloc t1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3991-4015 *)
+Lemma schorr_waite_impl_po_10 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (q: pointer),
+  forall (Post13: q = p1),
+  forall (p2: pointer),
+  forall (Post2: p2 = t1),
+  forall (t2: pointer),
+  forall (Post3: t2 = (acc l0 t1)),
+  forall (caduceus_3: pointer),
+  forall (Post6: caduceus_3 = p2),
+  (valid alloc caduceus_3).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 3968-4015 *)
+Lemma schorr_waite_impl_po_11 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (q: pointer),
+  forall (Post13: q = p1),
+  forall (p2: pointer),
+  forall (Post2: p2 = t1),
+  forall (t2: pointer),
+  forall (Post3: t2 = (acc l0 t1)),
+  forall (caduceus_3: pointer),
+  forall (Post6: caduceus_3 = p2),
+  forall (Pre7: (valid alloc caduceus_3)),
+  forall (l1: ((memory) pointer)),
+  forall (Post50: l1 = (upd l0 caduceus_3 q)),
+  (forall (result:pointer),
+   (result = p2 ->
+    (forall (m1:((memory) Z)),
+     (m1 = (upd m0 result 1) ->
+      (forall (result:pointer),
+       (result = p2 ->
+        (forall (c:((memory) Z)),
+         (c = (upd c0 result 0) ->
+          (((* I1 *)
+            (forall (x:pointer),
+             ((reachable alloc l r root x) -> (reachable alloc l1 r0 t2 x) \/
+              (reachable alloc l1 r0 p2 x))) /\
+          (* I2 *)
+          (forall (x:pointer),
+           (~(x = null) ->
+            ((reachable alloc l1 r0 t2 x) \/ (reachable alloc l1 r0 p2 x) ->
+             (reachable alloc l r root x))))) /\
+          (* I0 *)
+          (exists stack:plist,
+           (((((* I3 *) (clr_list alloc c l1 r0 p2 stack) /\
+           (* I4 *)
+           (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
+           (* I5 *)
+           (forall (x:pointer),
+            (((valid alloc x) /\ (reachable alloc l r root x)) /\
+             (acc m1 x) = 0 -> (unmarked_reachable alloc m1 l1 r0 t2 x) \/
+             (exists y:pointer, (in_list y stack) /\
+              (unmarked_reachable alloc m1 l1 r0 (acc r0 y) x))))) /\
+           (* I6 *)
+           (forall (x:pointer),
+            (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+             (acc l1 x) = (acc l x)))) /\
+           (* I7 *)
+           (forall (p1:pointer),
+            (forall (p2:pointer),
+             ((pair_in_list p1 p2 (cons t2 stack)) ->
+              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
+                (acc r p2) = p1)) /\
+              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r0 p2))))))) /\
+           (* I8 *)
+           (forall (x:pointer),
+            (~(reachable alloc l r root x) -> (acc m1 x) = (acc m x))))) /\
+          (order_mark_m_and_c_and_stack (weight alloc m1 c l1 r0 p2 t2)
+           (weight alloc m0 c0 l0 r0 p1 t1)))) /\
+        (valid alloc result))))) /\
+    (valid alloc result))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
+Lemma schorr_waite_impl_po_12 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (c1: ((memory) Z)),
+  forall (l1: ((memory) pointer)),
+  forall (m1: ((memory) Z)),
+  forall (p2: pointer),
+  forall (r1: ((memory) pointer)),
+  forall (t2: pointer),
+  forall (Post36: (((* I1 *)
+                    (forall (x:pointer),
+                     ((reachable alloc l r root x) ->
+                      (reachable alloc l1 r1 t2 x) \/
+                      (reachable alloc l1 r1 p2 x))) /\
+                  (* I2 *)
+                  (forall (x:pointer),
+                   (~(x = null) ->
+                    ((reachable alloc l1 r1 t2 x) \/
+                     (reachable alloc l1 r1 p2 x) ->
+                     (reachable alloc l r root x))))) /\
+                  (* I0 *)
+                  (exists stack:plist,
+                   (((((* I3 *) (clr_list alloc c1 l1 r1 p2 stack) /\
+                   (* I4 *)
+                   (forall (p_0:pointer),
+                    ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
+                   (* I5 *)
+                   (forall (x:pointer),
+                    (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                     (acc m1 x) = 0 ->
+                     (unmarked_reachable alloc m1 l1 r1 t2 x) \/
+                     (exists y:pointer, (in_list y stack) /\
+                      (unmarked_reachable alloc m1 l1 r1 (acc r1 y) x))))) /\
+                   (* I6 *)
+                   (forall (x:pointer),
+                    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
+                     (acc l1 x) = (acc l x)))) /\
+                   (* I7 *)
+                   (forall (p1:pointer),
+                    (forall (p2:pointer),
+                     ((pair_in_list p1 p2 (cons t2 stack)) ->
+                      (((acc c1 p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
+                        (acc r p2) = p1)) /\
+                      (((acc c1 p2) = 0 -> (acc l p2) = p1 /\
+                        (acc r p2) = (acc r1 p2))))))) /\
+                   (* I8 *)
+                   (forall (x:pointer),
+                    (~(reachable alloc l r root x) -> (acc m1 x) = (acc m x))))) /\
+                  (order_mark_m_and_c_and_stack (weight alloc m1 c1 l1 r1 p2
+                                                 t2)
+                   (weight alloc m0 c0 l0 r0 p1 t1))),
+  (order_mark_m_and_c_and_stack (weight alloc m1 c1 l1 r1 p2 t2) Variant1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
+Lemma schorr_waite_impl_po_13 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: weight_type),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
+  forall (Pre35: ((* I1 *)
+                  (forall (x:pointer),
+                   ((reachable alloc l r root x) ->
+                    (reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x))) /\
+                 (* I2 *)
+                 (forall (x:pointer),
+                  (~(x = null) ->
+                   ((reachable alloc l0 r0 t1 x) \/
+                    (reachable alloc l0 r0 p1 x) ->
+                    (reachable alloc l r root x))))) /\
+                 (* I0 *)
+                 (exists stack:plist,
+                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
+                  (* I4 *)
+                  (forall (p_0:pointer),
+                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+                  (* I5 *)
+                  (forall (x:pointer),
+                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
+                    (acc m0 x) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
+                    (exists y:pointer, (in_list y stack) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
+                  (* I6 *)
+                  (forall (x:pointer),
+                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
+                    (acc l0 x) = (acc l x)))) /\
+                  (* I7 *)
+                  (forall (p1:pointer),
+                   (forall (p2:pointer),
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                       (acc r p2) = p1)) /\
+                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                       (acc r p2) = (acc r0 p2))))))) /\
+                  (* I8 *)
+                  (forall (x:pointer),
+                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test1: p1 = null /\ (t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0)),
+  ((forall (x:pointer), (acc l x) = (acc l0 x) /\ (acc r x) = (acc r0 x)) /\
+  (forall (x:pointer),
+   ((valid alloc x) /\ (reachable alloc l0 r0 root x) -> (acc m0 x) <> 0))) /\
+  (forall (x:pointer),
+   (~(reachable alloc l0 r0 root x) -> (acc m0 x) = (acc m x))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 658-2929 *)
+Lemma schorr_waite_impl_po_14 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (c: ((memory) Z)),
+  forall (l: ((memory) pointer)),
+  forall (m: ((memory) Z)),
+  forall (r: ((memory) pointer)),
+  forall (Pre37: (forall (x:pointer),
+                  (~(x = null) /\ (reachable alloc l r root x) ->
+                   (valid alloc x) /\ (acc m x) = 0)) /\
+                 (exists l_0:plist,
+                  (reachable_elements alloc l r root root l_0))),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  ((* I1 *)
+   (forall (x:pointer),
+    ((reachable alloc l r root x) -> (reachable alloc l r t x) \/
+     (reachable alloc l r p x))) /\
+  (* I2 *)
+  (forall (x:pointer),
+   (~(x = null) ->
+    ((reachable alloc l r t x) \/ (reachable alloc l r p x) ->
+     (reachable alloc l r root x))))) /\
+  (* I0 *)
+  (exists stack:plist, (((((* I3 *) (clr_list alloc c l r p stack) /\
+   (* I4 *) (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:pointer),
+    (((valid alloc x) /\ (reachable alloc l r root x)) /\ (acc m x) = 0 ->
+     (unmarked_reachable alloc m l r t x) \/
+     (exists y:pointer, (in_list y stack) /\
+      (unmarked_reachable alloc m l r (acc r y) x))))) /\
+   (* I6 *)
+   (forall (x:pointer),
+    (~(in_list x stack) -> (acc r x) = (acc r x) /\ (acc l x) = (acc l x)))) /\
+   (* I7 *)
+   (forall (p1:pointer),
+    (forall (p2:pointer),
+     ((pair_in_list p1 p2 (cons t stack)) ->
+      (((acc c p2) <> 0 -> (acc l p2) = (acc l p2) /\ (acc r p2) = p1)) /\
+      (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r p2))))))) /\
+   (* I8 *)
+   (forall (x:pointer),
+    (~(reachable alloc l r root x) -> (acc m x) = (acc m x)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
