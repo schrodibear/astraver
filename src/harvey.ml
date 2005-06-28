@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.27 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.28 2005-06-28 11:55:52 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -169,7 +169,7 @@ let print_axiom fmt id p =
 let print_predicate_def fmt id p =
   let (bl,p) = p.Env.scheme_type in
   fprintf fmt "@[;; Why predicate %s@\n" id;
-  fprintf fmt "(forall %a (<-> (%s %a)@ @[%a@]))@]@\n@\n" 
+  fprintf fmt "@[(forall %a@ @[(<-> (%s %a)@ @[%a@])@])@]@]@\n@\n" 
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl id
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
     print_predicate p
@@ -177,7 +177,7 @@ let print_predicate_def fmt id p =
 let print_function_def fmt id p =
   let (bl,_,e) = p.Env.scheme_type in
   fprintf fmt "@[;; Why function %s@\n" id;
-  fprintf fmt "(forall %a (= (%s %a)@ @[%a@]))@]@\n@\n" 
+  fprintf fmt "@[(forall %a@ @[(= (%s %a)@ @[%a@])@])@]@]@\n@\n" 
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl id
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
     print_term e
@@ -194,48 +194,22 @@ let output_theory fmt f =
   fprintf fmt "))@\n";
   fprintf fmt "@]@\n) ;; END THEORY@\n"
 
-let output_sequent fmt (ctx, c) = match ctx with
-  | [] -> 
-      fprintf fmt "@[%a@]" print_predicate c
-  | [p] -> 
-      fprintf fmt "@[<hov 2>(->@ @[%a@]@ %a)@]" 
-	print_predicate p print_predicate c
-  | ctx -> 
-      fprintf fmt "@[<hov 2>(->@ @[<hov 2>(and@ %a)@]@ %a)@]"
-	(print_list space print_predicate) ctx print_predicate c
-
-(*s First-order checks *)
-
-(*
-let rec is_first_order = function
-  | Pvar _
-  | Papp _
-  | Ptrue
-  | Pfalse -> true
-  | Pimplies (a, b) -> is_first_order a && is_first_order b
-  | Pif (_, a, b) -> is_first_order a && is_first_order b
-  | Pand (a, b) | Por (a, b) -> is_first_order a && is_first_order b
-  | Pnot a -> is_first_order a 
-  | Forall _
-  | Exists _ -> false
-*)
-
-let rec filter_context = function
-  | [] -> []
-  | Svar (id, _) :: ctx -> filter_context ctx
-  | Spred (_, p) :: ctx -> p :: filter_context ctx
-
-exception NotFirstOrder
-
-let prepare_sequent (ctx, c) = filter_context ctx, c
+let output_sequent fmt (ctx, concl) = 
+  let rec print_seq fmt = function
+    | [] -> 
+	fprintf fmt "@[%a@]" print_predicate concl
+    | Svar (id, ty) :: ctx -> 
+	fprintf fmt "@[(forall %a@ %a)@]"
+	  Ident.print id print_seq ctx
+    | Spred (_, p) :: ctx -> 
+	fprintf fmt "@[<hov 2>(->@ @[%a@]@ %a)@]" 
+	  print_predicate p print_seq ctx
+  in
+  print_seq fmt ctx
 
 let output_obligation fmt (loc, o, s) = 
-  try
-    let s = prepare_sequent s in
-    fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation loc;
-    fprintf fmt "@[%a@]@\n" output_sequent s
-  with NotFirstOrder ->
-    unlocated_wprintf "obligation %s is not first-order@\n" o
+  fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation loc;
+  fprintf fmt "@[%a@]@\n" output_sequent s
 
 let output_file f = 
   let fname = f ^ "_why.rv" in

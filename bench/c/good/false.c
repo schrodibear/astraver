@@ -14,8 +14,17 @@ int x[4];
 int y[5];
 
 /*@ ensures \false */
+void false0() {
+}
+
 void false1() {
   z->y[5] = 3;
+}
+
+void false2() {
   x[-1] = 1;
+}
+
+void false3() {
   y[5] = 2;
 }

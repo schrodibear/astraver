@@ -1,4 +1,6 @@
 
+  o fixed variable capture issue in haRVey output
+  o fixed bug in Isabelle output (Yasuhiko Minamide)
   o support for declaration "function" with Isabelle/CVC/harvey/PVS
   o new declaration "goal" to declare a proof obligation
     e.g. goal foo : forall x:int. x = x+0

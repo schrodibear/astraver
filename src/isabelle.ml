@@ -192,7 +192,7 @@ let rec print_predicate fmt = function
   | Pimplies (_, a, b) ->
       fprintf fmt "(@[%a -->@ %a@])" print_predicate a print_predicate b
   | Piff (a, b) ->
-      fprintf fmt "(@[%a =@ %a@]))" 
+      fprintf fmt "(@[%a =@ %a@])" 
 	print_predicate a print_predicate b
   | Pif (a, b, c) ->
       fprintf fmt "(@[if %a@ then %a@ else %a@])" 
@@ -233,8 +233,8 @@ let print_sequent fmt (hyps,concl) =
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "fixes %a::\"%a\"@\n" Ident.print id print_cc_type v;
 	print_seq fmt hyps
-    | Spred (_, p) :: hyps -> 
-	fprintf fmt "assumes \"@[%a@]\"@\n" print_predicate p;
+    | Spred (id, p) :: hyps -> 
+	fprintf fmt "assumes %a: \"@[%a@]\"@\n" Ident.print id print_predicate p;
 	print_seq fmt hyps
   in
   fprintf fmt "@[%a@]@?" print_seq hyps

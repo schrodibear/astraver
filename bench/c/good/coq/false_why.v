@@ -3,68 +3,81 @@
 
 Require Export false_spec_why.
 
+(* Why obligation from file "why/false.why", characters 40-134 *)
+(*Why goal*) Lemma false0_impl_po_1 : 
+  forall (result: unit),
+  forall (Post1: result = tt),
+  (* File \"false.c\", line 16, characters 13-19 *) False.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 (* Why obligation from file "why/false.why", characters 260-316 *)
 (*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x_0: pointer),
   forall (y: ((memory) pointer)),
-  forall (y_0: pointer),
   forall (z: pointer),
-  forall (Pre11: (valid_range alloc y_0 0 4) /\
-                 (valid_range alloc x_0 0 3) /\
-                 ~((base_addr y_0) = (base_addr x_0)) /\
-                 (valid1_range y 5) /\ (valid1 y)),
+  forall (Pre5: (valid1_range y 5) /\ (valid1 y)),
   (valid alloc z).
 Proof.
-Admitted.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
 (* Why obligation from file "why/false.why", characters 324-351 *)
 (*Why goal*) Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (x_0: pointer),
   forall (y: ((memory) pointer)),
-  forall (y_0: pointer),
   forall (z: pointer),
-  forall (Pre11: (valid_range alloc y_0 0 4) /\
-                 (valid_range alloc x_0 0 3) /\
-                 ~((base_addr y_0) = (base_addr x_0)) /\
-                 (valid1_range y 5) /\ (valid1 y)),
+  forall (Pre5: (valid1_range y 5) /\ (valid1 y)),
   forall (Pre4: (valid alloc z)),
-  forall (caduceus_5: pointer),
-  forall (Post3: caduceus_5 = (shift (acc y z) 5)),
-  (valid alloc caduceus_5).
+  forall (caduceus_2: pointer),
+  forall (Post3: caduceus_2 = (shift (acc y z) 5)),
+  (valid alloc caduceus_2).
 Proof.
-Admitted.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/false.why", characters 243-351 *)
-(*Why goal*) Lemma false1_impl_po_3 : 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/false.why", characters 574-601 *)
+(*Why goal*) Lemma false2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
   forall (x_0: pointer),
-  forall (y: ((memory) pointer)),
-  forall (y_0: pointer),
-  forall (z: pointer),
-  forall (Pre11: (valid_range alloc y_0 0 4) /\
-                 (valid_range alloc x_0 0 3) /\
-                 ~((base_addr y_0) = (base_addr x_0)) /\
-                 (valid1_range y 5) /\ (valid1 y)),
-  forall (Pre4: (valid alloc z)),
-  forall (caduceus_5: pointer),
-  forall (Post3: caduceus_5 = (shift (acc y z) 5)),
-  forall (Pre3: (valid alloc caduceus_5)),
-  forall (intP0: ((memory) Z)),
-  forall (Post10: intP0 = (upd intP caduceus_5 3)),
-  (forall (result:pointer),
-   (result = (shift x_0 (Zopp 1)) ->
-    (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 1) ->
-      (forall (result:pointer),
-       (result = (shift y_0 5) ->
-        (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 2) ->
-          (* File \"false.c\", line 16, characters 13-19 *) False)) /\
-        (valid alloc result))))) /\
-    (valid alloc result))).
+  forall (Pre4: (valid_range alloc x_0 0 3)),
+  forall (caduceus_2: pointer),
+  forall (Post3: caduceus_2 = (shift x_0 (Zopp 1))),
+  (valid alloc caduceus_2).
 Proof.
-Admitted.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/false.why", characters 760-787 *)
+(*Why goal*) Lemma false3_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (y_0: pointer),
+  forall (Pre4: (valid_range alloc y_0 0 4)),
+  forall (caduceus_1: pointer),
+  forall (Post3: caduceus_1 = (shift y_0 5)),
+  (valid alloc caduceus_1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

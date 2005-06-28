@@ -473,4 +473,71 @@
 		     (neq (acc intP (shift src i)) 0))))))
 ))
 
+(theory valid1_def
+  (extends th_valid_def th_valid_range_def)
+  (axioms
+;; Why predicate valid1
+(forall m1
+(<-> (valid1 m1) (forall p (forall a (-> (valid a p) (valid a (acc m1 p)))))))
+;; Why predicate valid1_range
+(forall m1 size
+(<-> (valid1_range m1 size)
+(forall p
+(forall a (-> (valid a p) (valid_range a (acc m1 p) 0 (- size 1)))))))
+))
+
+(theory separation1_def
+  (extends th_valid_def th_base_addr_shift)
+  (axioms
+;; Why predicate separation1
+(forall m1 m2
+(<-> (separation1 m1 m2)
+(forall p
+(forall a
+(-> (valid a p) (not (= (base_addr (acc m1 p)) (base_addr (acc m2 p)))))))))
+
+;; Why predicate separation1_range1
+(forall m1 m2 size
+(<-> (separation1_range1 m1 m2 size)
+(forall p
+(forall a
+(-> (valid a p)
+(forall i
+(-> (and (<= 0 i) (< i size))
+(not (= (base_addr (acc m1 (shift p i))) (base_addr (acc m2 p)))))))))))
+
+;; Why predicate separation1_range
+(forall m size
+(<-> (separation1_range m size)
+(forall p
+(forall a
+(-> (valid a p)
+(forall i1
+(forall i2
+(-> (and (<= 0 i1) (< i1 size))
+(-> (and (<= 0 i2) (< i2 size))
+(-> (not (= i1 i2))
+(not (= (base_addr (acc m (shift p i1))) (base_addr (acc m (shift p i2)))))))))))))))
+
+;; Why predicate separation2
+(forall m1 m2
+(<-> (separation2 m1 m2)
+(forall p1
+(forall p2
+(forall a
+(-> (not (= p1 p2))
+(not (= (base_addr (acc m1 p1)) (base_addr (acc m2 p2))))))))))
+
+;; Why predicate separation2_range1
+(forall m1 m2 size
+(<-> (separation2_range1 m1 m2 size)
+(forall p
+(forall q
+(forall a
+(forall i
+(-> (and (<= 0 i) (< i size))
+(not (= (base_addr (acc m1 (shift p i))) (base_addr (acc m2 q)))))))))))
+))
+
+
 ) ;; END THEORY
