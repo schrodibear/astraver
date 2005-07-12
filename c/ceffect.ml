@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.101 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.102 2005-07-12 10:03:40 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -534,7 +534,7 @@ and ctype_node = function
   | Tfloat _ -> sprintf "float"
   | Ctypes.Tvar s -> sprintf "%s" s
   | Tarray (ty, _) -> sprintf "%s" (ctype ty)
-  | Tpointer ty -> sprintf "%s*" (ctype ty)
+  | Tpointer ty -> sprintf "%s_pointer" (ctype ty)
   | Tstruct s -> sprintf "%s" s;
   | Tunion s -> sprintf "%s" s
   | Tenum s -> sprintf "%s" s
