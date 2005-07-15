@@ -110,7 +110,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       Ident.print fmt id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool true) -> 
       fprintf fmt "T" 
   | Tconst (ConstBool false) -> 

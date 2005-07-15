@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.28 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.29 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -104,7 +104,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" Ident.print id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool true) -> 
       fprintf fmt "TRUE"
   | Tconst (ConstBool false) -> 

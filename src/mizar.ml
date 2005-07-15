@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.24 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.25 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -134,7 +134,7 @@ let rec print_term fmt t =
     | Tvar id -> 
 	Ident.print fmt id
     | Tconst (ConstInt n) -> 
-	fprintf fmt "%d" n
+	fprintf fmt "%s" n
     | Tconst (ConstBool true) -> 
 	fprintf fmt "TRUE" 
     | Tconst (ConstBool false) -> 

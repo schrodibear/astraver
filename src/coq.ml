@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.134 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.135 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -145,7 +145,7 @@ let print_term_v7 fmt t =
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	openz fmt; fprintf fmt "%d" n; closez fmt
+	openz fmt; fprintf fmt "%s" n; closez fmt
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
@@ -421,7 +421,7 @@ let print_term_v8 fmt t =
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	fprintf fmt "%d" n
+	fprintf fmt "%s" n
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 

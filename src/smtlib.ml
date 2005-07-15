@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.1 2005-04-14 14:58:15 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.2 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -79,7 +79,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" Ident.print id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 

@@ -14,14 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.27 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.28 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Logic. *)
 
 type real_constant = string * string * string (* int / frac / exp *)
 
 type constant =
-  | ConstInt of int
+  | ConstInt of string
   | ConstBool of bool
   | ConstUnit
   | ConstFloat of real_constant

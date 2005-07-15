@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.114 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.115 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -283,7 +283,7 @@ and is_pure_type_c c =
 
 let partial_pre loc = function
   | Tapp (id, [a;b], _) when id == t_div_int || id == t_mod_int ->
-      let p = neq (unref_term b) (Tconst (ConstInt 0)) in
+      let p = neq (unref_term b) (Tconst (ConstInt "0")) in
       [anonymous loc p]
   | Tapp (id, [a], _) when id == t_sqrt_real ->
       let p = ge_real (unref_term a) (Tconst (ConstFloat ("0","",""))) in

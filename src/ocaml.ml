@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.14 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.15 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -81,7 +81,7 @@ let binder_id fmt = function
 let binder_ids = print_list space binder_id
 
 let constant fmt = function
-  | ConstInt n -> fprintf fmt "%d" n
+  | ConstInt n -> fprintf fmt "%s" n
   | ConstBool b -> fprintf fmt "%b" b
   | ConstUnit -> fprintf fmt "()"
   | ConstFloat (i,f,"") -> fprintf fmt "%s.%s" i f

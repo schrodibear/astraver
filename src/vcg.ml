@@ -134,7 +134,7 @@ let conjunction ctx = function
 (* ... |- (well_founded (Zwf 0)) *)
 let wf_zwf = function
   | Papp (id, [Tvar id'], _) when id == well_founded && id' == t_zwf_zero ->
-      WfZwf (Tconst (ConstInt 0))
+      WfZwf (Tconst (ConstInt "0"))
   | _ -> 
       raise Exit
 

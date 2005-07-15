@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.104 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.105 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -210,7 +210,7 @@ EXTEND
 
   (* Logic *)
   constant:
-  [ [ n = INT -> ConstInt (int_of_string n)
+  [ [ n = INT -> ConstInt n
     | "true" -> ConstBool true
     | "false" -> ConstBool false
     | LIDENT "void" -> ConstUnit
@@ -453,7 +453,7 @@ EXTEND
   [ [ v = ident -> 
 	without_annot loc (Svar v)
     | n = INT ->
-	without_annot loc (Sconst (ConstInt (int_of_string n)))
+	without_annot loc (Sconst (ConstInt n))
     | f = FLOAT ->
 	let f = Float_lexer.split f in
 	without_annot loc (Sconst (ConstFloat f))

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.61 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.62 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -91,7 +91,7 @@ let print_term fmt t =
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	fprintf fmt "(%d :: int)" n
+	fprintf fmt "(%s :: int)" n
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
@@ -99,7 +99,7 @@ let print_term fmt t =
     | Tconst (ConstFloat f) -> 
 	print_real fmt f
     | Tapp (id, [Tconst (ConstInt n)], _) when id == t_real_of_int ->
-	fprintf fmt "(%d :: real)" n
+	fprintf fmt "(%s :: real)" n
     | Tderef _ ->
 	assert false
     | Tvar id when id == implicit ->

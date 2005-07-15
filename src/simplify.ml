@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.34 2005-06-16 07:30:34 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.35 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -84,7 +84,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" Ident.print id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
       fprintf fmt "|@@%b|" b
   | Tconst ConstUnit -> 

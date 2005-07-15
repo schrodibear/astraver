@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.1 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.2 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -103,7 +103,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       Ident.print fmt id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool true) -> 
       fprintf fmt "T" 
   | Tconst (ConstBool false) -> 

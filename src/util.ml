@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.104 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.105 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -328,7 +328,7 @@ let make_raw_access env (id,id') c =
 let make_pre_access env id c =
   let pt = array_info env id in
   let c = unref_term c in
-  Pand (false, le_int (Tconst (ConstInt 0)) c, lt_int c (array_length id pt))
+  Pand (false, le_int (Tconst (ConstInt "0")) c, lt_int c (array_length id pt))
       
 let make_raw_store env (id,id') c1 c2 =
   let pt = array_info env id in
@@ -396,7 +396,7 @@ let rec print_logic_type fmt lt =
 
 let rec print_term fmt = function
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 

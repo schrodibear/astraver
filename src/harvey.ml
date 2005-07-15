@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.28 2005-06-28 11:55:52 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.29 2005-07-15 08:07:05 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -91,7 +91,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" ident id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
+      fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
       fprintf fmt "harvey_%b" b
   | Tconst ConstUnit -> 
