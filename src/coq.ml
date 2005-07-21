@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.135 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.136 2005-07-21 12:32:39 hubert Exp $ i*)
 
 open Options
 open Logic
@@ -494,9 +494,9 @@ let print_predicate_v8 fmt p =
 	fprintf fmt "%a %s@ %a" 
 	  print_term_v8 a (infix_relation id) print_term_v8 b
     | Papp (id, [a;b], _) when id == t_eq_real ->
-	fprintf fmt "(@[eq R %a %a@])" print_term_v8 a print_term_v8 b
+	fprintf fmt "(@[eq %a %a@])" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b], _) when id == t_neq_real ->
-	fprintf fmt "~(@[eq R %a %a@])" print_term_v8 a print_term_v8 b
+	fprintf fmt "~(@[eq %a %a@])" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b], _) when is_eq id ->
 	fprintf fmt "@[%a = %a@]" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b], _) when is_neq id -> 
