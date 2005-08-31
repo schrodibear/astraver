@@ -72,38 +72,39 @@ let prefix_id id =
   (* int cmp *)
   if id == t_lt_int then "(op <)" 
   else if id == t_le_int then "(op <=)"
-  else if id == t_gt_int then "int_gt"
-  else if id == t_ge_int then "int_ge"
+  else if id == t_gt_int then "(%x y. y < x)"
+  else if id == t_ge_int then "(%x y. y <= x)"
   else if id == t_eq_int then "(op =)"
-  else if id == t_neq_int then "(op <>)"
+  else if id == t_neq_int then "(%x y. x ~= y)"
   (* real cmp *)
   else if id == t_lt_real then "(op <)" 
   else if id == t_le_real then "(op <=)"
-  else if id == t_gt_real then "real_gt"
-  else if id == t_ge_real then "real_ge"
+  else if id == t_gt_real then "(%x y. y < x)"
+  else if id == t_ge_real then "(%x y. y <= x)"
   else if id == t_eq_real then "(op =)"
-  else if id == t_neq_real then "(op <>)"
+  else if id == t_neq_real then "(%x y. x ~= y)"
   (* bool cmp *)
   else if id == t_eq_bool then "(op =)"
-  else if id == t_neq_bool then "(op <>)"
+  else if id == t_neq_bool then "(%x y. x ~= y)"
   (* unit cmp *)
   else if id == t_eq_unit then "(op =)"
-  else if id == t_neq_unit then "(op <>)"
+  else if id == t_neq_unit then "(%x y. x ~= y)"
   (* int ops *)
   else if id == t_add_int then "(op +)"
   else if id == t_sub_int then "(op -)"
   else if id == t_mul_int then "(op *)"
   else if id == t_div_int then "(op div)"
   else if id == t_mod_int then "(op mod)"
-  else if id == t_neg_int then "-"
+  else if id == t_neg_int then "(%x. - x)"
   (* real ops *)
-  else if id == t_add_real then "real_add"
-  else if id == t_sub_real then "real_sub"
-  else if id == t_mul_real then "real_mul"
-  else if id == t_div_real then "real_div"
-  else if id == t_neg_real then "real_neg"
+  else if id == t_add_real then "(op +)"
+  else if id == t_sub_real then "(op -)"
+  else if id == t_mul_real then "(op *)"
+  else if id == t_div_real then "(op /)"
+  else if id == t_neg_real then "(%x. - x)"
   else if id == t_sqrt_real then assert false (* TODO *)
-  else if id == t_real_of_int then assert false (* TODO *)
+  else if id == t_real_of_int then "real"
+  else if id == t_int_of_real then assert false (* TODO *)
   else assert false
 
 let rec print_term fmt = function
@@ -112,19 +113,19 @@ let rec print_term fmt = function
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool true) -> 
-      fprintf fmt "T" 
+      fprintf fmt "True" 
   | Tconst (ConstBool false) -> 
-      fprintf fmt "F" 
+      fprintf fmt "False" 
   | Tconst ConstUnit -> 
-      fprintf fmt "one" 
+      fprintf fmt "()" 
   | Tconst (ConstFloat (i,f,e)) ->
       let e = (if e = "" then 0 else int_of_string e) - String.length f in
       if e = 0 then
-	fprintf fmt "(real_of_num %s%s)" i f
+	fprintf fmt "(real (%s%s::int))" i f
       else if e > 0 then
-	fprintf fmt "(real_of_num (%s%s * 1%s))" i f (String.make e '0')
+	fprintf fmt "(real (%s%s::int * 1%s))" i f (String.make e '0')
       else
-	fprintf fmt "(real_of_num %s%s / real_of_num 1%s)" 
+	fprintf fmt "(real (%s%s::int) / real (1%s::int))" 
 	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
@@ -214,7 +215,7 @@ let rec print_predicate fmt = function
       fprintf fmt "(@[? %s::%a.@ %a@])" (Ident.string id')
 	print_pure_type t print_predicate p'
   | Pfpi _ ->
-      failwith "fpi not supported in HOL Light"
+      failwith "fpi not supported in Isabelle/HOL"
   | Pnamed (n, p) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
 
