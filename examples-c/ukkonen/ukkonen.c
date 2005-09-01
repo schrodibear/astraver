@@ -9,8 +9,8 @@
 unsigned int max_nodes_nb;
 /* size of the alphabet we work with */
 unsigned int alphabet_sz;
-/* maximum size of the processed string */
-unsigned int max_string_sz;
+/* size of the processed string */
+unsigned int string_sz;
 
 /* node structure */
 typedef struct struct_node
@@ -59,40 +59,58 @@ unsigned int next_node;
 /* word we are working on */
 unsigned int *current_word;
 
-/*@ invariant valid_word_range: \valid_range(current_word,0,max_string_sz-1) */
+/*@ invariant valid_word_range: \valid_range(current_word,0,string_sz) */
+
 /*@ invariant valid_word_chars:
-  @   \forall int k; 0 <= k < max_string_sz
-  @     => (0 <= current_word[k] < alphabet_sz)
-  @*/
-/*@ invariant valid_word_end:
-  @   \exists int n; 0 <= n < max_string_sz && current_word[n] == 0
-  @*/
-/*@ invariant end_mark_in_limit:
-  @   \forall int n; (0 <= n < max_string_sz && current_word[n] != 0)
-  @     => 0 <= n < max_string_sz - 1
+  @   \forall int k; 0 <= k < string_sz
+  @     => (0 < current_word[k] < alphabet_sz)
   @*/
 
+/*@ invariant valid_word_end: current_word[string_sz] == 0 */
+
 /* WARNING:
- * max_nodes_nb, alphabet_sz, nodes_list, next_node,
- * max_string_sz, and current_word must be initialized
- * before any call to the construction function (we don't
- * care about memory allocation or initialization here).
+ * max_nodes_nb, alphabet_sz, nodes_list, next_node, string_sz, and
+ * current_word must be initialized before any call to the construction
+ * function (we don't care about memory allocation or initialization here).
  */
 
 /* suffix tree related invariants, predicates and axioms
  *******************************************************
  */
 
+/*@ logic clist cons(char c, clist l) @*/
+/*@ logic clist nil()                 @*/
+/*@ logic int length(clist l)         @*/
+/*@ logic char nth(clist l, int n)    @*/
+
+/*@ predicate path(node *p, node *q, clist l)
+  @   reads p->sons[..],current_word[..]
+  @*/
+
+/*@ axiom path_init: \forall node *p; path(p,p,nil()) */
+
+/*@ axiom path_extent:
+  @   \forall node *p, node *q, char c, clist l;
+  @   path(p->sons[c],q,l) => path(p,q,cons(c,l))
+  @*/
+
+/*@ predicate is_suffix(clist l)
+  @ { \exists int i; i < string_sz =>
+  @   ((\forall int j; i <= j < string_sz =>
+  @   nth(l,j-i) == current_word[j]) &&
+  @   length(l) == string_sz - i) }
+  @*/
+
 /*@ invariant nodes_nb_floor:
-  @   1 < max_string_sz * max_string_sz < max_nodes_nb - 1
+  @   1 < max_nodes_nb &&  string_sz * string_sz == max_nodes_nb - 1
   @*/
 
 /* word's character retrieving function */
 /****************************************/
 /*@ requires
-  @   0 <= i < max_string_sz
+  @   0 <= i < string_sz
   @ ensures
-  @   0 <= \result < alphabet_sz &&
+  @   0 < \result < alphabet_sz &&
   @   \result == current_word[i]
   @*/
 unsigned int get_char(unsigned int i)
@@ -130,18 +148,18 @@ node *target(node *t, unsigned int c)
 /*********************************/
 /*@ requires
   @   valid_node(m) && \valid(r) &&
-  @   0 <= i < max_string_sz &&
+  @   0 <= i < string_sz &&
   @   \base_addr(r) != \base_addr(current_word)
   @ assigns *r
   @ ensures
-  @   0 <= *r < max_string_sz && valid_node(\result)
+  @   0 <= *r < string_sz && valid_node(\result)
   @*/
 node *locate_head(node *m, unsigned int i, unsigned int *r)
 {
-  /*@ invariant 0 <= i < max_string_sz && valid_node(m)
-    @ variant max_string_sz - i
+  /*@ invariant 0 <= i < string_sz && valid_node(m)
+    @ variant string_sz - i
     @*/
-  while(i < (max_string_sz - 1))
+  while(i < string_sz)
   {
     node *t = target(m,get_char(i));
     if(t == NULL) break;
@@ -155,13 +173,12 @@ node *locate_head(node *m, unsigned int i, unsigned int *r)
 /* node's son insertion function */
 /*********************************/
 /*@ requires
-  @   valid_node(f) && valid_node(s) &&
-  @   0 <= i < max_string_sz
+  @   valid_node(f) && valid_node(s) && 0 <= i < string_sz
   @ assigns f->sons[..]
   @ ensures valid_node(f)
   @*/
 void insert_son(node *f, node *s, unsigned int i)
-{/*@ assert 0 */ f->sons[get_char(i)] = s; }
+{ f->sons[get_char(i)] = s; }
 
 /* suffix tree construction function */
 /*************************************/
@@ -169,46 +186,49 @@ void insert_son(node *f, node *s, unsigned int i)
 /*@ predicate loops_invariant() 
   @ {
   @   \valid_range(nodes_list,0,max_nodes_nb-1) &&
-  @   \valid_range(current_word,0,max_string_sz-1) &&
-  @   (\forall int k; (0 <= k < max_string_sz) =>
-  @     (0 <= current_word[k] < alphabet_sz)) &&
+  @   \valid_range(current_word,0,string_sz) &&
+  @   (\forall int k; (0 <= k < string_sz) =>
+  @     (0 < current_word[k] < alphabet_sz)) &&
   @   (\forall node *t; valid_node(t) => valid_sons(t)) &&
   @   (\forall node *t; valid_node(t) =>
-  @     \valid_range(t->sons,0,alphabet_sz-1))
+  @     \valid_range(t->sons,0,alphabet_sz-1)) &&
+  @   (\forall int k; 0 <= k < string_sz => current_word[k] != 0)
   @ }
   @*/
 
 /*@ requires
-  @   0 < max_string_sz &&
-  @   next_node == 0 &&
-  @   max_nodes_nb > 1
+  @   1 < max_nodes_nb && next_node == 0 &&
+  @   current_word[string_sz] == 0 &&
+  @   max_nodes_nb - 1 == string_sz * string_sz
   @ ensures
-  @   valid_node(\result)
+  @   valid_node(\result) &&
+  @   (\forall clist l; path(\result,\null,l) => is_suffix(l)) &&
+  @   (\forall node *p, node *q, node *r, clist l;
+  @     (path(p,q,l) && path(p,r,l)) => q == r))
   @*/
 node *build_suffix_tree()
 {
   node *m = get_fresh_node();
-  unsigned int i;
-  unsigned int k;
-  /*@ assert 0 */
+  unsigned int i = 0;
+  unsigned int k = 0;
   /*@ invariant
-    @   0 <= next_node <= 2 + i * max_string_sz &&
-    @   0 <= i < max_string_sz && loops_invariant()
+    @   0 <= next_node <= 2 + i * string_sz &&
+    @   0 <= i < string_sz && loops_invariant()
     @ loop_assigns nodes_list[..].sons[..],nodes_list[..].exit,next_node,i
-    @ variant max_string_sz - i
+    @ variant string_sz - i
     @*/
-  for(i = 0; get_char(i) != 0; i++)
+  for(i = 0; i < string_sz; i++)
   {
     node *p = locate_head(m,i,&k);
-    unsigned int j;
+    unsigned int j = k;
     /*@ label suffix_add_beginning */
     /*@ invariant
       @   next_node - \at(next_node,suffix_add_beginning) == j - k &&
-      @   k <= j < max_string_sz - 2 && valid_node(p) && loops_invariant()
+      @   k <= j < string_sz && valid_node(p) && loops_invariant()
       @ loop_assigns nodes_list[..].sons[..],next_node,j
-      @ variant max_string_sz - j
+      @ variant string_sz - j
       @*/
-    for(j = k; get_char(j) != 0; j++)
+    for(j = k; j < string_sz; j++)
     {
       node *q = get_fresh_node();
       insert_son(p,q,j);
