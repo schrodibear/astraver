@@ -1,4 +1,6 @@
 
+version 1.82, September 1st, 2005
+=================================
   o fixed variable capture issue in haRVey output
   o fixed bugs in Isabelle output (Yasuhiko Minamide)
   o support for declaration "function" with Isabelle/CVC/harvey/PVS
