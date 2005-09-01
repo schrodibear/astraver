@@ -204,7 +204,7 @@ void insert_son(node *f, node *s, unsigned int i)
   @   valid_node(\result) &&
   @   (\forall clist l; path(\result,\null,l) => is_suffix(l)) &&
   @   (\forall node *p, node *q, node *r, clist l;
-  @     (path(p,q,l) && path(p,r,l)) => q == r))
+  @     (path(p,q,l) && path(p,r,l)) => q == r)
   @*/
 node *build_suffix_tree()
 {
