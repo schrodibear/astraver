@@ -5,7 +5,7 @@ Require Import Why.
 
 
 (* Why obligation from file "good/set.mlw", characters 208-208 *)
-Lemma p_po_1 : 
+(*Why goal*) Lemma p_po_1 : 
   forall (x0: Z),
   forall (Test1: x0 = 0 /\ x0 <> 0),
   forall (result0: Z),
@@ -16,7 +16,7 @@ intros; omega.
 Qed.
 
 (* Why obligation from file "good/set.mlw", characters 446-456 *)
-Lemma p2_po_1 : 
+(*Why goal*) Lemma p2_po_1 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
   forall (Variant1: Z),
@@ -34,7 +34,7 @@ unfold Zwf; intuition.
 Qed.
 
 (* Why obligation from file "good/set.mlw", characters 358-477 *)
-Lemma p2_po_2 : 
+(*Why goal*) Lemma p2_po_2 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
   forall (Variant1: Z),
@@ -50,7 +50,7 @@ intuition.
 Qed.
 
 (* Why obligation from file "good/set.mlw", characters 524-559 *)
-Lemma p3_po_1 : 
+(*Why goal*) Lemma p3_po_1 : 
   forall (y: Z),
   forall (Pre4: y >= 0),
   forall (Variant1: Z),
@@ -70,7 +70,7 @@ unfold Zwf; intros; subst result0; destruct b; intuition.
 Qed.
 
 (* Why obligation from file "good/set.mlw", characters 683-726 *)
-Lemma p4_po_1 : 
+(*Why goal*) Lemma p4_po_1 : 
   forall (y: Z),
   forall (Pre4: y >= 1),
   forall (Variant1: Z),

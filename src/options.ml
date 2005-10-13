@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.50 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.51 2005-10-13 15:05:14 filliatr Exp $ i*)
 
 open Format
 
@@ -53,10 +53,13 @@ let wol_ = ref false
 let c_file = ref false
 
 type coq_version = V7 | V8
+let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
+
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Dispatcher
-let prover_ = ref (match Version.coqversion with "v8" -> Coq V8 | _ -> Coq V7)
+
+let prover_ = ref (Coq coq_version)
 
 (*s extracting the Mizar environ from a file *)
 
@@ -192,9 +195,9 @@ let files =
     | [] -> List.rev !filesq
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
-    | ("-coq" | "--coq" | "-coq-v7" | "--coq-v7") :: args -> 
-	prover_ := Coq V7; parse args
+    | ("-coq-v7" | "--coq-v7") :: args -> prover_ := Coq V7; parse args
     | ("-coq-v8" | "--coq-v8") :: args -> prover_ := Coq V8; parse args
+    | ("-coq" | "--coq") :: args -> prover_ := Coq coq_version; parse args
     | ("-hol-light" | "--hol-light") :: args -> prover_ := HolLight; parse args
     | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.105 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.106 2005-10-13 15:05:14 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -594,7 +594,7 @@ i*)
   ] ]
   ;
   logic_binder:
-  [ [ id = ident; ":"; t = primitive_type -> (id, t) ] ]
+  [ [ id = ident; ":"; t = logic_arg -> (id, t) ] ]
   ;
   external_:
   [ [ "external" -> true | -> false ] ]

@@ -5,7 +5,7 @@ Require Import Why.
 
 
 (* Why obligation from file "good/see.mlw", characters 230-241 *)
-Lemma k_po_1 : 
+(*Why goal*) Lemma k_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),
   forall (b3: Z),

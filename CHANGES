@@ -1,4 +1,7 @@
 
+  o array types now accepted in logic/predicate arguments
+  o --coq now selects the Coq version determined at compiled time
+
 version 1.82, September 1st, 2005
 =================================
   o fixed variable capture issue in haRVey output

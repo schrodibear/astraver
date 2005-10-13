@@ -27,7 +27,7 @@ Parameter foo : Set.
 
 
 (* Why obligation from file "good/all.mlw", characters 675-692 *)
-Lemma p2_po_1 : 
+(*Why goal*) Lemma p2_po_1 : 
   ~False.
 Proof.
 tauto.
@@ -38,7 +38,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 703-724 *)
-Lemma p3_po_1 : 
+(*Why goal*) Lemma p3_po_1 : 
   True /\ True.
 Proof.
 tauto.
@@ -49,7 +49,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 735-756 *)
-Lemma p4_po_1 : 
+(*Why goal*) Lemma p4_po_1 : 
   True \/ False.
 Proof.
 tauto.
@@ -60,7 +60,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 767-793 *)
-Lemma p5_po_1 : 
+(*Why goal*) Lemma p5_po_1 : 
   False \/ ~False.
 auto.
 Qed.
@@ -70,7 +70,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 804-829 *)
-Lemma p6_po_1 : 
+(*Why goal*) Lemma p6_po_1 : 
   (True -> ~False).
 Proof.
 auto.
@@ -81,7 +81,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 840-865 *)
-Lemma p7_po_1 : 
+(*Why goal*) Lemma p7_po_1 : 
   (forall (x:Z), x = x).
 Proof.
 auto.
@@ -92,7 +92,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 876-910 *)
-Lemma p8_po_1 : 
+(*Why goal*) Lemma p8_po_1 : 
   True /\ (forall (x:Z), x = x).
 Proof.
 auto.
@@ -100,14 +100,14 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 921-967 *)
-Lemma p9_po_1 : 
+(*Why goal*) Lemma p9_po_1 : 
   (forall (x:Z), (forall (y:Z), (x = y -> x = y))).
 Proof.
 trivial.
 Qed.
 
 (* Why obligation from file "good/all.mlw", characters 1164-1166 *)
-Lemma ar6_po_1 : 
+(*Why goal*) Lemma ar6_po_1 : 
   ~(1 = 0).
 Proof.
 omega.
@@ -118,7 +118,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 1178-1180 *)
-Lemma ar7_po_1 : 
+(*Why goal*) Lemma ar7_po_1 : 
   ~(1 = 0).
 Proof.
 omega.
@@ -128,7 +128,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2122-2155 *)
-Lemma arr1_po_1 : 
+(*Why goal*) Lemma arr1_po_1 : 
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 1),
   0 <= 0 /\ 0 < (array_length v6).
@@ -140,7 +140,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2169-2204 *)
-Lemma arr2_po_1 : 
+(*Why goal*) Lemma arr2_po_1 : 
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 4),
   0 <= (1 + 2) /\ (1 + 2) < (array_length v6).
@@ -152,7 +152,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2217-2263 *)
-Lemma arr3_po_1 : 
+(*Why goal*) Lemma arr3_po_1 : 
   forall (v4: Z),
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 1 /\ v4 = 0),
@@ -165,7 +165,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2276-2328 *)
-Lemma arr4_po_1 : 
+(*Why goal*) Lemma arr4_po_1 : 
   forall (v6: (array Z)),
   forall (Pre4: (array_length v6) >= 10 /\ (access v6 0) = 9),
   0 <= 0 /\ 0 < (array_length v6).
@@ -173,7 +173,7 @@ intros; omega.
 Qed.
 
 (* Why obligation from file "good/all.mlw", characters 2276-2328 *)
-Lemma arr4_po_2 : 
+(*Why goal*) Lemma arr4_po_2 : 
   forall (v6: (array Z)),
   forall (Pre4: (array_length v6) >= 10 /\ (access v6 0) = 9),
   forall (Pre3: 0 <= 0 /\ 0 < (array_length v6)),
@@ -186,7 +186,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2342-2380 *)
-Lemma arr5_po_1 : 
+(*Why goal*) Lemma arr5_po_1 : 
   forall (v6: (array Z)),
   forall (Pre2: (array_length v6) >= 1),
   forall (aux_2: Z),
@@ -199,7 +199,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2393-2435 *)
-Lemma arr6_po_1 : 
+(*Why goal*) Lemma arr6_po_1 : 
   forall (v6: (array Z)),
   forall (Pre2: (array_length v6) >= 4),
   forall (aux_2: Z),
@@ -213,7 +213,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2492-2496 *)
-Lemma arr7_po_1 : 
+(*Why goal*) Lemma arr7_po_1 : 
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 10 /\ (access v6 0) = 9),
   forall (aux_2: Z),
@@ -223,7 +223,7 @@ intros; omega.
 Qed.
 
 (* Why obligation from file "good/all.mlw", characters 2448-2505 *)
-Lemma arr7_po_2 : 
+(*Why goal*) Lemma arr7_po_2 : 
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 10 /\ (access v6 0) = 9),
   forall (aux_2: Z),
@@ -240,7 +240,7 @@ Qed.
 
 
 (* Why obligation from file "good/all.mlw", characters 2611-2618 *)
-Lemma fc3_po_1 : 
+(*Why goal*) Lemma fc3_po_1 : 
   forall (a: Z),
   forall (Post2: a = 0),
   forall (b: Z),
@@ -257,7 +257,7 @@ Lemma fc3_po_1 :
 
 
 (* Why obligation from file "good/all.mlw", characters 2762-2809 *)
-Lemma an2_po_1 : 
+(*Why goal*) Lemma an2_po_1 : 
   forall (v4: Z),
   forall (Pre1: v4 >= 0),
   forall (v4_0: Z),
