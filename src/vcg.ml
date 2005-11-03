@@ -33,20 +33,7 @@ type context_element =
 
 type sequent = context_element list * predicate
 
-type obligation = Loc.t * string * sequent
-
-type proof = 
-  | Lemma of string * Ident.t list
-  | True
-  | Reflexivity of term
-  | Assumption of Ident.t
-  | Proj1 of Ident.t
-  | Conjunction of Ident.t * Ident.t
-  | WfZwf of term
-  | Loop_variant_1 of Ident.t * Ident.t
-  | Absurd of Ident.t
-  | ProofTerm of proof cc_term
-  | ShouldBeAWp
+type obligation = Loc.position * string * sequent
 
 type validation = proof cc_term
 
@@ -58,6 +45,7 @@ let log_print_function =
   ref (fun fmt (_,p) -> fprintf fmt "@[%a@]@?" print_predicate p)
 
 let log l sq lemma_name =
+  let l = l.Lexing.pos_cnum in
   if wol then
     let s = 
       let buf = Buffer.create 1024 in
@@ -73,6 +61,7 @@ let log l sq lemma_name =
 (* ... |- true *)
 let ptrue = function
   | Ptrue -> True
+  | Pvar id when id == Ident.default_post -> True
   | _ -> raise Exit
 
 (* ... |- a=a *)
@@ -83,7 +72,8 @@ let reflexivity = function
 (* ..., h:P, ...|- P  and ..., h:P and Q, ...|- P *)
 let assumption concl = function
   | Spred (id, p) when p = concl -> Assumption id 
-  | Spred (id, Pand (_, a, b)) when a = concl -> Proj1 id
+  | Spred (id, Pand (_, a, _)) when a = concl -> Proj1 id
+  | Spred (id, Pand (_, _, b)) when b = concl -> Proj2 id
   | _ -> raise Exit
 
 (* alpha-equivalence ? *)
@@ -275,12 +265,17 @@ let rec qe_forall = function
   | p -> 
       [], p
 
+let add_ctx_vars =
+  List.fold_left 
+    (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
+
 (* introduction of universal quantifiers and implications;
    return the new goal (context-conclusion), together with a proof-term
    modifier to apply to the proof-term found for the new goal. *)
 let rec intros ctx = function
   | Forall (true, id, n, t, p) ->
-      let id' = next_away id (predicate_vars p) in
+      (*let id' = next_away id (predicate_vars p) in*)
+      let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
       let ctx', concl', f = intros (Svar (id', TTpure t) :: ctx) p' in
       ctx', concl',
@@ -309,6 +304,7 @@ let make_forall_proof id = function
       assert false
 
 let should_be_a_wp ctx =
+  if debug then raise Exit;
   first_hyp (fun id _ -> if not (is_wp id) then raise Exit) ctx; ShouldBeAWp
 
 (* Tautologies in linear minimal first-order logic.
@@ -487,7 +483,9 @@ let discharge_methods ctx concl =
   try rewrite_var ctx concl with Exit ->
   try discriminate ctx concl with Exit ->
   try boolean_destruct ctx concl with Exit ->
+(***
   try should_be_a_wp ctx with Exit ->
+***)
   try linear ctx concl with Exit ->
   boolean_case ctx concl
   end
@@ -548,7 +546,7 @@ let clean_sequent hyps concl =
 	clean hl
     | Spred (_, Ptrue) :: hl ->
 	clean hl
-    | Spred (id, _) :: hl when is_wp id ->
+    | Spred (id, _) :: hl when not debug && is_wp id ->
 	clean hl
     | h :: hl ->
 	h :: clean hl
@@ -596,11 +594,11 @@ let conj = match prover () with
   | Coq V7 -> Ident.create "conj ? ?"
   | _ -> Ident.create "conj"
 
-let rec split ctx = function
-  | Pand (true, p1, p2) ->
-      let o1,pr1 = split ctx p1 in
+let rec split lvl ctx = function
+  | Pand (true, p1, p2) when lvl < lvlmax ->
+      let o1,pr1 = split (succ lvl) ctx p1 in
       let n1 = List.length o1 in
-      let o2,pr2 = split ctx p2 in
+      let o2,pr2 = split (succ lvl) ctx p2 in
       o1 @ o2, 
       (fun pl -> 
 	 let l1,l2 = split_list n1 pl in 
@@ -609,7 +607,7 @@ let rec split ctx = function
   | Pimplies (true, _, _)
   | Forall (true, _, _, _, _) as concl ->
       let ctx',concl',pr_intros = intros ctx concl in
-      let ol,prl = split ctx' concl' in
+      let ol,prl = split lvl ctx' concl' in
       ol, (fun pl -> pr_intros (prl pl))
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
@@ -631,8 +629,8 @@ let vcg base t =
     Lemma (id, hyps_names ctx')
   in
   let push loc ctx concl =
-    if Options.split then
-      let ol,pr = split ctx concl in
+    if false(*Options.split*) then
+      let ol,pr = split 0 ctx concl in
       pr (List.map (fun (ctx,c) -> push_one loc ctx c) ol)
     else
       push_one loc ctx concl
@@ -705,4 +703,28 @@ let vcg base t =
   in
   let cc' = traverse [] t in
   List.rev !po, cc'
+
+(* Proof obligations from the WP *)
+
+let vcg_from_wp base w =
+  let loc = Loc.dummy_position in (* TODO *)
+  let po = ref [] in
+  let cpt = ref 0 in
+  let push_one (ctx, concl) = 
+    try
+      discharge loc ctx concl
+    with Exit -> begin
+      incr cpt;
+      let id = base ^ "_po_" ^ string_of_int !cpt in
+      let ctx' = clean_sequent (List.rev ctx) concl in
+      let sq = (ctx', concl) in
+      log (snd loc) sq (Some id);
+      po := (loc, id, sq) :: !po;
+      Lemma (id, hyps_names ctx')
+    end
+  in
+  let w = w.Ast.a_value in
+  let ol,pr = split 0 [] w in 
+  let prl = List.map push_one ol in
+  List.rev !po, pr prl
 

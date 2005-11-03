@@ -21,53 +21,10 @@ Definition min_suffix (w1 w2:array A) (i j n:Z) :=
 
 Definition test_char (a b:A) := bool_of_sumbool (A_eq_dec a b).
 
-(* Why obligation from file "distance.mlw", characters 1780-1796 *)
-Lemma distance_po_1 : 
-  forall (t: (array Z)),
-  forall (w1: (array A)),
-  forall (w2: (array A)),
-  forall (Pre28: (array_length w1) = n1 /\ (array_length w2) = n2 /\
-                 (array_length t) = (n2 + 1)),
-  forall (i0: Z),
-  forall (Post1: i0 = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Pre4: Variant1 = (n2 + 1 - i1)),
-  forall (Pre3: (0 <= i1 /\ i1 <= (n2 + 1)) /\ (array_length t0) =
-                (n2 + 1) /\
-                (forall (j:Z), (0 <= j /\ j < i1 -> (access t0 j) = (n2 - j)))),
-  forall (Test2: i1 <= n2),
-  0 <= i1 /\ i1 < (array_length t0).
 Proof.
 simpl; intuition.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 1780-1817 *)
-Lemma distance_po_2 : 
-  forall (t: (array Z)),
-  forall (w1: (array A)),
-  forall (w2: (array A)),
-  forall (Pre28: (array_length w1) = n1 /\ (array_length w2) = n2 /\
-                 (array_length t) = (n2 + 1)),
-  forall (i0: Z),
-  forall (Post1: i0 = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Pre4: Variant1 = (n2 + 1 - i1)),
-  forall (Pre3: (0 <= i1 /\ i1 <= (n2 + 1)) /\ (array_length t0) =
-                (n2 + 1) /\
-                (forall (j:Z), (0 <= j /\ j < i1 -> (access t0 j) = (n2 - j)))),
-  forall (Test2: i1 <= n2),
-  forall (Pre2: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 i1 (n2 - i1))),
-  forall (i2: Z),
-  forall (Post3: i2 = (i1 + 1)),
-  ((0 <= i2 /\ i2 <= (n2 + 1)) /\ (array_length t1) = (n2 + 1) /\
-  (forall (j:Z), (0 <= j /\ j < i2 -> (access t1 j) = (n2 - j)))) /\
-  (Zwf 0 (n2 + 1 - i2) (n2 + 1 - i1)).
 Proof.
 intuition.
 ArraySubst t1.
@@ -76,132 +33,11 @@ subst t1.
 apply H8; Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 1607-1828 *)
-Lemma distance_po_3 : 
-  forall (t: (array Z)),
-  forall (w1: (array A)),
-  forall (w2: (array A)),
-  forall (Pre28: (array_length w1) = n1 /\ (array_length w2) = n2 /\
-                 (array_length t) = (n2 + 1)),
-  forall (i0: Z),
-  forall (Post1: i0 = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Pre4: Variant1 = (n2 + 1 - i1)),
-  forall (Pre3: (0 <= i1 /\ i1 <= (n2 + 1)) /\ (array_length t0) =
-                (n2 + 1) /\
-                (forall (j:Z), (0 <= j /\ j < i1 -> (access t0 j) = (n2 - j)))),
-  forall (Test1: i1 > n2),
-  (forall (i:Z),
-   (i = (n1 - 1) -> (((Zopp 1) <= i /\ i <= (n1 - 1)) /\ (array_length t0) =
-    (n2 + 1) /\
-    (forall (j:Z),
-     (0 <= j /\ j <= n2 -> (min_suffix w1 w2 (i + 1) j (access t0 j))))) /\
-    (forall (i:Z),
-     (forall (t:(array Z)),
-      (((Zopp 1) <= i /\ i <= (n1 - 1)) /\ (array_length t) = (n2 + 1) /\
-       (forall (j:Z),
-        (0 <= j /\ j <= n2 -> (min_suffix w1 w2 (i + 1) j (access t j)))) ->
-       ((i >= 0 ->
-         (forall (old:Z),
-          (old = (access t n2) ->
-           ((forall (t0:(array Z)),
-             (t0 = (store t n2 ((access t n2) + 1)) ->
-              (forall (j:Z),
-               (j = (n2 - 1) -> (((Zopp 1) <= j /\ j <= (n2 - 1)) /\
-                (array_length t0) = (n2 + 1) /\
-                (forall (k:Z),
-                 (j < k /\ k <= n2 -> (min_suffix w1 w2 i k (access t0 k)))) /\
-                (forall (k:Z),
-                 (0 <= k /\ k <= j ->
-                  (min_suffix w1 w2 (i + 1) k (access t0 k)))) /\
-                (min_suffix w1 w2 (i + 1) (j + 1) old)) /\
-                (forall (j:Z),
-                 (forall (old:Z),
-                  (forall (t:(array Z)),
-                   (((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t) =
-                    (n2 + 1) /\
-                    (forall (k:Z),
-                     (j < k /\ k <= n2 -> (min_suffix w1 w2 i k (access t k)))) /\
-                    (forall (k:Z),
-                     (0 <= k /\ k <= j ->
-                      (min_suffix w1 w2 (i + 1) k (access t k)))) /\
-                    (min_suffix w1 w2 (i + 1) (j + 1) old) ->
-                    ((j >= 0 ->
-                      (forall (result:Z),
-                       (result = old ->
-                        (forall (old:Z),
-                         (old = (access t j) ->
-                          (((((access w1 i) = (access w2 j) ->
-                              (forall (t0:(array Z)),
-                               (t0 = (store t j result) ->
-                                (forall (j0:Z),
-                                 (j0 = (j - 1) -> (((Zopp 1) <= j0 /\ j0 <=
-                                  (n2 - 1)) /\ (array_length t0) =
-                                  (n2 + 1) /\
-                                  (forall (k:Z),
-                                   (j0 < k /\ k <= n2 ->
-                                    (min_suffix w1 w2 i k (access t0 k)))) /\
-                                  (forall (k:Z),
-                                   (0 <= k /\ k <= j0 ->
-                                    (min_suffix w1 w2 (i + 1) k (access t0 k)))) /\
-                                  (min_suffix w1 w2 (i + 1) (j0 + 1) old)) /\
-                                  (Zwf 0 (j0 + 1) (j + 1)))))) /\
-                              0 <= j /\ j < (array_length t))) /\
-                          ((~(access w1 i) = (access w2 j) ->
-                            (((forall (t0:(array Z)),
-                               (t0 = (store t j
-                                      ((Zmin (access t j) (access t (j + 1))) +
-                                      1)) ->
-                                (forall (j0:Z),
-                                 (j0 = (j - 1) -> (((Zopp 1) <= j0 /\ j0 <=
-                                  (n2 - 1)) /\ (array_length t0) =
-                                  (n2 + 1) /\
-                                  (forall (k:Z),
-                                   (j0 < k /\ k <= n2 ->
-                                    (min_suffix w1 w2 i k (access t0 k)))) /\
-                                  (forall (k:Z),
-                                   (0 <= k /\ k <= j0 ->
-                                    (min_suffix w1 w2 (i + 1) k (access t0 k)))) /\
-                                  (min_suffix w1 w2 (i + 1) (j0 + 1) old)) /\
-                                  (Zwf 0 (j0 + 1) (j + 1)))))) /\
-                            0 <= j /\ j < (array_length t)) /\ 0 <=
-                            (j + 1) /\ (j + 1) < (array_length t)) /\ 0 <=
-                            j /\ j < (array_length t)))) /\
-                          0 <= i /\ i < (array_length w1)) /\ 0 <= j /\ j <
-                          (array_length w2))) /\
-                        0 <= j /\ j < (array_length t))))) /\
-                    ((j < 0 ->
-                      (forall (i0:Z),
-                       (i0 = (i - 1) -> (((Zopp 1) <= i0 /\ i0 <=
-                        (n1 - 1)) /\ (array_length t) = (n2 + 1) /\
-                        (forall (j:Z),
-                         (0 <= j /\ j <= n2 ->
-                          (min_suffix w1 w2 (i0 + 1) j (access t j))))) /\
-                        (Zwf 0 (i0 + 1) (i + 1)))))))))))))) /\
-           0 <= n2 /\ n2 < (array_length t)) /\ 0 <= n2 /\ n2 <
-           (array_length t))) /\
-         0 <= n2 /\ n2 < (array_length t))) /\
-       ((i < 0 ->
-         (min_dist (word_of_array n1 w1) (word_of_array n2 w2) (access t 0)) /\
-         0 <= 0 /\ 0 < (array_length t)))))))).
 Proof.
 intuition.
 Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 1645-1744 *)
-Lemma distance_po_4 : 
-  forall (t: (array Z)),
-  forall (w1: (array A)),
-  forall (w2: (array A)),
-  forall (Pre28: (array_length w1) = n1 /\ (array_length w2) = n2 /\
-                 (array_length t) = (n2 + 1)),
-  forall (i0: Z),
-  forall (Post1: i0 = 0),
-  (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
-  (forall (j:Z), (0 <= j /\ j < i0 -> (access t j) = (n2 - j))).
 Proof.
 intuition.
 Omega'.

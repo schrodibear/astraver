@@ -28,7 +28,7 @@ parameter x,y,e : int ref
     gives lower and upper bound for [e] (see the Coq file). *)
 
 external logic best : int, int -> prop
-external logic invariant : int, int, int -> prop
+external logic Invariant : int, int, int -> prop
 
 let bresenham =
   begin
@@ -36,7 +36,7 @@ let bresenham =
     y := 0;
     e := 2 * y2 - x2;
     while !x <= x2 do
-      { invariant 0 <= x <= x2 + 1 and invariant(x, y, e)
+      { invariant 0 <= x <= x2 + 1 and Invariant(x, y, e)
         variant   x2 + 1 - x }
       (* here we would do (plot x y) *) 
       assert { best(x, y) };

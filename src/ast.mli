@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ast.mli,v 1.49 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.50 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -30,41 +30,48 @@ type variant = term * pure_type * variable
 
 type exn_pattern = Ptree.exn_pattern
 
-(* ['a] is the type of information associated to the nodes. *)
+type assertion = { 
+  a_name : Ident.t;
+  a_value : predicate;
+  a_loc : Loc.position;
+  mutable a_proof : Cc.proof option;
+}
+
+type precondition = assertion
+
+type postcondition = assertion * (Ident.t * assertion) list
+
+(* ['a] is the type of information associated to the nodes. 
+   It will be defined later in module [Env] *)
 
 type 'a t = 
   { desc : 'a t_desc;
     info : 'a }
 
 and 'a t_desc =
-  | Var of variable
-  | Acc of variable
-  | Aff of variable * 'a t
-  | TabAcc of bool * variable * 'a t
-  | TabAff of bool * variable * 'a t * 'a t
-  | Seq of 'a block
-  | While of 'a t * assertion option * variant * 'a t
+  | Expression of term (* pure terms including !x *)
+  | Var of variable (* only for impure functions *)
+  | Seq of 'a t * 'a t
+  | Loop of assertion option * variant * 'a t (* infinite loop *)
   | If of 'a t * 'a t * 'a t
-  | Lam of type_v binder list * 'a t
-  | App of 'a t * 'a arg * type_c
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
-  | Rec of variable * type_v binder list * type_v * variant * 'a t
+  | Absurd
+  (* assertion *)
+  | Label of label * 'a t
+  | Assertion of assertion list * 'a t
+  | Post of 'a t * postcondition * transp
+  (* exceptions *)
   | Raise of variable * 'a t option
   | Try of 'a t * (exn_pattern * 'a t) list 
-  | Expression of term
-  | Absurd
+  (* functions and applications *)
+  | Lam of type_v binder list * precondition list * 'a t
+  | Rec of variable * type_v binder list * type_v * variant * 
+      precondition list * 'a t
+  | AppRef of 'a t * variable * 'a
+  | AppTerm of 'a t * term * 'a
+  (* undeterministic expression *)
   | Any of type_c
-
-and 'a arg =
-  | Term of 'a t
-  | Refarg of variable
-  | Type of type_v
-
-and 'a block_st =
-  | Label of label
-  | Assert of assertion
-  | Statement of 'a t
-
-and 'a block = 'a block_st list
+  (* proof term *)
+  | Proof of type_c * (Cc.proof_term list -> Cc.proof_term)
 

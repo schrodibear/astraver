@@ -6,7 +6,7 @@ parameter N : int
 parameter i : int ref
 parameter t : int array
 
-let p = 
+let p () = 
   { array_length(t) = N }
   try begin
     i := 0;

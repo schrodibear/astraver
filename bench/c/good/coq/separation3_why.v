@@ -3,158 +3,301 @@
 
 Require Export separation3_spec_why.
 
-(* Why obligation from file "why/separation3.why", characters 535-612 *)
-Lemma f2_impl_po_1 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
-  forall (c: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
   forall (l: pointer),
-  forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
+  forall (p: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre13: (valid1 b) /\ (valid_range alloc l 0 0) /\
-                 (valid_range alloc s0 0 0) /\
-                 (~((base_addr l) = (base_addr s0)) /\
-                 (~((base_addr s0) = (base_addr (acc q l))) /\
-                 ~((base_addr s0) = (base_addr (acc r l)))) /\
-                 ~((base_addr l) = (base_addr (acc b s0))) /\
-                 ~((base_addr l) = (base_addr (acc c s0)))) /\
-                 (valid1_range b 5)),
-  (valid alloc s0).
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (p0: ((memory) pointer)),
+  forall (HW_5: p0 = (upd p l s0)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc p0 l)),
+  forall (result2: pointer),
+  forall (HW_7: result2 = (acc b result1)),
+  forall (result3: pointer),
+  forall (HW_8: result3 = (shift result2 2)),
+  forall (result4: Z),
+  forall (HW_9: result4 = (acc intP0 result3)),
+  (* File \"separation3.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  result4 = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 620-647 *)
-Lemma f2_impl_po_2 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
-  forall (c: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
   forall (l: pointer),
-  forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
+  forall (p: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre13: (valid1 b) /\ (valid_range alloc l 0 0) /\
-                 (valid_range alloc s0 0 0) /\
-                 (~((base_addr l) = (base_addr s0)) /\
-                 (~((base_addr s0) = (base_addr (acc q l))) /\
-                 ~((base_addr s0) = (base_addr (acc r l)))) /\
-                 ~((base_addr l) = (base_addr (acc b s0))) /\
-                 ~((base_addr l) = (base_addr (acc c s0)))) /\
-                 (valid1_range b 5)),
-  forall (Pre4: (valid alloc s0)),
-  forall (caduceus_4: pointer),
-  forall (Post3: caduceus_4 = (shift (acc b s0) 2)),
-  (valid alloc caduceus_4).
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (p0: ((memory) pointer)),
+  forall (HW_5: p0 = (upd p l s0)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc p0 l)),
+  forall (result2: pointer),
+  forall (HW_7: result2 = (acc b result1)),
+  forall (result3: pointer),
+  forall (HW_8: result3 = (shift result2 2)),
+  (valid alloc result3).
 Proof.
 intuition; subst.
 unfold valid1_range in H8.
 generalize (H4 s0 alloc Pre4); intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 518-647 *)
-Lemma f2_impl_po_3 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
-  forall (c: ((memory) pointer)),
   forall (intP: ((memory) Z)),
   forall (l: pointer),
   forall (p: ((memory) pointer)),
-  forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre13: (valid1 b) /\ (valid_range alloc l 0 0) /\
-                 (valid_range alloc s0 0 0) /\
-                 (~((base_addr l) = (base_addr s0)) /\
-                 (~((base_addr s0) = (base_addr (acc q l))) /\
-                 ~((base_addr s0) = (base_addr (acc r l)))) /\
-                 ~((base_addr l) = (base_addr (acc b s0))) /\
-                 ~((base_addr l) = (base_addr (acc c s0)))) /\
-                 (valid1_range b 5)),
-  forall (Pre4: (valid alloc s0)),
-  forall (caduceus_4: pointer),
-  forall (Post3: caduceus_4 = (shift (acc b s0) 2)),
-  forall (Pre3: (valid alloc caduceus_4)),
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
   forall (intP0: ((memory) Z)),
-  forall (Post8: intP0 = (upd intP caduceus_4 1)),
-  (forall (result:pointer),
-   (result = l ->
-    (forall (p0:((memory) pointer)),
-     (p0 = (upd p result s0) ->
-      (((((forall (result:Z),
-           (result = (acc intP0 (shift (acc b (acc p0 l)) 2)) ->
-            (* File \"separation3.c\", line 17, characters 13-25 *) result =
-            1)) /\
-      (valid alloc l)) /\ (valid alloc (acc p0 l))) /\
-      (valid alloc (acc p0 l))) /\
-      (valid alloc (shift (acc b (acc p0 l)) 2))) /\
-      (valid alloc (shift (acc b (acc p0 l)) 2)))) /\
-    (valid alloc result))).
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (p0: ((memory) pointer)),
+  forall (HW_5: p0 = (upd p l s0)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc p0 l)),
+  (valid alloc result1).
 Proof.
 intuition; subst; try caduceus.
 valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 1153-1230 *)
-Lemma f3_impl_po_1 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
+  forall (l: pointer),
+  forall (p: ((memory) pointer)),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (p0: ((memory) pointer)),
+  forall (HW_5: p0 = (upd p l s0)),
+  (valid alloc l).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
+  forall (l: pointer),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  (valid alloc l).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (l: pointer),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  (valid alloc result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_7 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (l: pointer),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 b) /\ (valid_range alloc l 0 0) /\
+                (valid_range alloc s0 0 0) /\
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))) /\
+                (valid1_range b 5)),
+  (valid alloc s0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
   forall (s0: pointer),
-  forall (Pre12: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
-                 (separation1 b c) /\ (valid1_range c 5) /\
-                 (valid1_range b 5)),
-  (valid alloc s0).
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (result1: pointer),
+  forall (HW_5: result1 = (acc c s0)),
+  forall (result2: pointer),
+  forall (HW_6: result2 = (shift result1 2)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_7: intP1 = (upd intP0 result2 2)),
+  forall (result3: pointer),
+  forall (HW_8: result3 = (acc b s0)),
+  forall (result4: pointer),
+  forall (HW_9: result4 = (shift result3 2)),
+  forall (result5: Z),
+  forall (HW_10: result5 = (acc intP1 result4)),
+  (* File \"separation3.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  result5 = 1.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 1238-1265 *)
-Lemma f3_impl_po_2 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
   forall (s0: pointer),
-  forall (Pre12: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
-                 (separation1 b c) /\ (valid1_range c 5) /\
-                 (valid1_range b 5)),
-  forall (Pre4: (valid alloc s0)),
-  forall (caduceus_5: pointer),
-  forall (Post3: caduceus_5 = (shift (acc b s0) 2)),
-  (valid alloc caduceus_5).
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (result1: pointer),
+  forall (HW_5: result1 = (acc c s0)),
+  forall (result2: pointer),
+  forall (HW_6: result2 = (shift result1 2)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_7: intP1 = (upd intP0 result2 2)),
+  forall (result3: pointer),
+  forall (HW_8: result3 = (acc b s0)),
+  forall (result4: pointer),
+  forall (HW_9: result4 = (shift result3 2)),
+  (valid alloc result4).
 Proof.
 intuition; subst.
 generalize (H5 s0 alloc Pre4);
  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 1136-1265 *)
-Lemma f3_impl_po_3 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
   forall (intP: ((memory) Z)),
   forall (s0: pointer),
-  forall (Pre12: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
-                 (separation1 b c) /\ (valid1_range c 5) /\
-                 (valid1_range b 5)),
-  forall (Pre4: (valid alloc s0)),
-  forall (caduceus_5: pointer),
-  forall (Post3: caduceus_5 = (shift (acc b s0) 2)),
-  forall (Pre3: (valid alloc caduceus_5)),
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
   forall (intP0: ((memory) Z)),
-  forall (Post8: intP0 = (upd intP caduceus_5 1)),
-  (forall (result:pointer),
-   (result = (shift (acc c s0) 2) ->
-    (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 2) ->
-      (((forall (result:Z),
-         (result = (acc intP (shift (acc b s0) 2)) ->
-          (* File \"separation3.c\", line 25, characters 13-25 *) result = 1)) /\
-      (valid alloc s0)) /\ (valid alloc (shift (acc b s0) 2))) /\
-      (valid alloc (shift (acc b s0) 2)))) /\
-    (valid alloc result))) /\
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (result1: pointer),
+  forall (HW_5: result1 = (acc c s0)),
+  forall (result2: pointer),
+  forall (HW_6: result2 = (shift result1 2)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_7: intP1 = (upd intP0 result2 2)),
   (valid alloc s0).
 Proof.
 intuition; subst; caduceus; auto.
@@ -167,61 +310,133 @@ intuition.
 generalize (H3 s0 alloc Pre4);  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 2118-2142 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  forall (result1: pointer),
+  forall (HW_5: result1 = (acc c s0)),
+  forall (result2: pointer),
+  forall (HW_6: result2 = (shift result1 2)),
+  (valid alloc result2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (c: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  (valid alloc s0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (c: ((memory) pointer)),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  (valid alloc result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_7 : 
+  forall (alloc: alloc_table),
+  forall (b: ((memory) pointer)),
+  forall (c: ((memory) pointer)),
+  forall (s0: pointer),
+  forall (HW_1: (valid1 c) /\ (valid1 b) /\ (valid_range alloc s0 0 0) /\
+                (separation1 c b) /\ (valid1_range c 5) /\ (valid1_range b 5)),
+  (valid alloc s0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
+  forall (a: ((memory) Z)),
+  forall (alloc: alloc_table),
   forall (l: pointer),
   forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre9: (separation2 q q) /\ (valid_range alloc l 0 0) /\
+  forall (HW_1: (separation2 q q) /\ (valid_range alloc l 0 0) /\
                 (valid1 q) /\ (valid_range alloc s0 0 0) /\
                 ~((base_addr l) = (base_addr s0)) /\
                 (~((base_addr s0) = (base_addr (acc q l))) /\
                 ~((base_addr s0) = (base_addr (acc r l)))) /\
                 ~((base_addr l) = (base_addr (acc b s0))) /\
                 ~((base_addr l) = (base_addr (acc c s0)))),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = s0),
-  (valid alloc caduceus_2).
+  forall (a0: ((memory) Z)),
+  forall (HW_2: a0 = (upd a s0 1)),
+  forall (result: pointer),
+  forall (HW_3: result = (acc q l)),
+  forall (a1: ((memory) Z)),
+  forall (HW_4: a1 = (upd a0 result 2)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (acc a1 s0)),
+  (* File \"separation3.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  result0 = 1.
 Proof.
 intuition; subst; valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 2094-2142 *)
-Lemma f_impl_po_2 : 
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (a: ((memory) Z)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (c: ((memory) pointer)),
   forall (l: pointer),
   forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre9: (separation2 q q) /\ (valid_range alloc l 0 0) /\
+  forall (HW_1: (separation2 q q) /\ (valid_range alloc l 0 0) /\
                 (valid1 q) /\ (valid_range alloc s0 0 0) /\
                 ~((base_addr l) = (base_addr s0)) /\
                 (~((base_addr s0) = (base_addr (acc q l))) /\
                 ~((base_addr s0) = (base_addr (acc r l)))) /\
                 ~((base_addr l) = (base_addr (acc b s0))) /\
                 ~((base_addr l) = (base_addr (acc c s0)))),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = s0),
-  forall (Pre3: (valid alloc caduceus_2)),
   forall (a0: ((memory) Z)),
-  forall (Post8: a0 = (upd a caduceus_2 1)),
-  (forall (result:pointer),
-   (result = (acc q l) ->
-    (forall (a:((memory) Z)),
-     (a = (upd a0 result 2) ->
-      (forall (result:Z),
-       (result = (acc a s0) ->
-        (* File \"separation3.c\", line 9, characters 13-25 *) result = 1)) /\
-      (valid alloc s0))) /\
-    (valid alloc result))) /\
-  (valid alloc l).
+  forall (HW_2: a0 = (upd a s0 1)),
+  forall (result: pointer),
+  forall (HW_3: result = (acc q l)),
+  forall (a1: ((memory) Z)),
+  forall (HW_4: a1 = (upd a0 result 2)),
+  (valid alloc s0).
 Proof.
 intuition; subst; caduceus.
 rewrite acc_upd_neq; caduceus.
@@ -232,5 +447,70 @@ auto.
 red in H0.
 apply H0.
 apply valid_range_valid with 0 0;auto with *.
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_3 : 
+  forall (a: ((memory) Z)),
+  forall (alloc: alloc_table),
+  forall (l: pointer),
+  forall (q: ((memory) pointer)),
+  forall (s0: pointer),
+  forall (HW_1: (separation2 q q) /\ (valid_range alloc l 0 0) /\
+                (valid1 q) /\ (valid_range alloc s0 0 0) /\
+                ~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))),
+  forall (a0: ((memory) Z)),
+  forall (HW_2: a0 = (upd a s0 1)),
+  forall (result: pointer),
+  forall (HW_3: result = (acc q l)),
+  (valid alloc result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_4 : 
+  forall (a: ((memory) Z)),
+  forall (alloc: alloc_table),
+  forall (l: pointer),
+  forall (q: ((memory) pointer)),
+  forall (s0: pointer),
+  forall (HW_1: (separation2 q q) /\ (valid_range alloc l 0 0) /\
+                (valid1 q) /\ (valid_range alloc s0 0 0) /\
+                ~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))),
+  forall (a0: ((memory) Z)),
+  forall (HW_2: a0 = (upd a s0 1)),
+  (valid alloc l).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (l: pointer),
+  forall (q: ((memory) pointer)),
+  forall (s0: pointer),
+  forall (HW_1: (separation2 q q) /\ (valid_range alloc l 0 0) /\
+                (valid1 q) /\ (valid_range alloc s0 0 0) /\
+                ~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q l))) /\
+                ~((base_addr s0) = (base_addr (acc r l)))) /\
+                ~((base_addr l) = (base_addr (acc b s0))) /\
+                ~((base_addr l) = (base_addr (acc c s0)))),
+  (valid alloc s0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

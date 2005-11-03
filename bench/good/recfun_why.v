@@ -3,268 +3,177 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/recfun.mlw", characters 124-133 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_po_1 : 
   forall (x: Z),
-  forall (Pre8: x >= 0),
-  forall (Variant1: Z),
-  forall (x0: Z),
-  forall (Pre7: Variant1 = x0),
-  forall (Pre6: x0 >= 0),
-  forall (Test2: x0 > 0),
-  (x0 - 1) >= 0.
-Proof.
-intros; omega.
-Qed.
-
-
-(* Why obligation from file "good/recfun.mlw", characters 98-156 *)
-(*Why goal*) Lemma f1_po_2 : 
-  forall (x: Z),
-  forall (Pre8: x >= 0),
-  forall (Variant1: Z),
-  forall (x0: Z),
-  forall (Pre7: Variant1 = x0),
-  forall (Pre6: x0 >= 0),
-  forall (Test2: x0 > 0),
-  forall (Pre5: (x0 - 1) >= 0),
-  forall (result0: Z),
-  forall (Post2: result0 = (x0 - 1)),
-  forall (Pre4: (x0 - 1) >= 0),
-  (Zwf 0 result0 Variant1).
-Proof.
-intros; unfold Zwf; omega.
-Save.
-
-(* Why obligation from file "good/recfun.mlw", characters 140-140 *)
-(*Why goal*) Lemma f1_po_3 : 
-  forall (x: Z),
-  forall (Pre8: x >= 0),
-  forall (Variant1: Z),
-  forall (x0: Z),
-  forall (Pre7: Variant1 = x0),
-  forall (Pre6: x0 >= 0),
-  forall (Test1: x0 <= 0),
-  forall (result0: Z),
-  forall (Post1: result0 = x0),
-  result0 = 0.
+  forall (HW_1: x >= 0),
+  forall (HW_2: x > 0),
+  (Zwf 0 (x - 1) x).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 313-321 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_po_2 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_2: x > 0),
+  (x - 1) >= 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_po_3 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_4: x <= 0),
+  x = 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_po_1 : 
   forall (x: Z),
-  forall (Pre8: x >= 0),
-  forall (Variant1: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_2: x > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = x0),
-  forall (Pre6: x0 >= 0),
-  forall (Test2: x0 > 0),
-  forall (x1: Z),
-  forall (Post2: x1 = (x0 - 1)),
-  x1 >= 0.
+  forall (HW_3: x0 = (x - 1)),
+  (Zwf 0 x0 x).
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 267-336 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_po_2 : 
   forall (x: Z),
-  forall (Pre8: x >= 0),
-  forall (Variant1: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_2: x > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = x0),
-  forall (Pre6: x0 >= 0),
-  forall (Test2: x0 > 0),
-  forall (x1: Z),
-  forall (Post2: x1 = (x0 - 1)),
-  forall (Pre5: x1 >= 0),
-  forall (result1: unit),
-  forall (Post3: result1 = tt),
-  forall (Pre4: x1 >= 0),
-  (Zwf 0 x1 Variant1).
+  forall (HW_3: x0 = (x - 1)),
+  x0 >= 0.
 Proof.
-intros; unfold Zwf; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 323-323 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_po_3 : 
   forall (x: Z),
-  forall (Pre8: x >= 0),
-  forall (Variant1: Z),
-  forall (x0: Z),
-  forall (Pre7: Variant1 = x0),
-  forall (Pre6: x0 >= 0),
-  forall (Test1: x0 <= 0),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  x0 = 0.
+  forall (HW_1: x >= 0),
+  forall (HW_5: x <= 0),
+  x = 0.
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-
-
-
-
-(* Why obligation from file "good/recfun.mlw", characters 472-481 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_1 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test2: a0 > 0),
+  forall (HW_3: x0 = (x + 1)),
   forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
-  (a0 - 1) >= 0.
+  forall (HW_4: x1 = (x0 + (a - 1))),
+  x1 = (x + a).
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 427-501 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_2 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test2: a0 > 0),
-  forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
-  forall (Pre5: (a0 - 1) >= 0),
-  forall (result1: Z),
-  forall (Post3: result1 = (a0 - 1)),
-  forall (Pre4: (a0 - 1) >= 0),
-  (Zwf 0 result1 Variant1).
+  forall (HW_3: x0 = (x + 1)),
+  (Zwf 0 (a - 1) a).
 Proof.
-intros; unfold Zwf; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 453-483 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_3 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test2: a0 > 0),
-  forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
-  forall (Pre5: (a0 - 1) >= 0),
-  forall (x2: Z),
-  forall (Post7: x2 = (x1 + (a0 - 1))),
-  x2 = (x0 + a0).
+  forall (HW_3: x0 = (x + 1)),
+  (a - 1) >= 0.
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 483-483 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_po_4 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
-  forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test1: a0 <= 0),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  x0 = (x0 + a0).
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_5: a <= 0),
+  x = (x + a).
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-
-
-
-
-(* Why obligation from file "good/recfun.mlw", characters 666-671 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_1 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test2: a0 > 0),
+  forall (HW_3: x0 = (x + 1)),
+  forall (a0: Z),
+  forall (HW_4: a0 = (a - 1)),
   forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
-  forall (a1: Z),
-  forall (Post3: a1 = (a0 - 1)),
-  a1 >= 0.
+  forall (HW_5: x1 = (x0 + a0)),
+  x1 = (x + a).
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 604-694 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_2 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test2: a0 > 0),
-  forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
-  forall (a1: Z),
-  forall (Post3: a1 = (a0 - 1)),
-  forall (Pre4: a1 >= 0),
-  (Zwf 0 a1 Variant1).
+  forall (HW_3: x0 = (x + 1)),
+  forall (a0: Z),
+  forall (HW_4: a0 = (a - 1)),
+  (Zwf 0 a0 a).
 Proof.
-intros; unfold Zwf; omega.
-Qed.
+intuition.
+Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 634-673 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_3 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_2: a > 0),
   forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test2: a0 > 0),
-  forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
-  forall (a1: Z),
-  forall (Post3: a1 = (a0 - 1)),
-  forall (Pre5: a1 >= 0),
-  forall (x2: Z),
-  forall (Post7: x2 = (x1 + a1)),
-  x2 = (x0 + a0).
+  forall (HW_3: x0 = (x + 1)),
+  forall (a0: Z),
+  forall (HW_4: a0 = (a - 1)),
+  a0 >= 0.
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
-
-
-
-(* Why obligation from file "good/recfun.mlw", characters 673-673 *)
+(* Why obligation from file "good/recfun.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_po_4 : 
   forall (a: Z),
-  forall (Pre8: a >= 0),
-  forall (Variant1: Z),
-  forall (a0: Z),
-  forall (x0: Z),
-  forall (Pre7: Variant1 = a0),
-  forall (Pre6: a0 >= 0),
-  forall (Test1: a0 <= 0),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  x0 = (x0 + a0).
+  forall (x: Z),
+  forall (HW_1: a >= 0),
+  forall (HW_6: a <= 0),
+  x = (x + a).
 Proof.
-intros; omega.
+intuition.
 Save.
 

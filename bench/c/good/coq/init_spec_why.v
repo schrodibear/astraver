@@ -3,8 +3,8 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_S_int  (alloc:alloc_table)
-  (t:pointer) (b:((memory) pointer)) (s:pointer)
+(*Why predicate*) Definition separation_S_int  (s:pointer)
+  (b:((memory) pointer)) (t:pointer) (alloc:alloc_table)
   := ~((base_addr s) = (base_addr t)) /\
      ~((base_addr t) = (base_addr (acc b s))).
 

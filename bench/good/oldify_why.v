@@ -5,7 +5,22 @@ Require Import Why.
 Admitted.
 
 
+
 (*Why logic*) Definition q : (array Z) -> (array Z) -> Z -> Prop.
 Admitted.
 
+
+
+(* Why obligation from file "good/oldify.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_po_1 : 
+  forall (t: (array Z)),
+  forall (result: Z),
+  forall (HW_1: result = (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_2: (q t0 t result)),
+  (q t0 t (array_length t)).
+Proof.
+intuition.
+subst; intuition.
+Save.
 

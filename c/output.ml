@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.26 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.27 2005-11-03 14:11:32 filliatr Exp $ i*)
 
 open Format;;
 
@@ -199,7 +199,7 @@ let rec fprintf_assertion form a =
   | LPred(id,l) -> 
       assert false
   | LNamed (n, a) ->
-      fprintf form "@[(:%s:@ %a)@]" n fprintf_assertion a
+      fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a
 ;;
 
 (*s types *)
@@ -352,8 +352,8 @@ type expr =
   | Fun of (string * why_type) list * 
       assertion * expr * assertion * ((string * assertion) option)
   | Triple of assertion * expr * assertion * ((string * assertion) option)
-  | Assert of assertion  (*r only in blocks *)
-  | Label of string
+  | Assert of assertion * expr
+  | Label of string * expr
   | BlackBox of why_type
 ;;
 
@@ -390,12 +390,14 @@ let make_while cond inv var e =
   in While(cond,inv,var,body)
 ;;
 
-let make_label label e =
+let make_label label e = Label (label, e)
+(*
   let body = 
     match e with
       | Block(l) -> l
       | _ -> [e]
   in Block(Label label::body)
+*)
 ;;
 
 let make_pre pre e =  Triple(pre,e,LTrue,None)
@@ -444,8 +446,8 @@ let rec iter_expr f e =
 	iter_expr f e;
 	iter_assertion f post;
 	option_iter (fun (_,a) -> iter_assertion f a) exceps
-    | Assert(e) -> iter_assertion f e
-    | Label s -> ()
+    | Assert(p, e) -> iter_assertion f p; iter_expr f e
+    | Label (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
 
 
@@ -469,7 +471,8 @@ let rec fprintf_expr form e =
     | Void -> fprintf form "void"
     | Deref(id) -> fprintf form "!%s" id
     | If(e1,e2,e3) ->
-	fprintf form "@[<hv 0>if %a@ @[<hv 1>then@ %a@]@ @[<hv 1>else@ %a@]@]" 
+	fprintf form 
+	  "@[<hv 0>(if %a@ @[<hv 1>then@ %a@]@ @[<hv 1>else@ %a@])@]" 
 	  fprintf_expr e1 fprintf_expr e2 fprintf_expr e3
     | While(e1,inv,var,e2) ->
 	fprintf form 
@@ -486,17 +489,17 @@ let rec fprintf_expr form e =
 	fprintf form "@[<hv 1>%s := %a@]" 
 	  id fprintf_expr e
     | Let(id,e1,e2) ->
-	fprintf form "@[<hv 0>let %s = %a in@ %a@]" id
+	fprintf form "@[<hv 0>(let %s = %a in@ %a)@]" id
 	  fprintf_expr e1 fprintf_expr e2
     | Let_ref(id,e1,e2) ->
-	fprintf form "@[<hv 0>let %s = ref %a in@ %a@]" id
+	fprintf form "@[<hv 0>(let %s = ref %a in@ %a)@]" id
 	  fprintf_expr e1 fprintf_expr e2
     | App(e1,e2) ->
 	fprintf form "@[<hv 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
     | Raise(id,None) ->
-	fprintf form "@[<hv 1>raise@ %s@]" id
+	fprintf form "@[<hv 1>(raise@ %s)@]" id
     | Raise(id,Some e) ->
-	fprintf form "@[<hv 1>raise@ (%s@ %a)@]" id fprintf_expr e
+	fprintf form "@[<hv 1>(raise@ (%s@ %a))@]" id fprintf_expr e
     | Try(e1,exc,None,e2) ->
 	fprintf form "@[<hv 1>try@ %a@ with@ %s ->@ %a end@]" 
 	  fprintf_expr e1 exc fprintf_expr e2
@@ -525,30 +528,31 @@ let rec fprintf_expr form e =
 	end		    
 
     | Triple(pre,e,LTrue,None) ->
-	fprintf form "@[<hv 0>{ %a }@ (%a)@ { }@]" 
+	fprintf form "@[<hv 0>(assert { %a };@ (%a))@]" 
 	  fprintf_assertion pre
 	  fprintf_expr e
     | Triple(pre,e,post,exceps) ->
-	fprintf form "@[<hv 0>{ %a }@ (%a)@ " 
+	fprintf form "@[<hv 0>(assert { %a };@ (%a)@ " 
 	  fprintf_assertion pre
 	  fprintf_expr e;
 	begin
 	  match exceps with
 	    | None -> 
-		fprintf form "{ %a }@]" 
+		fprintf form "{ %a }" 
 		  fprintf_assertion post
 	    | Some(e,r) ->
 		fprintf form 
-		  "@[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]@]" 
+		  "@[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]" 
 		  fprintf_assertion post
 		  e 
 		  fprintf_assertion r
-	end
-    | Assert(e) ->
-	fprintf form "@[<hv 0>assert@ { %a }@]" 
-	  fprintf_assertion e
-    | Label s ->
-	fprintf form "@[<hv 0>label@ %s@]" s
+	end;
+	fprintf form ")@]"
+    | Assert(p, e) ->
+	fprintf form "@[<hv 0>(assert@ { %a };@ %a)@]" 
+	  fprintf_assertion p fprintf_expr e
+    | Label (s, e) ->
+	fprintf form "@[<hv 0>%s:@ %a@]" s fprintf_expr e
     | BlackBox(t) ->
 	fprintf form "@[<hv 0>[ %a ]@]" 
 	  (fprintf_type false) t

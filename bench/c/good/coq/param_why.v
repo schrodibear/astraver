@@ -3,17 +3,14 @@
 
 Require Export param_spec_why.
 
-(* Why obligation from file "why/param.why", characters 77-147 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "why/param.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
   forall (mutable_x: Z),
-  forall (Post3: mutable_x = x),
-  forall (mutable_x1: Z),
-  forall (Post1: mutable_x1 = (mutable_x + y)),
-  forall (result0: Z),
-  forall (Post2: result0 = mutable_x1),
-  (* File \"param.c\", line 1, characters 13-27 *) result0 = (x + y).
+  forall (HW_1: mutable_x = (x + y)),
+  (* File \"param.c819618234.c1069824147.i\", line 0, characters 9-23 *)
+  mutable_x = (x + y).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

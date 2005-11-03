@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.149 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.150 2005-11-03 14:11:32 filliatr Exp $ i*)
 
 
 open Format
@@ -328,24 +328,24 @@ let interp_bin_op = function
   | Badd_int -> "add_int"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
-  | Bdiv_int -> "div_int"
-  | Bmod_int -> "mod_int"
-  | Blt_int -> "lt_int"
-  | Bgt_int -> "gt_int"
-  | Ble_int -> "le_int"
-  | Bge_int -> "ge_int"
-  | Beq_int -> "eq_int"
-  | Bneq_int -> "neq_int" 
+  | Bdiv_int -> "div_int_"
+  | Bmod_int -> "mod_int_"
+  | Blt_int -> "lt_int_"
+  | Bgt_int -> "gt_int_"
+  | Ble_int -> "le_int_"
+  | Bge_int -> "ge_int_"
+  | Beq_int -> "eq_int_"
+  | Bneq_int -> "neq_int_" 
   | Badd_float -> "add_real"
   | Bsub_float -> "sub_real"
   | Bmul_float -> "mul_real"
-  | Bdiv_float -> "div_real"
-  | Blt_float -> "lt_real"
-  | Bgt_float -> "gt_real"
-  | Ble_float -> "le_real"
-  | Bge_float -> "ge_real"
-  | Beq_float -> "eq_real"
-  | Bneq_float -> "neq_real" 
+  | Bdiv_float -> "div_real_"
+  | Blt_float -> "lt_real_"
+  | Bgt_float -> "gt_real_"
+  | Ble_float -> "le_real_"
+  | Bge_float -> "ge_real_"
+  | Beq_float -> "eq_real_"
+  | Bneq_float -> "neq_real_" 
   | Blt_pointer -> "lt_pointer_"
   | Bgt_pointer -> "gt_pointer_"
   | Ble_pointer -> "le_pointer_"
@@ -578,8 +578,8 @@ and interp_boolean_expr e =
     (* otherwise e <> 0 *)
     | _ -> 
 	let cmp,zero = match e.nexpr_type.Ctypes.ctype_node with
-	  | Tenum _ | Tint _ -> "neq_int", Cte (Prim_int Int64.zero)
-	  | Tfloat _ -> "neq_real", Cte (Prim_float "0.0")
+	  | Tenum _ | Tint _ -> "neq_int_", Cte (Prim_int Int64.zero)
+	  | Tfloat _ -> "neq_real_", Cte (Prim_float "0.0")
 	  | Tarray _ | Tpointer _ -> "neq_pointer", Var "null"
 	  | _ -> assert false
 	in
@@ -1055,7 +1055,8 @@ let make_switch_condition tmp l =
     let a = 
       IntMap.fold 
 	(fun x n test -> 
-	   make_or_expr (App(App (Var "eq_int",Var tmp), (interp_expr n))) test) 
+	   make_or_expr 
+	     (App(App (Var "eq_int_",Var tmp), (interp_expr n))) test) 
 	l
 	(Cte (Prim_bool false))
     in
@@ -1069,10 +1070,11 @@ let make_switch_condition_default tmp l used_cases=
   let cond =
     IntMap.fold 
       (fun x e test -> 
-	 make_and_expr (App(App (Var "neq_int",Var tmp),(interp_expr e))) test)
+	 make_and_expr 
+	   (App(App (Var "neq_int_",Var tmp),(interp_expr e))) test)
       fl
       (Cte (Prim_bool true))
-      (*App(App (Var "neq_int",Var tmp), (interp_expr e))*)
+      (*App(App (Var "neq_int_",Var tmp), (interp_expr e))*)
   in
   cond,fl
 
@@ -1121,9 +1123,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	     (Ceffect.statement body).Ceffect.assigns)
       in
       let (inv,dec) = interp_invariant label ef annot in
-      append
-	(Output.Label label)
-	(append
+      Output.Label 
+	(label,
+	 append
 	   (interp_statement_expr e1)
 	   (break body.nst_break 
 	      (make_while (interp_boolean_expr e2) inv dec 
@@ -1138,8 +1140,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	  (Ceffect.statement s).Ceffect.assigns 
       in
       let (inv,dec) = interp_invariant label ef annot in
-      append (Output.Label label)
-	 (break s.nst_break
+      Output.Label 
+	(label,
+	 break s.nst_break
 	    (make_while (interp_boolean_expr e) inv dec 
 	       (continue s.nst_continue 
 		  (interp_statement true (ref false) s))))
@@ -1150,8 +1153,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	  (Ceffect.statement s).Ceffect.assigns 
       in
       let (inv,dec) = interp_invariant label ef annot in
-      append (Output.Label label)
-	(break true
+      Output.Label 
+	(label,
+	 break true
 	   (make_while (Cte (Prim_bool true)) inv dec
 	      (append 
 		 (continue s.nst_continue
@@ -1166,7 +1170,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NScontinue -> 
       Raise ("Continue", None)
   | NSlabel(lab,s) -> 
-      append (Output.Label lab) (interp_statement ab may_break s)
+      Output.Label (lab, interp_statement ab may_break s)
   | NSswitch(e,used_cases,l) ->
       let tmp = tmp_var() in
       let switch_may_break = ref false in
@@ -1188,9 +1192,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       unsupported "goto"
 *)
   | NSassert(pred) -> 
-      Output.Assert(interp_predicate None "init" pred)
+      Output.Assert(interp_predicate None "init" pred, Void)
   | NSlogic_label(l) -> 
-      Output.Label l
+      Output.Label (l, Void)
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
       let pre,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns 

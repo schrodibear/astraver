@@ -7,308 +7,40 @@ Require Import Omega.
 Require Import ZArithRing.
 
 
-(* Why obligation from file "partition.mlw", characters 1340-1344 *)
-Lemma swap_po_1 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (Pre4: 0 <= i /\ i < (array_length t)),
-  forall (v: Z),
-  forall (Post3: v = (access t i)),
-  forall (Pre2: 0 <= i /\ i < (array_length t)),
-  0 <= j /\ j < (array_length t).
  Proof.
  tauto.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1353-1362 *)
-Lemma swap_po_2 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (Pre4: 0 <= i /\ i < (array_length t)),
-  forall (v: Z),
-  forall (Post3: v = (access t i)),
-  forall (Pre2: 0 <= i /\ i < (array_length t)),
-  forall (Pre3: 0 <= j /\ j < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t i (access t j))),
-  0 <= j /\ j < (array_length t0).
 Proof.
 intuition.
 intros; ArraySubst t0.
 Qed.
 
 
-(* Why obligation from file "partition.mlw", characters 1319-1371 *)
-Lemma swap_po_3 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (Pre4: 0 <= i /\ i < (array_length t)),
-  forall (v: Z),
-  forall (Post3: v = (access t i)),
-  forall (Pre2: 0 <= i /\ i < (array_length t)),
-  forall (Pre3: 0 <= j /\ j < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t i (access t j))),
-  forall (Pre1: 0 <= j /\ j < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 j v)),
-  (exchange t1 t i j).
 Proof.
 intros; subst t1 t0 v.
 auto with datatypes.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1588-1592 *)
-Lemma partition_po_1 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  0 <= l /\ l < (array_length t).
 Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1959-1964 *)
-Lemma partition_po_2 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test8: i1 < j1),
-  forall (Variant3: Z),
-  forall (i2: Z),
-  forall (Pre8: Variant3 = (r - i2)),
-  forall (Invi: (i1 <= i2 /\ i2 <= r) /\ (array_le t0 (l + 1) (i2 - 1) pv)),
-  0 <= i2 /\ i2 < (array_length t0).
 Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1974-1981 *)
-Lemma partition_po_3 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test8: i1 < j1),
-  forall (Variant3: Z),
-  forall (i2: Z),
-  forall (Pre8: Variant3 = (r - i2)),
-  forall (Invi: (i1 <= i2 /\ i2 <= r) /\ (array_le t0 (l + 1) (i2 - 1) pv)),
-  forall (Pre7: 0 <= i2 /\ i2 < (array_length t0)),
-  forall (Test3: (access t0 i2) <= pv),
-  forall (result1: bool),
-  forall (Post25: (if result1 then i2 < j1 else i2 >= j1)),
-  (if result1
-   then (forall (i:Z),
-         (i = (i2 + 1) -> ((i1 <= i /\ i <= r) /\
-          (array_le t0 (l + 1) (i - 1) pv)) /\ (Zwf 0 (r - i) (r - i2))))
-   else ((l <= j1 /\ j1 <= j1) /\ (array_ge t0 (j1 + 1) r pv)) /\
-   (forall (j:Z),
-    ((l <= j /\ j <= j1) /\ (array_ge t0 (j + 1) r pv) ->
-     ((((access t0 j) >= pv ->
-        ((i2 < j ->
-          (forall (j0:Z),
-           (j0 = (j - 1) -> ((l <= j0 /\ j0 <= j1) /\
-            (array_ge t0 (j0 + 1) r pv)) /\ (Zwf 0 j0 j))))) /\
-        ((i2 >= j ->
-          ((i2 < j ->
-            (forall (t1:(array Z)),
-             ((exchange t1 t0 i2 j) ->
-              (forall (i:Z),
-               (i = (i2 + 1) ->
-                (forall (j0:Z),
-                 (j0 = (j - 1) -> (((l + 1) <= i /\ i <= r) /\ j0 <= r /\
-                  (array_le t1 (l + 1) (i - 1) pv) /\
-                  (array_ge t1 (j0 + 1) r pv) /\ (sub_permut l r t1 t) /\
-                  (access t1 l) = (access t l)) /\
-                  (Zwf 0 ((array_length t1) + 2 + j0 - i) ((array_length t0) +
-                                                          2 + j1 - i1)))))))) /\
-            (0 <= i2 /\ i2 < (array_length t0)) /\ 0 <= j /\ j <
-            (array_length t0))) /\
-          ((i2 >= j -> (((l + 1) <= i2 /\ i2 <= r) /\ j <= r /\
-            (array_le t0 (l + 1) (i2 - 1) pv) /\
-            (array_ge t0 (j + 1) r pv) /\ (sub_permut l r t0 t) /\
-            (access t0 l) = (access t l)) /\
-            (Zwf 0 ((array_length t0) + 2 + j - i2) ((array_length t0) + 2 +
-                                                    j1 - i1)))))))) /\
-     (((access t0 j) < pv ->
-       ((i2 < j ->
-         (forall (t1:(array Z)),
-          ((exchange t1 t0 i2 j) ->
-           (forall (i:Z),
-            (i = (i2 + 1) ->
-             (forall (j0:Z),
-              (j0 = (j - 1) -> (((l + 1) <= i /\ i <= r) /\ j0 <= r /\
-               (array_le t1 (l + 1) (i - 1) pv) /\
-               (array_ge t1 (j0 + 1) r pv) /\ (sub_permut l r t1 t) /\
-               (access t1 l) = (access t l)) /\
-               (Zwf 0 ((array_length t1) + 2 + j0 - i) ((array_length t0) +
-                                                       2 + j1 - i1)))))))) /\
-         (0 <= i2 /\ i2 < (array_length t0)) /\ 0 <= j /\ j <
-         (array_length t0))) /\
-       ((i2 >= j -> (((l + 1) <= i2 /\ i2 <= r) /\ j <= r /\
-         (array_le t0 (l + 1) (i2 - 1) pv) /\ (array_ge t0 (j + 1) r pv) /\
-         (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
-         (Zwf 0 ((array_length t0) + 2 + j - i2) ((array_length t0) + 2 +
-                                                 j1 - i1))))))) /\
-     0 <= j /\ j < (array_length t0)))).
 Proof.
 intuition.
 destruct result1; intuition.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1981-1981 *)
-Lemma partition_po_4 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test8: i1 < j1),
-  forall (Variant3: Z),
-  forall (i2: Z),
-  forall (Pre8: Variant3 = (r - i2)),
-  forall (Invi: (i1 <= i2 /\ i2 <= r) /\ (array_le t0 (l + 1) (i2 - 1) pv)),
-  forall (Pre7: 0 <= i2 /\ i2 < (array_length t0)),
-  forall (Test2: (access t0 i2) > pv),
-  (l <= j1 /\ j1 <= j1) /\ (array_ge t0 (j1 + 1) r pv).
 Proof.
 intuition.
 induction result1; auto.
  discriminate Post2.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1981-1981 *)
-Lemma partition_po_5 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test8: i1 < j1),
-  forall (Variant3: Z),
-  forall (i2: Z),
-  forall (Pre8: Variant3 = (r - i2)),
-  forall (Invi: (i1 <= i2 /\ i2 <= r) /\ (array_le t0 (l + 1) (i2 - 1) pv)),
-  forall (Pre7: 0 <= i2 /\ i2 < (array_length t0)),
-  forall (Test2: (access t0 i2) > pv),
-  forall (j: Z),
-  forall (HW_2: (l <= j /\ j <= j1) /\ (array_ge t0 (j + 1) r pv)),
-  (((access t0 j) >= pv ->
-    ((i2 < j ->
-      (forall (j0:Z),
-       (j0 = (j - 1) -> ((l <= j0 /\ j0 <= j1) /\
-        (array_ge t0 (j0 + 1) r pv)) /\ (Zwf 0 j0 j))))) /\
-    ((i2 >= j ->
-      ((i2 < j ->
-        (forall (t1:(array Z)),
-         ((exchange t1 t0 i2 j) ->
-          (forall (i:Z),
-           (i = (i2 + 1) ->
-            (forall (j0:Z),
-             (j0 = (j - 1) -> (((l + 1) <= i /\ i <= r) /\ j0 <= r /\
-              (array_le t1 (l + 1) (i - 1) pv) /\
-              (array_ge t1 (j0 + 1) r pv) /\ (sub_permut l r t1 t) /\
-              (access t1 l) = (access t l)) /\
-              (Zwf 0 ((array_length t1) + 2 + j0 - i) ((array_length t0) +
-                                                      2 + j1 - i1)))))))) /\
-        (0 <= i2 /\ i2 < (array_length t0)) /\ 0 <= j /\ j <
-        (array_length t0))) /\
-      ((i2 >= j -> (((l + 1) <= i2 /\ i2 <= r) /\ j <= r /\
-        (array_le t0 (l + 1) (i2 - 1) pv) /\ (array_ge t0 (j + 1) r pv) /\
-        (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
-        (Zwf 0 ((array_length t0) + 2 + j - i2) ((array_length t0) + 2 + j1 -
-                                                i1)))))))) /\
-  (((access t0 j) < pv ->
-    ((i2 < j ->
-      (forall (t1:(array Z)),
-       ((exchange t1 t0 i2 j) ->
-        (forall (i:Z),
-         (i = (i2 + 1) ->
-          (forall (j0:Z),
-           (j0 = (j - 1) -> (((l + 1) <= i /\ i <= r) /\ j0 <= r /\
-            (array_le t1 (l + 1) (i - 1) pv) /\
-            (array_ge t1 (j0 + 1) r pv) /\ (sub_permut l r t1 t) /\
-            (access t1 l) = (access t l)) /\
-            (Zwf 0 ((array_length t1) + 2 + j0 - i) ((array_length t0) + 2 +
-                                                    j1 - i1)))))))) /\
-      (0 <= i2 /\ i2 < (array_length t0)) /\ 0 <= j /\ j < (array_length t0))) /\
-    ((i2 >= j -> (((l + 1) <= i2 /\ i2 <= r) /\ j <= r /\
-      (array_le t0 (l + 1) (i2 - 1) pv) /\ (array_ge t0 (j + 1) r pv) /\
-      (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
-      (Zwf 0 ((array_length t0) + 2 + j - i2) ((array_length t0) + 2 + j1 -
-                                              i1)))))).
 Proof.
 intuition try discriminate.
 omega.
@@ -322,154 +54,26 @@ omega.
 unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1981-1981 *)
-Lemma partition_po_6 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test8: i1 < j1),
-  forall (Variant3: Z),
-  forall (i2: Z),
-  forall (Pre8: Variant3 = (r - i2)),
-  forall (Invi: (i1 <= i2 /\ i2 <= r) /\ (array_le t0 (l + 1) (i2 - 1) pv)),
-  forall (Pre7: 0 <= i2 /\ i2 < (array_length t0)),
-  forall (Test2: (access t0 i2) > pv),
-  forall (j: Z),
-  forall (HW_2: (l <= j /\ j <= j1) /\ (array_ge t0 (j + 1) r pv)),
-  0 <= j /\ j < (array_length t0).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2006-2057 *)
-Lemma partition_po_7 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test8: i1 < j1),
-  (i1 <= i1 /\ i1 <= r) /\ (array_le t0 (l + 1) (i1 - 1) pv).
 Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1676-2344 *)
-Lemma partition_po_8 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test1: i1 >= j1),
-  (((access t0 i1) < pv ->
-    (forall (t1:(array Z)),
-     ((exchange t1 t0 l i1) -> (l <= i1 /\ i1 <= r) /\
-      (partition_p t1 l r i1) /\ (sub_permut l r t1 t))) /\
-    (0 <= l /\ l < (array_length t0)) /\ 0 <= i1 /\ i1 < (array_length t0))) /\
-  (((access t0 i1) >= pv ->
-    (forall (t1:(array Z)),
-     ((exchange t1 t0 l (i1 - 1)) -> (l <= (i1 - 1) /\ (i1 - 1) <= r) /\
-      (partition_p t1 l r (i1 - 1)) /\ (sub_permut l r t1 t))) /\
-    (0 <= l /\ l < (array_length t0)) /\ 0 <= (i1 - 1) /\ (i1 - 1) <
-    (array_length t0))).
  Proof.
  intuition.
 induction result2; auto.
 induction result2; auto.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1676-2344 *)
-Lemma partition_po_9 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (t0: (array Z)),
-  forall (Pre19: Variant1 = ((array_length t0) + 2 + j1 - i1)),
-  forall (Inv: ((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
-               (array_le t0 (l + 1) (i1 - 1) pv) /\
-               (array_ge t0 (j1 + 1) r pv) /\ (sub_permut l r t0 t) /\
-               (access t0 l) = (access t l)),
-  forall (Test1: i1 >= j1),
-  0 <= i1 /\ i1 < (array_length t0).
 Proof.
 intuition.
 induction result2; auto || discriminate Post5.
 induction result2; auto || discriminate Post5.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1712-1892 *)
-Lemma partition_po_10 : 
-  forall (l: Z),
-  forall (r: Z),
-  forall (t: (array Z)),
-  forall (Pre32: (0 <= l /\ l < r) /\ r < (array_length t)),
-  forall (Pre31: 0 <= l /\ l < (array_length t)),
-  forall (pv: Z),
-  forall (Post11: pv = (access t l)),
-  forall (i: Z),
-  forall (Post10: i = (l + 1)),
-  forall (j: Z),
-  forall (Post9: j = r),
-  ((l + 1) <= i /\ i <= r) /\ j <= r /\ (array_le t (l + 1) (i - 1) pv) /\
-  (array_ge t (j + 1) r pv) /\ (sub_permut l r t t) /\ (access t l) =
-  (access t l).
 Proof.
 intuition.
 apply array_ge_cons.

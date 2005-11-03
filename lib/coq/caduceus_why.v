@@ -4,12 +4,6 @@
 Require Export Why.
 Require Export WhyFloat.
 
-Parameter addr : Set.
-Parameter pointer : Set. (* = addr * Z *)
-Parameter alloc_table : Set.
-Parameter memory : Set -> Set.
-Parameter assign_loc : Set.
-
 (*Why logic*) Definition bw_compl : Z -> Z.
 Admitted.
 
@@ -32,6 +26,30 @@ Admitted.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter pointer: Set.
+
+(*Why type*) Parameter addr: Set.
+
+(*Why type*) Parameter alloc_table: Set.
 
 (*Why*) Parameter null : pointer.
 
@@ -61,6 +79,7 @@ Admitted.
 
 (*Why predicate*) Definition ge_pointer  (p1:pointer) (p2:pointer)
   := (base_addr p1) = (base_addr p2) /\ (offset p1) >= (offset p2).
+
 
 
 
@@ -190,38 +209,90 @@ Admitted.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter memory: Set ->Set.
+
 (*Why logic*) Definition acc :
-  forall (A43:Set), ((memory) A43) -> pointer -> A43.
+  forall (A82:Set), ((memory) A82) -> pointer -> A82.
 Admitted.
 Implicit Arguments acc.
 
 
 (*Why logic*) Definition upd :
-  forall (A44:Set), ((memory) A44) -> pointer -> A44 -> ((memory) A44).
+  forall (A83:Set), ((memory) A83) -> pointer -> A83 -> ((memory) A83).
 Admitted.
 Implicit Arguments upd.
 
 
 (*Why axiom*) Lemma acc_upd :
-  forall (A45:Set),
-  (forall (m:((memory) A45)),
-   (forall (p:pointer), (forall (a:A45), (acc (upd m p a) p) = a))).
+  forall (A84:Set),
+  (forall (m:((memory) A84)),
+   (forall (p:pointer), (forall (a:A84), (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A46:Set),
-  (forall (m:((memory) A46)),
+  forall (A85:Set),
+  (forall (m:((memory) A85)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A46), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+     (forall (a:A85), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  forall (A47:Set),
-  (forall (m:((memory) A47)),
+  forall (A86:Set),
+  (forall (m:((memory) A86)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A47), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A86), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -251,6 +322,8 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition pset_acc_all : pset -> ((memory) pointer) -> pset.
+
+
 Admitted.
 
 (*Why logic*) Definition pset_acc_range :
@@ -271,8 +344,8 @@ Admitted.
 (*Why logic*) Definition not_in_pset : pointer -> pset -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A48:Set) (a:alloc_table)
-  (m1:((memory) A48)) (m2:((memory) A48)) (l:pset)
+(*Why predicate*) Definition not_assigns (A87:Set) (a:alloc_table)
+  (m1:((memory) A87)) (m2:((memory) A87)) (l:pset)
   := (forall (p:pointer),
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments not_assigns.
@@ -495,20 +568,20 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_trans :
-  forall (A49:Set),
+  forall (A88:Set),
   (forall (a:alloc_table),
    (forall (l:pset),
-    (forall (m1:((memory) A49)),
-     (forall (m2:((memory) A49)),
-      (forall (m3:((memory) A49)),
+    (forall (m1:((memory) A88)),
+     (forall (m2:((memory) A88)),
+      (forall (m3:((memory) A88)),
        ((not_assigns a m1 m2 l) ->
         ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_refl :
-  forall (A50:Set),
+  forall (A89:Set),
   (forall (a:alloc_table),
-   (forall (l:pset), (forall (m:((memory) A50)), (not_assigns a m m l)))).
+   (forall (l:pset), (forall (m:((memory) A89)), (not_assigns a m m l)))).
 Admitted.
 
 (*Why predicate*) Definition valid1  (m1:((memory) pointer))

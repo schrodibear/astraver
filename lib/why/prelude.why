@@ -1,0 +1,214 @@
+
+(* Predefined types: unit bool int real and 'a ref *)
+
+parameter any_bool : unit -> {} bool { true }
+parameter any_int : unit -> {} int { true }
+parameter any_real : unit -> {} real { true }
+
+
+(* Integers *)
+
+logic add_int : int,int -> int
+logic sub_int : int,int -> int
+logic mul_int : int,int -> int
+logic div_int : int,int -> int
+logic mod_int : int,int -> int
+logic neg_int : int -> int
+
+parameter div_int_ : x:int -> y:int -> { y<>0 } int { result = x / y }
+parameter mod_int_ : x:int -> y:int -> { y<>0 } int { result = x % y }
+
+logic lt_int : int,int -> prop
+logic le_int : int,int -> prop
+logic gt_int : int,int -> prop
+logic ge_int : int,int -> prop
+logic eq_int : int,int -> prop
+logic neq_int : int,int -> prop
+
+parameter lt_int_ : x:int -> y:int -> {} bool { if result then x<y else x>=y }
+parameter le_int_ : x:int -> y:int -> {} bool { if result then x<=y else x>y }
+parameter gt_int_ : x:int -> y:int -> {} bool { if result then x>y else x<=y }
+parameter ge_int_ : x:int -> y:int -> {} bool { if result then x>=y else x<y }
+parameter eq_int_ : x:int -> y:int -> {} bool { if result then x=y else x<>y }
+parameter neq_int_ : x:int -> y:int -> {} bool { if result then x<>y else x=y }
+
+logic lt_int_bool : int,int -> bool
+logic le_int_bool : int,int -> bool
+logic gt_int_bool : int,int -> bool
+logic ge_int_bool : int,int -> bool
+logic eq_int_bool : int,int -> bool
+logic neq_int_bool : int,int -> bool
+
+axiom lt_int_bool_axiom : 
+  forall x:int. forall y:int. lt_int_bool(x,y)=true <-> x<y
+axiom le_int_bool_axiom : 
+  forall x:int. forall y:int. le_int_bool(x,y)=true <-> x<=y
+axiom gt_int_bool_axiom : 
+  forall x:int. forall y:int. gt_int_bool(x,y)=true <-> x>y
+axiom ge_int_bool_axiom : 
+  forall x:int. forall y:int. ge_int_bool(x,y)=true <-> x>=y
+axiom eq_int_bool_axiom : 
+  forall x:int. forall y:int. eq_int_bool(x,y)=true <-> x=y
+axiom neq_int_bool_axiom : 
+  forall x:int. forall y:int. neq_int_bool(x,y)=true <-> x<>y
+
+(* Reals *)
+
+logic add_real : real,real -> real
+logic sub_real : real,real -> real
+logic mul_real : real,real -> real
+logic div_real : real,real -> real
+logic neg_real : real -> real
+
+parameter div_real_ : x:real -> y:real -> { y<>0.0 } real { result = x / y }
+
+logic sqrt_real : real -> real
+parameter sqrt_real_ : x:real -> { x >= 0.0 } real { result = sqrt_real(x) }
+
+logic real_of_int : int -> real
+logic int_of_real : real -> int
+
+logic lt_real : real,real -> prop
+logic le_real : real,real -> prop
+logic gt_real : real,real -> prop
+logic ge_real : real,real -> prop
+logic eq_real : real,real -> prop
+logic neq_real : real,real -> prop
+
+parameter lt_real_ : x:real -> y:real -> {} bool {if result then x<y else x>=y}
+parameter le_real_ : x:real -> y:real -> {} bool {if result then x<=y else x>y}
+parameter gt_real_ : x:real -> y:real -> {} bool {if result then x>y else x<=y}
+parameter ge_real_ : x:real -> y:real -> {} bool {if result then x>=y else x<y}
+parameter eq_real_ : x:real -> y:real -> {} bool {if result then x=y else x<>y}
+parameter neq_real_: x:real -> y:real -> {} bool {if result then x<>y else x=y}
+
+
+(* Booleans / Unit *)
+
+logic eq_bool : bool,bool -> prop
+logic neq_bool : bool,bool -> prop
+
+parameter eq_bool_ : x:bool -> y:bool -> {} bool {if result then x=y else x<>y}
+parameter neq_bool_: x:bool -> y:bool -> {} bool {if result then x<>y else x=y}
+
+logic eq_unit : unit,unit -> prop
+logic neq_unit : unit,unit -> prop
+
+parameter eq_unit_ : x:unit -> y:unit -> {} bool {if result then x=y else x<>y}
+parameter neq_unit_: x:unit -> y:unit -> {} bool {if result then x<>y else x=y}
+
+(* References *)
+
+parameter ref_set : x:'a ref -> v:'a -> {} unit writes x { x = v }
+
+
+(* Arrays *)
+
+type 'a farray
+
+(* type 'a array is a shortcut for 'a farray ref *)
+
+logic array_length : 'a farray -> int
+
+parameter array_length_ : 
+  t:'a array -> {} int reads t { result=array_length(t) }
+
+logic access : 'a farray, int -> 'a
+logic update : 'a farray, int, 'a -> 'a farray
+
+parameter array_get :
+  t:'a array -> i:int -> 
+    { 0 <= i < array_length(t) } 'a reads t { result = access(t,i) }
+
+parameter array_set : 
+  t:'a array -> i:int -> v:'a -> 
+    { 0 <= i < array_length(t) } unit writes t { t = update(t@,i,v) }
+
+(* Sorted arrays *)
+
+logic sorted_array : int farray, int, int -> prop
+
+axiom sorted_array_def :
+  forall t:int farray. forall i:int. forall j:int.
+    sorted_array(t,i,j) <->
+    forall k:int. i <= k < j -> t[k] <= t[k+1]
+
+logic array_le : int farray, int, int, int -> prop
+logic array_ge : int farray, int, int, int -> prop
+
+(* Arrays permutations *)
+
+logic exchange : int farray, int farray, int, int -> prop
+
+axiom exchange_def :
+  forall t1:int farray. forall t2:int farray. forall i:int. forall j:int.
+    exchange(t1,t2,i,j) <-> 
+    (array_length(t1) = array_length(t2) and
+    t1[i] = t2[j] and t2[i] = t1[j] and
+    forall k:int. (k <> i and k <> j) -> t1[k] = t2[k])
+
+logic permut : int farray, int farray -> prop
+
+axiom permut_refl :
+  forall t:int farray. permut(t,t)
+ 
+axiom permut_sym :
+  forall t1:int farray. forall t2:int farray.
+    permut(t1,t2) -> permut(t2,t1)
+ 
+axiom permut_trans :
+  forall t1:int farray. forall t2:int farray. forall t3:int farray.
+    (permut(t1,t2) and permut(t2,t3)) -> permut(t1,t3)
+  
+axiom permut_exchange :
+  forall t:int farray. forall i:int. forall j:int.
+    permut(t, update(update(t,i,t[j]),j,t[i]))
+
+logic sub_permut : int, int, int farray, int farray -> prop
+
+axiom sub_permut_refl :
+  forall t:int farray. forall g:int. forall d:int.
+    sub_permut(g,d,t,t)
+
+axiom sub_permut_sym :
+  forall t1:int farray. forall t2:int farray. forall g:int. forall d:int.
+    sub_permut(g,d,t1,t2) -> sub_permut(g,d,t2,t1)
+
+axiom sub_permut_trans :
+  forall t1:int farray. forall t2:int farray. forall t3:int farray.
+  forall g:int. forall d:int.
+    sub_permut(g,d,t1,t2) -> sub_permut(g,d,t2,t3) ->
+    sub_permut(g,d,t1,t3)
+
+axiom sub_permut_exchange_1 :
+  forall t:int farray.
+  forall g:int. forall d:int. forall i:int. forall j:int.
+    (g <= i and i <= d and g <= j and j <= d) ->
+    sub_permut(g,d,t,update(update(t,i,t[j]),j,t[i]))
+
+axiom sub_permut_exchange_2 :
+  forall t1:int farray. forall t2:int farray.
+  forall g:int. forall d:int. forall i:int. forall j:int.
+    (g <= i and i <= d and g <= j and j <= d and
+    exchange(t1,t2,i,j)) -> sub_permut(g,d,t1,t2)
+
+axiom sub_permut_permut :
+  forall t1:int farray. forall t2:int farray. forall g:int. forall d:int. 
+    sub_permut(g,d,t1,t2) -> permut(t1,t2)
+
+(* Axioms about array_length *)
+
+(* an update does not modify array_length *)
+
+axiom array_length_update :
+  forall t:int farray. forall i:int. forall v:int.
+    array_length(update(t,i,v)) = array_length(t)
+
+axiom sub_permut_array_length :
+  forall t1:int farray. forall t2:int farray. forall g:int. forall d:int. 
+    sub_permut(g,d,t1,t2) -> array_length(t1) = array_length(t2)
+
+axiom permut_array_length :
+  forall t1:int farray. forall t2:int farray.
+    permut(t1,t2) -> array_length(t1) = array_length(t2)
+

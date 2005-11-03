@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.68 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.69 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -27,6 +27,7 @@ open Ast
 open Cc
 open Rename
 open Env
+open Typing
 
 (*s [product ren [y1,z1;...;yk,zk] q] constructs the (possibly dependent) 
     tuple type
@@ -53,7 +54,7 @@ let arrow_pred ren env v pl =
   List.fold_right
     (fun p t -> 
        let p = apply_assert ren env p in
-       TTarrow ((id_of_name p.a_name, CC_pred_binder p.a_value), t))
+       TTarrow ((Ident.anonymous, CC_pred_binder p), t))
     pl v
 	
 let arrow_vars = 
@@ -77,7 +78,7 @@ let trad_exn_type =
     into CC types. *)
 
 let rec trad_type_c ren env k = 
-  let ((_,v),e,p,q) = decomp_kappa k in
+  let ((_,v),e,p,q) = decomp_type_c k in
   let i,o,x = get_repr e in
   let before = label_name () in
   let ren' = next (push_date ren before) o in
@@ -89,24 +90,21 @@ let rec trad_type_c ren env k =
   arrow_vars li ty
 
 and trad_type_v ren env = function
-  | Ref _ 
-  | Array _ -> 
+  | Ref _ -> 
       assert false
   | Arrow (bl, c) ->  
       let bl',ren',env' =
 	List.fold_left
 	  (fun (bl,ren,env) b -> match b with
-	     | (id, BindType ((Ref _ | Array _) as v)) ->
+	     | (id, (Ref _ as v)) ->
 		 let env' = Env.add id v env in
 		 let ren' = initial_renaming env' in
 		 (bl, ren', env')
-	     | (id, BindType v) -> 
+	     | (id, v) -> 
 		 let tt = trad_type_v ren env v in
 		 let env' = Env.add id v env in
 		 let ren' = initial_renaming env' in
-		 (id,tt)::bl, ren', env'
-	     | _ -> 
-		 failwith "Monad: trad_type_v: not yet implemented")
+		 (id,tt)::bl, ren', env')
  	  ([],ren,env) bl 
       in
       arrow_vars (List.rev bl') (trad_type_c ren' env' c)
@@ -124,8 +122,7 @@ and prod ren env g =
   List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
 
 and trad_imp_type ren env = function
-  | Ref v -> trad_type_v ren env v
-  | Array v -> TTarray (trad_type_v ren env v)
+  | Ref v -> TTpure v
   | _ -> assert false
 
 and trad_type_in_env ren env id =
@@ -137,7 +134,7 @@ and trad_type_in_env ren env id =
 and make_post ren env res k q =
   let q = post_app (subst_in_predicate (subst_onev result res)) q in
   let abs_pred v c =
-    lambda_vars [res, trad_type_v ren env v] (TTpred c.a_value)
+    lambda_vars [res, trad_type_v ren env v] (TTpred c)
   in
   List.fold_right 
     (fun x c -> 
@@ -154,11 +151,13 @@ and make_applied_post ren env k = function
   | None -> 
       None
   | Some (a, []) ->
-      Some (TTpred a.a_value)
+      Some (TTpred a)
   | Some q ->
       let tt = make_post ren env result k q in
       Some (TTapp (tt, [tt_var result]))
 
+let a_make_post ren env r k q =
+  make_post ren env r (type_c_of_typing_info [] k) (post_app a_value q)
 
 (* translation of type scheme *)
 
@@ -197,7 +196,7 @@ let rec make_exn ty x v = function
     type [interp] (functions producing a [cc_term] when given a renaming
     data structure). *)
 
-type interp = Rename.t -> (Loc.t * predicate) cc_term
+type interp = Rename.t -> (Loc.position * predicate) cc_term
 
 type result = 
   | Value of term
@@ -221,13 +220,12 @@ let result_term ef v = function
   | Exn (x, t) -> make_exn v x t (Effect.get_exns ef)
 
 let unit info r ren = 
-  let env = info.env in
-  let k = info.kappa in
+  let env = info.t_env in
   let r = apply_result ren env r in
-  let v = trad_type_v ren env k.c_result_type in
-  let ef = k.c_effect in
+  let v = trad_type_v ren env info.t_result_type in
+  let ef = info.t_effect in
   let t = result_term ef v r in
-  let q = k.c_post in
+  let q = info.t_post in
   let ids = get_writes ef in
   if ids = [] && q = None then
     t
@@ -238,7 +236,7 @@ let unit info r ren =
       | Some q -> 
 	  (* proof obligation *)
 	  let h = 
-	    let q = apply_post info.label ren env q in
+	    let q = a_apply_post info.t_label ren env q in
 	    let a = match r with 
 	      | Value _ -> post_val q 
 	      | Exn (x,_) -> post_exn x q 
@@ -255,8 +253,8 @@ let unit info r ren =
 	    let _,o,xs = get_repr ef in
 	    let ren' = Rename.next ren (result :: o) in
 	    let result' = current_var ren' result in
-	    let q = apply_post info.label ren' env q in
-	    let c = make_post ren' env result' k q in
+	    let q = a_apply_post info.t_label ren' env q in
+	    let c = a_make_post ren' env result' info q in
 	    let bl = 
 	      List.map (fun id -> (current_var ren' id, 
 				   trad_type_in_env ren env id)) o
@@ -303,8 +301,8 @@ let binding_of_alist ren env =
     (fun (id,id') -> (id', CC_var_binder (trad_type_in_env ren env id)))
 
 let make_pre env ren p = 
-  let p = apply_assert ren env p in
-  pre_name p.a_name, (p.a_loc, p.a_value)
+  let p = a_apply_assert ren env p in
+  p.a_name, (p.a_loc, p.a_value)
 
 let let_pre (id, h) cc = 
   CC_letin (false, [id, CC_pred_binder (snd h)], CC_hole h, cc)
@@ -322,10 +320,9 @@ let decomp x b v =
 *)
 
 let gen_compose isapp handler info1 e1 info2 e2 ren =
-  let env = info1.env in
-  let k1 = info1.kappa in
-  let (res1,v1),ef1,p1,q1 = decomp_kappa k1 in
-  let ren = push_date ren info1.label in
+  let env = info1.t_env in
+  let (res1,v1),ef1,q1 = decomp_kappa info1 in
+  let ren = push_date ren info1.t_label in
   let r1,w1,x1 = get_repr ef1 in
   let ren' = next ren w1 in
   let res1,ren' = fresh ren' res1 in
@@ -337,21 +334,19 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
 	[], false
     | Some q1 -> 
 	if x1 = [] then
-	  let (q,_) = apply_post info1.label ren' env q1 in
+	  let (q,_) = a_apply_post info1.t_label ren' env q1 in
 	  let hyp = subst_in_predicate (subst_onev result res1) q.a_value in
-	  [post_name q.a_name, CC_pred_binder hyp], true 
+	  [q.a_name, CC_pred_binder hyp], true 
 	else
-	  let tt = TTapp (make_post ren' env res1 k1 q1, [tt_var res1]) in
-	  [post_name Anonymous , CC_var_binder tt], true 
+	  let tt = TTapp (a_make_post ren' env res1 info1 q1, [tt_var res1]) in
+	  [post_name (), CC_var_binder tt], true 
   in
   let vo = current_vars ren' w1 in
   let bl = (binding_of_alist ren env vo) @ b @ b' in
-  let pre1 = List.map (make_pre env ren) p1 in
   let cc1 = 
     if isapp then 
       let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r1) in
-      let inputpre = List.map (fun (id,_) -> CC_var id) pre1 in
-      cc_applist (e1 ren) (input @ inputpre)
+      cc_applist (e1 ren) input
     else
       e1 ren
   in
@@ -362,10 +357,10 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
       e2 res1 ren'
     else
       (* e1 may raise an exception *)
-      let q1 = option_app (apply_post info1.label ren' env) q1 in
-      let q1 = optpost_app (subst_in_predicate (subst_onev result res1)) q1 in
+      let q1 = option_app (a_apply_post info1.t_label ren' env) q1 in
+      let q1 = optpost_app (subst_in_assertion (subst_onev result res1)) q1 in
       let pat_post a = 
-	PPvariable (post_name a.a_name, CC_pred_binder a.a_value) 
+	PPvariable (a.a_name, CC_pred_binder a.a_value) 
       in
       let exn_branch x =
 	let px = 
@@ -387,9 +382,7 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
 	       (val_pattern dep pres1 x1, e2 res1 ren') ::
 	       (List.map exn_branch x1))
   in
-  let cc = CC_letin (dep, bl, cc1, cc2) in
-  let ob1 = List.map (make_pre env ren) info1.obligations in
-  let_many_pre (pre1 @ ob1) cc
+  CC_letin (dep, bl, cc1, cc2)
 
 (* [compose], [apply] and [handle] are instances of [gen_compose].
    [compose] and [apply] use the default handler [reraise]. *)
@@ -444,22 +437,20 @@ let make_abs bl t = match bl with
   | _  -> cc_lam bl t
 
 let bind_pre ren env p =
-  pre_name p.a_name, CC_pred_binder (apply_assert ren env p).a_value
+  p.a_name, CC_pred_binder (a_apply_assert ren env p).a_value
 
 let abs_pre env pl t =
   List.fold_right
     (fun p t ren -> CC_lam (bind_pre ren env p, t ren))
     pl t
 
-let abstraction info e ren =
-  let env = info.env in
-  let k = info.kappa in
-  let _,ef,p,_ = decomp_kappa k in
+let abstraction info pl e ren =
+  let env = info.t_env in
+  let _,ef,_ = decomp_kappa info in
   let ids = get_reads ef in
   let al = current_vars ren ids in
-  let c = List.fold_right (insert_pre env) info.obligations e in
-  let c = abs_pre env p c ren in
   let bl = binding_of_alist ren env al in
+  let c = abs_pre env pl e ren in
   make_abs bl c
 
 let fresh id e ren =
@@ -482,35 +473,37 @@ let fresh id e ren =
     \end{verbatim}
 *)
 
-let wfrec_with_binders bl (phi,a,r) info f ren =
-  let env = info.env in
+let wfrec_with_binders bl (phi,a,r) pre info f ren =
+  let env = info.t_env in
   let vphi = variant_name () in
-  let wr = get_writes info.kappa.c_effect in
+  let wr = get_writes info.t_effect in
   let info' = 
-    let eq = Misc.anonymous Loc.dummy (equality (Tvar vphi) phi) in
-    { info with kappa = { info.kappa 
-			  with c_effect = keep_writes info.kappa.c_effect;
-			       c_pre = eq :: info.kappa.c_pre }}
+    let eq = Misc.anonymous Loc.dummy_position (equality (Tvar vphi) phi) in
+    { info with t_effect = keep_writes info.t_effect }
   in
   let a = TTpure a in
   let w = wf_name () in
-  let k = info'.kappa in
-  let ren' = next ren (get_writes k.c_effect) in 
-  let tphi = tt_arrow bl (trad_type_c ren' env k) in
+  let k = info' in
+  let ren' = next ren (get_writes k.t_effect) in 
+  let tphi = 
+    tt_arrow bl (trad_type_c ren' env (type_c_of_typing_info pre k)) 
+  in
   let vphi0 = variant_name () in
   let tphi0 = 
-    let k0 = type_c_subst (subst_onev vphi vphi0) k in 
+    let k0 = 
+      type_c_subst (subst_onev vphi vphi0) (type_c_of_typing_info pre k) 
+    in 
     tt_arrow bl (trad_type_c ren' env k0) 
   in
   let input ren =
     let args = List.map (fun (id,_) -> CC_var id) bl in
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
     let pl = 
-      (Misc.anonymous info.loc (equality phi phi)) :: info.kappa.c_pre 
+      (Misc.anonymous info.t_loc (equality phi phi)) :: pre
     in
     let holes = 
       List.map (fun p -> 
-		  let p = apply_assert ren env p in
+		  let p = a_apply_assert ren env p in
 		  CC_hole (p.a_loc, p.a_value)) pl 
     in
     args @ input @ holes
@@ -522,16 +515,16 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   in
   let fw ren = 
     let tphi = apply_term ren env phi in
-    let decphi = info.loc, Papp (r, [tphi; Tvar vphi], []) in
+    let decphi = info.t_loc, Papp (r, [tphi; Tvar vphi], []) in
     cc_applist (CC_var w) ([CC_term tphi; CC_hole decphi] @ input ren) 
   in
   cc_applist (CC_var well_founded_induction)
     ([CC_type a; CC_term (Tvar r);
-      CC_hole (info.loc, Papp (well_founded, [Tvar r], []));
+      CC_hole (info.t_loc, Papp (well_founded, [Tvar r], []));
       CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
       cc_lam 
 	([vphi, CC_var_binder a; w, CC_var_binder tw] @ bl)
-	(abstraction info' (f fw) ren');
+	(abstraction info' pre (f fw) ren');
       CC_term (apply_term ren env phi)] @
      input ren)
 

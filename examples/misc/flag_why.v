@@ -24,139 +24,98 @@ Definition eq_white c := bool_of_sumbool (eq_color_dec c white).
 Definition monochrome (t:array color) (i j:Z) (c:color) : Prop :=
   forall k:Z, (i <= k < j)%Z -> access t k = c.
 
-(* Why obligation from file "flag.mlw", characters 771-785 *)
-Lemma dutch_flag_po_1 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_1 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
-  forall (b: Z),
-  forall (Post32: b = 0),
-  forall (i: Z),
-  forall (Post31: i = 0),
-  forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
-  forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  0 <= i1 /\ i1 < (array_length t0).
+  forall (HW_1: (array_length t) = N),
+  (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\ (monochrome t 0 0 blue) /\
+  (monochrome t 0 0 white) /\ (monochrome t N N red) /\ (array_length t) = N.
 Proof.
-intuition.
+unfold monochrome; intuition; try (elimtype False; omega).
+exact N_non_negative.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 813-817 *)
-Lemma dutch_flag_po_2 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_2 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
   forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test5: (access t0 i1) = blue),
-  0 <= b1 /\ b1 < (array_length t0).
-Proof.
-intuition.
-Qed.
-
-(* Why obligation from file "flag.mlw", characters 828-841 *)
-Lemma dutch_flag_po_3 : 
-  forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
-  forall (b: Z),
-  forall (Post32: b = 0),
-  forall (i: Z),
-  forall (Post31: i = 0),
-  forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
-  forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test5: (access t0 i1) = blue),
-  forall (Pre10: 0 <= b1 /\ b1 < (array_length t0)),
-  forall (u: color),
-  forall (Post26: u = (access t0 b1)),
-  forall (Pre8: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (aux_2: color),
-  forall (Post20: aux_2 = (access t0 i1)),
-  forall (aux_1: Z),
-  forall (Post19: aux_1 = b1),
-  0 <= aux_1 /\ aux_1 < (array_length t0).
-Proof.
-intuition.
-Qed.
-
-(* Why obligation from file "flag.mlw", characters 828-841 *)
-Lemma dutch_flag_po_4 : 
-  forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
-  forall (b: Z),
-  forall (Post32: b = 0),
-  forall (i: Z),
-  forall (Post31: i = 0),
-  forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
-  forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test5: (access t0 i1) = blue),
-  forall (Pre10: 0 <= b1 /\ b1 < (array_length t0)),
-  forall (u: color),
-  forall (Post26: u = (access t0 b1)),
-  forall (Pre8: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (aux_2: color),
-  forall (Post20: aux_2 = (access t0 i1)),
-  forall (aux_1: Z),
-  forall (Post19: aux_1 = b1),
-  forall (Pre7: 0 <= aux_1 /\ aux_1 < (array_length t0)),
-  forall (t1: (array color)),
-  forall (Post18: t1 = (store t0 aux_1 aux_2)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
   forall (result: color),
-  forall (HW_3: result = u),
-  forall (result0: Z),
-  forall (HW_4: result0 = i1),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_5: result = blue),
+  forall (result0: color),
+  forall (HW_6: result0 = (access t0 b)),
+  forall (result1: color),
+  forall (HW_7: result1 = (access t0 i)),
+  forall (t1: (array color)),
+  forall (HW_8: t1 = (update t0 b result1)),
+  forall (t2: (array color)),
+  forall (HW_9: t2 = (update t1 i result0)),
+  forall (b0: Z),
+  forall (HW_10: b0 = (b + 1)),
+  forall (i0: Z),
+  forall (HW_11: i0 = (i + 1)),
+  ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\ r <= N) /\
+  (monochrome t2 0 b0 blue) /\ (monochrome t2 b0 i0 white) /\
+  (monochrome t2 r N red) /\ (array_length t2) = N) /\
+  (Zwf 0 (r - i0) (r - i)).
+Proof.
+intuition.
+Qed.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_3 : 
   forall (t: (array color)),
-  forall (HW_5: t = (store t1 result0 result)),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (HW_6: b = (b1 + 1)),
   forall (i: Z),
-  forall (HW_7: i = (i1 + 1)),
-  ((0 <= b /\ b <= i) /\ (i <= r1 /\ r1 <= N) /\ (monochrome t 0 b blue) /\
-  (monochrome t b i white) /\ (monochrome t r1 N red) /\ (array_length t) =
-  N) /\ (Zwf 0 (r1 - i) (r1 - i1)).
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_5: result = blue),
+  forall (result0: color),
+  forall (HW_6: result0 = (access t0 b)),
+  forall (result1: color),
+  forall (HW_7: result1 = (access t0 i)),
+  forall (t1: (array color)),
+  forall (HW_8: t1 = (update t0 b result1)),
+  0 <= i /\ i < (array_length t1).
+Proof.
+intuition.
+Qed.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_4 : 
+  forall (t: (array color)),
+  forall (HW_1: (array_length t) = N),
+  forall (b: Z),
+  forall (i: Z),
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_5: result = blue),
+  forall (result0: color),
+  forall (HW_6: result0 = (access t0 b)),
+  forall (result1: color),
+  forall (HW_7: result1 = (access t0 i)),
+  0 <= b /\ b < (array_length t0).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
 assert (h: (k < b1)%Z \/ k = b1).
@@ -196,78 +155,44 @@ subst t1; simpl; omega.
 subst t2 t1; simpl; auto.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 828-841 *)
-Lemma dutch_flag_po_5 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_5 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
   forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test5: (access t0 i1) = blue),
-  forall (Pre10: 0 <= b1 /\ b1 < (array_length t0)),
-  forall (u: color),
-  forall (Post26: u = (access t0 b1)),
-  forall (Pre8: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (aux_2: color),
-  forall (Post20: aux_2 = (access t0 i1)),
-  forall (aux_1: Z),
-  forall (Post19: aux_1 = b1),
-  forall (Pre7: 0 <= aux_1 /\ aux_1 < (array_length t0)),
-  forall (t1: (array color)),
-  forall (Post18: t1 = (store t0 aux_1 aux_2)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
   forall (result: color),
-  forall (HW_3: result = u),
-  forall (result0: Z),
-  forall (HW_4: result0 = i1),
-  0 <= result0 /\ result0 < (array_length t1).
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_5: result = blue),
+  forall (result0: color),
+  forall (HW_6: result0 = (access t0 b)),
+  0 <= i /\ i < (array_length t0).
 Proof.
 intuition; subst; auto.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 945-955 *)
-Lemma dutch_flag_po_6 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_6 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
   forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test4: ~((access t0 i1) = blue)),
-  forall (Pre6: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test3: (access t0 i1) = white),
-  forall (i2: Z),
-  forall (Post14: i2 = (i1 + 1)),
-  ((0 <= b1 /\ b1 <= i2) /\ (i2 <= r1 /\ r1 <= N) /\
-  (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i2 white) /\
-  (monochrome t0 r1 N red) /\ (array_length t0) = N) /\
-  (Zwf 0 (r1 - i2) (r1 - i1)).
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_5: result = blue),
+  0 <= b /\ b < (array_length t0).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
 assert (h: (k < i1)%Z \/ k = i1).
@@ -276,123 +201,95 @@ assert (h: (k < i1)%Z \/ k = i1).
 subst k; assumption.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 1008-1012 *)
-Lemma dutch_flag_po_7 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_7 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
   forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test4: ~((access t0 i1) = blue)),
-  forall (Pre6: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test2: ~((access t0 i1) = white)),
-  forall (r2: Z),
-  forall (Post2: r2 = (r1 - 1)),
-  0 <= r2 /\ r2 < (array_length t0).
-Proof.
-intuition; subst; omega.
-Qed.
-
-(* Why obligation from file "flag.mlw", characters 1023-1036 *)
-Lemma dutch_flag_po_8 : 
-  forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
-  forall (b: Z),
-  forall (Post32: b = 0),
-  forall (i: Z),
-  forall (Post31: i = 0),
-  forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
-  forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test4: ~((access t0 i1) = blue)),
-  forall (Pre6: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test2: ~((access t0 i1) = white)),
-  forall (r2: Z),
-  forall (Post2: r2 = (r1 - 1)),
-  forall (Pre5: 0 <= r2 /\ r2 < (array_length t0)),
-  forall (u: color),
-  forall (Post13: u = (access t0 r2)),
-  forall (Pre3: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (aux_6: color),
-  forall (Post7: aux_6 = (access t0 i1)),
-  forall (aux_5: Z),
-  forall (Post6: aux_5 = r2),
-  0 <= aux_5 /\ aux_5 < (array_length t0).
-Proof.
-intuition; subst; omega.
-Qed.
-
-(* Why obligation from file "flag.mlw", characters 1023-1036 *)
-Lemma dutch_flag_po_9 : 
-  forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
-  forall (b: Z),
-  forall (Post32: b = 0),
-  forall (i: Z),
-  forall (Post31: i = 0),
-  forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
-  forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test4: ~((access t0 i1) = blue)),
-  forall (Pre6: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test2: ~((access t0 i1) = white)),
-  forall (r2: Z),
-  forall (Post2: r2 = (r1 - 1)),
-  forall (Pre5: 0 <= r2 /\ r2 < (array_length t0)),
-  forall (u: color),
-  forall (Post13: u = (access t0 r2)),
-  forall (Pre3: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (aux_6: color),
-  forall (Post7: aux_6 = (access t0 i1)),
-  forall (aux_5: Z),
-  forall (Post6: aux_5 = r2),
-  forall (Pre2: 0 <= aux_5 /\ aux_5 < (array_length t0)),
-  forall (t1: (array color)),
-  forall (Post5: t1 = (store t0 aux_5 aux_6)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
   forall (result: color),
-  forall (HW_20: result = u),
-  forall (result0: Z),
-  forall (HW_21: result0 = i1),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  forall (result0: color),
+  forall (HW_13: result0 = (access t0 i)),
+  forall (HW_14: result0 = white),
+  forall (i0: Z),
+  forall (HW_15: i0 = (i + 1)),
+  ((0 <= b /\ b <= i0) /\ (i0 <= r /\ r <= N) /\ (monochrome t0 0 b blue) /\
+  (monochrome t0 b i0 white) /\ (monochrome t0 r N red) /\
+  (array_length t0) = N) /\ (Zwf 0 (r - i0) (r - i)).
+Proof.
+intuition; subst; omega.
+Qed.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_8 : 
   forall (t: (array color)),
-  forall (HW_22: t = (store t1 result0 result)),
-  ((0 <= b1 /\ b1 <= i1) /\ (i1 <= r2 /\ r2 <= N) /\
-  (monochrome t 0 b1 blue) /\ (monochrome t b1 i1 white) /\
-  (monochrome t r2 N red) /\ (array_length t) = N) /\
-  (Zwf 0 (r2 - i1) (r1 - i1)).
+  forall (HW_1: (array_length t) = N),
+  forall (b: Z),
+  forall (i: Z),
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  forall (result0: color),
+  forall (HW_13: result0 = (access t0 i)),
+  forall (HW_16: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_17: r0 = (r - 1)),
+  forall (result1: color),
+  forall (HW_18: result1 = (access t0 r0)),
+  forall (result2: color),
+  forall (HW_19: result2 = (access t0 i)),
+  forall (t1: (array color)),
+  forall (HW_20: t1 = (update t0 r0 result2)),
+  forall (t2: (array color)),
+  forall (HW_21: t2 = (update t1 i result1)),
+  ((0 <= b /\ b <= i) /\ (i <= r0 /\ r0 <= N) /\ (monochrome t2 0 b blue) /\
+  (monochrome t2 b i white) /\ (monochrome t2 r0 N red) /\
+  (array_length t2) = N) /\ (Zwf 0 (r0 - i) (r - i)).
+Proof.
+intuition; subst; omega.
+Qed.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_9 : 
+  forall (t: (array color)),
+  forall (HW_1: (array_length t) = N),
+  forall (b: Z),
+  forall (i: Z),
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  forall (result0: color),
+  forall (HW_13: result0 = (access t0 i)),
+  forall (HW_16: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_17: r0 = (r - 1)),
+  forall (result1: color),
+  forall (HW_18: result1 = (access t0 r0)),
+  forall (result2: color),
+  forall (HW_19: result2 = (access t0 i)),
+  forall (t1: (array color)),
+  forall (HW_20: t1 = (update t0 r0 result2)),
+  0 <= i /\ i < (array_length t1).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
 subst t2 t1; do 2 AccessOther.
@@ -416,76 +313,60 @@ apply H9; omega.
 subst t2 t1; simpl; trivial.
  Qed.
 
-(* Why obligation from file "flag.mlw", characters 1023-1036 *)
-Lemma dutch_flag_po_10 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_10 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
   forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test6: i1 < r1),
-  forall (Pre11: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test4: ~((access t0 i1) = blue)),
-  forall (Pre6: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (Test2: ~((access t0 i1) = white)),
-  forall (r2: Z),
-  forall (Post2: r2 = (r1 - 1)),
-  forall (Pre5: 0 <= r2 /\ r2 < (array_length t0)),
-  forall (u: color),
-  forall (Post13: u = (access t0 r2)),
-  forall (Pre3: 0 <= i1 /\ i1 < (array_length t0)),
-  forall (aux_6: color),
-  forall (Post7: aux_6 = (access t0 i1)),
-  forall (aux_5: Z),
-  forall (Post6: aux_5 = r2),
-  forall (Pre2: 0 <= aux_5 /\ aux_5 < (array_length t0)),
-  forall (t1: (array color)),
-  forall (Post5: t1 = (store t0 aux_5 aux_6)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
   forall (result: color),
-  forall (HW_20: result = u),
-  forall (result0: Z),
-  forall (HW_21: result0 = i1),
-  0 <= result0 /\ result0 < (array_length t1).
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  forall (result0: color),
+  forall (HW_13: result0 = (access t0 i)),
+  forall (HW_16: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_17: r0 = (r - 1)),
+  forall (result1: color),
+  forall (HW_18: result1 = (access t0 r0)),
+  forall (result2: color),
+  forall (HW_19: result2 = (access t0 i)),
+  0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
 subst; simpl; auto.
 Qed.
 
 
-(* Why obligation from file "flag.mlw", characters 532-1161 *)
-Lemma dutch_flag_po_11 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_11 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (r1: Z),
   forall (t0: (array color)),
-  forall (Pre13: Variant1 = (r1 - i1)),
-  forall (Pre12: (0 <= b1 /\ b1 <= i1) /\ (i1 <= r1 /\ r1 <= N) /\
-                 (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 i1 white) /\
-                 (monochrome t0 r1 N red) /\ (array_length t0) = N),
-  forall (Test1: i1 >= r1),
-  (monochrome t0 0 b1 blue) /\ (monochrome t0 b1 r1 white) /\
-  (monochrome t0 r1 N red).
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  forall (result0: color),
+  forall (HW_13: result0 = (access t0 i)),
+  forall (HW_16: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_17: r0 = (r - 1)),
+  forall (result1: color),
+  forall (HW_18: result1 = (access t0 r0)),
+  0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
 replace r1 with i1.
@@ -493,23 +374,87 @@ replace r1 with i1.
  omega.
 Save.
 
-(* Why obligation from file "flag.mlw", characters 572-738 *)
-Lemma dutch_flag_po_12 : 
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_12 : 
   forall (t: (array color)),
-  forall (Pre14: (array_length t) = N),
+  forall (HW_1: (array_length t) = N),
   forall (b: Z),
-  forall (Post32: b = 0),
   forall (i: Z),
-  forall (Post31: i = 0),
   forall (r: Z),
-  forall (Post30: r = N),
-  (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\ (monochrome t 0 b blue) /\
-  (monochrome t b i white) /\ (monochrome t r N red) /\ (array_length t) = N.
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  forall (result0: color),
+  forall (HW_13: result0 = (access t0 i)),
+  forall (HW_16: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_17: r0 = (r - 1)),
+  0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
 subst; exact N_non_negative.
 unfold monochrome; intros; absurd (0 < 0)%Z; omega.
 unfold monochrome; intros; absurd (0 < 0)%Z; omega.
 unfold monochrome; intros; absurd (N < N)%Z; omega.
+Save.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_13 : 
+  forall (t: (array color)),
+  forall (HW_1: (array_length t) = N),
+  forall (b: Z),
+  forall (i: Z),
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  forall (result: color),
+  forall (HW_4: result = (access t0 i)),
+  forall (HW_12: ~(result = blue)),
+  0 <= i /\ i < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_14 : 
+  forall (t: (array color)),
+  forall (HW_1: (array_length t) = N),
+  forall (b: Z),
+  forall (i: Z),
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_3: i < r),
+  0 <= i /\ i < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma dutch_flag_po_15 : 
+  forall (t: (array color)),
+  forall (HW_1: (array_length t) = N),
+  forall (b: Z),
+  forall (i: Z),
+  forall (r: Z),
+  forall (t0: (array color)),
+  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
+                (monochrome t0 r N red) /\ (array_length t0) = N),
+  forall (HW_22: i >= r),
+  (monochrome t0 0 b blue) /\ (monochrome t0 b r white) /\
+  (monochrome t0 r N red).
+Proof.
+(* FILL PROOF HERE *)
 Save.
 

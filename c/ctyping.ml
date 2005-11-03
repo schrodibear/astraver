@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.97 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.98 2005-11-03 14:11:32 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -119,6 +119,15 @@ and eval_const_expr (e : texpr) = match e.texpr_node with
 let located_app f x = { node = f x.node; loc = x.loc }
 
 let option_app f = function Some x -> Some (f x) | None -> None
+
+let offset ofs (ls, le) = (ofs + ls, ofs + le)
+
+let with_offset ofs f x =
+  try
+    f x
+  with 
+    | Error (Some loc, e) ->
+	raise (Error (Some (offset ofs loc), e))
 
 let type_location ofs env l = with_offset ofs (type_location env) l
 let type_predicate ofs env p = with_offset ofs (type_predicate env) p

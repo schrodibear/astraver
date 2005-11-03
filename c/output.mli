@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.13 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.14 2005-11-03 14:11:32 filliatr Exp $ i*)
 
 type constant =
   | Prim_int of int64
@@ -98,8 +98,8 @@ type expr =
   | Fun of (string * why_type) list * 
       assertion * expr * assertion * ((string * assertion) option)
   | Triple of assertion * expr * assertion * ((string * assertion) option)
-  | Assert of assertion  (*r only in blocks *)
-  | Label of string
+  | Assert of assertion * expr
+  | Label of string * expr
   | BlackBox of why_type
 ;;
 

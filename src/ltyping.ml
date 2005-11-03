@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.37 2004-12-02 17:24:26 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.38 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -24,6 +24,7 @@ open Ident
 open Logic
 open Types
 open Ptree
+open Ast
 open Misc
 open Util
 open Env
@@ -81,12 +82,11 @@ let rec unify t1 t2 = match (t1,t2) with
 	  | Some tb -> unify t1 tb
       end
   (* recursive types *)
-  | (PTarray ta, PTarray tb) -> unify ta tb
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
       i1 = i2 && List.length l1 = List.length l2 &&
       List.for_all2 unify l1 l2
-  | (PTexternal _ | PTarray _), _
-  | _, (PTexternal _ | PTarray _) ->
+  | (PTexternal _), _
+  | _, (PTexternal _) ->
       false
   (* other cases *)
   | (PTvarid xa, PTvarid xb) -> xa = xb
@@ -101,10 +101,15 @@ let make_comparison loc = function
       Papp (int_cmp r, [a; b], [])
   | (a,PTreal), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTreal) ->
       Papp (real_cmp r, [a; b], [])
-  | (a,ta), (PPeq | PPneq as r), (b,tb) when unify ta tb ->
-      Papp (other_cmp (ta,r), [a; b], [])
-  | _, _, (_,tb) ->
-      raise_located loc (ExpectedType (fun f -> Util.print_pure_type f tb))
+  | (a,ta), r, (b,tb) ->
+      if unify ta tb then
+	match normalize_pure_type ta, normalize_pure_type tb with
+	  | PTint, PTint -> Papp (int_cmp r, [a;b], [])
+	  | PTreal, PTreal -> Papp (real_cmp r, [a;b], [])
+	  | _ -> Papp (other_cmp (ta,r), [a; b], [])
+      else
+	raise_located loc 
+	  (ExpectedType (fun f -> Util.print_pure_type f (normalize_pure_type tb)))
 
 let int_arith = function
   | PPadd -> t_add_int
@@ -190,8 +195,13 @@ and desc_predicate loc lab env lenv = function
       Por (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPimplies, b) ->
       Pimplies (false, predicate lab env lenv a, predicate lab env lenv b)
+  | PPinfix 
+      ({pp_desc = PPinfix (_, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), a)} as p, 
+       (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
+      let q = { pp_desc = PPinfix (a, r, b); pp_loc = loc } in
+      Pand (false, predicate lab env lenv p, predicate lab env lenv q)
   | PPinfix (a, (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
-      make_comparison loc (term lab env lenv a, r, term lab env lenv b)
+      make_comparison a.pp_loc (term lab env lenv a, r, term lab env lenv b)
   | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv | PPmod), _) -> 
       predicate_expected loc
   | PPprefix (PPneg, _) ->
@@ -243,30 +253,6 @@ and term lab env lenv t =
 and desc_term loc lab env lenv = function
   | PPvar x ->
       type_tvar loc lab env lenv x
-  | PPapp (x, [a;b]) when x == Ident.access ->
-      (match term lab env lenv a, term lab env lenv b with
-	 | (a, PTarray v), (b, PTint) ->
-	     Tapp (x, [a;b], [v]), v
-	 | (_, PTarray _), _ ->
-	     expected_type b.pp_loc (PureType PTint)
-	 | _ ->
-	     raise_located a.pp_loc (AnyMessage "array expected"))
-  | PPapp (x, [a;b;c]) when x == Ident.store ->
-      (match term lab env lenv a, term lab env lenv b, term lab env lenv c with
-	 | (a, PTarray v), (b, PTint), (c, tc) when v = tc ->
-	     Tapp (x, [a;b;c], [v]), PTarray v
-	 | (_, PTarray v), (_, PTint), _ ->
-	     expected_type c.pp_loc (PureType v)
-	 | (_, PTarray _), _, _ ->
-	     expected_type b.pp_loc (PureType PTint)
-	 | _ ->
-	     raise_located a.pp_loc (AnyMessage "array expected"))
-  | PPapp (x, [a]) when x == Ident.array_length ->
-      (match term lab env lenv a with
-	 | a, PTarray v -> 
-	     Tapp (x, [a], [v]), PTint
-	 | Tvar t, _ -> raise_located a.pp_loc (UnboundArray t)
-	 | _ -> raise_located a.pp_loc (AnyMessage "array expected"))
   | PPapp (id, [a; b; c]) when id == if_then_else ->
       type_if lab env lenv a b c
   | PPif (a, b, c) ->
@@ -352,8 +338,11 @@ and type_const = function
 
 (*s Checking types *)
 
-let type_assert lab env lenv a = 
-  { a with a_value = predicate lab env lenv a.a_value }
+let type_assert ?(namer=h_name) lab env lenv a = 
+  { a_value = predicate lab env lenv a.pa_value;
+    a_name = namer a.pa_name;
+    a_loc = a.pa_loc;
+    a_proof = None }
 
 let type_post lab env lenv id v ef (a,al) = 
   let lab' = Label.add "" lab in 
@@ -361,17 +350,27 @@ let type_post lab env lenv id v ef (a,al) =
     let lenv' = Env.add_logic id v lenv in type_assert lab' env lenv' a 
   in
   let xs = Effect.get_exns ef in
-  let type_exn_post (x,a) =
-    let loc = a.a_value.pp_loc in
+  let check_exn (x,a) =
+    let loc = a.pa_value.pp_loc in
     if not (is_exception x) then raise_located loc (UnboundException x);
-    if not (List.mem x xs) then raise_located loc (CannotBeRaised x);
-    let lenv' = match find_exception x with
-      | None -> lenv
-      | Some pt -> Env.add_logic result (PureType pt) lenv
-    in
-    (x, type_assert lab' env lenv' a)
+    if not (List.mem x xs) then raise_located loc (CannotBeRaised x)
   in
-  (a', List.map type_exn_post al)
+  List.iter check_exn al;
+  let loc = a.pa_value.pp_loc in
+  let type_exn_post x =
+    try
+      let a = List.assoc x al in
+      let lenv' = match find_exception x with
+	| None -> lenv
+	| Some pt -> Env.add_logic result (PureType pt) lenv
+      in
+      (x, type_assert lab' env lenv' a)
+    with Not_found ->
+      wprintf loc "no postcondition for exception %a; false inserted@\n"
+	Ident.print x;
+      (x, anonymous loc Pfalse)
+  in
+  (a', List.map type_exn_post xs)
 
 let check_effect loc env e =
   let check_ref id =
@@ -399,20 +398,28 @@ let warn_refs loc env p =
 	 ef)
     (predicate_refs env p)
 
+let rec type_pure_type loc = function
+  | PTint | PTbool | PTreal | PTunit 
+  | PTvar _ | PTvarid _ as pt -> pt
+  | PTexternal (p, id) ->
+      if not (is_type id) then raise_located loc (UnboundType id);
+      let np = List.length p in
+      let a = type_arity id in
+      if np <> a then raise_located loc (TypeArity (id, a, np));
+      PTexternal (List.map (type_pure_type loc) p, id)
+
 let rec type_v loc lab env lenv = function
+  | PVpure pt -> 
+      PureType (type_pure_type loc pt)
   | PVref v -> 
-      Ref (pure_type_v loc lab env lenv v)
-  | PVarray v -> 
-      Array (pure_type_v loc lab env lenv v)
+      Ref (type_pure_type loc v)
   | PVarrow (bl, c) -> 
       let bl',env',lenv' = binders loc lab env lenv bl in 
       make_arrow bl' (type_c loc lab env' lenv' c)
-  | PVpure pt -> 
-      PureType pt
 
 and pure_type_v loc lab env lenv = function
   | PVpure pt ->
-      PureType pt
+      PureType (type_pure_type loc pt)
   | _ ->
       raise_located loc MutableMutable
 
@@ -426,23 +433,18 @@ and type_c loc lab env lenv c =
   let ef = List.fold_right (asst_fold (warn_refs loc env)) p ef in
   let ef = optpost_fold (warn_refs loc env) q ef in
   let s = subst_onev id Ident.result in
-  let q = optpost_app (subst_in_predicate s) q in
+  let p = List.map (fun a -> a.a_value) p in
+  let q = optpost_app (fun a -> subst_in_predicate s a.a_value) q in
   { c_result_name = c.pc_result_name; c_effect = ef;
     c_result_type = v; c_pre = p; c_post = q }
 
 and binders loc lab env lenv = function
   | [] ->
       [], env, lenv
-  | (id, BindType v) :: bl ->
+  | (id, v) :: bl ->
       let v = type_v loc lab env lenv v in
       let bl',env',lenv' = 
 	binders loc lab (Env.add id v env) 
 	  (Env.add_logic ~generalize:false id v lenv) bl 
       in
-      (id, BindType v) :: bl', env', lenv'
-  | (id, BindSet) :: bl ->
-      let bl',env',lenv' = binders loc lab (Env.add_set id env) lenv bl in
-      (id, BindSet) :: bl', env', lenv'
-  | (id, Untyped) :: bl ->
-      let bl',env',lenv' = binders loc lab env lenv bl in
-      (id, Untyped) :: bl', env', lenv'
+      (id, v) :: bl', env', lenv'

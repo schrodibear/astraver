@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.2 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.3 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -105,7 +105,7 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "Bool"
   | PTreal -> fprintf fmt "Real"
   | PTunit -> fprintf fmt "Unit"
-  | PTarray _ -> fprintf fmt "Array" 
+  | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
   | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
@@ -119,7 +119,7 @@ and instance fmt = function
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "true"
-  | Pvar id when id == default_post ->
+  | Pvar id when id == Ident.default_post ->
       fprintf fmt "true"
   | Pfalse ->
       fprintf fmt "false"
@@ -187,7 +187,7 @@ let output_theory fmt =
   fprintf fmt "@]@\n) ;; END THEORY@\n"
 
 let external_type = function
-  | PTexternal _ | PTarray (PTexternal _) -> true
+  | PTexternal _ -> true
   | _ -> false
 
 let cc_external_type = function
@@ -231,7 +231,7 @@ exception NotFirstOrder
 let output_obligation fmt (loc, o, s) = 
   try
     fprintf fmt "\n  :formula"; 
-    fprintf fmt "@[;; %a@]@\n" Loc.report_obligation loc;
+    fprintf fmt "@[;; %a@]@\n" Loc.report_obligation_position loc;
     output_sequent fmt s;
     fprintf fmt "\n\n" 
   with NotFirstOrder ->

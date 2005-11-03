@@ -14,14 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.mli,v 1.10 2002-10-18 11:18:38 filliatr Exp $ i*)
+(*i $Id: wp.mli,v 1.11 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
-open Types
 open Env
 
-val wp : typed_program -> typed_program * assertion option
+val wp : typed_expr -> typed_expr * Ast.assertion option
 
-
-
+(**
+val wp : typed_expr -> Ast.assertion option * (Cc.proof_term -> typed_expr)
+***)

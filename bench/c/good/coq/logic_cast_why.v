@@ -3,62 +3,58 @@
 
 Require Export logic_cast_spec_why.
 
-(* Why obligation from file "why/logic_cast.why", characters 412-440 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "why/logic_cast.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_range alloc t 0 3)),
-  forall (I1: Z),
-  forall (Post1: I1 = 0),
-  forall (Variant1: Z),
-  forall (I2: Z),
-  forall (Pre6: Variant1 = (4 - I2)),
-  forall (Pre5: (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <=
-                I2 /\ I2 <= 4)),
-  forall (Test2: I2 < 4),
-  forall (caduceus_1: pointer),
-  forall (Post5: caduceus_1 = (shift t I2)),
-  (valid alloc caduceus_1).
+  forall (HW_1: (valid_range alloc t 0 3)),
+  forall (I: Z),
+  forall (HW_3: I = 0),
+  (* File \"logic_cast.c819618234.c1069824147.i\", line 0, characters 11-25 *)
+  (0 <= I /\ I <= 4).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 375-440 *)
-Lemma f_impl_po_2 : 
+(* Why obligation from file "why/logic_cast.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_range alloc t 0 3)),
-  forall (I1: Z),
-  forall (Post1: I1 = 0),
-  forall (Variant1: Z),
-  forall (I2: Z),
+  forall (HW_1: (valid_range alloc t 0 3)),
+  forall (I: Z),
+  forall (HW_3: I = 0),
+  forall (I0: Z),
+  forall (intP: ((memory) Z)),
+  forall (HW_4: (* File \"logic_cast.c819618234.c1069824147.i\", line 0, characters 11-25 *)
+                (0 <= I0 /\ I0 <= 4)),
+  forall (HW_5: I0 < 4),
+  forall (result: pointer),
+  forall (HW_6: result = (shift t I0)),
   forall (intP0: ((memory) Z)),
-  forall (Pre6: Variant1 = (4 - I2)),
-  forall (Pre5: (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <=
-                I2 /\ I2 <= 4)),
-  forall (Test2: I2 < 4),
-  forall (caduceus_1: pointer),
-  forall (Post5: caduceus_1 = (shift t I2)),
-  forall (Pre4: (valid alloc caduceus_1)),
-  forall (intP1: ((memory) Z)),
-  forall (Post16: intP1 = (upd intP0 caduceus_1 I2)),
-  (forall (I:Z),
-   (I = (I2 + 1) ->
-    (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <= I /\ I <= 4) /\
-    (Zwf 0 (4 - I) (4 - I2)))).
+  forall (HW_7: intP0 = (upd intP result I0)),
+  forall (I1: Z),
+  forall (HW_8: I1 = (I0 + 1)),
+  (* File \"logic_cast.c819618234.c1069824147.i\", line 0, characters 11-25 *)
+  (0 <= I1 /\ I1 <= 4) /\ (Zwf 0 (4 - I1) (4 - I0)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 239-334 *)
-Lemma f_impl_po_3 : 
+(* Why obligation from file "why/logic_cast.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_range alloc t 0 3)),
-  forall (I1: Z),
-  forall (Post1: I1 = 0),
-  (* File \"logic_cast.c\", line 10, characters 11-25 *) (0 <= I1 /\ I1 <= 4).
+  forall (HW_1: (valid_range alloc t 0 3)),
+  forall (I: Z),
+  forall (HW_3: I = 0),
+  forall (I0: Z),
+  forall (HW_4: (* File \"logic_cast.c819618234.c1069824147.i\", line 0, characters 11-25 *)
+                (0 <= I0 /\ I0 <= 4)),
+  forall (HW_5: I0 < 4),
+  forall (result: pointer),
+  forall (HW_6: result = (shift t I0)),
+  (valid alloc result).
 Proof.
 intuition.
 Save.

@@ -32,6 +32,12 @@ Admitted.
 
 
 
+(*Why type*) Parameter pointer: Set.
+
+(*Why type*) Parameter addr: Set.
+
+(*Why type*) Parameter alloc_table: Set.
+
 (*Why*) Parameter null : pointer.
 
 (*Why logic*) Definition block_length : alloc_table -> pointer -> Z.
@@ -198,35 +204,37 @@ Admitted.
 
 
 
-(*Why logic*) Definition acc : (A43:Set) ((memory) A43) -> pointer -> A43.
+(*Why type*) Parameter memory: Set ->Set.
+
+(*Why logic*) Definition acc : (A82:Set) ((memory) A82) -> pointer -> A82.
 Admitted.
 Implicits acc [1].
 
 
 (*Why logic*) Definition upd :
-  (A44:Set) ((memory) A44) -> pointer -> A44 -> ((memory) A44).
+  (A83:Set) ((memory) A83) -> pointer -> A83 -> ((memory) A83).
 Admitted.
 Implicits upd [1].
 
 
 (*Why axiom*) Lemma acc_upd :
-  (A45:Set)
-  ((m:((memory) A45)) ((p:pointer) ((a:A45) (acc (upd m p a) p) = a))).
+  (A84:Set)
+  ((m:((memory) A84)) ((p:pointer) ((a:A84) (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (A46:Set)
-  ((m:((memory) A46))
+  (A85:Set)
+  ((m:((memory) A85))
    ((p1:pointer)
-    ((p2:pointer) ((a:A46) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+    ((p2:pointer) ((a:A85) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A47:Set)
-  ((m:((memory) A47))
+  (A86:Set)
+  ((m:((memory) A86))
    ((p1:pointer)
     ((p2:pointer)
-     ((a:A47) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     ((a:A86) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -311,8 +319,8 @@ Admitted.
 (*Why logic*) Definition not_in_pset : pointer -> pset -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns [A48:Set] [a:alloc_table]
-  [m1:((memory) A48)] [m2:((memory) A48)] [l:pset]
+(*Why predicate*) Definition not_assigns [A87:Set] [a:alloc_table]
+  [m1:((memory) A87)] [m2:((memory) A87)] [l:pset]
   := ((p:pointer)
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 
@@ -528,19 +536,19 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_trans :
-  (A49:Set)
+  (A88:Set)
   ((a:alloc_table)
    ((l:pset)
-    ((m1:((memory) A49))
-     ((m2:((memory) A49))
-      ((m3:((memory) A49))
+    ((m1:((memory) A88))
+     ((m2:((memory) A88))
+      ((m3:((memory) A88))
        ((not_assigns a m1 m2 l) ->
         ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_refl :
-  (A50:Set)
-  ((a:alloc_table) ((l:pset) ((m:((memory) A50)) (not_assigns a m m l)))).
+  (A89:Set)
+  ((a:alloc_table) ((l:pset) ((m:((memory) A89)) (not_assigns a m m l)))).
 Admitted.
 
 (*Why predicate*) Definition valid1  [m1:((memory) pointer)]

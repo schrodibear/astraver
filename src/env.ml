@@ -14,12 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.49 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.50 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 open Ident
 open Misc
-open Ast
 open Types
+open Ast
 open Logic
 open Error
 open Report
@@ -37,7 +37,6 @@ let rec find_pure_type_vars env t =
 	if List.mem s env then env else s::env
     | PTexternal(l,id) ->
 	List.fold_left find_pure_type_vars env l
-    | PTarray ta -> find_pure_type_vars env ta
     | PTint | PTreal | PTbool | PTunit | PTvar _ -> env
 
 let find_logic_type_vars t =
@@ -50,16 +49,12 @@ let find_logic_type_vars t =
 
 let rec find_type_v_vars acc t =
   match t with
-    | Ref t | Array t -> find_type_v_vars acc t
+    | Ref t | PureType t -> find_pure_type_vars acc t
     | Arrow(bl,c) ->
 	let acc = find_type_c_vars acc c in
 	List.fold_left find_binder_vars acc bl
-    | PureType t -> find_pure_type_vars acc t
 and find_type_c_vars acc c = find_type_v_vars acc c.c_result_type
-and find_binder_vars acc (_,b) =
-  match b with
-    | BindType t -> find_type_v_vars acc t
-    | BindSet | Untyped -> acc
+and find_binder_vars acc (_,t) = find_type_v_vars acc t
 
 
 let generalize_logic_type t =
@@ -120,7 +115,6 @@ let rec subst_pure_type s t =
 	 with Not_found -> t)
     | PTexternal(l,id) ->
 	PTexternal(List.map (subst_pure_type s) l,id)
-    | PTarray ta -> PTarray (subst_pure_type s ta)
     | PTint | PTreal | PTbool | PTunit | PTvar _ -> t
 
 let subst_logic_type s = function
@@ -154,17 +148,15 @@ let rec subst_predicate s p =
   | Ptrue | Pfalse | Pvar _ as p -> p
 
 let rec subst_type_v s = function
-  | Ref t -> Ref (subst_type_v s t)
-  | Array t -> Array (subst_type_v s t)
-  | Arrow (bl,c) -> Arrow (List.map (subst_binder s) bl,subst_type_c s c)
+  | Ref t -> Ref (subst_pure_type s t)
   | PureType t -> PureType (subst_pure_type s t)
-and subst_binder s ((id,t) as b) = match t with
-  | BindSet | Untyped -> b
-  | BindType t -> (id, BindType (subst_type_v s t))
+  | Arrow (bl,c) -> Arrow (List.map (subst_binder s) bl,subst_type_c s c)
+and subst_binder s (id,t) = 
+  (id, subst_type_v s t)
 and subst_type_c s c =
   { c with 
     c_result_type = subst_type_v s c.c_result_type;
-    c_pre = List.map (asst_app (subst_predicate s)) c.c_pre;
+    c_pre = List.map (subst_predicate s) c.c_pre;
     c_post = option_app (post_app (subst_predicate s)) c.c_post }
 
 let specialize_scheme subst s =
@@ -249,15 +241,17 @@ let is_local_set env id =
 
 (* typed programs *)
 
-type typing_info = {
-  loc : Loc.t;
-  env : local_env;
-  label : string;
-  obligations : assertion list;
-  kappa : type_c
+type typing_info = { 
+  t_loc : Loc.position;
+  t_env : local_env;
+  t_label : label;
+  t_result_name : Ident.t;
+  t_result_type : type_v;
+  t_effect : Effect.t;
+  t_post : postcondition option 
 }
   
-type typed_program = typing_info Ast.t
+type typed_expr = typing_info Ast.t
 
 (* The global environment.
  *
@@ -268,7 +262,7 @@ type typed_program = typing_info Ast.t
 
 let (env : type_info scheme Penv.t ref) = ref Penv.empty
 
-let (pgm_table : (typed_program option) Idmap.t ref) = ref Idmap.empty
+let (pgm_table : (typed_expr option) Idmap.t ref) = ref Idmap.empty
 
 let (init_table : term Idmap.t ref) = ref Idmap.empty
 
@@ -327,7 +321,7 @@ let all_vars () =
 
 let all_refs () =
   let add_ref (id,v) s = match v.scheme_type with
-    | TypeV (Ref _ | Array _) -> Idset.add id s 
+    | TypeV (Ref _) -> Idset.add id s 
     | _ -> s
   in
   Penv.fold add_ref !env Idset.empty
@@ -342,6 +336,26 @@ let find_exception = Hashtbl.find exn_table
 
 (* predefined exception [Exit] *)
 let _ = add_exception exit_exn None
+
+(* Logic types with their arities *) 
+
+let types = Hashtbl.create 97
+
+let is_type = Hashtbl.mem types
+
+let bad_arity =
+  let rec check s = function
+    | [] -> false
+    | v :: l -> Idset.mem v s || check (Idset.add v s) l
+  in
+  check Idset.empty
+
+let add_type loc v id = 
+  if is_type id then raise_located loc (ClashType id);
+  if bad_arity v then raise_located loc TypeBadArity;
+  Hashtbl.add types id (List.length v)
+
+let type_arity = Hashtbl.find types
 
 (* initializations *)
 
@@ -370,79 +384,12 @@ let add_rec = Penv.add_rec
 let is_rec = Penv.is_rec
 
 
-(* Initial symbol table *)
-
-let x = Ident.create "x"
-let y = Ident.create "y"
-let int = PureType PTint
-let bool = PureType PTbool
-let unit = PureType PTunit
-let real = PureType PTreal
-
-let make_c t q = 
-  { c_result_name = result; c_result_type = t;
-    c_effect = Effect.bottom; c_pre = []; c_post = q }
-
-let compare_type op t =
-  let q = Pif (Tvar result,
-	       relation op (Tvar x) (Tvar y),
-	       not_relation op (Tvar x) (Tvar y))
-  in
-  let q = make_c bool (Some (anonymous Loc.dummy q, [])) in
-  make_arrow [x, BindType t; y, BindType t] q
-
-let _ = add_global t_lt_int (compare_type t_lt_int int) None
-let _ = add_global t_le_int (compare_type t_le_int int) None
-let _ = add_global t_gt_int (compare_type t_gt_int int) None
-let _ = add_global t_ge_int (compare_type t_ge_int int) None
-
-let _ = add_global t_lt_real (compare_type t_lt_real real) None
-let _ = add_global t_le_real (compare_type t_le_real real) None
-let _ = add_global t_gt_real (compare_type t_gt_real real) None
-let _ = add_global t_ge_real (compare_type t_ge_real real) None
-
-let _ = add_global t_eq_int (compare_type t_eq_int int) None
-let _ = add_global t_eq_unit (compare_type t_eq_unit unit) None
-let _ = add_global t_eq_bool (compare_type t_eq_bool bool) None
-let _ = add_global t_eq_real (compare_type t_eq_real real) None
-
-let _ = add_global t_neq_int (compare_type t_neq_int int) None
-let _ = add_global t_neq_unit (compare_type t_neq_unit unit) None
-let _ = add_global t_neq_bool (compare_type t_neq_bool bool) None
-let _ = add_global t_neq_real (compare_type t_neq_real real) None
-
-let bin_arith_type t = 
-  make_arrow [x, BindType t; y, BindType t] (make_c t None)
-
-let _ = add_global t_add_int (bin_arith_type int) None
-let _ = add_global t_sub_int (bin_arith_type int) None
-let _ = add_global t_mul_int (bin_arith_type int) None
-let _ = add_global t_div_int (bin_arith_type int) None
-let _ = add_global t_mod_int (bin_arith_type int) None
-
-let _ = add_global t_add_real (bin_arith_type real) None
-let _ = add_global t_sub_real (bin_arith_type real) None
-let _ = add_global t_mul_real (bin_arith_type real) None
-let _ = add_global t_div_real (bin_arith_type real) None
-
-let un_arith_type t = 
-  make_arrow [x, BindType t] (make_c t None)
-
-let _ = add_global t_neg_int (un_arith_type int) None
-let _ = add_global t_neg_real (un_arith_type real) None
-let _ = add_global t_sqrt_real (un_arith_type real) None
-
-let _ = add_global t_real_of_int 
-	  (make_arrow [x, BindType int] (make_c real None)) None
-let _ = add_global t_int_of_real
-	  (make_arrow [x, BindType real] (make_c int None)) None
-
-let any t = 
-  make_arrow [x, BindType unit] 
-    (make_c t (Some (anonymous Loc.dummy Ptrue, [])))
-let _ = add_global any_int (any int) None
-let _ = add_global any_unit (any unit) None
-let _ = add_global any_real (any real) None
+let type_v_of_logic tl tr = match tl with
+  | [] -> 
+      PureType tr
+  | _ ->
+      let binder pt = Ident.anonymous, PureType pt in
+      Arrow (List.map binder tl, type_c_of_v (PureType tr))
 
 (* Logical environment *)
 
@@ -451,73 +398,38 @@ type logical_env = logic_type scheme Idmap.t
 let logic_table = ref Idmap.empty
 
 let add_global_logic x t = 
-  logic_table := Idmap.add x t !logic_table
+  logic_table := Idmap.add x t !logic_table;
+  match t.scheme_type with
+    | Function (tl, tr) ->
+	let v = type_v_of_logic tl tr in
+	let v = { scheme_vars = t.scheme_vars ; scheme_type = TypeV v } in
+	add_global_gen x v None
+    | Predicate _ ->
+	()
+
+let is_global_logic x = Idmap.mem x !logic_table
+
+let is_logic_function x =
+  try 
+    (match (Idmap.find x !logic_table).scheme_type with 
+       | Function _ -> true 
+       | _ -> false)
+  with Not_found -> 
+    false
 
 let iter_global_logic f = Idmap.iter f !logic_table
 
 let add_global_logic_gen x t =
  add_global_logic x (generalize_logic_type t)
 
-let int_array = PTarray PTint
-let agl s = add_global_logic_gen (Ident.create s)
-
-let int_cmp = Predicate [PTint; PTint]
-let _ = agl "lt_int" int_cmp
-let _ = agl "le_int" int_cmp
-let _ = agl "gt_int" int_cmp
-let _ = agl "ge_int" int_cmp
-let _ = agl "eq_int" int_cmp
-let _ = agl "neq_int" int_cmp
-
-let real_cmp = Predicate [PTreal; PTreal]
-let _ = agl "lt_real" real_cmp
-let _ = agl "le_real" real_cmp
-let _ = agl "gt_real" real_cmp
-let _ = agl "ge_real" real_cmp
-let _ = agl "eq_real" real_cmp
-let _ = agl "neq_real" real_cmp
-
-let _ = agl "eq_bool" (Predicate [PTbool; PTbool])
-let _ = agl "neq_bool" (Predicate [PTbool; PTbool])
-let _ = agl "eq_unit" (Predicate [PTunit; PTunit])
-let _ = agl "neq_unit" (Predicate [PTunit; PTunit])
-
-let int_binop_arith = Function ([PTint; PTint], PTint)
-let _ = agl "add_int" int_binop_arith
-let _ = agl "sub_int" int_binop_arith
-let _ = agl "mul_int" int_binop_arith
-let _ = agl "div_int" int_binop_arith
-let _ = agl "mod_int" int_binop_arith
-let _ = agl "neg_int" (Function ([PTint], PTint))
-
-let real_binop_arith = Function ([PTreal; PTreal], PTreal)
-let _ = agl "add_real" real_binop_arith
-let _ = agl "sub_real" real_binop_arith
-let _ = agl "mul_real" real_binop_arith
-let _ = agl "div_real" real_binop_arith
-let _ = agl "neg_real" (Function ([PTreal], PTreal))
-let _ = agl "sqrt_real" (Function ([PTreal], PTreal))
-let _ = agl "real_of_int" (Function ([PTint], PTreal))
-let _ = agl "int_of_real" (Function ([PTreal], PTint))
-
-let _ = agl "sorted_array" (Predicate [int_array; PTint; PTint])
-let _ = agl "exchange"     (Predicate [int_array; int_array; PTint; PTint])
-let _ = agl "sub_permut"   (Predicate [PTint; PTint; int_array; int_array])
-let _ = agl "permut"       (Predicate [int_array; int_array])
-let _ = agl "array_le"     (Predicate [int_array; PTint; PTint; PTint])
-let _ = agl "array_ge"     (Predicate [int_array; PTint; PTint; PTint])
-
 let is_logic = Idmap.mem
 
 let find_logic x env = specialize_logic_type (Idmap.find x env)
 
 let add_logic_aux id vars v env = match v with
-  | (Ref (PureType pt)) | (PureType pt) -> 
+  | (Ref pt) | (PureType pt) -> 
       Idmap.add id { scheme_vars = vars ; 
 		     scheme_type = (Function ([], pt)) } env
-  | (Array (PureType t)) -> 
-      Idmap.add id { scheme_vars = vars ; 
-		     scheme_type = (Function ([], PTarray t)) } env
   | _ -> 
       env
 

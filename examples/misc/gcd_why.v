@@ -19,198 +19,127 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
-(* Why obligation from file "gcd.mlw", characters 391-403 *)
-Lemma gcd1_po_1 : 
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd1_po_1 : 
   forall (a: Z),
   forall (b: Z),
-  forall (Pre4: a > 0 /\ b > 0),
-  forall (x: Z),
-  forall (Post7: x = a),
-  forall (y: Z),
-  forall (Post6: y = b),
-  forall (Variant1: Z),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Pre3: Variant1 = (max x1 y1)),
-  forall (Pre2: 0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)),
-  forall (Test4: x1 <> y1),
-  forall (Test3: x1 > y1),
-  forall (x2: Z),
-  forall (Post3: x2 = (x1 - y1)),
-  (0 < x2 /\ 0 < y1 /\ (gcd x2 y1) = (gcd a b)) /\
-  (Zwf 0 (max x2 y1) (max x1 y1)).
+  forall (HW_1: a > 0 /\ b > 0),
+  0 < a /\ 0 < b /\ (gcd a b) = (gcd a b).
 Proof.
 intuition.
-subst; rewrite <- H4; auto.
-unfold Zwf, max.
-case (Z_le_gt_dec x2 y1); case (Z_le_gt_dec x1 y1); intros; omega.
-Qed.
+Save.
 
-(* Why obligation from file "gcd.mlw", characters 419-431 *)
-Lemma gcd1_po_2 : 
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd1_po_2 : 
   forall (a: Z),
   forall (b: Z),
-  forall (Pre4: a > 0 /\ b > 0),
+  forall (HW_1: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post6: y = b),
-  forall (Variant1: Z),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Pre3: Variant1 = (max x1 y1)),
-  forall (Pre2: 0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)),
-  forall (Test4: x1 <> y1),
-  forall (Test2: x1 <= y1),
-  forall (y2: Z),
-  forall (Post2: y2 = (y1 - x1)),
-  (0 < x1 /\ 0 < y2 /\ (gcd x1 y2) = (gcd a b)) /\
-  (Zwf 0 (max x1 y2) (max x1 y1)).
+  forall (HW_2: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
+  forall (HW_3: x <> y),
+  forall (HW_4: x > y),
+  forall (x0: Z),
+  forall (HW_5: x0 = (x - y)),
+  (0 < x0 /\ 0 < y /\ (gcd x0 y) = (gcd a b)) /\ (Zwf 0 (max x0 y) (max x y)).
 Proof.
 intuition.
 subst; rewrite <- H4; auto.
 unfold Zwf, max.
-assert (h: x1 <> y1).
+case (Z_le_gt_dec x0 y); case (Z_le_gt_dec x y); intros; omega.
+Save.
+
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd1_po_3 : 
+  forall (a: Z),
+  forall (b: Z),
+  forall (HW_1: a > 0 /\ b > 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_2: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
+  forall (HW_3: x <> y),
+  forall (HW_6: x <= y),
+  forall (y0: Z),
+  forall (HW_7: y0 = (y - x)),
+  (0 < x /\ 0 < y0 /\ (gcd x y0) = (gcd a b)) /\ (Zwf 0 (max x y0) (max x y)).
+Proof.
+intuition.
+subst; rewrite <- H4; auto.
+unfold Zwf, max.
+assert (h: x <> y).
  assumption.
- case (Z_le_gt_dec x1 y2); case (Z_le_gt_dec x1 y1); intros; omega.
-Qed.
+ case (Z_le_gt_dec x y0); case (Z_le_gt_dec x y); intros; omega.
+Save.
 
-(* Why obligation from file "gcd.mlw", characters 262-441 *)
-Lemma gcd1_po_3 : 
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd1_po_4 : 
   forall (a: Z),
   forall (b: Z),
-  forall (Pre4: a > 0 /\ b > 0),
+  forall (HW_1: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post6: y = b),
-  forall (Variant1: Z),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Pre3: Variant1 = (max x1 y1)),
-  forall (Pre2: 0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)),
-  forall (Test1: x1 = y1),
-  forall (result: Z),
-  forall (HW_4: result = x1),
-  result = (gcd a b).
+  forall (HW_2: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
+  forall (HW_8: x = y),
+  x = (gcd a b).
 Proof.
 intuition; subst.
 rewrite <- H4; auto. 
-Qed.
+Save.
 
-(* Why obligation from file "gcd.mlw", characters 299-338 *)
-Lemma gcd1_po_4 : 
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd2_po_1 : 
   forall (a: Z),
   forall (b: Z),
-  forall (Pre4: a > 0 /\ b > 0),
-  forall (x: Z),
-  forall (Post7: x = a),
-  forall (y: Z),
-  forall (Post6: y = b),
-  0 < x /\ 0 < y /\ (gcd x y) = (gcd a b).
+  forall (HW_1: a >= 0 /\ b >= 0),
+  0 <= a /\ 0 <= b /\ (gcd a b) = (gcd a b).
 Proof.
 intuition.
-subst; reflexivity.
-Qed.
+Save.
 
-
-(* Why obligation from file "gcd.mlw", characters 723-730 *)
-Lemma gcd2_po_1 : 
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd2_po_2 : 
   forall (a: Z),
   forall (b: Z),
-  forall (Pre5: a >= 0 /\ b >= 0),
+  forall (HW_1: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post6: y = b),
-  forall (Variant1: Z),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Pre4: Variant1 = y1),
-  forall (Pre3: 0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)),
-  forall (Test2: y1 <> 0),
-  ~(y1 = 0).
+  forall (HW_2: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
+  forall (HW_3: y <> 0),
+  forall (x0: Z),
+  forall (HW_4: x0 = y),
+  forall (y0: Z),
+  forall (HW_5: y0 = ((Zmod x y))),
+  (0 <= x0 /\ 0 <= y0 /\ (gcd x0 y0) = (gcd a b)) /\ (Zwf 0 y0 y).
 Proof.
 intuition.
-Qed.
-
-(* Why obligation from file "gcd.mlw", characters 741-777 *)
-Lemma gcd2_po_2 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (Pre5: a >= 0 /\ b >= 0),
-  forall (x: Z),
-  forall (Post7: x = a),
-  forall (y: Z),
-  forall (Post6: y = b),
-  forall (Variant1: Z),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Pre4: Variant1 = y1),
-  forall (Pre3: 0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)),
-  forall (Test2: y1 <> 0),
-  forall (Pre2: ~(y1 = 0)),
-  forall (r: Z),
-  forall (Post4: r = ((Zmod x1 y1))),
-  forall (x2: Z),
-  forall (Post2: x2 = y1),
-  forall (y2: Z),
-  forall (Post3: y2 = r),
-  (0 <= x2 /\ 0 <= y2 /\ (gcd x2 y2) = (gcd a b)) /\ (Zwf 0 y2 y1).
-Proof.
-intuition.
-assert (h_y0: y1 <> 0).
+assert (h_y0: y <> 0).
  assumption.
-assert (h1_y0: (y1 > 0)).
+assert (h1_y0: (y > 0)).
  omega.
-generalize (Z_mod_lt x1 y1 h1_y0); intro.
+generalize (Z_mod_lt x y h1_y0); intro.
 subst; tauto.
 subst.
 rewrite <- H4; auto.
 unfold Zwf.
-assert (h_y0: y1 <> 0).
+assert (h_y0: y <> 0).
  assumption.
-assert (h1_y0: (y1 > 0)).
+assert (h1_y0: (y > 0)).
  omega.
-generalize (Z_mod_lt x1 y1 h1_y0); omega.
-Qed.
+generalize (Z_mod_lt x y h1_y0); omega.
+Save.
 
-(* Why obligation from file "gcd.mlw", characters 617-787 *)
-Lemma gcd2_po_3 : 
+(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma gcd2_po_3 : 
   forall (a: Z),
   forall (b: Z),
-  forall (Pre5: a >= 0 /\ b >= 0),
+  forall (HW_1: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post6: y = b),
-  forall (Variant1: Z),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Pre4: Variant1 = y1),
-  forall (Pre3: 0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)),
-  forall (Test1: y1 = 0),
-  forall (result: Z),
-  forall (HW_4: result = x1),
-  result = (gcd a b).
+  forall (HW_2: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
+  forall (HW_6: y = 0),
+  x = (gcd a b).
 Proof.
 intuition; subst.
 rewrite <- H4; auto.
-Qed.
-
-(* Why obligation from file "gcd.mlw", characters 653-694 *)
-Lemma gcd2_po_4 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (Pre5: a >= 0 /\ b >= 0),
-  forall (x: Z),
-  forall (Post7: x = a),
-  forall (y: Z),
-  forall (Post6: y = b),
-  0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b).
-Proof.
-intuition.
-subst; reflexivity.
-Qed.
-
+Save.
 

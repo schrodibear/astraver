@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.52 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.53 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -128,6 +128,11 @@ let t_sqrt_real = create "sqrt_real"
 let t_real_of_int = create "real_of_int"
 let t_int_of_real = create "int_of_real"
 
+let t_div_real_ = create "div_real_"
+let t_div_int_ = create "div_int_"
+let t_mod_int_ = create "mod_int_"
+let t_sqrt_real_ = create "sqrt_real_"
+
 let t_lt = create "%lt"
 let t_le = create "%le"
 let t_gt = create "%gt"
@@ -155,10 +160,34 @@ let t_le_real = create "le_real"
 let t_gt_real = create "gt_real"
 let t_ge_real = create "ge_real"
 
+let t_eq_int_ = create "eq_int_"
+let t_eq_bool_ = create "eq_bool_"
+let t_eq_real_ = create "eq_real_"
+let t_eq_unit_ = create "eq_unit_"
+
+let t_neq_int_ = create "neq_int_"
+let t_neq_bool_ = create "neq_bool_"
+let t_neq_real_ = create "neq_real_"
+let t_neq_unit_ = create "neq_unit_"
+
+let t_lt_int_ = create "lt_int_"
+let t_le_int_ = create "le_int_"
+let t_gt_int_ = create "gt_int_"
+let t_ge_int_ = create "ge_int_"
+
+let t_lt_real_ = create "lt_real_"
+let t_le_real_ = create "le_real_"
+let t_gt_real_ = create "gt_real_"
+let t_ge_real_ = create "ge_real_"
+
 let t_zwf_zero = create "%zwf_zero"
 let result = create "result"
 let default = create "H"
+let farray = create "farray"
 let array_length = create "array_length"
+let ref_set = create "ref_set"
+let array_get = create "array_get"
+let array_set = create "array_set"
 let access = create "access"
 let store = create "store"
 let annot_bool = create "annot_bool"

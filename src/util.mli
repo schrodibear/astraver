@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.46 2004-07-13 13:17:12 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.47 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -30,9 +30,15 @@ val put_label_predicate : local_env -> string -> predicate -> predicate
 val traverse_binders : local_env -> (type_v binder) list -> local_env
 val initial_renaming : local_env -> Rename.t
 
-val apply_term : Rename.t -> local_env -> term -> term
-val apply_assert : Rename.t -> local_env -> assertion -> assertion
+val apply_term : 
+  Rename.t -> local_env -> term -> term
+val apply_assert : 
+  Rename.t -> local_env -> Types.assertion -> Types.assertion
+val a_apply_assert : 
+  Rename.t -> local_env -> assertion -> assertion
 val apply_post : 
+  label -> Rename.t -> local_env -> Types.postcondition -> Types.postcondition
+val a_apply_post : 
   label -> Rename.t -> local_env -> postcondition -> postcondition
 
 val oldify : local_env -> Effect.t -> term -> term
@@ -45,23 +51,23 @@ val term_now_refs : local_env -> term -> Ident.set
 val term_refs : local_env -> term -> Ident.set
 val post_refs : local_env -> postcondition -> Ident.set
 
-val deref_type : type_v -> type_v
+val deref_type : type_v -> pure_type
 val dearray_type : type_v -> pure_type
 
-val decomp_kappa : type_c -> 
-  (Ident.t * type_v) * Effect.t * precondition list * postcondition option
+val decomp_type_c : type_c -> 
+  (Ident.t * type_v) * Effect.t * 
+  Types.precondition list * Types.postcondition option
+val decomp_kappa : typing_info -> 
+  (Ident.t * type_v) * Effect.t * Ast.postcondition option
 
 val equality : term -> term -> predicate
 val tequality : type_v -> term -> term -> predicate
 
 val decomp_boolean : postcondition -> predicate * predicate
 
-val effect : typed_program -> Effect.t
-val obligations : typed_program -> assertion list
-val pre : typed_program -> precondition list
-val preo : typed_program -> assertion list
-val post : typed_program -> postcondition option
-val result_type : typed_program -> type_v
+val effect : typed_expr -> Effect.t
+val post : typed_expr -> postcondition option
+val result_type : typed_expr -> type_v
 val result_name : typing_info -> Ident.t
 
 val erase_exns : typing_info -> typing_info
@@ -100,20 +106,29 @@ val make_pre_access :
 (*s AST builders for program transformation *)
 
 val make_lnode : 
-  Loc.t -> typing_info Ast.t_desc ->
-  local_env -> assertion list -> type_c -> typed_program
+  Loc.position -> typing_info Ast.t_desc ->
+  local_env -> type_c -> typed_expr
 val make_var : 
-  Loc.t -> Ident.t -> type_v -> local_env -> typed_program
+  Loc.position -> Ident.t -> type_v -> local_env -> typed_expr
 val make_expression :
-  Loc.t -> term -> type_v -> local_env -> typed_program
+  Loc.position -> term -> type_v -> local_env -> typed_expr
 val make_bool : 
-  Loc.t -> bool -> local_env -> typed_program
+  Loc.position -> bool -> local_env -> typed_expr
 val make_annot_bool :
-  Loc.t -> bool -> local_env -> typed_program
+  Loc.position -> bool -> local_env -> typed_expr
 val make_void :
-  Loc.t -> local_env -> typed_program
+  Loc.position -> local_env -> typed_expr
 val make_raise :
-  Loc.t -> Ident.t -> type_v -> local_env -> typed_program
+  Loc.position -> Ident.t -> type_v -> local_env -> typed_expr
+
+val change_desc : 'a Ast.t -> 'a Ast.t_desc -> 'a Ast.t
+
+val force_post :
+  local_env -> postcondition option -> typed_expr -> typed_expr
+
+val create_postval : predicate -> assertion option
+
+val create_post : predicate -> (assertion * 'b list) option
 
 (*s Pretty printers. *)
 
@@ -131,7 +146,8 @@ val print_wp : formatter -> assertion option -> unit
 
 val print_type_v : formatter -> type_v -> unit
 val print_type_c : formatter -> type_c -> unit
-val print_prog : formatter -> typed_program -> unit
+val print_typing_info : formatter -> typing_info -> unit
+val print_expr : formatter -> typed_expr -> unit
 
 val print_cc_type : formatter -> Cc.cc_type -> unit
 val print_cc_term : formatter -> ('a * predicate) Cc.cc_term -> unit

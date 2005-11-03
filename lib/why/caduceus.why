@@ -1,31 +1,27 @@
 
 (* bitwise operations *)
 logic bw_compl : int -> int
-external parameter bw_compl : int -> int
 
 logic bw_and : int,int -> int
-external parameter bw_and : int -> int -> int
 
 logic bw_xor : int,int -> int
-external parameter bw_xor : int -> int -> int
 
 logic bw_or : int,int -> int
-external parameter bw_or : int -> int -> int
 
 logic lsl : int,int -> int
-external parameter lsl : int -> int -> int
 
 logic lsr : int,int -> int
-external parameter lsr : int -> int -> int
 
 (* default variable initialisation *)
 
-parameter any_int: unit -> {} int { true }
-parameter any_real: unit -> {} real { true }
+type pointer
+
 parameter any_pointer: unit -> {} pointer { true }
 
 (* pointer arithmetic *)
 
+type addr
+type alloc_table
 
 parameter null : pointer
 
@@ -154,6 +150,8 @@ parameter gt_pointer_ : p1:pointer -> p2:pointer ->
 parameter ge_pointer_ : p1:pointer -> p2:pointer ->
   { base_addr(p1) = base_addr(p2) } bool 
   { if result then offset(p1) >= offset(p2) else offset(p1) < offset(p2) }
+
+type 'a memory
 
 (* pointer access *)
 logic acc: 'a memory, pointer -> 'a

@@ -9,117 +9,17 @@ Require Import Why.
 Require Import Omega.
 
 
-(* Why obligation from file "find.mlw", characters 1686-1690 *)
-Lemma find_po_1 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  0 <= f /\ f < (array_length A0).
 Proof.
 intros; generalize le_f_N; generalize le_1_f.
 intuition; SameLength A0 A; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2059-2064 *)
-Lemma find_po_2 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (Variant5: Z),
-  forall (i2: Z),
-  forall (Pre9: Variant5 = (N + 1 - i2)),
-  forall (Inv_i: (i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)),
-  0 <= i2 /\ i2 < (array_length A1).
 Proof.
 intuition SameLength A1 A.
 unfold i_invariant in H13; omega.
 omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2249-2260 *)
-Lemma find_po_3 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (Variant5: Z),
-  forall (i2: Z),
-  forall (Pre9: Variant5 = (N + 1 - i2)),
-  forall (Inv_i: (i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)),
-  forall (Pre8: 0 <= i2 /\ i2 < (array_length A1)),
-  forall (Test4: (access A1 i2) < r),
-  forall (i3: Z),
-  forall (Post1: i3 = (i2 + 1)),
-  ((i_invariant m1 n1 i3 r A1) /\ i1 <= i3 /\ i3 <= n1 /\
-  (termination i3 j1 m1 n1 r A1)) /\ (Zwf 0 (N + 1 - i3) (N + 1 - i2)).
 Proof.
 intros.
  subst r.
@@ -130,141 +30,17 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2094-2211 *)
-Lemma find_po_4 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  (i_invariant m1 n1 i1 r A1) /\ i1 <= i1 /\ i1 <= n1 /\
-  (termination i1 j1 m1 n1 r A1).
 Proof.
 intuition.
 unfold j_invariant in H8; unfold termination in H12; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2301-2306 *)
-Lemma find_po_5 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (Variant7: Z),
-  forall (j2: Z),
-  forall (Pre14: Variant7 = j2),
-  forall (Inv_j: (j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)),
-  0 <= j2 /\ j2 < (array_length A1).
 Proof.
 intuition SameLength A1 A.
 unfold j_invariant in H8; unfold termination in H12; omega.
 unfold j_invariant in H8; unfold termination in H12; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2484-2495 *)
-Lemma find_po_6 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (Variant7: Z),
-  forall (j2: Z),
-  forall (Pre14: Variant7 = j2),
-  forall (Inv_j: (j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)),
-  forall (Pre13: 0 <= j2 /\ j2 < (array_length A1)),
-  forall (Test6: r < (access A1 j2)),
-  forall (j3: Z),
-  forall (Post2: j3 = (j2 - 1)),
-  ((j_invariant m1 n1 j3 r A1) /\ j3 <= j1 /\ m1 <= j3 /\
-  (termination i2 j3 m1 n1 r A1)) /\ (Zwf 0 j3 j2).
 Proof.
 intros.
  subst r.
@@ -275,44 +51,6 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2332-2449 *)
-Lemma find_po_7 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  (j_invariant m1 n1 j1 r A1) /\ j1 <= j1 /\ m1 <= j1 /\
-  (termination i2 j1 m1 n1 r A1).
 Proof.
 intuition.
 unfold m_invariant in H7.
@@ -320,264 +58,27 @@ unfold termination in H12.
 omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2528-2551 *)
-Lemma find_po_8 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (j2: Z),
-  forall (Inv_j: ((j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)) /\ r >= (access A1 j2)),
-  (access A1 j2) <= r /\ r <= (access A1 i2).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2605-2610 *)
-Lemma find_po_9 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (j2: Z),
-  forall (Inv_j: ((j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)) /\ r >= (access A1 j2)),
-  forall (Pre22: (access A1 j2) <= r /\ r <= (access A1 i2)),
-  forall (Test8: i2 <= j2),
-  0 <= i2 /\ i2 < (array_length A1).
 Proof.
 intuition SameLength A1 A.
 unfold i_invariant in H16; omega.
 unfold i_invariant in H16; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2629-2634 *)
-Lemma find_po_10 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (j2: Z),
-  forall (Inv_j: ((j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)) /\ r >= (access A1 j2)),
-  forall (Pre22: (access A1 j2) <= r /\ r <= (access A1 i2)),
-  forall (Test8: i2 <= j2),
-  forall (Pre18: 0 <= i2 /\ i2 < (array_length A1)),
-  forall (w: Z),
-  forall (Post5: w = (access A1 i2)),
-  forall (Pre16: 0 <= i2 /\ i2 < (array_length A1)),
-  0 <= j2 /\ j2 < (array_length A1).
 Proof.
 intuition SameLength A1 A.
 unfold termination in H28; unfold j_invariant in H25; omega.
 unfold termination in H28; unfold j_invariant in H25; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2636-2646 *)
-Lemma find_po_11 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (j2: Z),
-  forall (Inv_j: ((j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)) /\ r >= (access A1 j2)),
-  forall (Pre22: (access A1 j2) <= r /\ r <= (access A1 i2)),
-  forall (Test8: i2 <= j2),
-  forall (Pre18: 0 <= i2 /\ i2 < (array_length A1)),
-  forall (w: Z),
-  forall (Post5: w = (access A1 i2)),
-  forall (Pre16: 0 <= i2 /\ i2 < (array_length A1)),
-  forall (Pre17: 0 <= j2 /\ j2 < (array_length A1)),
-  forall (A2: (array Z)),
-  forall (Post3: A2 = (store A1 i2 (access A1 j2))),
-  0 <= j2 /\ j2 < (array_length A2).
 Proof.
 intuition WhyArrays.
 ArraySubst A2; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2614-2650 *)
-Lemma find_po_12 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (j2: Z),
-  forall (Inv_j: ((j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)) /\ r >= (access A1 j2)),
-  forall (Pre22: (access A1 j2) <= r /\ r <= (access A1 i2)),
-  forall (Test8: i2 <= j2),
-  forall (Pre18: 0 <= i2 /\ i2 < (array_length A1)),
-  forall (w: Z),
-  forall (Post5: w = (access A1 i2)),
-  forall (Pre16: 0 <= i2 /\ i2 < (array_length A1)),
-  forall (Pre17: 0 <= j2 /\ j2 < (array_length A1)),
-  forall (A2: (array Z)),
-  forall (Post3: A2 = (store A1 i2 (access A1 j2))),
-  forall (Pre15: 0 <= j2 /\ j2 < (array_length A2)),
-  forall (A3: (array Z)),
-  forall (Post4: A3 = (store A2 j2 w)),
-  (((forall (i:Z),
-     (i = (i2 + 1) ->
-      (forall (j:Z),
-       (j = (j2 - 1) -> ((i_invariant m1 n1 i r A3) /\
-        (j_invariant m1 n1 j r A3) /\ (m_invariant m1 A3) /\
-        (n_invariant n1 A3) /\ 0 <= j /\ i <= (N + 1) /\
-        (termination i j m1 n1 r A3) /\ (permut A3 A)) /\
-        (Zwf 0 (N + 2 + j - i) (N + 2 + j1 - i1)))))) /\
-  r <= (access A3 j2)) /\ (access A3 i2) <= r) /\ (exchange A3 A1 i2 j2).
 Proof.
 intros.
 subst r.
@@ -597,81 +98,10 @@ generalize
 intuition subst; intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2779-2779 *)
-Lemma find_po_13 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (Variant3: Z),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Pre23: Variant3 = (N + 2 + j1 - i1)),
-  forall (Inv_ij: (i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)),
-  forall (Test9: i1 <= j1),
-  forall (i2: Z),
-  forall (Inv_i: ((i_invariant m1 n1 i2 r A1) /\ i1 <= i2 /\ i2 <= n1 /\
-                 (termination i2 j1 m1 n1 r A1)) /\ (access A1 i2) >= r),
-  forall (j2: Z),
-  forall (Inv_j: ((j_invariant m1 n1 j2 r A1) /\ j2 <= j1 /\ m1 <= j2 /\
-                 (termination i2 j2 m1 n1 r A1)) /\ r >= (access A1 j2)),
-  forall (Pre22: (access A1 j2) <= r /\ r <= (access A1 i2)),
-  forall (Test7: i2 > j2),
-  ((i_invariant m1 n1 i2 r A1) /\ (j_invariant m1 n1 j2 r A1) /\
-  (m_invariant m1 A1) /\ (n_invariant n1 A1) /\ 0 <= j2 /\ i2 <= (N + 1) /\
-  (termination i2 j2 m1 n1 r A1) /\ (permut A1 A)) /\
-  (Zwf 0 (N + 2 + j2 - i2) (N + 2 + j1 - i1)).
 Proof.
 intuition.
  Qed.
 
-(* Why obligation from file "find.mlw", characters 1785-1998 *)
-Lemma find_po_14 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  (i_invariant m1 n1 i r A0) /\ (j_invariant m1 n1 j r A0) /\
-  (m_invariant m1 A0) /\ (n_invariant n1 A0) /\ 0 <= j /\ i <= (N + 1) /\
-  (termination i j m1 n1 r A0) /\ (permut A0 A).
 Proof.
 intros; subst r i j; intuition.
 apply Lemma_4_14; auto.
@@ -683,77 +113,10 @@ omega.
 auto.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2808-2823 *)
-Lemma find_po_15 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Inv_ij: ((i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)) /\ i1 > j1),
-  m1 < i1 /\ j1 < n1.
 Proof.
 intuition elim H13; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2858-2865 *)
-Lemma find_po_16 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Inv_ij: ((i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)) /\ i1 > j1),
-  forall (Pre24: m1 < i1 /\ j1 < n1),
-  forall (Test13: f <= j1),
-  forall (n2: Z),
-  forall (Post8: n2 = j1),
-  ((m_invariant m1 A1) /\ (n_invariant n2 A1) /\ (permut A1 A) /\ 1 <= m1 /\
-  n2 <= N) /\ (Zwf 0 (n2 - m1) (n1 - m1)).
 Proof.
 intros; subst n2 r.
 assert (array_length A0 = array_length A).
@@ -764,43 +127,6 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2901-2908 *)
-Lemma find_po_17 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Inv_ij: ((i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)) /\ i1 > j1),
-  forall (Pre24: m1 < i1 /\ j1 < n1),
-  forall (Test12: f > j1),
-  forall (Test11: i1 <= f),
-  forall (m2: Z),
-  forall (Post9: m2 = i1),
-  ((m_invariant m2 A1) /\ (n_invariant n1 A1) /\ (permut A1 A) /\ 1 <= m2 /\
-  n1 <= N) /\ (Zwf 0 (n1 - m2) (n1 - m1)).
 Proof.
 intros; subst m2 r.
 assert (array_length A0 = array_length A).
@@ -812,45 +138,6 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2928-2952 *)
-Lemma find_po_18 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (Variant1: Z),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Pre26: Variant1 = (n1 - m1)),
-  forall (Inv_mn: (m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N),
-  forall (Test14: m1 < n1),
-  forall (Pre25: 0 <= f /\ f < (array_length A0)),
-  forall (r: Z),
-  forall (Post14: r = (access A0 f)),
-  forall (i: Z),
-  forall (Post13: i = m1),
-  forall (j: Z),
-  forall (Post12: j = n1),
-  forall (A1: (array Z)),
-  forall (i1: Z),
-  forall (j1: Z),
-  forall (Inv_ij: ((i_invariant m1 n1 i1 r A1) /\
-                  (j_invariant m1 n1 j1 r A1) /\ (m_invariant m1 A1) /\
-                  (n_invariant n1 A1) /\ 0 <= j1 /\ i1 <= (N + 1) /\
-                  (termination i1 j1 m1 n1 r A1) /\ (permut A1 A)) /\ i1 > j1),
-  forall (Pre24: m1 < i1 /\ j1 < n1),
-  forall (Test12: f > j1),
-  forall (Test10: i1 > f),
-  forall (n2: Z),
-  forall (Post10: n2 = f),
-  forall (m2: Z),
-  forall (Post11: m2 = f),
-  ((m_invariant m2 A1) /\ (n_invariant n2 A1) /\ (permut A1 A) /\ 1 <= m2 /\
-  n2 <= N) /\ (Zwf 0 (n2 - m2) (n1 - m1)).
 Proof.
 intros; subst n2 m2 r.
 assert (array_length A0 = array_length A).
@@ -862,35 +149,12 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 1549-1653 *)
-Lemma find_po_19 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  (m_invariant m A) /\ (n_invariant n A) /\ (permut A A) /\ 1 <= m /\ n <= N.
 Proof.
 intuition.
 subst m; exact (Lemma_1 A).
 subst n; exact (Lemma_2 A).
 Qed.
 
-(* Why obligation from file "find.mlw", characters 1497-2967 *)
-Lemma find_po_20 : 
-  forall (A: (array Z)),
-  forall (Pre27: (array_length A) = (N + 1)),
-  forall (m: Z),
-  forall (Post16: m = 1),
-  forall (n: Z),
-  forall (Post15: n = N),
-  forall (A0: (array Z)),
-  forall (m1: Z),
-  forall (n1: Z),
-  forall (Inv_mn: ((m_invariant m1 A0) /\ (n_invariant n1 A0) /\
-                  (permut A0 A) /\ 1 <= m1 /\ n1 <= N) /\ m1 >= n1),
-  (found A0) /\ (permut A0 A).
 Proof.
 intuition.
 apply Lemma_3 with (m := m1) (n := n1); auto.

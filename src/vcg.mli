@@ -26,29 +26,21 @@ type context_element =
 
 type sequent = context_element list * predicate
 
-type obligation = Loc.t * string * sequent
-
-type proof = 
-  | Lemma of string * Ident.t list
-  | True
-  | Reflexivity of term
-  | Assumption of Ident.t
-  | Proj1 of Ident.t
-  | Conjunction of Ident.t * Ident.t
-  | WfZwf of term
-  | Loop_variant_1 of Ident.t * Ident.t
-  | Absurd of Ident.t
-  | ProofTerm of proof cc_term
-  | ShouldBeAWp
+type obligation = Loc.position * string * sequent
 
 type validation = proof cc_term
 
-val vcg : string -> (Loc.t * predicate) cc_term -> obligation list * validation
+val vcg : 
+  string -> (Loc.position * predicate) cc_term -> obligation list * validation
 
 val logs : Log.t ref
 val log_print_function : (Format.formatter -> sequent -> unit) ref
 
-(* functions to be re-used in [Coq] *)
+(* obligations from the WP *)
+
+val vcg_from_wp : string -> Ast.assertion -> obligation list * proof
+
+(* functions to be reused in module [Coq] *)
 
 val annotated_if : Ident.t -> cc_binder list -> bool
 val annotation_if : cc_binder list -> Ident.t * predicate

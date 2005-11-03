@@ -3,92 +3,70 @@
 
 Require Export dowhile_spec_why.
 
-(* Why obligation from file "why/dowhile.why", characters 455-461 *)
-Lemma main_impl_po_1 : 
+(* Why obligation from file "why/dowhile.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_1 : 
   forall (x: Z),
-  forall (Pre4: (* File \"dowhile.c\", line 11, characters 14-20 *) x >= 0),
+  forall (HW_1: (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 10-16 *)
+                x >= 0),
   forall (x0: Z),
-  forall (Post1: x0 = 0),
-  forall (i0: Z),
-  forall (Post2: i0 = 10),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (x1: Z),
-  forall (Pre3: Variant1 = i1),
-  forall (Pre2: (* File \"dowhile.c\", line 16, characters 17-43 *) (x1 =
-                (10 - i1) /\ 10 >= i1 /\ i1 > 0)),
-  forall (Test4: true = true),
-  forall (x2: Z),
-  forall (Post5: x2 = (x1 + 1)),
-  forall (i2: Z),
-  forall (Post6: i2 = (i1 - 1)),
-  forall (Test3: i2 <= 0),
-  (forall (result:unit),
-   (result = tt ->
-    (* File \"dowhile.c\", line 11, characters 29-36 *) x2 = 10)).
+  forall (HW_2: x0 = 0),
+  forall (i: Z),
+  forall (HW_3: i = 10),
+  (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 11-37 *)
+  (x0 = (10 - i) /\ 10 >= i /\ i > 0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 472-472 *)
-Lemma main_impl_po_2 : 
+(* Why obligation from file "why/dowhile.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_2 : 
   forall (x: Z),
-  forall (Pre4: (* File \"dowhile.c\", line 11, characters 14-20 *) x >= 0),
+  forall (HW_1: (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 10-16 *)
+                x >= 0),
   forall (x0: Z),
-  forall (Post1: x0 = 0),
+  forall (HW_2: x0 = 0),
+  forall (i: Z),
+  forall (HW_3: i = 10),
   forall (i0: Z),
-  forall (Post2: i0 = 10),
-  forall (Variant1: Z),
-  forall (i1: Z),
   forall (x1: Z),
-  forall (Pre3: Variant1 = i1),
-  forall (Pre2: (* File \"dowhile.c\", line 16, characters 17-43 *) (x1 =
-                (10 - i1) /\ 10 >= i1 /\ i1 > 0)),
-  forall (Test4: true = true),
+  forall (HW_4: (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 11-37 *)
+                (x1 = (10 - i0) /\ 10 >= i0 /\ i0 > 0)),
   forall (x2: Z),
-  forall (Post5: x2 = (x1 + 1)),
-  forall (i2: Z),
-  forall (Post6: i2 = (i1 - 1)),
-  forall (Test2: i2 > 0),
-  forall (result5: unit),
-  forall (Post7: result5 = tt),
-  (* File \"dowhile.c\", line 16, characters 17-43 *) (x2 = (10 - i2) /\
-  10 >= i2 /\ i2 > 0) /\ (Zwf 0 i2 i1).
+  forall (HW_5: x2 = (x1 + 1)),
+  forall (i1: Z),
+  forall (HW_6: i1 = (i0 - 1)),
+  forall (HW_7: i1 > 0),
+  (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 11-37 *)
+  (x2 = (10 - i1) /\ 10 >= i1 /\ i1 > 0) /\ (Zwf 0 i1 i0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 183-481 *)
-Lemma main_impl_po_3 : 
+(* Why obligation from file "why/dowhile.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_3 : 
   forall (x: Z),
-  forall (Pre4: (* File \"dowhile.c\", line 11, characters 14-20 *) x >= 0),
+  forall (HW_1: (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 10-16 *)
+                x >= 0),
   forall (x0: Z),
-  forall (Post1: x0 = 0),
+  forall (HW_2: x0 = 0),
+  forall (i: Z),
+  forall (HW_3: i = 10),
   forall (i0: Z),
-  forall (Post2: i0 = 10),
-  forall (Variant1: Z),
-  forall (i1: Z),
   forall (x1: Z),
-  forall (Pre3: Variant1 = i1),
-  forall (Pre2: (* File \"dowhile.c\", line 16, characters 17-43 *) (x1 =
-                (10 - i1) /\ 10 >= i1 /\ i1 > 0)),
-  forall (Test1: false = true),
-  (* File \"dowhile.c\", line 11, characters 29-36 *) x1 = 10.
+  forall (HW_4: (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 11-37 *)
+                (x1 = (10 - i0) /\ 10 >= i0 /\ i0 > 0)),
+  forall (x2: Z),
+  forall (HW_5: x2 = (x1 + 1)),
+  forall (i1: Z),
+  forall (HW_6: i1 = (i0 - 1)),
+  forall (HW_8: i1 <= 0),
+  (* File \"dowhile.c819618234.c1069824147.i\", line 0, characters 25-32 *)
+  x2 = 10.
 Proof.
 intuition.
 discriminate.
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 221-344 *)
-Lemma main_impl_po_4 : 
-  forall (x: Z),
-  forall (Pre4: (* File \"dowhile.c\", line 11, characters 14-20 *) x >= 0),
-  forall (x0: Z),
-  forall (Post1: x0 = 0),
-  forall (i0: Z),
-  forall (Post2: i0 = 10),
-  (* File \"dowhile.c\", line 16, characters 17-43 *) (x0 = (10 - i0) /\
-  10 >= i0 /\ i0 > 0).
 Proof.
 intuition.
 Save.

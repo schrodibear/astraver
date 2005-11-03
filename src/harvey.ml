@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.29 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.30 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -117,7 +117,7 @@ and print_terms fmt tl =
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "true"
-  | Pvar id when id == default_post ->
+  | Pvar id when id == Ident.default_post ->
       fprintf fmt "true"
   | Pfalse ->
       fprintf fmt "false"
@@ -208,7 +208,7 @@ let output_sequent fmt (ctx, concl) =
   print_seq fmt ctx
 
 let output_obligation fmt (loc, o, s) = 
-  fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation loc;
+  fprintf fmt "@\n@[;; %a@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[%a@]@\n" output_sequent s
 
 let output_file f = 

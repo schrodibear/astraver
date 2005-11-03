@@ -3,8 +3,8 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition purse_inv  (alloc:alloc_table)
-  (balance:((memory) Z)) (p:pointer)
-  := (* File \"purse.c\", line 6, characters 37-65 *) ((valid alloc p) /\
-     (acc balance p) >= 0).
+(*Why predicate*) Definition purse_inv  (balance:((memory) Z))
+  (alloc:alloc_table) (p:pointer)
+  := (* File \"purse.c819618234.c1069824147.i\", line 0, characters 33-61 *)
+     ((valid alloc p) /\ (acc balance p) >= 0).
 

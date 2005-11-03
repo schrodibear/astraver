@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: viewer.ml,v 1.9 2005-06-16 13:36:14 filliatr Exp $ i*)
+(*i $Id: viewer.ml,v 1.10 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 open Format
 open Options
@@ -30,7 +30,7 @@ let deal_file f =
   Main.reset ();
   let cin = open_in f in 
   (*c_file := Filename.check_suffix f ".c";*)
-  let parsef = (*if !c_file then Main.c_parser else *) Main.ml_parser in
+  let parsef = (*if !c_file then Main.c_parser else *) Main.why_parser in
   let p = parsef cin in
   if parse_only then exit 0;
   List.iter Main.interp_decl p;
@@ -38,6 +38,7 @@ let deal_file f =
   close_in cin
 
 let _ =
+  if prelude then Main.load_prelude ();
   if files = [] then begin eprintf "usage: gwhy files@."; exit 1 end;
   try
     List.iter deal_file Options.files;
@@ -57,10 +58,13 @@ module Tree = struct
     let buf = Buffer.create 1024 in
     let fmt = formatter_of_buffer buf in
     fun x -> 
-      fprintf fmt "%a@." Util.print_type_c x.info.kappa;
+      fprintf fmt "%a@." Util.print_typing_info x.info;
       let s = Buffer.contents buf in
       Buffer.reset buf;
-      x.info.loc, s
+      let loc = 
+	let (b,e) = x.info.t_loc in b.Lexing.pos_cnum, e.Lexing.pos_cnum 
+      in
+      loc, s
 
   let show_info_ref = ref (fun i -> ())
   let show_info i = !show_info_ref i
@@ -71,22 +75,19 @@ module Tree = struct
     | _ :: bl -> statements bl
 
   let children x = match x.desc with
-    | Aff (_, e)
     | Lam (_, e)
     | Rec (_, _, _, _, e)
-    | TabAcc (_, _, e)
+    | Loop (_,_,e)
     | Raise (_, Some e) -> [e]
-    | While (e1, _, _, e2)
     | LetIn (_, e1, e2)
-    | LetRef (_, e1, e2)
-    | TabAff (_, _, e1, e2) -> [e1; e2]
+    | LetRef (_, e1, e2) -> [e1; e2]
     | App (e1, Term e2, _) -> [e2; e1]
     | App (e, _, _) -> [e]
     | If (e1, e2, e3) -> [e1; e2; e3]
     | Seq bl -> statements bl
     | Try (e, pl) -> e :: List.map snd pl
     | Raise _ 
-    | Var _ | Acc _ | Expression _ | Absurd | Any _ -> []
+    | Var _ | Expression _ | Absurd | Any _ -> []
 
 end
 

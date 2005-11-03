@@ -3,31 +3,28 @@
 
 Require Export sizeof_spec_why.
 
-(* Why obligation from file "why/sizeof.why", characters 36-139 *)
-Lemma f1_impl_po_1 : 
-  forall (result: Z),
-  forall (Post1: result = 4),
-  (* File \"sizeof.c\", line 2, characters 13-25 *) result = 4.
+(* Why obligation from file "why/sizeof.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_1 : 
+  (* File \"sizeof.c819618234.c1069824147.i\", line 0, characters 9-21 *) 4 =
+  4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sizeof.why", characters 178-283 *)
-Lemma f2_impl_po_1 : 
-  forall (result: Z),
-  forall (Post1: result = 34),
-  (* File \"sizeof.c\", line 5, characters 13-26 *) result = 34.
+(* Why obligation from file "why/sizeof.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_1 : 
+  (* File \"sizeof.c819618234.c1069824147.i\", line 0, characters 9-22 *)
+  34 = 34.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sizeof.why", characters 322-425 *)
-Lemma f3_impl_po_1 : 
-  forall (result: Z),
-  forall (Post1: result = 4),
-  (* File \"sizeof.c\", line 9, characters 13-25 *) result = 4.
+(* Why obligation from file "why/sizeof.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_1 : 
+  (* File \"sizeof.c819618234.c1069824147.i\", line 0, characters 9-21 *) 4 =
+  4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

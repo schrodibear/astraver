@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.24 2005-06-20 12:17:47 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.25 2005-11-03 14:11:32 filliatr Exp $ i*)
 
 open Ctypes
 
@@ -74,12 +74,8 @@ let set_const_value v n = v.enum_constant_value <- n
 module HeapVarSet = 
   Set.Make(struct type t = var_info 
 		  let compare i1 i2 = 
-		    (* compare elements in reverse order, because then
-		       HeapVarSet.fold will be more like fold_right 
-		       instead of fold_left (Call Compat because
-		       Set.fold order changed in OCaml 3.08.2) *)  
-		      Compat.compare_for_set_fold
-			i2.var_uniq_tag i1.var_uniq_tag 
+		    Pervasives.compare
+		      i1.var_uniq_tag i2.var_uniq_tag 
 	   end)
 
 let print_hvs fmt s =

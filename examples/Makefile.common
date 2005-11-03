@@ -2,8 +2,8 @@
 
 WHY=../../bin/why.opt
 CADUCEUS=../../bin/caduceus.opt
-WHYOPTIONS=--coq-v8 --split
-# WHYOPTIONS=--coq-v8 --valid --split
+# WHYOPTIONS=--coq-v8
+WHYOPTIONS=--coq-v8 --valid
 
 dp: simplify cvcl
 
@@ -19,8 +19,14 @@ cvcl: $(VO:_why.vo=_why.cvc)
 %_valid.v %_why.v: %.c $(CADUCEUS)
 	$(CADUCEUS) $<
 
-%.vo: %.v
+%_why.vo: %_why.v
 	coqc -I ../../lib/coq $(OPT) $<
+
+%_valid.vo: %_valid.v %_why.vo
+	coqc -I ../../lib/coq $(OPT) $<
+
+#%.vo: %.v
+#	coqc -I ../../lib/coq $(OPT) $<
 
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $<

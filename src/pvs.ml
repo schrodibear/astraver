@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.62 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.63 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -52,7 +52,8 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
-  | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
+  | PTexternal ([v], id) when id == farray -> 
+      fprintf fmt "warray[%a]" print_pure_type v
   | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
   | PTexternal(i,id) -> fprintf fmt "%a%a" Ident.print id instance i
   | PTvarid _ -> assert false 
@@ -275,7 +276,7 @@ module Mono = struct
       print_pure_type t print_term e
 
   let print_obligation fmt (loc,id,s) =
-    fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation loc;
+    fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation_position loc;
     fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
     print_sequent fmt s;
     fprintf fmt "@]@\n"
@@ -326,14 +327,16 @@ let output_elem fmt = function
   | FunctionDef (id, p) -> Output.print_function_def fmt id p
 
 (* declaring predefined symbols *)
+(***
 let predefined_symbols fmt = 
   let a = PTvarid (Ident.create "a") in
-  let int_array = PTarray PTint in
+  let farray_a = PTexternal ([a], farray) in
+  let int_array = PTexternal ([PTint], farray) in
   List.iter 
     (fun (s,t) -> Output.print_logic fmt s (Env.generalize_logic_type t))
-    [ "array_length", Function ([PTarray a], PTint);
-      "access", Function ([PTarray a; PTint], a);
-      "store", Function ([PTarray a; PTint; a], PTunit);
+    [ "array_length", Function ([farray_a], PTint);
+      "access", Function ([farray_a; PTint], a);
+      "store", Function ([farray_a; PTint; a], PTunit);
 
       "sorted_array", Predicate [int_array; PTint; PTint];
       "exchange"    , Predicate [int_array; int_array; PTint; PTint];
@@ -342,6 +345,7 @@ let predefined_symbols fmt =
       "array_le"    , Predicate [int_array; PTint; PTint; PTint];
       "array_ge"    , Predicate [int_array; PTint; PTint; PTint];
     ]
+***)
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in
@@ -352,6 +356,6 @@ let output_file fwe =
        begin_theory fmt th)
     sep
     (fun fmt ->
-       predefined_symbols fmt;
+       (*predefined_symbols fmt;*)
        Queue.iter (output_elem fmt) queue;
        end_theory fmt th)

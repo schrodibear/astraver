@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.9 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.10 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -22,8 +22,9 @@ open Types
 open Ast
 open Format
 open Error
+open Misc
 
-exception Error of (Loc.t option) * Error.t
+exception Error of Error.t
 
 let report fmt = function
   | AnyMessage s ->
@@ -38,12 +39,16 @@ let report fmt = function
       fprintf fmt "Unbound label '%s'" s
   | UnboundException id ->
       fprintf fmt "Unbound exception '%s'" (Ident.string id)
+  | UnboundType id ->
+      fprintf fmt "Unbound type '%a'" Ident.print id
   | Clash id ->
       fprintf fmt "Clash with previous constant %s" (Ident.string id)
   | ClashExn id ->
       fprintf fmt "Clash with previous exception %s" (Ident.string id)
   | ClashRef id ->
-      fprintf fmt "Clash with previous reference or array %s" (Ident.string id)
+      fprintf fmt "Clash with previous reference %s" (Ident.string id)
+  | ClashType id ->
+      fprintf fmt "Clash with previous type %s" (Ident.string id)
   | Undefined id ->
       fprintf fmt "The object %s is undefined" (Ident.string id)
   | NotAReference id ->
@@ -65,7 +70,9 @@ let report fmt = function
       fprintf fmt "(i.e. neither a mutable nor a function)@]"
   | BranchesSameType ->
       fprintf fmt "@[The two branches of an `if' expression@ ";
-      fprintf fmt "should have the same type@]"
+      fprintf fmt "should have the same type@ ";
+      fprintf fmt "(or the `else' branch has been omitted in a non-unit `if')";
+      fprintf fmt "@]"
   | LetRef ->
       fprintf fmt "References can only be bound in pure terms"
   | VariantInformative ->
@@ -117,32 +124,43 @@ let report fmt = function
   | ExceptionArgument (id, false) ->
       fprintf fmt "Exception %a has no argument" Ident.print id
   | CannotBeRaised id ->
-      fprintf fmt "Exception %a cannot be raised by this expression" 
+      fprintf fmt "Exception %a cannot be raised" 
 	Ident.print id
   | MutableMutable ->
       fprintf fmt 
 	"A mutable type cannot contain another mutable type or a function"
   | PolymorphicGoal ->
       fprintf fmt "A goal cannot be polymorphic"
+  | TypeBadArity ->
+      fprintf fmt "A type parameter occurs several times"
+  | TypeArity (id, a, n) ->
+      fprintf fmt "@[The type %a expects %d argument(s),@ " Ident.print id a;
+      fprintf fmt "but is applied to %d argument(s)@]" n
+  | GlobalWithEffects (id, e) ->
+      fprintf fmt "@[Global %a has effects (@[%a@]).@\n" 
+	Ident.print id Effect.print e;
+      fprintf fmt "A global declaration cannot have effects@]"
 
-let is_mutable = function Ref _ | Array _ -> true | _ -> false
+let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
 
-let raise_located loc e = raise (Error (Some loc, e))
-let raise_unlocated e = raise (Error (None, e))
-let raise_locop locop e = raise (Error (locop, e))
+let raise_located loc e = raise (Located (loc, Error e))
+let raise_unlocated e = raise (Error e)
+let raise_locop locop e = match locop with
+  | None -> raise (Error e)
+  | Some l -> raise (Located (l, Error e))
 
 
 let rec explain_exception fmt = function
+  | Lexer.Lexical_error s -> 
+      fprintf fmt "Lexical error: %s" s
   | Parsing.Parse_error -> 
       fprintf fmt "Syntax error"
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
-  | Error (Some loc, e) | Stdpp.Exc_located (_, Error (Some loc, e)) ->
-      fprintf fmt "%a%a" Loc.report loc report e
-  | Stdpp.Exc_located (loc, e) ->
-      fprintf fmt "%a%a" Loc.report (Compat.make_loc loc) explain_exception e
-  | Error (_, e) ->
+  | Located (loc, e) ->
+      fprintf fmt "%a%a" Loc.report_position loc explain_exception e
+  | Error e ->
       report fmt e
   | e ->
       fprintf fmt "Anomaly: %s" (Printexc.to_string e); raise e

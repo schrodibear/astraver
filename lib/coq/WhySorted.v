@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.9 2003-11-25 12:15:33 paulin Exp $ *)
+(* $Id: WhySorted.v,v 1.10 2005-11-03 14:11:35 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require Import WhyPermut.
@@ -147,7 +147,7 @@ Lemma left_substitution :
    (i >= 0)%Z ->
    (j < array_length A)%Z ->
    sorted_array A i j ->
-   (v <= access A i)%Z -> sorted_array (store A i v) i j.
+   (v <= access A i)%Z -> sorted_array (update A i v) i j.
 Proof.
 intros A i j v H_i H_j H_sorted H_v.
 unfold sorted_array; intros.
@@ -171,7 +171,7 @@ Lemma right_substitution :
    (i >= 0)%Z ->
    (j < array_length A)%Z ->
    sorted_array A i j ->
-   (access A j <= v)%Z -> sorted_array (store A j v) i j.
+   (access A j <= v)%Z -> sorted_array (update A j v) i j.
 Proof.
 intros A i j v H_i H_j H_sorted H_v.
 unfold sorted_array; intros.
@@ -198,7 +198,7 @@ Lemma no_effect :
    (j < array_length A)%Z ->
    sorted_array A i j ->
    (0 <= k < i)%Z \/ (j < k < array_length A)%Z ->
-   sorted_array (store A k v) i j.
+   sorted_array (update A k v) i j.
 Proof.
 intros.
 unfold sorted_array; intros.

@@ -1,4 +1,6 @@
 
+  o fixed bug with missing exceptional postconditions (false in now
+    inserted and a warning is emitted)
   o array types now accepted in logic/predicate arguments
   o --coq now selects the Coq version determined at compiled time
 

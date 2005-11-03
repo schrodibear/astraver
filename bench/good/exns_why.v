@@ -3,91 +3,67 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/exns.mlw", characters 493-507 *)
-(*Why goal*) Lemma p4_po_1 : 
-  forall (Test1: false = true),
-  forall (result0: Z),
-  forall (Post1: result0 = 2),
-  result0 = 1.
+(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma p7_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 1),
+  x = 1.
 Proof.
-intros; discriminate Test1.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 596-596 *)
-(*Why goal*) Lemma p5_po_1 : 
-  forall (Test1: false = true),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  False.
-Proof.
-intros; discriminate Test1.
-Save.
-
-(* Why obligation from file "good/exns.mlw", characters 710-720 *)
-(*Why goal*) Lemma p6_po_1 : 
-  forall (Test2: true = false),
-  forall (result0: Z),
-  forall (Post2: result0 = 1),
-  False.
-Proof.
-intros; discriminate Test2.
-Save.
-
-
-(* Why obligation from file "good/exns.mlw", characters 979-990 *)
+(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma p8_po_1 : 
-  forall (x0: Z),
-  forall (Post1: x0 = 1),
-  forall (result0: Z),
-  forall (Post2: result0 = x0),
-  x0 = 1 /\ result0 = 1.
+  forall (x: Z),
+  forall (HW_1: x = 1),
+  x = 1 /\ x = 1.
 Proof.
 intuition.
-Qed.
-
-
-(* Why obligation from file "good/exns.mlw", characters 1071-1088 *)
-(*Why goal*) Lemma p9_po_1 : 
-  forall (x0: Z),
-  forall (Post1: x0 = 1),
-  forall (result0: Z),
-  forall (Post2: result0 = x0),
-  x0 = 1 /\ result0 = 1.
-Proof.
-intuition.
-Qed.
-
-
-
-
-
-
-
-(* Why obligation from file "good/exns.mlw", characters 1244-1258 *)
-(*Why goal*) Lemma p11_po_1 : 
-  forall (result: Z),
-  forall (Post2: result = 1),
-  (forall (result0:Z), (result0 = result -> result0 = 1)).
-Proof.
-intuition.
+(* FILL PROOF HERE *)
 Save.
 
+(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma p9_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 1),
+  x = 1 /\ x = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
+(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma p13_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 2),
+  x = 2.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1630-1630 *)
+(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma p13a_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 1),
+  forall (x0: Z),
+  forall (HW_2: x0 = 0),
+  x0 <> 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma p14_po_1 : 
   forall (x: Z),
-  forall (Test1: x <> 1),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  ((x = 2 -> x = 2)) /\
-  ((x <> 2 ->
-    (forall (result:unit),
-     (result = tt -> ((x = 3 -> x = 3)) /\
-      ((x <> 3 ->
-        (forall (result:unit), (result = tt -> x <> 1 /\ x <> 2 /\ x <> 3)))))))).
+  forall (HW_2: x <> 1),
+  forall (HW_4: x <> 2),
+  forall (HW_6: x <> 3),
+  x <> 1 /\ x <> 2 /\ x <> 3.
 Proof.
 intuition.
-Qed.
-
+(* FILL PROOF HERE *)
+Save.
 

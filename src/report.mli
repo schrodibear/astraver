@@ -14,16 +14,16 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.mli,v 1.4 2004-07-21 08:07:09 filliatr Exp $ i*)
+(*i $Id: report.mli,v 1.5 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 open Format
 
-exception Error of (Loc.t option) * Error.t
+exception Error of Error.t
 
 val report : formatter -> Error.t -> unit
 
-val raise_located : Loc.t -> Error.t -> 'a 
+val raise_located : Loc.position -> Error.t -> 'a 
 val raise_unlocated : Error.t -> 'a
-val raise_locop : Loc.t option -> Error.t -> 'a
+val raise_locop : Loc.position option -> Error.t -> 'a
 
 val explain_exception : Format.formatter -> exn -> unit

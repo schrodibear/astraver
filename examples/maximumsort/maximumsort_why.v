@@ -68,59 +68,14 @@ Unset Implicit Arguments.
 
 
 (* DÃ©but: preuve de  *)
-(* Why obligation from file "maximumsort.mlw", characters 206-210 *)
-Lemma swap_po_1 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (Pre4: 0 <= i /\ i < (array_length t)),
-  forall (v: Z),
-  forall (Post3: v = (access t i)),
-  forall (Pre2: 0 <= i /\ i < (array_length t)),
-  0 <= j /\ j < (array_length t).
 Proof.
 intuition ArraySubst t0.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 217-226 *)
-Lemma swap_po_2 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (Pre4: 0 <= i /\ i < (array_length t)),
-  forall (v: Z),
-  forall (Post3: v = (access t i)),
-  forall (Pre2: 0 <= i /\ i < (array_length t)),
-  forall (Pre3: 0 <= j /\ j < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t i (access t j))),
-  0 <= j /\ j < (array_length t0).
 Proof.
 intros; ArraySubst t0; intuition.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 187-233 *)
-Lemma swap_po_3 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (Pre4: 0 <= i /\ i < (array_length t)),
-  forall (v: Z),
-  forall (Post3: v = (access t i)),
-  forall (Pre2: 0 <= i /\ i < (array_length t)),
-  forall (Pre3: 0 <= j /\ j < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t i (access t j))),
-  forall (Pre1: 0 <= j /\ j < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 j v)),
-  (exchange t1 t i j).
  Proof.
  intros; subst t1 t0 v; auto with datatypes.
 Qed.
@@ -130,99 +85,20 @@ Qed.
 
 (* DÃ©but: preuve de  *)
 
-(* Why obligation from file "maximumsort.mlw", characters 611-612 *)
-Lemma maximum_po_1 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test4: k0 = 0),
-  (0 <= i0 /\ i0 <= n0) /\ (Maximize t n0 (access t i0) 0).
   Proof.
   intros; split.
   Omega'.
   rewrite Test4 in Pre18; tauto.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 646-651 *)
-Lemma maximum_po_2 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test3: k0 <> 0),
-  forall (nk: Z),
-  forall (Post3: nk = (k0 - 1)),
-  0 <= nk /\ nk < (array_length t).
    Proof.
    intros; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 652-656 *)
-Lemma maximum_po_3 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test3: k0 <> 0),
-  forall (nk: Z),
-  forall (Post3: nk = (k0 - 1)),
-  forall (Pre16: 0 <= nk /\ nk < (array_length t)),
-  0 <= i0 /\ i0 < (array_length t).
   Proof.
   intros; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 665-684 *)
-Lemma maximum_po_4 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test3: k0 <> 0),
-  forall (nk: Z),
-  forall (Post3: nk = (k0 - 1)),
-  forall (Pre16: 0 <= nk /\ nk < (array_length t)),
-  forall (Pre17: 0 <= i0 /\ i0 < (array_length t)),
-  forall (Test2: (access t nk) > (access t i0)),
-  (0 <= nk /\ nk <= nk) /\ nk <= n0 /\ n0 < (array_length t) /\
-  (Maximize t n0 (access t nk) nk).
 Proof.
 repeat (split; [ Omega' | auto ]).
 subst nk.
@@ -230,94 +106,15 @@ ring (k0 - 1 + 1)%Z; intros;
  apply Maximize_Zle with (m1 := access t i0); Omega' || tauto.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 512-765 *)
-Lemma maximum_po_5 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test3: k0 <> 0),
-  forall (nk: Z),
-  forall (Post3: nk = (k0 - 1)),
-  forall (Pre16: 0 <= nk /\ nk < (array_length t)),
-  forall (Pre17: 0 <= i0 /\ i0 < (array_length t)),
-  forall (Test2: (access t nk) > (access t i0)),
-  forall (Pre15: (0 <= nk /\ nk <= nk) /\ nk <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t nk) nk)),
-  forall (Pre13: (0 <= nk /\ nk <= nk) /\ nk <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t nk) nk)),
-  forall (Pre14: (0 <= nk /\ nk <= nk) /\ nk <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t nk) nk)),
-  (Zwf 0 nk Variant1).
   Proof.
   intros; subst nk; unfold Zwf; Omega'.
   Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 693-711 *)
-Lemma maximum_po_6 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test3: k0 <> 0),
-  forall (nk: Z),
-  forall (Post3: nk = (k0 - 1)),
-  forall (Pre16: 0 <= nk /\ nk < (array_length t)),
-  forall (Pre17: 0 <= i0 /\ i0 < (array_length t)),
-  forall (Test1: (access t nk) <= (access t i0)),
-  (0 <= nk /\ nk <= i0) /\ i0 <= n0 /\ n0 < (array_length t) /\
-  (Maximize t n0 (access t i0) nk).
   Proof.
   intros; subst nk.
   repeat (split; [ Omega' | auto ]); ring (k0 - 1 + 1)%Z; tauto.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 512-765 *)
-Lemma maximum_po_7 : 
-  forall (n: Z),
-  forall (k: Z),
-  forall (i: Z),
-  forall (t: (array Z)),
-  forall (Pre20: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
-                 (Maximize t n (access t i) k)),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (k0: Z),
-  forall (i0: Z),
-  forall (Pre19: Variant1 = k0),
-  forall (Pre18: (0 <= k0 /\ k0 <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) k0)),
-  forall (Test3: k0 <> 0),
-  forall (nk: Z),
-  forall (Post3: nk = (k0 - 1)),
-  forall (Pre16: 0 <= nk /\ nk < (array_length t)),
-  forall (Pre17: 0 <= i0 /\ i0 < (array_length t)),
-  forall (Test1: (access t nk) <= (access t i0)),
-  forall (Pre11: (0 <= nk /\ nk <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) nk)),
-  forall (Pre9: (0 <= nk /\ nk <= i0) /\ i0 <= n0 /\ n0 < (array_length t) /\
-                (Maximize t n0 (access t i0) nk)),
-  forall (Pre10: (0 <= nk /\ nk <= i0) /\ i0 <= n0 /\ n0 <
-                 (array_length t) /\ (Maximize t n0 (access t i0) nk)),
-  (Zwf 0 nk Variant1).
   Proof.
   intros; subst nk.
   unfold Zwf; Omega'.
@@ -326,24 +123,6 @@ Lemma maximum_po_7 :
 
 (* fin preuve de maximum *)
 
-(* Why obligation from file "maximumsort.mlw", characters 1140-1160 *)
-Lemma maxisort_po_1 : 
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= (array_length t)),
-  forall (i: Z),
-  forall (Post3: i = ((array_length t) - 1)),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Pre9: Variant1 = (i1 + 1)),
-  forall (Pre8: (0 <= (i1 + 1) /\ (i1 + 1) <= (array_length t0)) /\
-                (sorted_array t0 (i1 + 1) ((array_length t0) - 1)) /\
-                (permut t0 t) /\
-                (((i1 + 1) < (array_length t0) ->
-                  (Maximize t0 i1 (access t0 (i1 + 1)) 0)))),
-  forall (Test2: i1 >= 0),
-  (0 <= i1 /\ i1 <= i1) /\ i1 <= i1 /\ i1 < (array_length t0) /\
-  (Maximize t0 i1 (access t0 i1) i1).
   Proof.
   intros; split.
  Omega'.
@@ -356,60 +135,10 @@ Lemma maxisort_po_1 :
   intros H; absurd (i1 < i1)%Z; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 1172-1185 *)
-Lemma maxisort_po_2 : 
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= (array_length t)),
-  forall (i: Z),
-  forall (Post3: i = ((array_length t) - 1)),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Pre9: Variant1 = (i1 + 1)),
-  forall (Pre8: (0 <= (i1 + 1) /\ (i1 + 1) <= (array_length t0)) /\
-                (sorted_array t0 (i1 + 1) ((array_length t0) - 1)) /\
-                (permut t0 t) /\
-                (((i1 + 1) < (array_length t0) ->
-                  (Maximize t0 i1 (access t0 (i1 + 1)) 0)))),
-  forall (Test2: i1 >= 0),
-  forall (Pre7: (0 <= i1 /\ i1 <= i1) /\ i1 <= i1 /\ i1 <
-                (array_length t0) /\ (Maximize t0 i1 (access t0 i1) i1)),
-  forall (r: Z),
-  forall (Post8: (0 <= r /\ r <= i1) /\ (Maximize t0 i1 (access t0 r) 0)),
-  (0 <= i1 /\ i1 < (array_length t0)) /\ 0 <= r /\ r < (array_length t0).
   Proof.
   intros; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 1132-1185 *)
-Lemma maxisort_po_3 : 
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= (array_length t)),
-  forall (i: Z),
-  forall (Post3: i = ((array_length t) - 1)),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Pre9: Variant1 = (i1 + 1)),
-  forall (Pre8: (0 <= (i1 + 1) /\ (i1 + 1) <= (array_length t0)) /\
-                (sorted_array t0 (i1 + 1) ((array_length t0) - 1)) /\
-                (permut t0 t) /\
-                (((i1 + 1) < (array_length t0) ->
-                  (Maximize t0 i1 (access t0 (i1 + 1)) 0)))),
-  forall (Test2: i1 >= 0),
-  forall (Pre7: (0 <= i1 /\ i1 <= i1) /\ i1 <= i1 /\ i1 <
-                (array_length t0) /\ (Maximize t0 i1 (access t0 i1) i1)),
-  forall (r: Z),
-  forall (Post8: (0 <= r /\ r <= i1) /\ (Maximize t0 i1 (access t0 r) 0)),
-  forall (Pre6: (0 <= i1 /\ i1 < (array_length t0)) /\ 0 <= r /\ r <
-                (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post10: (exchange t1 t0 i1 r)),
-  (forall (i:Z),
-   (i = (i1 - 1) -> ((0 <= (i + 1) /\ (i + 1) <= (array_length t1)) /\
-    (sorted_array t1 (i + 1) ((array_length t1) - 1)) /\ (permut t1 t) /\
-    (((i + 1) < (array_length t1) -> (Maximize t1 i (access t1 (i + 1)) 0)))) /\
-    (Zwf 0 (i + 1) (i1 + 1)))).
  Proof.
  intros; decompose [and] Pre8; clear Pre8; split.
    ArrayLength.
@@ -448,15 +177,6 @@ Lemma maxisort_po_3 :
    unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 927-1102 *)
-Lemma maxisort_po_4 : 
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= (array_length t)),
-  forall (i: Z),
-  forall (Post3: i = ((array_length t) - 1)),
-  (0 <= (i + 1) /\ (i + 1) <= (array_length t)) /\
-  (sorted_array t (i + 1) ((array_length t) - 1)) /\ (permut t t) /\
-  (((i + 1) < (array_length t) -> (Maximize t i (access t (i + 1)) 0))).
   Proof.
   intros; subst i; ring (array_length t - 1 + 1)%Z; split.
    Omega'.
@@ -469,21 +189,6 @@ Lemma maxisort_po_4 :
    [ Omega' | auto ].
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 853-1210 *)
-Lemma maxisort_po_5 : 
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= (array_length t)),
-  forall (i: Z),
-  forall (Post3: i = ((array_length t) - 1)),
-  forall (i1: Z),
-  forall (t0: (array Z)),
-  forall (Post2: ((0 <= (i1 + 1) /\ (i1 + 1) <= (array_length t0)) /\
-                 (sorted_array t0 (i1 + 1) ((array_length t0) - 1)) /\
-                 (permut t0 t) /\
-                 (((i1 + 1) < (array_length t0) ->
-                   (Maximize t0 i1 (access t0 (i1 + 1)) 0)))) /\
-                 i1 < 0),
-  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
   Proof.
   intros; cut ((i1 + 1)%Z = 0%Z);
    [ intros H; rewrite H in Post2; split; tauto | Omega' ].

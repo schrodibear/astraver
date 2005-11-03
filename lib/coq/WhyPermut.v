@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.13 2003-12-17 16:17:22 marche Exp $ *)
+(* $Id: WhyPermut.v,v 1.14 2005-11-03 14:11:35 filliatr Exp $ *)
 
 Require Import WhyArrays.
 Require Import Omega.
@@ -47,7 +47,7 @@ Lemma exchange_1 :
  forall (A:Set) (t:array A) (i j:Z),
    (0 <= i < array_length t)%Z ->
    (0 <= j < array_length t)%Z ->
-   access (store (store t i (access t j)) j (access t i)) i =
+   access (update (update t i (access t j)) j (access t i)) i =
    access t j.
 Proof.
 intros A t i j H_i H_j.
@@ -61,7 +61,7 @@ Lemma exchange_proof :
  forall (A:Set) (t:array A) (i j:Z),
    (0 <= i < array_length t)%Z ->
    (0 <= j < array_length t)%Z ->
-   exchange (store (store t i (access t j)) j (access t i)) t i j.
+   exchange (update (update t i (access t j)) j (access t i)) t i j.
 Proof.
 intros A t i j H_i H_j.
 apply exchange_c; WhyArrays; auto with datatypes.

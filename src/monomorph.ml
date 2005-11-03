@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.5 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.6 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -112,7 +112,6 @@ module PureType = struct
   let rec normalize = function
     | PTvar { type_val = Some t } -> normalize t
     | PTexternal (i, id) -> PTexternal (List.map normalize i, id)
-    | PTarray t -> PTarray (normalize t)
     | PTvar _ | PTvarid _ | PTint | PTbool | PTunit | PTreal as t -> t
 
   let equal t1 t2 = normalize t1 = normalize t2
@@ -196,7 +195,6 @@ module SV = struct
 	pure_type s pt
     | PTexternal (l, id) ->
 	PTexternal (List.map (pure_type s) l, id)
-    | PTarray ta -> PTarray (pure_type s ta)
     | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
 
 end
@@ -248,8 +246,6 @@ end
 (* unification of an open instance [t1] with a closed instance [t2];
    raises [Exit] if unification fails *)
 let rec unify s t1 t2 = match (t1,t2) with
-  | (PTarray ta, PTarray tb) -> 
-      unify s ta tb
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
       if i1 <> i2 || List.length l1 <> List.length l2 then raise Exit;
       List.fold_left2 unify s l1 l2
@@ -312,6 +308,7 @@ module Make(X : S) = struct
   let logic_symbols = Hashtbl.create 97
 			
   let print_logic fmt id t = 
+    (*eprintf "print_logic %s@." id;*)
     if t.scheme_vars = [] then
       print_logic_instance fmt id [] t.scheme_type
     else
@@ -325,7 +322,7 @@ module Make(X : S) = struct
   let rec declare_logic fmt id i =
     if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
       Hinstance.add declared_logic (id,i) ();
-      (* eprintf "declare_logic %a@." Ident.print id; *)
+      (*eprintf "declare_logic %a@." Ident.print id;*)
       assert (Hashtbl.mem logic_symbols id);
       match Hashtbl.find logic_symbols id with
 	| Uninterp t ->

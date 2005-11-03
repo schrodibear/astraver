@@ -1,6 +1,8 @@
 
 (** Dijkstra's "Dutch national flag" *)
 
+external type color
+
 external parameter blue : color
 external parameter white : color
 external parameter red : color
@@ -11,14 +13,14 @@ external parameter eq_white : c:color -> {} bool { if result then c=white else c
 parameter N : int
 parameter t : color array
 
-external logic monochrome : color array, int, int, color -> prop
+external logic monochrome : color farray, int, int, color -> prop
 
-let dutch_flag = 
+let dutch_flag () = 
   { array_length(t) = N }
   let b = ref 0 in
   let i = ref 0 in
   let r = ref N in
-  {} 
+  begin
   while !i < !r do
      { invariant 0 <= b <= i and i <= r <= N and
 	         monochrome(t,0,b,blue) and 
@@ -40,4 +42,4 @@ let dutch_flag =
   { monochrome(t,0,b,blue) and 
     monochrome(t,b,r,white) and 
     monochrome(t,r,N,red) }
-  {} 
+  end

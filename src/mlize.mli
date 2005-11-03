@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.mli,v 1.8 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: mlize.mli,v 1.9 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s translation of imperative programs into intermediate functional programs *)
 
@@ -23,5 +23,5 @@ open Cc
 open Env
 open Logic
 
-val trans : typed_program -> Rename.t -> (Loc.t * predicate) cc_term
+val trad : typed_expr -> Rename.t -> (Loc.position * predicate) cc_term
 

@@ -13,7 +13,7 @@ let search1 =
   {} 
   try
     let i = ref 0 in begin
-    while !i < (array_length t) do
+    while !i < (array_length_ t) do
       { invariant 0 <= i and forall k:int. 0 <= k < i -> t[k] <> 0
         variant array_length(t) - i } 
       if t[!i] = 0 then raise (Found !i);
@@ -37,7 +37,7 @@ let search2 =
   let i = ref 0 in 
   try
     begin
-    while !i < (array_length t) do
+    while !i < (array_length_ t) do
       { invariant 0 <= i and forall k:int. 0 <= k < i -> t[k] <> 0
         variant array_length(t) - i }
       if t[!i] = 0 then raise Break;
@@ -58,7 +58,7 @@ let search3 =
   { 0 <= array_length(t) }
   (let rec search_rec (i:int) : int { variant array_length(t) - i } =
      { 0 <= i <= array_length(t) }
-     (if i = (array_length t) then raise Not_found : int
+     (if i = (array_length_ t) then raise Not_found : int
       else if t[i] = 0 then i
       else (search_rec (i + 1)))
      { t[result] = 0 

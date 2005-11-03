@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.11 2005-06-16 07:30:34 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.12 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
@@ -57,7 +57,7 @@ open Format
 
 let gen_report fmt (b,e) = match !file with
   | None ->
-      fprintf fmt "Standard input, characters %d-%d" b e
+      fprintf fmt "Standard input, characters %d-%d:@\n" b e
   | Some f ->
       (try
          let (f,l,cl) = Linenum.from_char f b in
@@ -97,3 +97,31 @@ let line n = match !file with
   | None -> assert false
 
 
+(* Lexing positions *)
+
+type position = Lexing.position * Lexing.position
+
+open Lexing
+
+let dummy_position = Lexing.dummy_pos, Lexing.dummy_pos
+
+let report_position fmt (b,e) = 
+  begin match !file with
+    | None -> fprintf fmt "Standard input, "
+    | Some f ->	fprintf fmt "File \"%s\", " f
+  end;
+  let l = b.pos_lnum in
+  let fc = b.pos_cnum - b.pos_bol + 1 in
+  let lc = e.pos_cnum - b.pos_bol + 1 in
+  fprintf fmt "line %d, characters %d-%d:@\n" l fc lc
+
+let report_obligation_position fmt (b,e) =
+  begin match !file with
+    | None -> fprintf fmt "Why obligation from standard input, "
+    | Some f -> fprintf fmt "Why obligation from file \"%s\", " f
+  end;
+  let l = b.pos_lnum in
+  let fc = b.pos_cnum - b.pos_bol + 1 in
+  let lc = e.pos_cnum - b.pos_bol + 1 in
+  fprintf fmt "line %d, characters %d-%d:" l fc lc
+  

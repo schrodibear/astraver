@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.15 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.16 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -31,13 +31,13 @@ open Pp
 
 (*s pre- and postconditions *)
 
-let pre = 
-  let print fmt p = fprintf fmt "(* @[%a@] *)" print_predicate p.a_value in
+let pre print_assertion = 
+  let print fmt p = fprintf fmt "(* @[%a@] *)" print_assertion p in
   print_list newline print
 
-let post fmt q = 
+let post print_assertion fmt q = 
   let exn fmt (x,a) = fprintf fmt "%a => %a" Ident.print x print_assertion a in
-  match q with 
+  match q with
     | (a, []) -> 
 	fprintf fmt "(* @[%a@] *)" print_assertion a 
     | (a, al) -> 
@@ -49,34 +49,30 @@ let post fmt q =
 let identifiers = print_list comma Ident.print
 
 let rec typev fmt = function
-  | Ref v -> 
-      fprintf fmt "(%a ref)" typev v
-  | Array v -> 
-      fprintf fmt "(%a array)" typev v
-  | Arrow (bl, c) -> 
-      fprintf fmt "%a ->@ %a" (print_list arrow binder_type) bl typec c
   | PureType pt -> 
       print_pure_type fmt pt
+  | Ref v -> 
+      fprintf fmt "(%a ref)" print_pure_type v
+  | Arrow (bl, c) -> 
+      fprintf fmt "%a ->@ %a" (print_list arrow binder_type) bl typec c
 
 and typec fmt c = match c.c_pre, c.c_post with
   | [], None ->
       fprintf fmt "%a" typev c.c_result_type
   | [], Some q ->
-      fprintf fmt "%a@ %a" typev c.c_result_type post q
+      fprintf fmt "%a@ %a" typev c.c_result_type (post print_predicate) q
   | p, None ->
-      fprintf fmt "%a@ %a" pre p typev c.c_result_type
+      fprintf fmt "%a@ %a" (pre print_predicate) p typev c.c_result_type
   | p, Some q ->
-      fprintf fmt "%a@ %a@ %a" pre p typev c.c_result_type post q
+      fprintf fmt "%a@ %a@ %a" 
+	(pre print_predicate) p typev c.c_result_type (post print_predicate) q
 
 and binder_type fmt = function
-  | id, BindType v when id == Ident.anonymous -> typev fmt v
-  | id, BindType v -> fprintf fmt "(*%a:*)%a" Ident.print id typev v
-  | _, (BindSet | Untyped) -> assert false
+  | id, v when id == Ident.anonymous -> typev fmt v
+  | id, v -> fprintf fmt "(*%a:*)%a" Ident.print id typev v
 
-let binder_id fmt = function
-  | id, BindType v -> fprintf fmt "%a (*:%a*)" Ident.print id typev v
-  | id, Untyped -> Ident.print fmt id
-  | _, BindSet -> assert false
+let binder_id fmt (id, v) =
+  fprintf fmt "%a (*:%a*)" Ident.print id typev v
 
 let binder_ids = print_list space binder_id
 
@@ -138,57 +134,47 @@ let rec expression fmt = function
 (*s program expressions *)
 
 let rec expr fmt e = 
-  let k = e.info.kappa in
-  let p = k.c_pre in
-  let q = k.c_post in
-  if not ocaml_annot || (p = [] && q = None) then
+  let k = e.info in
+  let q = k.t_post in
+  if not ocaml_annot || q = None then
     fprintf fmt "@[%a@]" exprd e.desc
-  else match p, q with
-    | [], Some q -> 
-	fprintf fmt "@[<hv>%a@ %a@]" exprd e.desc post q
-    | p, None ->
-	fprintf fmt "@[<hv>%a@ %a@]" pre p exprd e.desc
-    | p, Some q ->
-	fprintf fmt "@[<hv>%a@ %a@ %a@]" pre p exprd e.desc post q
+  else match q with
+    | Some q -> 
+	fprintf fmt "@[<hv>%a@ %a@]" exprd e.desc (post print_assertion) q
+    | None ->
+	fprintf fmt "@[<hv>%a@]" exprd e.desc
 
 and exprd fmt = function
   | Var id when caml_infix id ->
       fprintf fmt "%a" prefix id
   | Var id ->
       Ident.print fmt id
-  | Acc id ->
-      fprintf fmt "!%a" Ident.print id
-  | Aff (id, e) ->
-      fprintf fmt "@[<hov 2>(%a := %a)@]" Ident.print id expr e
-  | TabAcc (_, id, e) ->
-      fprintf fmt "%a.(%a)" Ident.print id expr e
-  | TabAff (_, id, e1, e2) ->
-      fprintf fmt "@[<hov 2>(%a.(%a) <-@ %a)@]" Ident.print id expr e1 expr e2
-  | Seq bl ->
-      fprintf fmt "@[<hv>begin@;<1 2>%a@ end@]" block bl
-  | While (e1, inv, var, { desc = Seq e2 }) ->
-      fprintf fmt "@[<hv>while %a do@;<1 2>%a@ done@]" expr e1 block e2
-  | While (e1, inv, var, e2) ->
-      fprintf fmt "@[<hv>while %a do@;<1 2>%a@ done@]" expr e1 expr e2
+  | Seq (e1, e2) ->
+      fprintf fmt "@[<hv>begin@;<1 2>%a@ %a end@]" expr e1 expr e2
+  | Loop (inv, var, e2) ->
+      fprintf fmt "@[<hv>while true do@;<1 2>%a@ done@]" expr e2
   | If (e1, e2, e3) ->
       fprintf fmt "(@[<hv>if %a then@;<1 2>%a@ else@;<1 2>%a@])" 
 	expr e1 expr e2 expr e3
-  | Lam (bl, e) ->
-      fprintf fmt "@[<hov 2>(fun %a ->@ %a)@]" binder_ids bl expr e
-  | App ({desc=App ({desc=Var id}, Term e1, _)}, Term e2, _) 
+  | Lam (bl, p, e) ->
+      fprintf fmt "@[<hov 2>(fun %a ->@ %a)@]" binder_ids bl expr_pre (p,e)
+  | AppTerm ({desc=AppTerm ({desc=Var id}, t1, _)}, t2, _) 
     when is_poly id || id == t_mod_int ->
-      fprintf fmt "@[<hov 2>(%a %s@ %a)@]" expr e1 (infix id) expr e2
-  | App (e, a, _) ->
-      fprintf fmt "@[<hov 2>(%a@ %a)@]" expr e arg a
+      fprintf fmt "@[<hov 2>(%a %s@ %a)@]" 
+      expression t1 (infix id) expression t2
+  | AppTerm (e, t, _) ->
+      fprintf fmt "@[<hov 2>(%a@ %a)@]" expr e expression t
+  | AppRef (e, a, _) ->
+      fprintf fmt "@[<hov 2>(%a@ %a)@]" expr e Ident.print a
   | LetRef (id, e1, e2) ->
       fprintf fmt "@[(@[<hov 2>let %a =@ ref %a in@]@\n%a)@]" 
 	Ident.print id expr e1 expr e2
   | LetIn (id, e1, e2) ->
       fprintf fmt "@[(@[<hov 2>let %a =@ %a in@]@\n%a)@]" 
 	Ident.print id expr e1 expr e2
-  | Rec (id, bl, v, var, e) ->
+  | Rec (id, bl, v, var, p, e) ->
       fprintf fmt "@[<hov 2>(let rec %a %a =@ %a in@ %a)@]" 
-	Ident.print id binder_ids bl expr e Ident.print id
+	Ident.print id binder_ids bl expr_pre (p,e) Ident.print id
   | Raise (id, None) ->
       fprintf fmt "@[<hov 2>(raise %a)@]" Ident.print id
   | Raise (id, Some e) ->
@@ -202,18 +188,18 @@ and exprd fmt = function
       fprintf fmt "@[assert false@]"
   | Any _ ->
       fprintf fmt "@[assert false (* code not given *)@]"
+  | Assertion (p,e) ->
+      expr_pre fmt (p,e)
+  | Proof _ ->
+      assert false (*TODO*)
+  | Post (e, q, _) ->
+      let q = post_app a_value q in
+      fprintf fmt "@[(%a@ %a)@]" print_expr e (post print_predicate) q
+  | Label (l, e) -> 
+      fprintf fmt "@[(* label %s *)@ %a@]" l print_expr e
 
-and block fmt = fprintf fmt "@[<hv>%a@]" (print_list space block_st)
-
-and block_st fmt = function
-  | Label l -> fprintf fmt "(* label %s *)" l
-  | Assert a -> fprintf fmt "(* assert %a *)" print_assertion a
-  | Statement e -> fprintf fmt "%a;" expr e
-
-and arg fmt = function
-  | Term e -> expr fmt e
-  | Refarg id -> Ident.print fmt id
-  | Type _ -> assert false
+and expr_pre fmt (p,e) =
+  fprintf fmt "@[%a %a@]" (print_list newline print_assertion) p expr e
 
 and handler fmt = function
   | (id, None), e -> 

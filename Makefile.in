@@ -35,8 +35,8 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
 INCLUDES = -I src -I c -I intf -I tools
-BFLAGS   = -dtypes -g $(INCLUDES) -I +camlp4 -I +lablgtk2 -I +threads
-OFLAGS   = -dtypes $(INCLUDES) -I +camlp4 -I +lablgtk2 -I +threads
+BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
+OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -51,7 +51,7 @@ VO7= lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo  lib/coq-v7/WhyInt.vo \
 V7FILES=$(VO7:.vo=.v)
 
 VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
-     lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
+     lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo lib/coq/WhyPrelude.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo     lib/coq/WhyFloat.vo \
      lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo \
      lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo \
@@ -62,7 +62,8 @@ V8FILES=$(VO8:.vo=.v)
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
-GENERATED = src/version.ml src/compat.ml src/parser.ml src/linenum.ml \
+GENERATED = src/version.ml src/lexer.ml src/parser.mli \
+            src/parser.ml src/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    intf/hilight.ml tools/why2html.ml src/float_lexer.ml \
@@ -85,12 +86,13 @@ opt: bin/why.opt bin/caduceus.opt
 byte : bin/why.byte bin/caduceus.byte
 
 # why
-CMO = src/lib.cmo src/compat.cmo \
+CMO = src/lib.cmo \
       src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
-	   src/ident.cmo src/float_lexer.cmo \
-	   src/effect.cmo src/pp.cmo src/misc.cmo src/report.cmo	\
-           src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
-           src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
+	   src/ident.cmo src/float_lexer.cmo  \
+	   src/effect.cmo src/pp.cmo src/misc.cmo 	\
+	   src/parser.cmo src/lexer.cmo src/report.cmo \
+           src/env.cmo src/rename.cmo src/util.cmo 	\
+           src/ltyping.cmo src/typing.cmo src/purify.cmo src/wp.cmo \
            src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo \
 	   src/monomorph.cmo src/pvs.cmo src/hol4.cmo \
@@ -101,22 +103,21 @@ CMO = src/lib.cmo src/compat.cmo \
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 #	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/top: $(CMO)
-	$(OCAMLC) $(BFLAGS) -a -o why.cma $(CMO)
-	ocamlmktop $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma why.cma
+	ocamlmktop $(BFLAGS) -o $@ str.cma $^
 
 # caduceus
-CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo \
+CCMO = src/lib.cmo src/linenum.cmo \
 	src/loc.cmo src/pp.cmo \
 	src/version.cmo c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
@@ -130,14 +131,14 @@ CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo \
 CCMX = $(CCMO:.cmo=.cmx)
 
 bin/caduceus.opt: $(CCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/caduceus.byte: $(CCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/caduceus.static: $(CCMX)
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 # graphical interface
@@ -158,11 +159,11 @@ GCMX = $(GCMO:.cmo=.cmx)
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
 	strip $@
 
 bin/gwhy.byte: $(GCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma $^
 
 # tools
 bin/why2html.byte: tools/why2html.ml
@@ -196,7 +197,7 @@ coq-v8: $(VO8)
 
 include Version
 
-src/version.ml: Version 
+src/version.ml: Version Makefile
 	echo "let coqversion = \""@COQVER@"\"" > $@
 	echo "let version = \""$(VERSION)"\"" >> $@
 	echo "let date = \""`date`"\"" >> $@
@@ -211,10 +212,10 @@ doc:: doc/version.tex
 	cd doc; make
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
-	$(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
+	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
 
 lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
-	$(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
+	WHYLIB=lib/why $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
 
 # bench
 
@@ -267,6 +268,8 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE)
 	fi
 
 install-lib: 
+	mkdir -p $(LIBDIR)/why
+	cp -f lib/why/prelude.why $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/caduceus/coq
@@ -355,16 +358,16 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 # special rules
 ###############
 
-CAMLP4=@CAMLP4O@ pa_extend.cmo pa_macro.cmo
+# CAMLP4=@CAMLP4O@ pa_extend.cmo pa_macro.cmo
 
-src/%.cmo: src/%.ml4
-	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -DOCAML@OCAMLV@ -impl" -impl $<
+# src/%.cmo: src/%.ml4
+# 	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -DOCAML@OCAMLV@ -impl" -impl $<
 
-src/%.cmx: src/%.ml4
-	$(OCAMLOPT) -c $(OFLAGS) -pp "$(CAMLP4) -DOCAML@OCAMLV@ -impl" -impl $<
+# src/%.cmx: src/%.ml4
+# 	$(OCAMLOPT) -c $(OFLAGS) -pp "$(CAMLP4) -DOCAML@OCAMLV@ -impl" -impl $<
 
-src/%.ml: src/%.ml4
-	$(CAMLP4) pr_o.cmo -DOCAML@OCAMLV@ -impl $< > $@
+# src/%.ml: src/%.ml4
+# 	$(CAMLP4) pr_o.cmo -DOCAML@OCAMLV@ -impl $< > $@
 
 # generic rules
 ###############
@@ -539,7 +542,7 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
 
-.depend.coq: # lib/coq*/*.v
+depend.coq: lib/coq*/*.v
 	if test @COQ@ = yes; then \
 	  rm -f .depend.coq; \
 	  $(COQDEP) -I lib/coq lib/coq/*.v > .depend.coq; \

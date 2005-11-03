@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.31 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.32 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -40,14 +40,17 @@ val is_local_set : local_env -> Ident.t -> bool
 
 (*s typed programs *)
 
-type typing_info = 
-  { loc : Loc.t;
-    env : local_env;
-    label : label;
-    obligations : assertion list;
-    kappa : type_c }
+type typing_info = { 
+  t_loc : Loc.position;
+  t_env : local_env;
+  t_label : label;
+  t_result_name : Ident.t;
+  t_result_type : type_v;
+  t_effect : Effect.t;
+  t_post : postcondition option 
+}
   
-type typed_program = typing_info Ast.t
+type typed_expr = typing_info Ast.t
 
 type 'a scheme = private { scheme_vars : string list; scheme_type : 'a }
 
@@ -55,8 +58,8 @@ type type_info = Set | TypeV of type_v
 
 (*s global environment *)
 
-val add_global : Ident.t -> type_v -> typed_program option -> unit
-val add_global_gen : Ident.t -> type_info scheme -> typed_program option -> unit
+val add_global : Ident.t -> type_v -> typed_expr option -> unit
+val add_global_gen : Ident.t -> type_info scheme -> typed_expr option -> unit
 val add_global_set : Ident.t -> unit
 val is_global : Ident.t -> bool
 val is_global_set : Ident.t -> bool
@@ -64,6 +67,10 @@ val lookup_global : Ident.t -> type_v
 
 val all_vars : unit -> Ident.set
 val all_refs : unit -> Ident.set
+
+val add_type : Loc.position -> Ident.t list -> Ident.t -> unit
+val is_type : Ident.t -> bool
+val type_arity : Ident.t -> int
 
 (*s exceptions (only global) *)
 
@@ -73,7 +80,7 @@ val find_exception : Ident.t -> pure_type option
 
 (*s a table keeps the program (for extraction) *)
 
-val find_pgm : Ident.t -> typed_program option
+val find_pgm : Ident.t -> typed_expr option
 
 (*s a table keeps the initializations of mutable objects *)
 
@@ -95,6 +102,7 @@ val is_rec : Ident.t -> local_env -> bool
 
 val add_global_logic : Ident.t -> logic_type scheme -> unit
 val iter_global_logic : (Ident.t -> logic_type scheme -> unit) -> unit
+val is_logic_function : Ident.t -> bool
 
 type logical_env
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.45 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.46 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -83,6 +83,7 @@ val t_add_int : t
 val t_sub_int : t
 val t_mul_int : t
 val t_div_int : t
+val t_mod_int : t
 val t_neg_int : t
 
 val t_add_real : t
@@ -90,9 +91,12 @@ val t_sub_real : t
 val t_mul_real : t
 val t_div_real : t
 val t_neg_real : t
-
-val t_mod_int : t
 val t_sqrt_real : t
+
+val t_div_real_ : t
+val t_div_int_ : t
+val t_mod_int_ : t
+val t_sqrt_real_ : t
 
 val t_real_of_int : t
 val t_int_of_real : t
@@ -124,11 +128,35 @@ val t_le_real : t
 val t_gt_real : t
 val t_ge_real : t
 
+val t_eq_int_ : t
+val t_eq_bool_ : t
+val t_eq_real_ : t
+val t_eq_unit_ : t
+
+val t_neq_int_ : t
+val t_neq_bool_ : t
+val t_neq_real_ : t
+val t_neq_unit_ : t
+
+val t_lt_int_ : t
+val t_le_int_ : t
+val t_gt_int_ : t
+val t_ge_int_ : t
+
+val t_lt_real_ : t
+val t_le_real_ : t
+val t_gt_real_ : t
+val t_ge_real_ : t
+
 val t_zwf_zero : t
 val result : t
 val default : t
+val farray : t
 val array_length : t
 val if_then_else : t
+val ref_set : t
+val array_get : t
+val array_set : t
 val access : t
 val store : t
 val annot_bool : t

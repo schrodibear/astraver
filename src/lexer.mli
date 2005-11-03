@@ -14,18 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.mli,v 1.18 2004-07-21 08:07:09 filliatr Exp $ i*)
+(* $Id: lexer.mli,v 1.2 2005-11-03 14:11:36 filliatr Exp $ *)
 
-(* Grammar for the programs *)
+exception Lexical_error of string
 
-open Types
-open Ptree
+val token : Lexing.lexbuf -> Parser.token
 
-val program : parsed_program Grammar.Entry.e
-val type_v  : ptype_v Grammar.Entry.e
-val type_c  : ptype_c Grammar.Entry.e
+val parse_file  : Lexing.lexbuf -> Ptree.file
+val parse_lexpr : Lexing.lexbuf -> Ptree.lexpr
 
-val decls : (decl list) Grammar.Entry.e
-
-val lexpr : lexpr Grammar.Entry.e
+val lexpr_of_string : string -> Ptree.lexpr
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.8 2003-11-25 12:15:33 paulin Exp $ *)
+(* $Id: WhyCM.v,v 1.9 2005-11-03 14:11:35 filliatr Exp $ *)
 
 Require Export WhyArrays.
 
@@ -51,30 +51,30 @@ End AnySet.
 
 Module Store (X: AnySet).
 
-Definition cstore : Set := adr -> array X.T.
+Definition cupdate : Set := adr -> array X.T.
 
-   Definition get (s:cstore) (p:pointer) : X.T :=
+   Definition get (s:cupdate) (p:pointer) : X.T :=
      match p with
      | null => access (s dummy_adr) 0
      | Ref a ofs => access (s a) ofs
      end.
 
-  Definition cstore_update (s:cstore) (a:adr) (v:array X.T) : cstore :=
+  Definition cupdate_update (s:cupdate) (a:adr) (v:array X.T) : cupdate :=
     fun a':adr =>
       match eq_adr_dec a' a with
       | left _ => v
       | right _ => s a'
       end.
 
-  Definition set (s:cstore) (p:pointer) (v:X.T) : cstore :=
+  Definition set (s:cupdate) (p:pointer) (v:X.T) : cupdate :=
     match p with
     | null => s
-    | Ref a ofs => cstore_update s a (store (s a) ofs v)
+    | Ref a ofs => cupdate_update s a (update (s a) ofs v)
     end.
 
 (* Pointer validity *)
 
-Definition is_valid (s:cstore) (p:pointer) : Prop :=
+Definition is_valid (s:cupdate) (p:pointer) : Prop :=
   match p with
   | null => False
   | Ref a ofs => (0 <= ofs < array_length (s a))%Z
@@ -82,54 +82,54 @@ Definition is_valid (s:cstore) (p:pointer) : Prop :=
 
 (* access/update lemmas *)
 
-  Lemma cstore_update_same :
-   forall (s:cstore) (a:adr) (v:array X.T), cstore_update s a v a = v.
+  Lemma cupdate_update_same :
+   forall (s:cupdate) (a:adr) (v:array X.T), cupdate_update s a v a = v.
 Proof.
 intros.
- unfold cstore_update; case (eq_adr_dec a a); intuition.
+ unfold cupdate_update; case (eq_adr_dec a a); intuition.
 Qed.
 
   Lemma get_set_same :
-   forall (s:cstore) (p:pointer) (v:X.T),
+   forall (s:cupdate) (p:pointer) (v:X.T),
      is_valid s p -> get (set s p v) p = v.
 Proof.
 simple destruct p; simpl; intuition.
-unfold cstore_update; case (eq_adr_dec a a); intuition.
+unfold cupdate_update; case (eq_adr_dec a a); intuition.
 Qed.
 
   Lemma get_set_eq :
-   forall (s:cstore) (p1 p2:pointer) (v:X.T),
+   forall (s:cupdate) (p1 p2:pointer) (v:X.T),
      is_valid s p1 -> p1 = p2 -> get (set s p1 v) p2 = v.
 Proof.
 simple destruct p1; simple destruct p2; simpl; intuition.
 discriminate H0.
 injection H0; intros.
-unfold cstore_update; subst a z; case (eq_adr_dec a0 a0); intuition.
+unfold cupdate_update; subst a z; case (eq_adr_dec a0 a0); intuition.
 Qed.
 
   Lemma get_set_other :
-   forall (s:cstore) (p1 p2:pointer) (v:X.T),
+   forall (s:cupdate) (p1 p2:pointer) (v:X.T),
      is_valid s p1 ->
      is_valid s p2 -> p1 <> p2 -> get (set s p1 v) p2 = get s p2.
 Proof.
 simple destruct p1; simple destruct p2; simpl; intuition.
-unfold cstore_update; case (eq_adr_dec a0 a); intuition.
+unfold cupdate_update; case (eq_adr_dec a0 a); intuition.
 assert (z = z0 \/ z <> z0).
  omega.
  intuition.
 subst a0 z; intuition.
-rewrite store_def_2; subst a0; intuition.
+rewrite update_def_2; subst a0; intuition.
 Qed.
 
 (* lemmas about [is_valid] *)
 
   Lemma is_valid_set :
-   forall (s:cstore) (p1 p2:pointer) (v:X.T),
+   forall (s:cupdate) (p1 p2:pointer) (v:X.T),
      is_valid s p1 -> is_valid (set s p2 v) p1.
 Proof.
 unfold is_valid; simple destruct p1; intuition.
 unfold set; case p2; intuition.
-unfold cstore_update; case (eq_adr_dec a a0); intuition.
+unfold cupdate_update; case (eq_adr_dec a a0); intuition.
 subst a; WhyArrays; trivial.
 Qed.
 
@@ -144,7 +144,7 @@ Module Int : AnySet with Definition T := Z.
 End Int.
 Module IntStore := Store Int.
 
-Definition int_store := IntStore.cstore.
+Definition int_update := IntStore.cupdate.
 Definition get_int := IntStore.get.
 Definition set_int := IntStore.set.
 Definition is_valid_int := IntStore.is_valid.
@@ -154,7 +154,7 @@ Module Pointer : AnySet with Definition T := pointer.
 End Pointer.
 Module PointerStore := Store Pointer.
 
-Definition pointer_store := PointerStore.cstore.
+Definition pointer_update := PointerStore.cupdate.
 Definition pget := PointerStore.get.
 Definition pset := PointerStore.set.
 Definition is_valid_pointer := PointerStore.is_valid.

@@ -3,869 +3,3062 @@
 
 Require Export switch_spec_why.
 
-(* Why obligation from file "why/switch.why", characters 220-243 *)
-Lemma f1_impl_po_1 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_1 : 
   forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post13: caduceus_1 = x),
-  forall (Test8: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (y0: Z),
+  forall (HW_4: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y0 = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_2 : 
+  forall (x: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_6: x = 1),
+  forall (y: Z),
+  forall (HW_7: y = 1),
+  forall (y0: Z),
+  forall (HW_8: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y0 = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_3 : 
+  forall (x: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_10: x = 2),
+  forall (y: Z),
+  forall (HW_11: y = 2),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_4 : 
+  forall (x: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_13: x = 4),
+  forall (y: Z),
+  forall (HW_14: y = 2),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_5 : 
+  forall (x: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_16: x = 3),
+  forall (y: Z),
+  forall (HW_17: y = 3),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_6 : 
+  forall (x: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_18: x <> 3),
+  forall (HW_19: x <> 0),
+  forall (HW_20: x <> 1),
+  forall (HW_21: x <> 2),
+  forall (HW_22: x <> 3),
+  forall (HW_23: x <> 4),
+  forall (y: Z),
+  forall (HW_24: y = 4),
+  forall (y0: Z),
+  forall (HW_25: y0 = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y0 = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_7 : 
+  forall (x: Z),
+  forall (result: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_18: x <> 3),
+  forall (HW_19: x <> 0),
+  forall (HW_20: x <> 1),
+  forall (HW_21: x <> 2),
+  forall (HW_22: x <> 3),
+  forall (HW_26: x = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> result = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_8 : 
+  forall (x: Z),
+  forall (result: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_18: x <> 3),
+  forall (HW_19: x <> 0),
+  forall (HW_20: x <> 1),
+  forall (HW_21: x <> 2),
+  forall (HW_27: x = 3),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> result = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_9 : 
+  forall (x: Z),
+  forall (result: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_18: x <> 3),
+  forall (HW_19: x <> 0),
+  forall (HW_20: x <> 1),
+  forall (HW_28: x = 2),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> result = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_10 : 
+  forall (x: Z),
+  forall (result: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_18: x <> 3),
+  forall (HW_19: x <> 0),
+  forall (HW_29: x = 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> result = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_11 : 
+  forall (x: Z),
+  forall (result: Z),
+  forall (HW_5: x <> 0),
+  forall (HW_9: x <> 1),
+  forall (HW_12: x <> 2),
+  forall (HW_15: x <> 4),
+  forall (HW_18: x <> 3),
+  forall (HW_30: x = 0),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> result = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_1 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (y0: Z),
+  forall (HW_4: y0 = 4),
   forall (y1: Z),
-  forall (Post10: y1 = 1),
+  forall (HW_5: y1 = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y1 = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_2 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_7: x = 1),
+  forall (y: Z),
+  forall (HW_8: y = 1),
+  forall (y0: Z),
+  forall (HW_9: y0 = 4),
+  forall (y1: Z),
+  forall (HW_10: y1 = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y1 = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_3 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_12: x = 2),
+  forall (y: Z),
+  forall (HW_13: y = 2),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_4 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_15: x = 4),
+  forall (y: Z),
+  forall (HW_16: y = 2),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_5 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_18: x = 3),
+  forall (y: Z),
+  forall (HW_19: y = 3),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_6 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_20: x <> 3),
+  forall (HW_21: x <> 0),
+  forall (HW_22: x <> 1),
+  forall (HW_23: x <> 2),
+  forall (HW_24: x <> 3),
+  forall (HW_25: x <> 4),
+  forall (y: Z),
+  forall (HW_26: y = 4),
+  forall (y0: Z),
+  forall (HW_27: y0 = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y0 = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_7 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_20: x <> 3),
+  forall (HW_21: x <> 0),
+  forall (HW_22: x <> 1),
+  forall (HW_23: x <> 2),
+  forall (HW_24: x <> 3),
+  forall (HW_28: x = 4),
+  forall (y: Z),
+  forall (HW_29: y = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_8 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_20: x <> 3),
+  forall (HW_21: x <> 0),
+  forall (HW_22: x <> 1),
+  forall (HW_23: x <> 2),
+  forall (HW_30: x = 3),
+  forall (y: Z),
+  forall (HW_31: y = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_9 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_20: x <> 3),
+  forall (HW_21: x <> 0),
+  forall (HW_22: x <> 1),
+  forall (HW_32: x = 2),
+  forall (y: Z),
+  forall (HW_33: y = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_10 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_20: x <> 3),
+  forall (HW_21: x <> 0),
+  forall (HW_34: x = 1),
+  forall (y: Z),
+  forall (HW_35: y = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1a_impl_po_11 : 
+  forall (x: Z),
+  forall (HW_6: x <> 0),
+  forall (HW_11: x <> 1),
+  forall (HW_14: x <> 2),
+  forall (HW_17: x <> 4),
+  forall (HW_20: x <> 3),
+  forall (HW_36: x = 0),
+  forall (y: Z),
+  forall (HW_37: y = 5),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 4 -> y = 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_1 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: x = 0),
+  forall (y0: Z),
+  forall (HW_5: y0 = 2),
+  forall (HW_6: x = 0),
+  forall (y1: Z),
+  forall (HW_7: y1 = 3),
   forall (y2: Z),
-  forall (Post11: y2 = 4),
-  (forall (result:Z),
-   (result = y2 ->
-    (* File \"switch.c\", line 1, characters 13-31 *) ((x = 4 -> result = 2)))).
+  forall (HW_8: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 336-351 *)
-Lemma f1_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_2 : 
   forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post13: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test6: caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: x = 0),
+  forall (y0: Z),
+  forall (HW_5: y0 = 2),
+  forall (HW_9: x <> 0),
+  forall (HW_10: x = 1),
   forall (y1: Z),
-  forall (Post8: y1 = 2),
-  (forall (result:Z),
-   (result = y1 ->
-    (* File \"switch.c\", line 1, characters 13-31 *) ((x = 4 -> result = 2)))).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/switch.why", characters 418-433 *)
-Lemma f1_impl_po_3 : 
-  forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post13: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
-  forall (Test4: caduceus_1 = 3),
-  forall (y1: Z),
-  forall (Post6: y1 = 3),
-  (forall (result:Z),
-   (result = y1 ->
-    (* File \"switch.c\", line 1, characters 13-31 *) ((x = 4 -> result = 2)))).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/switch.why", characters 779-802 *)
-Lemma f1_impl_po_4 : 
-  forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post13: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
-  forall (Test3: caduceus_1 <> 3),
-  forall (Test2: caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
-                 caduceus_1 <> 3 /\ caduceus_1 <> 4),
-  forall (y1: Z),
-  forall (Post2: y1 = 4),
+  forall (HW_11: y1 = 3),
   forall (y2: Z),
-  forall (Post3: y2 = 5),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y2 ->
-      (* File \"switch.c\", line 1, characters 13-31 *)
-      ((x = 4 -> result = 2)))))).
+  forall (HW_12: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 823-823 *)
-Lemma f1_impl_po_5 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_3 : 
   forall (x: Z),
+  forall (HW_2: x = 0),
   forall (y: Z),
-  forall (caduceus_1: Z),
-  forall (Post13: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
-  forall (Test3: caduceus_1 <> 3),
-  forall (Test1: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/
-                 caduceus_1 <> 1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\
-                 (caduceus_1 = 3 \/ caduceus_1 <> 3 /\ caduceus_1 = 4)))),
-  forall (result3: unit),
-  forall (Post1: result3 = tt),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 1, characters 13-31 *)
-      ((x = 4 -> result = 2)))))).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/switch.why", characters 1222-1245 *)
-Lemma f1a_impl_po_1 : 
-  forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x),
-  forall (Test8: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
+  forall (HW_3: y = 1),
+  forall (HW_4: x = 0),
+  forall (y0: Z),
+  forall (HW_5: y0 = 2),
+  forall (HW_9: x <> 0),
+  forall (HW_13: x <> 1),
+  forall (HW_14: x = 2),
   forall (y1: Z),
-  forall (Post12: y1 = 1),
+  forall (HW_15: y1 = 3),
   forall (y2: Z),
-  forall (Post13: y2 = 4),
-  (forall (y:Z),
-   (y = 5 ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 23, characters 13-31 *)
-      ((x = 4 -> result = 2)))))).
+  forall (HW_16: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1357-1377 *)
-Lemma f1a_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_4 : 
   forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test6: caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: x = 0),
+  forall (y0: Z),
+  forall (HW_5: y0 = 2),
+  forall (HW_9: x <> 0),
+  forall (HW_13: x <> 1),
+  forall (HW_17: x <> 2),
+  forall (HW_18: x = 3),
   forall (y1: Z),
-  forall (Post9: y1 = 2),
-  forall (result2: Z),
-  forall (Post10: result2 = y1),
-  (forall (result:Z),
-   (result = result2 ->
-    (* File \"switch.c\", line 23, characters 13-31 *)
-    ((x = 4 -> result = 2)))).
+  forall (HW_19: y1 = 3),
+  forall (y2: Z),
+  forall (HW_20: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1465-1485 *)
-Lemma f1a_impl_po_3 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_5 : 
   forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
-  forall (Test4: caduceus_1 = 3),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: x = 0),
+  forall (y0: Z),
+  forall (HW_5: y0 = 2),
+  forall (HW_9: x <> 0),
+  forall (HW_13: x <> 1),
+  forall (HW_17: x <> 2),
+  forall (HW_21: x <> 3),
+  forall (HW_22: x = 4),
   forall (y1: Z),
-  forall (Post6: y1 = 3),
-  forall (result3: Z),
-  forall (Post7: result3 = y1),
-  (forall (result:Z),
-   (result = result3 ->
-    (* File \"switch.c\", line 23, characters 13-31 *)
-    ((x = 4 -> result = 2)))).
+  forall (HW_23: y1 = 3),
+  forall (y2: Z),
+  forall (HW_24: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1840-1855 *)
-Lemma f1a_impl_po_4 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_6 : 
   forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
-  forall (Test3: caduceus_1 <> 3),
-  forall (Test2: caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
-                 caduceus_1 <> 3 /\ caduceus_1 <> 4),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: x = 0),
+  forall (y0: Z),
+  forall (HW_5: y0 = 2),
+  forall (HW_9: x <> 0),
+  forall (HW_13: x <> 1),
+  forall (HW_17: x <> 2),
+  forall (HW_21: x <> 3),
+  forall (HW_25: x <> 4),
   forall (y1: Z),
-  forall (Post3: y1 = 4),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (y:Z),
-     (y = 5 ->
-      (forall (result:Z),
-       (result = y ->
-        (* File \"switch.c\", line 23, characters 13-31 *)
-        ((x = 4 -> result = 2)))))))).
+  forall (HW_26: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1877-1877 *)
-Lemma f1a_impl_po_5 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_7 : 
   forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x),
-  forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
-  forall (Test3: caduceus_1 <> 3),
-  forall (Test1: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/
-                 caduceus_1 <> 1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\
-                 (caduceus_1 = 3 \/ caduceus_1 <> 3 /\ caduceus_1 = 4)))),
-  forall (result3: unit),
-  forall (Post2: result3 = tt),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (y:Z),
-     (y = 5 ->
-      (forall (result:Z),
-       (result = y ->
-        (* File \"switch.c\", line 23, characters 13-31 *)
-        ((x = 4 -> result = 2)))))))).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/switch.why", characters 2357-2372 *)
-Lemma f2_impl_po_1 : 
-  forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x),
-  forall (Test2: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_28: x = 1),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_30: x = 0),
   forall (y1: Z),
-  forall (Post2: y1 = 1),
-  ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
-    1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4)) ->
-    (forall (y:Z),
-     (y = 2 ->
-      ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
-        1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
-        caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
-        caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))))))) /\
-  ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\ caduceus_1 <>
-    4 ->
-    (forall (result:unit),
-     (result = tt ->
-      ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
-        1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
-        caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
-        caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y1 ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))))))).
+  forall (HW_31: y1 = 3),
+  forall (y2: Z),
+  forall (HW_32: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_8 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_28: x = 1),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_33: x <> 0),
+  forall (HW_34: x = 1),
+  forall (y1: Z),
+  forall (HW_35: y1 = 3),
+  forall (y2: Z),
+  forall (HW_36: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_9 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_28: x = 1),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_33: x <> 0),
+  forall (HW_37: x <> 1),
+  forall (HW_38: x = 2),
+  forall (y1: Z),
+  forall (HW_39: y1 = 3),
+  forall (y2: Z),
+  forall (HW_40: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_10 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_28: x = 1),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_33: x <> 0),
+  forall (HW_37: x <> 1),
+  forall (HW_41: x <> 2),
+  forall (HW_42: x = 3),
+  forall (y1: Z),
+  forall (HW_43: y1 = 3),
+  forall (y2: Z),
+  forall (HW_44: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_11 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_28: x = 1),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_33: x <> 0),
+  forall (HW_37: x <> 1),
+  forall (HW_41: x <> 2),
+  forall (HW_45: x <> 3),
+  forall (HW_46: x = 4),
+  forall (y1: Z),
+  forall (HW_47: y1 = 3),
+  forall (y2: Z),
+  forall (HW_48: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_12 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_28: x = 1),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_33: x <> 0),
+  forall (HW_37: x <> 1),
+  forall (HW_41: x <> 2),
+  forall (HW_45: x <> 3),
+  forall (HW_49: x <> 4),
+  forall (y1: Z),
+  forall (HW_50: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_13 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_52: x = 2),
+  forall (y0: Z),
+  forall (HW_53: y0 = 2),
+  forall (HW_54: x = 0),
+  forall (y1: Z),
+  forall (HW_55: y1 = 3),
+  forall (y2: Z),
+  forall (HW_56: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_14 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_52: x = 2),
+  forall (y0: Z),
+  forall (HW_53: y0 = 2),
+  forall (HW_57: x <> 0),
+  forall (HW_58: x = 1),
+  forall (y1: Z),
+  forall (HW_59: y1 = 3),
+  forall (y2: Z),
+  forall (HW_60: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_15 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_52: x = 2),
+  forall (y0: Z),
+  forall (HW_53: y0 = 2),
+  forall (HW_57: x <> 0),
+  forall (HW_61: x <> 1),
+  forall (HW_62: x = 2),
+  forall (y1: Z),
+  forall (HW_63: y1 = 3),
+  forall (y2: Z),
+  forall (HW_64: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_16 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_52: x = 2),
+  forall (y0: Z),
+  forall (HW_53: y0 = 2),
+  forall (HW_57: x <> 0),
+  forall (HW_61: x <> 1),
+  forall (HW_65: x <> 2),
+  forall (HW_66: x = 3),
+  forall (y1: Z),
+  forall (HW_67: y1 = 3),
+  forall (y2: Z),
+  forall (HW_68: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_17 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_52: x = 2),
+  forall (y0: Z),
+  forall (HW_53: y0 = 2),
+  forall (HW_57: x <> 0),
+  forall (HW_61: x <> 1),
+  forall (HW_65: x <> 2),
+  forall (HW_69: x <> 3),
+  forall (HW_70: x = 4),
+  forall (y1: Z),
+  forall (HW_71: y1 = 3),
+  forall (y2: Z),
+  forall (HW_72: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_18 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_52: x = 2),
+  forall (y0: Z),
+  forall (HW_53: y0 = 2),
+  forall (HW_57: x <> 0),
+  forall (HW_61: x <> 1),
+  forall (HW_65: x <> 2),
+  forall (HW_69: x <> 3),
+  forall (HW_73: x <> 4),
+  forall (y1: Z),
+  forall (HW_74: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_19 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_76: x = 4),
+  forall (y0: Z),
+  forall (HW_77: y0 = 2),
+  forall (HW_78: x = 0),
+  forall (y1: Z),
+  forall (HW_79: y1 = 3),
+  forall (y2: Z),
+  forall (HW_80: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_20 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_76: x = 4),
+  forall (y0: Z),
+  forall (HW_77: y0 = 2),
+  forall (HW_81: x <> 0),
+  forall (HW_82: x = 1),
+  forall (y1: Z),
+  forall (HW_83: y1 = 3),
+  forall (y2: Z),
+  forall (HW_84: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_21 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_76: x = 4),
+  forall (y0: Z),
+  forall (HW_77: y0 = 2),
+  forall (HW_81: x <> 0),
+  forall (HW_85: x <> 1),
+  forall (HW_86: x = 2),
+  forall (y1: Z),
+  forall (HW_87: y1 = 3),
+  forall (y2: Z),
+  forall (HW_88: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_22 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_76: x = 4),
+  forall (y0: Z),
+  forall (HW_77: y0 = 2),
+  forall (HW_81: x <> 0),
+  forall (HW_85: x <> 1),
+  forall (HW_89: x <> 2),
+  forall (HW_90: x = 3),
+  forall (y1: Z),
+  forall (HW_91: y1 = 3),
+  forall (y2: Z),
+  forall (HW_92: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_23 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_76: x = 4),
+  forall (y0: Z),
+  forall (HW_77: y0 = 2),
+  forall (HW_81: x <> 0),
+  forall (HW_85: x <> 1),
+  forall (HW_89: x <> 2),
+  forall (HW_93: x <> 3),
+  forall (HW_94: x = 4),
+  forall (y1: Z),
+  forall (HW_95: y1 = 3),
+  forall (y2: Z),
+  forall (HW_96: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_24 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_76: x = 4),
+  forall (y0: Z),
+  forall (HW_77: y0 = 2),
+  forall (HW_81: x <> 0),
+  forall (HW_85: x <> 1),
+  forall (HW_89: x <> 2),
+  forall (HW_93: x <> 3),
+  forall (HW_97: x <> 4),
+  forall (y1: Z),
+  forall (HW_98: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_25 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_99: x <> 4),
+  forall (HW_100: x = 0),
+  forall (y0: Z),
+  forall (HW_101: y0 = 3),
+  forall (y1: Z),
+  forall (HW_102: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_26 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_99: x <> 4),
+  forall (HW_103: x <> 0),
+  forall (HW_104: x = 1),
+  forall (y0: Z),
+  forall (HW_105: y0 = 3),
+  forall (y1: Z),
+  forall (HW_106: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_27 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_99: x <> 4),
+  forall (HW_103: x <> 0),
+  forall (HW_107: x <> 1),
+  forall (HW_108: x = 2),
+  forall (y0: Z),
+  forall (HW_109: y0 = 3),
+  forall (y1: Z),
+  forall (HW_110: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_28 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_99: x <> 4),
+  forall (HW_103: x <> 0),
+  forall (HW_107: x <> 1),
+  forall (HW_111: x <> 2),
+  forall (HW_112: x = 3),
+  forall (y0: Z),
+  forall (HW_113: y0 = 3),
+  forall (y1: Z),
+  forall (HW_114: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_29 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_99: x <> 4),
+  forall (HW_103: x <> 0),
+  forall (HW_107: x <> 1),
+  forall (HW_111: x <> 2),
+  forall (HW_115: x <> 3),
+  forall (HW_116: x = 4),
+  forall (y0: Z),
+  forall (HW_117: y0 = 3),
+  forall (y1: Z),
+  forall (HW_118: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_30 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_27: x <> 0),
+  forall (HW_51: x <> 1),
+  forall (HW_75: x <> 2),
+  forall (HW_99: x <> 4),
+  forall (HW_103: x <> 0),
+  forall (HW_107: x <> 1),
+  forall (HW_111: x <> 2),
+  forall (HW_115: x <> 3),
+  forall (HW_119: x <> 4),
+  forall (y0: Z),
+  forall (HW_120: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_31 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_124: x = 0),
+  forall (y0: Z),
+  forall (HW_125: y0 = 2),
+  forall (HW_126: x = 0),
+  forall (y1: Z),
+  forall (HW_127: y1 = 3),
+  forall (y2: Z),
+  forall (HW_128: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_32 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_124: x = 0),
+  forall (y0: Z),
+  forall (HW_125: y0 = 2),
+  forall (HW_129: x <> 0),
+  forall (HW_130: x = 1),
+  forall (y1: Z),
+  forall (HW_131: y1 = 3),
+  forall (y2: Z),
+  forall (HW_132: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_33 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_124: x = 0),
+  forall (y0: Z),
+  forall (HW_125: y0 = 2),
+  forall (HW_129: x <> 0),
+  forall (HW_133: x <> 1),
+  forall (HW_134: x = 2),
+  forall (y1: Z),
+  forall (HW_135: y1 = 3),
+  forall (y2: Z),
+  forall (HW_136: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_34 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_124: x = 0),
+  forall (y0: Z),
+  forall (HW_125: y0 = 2),
+  forall (HW_129: x <> 0),
+  forall (HW_133: x <> 1),
+  forall (HW_137: x <> 2),
+  forall (HW_138: x = 3),
+  forall (y1: Z),
+  forall (HW_139: y1 = 3),
+  forall (y2: Z),
+  forall (HW_140: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_35 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_124: x = 0),
+  forall (y0: Z),
+  forall (HW_125: y0 = 2),
+  forall (HW_129: x <> 0),
+  forall (HW_133: x <> 1),
+  forall (HW_137: x <> 2),
+  forall (HW_141: x <> 3),
+  forall (HW_142: x = 4),
+  forall (y1: Z),
+  forall (HW_143: y1 = 3),
+  forall (y2: Z),
+  forall (HW_144: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_36 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_124: x = 0),
+  forall (y0: Z),
+  forall (HW_125: y0 = 2),
+  forall (HW_129: x <> 0),
+  forall (HW_133: x <> 1),
+  forall (HW_137: x <> 2),
+  forall (HW_141: x <> 3),
+  forall (HW_145: x <> 4),
+  forall (y1: Z),
+  forall (HW_146: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_37 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_148: x = 1),
+  forall (y0: Z),
+  forall (HW_149: y0 = 2),
+  forall (HW_150: x = 0),
+  forall (y1: Z),
+  forall (HW_151: y1 = 3),
+  forall (y2: Z),
+  forall (HW_152: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_38 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_148: x = 1),
+  forall (y0: Z),
+  forall (HW_149: y0 = 2),
+  forall (HW_153: x <> 0),
+  forall (HW_154: x = 1),
+  forall (y1: Z),
+  forall (HW_155: y1 = 3),
+  forall (y2: Z),
+  forall (HW_156: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_39 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_148: x = 1),
+  forall (y0: Z),
+  forall (HW_149: y0 = 2),
+  forall (HW_153: x <> 0),
+  forall (HW_157: x <> 1),
+  forall (HW_158: x = 2),
+  forall (y1: Z),
+  forall (HW_159: y1 = 3),
+  forall (y2: Z),
+  forall (HW_160: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_40 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_148: x = 1),
+  forall (y0: Z),
+  forall (HW_149: y0 = 2),
+  forall (HW_153: x <> 0),
+  forall (HW_157: x <> 1),
+  forall (HW_161: x <> 2),
+  forall (HW_162: x = 3),
+  forall (y1: Z),
+  forall (HW_163: y1 = 3),
+  forall (y2: Z),
+  forall (HW_164: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_41 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_148: x = 1),
+  forall (y0: Z),
+  forall (HW_149: y0 = 2),
+  forall (HW_153: x <> 0),
+  forall (HW_157: x <> 1),
+  forall (HW_161: x <> 2),
+  forall (HW_165: x <> 3),
+  forall (HW_166: x = 4),
+  forall (y1: Z),
+  forall (HW_167: y1 = 3),
+  forall (y2: Z),
+  forall (HW_168: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_42 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_148: x = 1),
+  forall (y0: Z),
+  forall (HW_149: y0 = 2),
+  forall (HW_153: x <> 0),
+  forall (HW_157: x <> 1),
+  forall (HW_161: x <> 2),
+  forall (HW_165: x <> 3),
+  forall (HW_169: x <> 4),
+  forall (y1: Z),
+  forall (HW_170: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_43 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_172: x = 2),
+  forall (y0: Z),
+  forall (HW_173: y0 = 2),
+  forall (HW_174: x = 0),
+  forall (y1: Z),
+  forall (HW_175: y1 = 3),
+  forall (y2: Z),
+  forall (HW_176: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_44 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_172: x = 2),
+  forall (y0: Z),
+  forall (HW_173: y0 = 2),
+  forall (HW_177: x <> 0),
+  forall (HW_178: x = 1),
+  forall (y1: Z),
+  forall (HW_179: y1 = 3),
+  forall (y2: Z),
+  forall (HW_180: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_45 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_172: x = 2),
+  forall (y0: Z),
+  forall (HW_173: y0 = 2),
+  forall (HW_177: x <> 0),
+  forall (HW_181: x <> 1),
+  forall (HW_182: x = 2),
+  forall (y1: Z),
+  forall (HW_183: y1 = 3),
+  forall (y2: Z),
+  forall (HW_184: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_46 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_172: x = 2),
+  forall (y0: Z),
+  forall (HW_173: y0 = 2),
+  forall (HW_177: x <> 0),
+  forall (HW_181: x <> 1),
+  forall (HW_185: x <> 2),
+  forall (HW_186: x = 3),
+  forall (y1: Z),
+  forall (HW_187: y1 = 3),
+  forall (y2: Z),
+  forall (HW_188: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_47 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_172: x = 2),
+  forall (y0: Z),
+  forall (HW_173: y0 = 2),
+  forall (HW_177: x <> 0),
+  forall (HW_181: x <> 1),
+  forall (HW_185: x <> 2),
+  forall (HW_189: x <> 3),
+  forall (HW_190: x = 4),
+  forall (y1: Z),
+  forall (HW_191: y1 = 3),
+  forall (y2: Z),
+  forall (HW_192: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_48 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_172: x = 2),
+  forall (y0: Z),
+  forall (HW_173: y0 = 2),
+  forall (HW_177: x <> 0),
+  forall (HW_181: x <> 1),
+  forall (HW_185: x <> 2),
+  forall (HW_189: x <> 3),
+  forall (HW_193: x <> 4),
+  forall (y1: Z),
+  forall (HW_194: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_49 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_196: x = 4),
+  forall (y0: Z),
+  forall (HW_197: y0 = 2),
+  forall (HW_198: x = 0),
+  forall (y1: Z),
+  forall (HW_199: y1 = 3),
+  forall (y2: Z),
+  forall (HW_200: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_50 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_196: x = 4),
+  forall (y0: Z),
+  forall (HW_197: y0 = 2),
+  forall (HW_201: x <> 0),
+  forall (HW_202: x = 1),
+  forall (y1: Z),
+  forall (HW_203: y1 = 3),
+  forall (y2: Z),
+  forall (HW_204: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_51 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_196: x = 4),
+  forall (y0: Z),
+  forall (HW_197: y0 = 2),
+  forall (HW_201: x <> 0),
+  forall (HW_205: x <> 1),
+  forall (HW_206: x = 2),
+  forall (y1: Z),
+  forall (HW_207: y1 = 3),
+  forall (y2: Z),
+  forall (HW_208: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_52 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_196: x = 4),
+  forall (y0: Z),
+  forall (HW_197: y0 = 2),
+  forall (HW_201: x <> 0),
+  forall (HW_205: x <> 1),
+  forall (HW_209: x <> 2),
+  forall (HW_210: x = 3),
+  forall (y1: Z),
+  forall (HW_211: y1 = 3),
+  forall (y2: Z),
+  forall (HW_212: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_53 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_196: x = 4),
+  forall (y0: Z),
+  forall (HW_197: y0 = 2),
+  forall (HW_201: x <> 0),
+  forall (HW_205: x <> 1),
+  forall (HW_209: x <> 2),
+  forall (HW_213: x <> 3),
+  forall (HW_214: x = 4),
+  forall (y1: Z),
+  forall (HW_215: y1 = 3),
+  forall (y2: Z),
+  forall (HW_216: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_54 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_196: x = 4),
+  forall (y0: Z),
+  forall (HW_197: y0 = 2),
+  forall (HW_201: x <> 0),
+  forall (HW_205: x <> 1),
+  forall (HW_209: x <> 2),
+  forall (HW_213: x <> 3),
+  forall (HW_217: x <> 4),
+  forall (y1: Z),
+  forall (HW_218: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_55 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_219: x <> 4),
+  forall (HW_220: x = 0),
+  forall (y0: Z),
+  forall (HW_221: y0 = 3),
+  forall (y1: Z),
+  forall (HW_222: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_56 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_219: x <> 4),
+  forall (HW_223: x <> 0),
+  forall (HW_224: x = 1),
+  forall (y0: Z),
+  forall (HW_225: y0 = 3),
+  forall (y1: Z),
+  forall (HW_226: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_57 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_219: x <> 4),
+  forall (HW_223: x <> 0),
+  forall (HW_227: x <> 1),
+  forall (HW_228: x = 2),
+  forall (y0: Z),
+  forall (HW_229: y0 = 3),
+  forall (y1: Z),
+  forall (HW_230: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_58 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_219: x <> 4),
+  forall (HW_223: x <> 0),
+  forall (HW_227: x <> 1),
+  forall (HW_231: x <> 2),
+  forall (HW_232: x = 3),
+  forall (y0: Z),
+  forall (HW_233: y0 = 3),
+  forall (y1: Z),
+  forall (HW_234: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_59 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_219: x <> 4),
+  forall (HW_223: x <> 0),
+  forall (HW_227: x <> 1),
+  forall (HW_231: x <> 2),
+  forall (HW_235: x <> 3),
+  forall (HW_236: x = 4),
+  forall (y0: Z),
+  forall (HW_237: y0 = 3),
+  forall (y1: Z),
+  forall (HW_238: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_60 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_122: x = 1),
+  forall (y: Z),
+  forall (HW_123: y = 1),
+  forall (HW_147: x <> 0),
+  forall (HW_171: x <> 1),
+  forall (HW_195: x <> 2),
+  forall (HW_219: x <> 4),
+  forall (HW_223: x <> 0),
+  forall (HW_227: x <> 1),
+  forall (HW_231: x <> 2),
+  forall (HW_235: x <> 3),
+  forall (HW_239: x <> 4),
+  forall (y0: Z),
+  forall (HW_240: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_61 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_242: x = 0),
+  forall (y: Z),
+  forall (HW_243: y = 2),
+  forall (HW_244: x = 0),
+  forall (y0: Z),
+  forall (HW_245: y0 = 3),
+  forall (y1: Z),
+  forall (HW_246: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_62 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_242: x = 0),
+  forall (y: Z),
+  forall (HW_243: y = 2),
+  forall (HW_247: x <> 0),
+  forall (HW_248: x = 1),
+  forall (y0: Z),
+  forall (HW_249: y0 = 3),
+  forall (y1: Z),
+  forall (HW_250: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_63 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_242: x = 0),
+  forall (y: Z),
+  forall (HW_243: y = 2),
+  forall (HW_247: x <> 0),
+  forall (HW_251: x <> 1),
+  forall (HW_252: x = 2),
+  forall (y0: Z),
+  forall (HW_253: y0 = 3),
+  forall (y1: Z),
+  forall (HW_254: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_64 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_242: x = 0),
+  forall (y: Z),
+  forall (HW_243: y = 2),
+  forall (HW_247: x <> 0),
+  forall (HW_251: x <> 1),
+  forall (HW_255: x <> 2),
+  forall (HW_256: x = 3),
+  forall (y0: Z),
+  forall (HW_257: y0 = 3),
+  forall (y1: Z),
+  forall (HW_258: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_65 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_242: x = 0),
+  forall (y: Z),
+  forall (HW_243: y = 2),
+  forall (HW_247: x <> 0),
+  forall (HW_251: x <> 1),
+  forall (HW_255: x <> 2),
+  forall (HW_259: x <> 3),
+  forall (HW_260: x = 4),
+  forall (y0: Z),
+  forall (HW_261: y0 = 3),
+  forall (y1: Z),
+  forall (HW_262: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_66 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_242: x = 0),
+  forall (y: Z),
+  forall (HW_243: y = 2),
+  forall (HW_247: x <> 0),
+  forall (HW_251: x <> 1),
+  forall (HW_255: x <> 2),
+  forall (HW_259: x <> 3),
+  forall (HW_263: x <> 4),
+  forall (y0: Z),
+  forall (HW_264: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_67 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_266: x = 1),
+  forall (y: Z),
+  forall (HW_267: y = 2),
+  forall (HW_268: x = 0),
+  forall (y0: Z),
+  forall (HW_269: y0 = 3),
+  forall (y1: Z),
+  forall (HW_270: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_68 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_266: x = 1),
+  forall (y: Z),
+  forall (HW_267: y = 2),
+  forall (HW_271: x <> 0),
+  forall (HW_272: x = 1),
+  forall (y0: Z),
+  forall (HW_273: y0 = 3),
+  forall (y1: Z),
+  forall (HW_274: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_69 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_266: x = 1),
+  forall (y: Z),
+  forall (HW_267: y = 2),
+  forall (HW_271: x <> 0),
+  forall (HW_275: x <> 1),
+  forall (HW_276: x = 2),
+  forall (y0: Z),
+  forall (HW_277: y0 = 3),
+  forall (y1: Z),
+  forall (HW_278: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_70 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_266: x = 1),
+  forall (y: Z),
+  forall (HW_267: y = 2),
+  forall (HW_271: x <> 0),
+  forall (HW_275: x <> 1),
+  forall (HW_279: x <> 2),
+  forall (HW_280: x = 3),
+  forall (y0: Z),
+  forall (HW_281: y0 = 3),
+  forall (y1: Z),
+  forall (HW_282: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_71 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_266: x = 1),
+  forall (y: Z),
+  forall (HW_267: y = 2),
+  forall (HW_271: x <> 0),
+  forall (HW_275: x <> 1),
+  forall (HW_279: x <> 2),
+  forall (HW_283: x <> 3),
+  forall (HW_284: x = 4),
+  forall (y0: Z),
+  forall (HW_285: y0 = 3),
+  forall (y1: Z),
+  forall (HW_286: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_72 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_266: x = 1),
+  forall (y: Z),
+  forall (HW_267: y = 2),
+  forall (HW_271: x <> 0),
+  forall (HW_275: x <> 1),
+  forall (HW_279: x <> 2),
+  forall (HW_283: x <> 3),
+  forall (HW_287: x <> 4),
+  forall (y0: Z),
+  forall (HW_288: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_73 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_290: x = 2),
+  forall (y: Z),
+  forall (HW_291: y = 2),
+  forall (HW_292: x = 0),
+  forall (y0: Z),
+  forall (HW_293: y0 = 3),
+  forall (y1: Z),
+  forall (HW_294: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_74 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_290: x = 2),
+  forall (y: Z),
+  forall (HW_291: y = 2),
+  forall (HW_295: x <> 0),
+  forall (HW_296: x = 1),
+  forall (y0: Z),
+  forall (HW_297: y0 = 3),
+  forall (y1: Z),
+  forall (HW_298: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_75 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_290: x = 2),
+  forall (y: Z),
+  forall (HW_291: y = 2),
+  forall (HW_295: x <> 0),
+  forall (HW_299: x <> 1),
+  forall (HW_300: x = 2),
+  forall (y0: Z),
+  forall (HW_301: y0 = 3),
+  forall (y1: Z),
+  forall (HW_302: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_76 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_290: x = 2),
+  forall (y: Z),
+  forall (HW_291: y = 2),
+  forall (HW_295: x <> 0),
+  forall (HW_299: x <> 1),
+  forall (HW_303: x <> 2),
+  forall (HW_304: x = 3),
+  forall (y0: Z),
+  forall (HW_305: y0 = 3),
+  forall (y1: Z),
+  forall (HW_306: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_77 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_290: x = 2),
+  forall (y: Z),
+  forall (HW_291: y = 2),
+  forall (HW_295: x <> 0),
+  forall (HW_299: x <> 1),
+  forall (HW_303: x <> 2),
+  forall (HW_307: x <> 3),
+  forall (HW_308: x = 4),
+  forall (y0: Z),
+  forall (HW_309: y0 = 3),
+  forall (y1: Z),
+  forall (HW_310: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_78 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_290: x = 2),
+  forall (y: Z),
+  forall (HW_291: y = 2),
+  forall (HW_295: x <> 0),
+  forall (HW_299: x <> 1),
+  forall (HW_303: x <> 2),
+  forall (HW_307: x <> 3),
+  forall (HW_311: x <> 4),
+  forall (y0: Z),
+  forall (HW_312: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_79 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_314: x = 4),
+  forall (y: Z),
+  forall (HW_315: y = 2),
+  forall (HW_316: x = 0),
+  forall (y0: Z),
+  forall (HW_317: y0 = 3),
+  forall (y1: Z),
+  forall (HW_318: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_80 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_314: x = 4),
+  forall (y: Z),
+  forall (HW_315: y = 2),
+  forall (HW_319: x <> 0),
+  forall (HW_320: x = 1),
+  forall (y0: Z),
+  forall (HW_321: y0 = 3),
+  forall (y1: Z),
+  forall (HW_322: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_81 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_314: x = 4),
+  forall (y: Z),
+  forall (HW_315: y = 2),
+  forall (HW_319: x <> 0),
+  forall (HW_323: x <> 1),
+  forall (HW_324: x = 2),
+  forall (y0: Z),
+  forall (HW_325: y0 = 3),
+  forall (y1: Z),
+  forall (HW_326: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_82 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_314: x = 4),
+  forall (y: Z),
+  forall (HW_315: y = 2),
+  forall (HW_319: x <> 0),
+  forall (HW_323: x <> 1),
+  forall (HW_327: x <> 2),
+  forall (HW_328: x = 3),
+  forall (y0: Z),
+  forall (HW_329: y0 = 3),
+  forall (y1: Z),
+  forall (HW_330: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_83 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_314: x = 4),
+  forall (y: Z),
+  forall (HW_315: y = 2),
+  forall (HW_319: x <> 0),
+  forall (HW_323: x <> 1),
+  forall (HW_327: x <> 2),
+  forall (HW_331: x <> 3),
+  forall (HW_332: x = 4),
+  forall (y0: Z),
+  forall (HW_333: y0 = 3),
+  forall (y1: Z),
+  forall (HW_334: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_84 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_314: x = 4),
+  forall (y: Z),
+  forall (HW_315: y = 2),
+  forall (HW_319: x <> 0),
+  forall (HW_323: x <> 1),
+  forall (HW_327: x <> 2),
+  forall (HW_331: x <> 3),
+  forall (HW_335: x <> 4),
+  forall (y0: Z),
+  forall (HW_336: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_85 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_337: x <> 4),
+  forall (HW_338: x = 0),
+  forall (y: Z),
+  forall (HW_339: y = 3),
+  forall (y0: Z),
+  forall (HW_340: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_86 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_337: x <> 4),
+  forall (HW_341: x <> 0),
+  forall (HW_342: x = 1),
+  forall (y: Z),
+  forall (HW_343: y = 3),
+  forall (y0: Z),
+  forall (HW_344: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_87 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_337: x <> 4),
+  forall (HW_341: x <> 0),
+  forall (HW_345: x <> 1),
+  forall (HW_346: x = 2),
+  forall (y: Z),
+  forall (HW_347: y = 3),
+  forall (y0: Z),
+  forall (HW_348: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_88 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_337: x <> 4),
+  forall (HW_341: x <> 0),
+  forall (HW_345: x <> 1),
+  forall (HW_349: x <> 2),
+  forall (HW_350: x = 3),
+  forall (y: Z),
+  forall (HW_351: y = 3),
+  forall (y0: Z),
+  forall (HW_352: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_89 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_337: x <> 4),
+  forall (HW_341: x <> 0),
+  forall (HW_345: x <> 1),
+  forall (HW_349: x <> 2),
+  forall (HW_353: x <> 3),
+  forall (HW_354: x = 4),
+  forall (y: Z),
+  forall (HW_355: y = 3),
+  forall (y0: Z),
+  forall (HW_356: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_90 : 
+  forall (x: Z),
+  forall (HW_121: x <> 0),
+  forall (HW_241: x <> 1),
+  forall (HW_265: x <> 0),
+  forall (HW_289: x <> 1),
+  forall (HW_313: x <> 2),
+  forall (HW_337: x <> 4),
+  forall (HW_341: x <> 0),
+  forall (HW_345: x <> 1),
+  forall (HW_349: x <> 2),
+  forall (HW_353: x <> 3),
+  forall (HW_357: x <> 4),
+  forall (y: Z),
+  forall (HW_358: y = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
+  4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_1 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: x <> 2),
+  forall (HW_5: x <> 3),
+  forall (y0: Z),
+  forall (HW_6: y0 = 2),
+  forall (HW_7: x <> 2),
+  forall (y1: Z),
+  forall (HW_8: y1 = 3),
+  forall (y2: Z),
+  forall (HW_9: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2390-2390 *)
-Lemma f2_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_2 : 
   forall (x: Z),
+  forall (HW_2: x = 0),
   forall (y: Z),
-  forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x),
-  forall (Test1: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
-    1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4)) ->
-    (forall (y:Z),
-     (y = 2 ->
-      ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
-        1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
-        caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
-        caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))))))) /\
-  ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\ caduceus_1 <>
-    4 ->
-    (forall (result:unit),
-     (result = tt ->
-      ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
-        1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
-        caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
-        caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 45, characters 13-23 *) result =
-                  4)))))))))))))))).
-Proof.
-intuition; discriminate.
-Save.
-
-(* Why obligation from file "why/switch.why", characters 3479-3494 *)
-Lemma f3_impl_po_1 : 
-  forall (x: Z),
-  forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x),
-  forall (Test2: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
+  forall (HW_3: y = 1),
+  forall (HW_4: x <> 2),
+  forall (HW_5: x <> 3),
+  forall (y0: Z),
+  forall (HW_6: y0 = 2),
+  forall (HW_10: x = 2),
   forall (y1: Z),
-  forall (Post2: y1 = 1),
-  ((caduceus_1 <> 2 /\ caduceus_1 <> 3 ->
-    (forall (y:Z),
-     (y = 2 ->
-      ((caduceus_1 <> 2 ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 = 2 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))))))) /\
-  ((caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 3 ->
-    (forall (result:unit),
-     (result = tt ->
-      ((caduceus_1 <> 2 ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 = 2 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y1 ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))))))).
+  forall (HW_11: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3512-3512 *)
-Lemma f3_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_3 : 
   forall (x: Z),
+  forall (HW_2: x = 0),
   forall (y: Z),
-  forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x),
-  forall (Test1: caduceus_1 <> 0 /\ caduceus_1 <> 1),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  ((caduceus_1 <> 2 /\ caduceus_1 <> 3 ->
-    (forall (y:Z),
-     (y = 2 ->
-      ((caduceus_1 <> 2 ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 = 2 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))))))) /\
-  ((caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 3 ->
-    (forall (result:unit),
-     (result = tt ->
-      ((caduceus_1 <> 2 ->
-        (forall (y:Z),
-         (y = 3 ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))) /\
-      ((caduceus_1 = 2 ->
-        (forall (result:unit),
-         (result = tt ->
-          ((true = true ->
-            (forall (y:Z),
-             (y = 4 ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))) /\
-          ((false = true ->
-            (forall (result:unit),
-             (result = tt ->
-              (forall (result:unit),
-               (result = tt ->
-                (forall (result:Z),
-                 (result = y ->
-                  (* File \"switch.c\", line 64, characters 13-23 *) result =
-                  4)))))))))))))))).
+  forall (HW_3: y = 1),
+  forall (HW_4: x <> 2),
+  forall (HW_12: x = 3),
+  forall (HW_13: x <> 2),
+  forall (y0: Z),
+  forall (HW_14: y0 = 3),
+  forall (y1: Z),
+  forall (HW_15: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
 Proof.
-intuition; discriminate.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4210-4216 *)
-Lemma f4_impl_po_1 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_4 : 
   forall (x: Z),
+  forall (HW_2: x = 0),
   forall (y: Z),
-  forall (Post10: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post8: caduceus_1 = x),
-  forall (Test4: caduceus_1 = 0),
-  forall (Test3: x = 0),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 82, characters 13-23 *) result = 0)))).
+  forall (HW_3: y = 1),
+  forall (HW_4: x <> 2),
+  forall (HW_12: x = 3),
+  forall (HW_16: x = 2),
+  forall (y0: Z),
+  forall (HW_17: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_5 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_18: x = 2),
+  forall (HW_19: x <> 2),
+  forall (y0: Z),
+  forall (HW_20: y0 = 3),
+  forall (y1: Z),
+  forall (HW_21: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_6 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_22: x = 2),
+  forall (y0: Z),
+  forall (HW_23: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_7 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_25: x = 1),
+  forall (y: Z),
+  forall (HW_26: y = 1),
+  forall (HW_27: x <> 2),
+  forall (HW_28: x <> 3),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_30: x <> 2),
+  forall (y1: Z),
+  forall (HW_31: y1 = 3),
+  forall (y2: Z),
+  forall (HW_32: y2 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y2 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_8 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_25: x = 1),
+  forall (y: Z),
+  forall (HW_26: y = 1),
+  forall (HW_27: x <> 2),
+  forall (HW_28: x <> 3),
+  forall (y0: Z),
+  forall (HW_29: y0 = 2),
+  forall (HW_33: x = 2),
+  forall (y1: Z),
+  forall (HW_34: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_9 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_25: x = 1),
+  forall (y: Z),
+  forall (HW_26: y = 1),
+  forall (HW_27: x <> 2),
+  forall (HW_35: x = 3),
+  forall (HW_36: x <> 2),
+  forall (y0: Z),
+  forall (HW_37: y0 = 3),
+  forall (y1: Z),
+  forall (HW_38: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_10 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_25: x = 1),
+  forall (y: Z),
+  forall (HW_26: y = 1),
+  forall (HW_27: x <> 2),
+  forall (HW_35: x = 3),
+  forall (HW_39: x = 2),
+  forall (y0: Z),
+  forall (HW_40: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_11 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_25: x = 1),
+  forall (y: Z),
+  forall (HW_26: y = 1),
+  forall (HW_41: x = 2),
+  forall (HW_42: x <> 2),
+  forall (y0: Z),
+  forall (HW_43: y0 = 3),
+  forall (y1: Z),
+  forall (HW_44: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_12 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_25: x = 1),
+  forall (y: Z),
+  forall (HW_26: y = 1),
+  forall (HW_45: x = 2),
+  forall (y0: Z),
+  forall (HW_46: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_13 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_47: x <> 1),
+  forall (HW_48: x <> 2),
+  forall (HW_49: x <> 3),
+  forall (y: Z),
+  forall (HW_50: y = 2),
+  forall (HW_51: x <> 2),
+  forall (y0: Z),
+  forall (HW_52: y0 = 3),
+  forall (y1: Z),
+  forall (HW_53: y1 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y1 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_14 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_47: x <> 1),
+  forall (HW_48: x <> 2),
+  forall (HW_49: x <> 3),
+  forall (y: Z),
+  forall (HW_50: y = 2),
+  forall (HW_54: x = 2),
+  forall (y0: Z),
+  forall (HW_55: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_15 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_47: x <> 1),
+  forall (HW_48: x <> 2),
+  forall (HW_56: x = 3),
+  forall (HW_57: x <> 2),
+  forall (y: Z),
+  forall (HW_58: y = 3),
+  forall (y0: Z),
+  forall (HW_59: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_16 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_47: x <> 1),
+  forall (HW_48: x <> 2),
+  forall (HW_56: x = 3),
+  forall (HW_60: x = 2),
+  forall (y: Z),
+  forall (HW_61: y = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
+  4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_17 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_47: x <> 1),
+  forall (HW_62: x = 2),
+  forall (HW_63: x <> 2),
+  forall (y: Z),
+  forall (HW_64: y = 3),
+  forall (y0: Z),
+  forall (HW_65: y0 = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
+  y0 = 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_18 : 
+  forall (x: Z),
+  forall (HW_24: x <> 0),
+  forall (HW_47: x <> 1),
+  forall (HW_66: x = 2),
+  forall (y: Z),
+  forall (HW_67: y = 4),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
+  4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f4_impl_po_1 : 
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) 0 =
+  0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4227-4227 *)
-Lemma f4_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f4_impl_po_2 : 
   forall (x: Z),
+  forall (HW_1: x = 0),
+  forall (HW_3: x <> 0),
   forall (y: Z),
-  forall (Post10: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post8: caduceus_1 = x),
-  forall (Test4: caduceus_1 = 0),
-  forall (Test2: x <> 0),
-  forall (result1: unit),
-  forall (Post3: result1 = tt),
-  (forall (y:Z),
-   (y = 1 ->
-    (forall (result:unit),
-     (result = tt ->
-      (forall (result:Z),
-       (result = y ->
-        (* File \"switch.c\", line 82, characters 13-23 *) result = 0)))))).
+  forall (HW_4: y = 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
+  0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4259-4259 *)
-Lemma f4_impl_po_3 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f4_impl_po_3 : 
   forall (x: Z),
-  forall (y: Z),
-  forall (Post10: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post8: caduceus_1 = x),
-  forall (Test1: caduceus_1 <> 0),
-  forall (result0: unit),
-  forall (Post2: result0 = tt),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 82, characters 13-23 *) result = 0)))).
+  forall (HW_5: x <> 0),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) 0 =
+  0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4802-4808 *)
-Lemma f5_impl_po_1 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f5_impl_po_1 : 
   forall (x: Z),
+  forall (HW_1: x = 1),
+  forall (HW_3: x > 0),
   forall (y: Z),
-  forall (Post9: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x),
-  forall (Test4: caduceus_1 = 1),
-  forall (Variant1: Z),
-  forall (Pre3: Variant1 = 0),
-  forall (Test3: x > 0),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (y:Z),
-     (y = 1 ->
-      (forall (result:unit),
-       (result = tt ->
-        (forall (result:Z),
-         (result = y ->
-          (* File \"switch.c\", line 94, characters 13-31 *)
-          ((x = 1 -> result = 1)))))))))).
+  forall (HW_4: y = 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 1 -> y = 1)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4735-4828 *)
-Lemma f5_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f5_impl_po_2 : 
   forall (x: Z),
+  forall (HW_1: x = 1),
+  forall (HW_5: x <= 0),
   forall (y: Z),
-  forall (Post9: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x),
-  forall (Test4: caduceus_1 = 1),
-  forall (Variant1: Z),
-  forall (Pre3: Variant1 = 0),
-  forall (Test3: x > 0),
-  forall (Post10: (Zwf 0 0 0)),
-  (Zwf 0 0 Variant1).
+  forall (HW_6: y = 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 1 -> y = 1)).
 Proof.
 intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4735-4828 *)
-Lemma f5_impl_po_3 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f5_impl_po_3 : 
   forall (x: Z),
-  forall (y: Z),
-  forall (Post9: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x),
-  forall (Test4: caduceus_1 = 1),
-  forall (Variant1: Z),
-  forall (Pre3: Variant1 = 0),
-  forall (Test2: x <= 0),
-  (forall (y:Z),
-   (y = 1 ->
-    (forall (result:unit),
-     (result = tt ->
-      (forall (result:Z),
-       (result = y ->
-        (* File \"switch.c\", line 94, characters 13-31 *)
-        ((x = 1 -> result = 1)))))))).
+  forall (HW_7: x <> 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 1 -> 0 = 1)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4961-4961 *)
-Lemma f5_impl_po_4 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (Post9: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x),
-  forall (Test1: caduceus_1 <> 1),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 94, characters 13-31 *)
-      ((x = 1 -> result = 1)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5330-5345 *)
-Lemma f6_impl_po_1 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f6_impl_po_1 : 
   forall (x: Z),
+  forall (HW_1: x = (1 + 1)),
   forall (y: Z),
-  forall (Post7: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x),
-  forall (Test2: caduceus_1 = (1 + 1)),
-  forall (y1: Z),
-  forall (Post2: y1 = 1),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y1 ->
-      (* File \"switch.c\", line 106, characters 13-31 *)
-      ((x = 2 -> result = 1)))))).
+  forall (HW_2: y = 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 2 -> y = 1)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5363-5363 *)
-Lemma f6_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f6_impl_po_2 : 
   forall (x: Z),
-  forall (y: Z),
-  forall (Post7: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x),
-  forall (Test1: caduceus_1 <> (1 + 1)),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 106, characters 13-31 *)
-      ((x = 2 -> result = 1)))))).
+  forall (HW_3: x <> (1 + 1)),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = 2 -> 0 = 1)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5710-5725 *)
-Lemma f7_impl_po_1 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f7_impl_po_1 : 
   forall (x: Z),
+  forall (HW_1: x = A),
   forall (y: Z),
-  forall (Post7: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x),
-  forall (Test2: caduceus_1 = A),
-  forall (y1: Z),
-  forall (Post2: y1 = 1),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y1 ->
-      (* File \"switch.c\", line 119, characters 13-31 *)
-      ((x = A -> result = 1)))))).
+  forall (HW_2: y = 1),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = A -> y = 1)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5734-5734 *)
-Lemma f7_impl_po_2 : 
+(* Why obligation from file "why/switch.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f7_impl_po_2 : 
   forall (x: Z),
-  forall (y: Z),
-  forall (Post7: y = 0),
-  forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x),
-  forall (Test1: caduceus_1 <> A),
-  forall (result0: unit),
-  forall (Post1: result0 = tt),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = y ->
-      (* File \"switch.c\", line 119, characters 13-31 *)
-      ((x = A -> result = 1)))))).
+  forall (HW_3: x <> A),
+  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  ((x = A -> 0 = 1)).
 Proof.
 intuition.
 Save.

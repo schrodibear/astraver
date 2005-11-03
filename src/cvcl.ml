@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.29 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.30 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -82,7 +82,7 @@ let infix id =
   else assert false
 
 let external_type = function
-  | PTexternal _ | PTarray (PTexternal _) -> true
+  | PTexternal _ -> true
   | _ -> false
 
 let rec print_pure_type fmt = function
@@ -90,7 +90,8 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "BOOLEAN"
   | PTreal -> fprintf fmt "REAL"
   | PTunit -> fprintf fmt "UNIT"
-  | PTarray pt -> fprintf fmt "(ARRAY INT OF %a)" print_pure_type pt
+  | PTexternal ([pt], id) when id == farray -> 
+      fprintf fmt "ARRAY INT OF %a" print_pure_type pt
   | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
@@ -151,7 +152,7 @@ and print_terms fmt tl =
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "TRUE"
-  | Pvar id when id == default_post ->
+  | Pvar id when id == Ident.default_post ->
       fprintf fmt "TRUE"
   | Pfalse ->
       fprintf fmt "FALSE"
@@ -285,7 +286,7 @@ module Mono = struct
     fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
   let print_obligation fmt (loc, o, s) = 
-    fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation loc;
+    fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
     fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 
 end
@@ -316,8 +317,7 @@ mod_int: (INT, INT) -> INT;
 let reset () = Queue.clear queue; Output.reset ()
 
 let predicate_of_string s =
-  let st = Stream.of_string s in
-  let p = Grammar.Entry.parse Parser.lexpr st in
+  let p = Lexer.lexpr_of_string s in
   let env = Env.empty in
   let lenv = Env.logical_env env in
   let p = Ltyping.predicate Label.empty env lenv p in
@@ -326,12 +326,13 @@ let predicate_of_string s =
 (* declaring predefined symbols *)
 let predefined_symbols fmt = 
   let a = PTvarid (Ident.create "a") in
-  let int_array = PTarray PTint in
+  let farray_a = PTexternal ([a], farray) in
+  let int_array = PTexternal ([PTint], farray) in
   List.iter 
     (fun (s,t) -> Output.print_logic fmt s (generalize_logic_type t))
-    [ "array_length", Function ([PTarray a], PTint);
-      "access", Function ([PTarray a; PTint], a);
-      "store", Function ([PTarray a; PTint; a], PTunit);
+    [ "array_length", Function ([farray_a], PTint);
+      "access", Function ([farray_a; PTint], a);
+      "store", Function ([farray_a; PTint; a], PTunit);
 
       "sorted_array", Predicate [int_array; PTint; PTint];
       "exchange"    , Predicate [int_array; int_array; PTint; PTint];

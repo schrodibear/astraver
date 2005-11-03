@@ -3,31 +3,9 @@
 
 Require Export separation_spec_why.
 
-(* Why obligation from file "why/separation.why", characters 638-655 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (p1: ((memory) pointer)),
-  forall (p2: ((memory) pointer)),
-  forall (u1: pointer),
-  forall (u2: pointer),
-  forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (~((base_addr u2) = (base_addr u1)) /\
-                (~((base_addr u1) = (base_addr (acc p1 u2))) /\
-                ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
-                ~((base_addr u2) = (base_addr (acc p1 u1))) /\
-                ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
-                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
-                (valid1 p2) /\ (valid1 p1)),
-  (* File \"separation.c\", line 46, characters 5-14 *) (valid alloc u1) /\
-  (valid1_range p2 5) /\ (valid1_range p1 5) /\ (separation1 p1 p2) /\
-  (valid1 p2) /\ (valid1 p1).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 658-675 *)
-(*Why goal*) Lemma f1_impl_po_2 : 
-  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (p1: ((memory) pointer)),
   forall (p2: ((memory) pointer)),
@@ -35,75 +13,30 @@ Save.
   forall (u2: pointer),
   forall (v1: ((memory) Z)),
   forall (v2: ((memory) Z)),
-  forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (~((base_addr u2) = (base_addr u1)) /\
+  forall (HW_1: (valid1_range p2 5) /\ (valid1_range p1 5) /\
+                (separation1 p2 p1) /\ (~((base_addr u2) = (base_addr u1)) /\
                 (~((base_addr u1) = (base_addr (acc p1 u2))) /\
                 ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
                 ~((base_addr u2) = (base_addr (acc p1 u1))) /\
                 ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1 p2) /\ (valid1 p1)),
-  forall (Pre6: (* File \"separation.c\", line 46, characters 5-14 *)
-                (valid alloc u1) /\ (valid1_range p2 5) /\
-                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
-                (valid1 p1)),
   forall (intP0: ((memory) Z)),
   forall (v1_0: ((memory) Z)),
   forall (v2_0: ((memory) Z)),
-  forall (Post3: ((not_assigns alloc v2 v2_0 (pset_singleton u1)) /\
-                 (not_assigns alloc v1 v1_0 (pset_singleton u1))) /\
-                 (not_assigns alloc intP intP0
-                  (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
-                   (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
-  (* File \"separation.c\", line 46, characters 5-14 *) (valid alloc u2) /\
-  (valid1_range p2 5) /\ (valid1_range p1 5) /\ (separation1 p1 p2) /\
-  (valid1 p2) /\ (valid1 p1).
-Proof.
-intuition;generalize (H3 u2);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 36-1184 *)
-(*Why goal*) Lemma f1_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (p1: ((memory) pointer)),
-  forall (p2: ((memory) pointer)),
-  forall (u1: pointer),
-  forall (u2: pointer),
-  forall (v1: ((memory) Z)),
-  forall (v2: ((memory) Z)),
-  forall (Pre7: (valid1_range p2 5) /\ (valid1_range p1 5) /\
-                (separation1 p1 p2) /\ (~((base_addr u2) = (base_addr u1)) /\
-                (~((base_addr u1) = (base_addr (acc p1 u2))) /\
-                ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
-                ~((base_addr u2) = (base_addr (acc p1 u1))) /\
-                ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
-                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
-                (valid1 p2) /\ (valid1 p1)),
-  forall (Pre6: (* File \"separation.c\", line 46, characters 5-14 *)
-                (valid alloc u1) /\ (valid1_range p2 5) /\
-                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
-                (valid1 p1)),
-  forall (intP0: ((memory) Z)),
-  forall (v1_0: ((memory) Z)),
-  forall (v2_0: ((memory) Z)),
-  forall (Post3: ((not_assigns alloc v2 v2_0 (pset_singleton u1)) /\
-                 (not_assigns alloc v1 v1_0 (pset_singleton u1))) /\
-                 (not_assigns alloc intP intP0
-                  (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
-                   (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
-  forall (Pre5: (* File \"separation.c\", line 46, characters 5-14 *)
-                (valid alloc u2) /\ (valid1_range p2 5) /\
-                (valid1_range p1 5) /\ (separation1 p1 p2) /\ (valid1 p2) /\
-                (valid1 p1)),
+  forall (HW_2: ((not_assigns alloc v2 v2_0 (pset_singleton u1)) /\
+                (not_assigns alloc v1 v1_0 (pset_singleton u1))) /\
+                (not_assigns alloc intP intP0
+                 (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
+                  (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
   forall (intP1: ((memory) Z)),
   forall (v1_1: ((memory) Z)),
   forall (v2_1: ((memory) Z)),
-  forall (Post5: ((not_assigns alloc v2_0 v2_1 (pset_singleton u2)) /\
-                 (not_assigns alloc v1_0 v1_1 (pset_singleton u2))) /\
-                 (not_assigns alloc intP0 intP1
-                  (pset_union (pset_range (pset_singleton (acc p2 u2)) 0 4)
-                   (pset_range (pset_singleton (acc p1 u2)) 0 4)))),
+  forall (HW_3: ((not_assigns alloc v2_0 v2_1 (pset_singleton u2)) /\
+                (not_assigns alloc v1_0 v1_1 (pset_singleton u2))) /\
+                (not_assigns alloc intP0 intP1
+                 (pset_union (pset_range (pset_singleton (acc p2 u2)) 0 4)
+                  (pset_range (pset_singleton (acc p1 u2)) 0 4)))),
   ((not_assigns alloc v2 v2_1
     (pset_union (pset_singleton u2) (pset_singleton u1))) /\
   (not_assigns alloc v1 v1_1
@@ -113,6 +46,61 @@ Save.
     (pset_union (pset_range (pset_singleton (acc p1 u2)) 0 4)
      (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
       (pset_range (pset_singleton (acc p1 u1)) 0 4))))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (p1: ((memory) pointer)),
+  forall (p2: ((memory) pointer)),
+  forall (u1: pointer),
+  forall (u2: pointer),
+  forall (v1: ((memory) Z)),
+  forall (v2: ((memory) Z)),
+  forall (HW_1: (valid1_range p2 5) /\ (valid1_range p1 5) /\
+                (separation1 p2 p1) /\ (~((base_addr u2) = (base_addr u1)) /\
+                (~((base_addr u1) = (base_addr (acc p1 u2))) /\
+                ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
+                ~((base_addr u2) = (base_addr (acc p1 u1))) /\
+                ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
+                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
+                (valid1 p2) /\ (valid1 p1)),
+  forall (intP0: ((memory) Z)),
+  forall (v1_0: ((memory) Z)),
+  forall (v2_0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc v2 v2_0 (pset_singleton u1)) /\
+                (not_assigns alloc v1 v1_0 (pset_singleton u1))) /\
+                (not_assigns alloc intP intP0
+                 (pset_union (pset_range (pset_singleton (acc p2 u1)) 0 4)
+                  (pset_range (pset_singleton (acc p1 u1)) 0 4)))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc u2) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  (separation1 p2 p1) /\ (valid1 p2) /\ (valid1 p1).
+Proof.
+intuition;generalize (H3 u2);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (p1: ((memory) pointer)),
+  forall (p2: ((memory) pointer)),
+  forall (u1: pointer),
+  forall (u2: pointer),
+  forall (HW_1: (valid1_range p2 5) /\ (valid1_range p1 5) /\
+                (separation1 p2 p1) /\ (~((base_addr u2) = (base_addr u1)) /\
+                (~((base_addr u1) = (base_addr (acc p1 u2))) /\
+                ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
+                ~((base_addr u2) = (base_addr (acc p1 u1))) /\
+                ~((base_addr u2) = (base_addr (acc p2 u1)))) /\
+                (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
+                (valid1 p2) /\ (valid1 p1)),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc u1) /\ (valid1_range p2 5) /\ (valid1_range p1 5) /\
+  (separation1 p2 p1) /\ (valid1 p2) /\ (valid1 p1).
 Proof.
 intuition.
 apply not_assigns_trans with v2_0.
@@ -154,378 +142,11 @@ p H32);intro.
 apply pset_union_intro;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 153717-153734 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
   forall (anonymous_2_p2: ((memory) pointer)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc u3) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;
-generalize (H1 u3);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153740-153757 *)
-(*Why goal*) Lemma f3_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
   forall (anonymous_2_v1: ((memory) Z)),
   forall (anonymous_2_v2: ((memory) Z)),
   forall (intP: ((memory) Z)),
@@ -541,5733 +162,491 @@ Save.
   forall (w7: pointer),
   forall (w8: pointer),
   forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
   forall (anonymous_2_v1_0: ((memory) Z)),
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc u4) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 u4);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153763-153780 *)
-(*Why goal*) Lemma f3_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
   forall (anonymous_2_v1_1: ((memory) Z)),
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w1) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w1);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153786-153803 *)
-(*Why goal*) Lemma f3_impl_po_4 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
   forall (anonymous_2_v1_2: ((memory) Z)),
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w2) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w2);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153809-153826 *)
-(*Why goal*) Lemma f3_impl_po_5 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
   forall (anonymous_2_v1_3: ((memory) Z)),
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w3) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w3);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153832-153849 *)
-(*Why goal*) Lemma f3_impl_po_6 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
   forall (anonymous_2_v1_4: ((memory) Z)),
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w4) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w4);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153855-153872 *)
-(*Why goal*) Lemma f3_impl_po_7 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
   forall (anonymous_2_v1_5: ((memory) Z)),
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w5) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w5);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153878-153895 *)
-(*Why goal*) Lemma f3_impl_po_8 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_5: ((memory) Z)),
-  forall (anonymous_2_v2_5: ((memory) Z)),
-  forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
   forall (anonymous_2_v1_6: ((memory) Z)),
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
-  forall (Post25: ((not_assigns alloc intP5 intP6
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w5))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
-                   (pset_singleton w5))) /\
-                  (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
-                   (pset_singleton w5))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w6) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w6);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153901-153918 *)
-(*Why goal*) Lemma f3_impl_po_9 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_5: ((memory) Z)),
-  forall (anonymous_2_v2_5: ((memory) Z)),
-  forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_6: ((memory) Z)),
-  forall (anonymous_2_v2_6: ((memory) Z)),
-  forall (intP6: ((memory) Z)),
-  forall (Post25: ((not_assigns alloc intP5 intP6
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w5))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
-                   (pset_singleton w5))) /\
-                  (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
-                   (pset_singleton w5))),
-  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_8: ((not_assigns alloc intP5 intP6
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w5))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                 (pset_singleton w5))) /\
+                (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                 (pset_singleton w5))),
   forall (anonymous_2_v1_7: ((memory) Z)),
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
-  forall (Post27: ((not_assigns alloc intP6 intP7
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w6))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
-                   (pset_singleton w6))) /\
-                  (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
-                   (pset_singleton w6))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w7) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w7);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153924-153941 *)
-(*Why goal*) Lemma f3_impl_po_10 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_5: ((memory) Z)),
-  forall (anonymous_2_v2_5: ((memory) Z)),
-  forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_6: ((memory) Z)),
-  forall (anonymous_2_v2_6: ((memory) Z)),
-  forall (intP6: ((memory) Z)),
-  forall (Post25: ((not_assigns alloc intP5 intP6
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w5))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
-                   (pset_singleton w5))) /\
-                  (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
-                   (pset_singleton w5))),
-  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_7: ((memory) Z)),
-  forall (anonymous_2_v2_7: ((memory) Z)),
-  forall (intP7: ((memory) Z)),
-  forall (Post27: ((not_assigns alloc intP6 intP7
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w6))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
-                   (pset_singleton w6))) /\
-                  (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
-                   (pset_singleton w6))),
-  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_9: ((not_assigns alloc intP6 intP7
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w6))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                 (pset_singleton w6))) /\
+                (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                 (pset_singleton w6))),
   forall (anonymous_2_v1_8: ((memory) Z)),
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
-  forall (Post29: ((not_assigns alloc intP7 intP8
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w7))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
-                   (pset_singleton w7))) /\
-                  (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
-                   (pset_singleton w7))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w8) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w8);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153947-153964 *)
-(*Why goal*) Lemma f3_impl_po_11 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_5: ((memory) Z)),
-  forall (anonymous_2_v2_5: ((memory) Z)),
-  forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_6: ((memory) Z)),
-  forall (anonymous_2_v2_6: ((memory) Z)),
-  forall (intP6: ((memory) Z)),
-  forall (Post25: ((not_assigns alloc intP5 intP6
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w5))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
-                   (pset_singleton w5))) /\
-                  (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
-                   (pset_singleton w5))),
-  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_7: ((memory) Z)),
-  forall (anonymous_2_v2_7: ((memory) Z)),
-  forall (intP7: ((memory) Z)),
-  forall (Post27: ((not_assigns alloc intP6 intP7
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w6))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
-                   (pset_singleton w6))) /\
-                  (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
-                   (pset_singleton w6))),
-  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_8: ((memory) Z)),
-  forall (anonymous_2_v2_8: ((memory) Z)),
-  forall (intP8: ((memory) Z)),
-  forall (Post29: ((not_assigns alloc intP7 intP8
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w7))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
-                   (pset_singleton w7))) /\
-                  (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
-                   (pset_singleton w7))),
-  forall (Pre27: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_10: ((not_assigns alloc intP7 intP8
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w7))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                  (pset_singleton w7))),
   forall (anonymous_2_v1_9: ((memory) Z)),
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
-  forall (Post31: ((not_assigns alloc intP8 intP9
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w8))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
-                   (pset_singleton w8))) /\
-                  (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
-                   (pset_singleton w8))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w9) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w9);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 153970-153988 *)
-(*Why goal*) Lemma f3_impl_po_12 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_5: ((memory) Z)),
-  forall (anonymous_2_v2_5: ((memory) Z)),
-  forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_6: ((memory) Z)),
-  forall (anonymous_2_v2_6: ((memory) Z)),
-  forall (intP6: ((memory) Z)),
-  forall (Post25: ((not_assigns alloc intP5 intP6
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w5))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
-                   (pset_singleton w5))) /\
-                  (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
-                   (pset_singleton w5))),
-  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_7: ((memory) Z)),
-  forall (anonymous_2_v2_7: ((memory) Z)),
-  forall (intP7: ((memory) Z)),
-  forall (Post27: ((not_assigns alloc intP6 intP7
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w6))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
-                   (pset_singleton w6))) /\
-                  (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
-                   (pset_singleton w6))),
-  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_8: ((memory) Z)),
-  forall (anonymous_2_v2_8: ((memory) Z)),
-  forall (intP8: ((memory) Z)),
-  forall (Post29: ((not_assigns alloc intP7 intP8
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w7))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
-                   (pset_singleton w7))) /\
-                  (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
-                   (pset_singleton w7))),
-  forall (Pre27: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_9: ((memory) Z)),
-  forall (anonymous_2_v2_9: ((memory) Z)),
-  forall (intP9: ((memory) Z)),
-  forall (Post31: ((not_assigns alloc intP8 intP9
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w8))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
-                   (pset_singleton w8))) /\
-                  (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
-                   (pset_singleton w8))),
-  forall (Pre26: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_11: ((not_assigns alloc intP8 intP9
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w8))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
+                  (pset_singleton w8))) /\
+                 (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
+                  (pset_singleton w8))),
   forall (anonymous_2_v1_10: ((memory) Z)),
   forall (anonymous_2_v2_10: ((memory) Z)),
   forall (intP10: ((memory) Z)),
-  forall (Post33: ((not_assigns alloc intP9 intP10
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w9))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
-                   (pset_singleton w9))) /\
-                  (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
-                   (pset_singleton w9))),
-  (* File \"separation.c\", line 81, characters 5-14 *) (valid alloc w10) /\
-  (valid1_range anonymous_2_p2 5) /\ (valid1_range anonymous_2_p1 5) /\
-  (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-  (separation1 anonymous_2_p1 anonymous_2_p2).
-Proof.
-intuition;generalize (H3 w10);intuition.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 1223-157003 *)
-(*Why goal*) Lemma f3_impl_po_13 : 
-  forall (alloc: alloc_table),
-  forall (anonymous_2_p1: ((memory) pointer)),
-  forall (anonymous_2_p2: ((memory) pointer)),
-  forall (anonymous_2_v1: ((memory) Z)),
-  forall (anonymous_2_v2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (u3: pointer),
-  forall (u4: pointer),
-  forall (w1: pointer),
-  forall (w10: pointer),
-  forall (w2: pointer),
-  forall (w3: pointer),
-  forall (w4: pointer),
-  forall (w5: pointer),
-  forall (w6: pointer),
-  forall (w7: pointer),
-  forall (w8: pointer),
-  forall (w9: pointer),
-  forall (Pre37: (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (~((base_addr w3) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w3) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr u4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w1) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w1) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w8) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w8) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w8) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w8) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w8) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w8) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w8) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
-                 (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
-                 (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
-                 (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
-                 (valid_range alloc w1 0 0) /\
-                 (~((base_addr w6) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w6) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w6) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w6) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w6) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w8) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w8) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (~((base_addr w4) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w4) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w4) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w6) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w6) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w4) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w4) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w2) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (valid_range alloc w10 0 0) /\
-                 (~((base_addr w2) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2) /\
-                 (~((base_addr w9) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w9)) /\
-                 (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 (~((base_addr w9) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w8)) /\
-                 (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
-                 (~((base_addr w9) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w7)) /\
-                 (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 (~((base_addr w9) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w9) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w10) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w10) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w10) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w10) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w10) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr w6)) /\
-                 (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
-                 (~((base_addr w7) = (base_addr w5)) /\
-                 (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 (~((base_addr w7) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w7) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w7) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w7) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w9) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w9) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w10) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w10) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w5) = (base_addr w4)) /\
-                 (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
-                 (~((base_addr w5) = (base_addr w3)) /\
-                 (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 (~((base_addr w5) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w5) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w7) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 (~((base_addr w7) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
-                 (~((base_addr w3) = (base_addr w2)) /\
-                 (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
-                 (~((base_addr w3) = (base_addr w1)) /\
-                 (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
-                 ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
-                 ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
-                 (~((base_addr w5) = (base_addr u4)) /\
-                 (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
-                 ~((base_addr w5) = (base_addr u3)) /\
-                 (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
-                 ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
-                 ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
-  forall (Pre36: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_0: ((memory) Z)),
-  forall (anonymous_2_v2_0: ((memory) Z)),
-  forall (intP0: ((memory) Z)),
-  forall (Post13: ((not_assigns alloc intP intP0
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
-                   (pset_singleton u3))) /\
-                  (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
-                   (pset_singleton u3))),
-  forall (Pre35: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_1: ((memory) Z)),
-  forall (anonymous_2_v2_1: ((memory) Z)),
-  forall (intP1: ((memory) Z)),
-  forall (Post15: ((not_assigns alloc intP0 intP1
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             u4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
-                   (pset_singleton u4))) /\
-                  (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
-                   (pset_singleton u4))),
-  forall (Pre34: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_2: ((memory) Z)),
-  forall (anonymous_2_v2_2: ((memory) Z)),
-  forall (intP2: ((memory) Z)),
-  forall (Post17: ((not_assigns alloc intP1 intP2
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w1))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
-                   (pset_singleton w1))) /\
-                  (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
-                   (pset_singleton w1))),
-  forall (Pre33: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_3: ((memory) Z)),
-  forall (anonymous_2_v2_3: ((memory) Z)),
-  forall (intP3: ((memory) Z)),
-  forall (Post19: ((not_assigns alloc intP2 intP3
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w2))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
-                   (pset_singleton w2))) /\
-                  (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
-                   (pset_singleton w2))),
-  forall (Pre32: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_4: ((memory) Z)),
-  forall (anonymous_2_v2_4: ((memory) Z)),
-  forall (intP4: ((memory) Z)),
-  forall (Post21: ((not_assigns alloc intP3 intP4
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w3))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
-                   (pset_singleton w3))) /\
-                  (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
-                   (pset_singleton w3))),
-  forall (Pre31: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_5: ((memory) Z)),
-  forall (anonymous_2_v2_5: ((memory) Z)),
-  forall (intP5: ((memory) Z)),
-  forall (Post23: ((not_assigns alloc intP4 intP5
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w4))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
-                   (pset_singleton w4))) /\
-                  (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
-                   (pset_singleton w4))),
-  forall (Pre30: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_6: ((memory) Z)),
-  forall (anonymous_2_v2_6: ((memory) Z)),
-  forall (intP6: ((memory) Z)),
-  forall (Post25: ((not_assigns alloc intP5 intP6
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w5))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
-                   (pset_singleton w5))) /\
-                  (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
-                   (pset_singleton w5))),
-  forall (Pre29: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_7: ((memory) Z)),
-  forall (anonymous_2_v2_7: ((memory) Z)),
-  forall (intP7: ((memory) Z)),
-  forall (Post27: ((not_assigns alloc intP6 intP7
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w6))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
-                   (pset_singleton w6))) /\
-                  (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
-                   (pset_singleton w6))),
-  forall (Pre28: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_8: ((memory) Z)),
-  forall (anonymous_2_v2_8: ((memory) Z)),
-  forall (intP8: ((memory) Z)),
-  forall (Post29: ((not_assigns alloc intP7 intP8
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w7))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
-                   (pset_singleton w7))) /\
-                  (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
-                   (pset_singleton w7))),
-  forall (Pre27: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_9: ((memory) Z)),
-  forall (anonymous_2_v2_9: ((memory) Z)),
-  forall (intP9: ((memory) Z)),
-  forall (Post31: ((not_assigns alloc intP8 intP9
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w8))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
-                   (pset_singleton w8))) /\
-                  (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
-                   (pset_singleton w8))),
-  forall (Pre26: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
-  forall (anonymous_2_v1_10: ((memory) Z)),
-  forall (anonymous_2_v2_10: ((memory) Z)),
-  forall (intP10: ((memory) Z)),
-  forall (Post33: ((not_assigns alloc intP9 intP10
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w9))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0 4))) /\
-                  (not_assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
-                   (pset_singleton w9))) /\
-                  (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
-                   (pset_singleton w9))),
-  forall (Pre25: (* File \"separation.c\", line 81, characters 5-14 *)
-                 (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
-                 (valid1_range anonymous_2_p1 5) /\
-                 (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
-                 (separation1 anonymous_2_p1 anonymous_2_p2)),
+  forall (HW_12: ((not_assigns alloc intP9 intP10
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w9))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
+                  (pset_singleton w9))) /\
+                 (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
+                  (pset_singleton w9))),
   forall (anonymous_2_v1_11: ((memory) Z)),
   forall (anonymous_2_v2_11: ((memory) Z)),
   forall (intP11: ((memory) Z)),
-  forall (Post35: ((not_assigns alloc intP10 intP11
-                    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
-                                                             w10))
-                                 0 4)
-                     (pset_range (pset_singleton (acc anonymous_2_p1 w10)) 0
-                      4))) /\
-                  (not_assigns alloc anonymous_2_v2_10 anonymous_2_v2_11
-                   (pset_singleton w10))) /\
-                  (not_assigns alloc anonymous_2_v1_10 anonymous_2_v1_11
-                   (pset_singleton w10))),
+  forall (HW_13: ((not_assigns alloc intP10 intP11
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w10))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w10)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_10 anonymous_2_v2_11
+                  (pset_singleton w10))) /\
+                 (not_assigns alloc anonymous_2_v1_10 anonymous_2_v1_11
+                  (pset_singleton w10))),
   ((not_assigns alloc intP intP11
     (pset_union (pset_range (pset_singleton (acc anonymous_2_p2 w10)) 0 4)
      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1 w10)) 0 4)
@@ -6347,70 +726,5322 @@ Save.
             (pset_union (pset_singleton w1)
              (pset_union (pset_singleton u4) (pset_singleton u3))))))))))))).
 Proof.
+intuition;
+generalize (H1 u3);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (HW_8: ((not_assigns alloc intP5 intP6
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w5))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                 (pset_singleton w5))) /\
+                (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                 (pset_singleton w5))),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (HW_9: ((not_assigns alloc intP6 intP7
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w6))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                 (pset_singleton w6))) /\
+                (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                 (pset_singleton w6))),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (HW_10: ((not_assigns alloc intP7 intP8
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w7))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                  (pset_singleton w7))),
+  forall (anonymous_2_v1_9: ((memory) Z)),
+  forall (anonymous_2_v2_9: ((memory) Z)),
+  forall (intP9: ((memory) Z)),
+  forall (HW_11: ((not_assigns alloc intP8 intP9
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w8))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
+                  (pset_singleton w8))) /\
+                 (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
+                  (pset_singleton w8))),
+  forall (anonymous_2_v1_10: ((memory) Z)),
+  forall (anonymous_2_v2_10: ((memory) Z)),
+  forall (intP10: ((memory) Z)),
+  forall (HW_12: ((not_assigns alloc intP9 intP10
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w9))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w9)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
+                  (pset_singleton w9))) /\
+                 (not_assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
+                  (pset_singleton w9))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w10) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 u4);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (HW_8: ((not_assigns alloc intP5 intP6
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w5))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                 (pset_singleton w5))) /\
+                (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                 (pset_singleton w5))),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (HW_9: ((not_assigns alloc intP6 intP7
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w6))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                 (pset_singleton w6))) /\
+                (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                 (pset_singleton w6))),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (HW_10: ((not_assigns alloc intP7 intP8
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w7))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                  (pset_singleton w7))),
+  forall (anonymous_2_v1_9: ((memory) Z)),
+  forall (anonymous_2_v2_9: ((memory) Z)),
+  forall (intP9: ((memory) Z)),
+  forall (HW_11: ((not_assigns alloc intP8 intP9
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w8))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w8)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
+                  (pset_singleton w8))) /\
+                 (not_assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
+                  (pset_singleton w8))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w9) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w1);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (HW_8: ((not_assigns alloc intP5 intP6
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w5))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                 (pset_singleton w5))) /\
+                (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                 (pset_singleton w5))),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (HW_9: ((not_assigns alloc intP6 intP7
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w6))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                 (pset_singleton w6))) /\
+                (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                 (pset_singleton w6))),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (HW_10: ((not_assigns alloc intP7 intP8
+                   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                            w7))
+                                0 4)
+                    (pset_range (pset_singleton (acc anonymous_2_p1 w7)) 0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                  (pset_singleton w7))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w8) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w2);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (HW_8: ((not_assigns alloc intP5 intP6
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w5))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                 (pset_singleton w5))) /\
+                (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                 (pset_singleton w5))),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (HW_9: ((not_assigns alloc intP6 intP7
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w6))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w6)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                 (pset_singleton w6))) /\
+                (not_assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                 (pset_singleton w6))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w7) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w3);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (HW_8: ((not_assigns alloc intP5 intP6
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w5))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w5)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                 (pset_singleton w5))) /\
+                (not_assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                 (pset_singleton w5))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w6) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w4);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_7 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (HW_7: ((not_assigns alloc intP4 intP5
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                 (pset_singleton w4))) /\
+                (not_assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                 (pset_singleton w4))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w5) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w5);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_8 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (HW_6: ((not_assigns alloc intP3 intP4
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                 (pset_singleton w3))) /\
+                (not_assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                 (pset_singleton w3))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w4) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w6);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_9 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_5: ((not_assigns alloc intP2 intP3
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w2))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                 (pset_singleton w2))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w3) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w7);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_10 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_4: ((not_assigns alloc intP1 intP2
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           w1))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                 (pset_singleton w1))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w2) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w8);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_11 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_3: ((not_assigns alloc intP0 intP1
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u4))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                 (pset_singleton u4))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc w1) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w9);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_12 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_2: ((not_assigns alloc intP intP0
+                  (pset_union (pset_range (pset_singleton (acc anonymous_2_p2
+                                                           u3))
+                               0 4)
+                   (pset_range (pset_singleton (acc anonymous_2_p1 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                 (pset_singleton u3))) /\
+                (not_assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                 (pset_singleton u3))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc u4) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
+intuition;generalize (H3 w10);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_13 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (HW_1: (valid1_range anonymous_2_p2 5) /\
+                (valid1_range anonymous_2_p1 5) /\
+                (~((base_addr w3) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w3) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr u4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w1) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w1) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w8) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w8) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w8) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w8) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w8) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w8) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w8) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (valid_range alloc w9 0 0) /\ (valid_range alloc w8 0 0) /\
+                (valid_range alloc w7 0 0) /\ (valid_range alloc w6 0 0) /\
+                (valid_range alloc w5 0 0) /\ (valid_range alloc w4 0 0) /\
+                (valid_range alloc w3 0 0) /\ (valid_range alloc w2 0 0) /\
+                (valid_range alloc w1 0 0) /\
+                (~((base_addr w6) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w6) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w6) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w6) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w6) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w8) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w8) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (valid_range alloc u4 0 0) /\ (valid_range alloc u3 0 0) /\
+                (valid1 anonymous_2_p2) /\ (valid1 anonymous_2_p1) /\
+                (~((base_addr w4) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w4) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w4) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w6) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w6) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w4) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w4) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w2) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (valid_range alloc w10 0 0) /\
+                (~((base_addr w2) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (separation1 anonymous_2_p2 anonymous_2_p1) /\
+                (~((base_addr w9) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w9)) /\
+                (~((base_addr w9) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                (~((base_addr w9) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w8)) /\
+                (~((base_addr w8) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w8) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w8))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w8)))) /\
+                (~((base_addr w9) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w7)) /\
+                (~((base_addr w7) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                (~((base_addr w9) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w9) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w10) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w10) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w10) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w10) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w10) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr w6)) /\
+                (~((base_addr w6) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w6) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w6))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w6)))) /\
+                (~((base_addr w7) = (base_addr w5)) /\
+                (~((base_addr w5) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                (~((base_addr w7) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w7) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w7) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w7) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w9) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w9) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w9))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w9)))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w9) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w10) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w10) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w10))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w10)))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w10) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w5) = (base_addr w4)) /\
+                (~((base_addr w4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w4)))) /\
+                (~((base_addr w5) = (base_addr w3)) /\
+                (~((base_addr w3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                (~((base_addr w5) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w5) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w7) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                (~((base_addr w7) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w7))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w7)))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w7) = (base_addr (acc anonymous_2_p2 u3)))) /\
+                (~((base_addr w3) = (base_addr w2)) /\
+                (~((base_addr w2) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w2) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w2))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w2)))) /\
+                (~((base_addr w3) = (base_addr w1)) /\
+                (~((base_addr w1) = (base_addr (acc anonymous_2_p1 w3))) /\
+                ~((base_addr w1) = (base_addr (acc anonymous_2_p2 w3)))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p1 w1))) /\
+                ~((base_addr w3) = (base_addr (acc anonymous_2_p2 w1)))) /\
+                (~((base_addr w5) = (base_addr u4)) /\
+                (~((base_addr u4) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u4) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u4))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u4)))) /\
+                ~((base_addr w5) = (base_addr u3)) /\
+                (~((base_addr u3) = (base_addr (acc anonymous_2_p1 w5))) /\
+                ~((base_addr u3) = (base_addr (acc anonymous_2_p2 w5)))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p1 u3))) /\
+                ~((base_addr w5) = (base_addr (acc anonymous_2_p2 u3)))),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 14-23 *)
+  (valid alloc u3) /\ (valid1_range anonymous_2_p2 5) /\
+  (valid1_range anonymous_2_p1 5) /\ (valid1 anonymous_2_p2) /\
+  (valid1 anonymous_2_p1) /\ (separation1 anonymous_2_p2 anonymous_2_p1).
+Proof.
 Admitted.
 
-(* Why obligation from file "why/separation.why", characters 158457-158470 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (ss: pointer),
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre19: (~((base_addr ss) = (base_addr s)) /\
-                 (~((base_addr s) = (base_addr (acc t ss))) /\
-                 ~((base_addr s) = (base_addr (acc u ss)))) /\
-                 ~((base_addr ss) = (base_addr (acc t s))) /\
-                 ~((base_addr ss) = (base_addr (acc u s)))) /\
-                 (separation1 t u) /\ (valid1 u) /\ (valid1 t) /\
-                 (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
-                 (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
-                 (valid_range alloc s 0 0) /\
-                 (~((base_addr v) = (base_addr s)) /\
-                 ~((base_addr v) = (base_addr (acc t s))) /\
-                 ~((base_addr v) = (base_addr (acc u s)))) /\
-                 ~((base_addr v) = (base_addr ss)) /\
-                 ~((base_addr v) = (base_addr (acc t ss))) /\
-                 ~((base_addr v) = (base_addr (acc u ss)))),
-  (valid alloc ss).
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_5: intP1 = (upd intP0 result0 1)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc u s)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_7: intP2 = (upd intP1 result1 2)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_8: intP3 = (upd intP2 v 3)),
+  forall (result2: pointer),
+  forall (HW_9: result2 = (acc t s)),
+  forall (result3: Z),
+  forall (HW_10: result3 = (acc intP3 result2)),
+  (* File \"separation.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  result3 = 1.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 158475-158502 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (ss: pointer),
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre19: (~((base_addr ss) = (base_addr s)) /\
-                 (~((base_addr s) = (base_addr (acc t ss))) /\
-                 ~((base_addr s) = (base_addr (acc u ss)))) /\
-                 ~((base_addr ss) = (base_addr (acc t s))) /\
-                 ~((base_addr ss) = (base_addr (acc u s)))) /\
-                 (separation1 t u) /\ (valid1 u) /\ (valid1 t) /\
-                 (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
-                 (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
-                 (valid_range alloc s 0 0) /\
-                 (~((base_addr v) = (base_addr s)) /\
-                 ~((base_addr v) = (base_addr (acc t s))) /\
-                 ~((base_addr v) = (base_addr (acc u s)))) /\
-                 ~((base_addr v) = (base_addr ss)) /\
-                 ~((base_addr v) = (base_addr (acc t ss))) /\
-                 ~((base_addr v) = (base_addr (acc u ss)))),
-  forall (Pre4: (valid alloc ss)),
-  forall (caduceus_4: pointer),
-  forall (Post3: caduceus_4 = (acc t ss)),
-  (valid alloc caduceus_4).
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_5: intP1 = (upd intP0 result0 1)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc u s)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_7: intP2 = (upd intP1 result1 2)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_8: intP3 = (upd intP2 v 3)),
+  forall (result2: pointer),
+  forall (HW_9: result2 = (acc t s)),
+  (valid alloc result2).
 Proof.
 intuition.
 subst.
 generalize (H4 ss alloc Pre4 );intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 158440-158502 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -6419,49 +6050,35 @@ Save.
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre19: (~((base_addr ss) = (base_addr s)) /\
-                 (~((base_addr s) = (base_addr (acc t ss))) /\
-                 ~((base_addr s) = (base_addr (acc u ss)))) /\
-                 ~((base_addr ss) = (base_addr (acc t s))) /\
-                 ~((base_addr ss) = (base_addr (acc u s)))) /\
-                 (separation1 t u) /\ (valid1 u) /\ (valid1 t) /\
-                 (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
-                 (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
-                 (valid_range alloc s 0 0) /\
-                 (~((base_addr v) = (base_addr s)) /\
-                 ~((base_addr v) = (base_addr (acc t s))) /\
-                 ~((base_addr v) = (base_addr (acc u s)))) /\
-                 ~((base_addr v) = (base_addr ss)) /\
-                 ~((base_addr v) = (base_addr (acc t ss))) /\
-                 ~((base_addr v) = (base_addr (acc u ss)))),
-  forall (Pre4: (valid alloc ss)),
-  forall (caduceus_4: pointer),
-  forall (Post3: caduceus_4 = (acc t ss)),
-  forall (Pre3: (valid alloc caduceus_4)),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
   forall (intP0: ((memory) Z)),
-  forall (Post14: intP0 = (upd intP caduceus_4 0)),
-  (forall (result:pointer),
-   (result = (acc t s) ->
-    (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 1) ->
-      (forall (result:pointer),
-       (result = (acc u s) ->
-        (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 2) ->
-          (forall (result:pointer),
-           (result = v ->
-            (forall (intP:((memory) Z)),
-             (intP = (upd intP0 result 3) ->
-              (((forall (result:Z),
-                 (result = (acc intP (acc t s)) ->
-                  (* File \"separation.c\", line 11, characters 13-25 *)
-                  result = 1)) /\
-              (valid alloc s)) /\ (valid alloc (acc t s))) /\
-              (valid alloc (acc t s)))) /\
-            (valid alloc result))))) /\
-        (valid alloc result))) /\
-      (valid alloc s))) /\
-    (valid alloc result))) /\
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_5: intP1 = (upd intP0 result0 1)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc u s)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_7: intP2 = (upd intP1 result1 2)),
+  forall (intP3: ((memory) Z)),
+  forall (HW_8: intP3 = (upd intP2 v 3)),
   (valid alloc s).
 Proof.
 intuition;subst;auto.
@@ -6481,38 +6098,289 @@ rewrite <- shift_zero with (s#t).
 apply neq_base_addr_neq_shift;tauto.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 158899-158914 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_5: intP1 = (upd intP0 result0 1)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc u s)),
+  forall (intP2: ((memory) Z)),
+  forall (HW_7: intP2 = (upd intP1 result1 2)),
+  (valid alloc v).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_5: intP1 = (upd intP0 result0 1)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc u s)),
+  (valid alloc result1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  forall (intP1: ((memory) Z)),
+  forall (HW_5: intP1 = (upd intP0 result0 1)),
+  (valid alloc s).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_7 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc t s)),
+  (valid alloc result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_8 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_3: intP0 = (upd intP result 0)),
+  (valid alloc s).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_9 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  forall (result: pointer),
+  forall (HW_2: result = (acc t ss)),
+  (valid alloc result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_10 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (ss: pointer),
+  forall (t: ((memory) pointer)),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (HW_1: (~((base_addr ss) = (base_addr s)) /\
+                (~((base_addr s) = (base_addr (acc t ss))) /\
+                ~((base_addr s) = (base_addr (acc u ss)))) /\
+                ~((base_addr ss) = (base_addr (acc t s))) /\
+                ~((base_addr ss) = (base_addr (acc u s)))) /\
+                (separation1 u t) /\ (valid1 u) /\ (valid1 t) /\
+                (valid_range alloc ss 0 0) /\ (valid1_range u 3) /\
+                (valid1_range t 2) /\ (valid_range alloc v 0 3) /\
+                (valid_range alloc s 0 0) /\
+                (~((base_addr v) = (base_addr s)) /\
+                ~((base_addr v) = (base_addr (acc t s))) /\
+                ~((base_addr v) = (base_addr (acc u s)))) /\
+                ~((base_addr v) = (base_addr ss)) /\
+                ~((base_addr v) = (base_addr (acc t ss))) /\
+                ~((base_addr v) = (base_addr (acc u ss)))),
+  (valid alloc ss).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
-  forall (Pre2: (valid_range alloc v 0 3)),
+  forall (HW_1: (valid_range alloc v 0 3)),
   (valid alloc v).
 Proof.
 intuition.
 Save.
 
 
-(* Why obligation from file "why/separation.why", characters 159064-159092 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre4: (valid1 x) /\ (valid1_range x 1) /\
+  forall (HW_1: (valid1 x) /\ (valid1_range x 1) /\
                 (valid_range alloc tab 0 4)),
-  (valid alloc tab).
+  forall (result: pointer),
+  forall (HW_2: result = (acc x tab)),
+  (valid alloc result).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 159064-159092 *)
+(* Why obligation from file "why/separation.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre4: (valid1 x) /\ (valid1_range x 1) /\
+  forall (HW_1: (valid1 x) /\ (valid1_range x 1) /\
                 (valid_range alloc tab 0 4)),
-  forall (Pre1: (valid alloc tab)),
-  (valid alloc (acc x tab)).
+  (valid alloc tab).
 Proof.
 intuition.
 Save.

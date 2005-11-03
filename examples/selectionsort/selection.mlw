@@ -8,7 +8,7 @@ let selection =
   begin
     label init;
     let i = ref 0 in
-    while !i < (array_length t)-1 do
+    while !i < (array_length_ t)-1 do
       (* t[0..i-1] is already sorted *)
       { invariant 0 <= i <= array_length(t)-1 and
 	          sorted_array(t, 0, i-1) and permut(t, t@init) and
@@ -19,7 +19,7 @@ let selection =
       let min = ref !i in 
       let j = ref !i + 1 in
       begin
-	while !j < (array_length t) do
+	while !j < (array_length_ t) do
 	  { invariant i+1 <= j <= array_length(t) and 
 	              i <= min < array_length(t) and
 	              forall k:int. i <= k < j -> t[min] <= t[k]

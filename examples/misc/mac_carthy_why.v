@@ -9,70 +9,58 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
-(* Why obligation from file "mac_carthy.mlw", characters 131-263 *)
-Lemma f91_po_1 : 
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (Pre2: Variant1 = (max 0 (101 - n0))),
-  forall (Test2: n0 <= 100),
+(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma f91_po_1 : 
+  forall (n: Z),
+  forall (HW_1: n <= 100),
+  forall (result: Z),
+  forall (HW_2: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
+                (n + 11 - 10)),
   forall (result0: Z),
-  forall (Post3: result0 = (n0 + 11)),
-  (Zwf 0 (max 0 (101 - result0)) Variant1).
+  forall (HW_3: result <= 100 /\ result0 = 91 \/ result >= 101 /\ result0 =
+                (result - 10)),
+  n <= 100 /\ result0 = 91 \/ n >= 101 /\ result0 = (n - 10).
 Proof.
-intros Variant1 n.
- unfold Zwf, max.
-case (Z_le_gt_dec 0 (101 - n)); intros H Pre2 Test2 result0 Post3; 
-subst result0; 
-case (Z_le_gt_dec 0 (101 - (n + 11))); intuition; omega.
+intuition.
 Qed.
 
-(* Why obligation from file "mac_carthy.mlw", characters 131-263 *)
-Lemma f91_po_2 : 
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (Pre2: Variant1 = (max 0 (101 - n0))),
-  forall (Test2: n0 <= 100),
-  forall (aux_3: Z),
-  forall (Post7: (n0 + 11) <= 100 /\ aux_3 = 91 \/ (n0 + 11) >= 101 /\
-                 aux_3 = (n0 + 11 - 10)),
-  forall (result0: Z),
-  forall (Post2: result0 = aux_3),
-  (Zwf 0 (max 0 (101 - result0)) Variant1).
+(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma f91_po_2 : 
+  forall (n: Z),
+  forall (HW_1: n <= 100),
+  forall (result: Z),
+  forall (HW_2: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
+                (n + 11 - 10)),
+  (Zwf 0 (max 0 (101 - result)) (max 0 (101 - n))).
 Proof.
-intros Variant1 n.
- unfold Zwf, max.
-case (Z_le_gt_dec 0 (101 - n)); intros; subst;
-case (Z_le_gt_dec 0 (101 - aux_3)); intuition omega.
-Qed.
+intros n.
+unfold Zwf, max. 
+case (Z_le_gt_dec 0 (101 - n)); intuition.
+subst result.
+ring (101-91).
+case (Z_le_gt_dec 0 10); intuition.
+subst result.
+case (Z_le_gt_dec 0 (101 - (n + 11 - 10))); intuition; omega.
+Save.
 
-(* Why obligation from file "mac_carthy.mlw", characters 158-178 *)
-Lemma f91_po_3 : 
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (Pre2: Variant1 = (max 0 (101 - n0))),
-  forall (Test2: n0 <= 100),
-  forall (aux_3: Z),
-  forall (Post7: (n0 + 11) <= 100 /\ aux_3 = 91 \/ (n0 + 11) >= 101 /\
-                 aux_3 = (n0 + 11 - 10)),
-  forall (result0: Z),
-  forall (Post9: aux_3 <= 100 /\ result0 = 91 \/ aux_3 >= 101 /\ result0 =
-                 (aux_3 - 10)),
-  n0 <= 100 /\ result0 = 91 \/ n0 >= 101 /\ result0 = (n0 - 10).
+(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma f91_po_3 : 
+  forall (n: Z),
+  forall (HW_1: n <= 100),
+  (Zwf 0 (max 0 (101 - (n + 11))) (max 0 (101 - n))).
 Proof.
-intuition omega.
-Qed.
+unfold Zwf, max; intuition.
+case (Z_le_gt_dec 0 (101 - n)); intuition.
+case (Z_le_gt_dec 0 (101 - n)); intuition.
+case (Z_le_gt_dec 0 (101 - (n+11))); intuition.
+Save.
 
-(* Why obligation from file "mac_carthy.mlw", characters 190-196 *)
-Lemma f91_po_4 : 
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (Pre2: Variant1 = (max 0 (101 - n0))),
-  forall (Test1: n0 > 100),
-  forall (result0: Z),
-  forall (Post1: result0 = (n0 - 10)),
-  n0 <= 100 /\ result0 = 91 \/ n0 >= 101 /\ result0 = (n0 - 10).
+(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma f91_po_4 : 
+  forall (n: Z),
+  forall (HW_4: n > 100),
+  n <= 100 /\ (n - 10) = 91 \/ n >= 101 /\ (n - 10) = (n - 10).
 Proof.
-intuition omega.
-Qed.
-
+intuition.
+Save.
 

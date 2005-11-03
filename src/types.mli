@@ -14,40 +14,25 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: types.mli,v 1.17 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.18 2005-11-03 14:11:37 filliatr Exp $ i*)
 
-(*s Types for programs *)
+(*s Types for programs.
+    Types of values ([type_v]) and computations ([type_c]) *)
 
 open Logic
 
-(*s Pre- and postconditions. *)
-
-type 'a asst = { a_name : Ident.name; a_value : 'a; a_loc : Loc.t }
-
-type assertion = predicate asst
-
-type 'a post = 'a asst * (Ident.t * 'a asst) list
+type assertion = predicate
 
 type precondition = assertion
 
 type postcondition = assertion * (Ident.t * assertion) list
 
-(*s Binders. *)
-
-type 'a binder_type =
-  | BindType of 'a
-  | BindSet
-  | Untyped
-
-type 'a binder = Ident.t * 'a binder_type
-
-(*s Types of values ([type_v]) and computations ([type_c]) *)
+type 'a binder = Ident.t * 'a
 
 type type_v = 
-  | Ref of type_v
-  | Array of type_v
-  | Arrow of type_v binder list * type_c
   | PureType of pure_type
+  | Ref of pure_type
+  | Arrow of type_v binder list * type_c
 
 and type_c = 
   { c_result_name : Ident.t;
@@ -55,4 +40,6 @@ and type_c =
     c_effect : Effect.t;
     c_pre    : precondition list;
     c_post   : postcondition option }
+
+type transp = Transparent | Opaque
 

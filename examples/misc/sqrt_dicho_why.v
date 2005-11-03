@@ -27,50 +27,10 @@ Qed.
 
 Hint Resolve mean1 mean2 .
 
-(* Why obligation from file "sqrt_dicho.mlw", characters 326-346 *)
-Lemma sqrt_po_1 : 
-  forall (x: Z),
-  forall (Pre5: x >= 0),
-  forall (inf: Z),
-  forall (Post9: inf = 0),
-  forall (sup: Z),
-  forall (Post8: sup = (x + 1)),
-  forall (mil: Z),
-  forall (Post7: mil = 0),
-  forall (Variant1: Z),
-  forall (inf1: Z),
-  forall (sup1: Z),
-  forall (Pre4: Variant1 = (sup1 - inf1)),
-  forall (Pre3: (inf1 * inf1) <= x /\ x < (sup1 * sup1) /\ inf1 < sup1),
-  forall (Test4: (inf1 + 1) <> sup1),
-  ~(2 = 0).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "sqrt_dicho.mlw", characters 375-386 *)
-Lemma sqrt_po_2 : 
-  forall (x: Z),
-  forall (Pre5: x >= 0),
-  forall (inf: Z),
-  forall (Post9: inf = 0),
-  forall (sup: Z),
-  forall (Post8: sup = (x + 1)),
-  forall (mil: Z),
-  forall (Post7: mil = 0),
-  forall (Variant1: Z),
-  forall (inf1: Z),
-  forall (sup1: Z),
-  forall (Pre4: Variant1 = (sup1 - inf1)),
-  forall (Pre3: (inf1 * inf1) <= x /\ x < (sup1 * sup1) /\ inf1 < sup1),
-  forall (Test4: (inf1 + 1) <> sup1),
-  forall (mil2: Z),
-  forall (Post2: mil2 = ((Zdiv (inf1 + (sup1 + 1)) 2))),
-  forall (Test3: x < (mil2 * mil2)),
-  forall (sup2: Z),
-  forall (Post4: sup2 = mil2),
-  ((inf1 * inf1) <= x /\ x < (sup2 * sup2) /\ inf1 < sup2) /\
-  (Zwf 0 (sup2 - inf1) (sup1 - inf1)).
 Proof.
 intuition.
 subst sup2; trivial.
@@ -90,29 +50,6 @@ apply mean2; omega.
 omega.
 Qed.
 
-(* Why obligation from file "sqrt_dicho.mlw", characters 392-403 *)
-Lemma sqrt_po_3 : 
-  forall (x: Z),
-  forall (Pre5: x >= 0),
-  forall (inf: Z),
-  forall (Post9: inf = 0),
-  forall (sup: Z),
-  forall (Post8: sup = (x + 1)),
-  forall (mil: Z),
-  forall (Post7: mil = 0),
-  forall (Variant1: Z),
-  forall (inf1: Z),
-  forall (sup1: Z),
-  forall (Pre4: Variant1 = (sup1 - inf1)),
-  forall (Pre3: (inf1 * inf1) <= x /\ x < (sup1 * sup1) /\ inf1 < sup1),
-  forall (Test4: (inf1 + 1) <> sup1),
-  forall (mil2: Z),
-  forall (Post2: mil2 = ((Zdiv (inf1 + (sup1 + 1)) 2))),
-  forall (Test2: x >= (mil2 * mil2)),
-  forall (inf2: Z),
-  forall (Post3: inf2 = mil2),
-  ((inf2 * inf2) <= x /\ x < (sup1 * sup1) /\ inf2 < sup1) /\
-  (Zwf 0 (sup1 - inf2) (sup1 - inf1)).
 Proof.
 intuition.
 subst mil2 inf2; omega.
@@ -129,40 +66,10 @@ apply mean1; omega.
 omega.
 Qed.
 
-(* Why obligation from file "sqrt_dicho.mlw", characters 185-409 *)
-Lemma sqrt_po_4 : 
-  forall (x: Z),
-  forall (Pre5: x >= 0),
-  forall (inf: Z),
-  forall (Post9: inf = 0),
-  forall (sup: Z),
-  forall (Post8: sup = (x + 1)),
-  forall (mil: Z),
-  forall (Post7: mil = 0),
-  forall (Variant1: Z),
-  forall (inf1: Z),
-  forall (sup1: Z),
-  forall (Pre4: Variant1 = (sup1 - inf1)),
-  forall (Pre3: (inf1 * inf1) <= x /\ x < (sup1 * sup1) /\ inf1 < sup1),
-  forall (Test1: (inf1 + 1) = sup1),
-  forall (result: Z),
-  forall (HW_4: result = inf1),
-  (result * result) <= x /\ x < ((result + 1) * (result + 1)).
 Proof.
 intuition; subst; auto.
 Qed.
 
-(* Why obligation from file "sqrt_dicho.mlw", characters 235-287 *)
-Lemma sqrt_po_5 : 
-  forall (x: Z),
-  forall (Pre5: x >= 0),
-  forall (inf: Z),
-  forall (Post9: inf = 0),
-  forall (sup: Z),
-  forall (Post8: sup = (x + 1)),
-  forall (mil: Z),
-  forall (Post7: mil = 0),
-  (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup.
 Proof.
 intuition.
 subst inf; omega.

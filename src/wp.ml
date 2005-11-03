@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.87 2004-07-05 13:18:45 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.88 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -27,24 +27,66 @@ open Ast
 open Util
 open Env
 open Effect
-open Annot
 
-(*s to quantify over all the variables modified by [p] *)
+(*s to quantify over all the variables read/modified by [p] *)
+
+let input_info info = 
+  let w = Effect.get_reads info.t_effect in
+  let env = info.t_env in
+  List.map (fun id -> (id, type_in_env env id)) w
+
+let input p = input_info p.info
 
 let output_info info = 
-  let w = Effect.get_writes info.kappa.c_effect in
-  let env = info.env in
+  let w = Effect.get_writes info.t_effect in
+  let env = info.t_env in
   List.map (fun id -> (id, type_in_env env id)) w
 
 let output p = output_info p.info
+
+(* maximum *)
+
+let sup q q' = match q, q' with
+  | None, _ ->
+      q'
+  | _, None ->
+      q
+  | Some (q, ql), Some (_, ql') ->
+      assert (List.length ql = List.length ql');
+      let supx (x,a) (x',a') =
+	assert (x = x');
+	x, if is_default_post a then a' else a
+      in
+      Some (q, List.map2 supx ql ql') 
 
 (*s [filter_post k q] removes exc. postconditions from [q] which do not
     appear in typing info [k] *)
 
 let filter_post k =
-  let ef = k.kappa.c_effect in
+  let ef = k.t_effect in
   let keep (x,_) = is_exn ef x in
   option_app (fun (q, ql) -> (q, List.filter keep ql))
+
+(*s post-condition for a loop body *)
+
+let default_exns_post e =
+  let xs = Effect.get_exns e in
+  List.map (fun x -> x, default_post) xs
+ 
+let while_post_block env inv (phi,_,r) e = 
+  let lab = e.info.t_label in
+  let decphi = Papp (r, [phi; put_label_term env lab phi], []) in
+  let ql = default_exns_post (effect e) in
+  match inv with
+    | None -> 
+	anonymous e.info.t_loc decphi, ql
+    | Some i -> 
+	{ a_value = pand i.a_value decphi; (* is_wp:true ? *)
+	  a_name = post_name_from (Name i.a_name);
+	  a_loc = e.info.t_loc;
+	  a_proof = None }, ql
+
+let well_founded_rel (_,_,r) = Papp (well_founded, [Tvar r], [])
 
 (*s [saturate_post k a q] makes a postcondition for a program of type [k]
     out of a normal postcondition [a] and the exc. postconditions from [q] *)
@@ -52,7 +94,7 @@ let filter_post k =
 let saturate_post k a q = 
   let ql = match q with Some (_,l) -> l | None -> [] in
   let set_post x = x, try List.assoc x ql with Not_found -> default_post in
-  let xs = get_exns k.kappa.c_effect in
+  let xs = get_exns k.t_effect in
   let saturate a = (a, List.map set_post xs) in
   option_app saturate a
 
@@ -62,7 +104,7 @@ let need_a_post p =
   match p.desc with Lam _ | Rec _ -> false | _ -> true
 
 let is_while p = 
-  match p.desc with While _ -> true | _ -> false
+  match p.desc with Loop _ -> true | _ -> false
 
 (*s Weakest precondition of an annotated program:
     \begin{verbatim}
@@ -87,6 +129,47 @@ let abstract_wp (q',ql') (q,ql) res out =
   in
   pands ~is_wp:true (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
 
+(* simple version when [q'] is absent *)
+let abstract_wp_0 (q,ql) res out =
+  let quantify a res =
+    let vars = match res with Some b -> b :: out | None -> out in
+    foralls ~is_wp:true vars a.a_value
+  in
+  let quantify_h (x,a) =
+    let pt = find_exception x in
+    quantify a (option_app (fun t -> (result, PureType t)) pt)
+  in
+  pands ~is_wp:true (quantify q (Some res) :: List.map quantify_h ql)
+
+let opaque_wp q' q info = match q', q with
+  | Some q', Some q ->
+      let res = (result, info.t_result_type) in
+      let p = abstract_wp q' q res (output_info info) in
+      let p = erase_label info.t_label (erase_label "" p) in
+      Some (wp_named info.t_loc p)
+  | None, Some q ->
+      let res = (result, info.t_result_type) in
+      let p = abstract_wp_0 q res (output_info info) in
+      let p = erase_label info.t_label (erase_label "" p) in
+      Some (wp_named info.t_loc p)
+  | _ ->
+      None
+
+let pand_wp info w1 w2 = match w1, w2 with
+  | Some w1, Some w2 -> 
+      Some (wp_named info.t_loc (pand ~is_wp:true w1.a_value w2.a_value))
+  | Some _, None -> w1
+  | None, Some _ -> w2
+  | None, None -> None
+
+(*s function binders *)
+
+let abstract_binders =
+  List.fold_right
+    (fun (x,v) p -> match v with
+       | PureType _ -> forall ~is_wp:true x v p
+       | _ -> p)
+
 (*s Adding precondition and obligations to the wp *)
 
 let add_to_wp loc al w =
@@ -95,11 +178,9 @@ let add_to_wp loc al w =
     w
   else match w with
     | Some w -> 
-	Some (asst_app (fun w -> List.fold_left (pand ~is_wp:true) w al) w) 
+	Some (asst_app (fun w -> List.fold_left wpand w al) w) 
     | None -> 
 	Some (wp_named loc (pands ~is_wp:true al))
-
-let add_pre_and_oblig p = add_to_wp p.info.loc (pre p @ obligations p)
 
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
@@ -108,30 +189,18 @@ let add_pre_and_oblig p = add_to_wp p.info.loc (pre p @ obligations p)
 
 let rec wp p q =
   (* Format.eprintf "wp with size(q) = %d@." (Size.postcondition_opt q); *)
-  let q = option_app (force_post_loc p.info.loc) q in
-  let env = p.info.env in
-  let lab = p.info.label in
-  let postp = post p in
-  let q0 = Annot.sup postp q (* if postp = None then q else postp *) in
-  let q0_ = optpost_app (change_label "" lab) q0 in
+  let q = option_app (force_post_loc p.info.t_loc) q in
+  let env = p.info.t_env in
+  let lab = p.info.t_label in
+  let q0_ = optpost_app (asst_app (change_label "" lab)) q in
   let d,w = wp_desc p.info p.desc q0_ in
   let p = change_desc p d in
   let w = option_app (asst_app (erase_label lab)) w in
-  let p = if need_a_post p then force_post env q0 p else p in
-  let w = match postp, q with
-    (* abstrac wrt existing post, unless [p] is a loop *)
-    | Some q', Some q when not (is_while p) ->
-	let res = (result, result_type p) in
-	let w = abstract_wp q' q res (output p) in
-	Some (wp_named p.info.loc (erase_label lab (erase_label "" w)))
-    | _ -> 
-	force_wp_name w
-  in
-  let w = add_pre_and_oblig p w in
+  (* let w = force_wp_name w ?? *)
   p, w
 
 and wp_desc info d q = 
-  let result = info.kappa.c_result_name in
+  let result = info.t_result_name in
   match d with
     (* TODO: check if likely *)
     | Var x ->
@@ -143,48 +212,6 @@ and wp_desc info d q =
 	let t = unref_term t in
 	let s = subst_one result t in
 	d, optasst_app (fun p -> simplify (tsubst_in_predicate s p)) w
-    (* $wp(!x,q) = q[result \leftarrow x]$ *)
-    | Acc x ->
-	let w = optpost_val q in
-	d, optasst_app (subst_in_predicate (subst_onev result x)) w
-    (* $wp(x := e, q) = wp(e, q[result\leftarrow void; x\leftarrow result])$ *)
-    | Aff (x, p) ->
-	let q = optval_app (tsubst_in_predicate (subst_one result tvoid)) q in
-	let q = optval_app (subst_in_predicate (subst_onev x result)) q in
-	let p',w = wp p q in
-	Aff (x, p'), w
-    | TabAcc (ck, x, e1) ->
-	let t = make_raw_access info.env (x,x) (Tvar result) in
-	let q = optpost_app (tsubst_in_predicate (subst_one result t)) q in
-	let e'1,w = wp e1 q in
-	TabAcc (ck, x, e'1), w
-    | TabAff (ck, x, 
-	      ({desc=Any {c_post = Some (q1,[])}} as e1), 
-	      ({desc=Any {c_post = Some (q2,[])}} as e2)) ->
-	begin match is_result_eq q1.a_value, is_result_eq q2.a_value with
-	  | Some ce1, Some ce2 ->
-	      let w = optpost_val q in
-	      let w = 
-		optasst_app (tsubst_in_predicate (subst_one result tvoid)) w in
-	      let st = make_raw_store info.env (x,x) ce1 ce2 in
-	      let w = optasst_app (tsubst_in_predicate (subst_one x st)) w in
-	      (* TODO: obligations de e1 et e2 *)
-	      TabAff (ck, x, e1, e2), w
-	  | _ ->
-	      assert false
-	end
-    | TabAff (ck, x, 
-	      ({desc=Expression ce1} as e1), ({desc=Expression ce2} as e2)) ->
-	let w = optpost_val q in
-	let w = optasst_app (tsubst_in_predicate (subst_one result tvoid)) w in
-	let st = make_raw_store info.env (x,x) ce1 ce2 in
-	let w = optasst_app (tsubst_in_predicate (subst_one x st)) w in
-	let e'1,_ = wp e1 None in
-	let e'2,_ = wp e2 None in
-	TabAff (ck, x, e'1, e'2), w
-    | TabAff _ ->
-	assert false
-
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 (filter_post p2.info q) in
 	let p'3,w3 = wp p3 (filter_post p3.info q) in
@@ -192,28 +219,29 @@ and wp_desc info d q =
 	   | Some {a_value=q2}, Some {a_value=q3} -> 
 	       (* $wp(if p1 then p2 else p3, q) =$ *)
 	       (* $wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
-	       let result1 = p1.info.kappa.c_result_name in
+	       let result1 = p1.info.t_result_name in
 	       let q1 = create_postval (Pif (Tvar result1, q2, q3)) in
 	       let q1 = force_wp_name q1 in
 	       let q1 = saturate_post p1.info q1 q in
 	       let p'1,w1 = wp p1 q1 in
 	       If (p'1, p'2, p'3), w1
 	   | _ ->
+	       (* TODO: w2 et w3 perdues *)
 	       let p'1,_ = wp p1 None in
 	       If (p'1, p'2, p'3), None)
-    | Seq bl -> 
-	let bl',w = wp_block bl q in
-	Seq bl', w
-    | App (p1, Term p2, k) ->
-	let p'1,_ = wp p1 None in
-	let p'2,_ = wp p2 None in
-	App (p'1, Term p'2, k), None
-    | App (p1, a, k) ->
-	let p'1,_ = wp p1 None in
-	App (p'1, a, k), None
-    | Lam (bl, p) ->
-	let p',_ = wp p None in
-	Lam (bl, p'), None
+    | AppTerm (p1, t, k) ->
+	let p'1,w1 = wp p1 None in
+	let wapp = opaque_wp k.t_post q k in
+	let w = pand_wp info w1 wapp in
+	AppTerm (p'1, t, k), w
+    | AppRef (p1, x, k) ->
+	let p'1,w1 = wp p1 None in
+	let wapp = opaque_wp k.t_post q k in
+	let w = pand_wp info w1 wapp in
+	AppRef (p'1, x, k), w
+    | Lam (bl, p, e) ->
+	let e',w = wp_prog (p,e) None in
+	Lam (bl, p, e'), optasst_app (abstract_binders bl) w
     | LetIn (x, _, _) | LetRef (x, _, _) when occur_post x q ->
         Report.raise_unlocated 
 	  (AnyMessage ("cannot compute wp due to capture variable;\n" ^
@@ -225,6 +253,11 @@ and wp_desc info d q =
 	let q1 = saturate_post e1.info q1 q in
 	let e'1,w = wp e1 q1 in
 	LetIn (x, e'1, e'2), w
+    | Seq (e1, e2) -> 
+	let e'2, w2 = wp e2 (filter_post e2.info q) in
+	let q1 = saturate_post e1.info w2 q in
+	let e'1,w = wp e1 q1 in
+	Seq (e'1, e'2), w
     | LetRef (x, e1, e2) ->
 	(* same as LetIn: correct? *)
 	let e'2, w2 = wp e2 (filter_post e2.info q) in
@@ -232,44 +265,37 @@ and wp_desc info d q =
 	let q1 = saturate_post e1.info q1 q in
 	let e'1,w = wp e1 q1 in
 	LetRef (x, e'1, e'2), w
-    | Rec (f, bl, v, var, e) ->
-	let e',_ = wp e None in
-	Rec (f, bl, v, var, e'), None
-    (* While loops as black boxes (old-style WP, incomplete!) *)
-    | While (b, inv, var, e) when Options.wbb ->
-	let b',_ = wp b None in
-	let qbl = while_post_block info.env inv var e in
-	let q = Annot.sup (Some qbl) q in (* exc. posts taken from [q] *)
-	let e',_ = wp e q in
-	While (b', inv, var, e'), inv (* None *)
-    | While (b, inv, var, e) ->
-        (* wp = I /\ 
-	   forall w. I => wp(e1, if result then wp(e2, I/\var<var@) else q) *)
-	let qe = while_post_block info.env inv var e in
-	let qe = Annot.sup (Some qe) q in (* exc. posts taken from [q] *)
+    | Rec (f, bl, v, var, p, e) ->
+	(* wp = well_founded(R) /\ forall bl. wp(e, True) *)
+	let wfr = well_founded_rel var in
+	let e',we = wp_prog (p, e) None in
+	let w = match we with
+	  | None -> wfr
+	  | Some {a_value=we} -> wpand wfr (abstract_binders bl we)
+	in
+	let w = Some (wp_named info.t_loc w) in
+	Rec (f, bl, v, var, p, e'), w
+    | Loop (inv, var, e) ->
+        (* wp = well_founded(R) /\ I /\ forall w. I => wp(e, I/\var<var@) *)
+	let wfr = well_founded_rel var in
+	let qe = while_post_block info.t_env inv var e in
+	let qe = sup (Some qe) q in (* exc. posts taken from [q] *)
 	let e',we = wp e qe in
-	let qb = 
-	  let resultb = b.info.kappa.c_result_name in
-	  let qexit = match q with None -> Ptrue | Some (q,_) -> q.a_value in
-	  let qbody = match we with None -> Ptrue | Some we -> we.a_value in
-	  let qb = create_postval (Pif (Tvar resultb, qbody, qexit)) in
-	  let qb = force_wp_name qb in
-	  saturate_post b.info qb q
-	in
-	let b',wb = wp b qb in
-	let w = match inv,wb with
-	  | None, _ ->
-	      None
-	  | Some _, None ->
-	      inv
-	  | Some {a_value=i}, Some {a_value=wb} ->
+	let w = match inv, we with
+	  | None, None ->
+	      wfr
+	  | Some {a_value=i}, None ->
+	      wpand wfr i
+	  | None, Some {a_value=we} ->
 	      let vars = output_info info in
-	      Some 
-		(wp_named info.loc
-		   (pand ~is_wp:true i 
-		      (foralls ~is_wp:true vars (Pimplies (true, i, wb)))))
+	      wpand wfr (foralls ~is_wp:true vars we)
+	  | Some {a_value=i}, Some {a_value=we} ->
+	      let vars = output_info info in
+	      wpand wfr
+		(wpand i (foralls ~is_wp:true vars (Pimplies (true, i, we))))
 	in
-	While (b', inv, var, e'), w
+	let w = Some (wp_named info.t_loc w) in
+	Loop (inv, var, e'), w
     | Raise (id, None) ->
 	(* $wp(raise E, _, R) = R$ *)
 	d, option_app (fun (_,ql) -> List.assoc id ql) q
@@ -304,24 +330,41 @@ and wp_desc info d q =
 	let qe = filter_post e.info (option_app make_post q) in
 	let e',w = wp e qe in
 	Try (e', hl'), w
+    | Assertion (l, e) ->
+	let e',w = wp e q in
+	Assertion (l, e'), add_to_wp info.t_loc l w
     | Absurd ->
-	Absurd, Some (anonymous info.loc Pfalse)
+	Absurd, Some (anonymous info.t_loc Pfalse)
     | Any _ as d ->
 	d, None
+    | Proof _ ->
+	assert false
+    | Post (e, qe, Transparent) ->
+	let lab = e.info.t_label in
+	let qe' = Typing.conj (Some qe) q in
+	let qe' = optpost_app (asst_app (change_label "" lab)) qe' in
+	let e',w = wp e qe' in
+	Post (e', qe, Transparent), w
+    | Post (e, qe, Opaque) ->
+	let lab = e.info.t_label in
+	let qe' = Some (post_app (asst_app (change_label "" lab)) qe) in
+	let e',we = wp e qe' in
+	let w' = opaque_wp qe' q e.info in
+	let w = pand_wp e.info we w' in
+	Post (e', qe, Opaque), w
+    | Label (l, e) ->
+	let e,w = wp e q in
+	Label (l, e), optasst_app (erase_label l) w
 
-and wp_block bl q = match bl with
-  | [] ->
-      [], option_app post_val q
-  | Statement p :: bl ->
-      let bl', w = wp_block bl q in
-      let w = saturate_post p.info w q in
-      let p', w' = wp p w in
-      Statement p' :: bl', w'
-  | Label l :: bl ->
-      let bl', w = wp_block bl q in
-      Label l :: bl', optasst_app (erase_label l) w
-  | Assert p :: bl ->
-      let bl', w = wp_block bl q in
-      Assert p :: bl', add_to_wp p.a_loc [p] w
+and wp_prog (l,e) q =
+  let loc = e.info.t_loc in
+  let e,w = wp e q in
+  let abstract {a_value=w} =
+    let w = 
+      List.fold_left (fun w p -> pimplies ~is_wp:true p.a_value w) w l 
+    in
+    wp_named loc (foralls ~is_wp:true (input e) w)
+  in
+  e, option_app abstract w
 
 let wp p = wp p None

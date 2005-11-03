@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.31 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.32 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -26,8 +26,6 @@ open Env
 open Types
 
 (* Automatic annotations *)
-
-let default_post = anonymous Loc.dummy (Pvar Ident.default_post)
 
 let is_default_post a = match a.a_value with
   | Pvar id when id == Ident.default_post -> true
@@ -49,17 +47,6 @@ let sup q q' = match q, q' with
       Some (q, List.map2 supx ql ql') 
 
 (* force a post-condition *)
-
-let force_post env q e = match q with
-  | None -> 
-      e
-  | Some c ->
-      let c = force_post_loc e.info.loc c in
-      let ids = post_refs env c in
-      let ef = Effect.add_reads ids e.info.kappa.c_effect in
-      let k = { e.info.kappa with c_post = Some c; c_effect = ef } in
-      let i = { e.info with kappa = k } in
-      { e with info = i }
 
 let post_if_none env q p = match post p with
   | None -> force_post env q p 
@@ -110,13 +97,6 @@ let check_while_test b =
 
 (* misc. *)
 
-let post_named c = 
-  { a_value = c; a_name = Name (post_name Anonymous); a_loc = Loc.dummy }
-
-let create_postval c = Some (post_named c)
-
-let create_post c = Some (post_named c, [])
-
 let is_conditional p = match p.desc with If _ -> true | _ -> false
 
 (* BUG: use is_eq and not t_eq
@@ -149,8 +129,6 @@ let add_oblig p1 pr =
   
 (* change the statement *)
 
-let change_desc p d = { p with desc = d }
-
 let is_bool = function
   | PureType PTbool -> true
   | _ -> false
@@ -159,19 +137,6 @@ let is_pure e =
   let ef = effect e in 
   Effect.get_writes ef = [] && Effect.get_exns ef = []
 
-(*s Moving obligations up in assignments *)
-
-let lift_oblig_assign p = match p.desc with
-  | Aff (x,e) ->
-      let e1,p1 = extract_oblig e in
-      change_desc (add_oblig p1 p) (Aff (x,e1))
-  | TabAff (check, x, ({ desc = Expression _ } as e1), e2) ->
-      let e1',p1 = extract_oblig e1 in
-      let e2',p2 = extract_oblig e2 in
-      change_desc (add_oblig (p1 @ p2) p) (TabAff (check,x,e1',e2'))
-  | _ ->
-      p
-
 (*s Normalization. In this first pass, we
     (2) annotate [x := E] with [{ x = E }]
     (3) give tests the right postconditions
@@ -179,7 +144,6 @@ let lift_oblig_assign p = match p.desc with
 
 let rec normalize p =
   let env = p.info.env in
-  let p = lift_oblig_assign p in
   let k = p.info.kappa in
   match p.desc with
     (***
@@ -187,28 +151,9 @@ let rec normalize p =
 	let t = put_label_term env p.info.label (unref_term t) in
 	change_desc p (Expression t)
     ***)
-    | Aff (x, ({desc = Expression t} as e1)) 
-      when post e1 = None && k.c_post = None ->
-	let t = put_label_term env p.info.label (unref_term t) in
-	let q = create_post (equality (Tvar x) t) in
-	post_if_none env q p
-    | Aff (x, e1) when is_pure e1 && post e1 <> None ->
-	(match post e1 with
-	   | Some q1 ->
-	       let q = post_app (change_label e1.info.label p.info.label) q1 in
-	       let q = post_app (put_label_predicate env p.info.label) q in
-	       let q = post_app (subst_in_predicate (subst_onev result x)) q in
-	       post_if_none env (Some q) p
-	   | _ -> assert false)
     | If (e1, e2, e3) ->
 	change_desc p (If (normalize_boolean false env e1, e2, e3))
-    | TabAff (_, x, ({desc=Expression t1} as e1), ({desc=Expression t2} as e2))
-      when post e1 = None && post e2 = None && k.c_post = None ->
-	let t1 = put_label_term env p.info.label (unref_term t1) in
-	let t2 = put_label_term env p.info.label (unref_term t2) in
-	let t = make_raw_store env (x, at_id x p.info.label) t1 t2 in
-	let q = create_post (equality (Tvar x) t) in
-	post_if_none env q p
+(****
     | While (b, invopt, var, e) ->
 	let b' = normalize_boolean true env b in
 	let p = match post b' with
@@ -252,15 +197,16 @@ let rec normalize p =
 	in
 	let q = optpost_app (change_label "" p.info.label) (post p) in
 	force_post env q p
+***)
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
 	change_desc p (LetRef (x, post_if_none env q e1, e2))
     | LetIn (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
 	change_desc p (LetIn (x, post_if_none env q e1, e2))
-    | Expression _ | Var _ | Acc _ | Aff _ | TabAcc _ | TabAff _  
+    | Expression _ | Var _ 
     | Seq _ | Lam _ | LetIn _ | LetRef _ | Rec _ | App _ 
-    | Raise _ | Try _ | Absurd | Any _ ->
+    | Raise _ | Try _ | Absurd | Any _ | Loop _ ->
 	p
 
 (* [normalize_boolean b] checks if the boolean expression [b] (of type
@@ -340,25 +286,18 @@ and normalize_boolean force env b =
 let map_desc f p =
   let d = match p.desc with
     | Var _ 
-    | Acc _ 
     | Expression _
     | Absurd
     | Any _ as d -> 
 	d
-    | Aff (x, e) -> 
-	Aff (x, f e)
-    | TabAcc (b, x, e) -> 
-	TabAcc (b, x, f e)
-    | TabAff (b, x, e1, e2) -> 
-	TabAff (b, x, f e1, f e2)
     | Seq bl -> 
 	let block_st = function
 	  | Label _ | Assert _ as s -> s
 	  | Statement e -> Statement (f e)
 	in
 	Seq (List.map block_st bl)
-    | While (e1, inv, var, e2) ->
-	While (f e1, inv, var, f e2)
+    | Loop (inv, var, e2) ->
+	Loop (inv, var, f e2)
     | If (e1, e2, e3) ->
 	If (f e1, f e2, f e3)
     | Lam (bl, e) ->
@@ -394,8 +333,6 @@ let q_true_false q =
 let is_result_eq = function
   | Papp (id, [Tvar id'; t], _) when is_eq id && id' == result -> Some t
   | _ -> None
-
-let a_values = List.map (fun a -> a.a_value)
 
 let rec purify p =
   try
@@ -473,74 +410,4 @@ let rec purify p =
 	desc = Any c; 
 	info = { p.info with obligations = o; kappa = c } }
   with Exit -> 
-    let env = p.info.env in
-    (* we apply purify recursively *) 
-    match p.desc with
-    | Aff (x, e1) ->
-	let e1 = purify e1 in
-	if is_pure e1 && post e1 <> None then begin match post e1 with
-	  | Some q1 ->
-	      let q = post_app (change_label e1.info.label p.info.label) q1 in
-	      let q = post_app (put_label_predicate env p.info.label) q in
-	      let q = post_app (subst_in_predicate (subst_onev result x)) q in
-	      post_if_none env (Some q) p
-	  | _ -> assert false
-	end else
-	  map_desc purify p
-    | TabAff (_, x, e1, e2) ->
-	let e1 = purify e1 in
-	let e2 = purify e2 in
-	if is_pure e1 && is_pure e2 then begin
-	  match post e1, post e2 with
-	    | Some ({a_value=q1},_), Some ({a_value=q2},_) -> begin
-		match is_result_eq q1, is_result_eq q2 with
-		  | Some t1, Some t2 ->
-		let t1 = put_label_term env p.info.label (unref_term t1) in
-		let t2 = put_label_term env p.info.label (unref_term t2) in
-		let t = make_raw_store env (x, at_id x p.info.label) t1 t2 in
-		let q = create_post (equality (Tvar x) t) in
-		post_if_none env q p
-	    | _ ->
-		map_desc purify p
-	      end
-	    | _ ->
-		map_desc purify p
-	  end else
-	    map_desc purify p
-    | While (b, invopt, var, e) ->
-	let b = purify b in
-	let e = purify e in
-	let p = match post b with
-          (* test is not annotated -> translation using an exception *)
-	  | None ->
-	      let effect_and_exit k = 
-		let ef = Effect.add_exn exit_exn k.c_effect in
-		let k' = type_c_of_v k.c_result_type in
-		{ k' with c_effect = ef }
-	      in
-	      let bloc = b.info.loc in
-	      let praise_exit = 
-		make_raise bloc exit_exn (PureType PTunit) env
-	      in
-	      let body = 
-		(* if b then e else raise Exit *)
-		make_lnode e.info.loc (If (b, e, praise_exit))
-		  env [] (effect_and_exit p.info.kappa)
-	      in
-	      let d = 
-		Try 
-		  (make_lnode p.info.loc
-		     (While (make_annot_bool bloc true env, 
-			     invopt, var, body))
-		     env [] (effect_and_exit p.info.kappa),
-		     [ (exit_exn, None), make_void p.info.loc env])
-	      in
-	      change_desc p d
- 	  (* test is annotated -> nothing to do *)
-	  | Some _ ->
-	      { p with desc = While (b, invopt, var, e) }
-	in
-	let q = optpost_app (change_label "" p.info.label) (post p) in
-	force_post env q p
-    | _ -> 
-	map_desc purify p
+    map_desc purify p

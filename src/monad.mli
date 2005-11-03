@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.mli,v 1.24 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: monad.mli,v 1.25 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -38,7 +38,7 @@ val exn_arg_type : Ident.t -> cc_type
 (*s Basic monadic operators. They operate over values of type [interp] i.e.
     functions building a [cc_term] given a renaming structure. *)
 
-type interp = Rename.t -> (Loc.t * predicate) cc_term
+type interp = Rename.t -> (Loc.position * predicate) cc_term
 
 (*s The [unit] operator encapsulates a term in a computation. *)
 
@@ -75,16 +75,18 @@ val insert_pre : local_env -> precondition -> interp -> interp
 
 val insert_many_pre : local_env -> precondition list -> interp -> interp
 
-val abstraction : typing_info -> interp -> interp
+val abstraction : typing_info -> precondition list -> interp -> interp
 
 val fresh : Ident.t -> (Ident.t -> interp) -> interp
 
 (*s Well-founded recursion. *)
 
-val wfrec : variant -> typing_info -> (interp -> interp) -> interp
+val wfrec : 
+  variant -> precondition list -> typing_info -> (interp -> interp) -> interp
 
 val wfrec_with_binders : 
-  cc_binder list -> variant -> typing_info -> (interp -> interp) -> interp
+  cc_binder list -> 
+  variant -> precondition list -> typing_info -> (interp -> interp) -> interp
 
 (*s Table for recursive functions' interpretation *)
 

@@ -14,12 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.26 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.27 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
 open Logic
 open Types
+
+type loc = Loc.position
 
 (*s Logical expressions (for both terms and predicates) *)
 
@@ -32,7 +34,7 @@ type pp_prefix =
   PPneg | PPnot
 
 type lexpr = 
-  { pp_loc : Loc.t; pp_desc : pp_desc }
+  { pp_loc : loc; pp_desc : pp_desc }
 
 and pp_desc =
   | PPvar of Ident.t
@@ -50,18 +52,25 @@ and pp_desc =
 
 (*s Parsed types *)
 
+type assertion = { 
+  pa_name : Ident.name; 
+  pa_value : lexpr; 
+  pa_loc : Loc.position;
+}
+
+type postcondition = assertion * (Ident.t * assertion) list
+
 type ptype_v =
-  | PVref   of ptype_v
-  | PVarray of ptype_v
-  | PVarrow of ptype_v binder list * ptype_c
   | PVpure  of pure_type
+  | PVref   of pure_type
+  | PVarrow of ptype_v binder list * ptype_c
 
 and ptype_c =
   { pc_result_name : Ident.t;
     pc_result_type : ptype_v;
     pc_effect : Effect.t;
-    pc_pre    : lexpr asst list;
-    pc_post   : lexpr post option }
+    pc_pre    : assertion list;
+    pc_post   : postcondition option }
 
 (*s Parsed program. *)
 
@@ -75,41 +84,28 @@ type exn_pattern = variable * variable option
 
 type t = 
   { pdesc : t_desc;
-    pre : lexpr asst list;
-    oblig : lexpr asst list;
-    post : lexpr post option;
-    ploc : Loc.t }
+    ploc : loc }
 
 and t_desc =
   | Svar of variable
-  | Srefget of variable
-  | Srefset of variable * t
-  | Sarrget of bool * variable * t
-  | Sarrset of bool * variable * t * t
-  | Sseq of block
-  | Swhile of t * lexpr asst option * variant * t
+  | Sderef of variable
+  | Sloop of assertion option * variant * t
   | Sif of t * t * t
-  | Slam of ptype_v binder list * t
-  | Sapp of t * arg
+  | Sapp of t * t
   | Sletref of variable * t * t
   | Sletin of variable * t * t
-  | Srec of variable * ptype_v binder list * ptype_v * variant * t
+  | Sseq of t * t
+  | Slam of ptype_v binder list * assertion list * t
+  | Srec of 
+      variable * ptype_v binder list * ptype_v * variant * assertion list * t
   | Sraise of variable * t option * ptype_v option
   | Stry of t * (exn_pattern * t) list
   | Sconst of constant
   | Sabsurd of ptype_v option
   | Sany of ptype_c
-
-and arg =
-  | Sterm of t
-  | Stype of ptype_v
-
-and block_st =
-  | Slabel of label
-  | Sassert of lexpr asst
-  | Sstatement of t
-
-and block = block_st list
+  | Slabel of label * t
+  | Sassert of assertion list * t
+  | Spost of t * postcondition * transp
 
 type parsed_program = t
 
@@ -119,13 +115,14 @@ type external_ = bool
 
 type decl = 
   | Program of Ident.t * parsed_program
-  | Parameter of Loc.t * external_ * Ident.t list * ptype_v
-  | Exception of Loc.t * Ident.t * pure_type option
-  | Logic of Loc.t * external_ * Ident.t list * logic_type
-  | Predicate_def of Loc.t * Ident.t * (Ident.t * pure_type) list * lexpr
+  | Parameter of loc * external_ * Ident.t list * ptype_v
+  | Exception of loc * Ident.t * pure_type option
+  | Logic of loc * external_ * Ident.t list * logic_type
+  | Predicate_def of loc * Ident.t * (Ident.t * pure_type) list * lexpr
   | Function_def 
-      of Loc.t * Ident.t * (Ident.t * pure_type) list * pure_type * lexpr
-  | Axiom of Loc.t * Ident.t * lexpr
-  | Goal of Loc.t * Ident.t * lexpr
+      of loc * Ident.t * (Ident.t * pure_type) list * pure_type * lexpr
+  | Axiom of loc * Ident.t * lexpr
+  | Goal of loc * Ident.t * lexpr
+  | TypeDecl of loc * external_ * Ident.t list * Ident.t
 
 type file = decl list

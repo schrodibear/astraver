@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.mli,v 1.18 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: coq.mli,v 1.19 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 open Cc
 open Vcg
@@ -31,6 +31,7 @@ val push_logic : string -> Logic.logic_type Env.scheme -> unit
 val push_axiom : string -> Logic.predicate Env.scheme -> unit
 val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
 val push_function : string -> Logic.function_def Env.scheme -> unit
+val push_type : string -> Ident.t list -> unit
 
 val output_file : string -> unit
 

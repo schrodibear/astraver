@@ -3,7 +3,7 @@ external parameter v : int
 
 external parameter mean : int -> int -> int
 
-external logic In : int array,int,int -> prop
+external logic In : int farray,int,int -> prop
 
 parameter t : int array
 
@@ -12,7 +12,7 @@ parameter l,u,p,m : int ref
 let binary_search =
   { array_length(t) >= 1 and sorted_array(t,1,array_length(t)-1) }
   begin
-    l := 1; u := (array_length t)-1; p := 0;
+    l := 1; u := (array_length_ t)-1; p := 0;
     while !l <= !u do
       { invariant 
 	  1 <= l and u <= array_length(t)-1 and 0 <= p <= array_length(t)-1

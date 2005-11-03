@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.13 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.14 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -33,6 +33,7 @@ type element_kind =
   | Ax
   | Pr
   | Fun
+  | Ty
 
 type element_id = element_kind * string
 
@@ -43,6 +44,7 @@ type element =
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | Function of string * function_def Env.scheme
+  | AbstractType of string * Ident.t list
 
 module type S = sig
  
@@ -74,6 +76,7 @@ module Make(X : S) = struct
     | Ax, s -> fprintf fmt "axiom %s" s
     | Pr, s -> fprintf fmt "predicate %s" s
     | Fun, s -> fprintf fmt "function %s" s
+    | Ty, s -> fprintf fmt "type %s" s
 
   let elem_t = Hashtbl.create 97 (* maps [element_id] to [element] *)
   let elem_q = Queue.create ()   (* queue of [element_id * element] *)

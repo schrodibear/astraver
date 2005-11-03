@@ -3,109 +3,162 @@
 
 Require Export struct3_spec_why.
 
-(* Why obligation from file "why/struct3.why", characters 75-94 *)
-Lemma f_impl_po_1 : 
-  1 >= 1.
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (result: pointer),
+  forall (alloc0: alloc_table),
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (x0: ((memory) Z)),
+  forall (HW_2: x0 = (upd x result 1)),
+  forall (y0: ((memory) Z)),
+  forall (HW_3: y0 = (upd y result 2)),
+  forall (result0: Z),
+  forall (HW_4: result0 = (acc y0 result)),
+  (* File \"struct3.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  result0 = 2.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 110-167 *)
-Lemma f_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (Pre10: 1 >= 1),
-  forall (alloc0: alloc_table),
-  forall (a: pointer),
-  forall (Post8: (valid alloc0 a) /\ (offset a) = 0 /\
-                 (block_length alloc0 a) = 1 /\
-                 (valid_range alloc0 a 0 (1 - 1)) /\ (fresh alloc a) /\
-                 (on_stack alloc0 a) /\ (alloc_stack a alloc alloc0)),
-  forall (Pre9: (valid alloc0 a)),
-  forall (x0: ((memory) Z)),
-  forall (Post12: x0 = (upd x a 1)),
-  forall (Pre8: (valid alloc0 a)),
-  forall (y0: ((memory) Z)),
-  forall (Post14: y0 = (upd y a 2)),
-  forall (Pre7: (valid alloc0 a)),
-  forall (result1: Z),
-  forall (Post5: result1 = (acc y0 a)),
-  (* File \"struct3.c\", line 4, characters 13-25 *) result1 = 2.
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
+  1 >= 1.
 Proof.
 intuition; subst; auto;
 caduceus;
 red;auto.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 365-384 *)
-Lemma g_impl_po_1 : 
-  forall (s: ((memory) pointer)),
-  forall (Pre18: (valid1 s) /\ (separation2 s s)),
-  1 >= 1.
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "why/struct3.why", characters 473-497 *)
-Lemma g_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (s: ((memory) pointer)),
-  forall (z: ((memory) Z)),
-  forall (Pre18: (valid1 s) /\ (separation2 s s)),
-  forall (Pre17: 1 >= 1),
-  forall (alloc0: alloc_table),
-  forall (u: pointer),
-  forall (Post12: (valid alloc0 u) /\ (offset u) = 0 /\
-                  (block_length alloc0 u) = 1 /\
-                  (valid_range alloc0 u 0 (1 - 1)) /\ (fresh alloc u) /\
-                  (on_stack alloc0 u) /\ (alloc_stack u alloc alloc0)),
-  forall (Pre16: (valid alloc0 u)),
-  forall (z0: ((memory) Z)),
-  forall (Post16: z0 = (upd z u 1)),
-  forall (Pre8: (valid alloc0 u)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = (acc s u)),
-  (valid alloc0 caduceus_2).
-Proof.
-intuition; subst; auto.
-Save.
-
-(* Why obligation from file "why/struct3.why", characters 440-497 *)
-Lemma g_impl_po_3 : 
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: ((memory) pointer)),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
   forall (z: ((memory) Z)),
-  forall (Pre18: (valid1 s) /\ (separation2 s s)),
-  forall (Pre17: 1 >= 1),
+  forall (HW_1: (valid1 s) /\ (separation2 s s)),
+  forall (result: pointer),
   forall (alloc0: alloc_table),
-  forall (u: pointer),
-  forall (Post12: (valid alloc0 u) /\ (offset u) = 0 /\
-                  (block_length alloc0 u) = 1 /\
-                  (valid_range alloc0 u 0 (1 - 1)) /\ (fresh alloc u) /\
-                  (on_stack alloc0 u) /\ (alloc_stack u alloc alloc0)),
-  forall (Pre16: (valid alloc0 u)),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
   forall (z0: ((memory) Z)),
-  forall (Post16: z0 = (upd z u 1)),
-  forall (Pre8: (valid alloc0 u)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = (acc s u)),
-  forall (Pre7: (valid alloc0 caduceus_2)),
+  forall (HW_3: z0 = (upd z result 1)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc s result)),
   forall (x0: ((memory) Z)),
-  forall (Post18: x0 = (upd x caduceus_2 2)),
-  (forall (result:pointer),
-   (result = (acc s u) ->
-    (forall (y0:((memory) Z)),
-     (y0 = (upd y result 3) ->
-      (((forall (result:Z),
-         (result = (acc y0 (acc s u)) ->
-          (* File \"struct3.c\", line 13, characters 13-25 *) result = 3)) /\
-      (valid alloc0 u)) /\ (valid alloc0 (acc s u))) /\
-      (valid alloc0 (acc s u)))) /\
-    (valid alloc0 result))) /\
-  (valid alloc0 u).
+  forall (HW_5: x0 = (upd x result0 2)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc s result)),
+  forall (y0: ((memory) Z)),
+  forall (HW_7: y0 = (upd y result1 3)),
+  forall (result2: pointer),
+  forall (HW_8: result2 = (acc s result)),
+  forall (result3: Z),
+  forall (HW_9: result3 = (acc y0 result2)),
+  (* File \"struct3.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  result3 = 3.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (s: ((memory) pointer)),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (z: ((memory) Z)),
+  forall (HW_1: (valid1 s) /\ (separation2 s s)),
+  forall (result: pointer),
+  forall (alloc0: alloc_table),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (z0: ((memory) Z)),
+  forall (HW_3: z0 = (upd z result 1)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc s result)),
+  forall (x0: ((memory) Z)),
+  forall (HW_5: x0 = (upd x result0 2)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc s result)),
+  forall (y0: ((memory) Z)),
+  forall (HW_7: y0 = (upd y result1 3)),
+  forall (result2: pointer),
+  forall (HW_8: result2 = (acc s result)),
+  (valid alloc0 result2).
+Proof.
+intuition; subst; auto.
+Save.
+
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (s: ((memory) pointer)),
+  forall (x: ((memory) Z)),
+  forall (z: ((memory) Z)),
+  forall (HW_1: (valid1 s) /\ (separation2 s s)),
+  forall (result: pointer),
+  forall (alloc0: alloc_table),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (z0: ((memory) Z)),
+  forall (HW_3: z0 = (upd z result 1)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc s result)),
+  forall (x0: ((memory) Z)),
+  forall (HW_5: x0 = (upd x result0 2)),
+  forall (result1: pointer),
+  forall (HW_6: result1 = (acc s result)),
+  (valid alloc0 result1).
 Proof.
 intuition; subst; auto; caduceus.
 Save.
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (s: ((memory) pointer)),
+  forall (z: ((memory) Z)),
+  forall (HW_1: (valid1 s) /\ (separation2 s s)),
+  forall (result: pointer),
+  forall (alloc0: alloc_table),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (z0: ((memory) Z)),
+  forall (HW_3: z0 = (upd z result 1)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc s result)),
+  (valid alloc0 result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_5 : 
+  forall (s: ((memory) pointer)),
+  forall (HW_1: (valid1 s) /\ (separation2 s s)),
+  1 >= 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

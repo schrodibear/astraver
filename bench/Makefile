@@ -1,4 +1,7 @@
 
+WHY=WHYLIB=../lib/why ../bin/why.opt
+BWHY=WHYLIB=../lib/why ../bin/why.byte
+
 all:
 	./bench "../bin/why.opt --coq-v8 --valid"
 
@@ -52,10 +55,17 @@ hol:
 	../bin/why.opt --hol-light -d -V test.mlw
 
 test:
-	../bin/why.opt --coq-v8 -d -V --coq-tactic magic test.mlw
-#	../bin/why.opt --coq-v8 -d -V --valid --coq-tactic magic test.mlw
+#	$(WHY) --coq-v8 -d -V --coq-tactic magic test.mlw
+	$(WHY) --coq-v8 -d -V --valid --coq-tactic magic test.mlw
 	coqc -I ../lib/coq test_why.v
 	coqc -I ../lib/coq test_valid.v
+	coqide -I ../lib/coq test_why.v
+
+byte:
+	$(BWHY) --coq-v8 -d -V --valid --coq-tactic magic test.mlw
+	-coqc -I ../lib/coq test_why.v
+	-coqc -I ../lib/coq test_valid.v
+	coqide -I ../lib/coq test_why.v
 
 stat:
 	../bin/gwhy.opt -d test.mlw

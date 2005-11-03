@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.96 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.97 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -23,6 +23,8 @@ open Types
 open Ast
 open Ptree
 open Cc
+
+exception Located of Loc.position * exn
 
 (*s Utility functions. *)
 
@@ -38,6 +40,9 @@ let option_app f = function None -> None | Some x -> Some (f x)
 let option_iter f = function None -> () | Some x -> f x
 
 let option_fold f x c = match x with None -> c | Some x -> f x c 
+
+let a_value a = a.a_value
+let a_values = List.map a_value
 
 let list_of_some = function None -> [] | Some x -> [x]
 
@@ -58,6 +63,10 @@ let rec list_combine3 a b c = match a, b, c with
 let rec list_first f = function
   | [] -> raise Exit
   | x :: l -> try f x with Exit -> list_first f l
+
+let is_default_post a = match a.a_value with
+  | Pvar id when id == Ident.default_post -> true
+  | _ -> false
 
 (*s Functions on names *)
 
@@ -91,10 +100,11 @@ let gen_sym_name s =
 let gen_sym s = let g = gen_sym_name s in fun () -> g Anonymous
 
 let pre_name = gen_sym_name "Pre"
-let post_name = gen_sym_name "Post"
+let post_name = gen_sym "Post"
 let inv_name = gen_sym_name "Inv"
-let test_name = gen_sym_name "Test"
+let test_name = gen_sym "Test"
 let wp_name = gen_sym "WP"
+let h_name = gen_sym_name "H_"
 let bool_name = gen_sym "Bool"
 let variant_name = gen_sym "Variant"
 let phi_name = gen_sym "rphi"
@@ -117,9 +127,9 @@ let post_name_from =
   reset_names_table := (fun () -> avoid := Idset.empty) :: !reset_names_table;
   function
   | Anonymous ->
-      post_name Anonymous
+      post_name ()
   | Name id when is_post id ->
-      post_name Anonymous
+      post_name ()
   | Name id -> 
       let id' = Ident.next_away id !avoid in
       avoid := Idset.add id' !avoid;
@@ -127,7 +137,7 @@ let post_name_from =
 
 let warning s = Format.eprintf "warning: %s@\n" s
 let wprintf loc f = 
-  Format.eprintf "%awarning: " Loc.report loc; Format.eprintf f
+  Format.eprintf "%awarning: " Loc.report_position loc; Format.eprintf f
 let unlocated_wprintf f = 
   Format.eprintf "warning: "; Format.eprintf f
 
@@ -135,10 +145,14 @@ let unlocated_wprintf f =
 
 let rec is_closed_pure_type = function
   | PTint | PTbool | PTreal | PTunit -> true
-  | PTarray pt -> is_closed_pure_type pt
   | PTvarid _ | PTvar {type_val=None} -> false
   | PTvar {type_val=Some t} -> is_closed_pure_type t
   | PTexternal (ptl,_) -> List.for_all is_closed_pure_type ptl
+
+let rec normalize_pure_type = function
+  | PTvar { type_val = Some t } -> normalize_pure_type t
+  | PTexternal (i, id) -> PTexternal (List.map normalize_pure_type i, id)
+  | PTvar _ | PTvarid _ | PTint | PTbool | PTunit | PTreal as t -> t
 
 let rationalize s =
   let n = String.length s in
@@ -146,13 +160,12 @@ let rationalize s =
   let d = n - i - 1 in
   String.sub s 0 i ^ String.sub s (succ i) d, "1" ^ String.make d '0'
 
-let is_mutable = function Ref _ | Array _ -> true | _ -> false
+let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
 
-let asst_app f x = { x with a_value = (f x.a_value) }
+let asst_app f x = { x with a_value = (f x.a_value); a_proof = None }
 
-let post_app f (q,l) = 
-  (asst_app f q, List.map (fun (x,a) -> (x, asst_app f a)) l)
+let post_app f (q,l) = (f q, List.map (fun (x,a) -> (x, f a)) l)
 
 let optpost_app f = option_app (post_app f)
 
@@ -161,24 +174,35 @@ let post_fold f (q,l) v =
   List.fold_right (fun (_,p) -> asst_fold f p) l (asst_fold f q v)
 let optpost_fold f = option_fold (post_fold f)
 
-let anonymous loc x = { a_name = Anonymous; a_value = x; a_loc = loc }
-let wp_named loc x = { a_name = Name (wp_name ()); a_value = x; a_loc = loc }
+let panonymous loc x = 
+  { pa_name = Anonymous; pa_value = x; pa_loc = loc }
+let anonymous loc x = 
+  { a_name = Ident.anonymous; a_value = x; a_loc = loc; a_proof = None }
+let wp_named loc x = 
+  { a_name = wp_name (); a_value = x; a_loc = loc; a_proof = None }
+let pre_named loc x = 
+  { a_name = pre_name Anonymous; a_value = x; a_loc = loc; a_proof = None }
+let post_named loc x = 
+  { a_name = post_name (); a_value = x; a_loc = loc; a_proof = None }
 
-let force_wp_name = option_app (fun a -> { a with a_name = Name (wp_name ()) })
+let force_wp_name = option_app (fun a -> { a with a_name = wp_name () })
 
-let force_name f a = { a with a_name = Name (f a.a_name) }
+let force_name f a = { a with a_name = f a.a_name }
 
+(***
 let force_post_name = option_app (fun (q,l) -> (force_name post_name q, l))
 
 let force_bool_name = 
   let f = function Name id -> id | Anonymous -> bool_name() in
   option_app (fun (q,l) -> (force_name f q, l))
+***)
 
 let force_loc l a = { a with a_loc = l }
 
 let force_post_loc l (q,ql) = 
   (force_loc l q, List.map (fun (x,a) -> (x, force_loc l a)) ql)
 
+(***
 let rec force_type_c_loc l c =
   { c with 
       c_result_type = force_type_v_loc l c.c_result_type;
@@ -186,11 +210,11 @@ let rec force_type_c_loc l c =
       c_post = option_app (force_post_loc l) c.c_post }
 
 and force_type_v_loc l = function
-  | Ref v -> Ref (force_type_v_loc l v)
-  | Array v -> Array (force_type_v_loc l v)
   | Arrow (bl, c) -> Arrow (bl, force_type_c_loc l c)
-  | (PureType _) as v -> v
+  | (PureType _ | Ref _) as v -> v
+***)
 
+let default_post = anonymous Loc.dummy_position (Pvar Ident.default_post)
 
 (* selection of postcondition's parts *)
 let post_val = fst
@@ -247,12 +271,16 @@ let rec collect_pred s = function
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
+let assertion_vars a = predicate_vars a.a_value
 
-let post_vars (q,al) = 
+let gen_post_vars assertion_vars (q,al) = 
   List.fold_left 
-    (fun s (_,a) -> Idset.union s (predicate_vars a.a_value))
-    (predicate_vars q.a_value)
+    (fun s (_,a) -> Idset.union s (assertion_vars a))
+    (assertion_vars q)
     al
+
+let post_vars = gen_post_vars predicate_vars
+let apost_vars = gen_post_vars assertion_vars
 
 let rec tsubst_in_term s = function
   | Tvar x as t -> 
@@ -294,6 +322,8 @@ let subst_in_term s =
 
 let subst_in_predicate s = 
   tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
+
+let subst_in_assertion s = asst_app (subst_in_predicate s)
 
 let subst_one x t = Idmap.add x t Idmap.empty
 
@@ -350,9 +380,7 @@ let equals_false = function
   | t -> Tapp (t_eq, [t; Tconst (ConstBool false)], [])
 
 let rec mlize_type = function
-  | PureType pt -> pt
-  | Ref v -> mlize_type v
-  | Array v -> PTarray (mlize_type v)
+  | PureType pt | Ref pt -> pt
   | Arrow _ -> assert false
 
 (*s Substitutions *)
@@ -363,18 +391,14 @@ let rec type_c_subst s c =
   { c_result_name = id;
     c_result_type = type_v_subst s t;
     c_effect = Effect.subst s e;
-    c_pre = List.map (asst_app (subst_in_predicate s)) p;
+    c_pre = List.map (subst_in_predicate s) p;
     c_post = option_app (post_app (subst_in_predicate s')) q }
 
 and type_v_subst s = function
-  | Ref v -> Ref (type_v_subst s v)
-  | Array v -> Array (type_v_subst s v)
+  | Ref _ | PureType _ as v -> v
   | Arrow (bl,c) -> Arrow (List.map (binder_subst s) bl, type_c_subst s c)
-  | (PureType _) as v -> v
 
-and binder_subst s = function
-  | (n, BindType v) -> (n, BindType (type_v_subst s v))
-  | b -> b
+and binder_subst s (n,v) = (n, type_v_subst s v)
 
 (*s substitution of term for variables *)
 
@@ -382,18 +406,14 @@ let rec type_c_rsubst s c =
   { c_result_name = c.c_result_name;
     c_result_type = type_v_rsubst s c.c_result_type;
     c_effect = c.c_effect;
-    c_pre = List.map (asst_app (tsubst_in_predicate s)) c.c_pre;
+    c_pre = List.map (tsubst_in_predicate s) c.c_pre;
     c_post = option_app (post_app (tsubst_in_predicate s)) c.c_post }
 
 and type_v_rsubst s = function
-  | Ref v -> Ref (type_v_rsubst s v)
-  | Array v -> Array (type_v_rsubst s v)
+  | Ref _ | PureType _ as v -> v
   | Arrow (bl,c) -> Arrow(List.map (binder_rsubst s) bl, type_c_rsubst s c)
-  | PureType _ as v -> v
 
-and binder_rsubst s = function
-  | (n, BindType v) -> (n, BindType (type_v_rsubst s v))
-  | b -> b
+and binder_rsubst s (n,v) = (n, type_v_rsubst s v)
 
 let ptype_c_of_v v =
   { pc_result_name = Ident.result;
@@ -449,7 +469,11 @@ let pand ?(is_wp=false) a b =
   if a = Pfalse || b = Pfalse then Pfalse else
   Pand (is_wp, a, b)
 
+let wpand = pand ~is_wp:true
+
 let pands ?(is_wp=false) = List.fold_left (pand ~is_wp) Ptrue
+
+let wpands = pands ~is_wp:true
 
 let por a b =
   if a = Ptrue || b = Ptrue then Ptrue else
@@ -461,6 +485,8 @@ let pnot a =
 
 let pimplies ?(is_wp=false) p1 p2 = 
   if p2 = Ptrue then Ptrue else Pimplies (is_wp, p1, p2)
+
+let wpimplies = pimplies ~is_wp:true
 
 (*s [simplify] only performs simplications which are Coq reductions.
      Currently: only [if true] and [if false] *)
@@ -517,12 +543,6 @@ let cc_lam bl = List.fold_right (fun b c -> CC_lam (b, c)) bl
 let tt_var x = TTterm (Tvar x)
 
 let tt_arrow = List.fold_right (fun b t -> TTarrow (b, t))
-
-(*s functions over AST *)
-
-let arg_loc = function 
-  | Sterm t -> t.Ptree.ploc 
-  | Stype _ -> assert false (* TODO *)
 
 open Format
 

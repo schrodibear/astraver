@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.16 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.17 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -27,10 +27,10 @@ open Env
 val unify : Logic.pure_type -> Logic.pure_type -> bool
 
 val type_v : 
-  Loc.t -> Label.t -> local_env -> logical_env -> ptype_v -> type_v
+  Loc.position -> Label.t -> local_env -> logical_env -> ptype_v -> type_v
 
 val type_c :
-  Loc.t -> Label.t -> local_env -> logical_env -> ptype_c -> type_c
+  Loc.position -> Label.t -> local_env -> logical_env -> ptype_c -> type_c
 
 val predicate : 
   Label.t -> local_env -> logical_env -> lexpr -> predicate
@@ -39,22 +39,23 @@ val term :
   Label.t -> local_env -> logical_env -> lexpr -> term * pure_type
 
 val type_assert : 
-  Label.t -> local_env -> logical_env -> lexpr asst -> assertion
+  ?namer:(Ident.name -> Ident.t) ->
+  Label.t -> local_env -> logical_env -> Ptree.assertion -> assertion
 
 val type_post : 
   Label.t -> local_env -> logical_env -> Ident.t -> type_v -> Effect.t -> 
-  lexpr post -> postcondition
+  Ptree.postcondition -> postcondition
 
 val binders : 
-  Loc.t -> Label.t -> local_env -> logical_env -> 
+  Loc.position -> Label.t -> local_env -> logical_env -> 
   ptype_v binder list -> 
   type_v binder list * local_env * logical_env
 
 (* errors *)
 
-val expected_num : Loc.t -> 'a
+val expected_num : Loc.position -> 'a
 
-val expected_type : Loc.t -> type_v -> 'a
+val expected_type : Loc.position -> type_v -> 'a
 
 (* instances: the following table contains all closed instances of logical
    symbols that have been used so far. 

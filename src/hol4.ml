@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.2 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.3 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -55,7 +55,8 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "one"
   | PTreal -> fprintf fmt "real"
-  | PTarray v -> fprintf fmt "list(%a)" print_pure_type v (* TODO *)
+  | PTexternal([v],id) when id==farray -> 
+      fprintf fmt "list(%a)" print_pure_type v (* TODO *)
   | PTexternal([],id) -> Ident.print fmt id
   | PTexternal(_,_) 
   | PTvar _ -> failwith "no polymorphism with HOL-light yet"
@@ -153,7 +154,7 @@ and print_terms fmt tl =
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "T"
-  | Pvar id when id == default_post ->
+  | Pvar id when id == Ident.default_post ->
       fprintf fmt "T"
   | Pfalse ->
       fprintf fmt "F"
@@ -243,7 +244,7 @@ let print_axiom fmt id v =
   fprintf fmt "(* axiom %s *);;" id
 
 let print_obligation fmt loc id sq =
-  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
+  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "val %s = Parse.Term `%a`;;@\n@\n" id print_sequent sq
 
 let print_elem fmt = function

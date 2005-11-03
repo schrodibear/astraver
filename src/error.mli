@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: error.mli,v 1.20 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.21 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -26,9 +26,11 @@ type t =
   | UnboundArray of Ident.t
   | UnboundLabel of string
   | UnboundException of Ident.t
+  | UnboundType of Ident.t
   | Clash of Ident.t
   | ClashExn of Ident.t
   | ClashRef of Ident.t
+  | ClashType of Ident.t
   | Undefined of Ident.t
   | NotAReference of Ident.t
   | NotAnArray of Ident.t
@@ -62,3 +64,6 @@ type t =
   | CannotBeRaised of Ident.t
   | MutableMutable
   | PolymorphicGoal
+  | TypeBadArity
+  | TypeArity of Ident.t * int * int
+  | GlobalWithEffects of Ident.t * Effect.t

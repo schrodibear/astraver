@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.51 2005-10-13 15:05:14 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.52 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 open Format
 
@@ -41,8 +41,9 @@ let dir_ = ref ""
 let white_ = ref false
 let black_ = ref true
 let wbb_ = ref false
-let split_ = ref false
+let lvlmax_ = ref max_int
 let all_vc_ = ref false
+let prelude_ = ref true
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -136,7 +137,7 @@ Typing/Annotations/VCG options:
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
-  --split            split conditions into several pieces
+  --split n          split conditions into several pieces up to n levels
   --all-vc           outputs all verification conditions (no auto discharge)
 
 Prover selection:
@@ -277,11 +278,16 @@ let files =
 	black_ := true; white_ := false; parse args
     | ("-wbb" | "--wbb") :: args ->
 	wbb_ := true; parse args
-    | ("-split" | "--split") :: args ->
-	split_ := true; parse args
+    | ("-split" | "--split") :: n :: args ->
+	lvlmax_ := int_of_string n; parse args
+    | ("-split" | "--split") :: [] ->
+	usage (); exit 1
     | ("-all-vc" | "--all-vc" | "--allvc") :: args ->
 	all_vc_ := true; parse args
-    | f :: args -> filesq := f :: !filesq; parse args
+    | ("-no-prelude" | "--no-prelude") :: args ->
+	prelude_ := false; parse args
+    | f :: args -> 
+	filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
 
@@ -320,7 +326,7 @@ let dir = !dir_
 let white = !white_
 let black = !black_
 let wbb = !wbb_
-let split = !split_
+let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
@@ -356,3 +362,19 @@ let () = if white && black then begin
   Printf.eprintf "options -white and -black are not compatible\n";
   exit 1
 end
+
+(* prelude *)
+
+let prelude = !prelude_
+
+let prelude_file =
+  try
+    Filename.concat (Sys.getenv "WHYLIB") "prelude.why"
+  with Not_found ->
+    Filename.concat Version.libdir "prelude.why"
+
+let () = 
+  if prelude && not (Sys.file_exists prelude_file) then begin
+    Printf.eprintf "cannot find prelude file %s\n" prelude_file;
+    exit 1
+  end

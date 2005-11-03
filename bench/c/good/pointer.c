@@ -25,11 +25,11 @@ int g() {
   return f(r); 
 }
 
-void * malloc(int);
+void * my_malloc(int);
 
 /*@ ensures *r == 1 */
 int g2() { 
-  r = (int *)malloc(sizeof(int));
+  r = (int *)my_malloc(sizeof(int));
   return f(r); 
 }
 

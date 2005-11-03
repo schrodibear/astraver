@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.mli,v 1.14 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.15 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
@@ -23,8 +23,24 @@ open Ptree
 open Ast
 open Env
 
-val typef : Label.t -> local_env -> parsed_program -> typed_program
+val typef : Label.t -> local_env -> parsed_program -> typed_expr
 
-val check_for_not_mutable : Loc.t -> type_v -> unit
+val check_for_not_mutable : Loc.position -> type_v -> unit
 
 val is_pure_type_v : type_v -> bool
+
+val type_c_of_typing_info : assertion list -> typing_info -> type_c
+val typing_info_of_type_c : 
+  Loc.position -> local_env -> label -> type_c -> typing_info
+
+val gmake_node : 
+  Loc.position ->
+    local_env ->
+    label ->
+    ?post:postcondition option ->
+    typing_info t_desc ->
+    type_v -> Effect.t -> typed_expr
+
+val conj : postcondition option -> postcondition option -> postcondition option
+
+

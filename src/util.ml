@@ -14,16 +14,16 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.105 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.106 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 open Logic
 open Ident
 open Misc
 open Types
+open Cc
 open Ast
 open Env
 open Rename
-open Cc
 open Options
 
 (*s References mentioned by a predicate *)
@@ -59,7 +59,7 @@ let term_refs env c =
   set_map_succeed (labelled_reference env) (term_vars c)
 
 let post_refs env q =
-  set_map_succeed (labelled_reference env) (post_vars q)
+  set_map_succeed (labelled_reference env) (apost_vars q)
 
 (*s Labels management *)
 
@@ -113,22 +113,18 @@ let type_c_subst_oldify env x t k =
   { c_result_name = k.c_result_name;
     c_result_type = type_v_rsubst s k.c_result_type;
     c_effect = k.c_effect;
-    c_pre = List.map (asst_app (tsubst_in_predicate s)) k.c_pre;
+    c_pre = List.map (tsubst_in_predicate s) k.c_pre;
     c_post = option_app (post_app (tsubst_in_predicate s_old)) k.c_post }
 
 (*s shortcuts for typing information *)
 
-let effect p = p.info.kappa.c_effect
-let obligations p = p.info.obligations
-let pre p = p.info.kappa.c_pre
-let preo p = pre p @ obligations p
-let post p = p.info.kappa.c_post
-let result_type p = p.info.kappa.c_result_type
-let result_name p = p.kappa.c_result_name
+let effect p = p.info.t_effect
+let post p = p.info.t_post
+let result_type p = p.info.t_result_type
+let result_name p = p.t_result_name
 
 let erase_exns ti = 
-  let k = ti.kappa in
-  { ti with kappa = { k with c_effect = Effect.erase_exns k.c_effect } }
+  { ti with t_effect = Effect.erase_exns ti.t_effect }
 
 (*s [apply_pre] and [apply_post] instantiate pre- and post- conditions
     according to a given renaming of variables (and a date that means
@@ -160,14 +156,24 @@ let apply_term ren env t =
   subst_in_term s t
 
 let apply_assert ren env c =
+  let ids = predicate_vars c in
+  let s = make_subst None ren env ids in
+  subst_in_predicate s c
+ 
+let a_apply_assert ren env c =
   let ids = predicate_vars c.a_value in
   let s = make_subst None ren env ids in
-  { c with a_value = subst_in_predicate s c.a_value }
+  asst_app (subst_in_predicate s) c
  
 let apply_post before ren env q =
   let ids = post_vars q in
   let s = make_subst (Some before) ren env ids in
   post_app (subst_in_predicate s) q
+  
+let a_apply_post before ren env q =
+  let ids = apost_vars q in
+  let s = make_subst (Some before) ren env ids in
+  post_app (asst_app (subst_in_predicate s)) q
   
 (*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
     as we cross the binders [bl]. *)
@@ -175,12 +181,8 @@ let apply_post before ren env q =
 let rec traverse_binders env = function
   | [] -> 
       env
-  | (id, BindType v) :: rem ->
+  | (id, v) :: rem ->
       traverse_binders (Env.add id v env) rem
-  | (id, BindSet) :: rem ->
-      traverse_binders (Env.add_set id env) rem
-  | (_, Untyped) :: _ ->
-      invalid_arg "traverse_binders"
 	  
 let initial_renaming env =
   let ids = Env.fold_all (fun (id,_) l -> id::l) env [] in
@@ -212,32 +214,30 @@ let rec occur_predicate id = function
 
 let occur_assertion id a = occur_predicate id a.a_value
 
-let occur_post id = function 
+let gen_occur_post occur_assertion id = function 
   | None -> 
       false 
   | Some (q,l) -> 
       occur_assertion id q || 
       List.exists (fun (_,a) -> occur_assertion id a) l
 
+let occur_post = gen_occur_post occur_assertion
+
 let rec occur_type_v id = function
-  | Ref v -> occur_type_v id v
-  | Array v -> occur_type_v id v
+  | PureType _ | Ref _ -> false
   | Arrow (bl, c) -> occur_arrow id bl c
-  | PureType _ -> false
 
 and occur_type_c id c =
   occur_type_v id c.c_result_type ||
-  List.exists (occur_assertion id) c.c_pre ||
+  List.exists (occur_predicate id) c.c_pre ||
   Effect.occur id c.c_effect ||
-  occur_post id c.c_post 
+  gen_occur_post occur_predicate id c.c_post 
 
 and occur_arrow id bl c = match bl with
   | [] -> 
       occur_type_c id c
-  | (id', BindType v) :: bl' -> 
+  | (id', v) :: bl' -> 
       occur_type_v id v || (id <> id' && occur_arrow id bl' c)
-  | (_, (BindSet | Untyped)) :: bl' -> 
-      occur_arrow id bl' c
 
 let forall ?(is_wp=false) x v p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
@@ -252,7 +252,7 @@ let forall ?(is_wp=false) x v p = match v with
   | PureType PTbool ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
-      Pand (is_wp, simplify ptrue, simplify pfalse)
+      Pand (true, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
@@ -285,12 +285,14 @@ let deref_type = function
   | _ -> invalid_arg "deref_type"
 
 let dearray_type = function
-  | Array (PureType pt) -> pt
-  | Array _ -> assert false
+  | PureType (PTexternal ([pt], id)) when id == Ident.farray -> pt
   | _ -> invalid_arg "dearray_type"
 
-let decomp_kappa c = 
+let decomp_type_c c = 
   ((c.c_result_name, c.c_result_type), c.c_effect, c.c_pre, c.c_post)
+
+let decomp_kappa c = 
+  ((c.t_result_name, c.t_result_type), c.t_effect, c.t_post)
 
 let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 
@@ -336,16 +338,18 @@ let make_raw_store env (id,id') c1 c2 =
 
 (*s to build AST *)
 
-let make_lnode loc p env o k = 
+let make_lnode loc p env k = 
   { desc = p; 
-    info = { loc = loc; env = env; label = label_name (); 
-	     obligations = o; kappa = k } }
+    info = { t_loc = loc; t_env = env; t_label = label_name ();
+	     t_result_name = k.c_result_name; t_result_type = k.c_result_type;
+	     t_effect = k.c_effect; 
+	     t_post = optpost_app (anonymous loc) k.c_post } }
 
 let make_var loc x t env =
-  make_lnode loc (Expression (Tvar x)) env [] (type_c_of_v t)
+  make_lnode loc (Expression (Tvar x)) env (type_c_of_v t)
 
 let make_expression loc e t env =
-  make_lnode loc (Expression e) env [] (type_c_of_v t)
+  make_lnode loc (Expression e) env (type_c_of_v t)
     
 let make_bool loc b env = 
   make_expression loc (Tconst (ConstBool b)) (PureType PTbool) env
@@ -354,8 +358,8 @@ let make_annot_bool loc b env =
   let e = make_bool loc b env in
   let k = type_c_of_v (PureType PTbool) in
   let b = Tconst (ConstBool b) in
-  let q = anonymous loc (equality (Tvar result) b) in
-  make_lnode loc (Expression b) env [] { k with c_post = Some (q, []) }
+  let q = equality (Tvar result) b in
+  make_lnode loc (Expression b) env { k with c_post = Some (q, []) }
 
 let make_void loc env = 
   make_expression loc (Tconst ConstUnit) (PureType PTunit) env 
@@ -363,7 +367,27 @@ let make_void loc env =
 let make_raise loc x v env =
   let k = type_c_of_v v in
   let ef = Effect.add_exn exit_exn Effect.bottom in
-  make_lnode loc (Raise (x, None)) env [] { k with c_effect = ef }
+  make_lnode loc (Raise (x, None)) env { k with c_effect = ef }
+
+let change_desc p d = { p with desc = d }
+
+let force_post env q e = match q with
+  | None -> 
+      e
+  | Some c ->
+      let c = force_post_loc e.info.t_loc c in
+      let ids = post_refs env c in
+      let ef = Effect.add_reads ids e.info.t_effect in
+      let i = { e.info with t_post = Some c; t_effect = ef } in
+      { e with info = i }
+
+let post_named c = 
+  { a_value = c; a_name = post_name (); 
+    a_loc = Loc.dummy_position; a_proof = None }
+
+let create_postval c = Some (post_named c)
+
+let create_post c = Some (post_named c, [])
 
 (*s Pretty printers (for debugging purposes) *)
 
@@ -375,15 +399,17 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
-  | PTarray t -> fprintf fmt "(%a array)" print_pure_type t
   | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
   | PTvarid(id) -> fprintf fmt "'%a" Ident.print id
-  | PTvar {tag=t; type_val=None} -> fprintf fmt "'a#%d" t
+  | PTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
   | PTvar {tag=t; type_val=Some pt} -> 
-      fprintf fmt "'a#%d(=%a)" t print_pure_type pt
+      if debug then
+	fprintf fmt "'a%d(=%a)" t print_pure_type pt
+      else
+	print_pure_type fmt pt
   | PTexternal([t],id) -> 
-      fprintf fmt "(%a %a)" print_pure_type t Ident.print id
-  | PTexternal(l,id) -> fprintf fmt "((%a) %a)" 
+      fprintf fmt "%a %a" print_pure_type t Ident.print id
+  | PTexternal(l,id) -> fprintf fmt "(%a) %a" 
       (print_list space print_pure_type) l
       Ident.print id
 
@@ -469,32 +495,33 @@ let rec print_predicate fmt = function
   | Pnamed (n, p) ->
       fprintf fmt "@[%s: %a@]" n print_predicate p
 
-let print_assertion fmt a = print_predicate fmt a.a_value
+let print_assertion fmt a = 
+  fprintf fmt "%a: %a" Ident.print a.a_name print_predicate a.a_value
 
 let print_wp fmt = function
   | None -> fprintf fmt "<no weakest precondition>"
   | Some {a_value=p} -> print_predicate fmt p
 
-let print_pre fmt l = 
+let print_pre print_assertion fmt l = 
   if l <> [] then begin
     fprintf fmt "@[ ";
-    print_list semi (fun fmt p -> print_predicate fmt p.a_value) fmt l;
+    print_list semi print_assertion fmt l;
     fprintf fmt " @]"
   end
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 
-let print_exn fmt (x,c) = 
+let print_exn print_assertion fmt (x,c) = 
   fprintf fmt "| %a => @[%a@]@," Ident.print x print_assertion c
 
-let print_post fmt = function
+let print_post print_assertion fmt = function
   | None -> 
       ()
   | Some (c,[]) -> 
       fprintf fmt "@[ %a @]" print_assertion c
   | Some (c, l) -> 
       fprintf fmt "@[ %a@ %a @]" print_assertion c 
-	(print_list space print_exn) l
+	(print_list space (print_exn print_assertion)) l
 
 let rec print_type_v fmt = function
   | Arrow (b,c) ->
@@ -504,20 +531,14 @@ let rec print_type_v fmt = function
       print_type_v2 fmt v
 
 and pp_binder fmt = function
-  | id, BindType v when id == Ident.anonymous -> 
+  | id, v when id == Ident.anonymous -> 
       print_type_v2 fmt v
-  | id, BindType v ->
+  | id, v ->
       fprintf fmt "@[%a:%a@]" Ident.print id print_type_v v; 
-  | id, BindSet -> 
-      fprintf fmt "%a:Set" Ident.print id
-  | id, Untyped -> 
-      fprintf fmt "<untyped>"
 
 and print_type_v2 fmt = function
   | Ref v -> 
-      fprintf fmt "@[%a@ ref@]" print_type_v v
-  | Array v -> 
-      fprintf fmt "@[array@ %a@]" print_type_v v
+      fprintf fmt "@[%a@ ref@]" print_pure_type v
   | PureType pt -> 
       print_pure_type fmt pt
   | Arrow _ as v ->
@@ -533,63 +554,79 @@ and print_type_c fmt c =
     print_type_v fmt v
   else
     fprintf fmt "@[{%a}@ returns %a: %a@ %a@,{%a}@]" 
-      print_pre p
+      (print_pre print_predicate) p
       Ident.print id 
       print_type_v v 
       Effect.print e
-      print_post q
+      (print_post print_predicate) q
+
+let print_typing_info fmt c =
+  let id = c.t_result_name in
+  let v = c.t_result_type in
+  let q = c.t_post in
+  let e = c.t_effect in
+  if e = Effect.bottom && q = None then
+    print_type_v fmt v
+  else
+    fprintf fmt "@[{}@ returns %a: %a@ %a@,{%a}@]" 
+      Ident.print id 
+      print_type_v v 
+      Effect.print e
+      (print_post print_assertion) q
 
 (*s Pretty-print of typed programs *)
 
-let rec print_prog fmt p = 
-  let k = p.info.kappa in
-  if k.c_pre = [] && p.info.obligations = [] && k.c_post = None then
-    fprintf fmt "@[%s:@,%a@]" p.info.label print_desc p.desc
+let rec print_prog fmt (pre,p) = 
+  let i = p.info in
+  fprintf fmt "@[<hv>%s:@,@[{%a}@]@ @[%a@]@ @[{%a}@]@]" 
+    i.t_label (print_pre print_assertion) pre 
+    print_desc p.desc (print_post print_assertion) i.t_post
+
+and print_expr fmt p =
+  let i = p.info in
+  if i.t_post = None then
+    fprintf fmt "@[%s:@,%a@]" i.t_label print_desc p.desc
   else
-  fprintf fmt "@[<hv>[%d-%d]%s:@,@[{%a;%a}@]@ @[%a@]@ @[{%a}@]@]" 
-    (fst p.info.loc) (snd p.info.loc)
-    p.info.label print_pre k.c_pre print_pre p.info.obligations 
-    print_desc p.desc print_post k.c_post
+    fprintf fmt "@[<hv>%s:@,{}@ @[%a@]@ @[{%a}@]@]" i.t_label
+      print_desc p.desc (print_post print_assertion) i.t_post
 
 and print_desc fmt = function
   | Var id -> 
       Ident.print fmt id
-  | Acc id -> 
-      fprintf fmt "!%a" Ident.print id
-  | Aff (id, p) -> 
-      fprintf fmt "@[%a :=@ %a@]" Ident.print id print_prog p
-  | TabAcc (_, id, p) -> 
-      fprintf fmt "%a[%a]" Ident.print id print_prog p
-  | TabAff (_, id, p1, p2) -> 
-      fprintf fmt "%a[%a] :=@ %a" Ident.print id print_prog p1 print_prog p2
-  | Seq bl -> 
-      fprintf fmt "@[begin@\n  @[%a@]@\nend@]" print_block bl
-  | While (p, i, var, e) ->
+  | Seq (e1, e2) -> 
+      fprintf fmt "@[%a@ %a@]" print_expr e1 print_expr e2
+  | Loop (i, var, e) ->
       fprintf fmt 
-	"while %a do@\n  { invariant @[%a@] variant _ }@\n  @[%a@]@\ndone" 
-	print_prog p (print_option print_assertion) i print_prog e
+	"loop @\n { invariant @[%a@] variant _ }@\n  @[%a@]@\ndone" 
+	(print_option print_assertion) i print_expr e
   | If (p1, p2, p3) ->
       fprintf fmt "@[if %a then@ %a else@ %a@]" 
-	print_prog p1 print_prog p2 print_prog p3
-  | Lam (bl, p) -> 
-      fprintf fmt "@[fun <bl> ->@\n  %a@]" print_prog p
-  | App (p, a, k) -> 
-      fprintf fmt "(@[%a %a ::@ %a@])" print_prog p print_arg a print_type_c k
+	print_expr p1 print_expr p2 print_expr p3
+  | Lam (bl, p, e) -> 
+      fprintf fmt "@[fun <bl> ->@ @[%a@]@\n  %a@]" 
+	(print_pre print_assertion) p print_expr e
+  | AppRef (p, x, k) -> 
+      fprintf fmt "(@[%a %a ::@ %a@])" 
+	print_expr p Ident.print x print_typing_info k
+  | AppTerm (p, t, k) -> 
+      fprintf fmt "(@[%a %a ::@ %a@])" 
+	print_expr p print_term t print_typing_info k
   | LetRef (id, p1, p2) ->
       fprintf fmt "@[<hv>@[<hv 2>let %a =@ ref %a@ in@]@ %a@]" 
-	Ident.print id print_prog p1 print_prog p2
+	Ident.print id print_expr p1 print_expr p2
   | LetIn (id, p1, p2) ->
       fprintf fmt "@[<hv>@[<hv 2>let %a =@ %a in@]@ %a@]" 
-	Ident.print id print_prog p1 print_prog p2
-  | Rec (id, bl, v, var, p) ->
-      fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 
-	Ident.print id print_type_v v print_prog p
+	Ident.print id print_expr p1 print_expr p2
+  | Rec (id, bl, v, var, p, e) ->
+      fprintf fmt "rec %a : <bl> %a { variant _ } =@ %a@\n%a" 
+	Ident.print id print_type_v v 
+	(print_pre print_assertion) p print_expr e
   | Raise (id, None) ->
       fprintf fmt "raise %a" Ident.print id
   | Raise (id, Some p) ->
-      fprintf fmt "raise (%a %a)" Ident.print id print_prog p
+      fprintf fmt "raise (%a %a)" Ident.print id print_expr p
   | Try (p, hl) ->
-      fprintf fmt "@[<hv>try@ %a@ with %a@ end@]" print_prog p 
+      fprintf fmt "@[<hv>try@ %a@ with %a@ end@]" print_expr p 
 	(print_list alt print_handler) hl
   | Expression t -> 
       print_term fmt t
@@ -597,29 +634,29 @@ and print_desc fmt = function
       fprintf fmt "absurd"
   | Any k ->
       fprintf fmt "[%a]" print_type_c k
+  | Assertion (l, p) ->
+      fprintf fmt "@[{%a}@ %a@]" 
+	(print_pre print_assertion) l print_expr p
+  | Proof (k, _) ->
+      fprintf fmt "proof[%a]" print_type_c k
+  | Post (e, q, Transparent) ->
+      fprintf fmt "@[(%a@ { %a })@]" 
+	print_expr e (print_post print_assertion) (Some q)
+  | Post (e, q, Opaque) ->
+      fprintf fmt "@[(%a@ {{ %a }})@]" 
+	print_expr e (print_post print_assertion) (Some q)
+  | Label (s, e) ->
+      fprintf fmt "@[%s:@ %a@]" s print_expr e
 
 and print_handler fmt ((id, a), e) = match a with
   | None -> 
-      fprintf fmt "%a ->@ %a" Ident.print id print_prog e
+      fprintf fmt "%a ->@ %a" Ident.print id print_expr e
   | Some a -> 
-      fprintf fmt "%a %a ->@ %a" Ident.print id Ident.print a print_prog e
+      fprintf fmt "%a %a ->@ %a" Ident.print id Ident.print a print_expr e
 
 and print_cast fmt = function
   | None -> ()
   | Some v -> fprintf fmt ": %a" print_type_v v
-
-and print_block fmt = 
-  print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
-
-and print_block_st fmt = function
-  | Statement p -> print_prog fmt p
-  | Label l -> fprintf fmt "label %s" l
-  | Assert a -> fprintf fmt "@[assert@ @[{ %a }@]@]" print_assertion a
-
-and print_arg fmt = function
-  | Term p -> print_prog fmt p
-  | Refarg id -> Ident.print fmt id
-  | Type v -> print_type_v fmt v
 
 (*s Pretty-print of cc-terms (intermediate terms) *)
 
@@ -729,23 +766,18 @@ open Ptree
 
 let rec print_ptree fmt p = match p.pdesc with
   | Svar x -> Ident.print fmt x
-  | Srefget x -> fprintf fmt "!%a" Ident.print x
-  | Srefset (x, p) -> fprintf fmt "@[%a := %a@]" Ident.print x print_ptree p
-  | Sarrget (_, x, p) -> fprintf fmt "%a[%a]" Ident.print x print_ptree p
-  | Sarrset (_, x, p1, p2) ->
-      fprintf fmt "@[%a[%a] := %a@]" Ident.print x 
-	print_ptree p1 print_ptree p2
-  | Sseq bl ->
-      fprintf fmt "begin@\n  @[%a@]@\nend" print_block bl
-  | Swhile (p1, _, _, p2) ->
-      fprintf fmt "while %a do@\n  @[%a@]@\ndone" print_ptree p1 print_ptree p2
+  | Sderef x -> fprintf fmt "!%a" Ident.print x
+  | Sseq (p1, p2) ->
+      fprintf fmt "@[%a;@ %a@]" print_ptree p1 print_ptree p2
+  | Sloop ( _, _, p2) ->
+      fprintf fmt "loop@\n  @[%a@]@\ndone" print_ptree p2
   | Sif (p1, p2, p3) ->
       fprintf fmt "@[<hv 2>if %a then@ %a else@ %a@]" 
 	print_ptree p1 print_ptree p2 print_ptree p3
-  | Slam (bl, p) ->
+  | Slam (bl, pre, p) ->
       fprintf fmt "@[<hov 2>fun <...> ->@ %a@]" print_ptree p
   | Sapp (p, a) ->
-      fprintf fmt "(%a %a)" print_ptree p print_arg a
+      fprintf fmt "(%a %a)" print_ptree p print_ptree a
   | Sletref (id, e1, e2) -> 
       fprintf fmt "@[let %a = ref %a in@ %a@]" 
 	Ident.print id print_ptree e1 print_ptree e2
@@ -764,24 +796,16 @@ let rec print_ptree fmt p = match p.pdesc with
   | Sconst c -> print_term fmt (Tconst c)
   | Sabsurd _ -> fprintf fmt "<Sabsurd>"
   | Sany _ -> fprintf fmt "<Sany>"
+  | Spost (e,q,Transparent) -> fprintf fmt "@[%a@ {...}@]" print_ptree e
+  | Spost (e,q,Opaque) -> fprintf fmt "@[%a@ {{...}}@]" print_ptree e
+  | Sassert (p,e) -> fprintf fmt "@[{...}@ %a@]" print_ptree e
+  | Slabel (l,e) -> fprintf fmt "@[%s: %a@]" l print_ptree e
 
 and print_phandler fmt = function
   | (x, None), e -> 
       fprintf fmt "| %a => %a" Ident.print x print_ptree e
   | (x, Some y), e -> 
       fprintf fmt "| %a %a => %a" Ident.print x Ident.print y print_ptree e
-
-and print_arg fmt = function
-  | Sterm p -> print_ptree fmt p
-  | Stype _ -> fprintf fmt "<Stype>"
-
-and print_block_st fmt = function
-  | Slabel l -> fprintf fmt "%s:" l
-  | Sassert _ -> fprintf fmt "<Sassert>"
-  | Sstatement p -> print_ptree fmt p
-
-and print_block fmt =
-  print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
 
 let print_external fmt b = if b then fprintf fmt "external "
 
@@ -801,5 +825,7 @@ let print_decl fmt = function
       fprintf fmt "predicate %a <...>" Ident.print id
   | Function_def (_, id, _, _, _) ->
       fprintf fmt "function %a <...>" Ident.print id
+  | TypeDecl (_, e, _, id) ->
+      fprintf fmt "%atype %a" print_external e Ident.print id
 
 let print_pfile = print_list newline print_decl

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.136 2005-07-21 12:32:39 hubert Exp $ i*)
+(*i $Id: coq.ml,v 1.137 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -34,7 +34,8 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "R"
-  | PTarray v -> fprintf fmt "(array %a)" print_pure_type v
+  | PTexternal ([v], id) when id == farray -> 
+      fprintf fmt "(array %a)" print_pure_type v
   | PTexternal([],id) -> Ident.print fmt id
   | PTexternal(l,id) -> 
       fprintf fmt "((%a) %a)"
@@ -198,7 +199,7 @@ let print_predicate_v7 fmt p =
   and print3 fmt = function
     | Ptrue -> 
 	fprintf fmt "True"
-    | Pvar id when id == default_post ->
+    | Pvar id when id == Ident.default_post ->
 	fprintf fmt "True"
     | Pfalse -> 
 	fprintf fmt "False"
@@ -380,6 +381,8 @@ and print_proof_v7 fmt = function
       Ident.print fmt id
   | Proj1 id ->
       fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
+  | Proj2 id ->
+      fprintf fmt "@[(proj2 ? ? %a)@]" Ident.print id
   | Conjunction (id1, id2) ->
       fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
   | WfZwf t ->
@@ -480,7 +483,7 @@ let print_predicate_v8 fmt p =
   and print3 fmt = function
     | Ptrue -> 
 	fprintf fmt "True"
-    | Pvar id when id == default_post ->
+    | Pvar id when id == Ident.default_post ->
 	fprintf fmt "True"
     | Pfalse -> 
 	fprintf fmt "False"
@@ -663,6 +666,8 @@ and print_proof_v8 fmt = function
       Ident.print fmt id
   | Proj1 id ->
       fprintf fmt "@[(proj1 %a)@]" Ident.print id
+  | Proj2 id ->
+      fprintf fmt "@[(proj2 %a)@]" Ident.print id
   | Conjunction (id1, id2) ->
       fprintf fmt "@[(conj %a %a)@]" Ident.print id1 Ident.print id2
   | WfZwf t ->
@@ -674,6 +679,7 @@ and print_proof_v8 fmt = function
   | ProofTerm t ->
       fprintf fmt "@[%a@]" print_cc_term_v8 t
   | ShouldBeAWp ->
+      if debug then Report.raise_unlocated (Error.AnyMessage "should be a WP");
       Report.raise_unlocated 
       (Error.AnyMessage "can't produce a validation for an incomplete program")
 
@@ -693,14 +699,8 @@ let print_cc_term = if v8 then print_cc_term_v8 else print_cc_term_v7
 let _ = Vcg.log_print_function := print_sequent
       
 let reprint_obligation fmt (loc,id,s) =
-  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
+  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[<hov 2>(*Why goal*) Lemma %s : @\n%a.@]@\n" id print_sequent s
-
-let print_obligation fmt o = 
-  reprint_obligation fmt o;
-  fprintf fmt "Proof.@\n";
-  option_iter (fun t -> fprintf fmt "%s.@\n" t) coq_tactic;
-  fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
 
 let print_obligation fmt o = 
   reprint_obligation fmt o;
@@ -777,6 +777,11 @@ let reprint_predicate fmt id p =
 
 let print_predicate fmt id p = reprint_predicate fmt id p
 
+let reprint_type fmt id vl =
+  fprintf fmt "@[<hov 2>(*Why type*) Parameter %s: @[%aSet@].@]@\n"
+    id (print_list space (fun fmt _ -> fprintf fmt "Set ->")) vl
+
+let print_type = reprint_type
 
 let reprint_function fmt id p =
   let (l,(bl,t,e)) = Env.specialize_function_def p in
@@ -813,6 +818,7 @@ struct
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
       | Function (id, f) -> print_function fmt id f
+      | AbstractType (id, vl) -> print_type fmt id vl
     end;
     fprintf fmt "@\n"
       
@@ -823,6 +829,7 @@ struct
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
     | Function (id, f) -> reprint_function fmt id f
+    | AbstractType (id, vl) -> reprint_type fmt id vl
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -859,6 +866,9 @@ let push_predicate id p =
 let push_function id f =
   Gen.add_elem (Fun, id) (Function (id, f))
 
+let push_type id vl =
+  Gen.add_elem (Ty, id) (AbstractType (id, vl))
+
 let _ = 
   Gen.add_regexp 
     "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
@@ -877,7 +887,9 @@ let _ =
   Gen.add_regexp 
     "(\\*Why predicate\\*) Definition[ ]+\\([^ ]*\\) " Pr;
   Gen.add_regexp 
-    "(\\*Why function\\*) Definition[ ]+\\([^ ]*\\) " Fun
+    "(\\*Why function\\*) Definition[ ]+\\([^ ]*\\) " Fun;
+  Gen.add_regexp 
+    "(\\*Why type\\*) Parameter[ ]+\\([^ ]*\\) " Ty
 
 (* validations *)
 

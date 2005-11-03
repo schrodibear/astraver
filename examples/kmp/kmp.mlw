@@ -7,6 +7,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+type A
+
 external parameter A_eq_bool : x:A -> y:A -> {} bool { if result then x=y else not x=y }
 
 (* The pattern p is an array of length M. *)
@@ -20,8 +22,8 @@ parameter p : A array
 
 parameter next : int array
 
-external logic match_ : A array, int, A array, int, int -> prop
-external logic Next : A array, int, int -> prop
+external logic match_ : A farray, int, A farray, int, int -> prop
+external logic Next : A farray, int, int -> prop
 external logic pairZ : int,int -> prodZZ
 
 let initnext =
@@ -57,7 +59,7 @@ parameter N : int
 
 parameter a : A array
 
-external logic first_occur : A array, A array, int -> prop
+external logic first_occur : A farray, A farray, int -> prop
 
 let kmp =
   { array_length(p) = M and array_length(next) = M and 

@@ -53,7 +53,8 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
-  | PTarray v -> fprintf fmt "(%a list)" print_pure_type v (* TODO *)
+  | PTexternal ([v], id) when id == farray -> 
+      fprintf fmt "(%a list)" print_pure_type v (* TODO *)
   | PTexternal([],id) -> Ident.print fmt id
   | PTexternal([t],id) -> 
       fprintf fmt "(%a %a)"
@@ -165,7 +166,7 @@ and print_terms fmt tl =
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "True"
-  | Pvar id when id == default_post ->
+  | Pvar id when id == Ident.default_post ->
       fprintf fmt "True"
   | Pfalse ->
       fprintf fmt "False"
@@ -278,7 +279,7 @@ let print_axiom fmt id p =
   reprint_axiom fmt id p
 
 let reprint_obligation fmt (loc,id,s) =
-  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
+  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "(*Why goal*) lemma %s: %a;@\n" id print_sequent s
 
 let print_obligation fmt o = 
@@ -336,6 +337,7 @@ struct
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
       | Function (id, f) -> print_function fmt id f
+      | AbstractType _ -> assert false(*TODO*)
     end;
     fprintf fmt "@\n"
       
@@ -346,6 +348,7 @@ struct
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
     | Function (id, f) -> reprint_function fmt id f
+    | AbstractType _ -> assert false (*TODO*)
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 

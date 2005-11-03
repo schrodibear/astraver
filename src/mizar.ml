@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.25 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.26 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -57,17 +57,18 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "Element of {0}"
   | PTreal -> fprintf fmt "Real"
   | PTexternal([],id) -> Ident.print fmt id
-  | PTarray PTunit -> fprintf fmt "XFinSequence of {0}"
-  | PTarray PTbool -> fprintf fmt "XFinSequence of BOOLEAN"
-  | PTarray PTint -> fprintf fmt "XFinSequence of INT"
-  | PTarray PTreal -> fprintf fmt "XFinSequence of REAL"
-  | PTarray (PTexternal([],id)) -> fprintf fmt "XFinSequence of %a" Ident.print id
-  | PTarray (PTarray _) -> assert false
-  | PTarray (PTexternal _)
-  | PTarray (PTvar _)
+  | PTexternal([v],id) when id == farray ->
+      begin match v with
+	| PTunit -> fprintf fmt "XFinSequence of {0}"
+	| PTbool -> fprintf fmt "XFinSequence of BOOLEAN"
+	| PTint -> fprintf fmt "XFinSequence of INT"
+	| PTreal -> fprintf fmt "XFinSequence of REAL"
+	| PTexternal _ as ty ->
+	    fprintf fmt "XFinSequence of %a" print_pure_type ty
+	| PTvar _ | PTvarid _ -> failwith "no polymorphism with Mizar yet"
+      end
   | PTexternal _ | PTvar _ ->  failwith "no polymorphism with Mizar yet"
-  | PTvarid _  
-  | PTarray (PTvarid _) -> assert false
+  | PTvarid _ -> assert false
 
 let prefix_id id =
   (* int cmp *)
@@ -207,7 +208,7 @@ let print_predicate fmt p =
   and print3 fmt = function
     | Ptrue ->
 	fprintf fmt "not contradiction"
-    | Pvar id when id == default_post ->
+    | Pvar id when id == Ident.default_post ->
 	fprintf fmt "not contradiction"
     | Pfalse ->
 	fprintf fmt "contradiction"
@@ -248,7 +249,7 @@ let rec print_cc_type fmt = function
   | TTpure pt -> 
       print_pure_type fmt pt
   | TTarray (TTpure pt) -> 
-      print_pure_type fmt (PTarray pt)
+      print_pure_type fmt (PTexternal ([pt],farray))
   | _ ->
       assert false
 
@@ -280,7 +281,7 @@ let rec print_thesis fmt = function
   | t -> fprintf fmt "@[thus %a@];" print_predicate t
 
 let reprint_obligation fmt (loc,id,s) =
-  fprintf fmt "@[ :: %a @]@\n" Loc.report_obligation loc;
+  fprintf fmt "@[ :: %a @]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[ (*Why goal*) theorem %s:@\n @[%a@]@]@\n" id print_sequent s
 
 let print_obligation fmt ((_,_,(_,t)) as o) = 
@@ -320,6 +321,7 @@ struct
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate _ -> assert false (*TODO*)
       | Function _ -> assert false (*TODO*)
+      | AbstractType _ -> assert false (*TODO*)
     end;
     fprintf fmt "@\n"
       
@@ -330,6 +332,7 @@ struct
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate _ -> assert false (*TODO*)
     | Function _ -> assert false (*TODO*)
+    | AbstractType _ -> assert false (*TODO*)
 
   let re_oblig_loc = Str.regexp " :: Why obligation from .*"
 

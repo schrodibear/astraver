@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.58 2005-05-26 13:20:15 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.59 2005-11-03 14:11:32 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -148,10 +148,8 @@ let rec explain_exception fmt = function
       fprintf fmt "Syntax error"
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
-  | Error (Some loc, e) | Stdpp.Exc_located (_, Error (Some loc, e)) ->
+  | Error (Some loc, e) ->
       fprintf fmt "%a%a" Loc.report loc report e
-  | Stdpp.Exc_located (loc, e) ->
-      fprintf fmt "%a%a" Loc.report (Compat.make_loc loc) explain_exception e
   | Error (_, e) ->
       report fmt e
   | e ->

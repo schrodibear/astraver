@@ -14,30 +14,43 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.73 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.74 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
 open Logic
 open Types
-open Ast
 open Ptree
+open Ast
 open Cc
+
+exception Located of Loc.position * exn
 
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
 val is_closed_pure_type : pure_type -> bool
+val normalize_pure_type : pure_type -> pure_type
+
+val is_default_post : assertion -> bool
 
 (* Substitution within assertions and pre/post-conditions *)
 val asst_app : (predicate -> predicate) -> assertion -> assertion
 val optasst_app : 
   (predicate -> predicate) -> assertion option -> assertion option
+val post_app : ('a -> 'b) -> 'a * ('c * 'a) list -> 'b * ('c * 'b) list
+val optpost_app :
+  ('a -> 'b) -> ('a * ('c * 'a) list) option -> ('b * ('c * 'b) list) option
+val optpost_fold :
+  (predicate -> 'a -> 'a) ->
+  (assertion * ('b * assertion) list) option -> 'a -> 'a
+(***
 val post_app : (predicate -> predicate) -> postcondition -> postcondition
 val optpost_app : 
   (predicate -> predicate) -> postcondition option -> postcondition option
+val optpost_fold : (predicate -> 'a -> 'a) -> postcondition option -> 'a -> 'a
+***)
 
 val asst_fold : (predicate -> 'a -> 'a) -> assertion -> 'a -> 'a
-val optpost_fold : (predicate -> 'a -> 'a) -> postcondition option -> 'a -> 'a
 
 (* Substitution within some parts of postconditions (value or exns) *)
 val val_app : (predicate -> predicate) -> postcondition -> postcondition
@@ -49,19 +62,31 @@ val optexn_app :
   Ident.t -> 
   (predicate -> predicate) -> postcondition option -> postcondition option
 
-val anonymous : Loc.t -> 'a -> 'a asst
-val wp_named : Loc.t -> 'a -> 'a asst
+val a_value : assertion -> predicate
+val a_values : assertion list -> predicate list
 
+val anonymous : Loc.position -> predicate -> assertion
+val pre_named  : Loc.position -> predicate -> assertion
+val post_named  : Loc.position -> predicate -> assertion
+val wp_named : Loc.position -> predicate -> assertion
+
+(*s Default exceptional postcondition (inserted when not given) *)
+val default_post : assertion
+
+(***
 val force_post_name : postcondition option -> postcondition option
 val force_bool_name : postcondition option -> postcondition option
+***)
 val force_wp_name : assertion option -> assertion option
 
-val force_loc : Loc.t -> assertion -> assertion
-val force_post_loc : Loc.t -> postcondition -> postcondition
-val force_type_c_loc : Loc.t -> type_c -> type_c
+val force_loc : Loc.position -> assertion -> assertion
+val force_post_loc : Loc.position -> postcondition -> postcondition
+(***
+val force_type_c_loc : Loc.position -> type_c -> type_c
+***)
 
-val post_val : postcondition -> assertion
-val post_exn : Ident.t -> postcondition -> assertion
+val post_val : 'a * 'b -> 'a
+val post_exn : Ident.t -> 'a * (Ident.t * 'b) list -> 'b
 val optpost_val : postcondition option -> assertion option
 val optpost_exn : Ident.t -> postcondition option -> assertion option
 
@@ -84,10 +109,11 @@ type avoid = Ident.set
 val renaming_of_ids : avoid -> Ident.t list -> (Ident.t * Ident.t) list * avoid
 
 val pre_name    : Ident.name -> Ident.t
-val post_name   : Ident.name -> Ident.t
+val post_name   : unit -> Ident.t
 val inv_name    : Ident.name -> Ident.t
-val test_name   : Ident.name -> Ident.t
+val test_name   : unit -> Ident.t
 val wp_name     : unit -> Ident.t
+val h_name      : Ident.name -> Ident.t
 
 val bool_name   : unit -> Ident.t
 val variant_name : unit -> Ident.t
@@ -117,10 +143,13 @@ val predicate_of_term : term -> predicate
 
 val term_vars : term -> Ident.set
 val predicate_vars : predicate -> Ident.set
-val post_vars : postcondition -> Ident.set
+val post_vars : Types.postcondition -> Ident.set
+val apost_vars : postcondition -> Ident.set
 
 val subst_in_term : var_substitution -> term -> term
 val tsubst_in_term : substitution -> term -> term
+
+val subst_in_assertion : var_substitution -> assertion -> assertion
 
 val subst_in_predicate : var_substitution -> predicate -> predicate
 val tsubst_in_predicate : substitution -> predicate -> predicate
@@ -176,6 +205,11 @@ val por : predicate -> predicate -> predicate
 val pnot : predicate -> predicate
 val pimplies : ?is_wp:is_wp -> predicate -> predicate -> predicate
 
+(* WP connectives *)
+val wpand : predicate -> predicate -> predicate
+val wpands : predicate list -> predicate
+val wpimplies : predicate -> predicate -> predicate
+
 val simplify : predicate -> predicate
 
 (*s Debug functions *)
@@ -197,16 +231,12 @@ val cc_lam : cc_binder list -> 'a cc_term -> 'a cc_term
 val tt_var : Ident.t -> cc_type
 val tt_arrow : cc_binder list -> cc_type -> cc_type
 
-(*s functions over AST *)
-
-val arg_loc : Ptree.arg -> Loc.t
-
 (*s Pretty-print *)
 
 open Format
 
 val warning : string -> unit
-val wprintf : Loc.t -> ('a, Format.formatter, unit) format -> 'a
+val wprintf : Loc.position -> ('a, Format.formatter, unit) format -> 'a
 val unlocated_wprintf : ('a, Format.formatter, unit) format -> 'a
 
 (* [do_not_edit f before sep after] updates the part of file [f] following a

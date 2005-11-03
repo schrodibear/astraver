@@ -3,29 +3,38 @@
 
 Require Export struct2_spec_why.
 
-(* Why obligation from file "why/struct2.why", characters 153-230 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
   forall (s0: pointer),
-  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 0) /\
+  forall (HW_1: (valid1 b) /\ (valid_range alloc s0 0 0) /\
                 (valid1_range b 5)),
-  (valid alloc s0).
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_4: intP0 = (upd intP result0 1)),
+  (* File \"struct2.c819618234.c1069824147.i\", line 0, characters 9-14 *)
+  True.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", characters 238-265 *)
-Lemma f_impl_po_2 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 0) /\
+  forall (HW_1: (valid1 b) /\ (valid_range alloc s0 0 0) /\
                 (valid1_range b 5)),
-  forall (Pre4: (valid alloc s0)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift (acc b s0) 2)),
-  (valid alloc caduceus_2).
+  forall (result: pointer),
+  forall (HW_2: result = (acc b s0)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 2)),
+  (valid alloc result0).
 Proof.
 intuition.
 subst.
@@ -35,66 +44,72 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/struct2.why", characters 136-265 *)
-Lemma f_impl_po_3 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
   forall (s0: pointer),
-  forall (Pre5: (valid1 b) /\ (valid_range alloc s0 0 0) /\
+  forall (HW_1: (valid1 b) /\ (valid_range alloc s0 0 0) /\
                 (valid1_range b 5)),
-  forall (Pre4: (valid alloc s0)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift (acc b s0) 2)),
-  forall (Pre3: (valid alloc caduceus_2)),
-  forall (intP0: ((memory) Z)),
-  forall (Post5: intP0 = (upd intP caduceus_2 1)),
-  (* File \"struct2.c\", line 6, characters 13-18 *) True.
+  (valid alloc s0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct2.why", characters 540-627 *)
-Lemma g_impl_po_1 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
-  (valid alloc u).
+  forall (result: pointer),
+  forall (HW_2: result = (acc d u)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (acc b result)),
+  forall (result1: pointer),
+  forall (HW_4: result1 = (shift result0 2)),
+  forall (intP0: ((memory) Z)),
+  forall (HW_5: intP0 = (upd intP result1 1)),
+  (* File \"struct2.c819618234.c1069824147.i\", line 0, characters 9-14 *)
+  True.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", characters 540-627 *)
-Lemma g_impl_po_2 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
-  forall (Pre4: (valid alloc u)),
-  (valid alloc (acc d u)).
+  forall (result: pointer),
+  forall (HW_2: result = (acc d u)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (acc b result)),
+  forall (result1: pointer),
+  forall (HW_4: result1 = (shift result0 2)),
+  (valid alloc result1).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", characters 635-662 *)
-Lemma g_impl_po_3 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
-  forall (Pre4: (valid alloc u)),
-  forall (Pre6: (valid alloc (acc d u))),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift (acc b (acc d u)) 2)),
-  (valid alloc caduceus_2).
+  forall (result: pointer),
+  forall (HW_2: result = (acc d u)),
+  (valid alloc result).
 Proof.
 intuition.
 subst.
@@ -102,23 +117,15 @@ unfold valid1_range in H4.
 generalize (H4 (u#d) alloc Pre6);intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", characters 523-662 *)
-Lemma g_impl_po_4 : 
+(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (d: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
   forall (u: pointer),
-  forall (Pre7: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b) /\ (valid1 d) /\
                 (separation2 d d) /\ (valid1_range b 5)),
-  forall (Pre4: (valid alloc u)),
-  forall (Pre6: (valid alloc (acc d u))),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift (acc b (acc d u)) 2)),
-  forall (Pre3: (valid alloc caduceus_2)),
-  forall (intP0: ((memory) Z)),
-  forall (Post5: intP0 = (upd intP caduceus_2 1)),
-  (* File \"struct2.c\", line 16, characters 13-18 *) True.
+  (valid alloc u).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

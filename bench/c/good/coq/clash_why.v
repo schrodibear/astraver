@@ -3,127 +3,112 @@
 
 Require Export clash_spec_why.
 
-(* Why obligation from file "why/clash.why", characters 186-244 *)
-Lemma f1_impl_po_1 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_1 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (toto: ((memory) Z)),
-  forall (Pre4: (valid alloc ma_structure) /\ (valid alloc ma_structure)),
-  forall (toto_0_1: Z),
-  forall (Post1: toto_0_1 = 0),
-  forall (Pre3: (valid alloc ma_structure)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure)),
+  forall (toto_0: Z),
+  forall (HW_3: toto_0 = 0),
   forall (toto0: ((memory) Z)),
-  forall (Post8: toto0 = (upd toto ma_structure toto_0_1)),
+  forall (HW_4: toto0 = (upd toto ma_structure toto_0)),
   (not_assigns alloc toto toto0 (pset_singleton ma_structure)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 617-636 *)
-Lemma f2_impl_po_1 : 
-  forall (ma_structure: pointer),
-  forall (alloc: alloc_table),
-  forall (substruct: ((memory) pointer)),
-  forall (Pre11: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                 (valid alloc (acc substruct ma_structure))) /\
-                 (valid1 substruct) /\ (separation2 substruct substruct)),
-  1 >= 1.
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "why/clash.why", characters 721-751 *)
-Lemma f2_impl_po_2 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_1 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (fst: ((memory) Z)),
   forall (substruct: ((memory) pointer)),
-  forall (Pre11: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                 (valid alloc (acc substruct ma_structure))) /\
-                 (valid1 substruct) /\ (separation2 substruct substruct)),
-  forall (Pre10: 1 >= 1),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct ma_structure))) /\
+                (valid1 substruct) /\ (separation2 substruct substruct)),
+  forall (result: pointer),
   forall (alloc0: alloc_table),
-  forall (substruct_0: pointer),
-  forall (Post9: (valid alloc0 substruct_0) /\ (offset substruct_0) = 0 /\
-                 (block_length alloc0 substruct_0) = 1 /\
-                 (valid_range alloc0 substruct_0 0 (1 - 1)) /\
-                 (fresh alloc substruct_0) /\
-                 (on_stack alloc0 substruct_0) /\
-                 (alloc_stack substruct_0 alloc alloc0)),
-  forall (Pre9: (valid alloc0 substruct_0)),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
   forall (fst0: ((memory) Z)),
-  forall (Post13: fst0 = (upd fst substruct_0 0)),
-  (valid alloc0 ma_structure).
+  forall (HW_3: fst0 = (upd fst result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc substruct ma_structure)),
+  forall (result1: Z),
+  forall (HW_5: result1 = (acc fst0 result)),
+  forall (fst1: ((memory) Z)),
+  forall (HW_6: fst1 = (upd fst0 result0 result1)),
+  (not_assigns alloc fst fst1 (pset_singleton (acc substruct ma_structure))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_2 : 
+  forall (ma_structure: pointer),
+  forall (alloc: alloc_table),
+  forall (fst: ((memory) Z)),
+  forall (substruct: ((memory) pointer)),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct ma_structure))) /\
+                (valid1 substruct) /\ (separation2 substruct substruct)),
+  forall (result: pointer),
+  forall (alloc0: alloc_table),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (fst0: ((memory) Z)),
+  forall (HW_3: fst0 = (upd fst result 0)),
+  forall (result0: pointer),
+  forall (HW_4: result0 = (acc substruct ma_structure)),
+  forall (result1: Z),
+  forall (HW_5: result1 = (acc fst0 result)),
+  (valid alloc0 result0).
 Proof.
 intuition.
 apply alloc_stack_valid with substruct_0 alloc; auto.
 
 Save.
 
-(* Why obligation from file "why/clash.why", characters 762-811 *)
-Lemma f2_impl_po_3 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_3 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (fst: ((memory) Z)),
   forall (substruct: ((memory) pointer)),
-  forall (Pre11: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                 (valid alloc (acc substruct ma_structure))) /\
-                 (valid1 substruct) /\ (separation2 substruct substruct)),
-  forall (Pre10: 1 >= 1),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct ma_structure))) /\
+                (valid1 substruct) /\ (separation2 substruct substruct)),
+  forall (result: pointer),
   forall (alloc0: alloc_table),
-  forall (substruct_0: pointer),
-  forall (Post9: (valid alloc0 substruct_0) /\ (offset substruct_0) = 0 /\
-                 (block_length alloc0 substruct_0) = 1 /\
-                 (valid_range alloc0 substruct_0 0 (1 - 1)) /\
-                 (fresh alloc substruct_0) /\
-                 (on_stack alloc0 substruct_0) /\
-                 (alloc_stack substruct_0 alloc alloc0)),
-  forall (Pre9: (valid alloc0 substruct_0)),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
   forall (fst0: ((memory) Z)),
-  forall (Post13: fst0 = (upd fst substruct_0 0)),
-  forall (Pre8: (valid alloc0 ma_structure)),
-  forall (caduceus_1: pointer),
-  forall (Post6: caduceus_1 = (acc substruct ma_structure)),
-  forall (Pre7: (valid alloc0 substruct_0)),
-  forall (aux_1: Z),
-  forall (Post5: aux_1 = (acc fst0 substruct_0)),
-  (valid alloc0 caduceus_1).
+  forall (HW_3: fst0 = (upd fst result 0)),
+  (valid alloc0 ma_structure).
 Proof.
 intuition.
 subst; apply alloc_stack_valid with substruct_0 alloc; auto.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 762-811 *)
-Lemma f2_impl_po_4 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_4 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
-  forall (fst: ((memory) Z)),
   forall (substruct: ((memory) pointer)),
-  forall (Pre11: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                 (valid alloc (acc substruct ma_structure))) /\
-                 (valid1 substruct) /\ (separation2 substruct substruct)),
-  forall (Pre10: 1 >= 1),
-  forall (alloc0: alloc_table),
-  forall (substruct_0: pointer),
-  forall (Post9: (valid alloc0 substruct_0) /\ (offset substruct_0) = 0 /\
-                 (block_length alloc0 substruct_0) = 1 /\
-                 (valid_range alloc0 substruct_0 0 (1 - 1)) /\
-                 (fresh alloc substruct_0) /\
-                 (on_stack alloc0 substruct_0) /\
-                 (alloc_stack substruct_0 alloc alloc0)),
-  forall (Pre9: (valid alloc0 substruct_0)),
-  forall (fst0: ((memory) Z)),
-  forall (Post13: fst0 = (upd fst substruct_0 0)),
-  forall (Pre8: (valid alloc0 ma_structure)),
-  forall (caduceus_1: pointer),
-  forall (Post6: caduceus_1 = (acc substruct ma_structure)),
-  forall (Pre7: (valid alloc0 substruct_0)),
-  forall (aux_1: Z),
-  forall (Post5: aux_1 = (acc fst0 substruct_0)),
-  forall (Pre5: (valid alloc0 caduceus_1)),
-  forall (fst1: ((memory) Z)),
-  forall (Post17: fst1 = (upd fst0 caduceus_1 aux_1)),
-  (not_assigns alloc fst fst1 (pset_singleton (acc substruct ma_structure))).
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct ma_structure))) /\
+                (valid1 substruct) /\ (separation2 substruct substruct)),
+  1 >= 1.
 Proof.
 intros.
 unfold not_assigns.
@@ -148,72 +133,63 @@ Save.
 
 
 
-(* Why obligation from file "why/clash.why", characters 1059-1082 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
-  forall (Test2: x = 0),
-  forall (y_0_1: Z),
-  forall (Post4: y_0_1 = 1),
-  forall (result1: Z),
-  forall (Post5: result1 = y_0_1),
-  (* File \"clash.c\", line 12, characters 13-62 *)
-  (((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2))).
+  forall (HW_1: x = 0),
+  forall (y_0: Z),
+  forall (HW_3: y_0 = 1),
+  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-58 *)
+  (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1142-1165 *)
-Lemma f_impl_po_2 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (x: Z),
-  forall (Test1: x <> 0),
-  forall (y_0_1: Z),
-  forall (Post1: y_0_1 = 2),
-  forall (result1: Z),
-  forall (Post2: result1 = y_0_1),
-  (* File \"clash.c\", line 12, characters 13-62 *)
-  (((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2))).
+  forall (HW_4: x <> 0),
+  forall (y_0: Z),
+  forall (HW_6: y_0 = 2),
+  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-58 *)
+  (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1430-1453 *)
-Lemma g_impl_po_1 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_1 : 
   forall (y: Z),
-  forall (y_0_1: Z),
-  forall (Post1: y_0_1 = 0),
-  forall (result0: Z),
-  forall (Post2: result0 = y_0_1),
-  (* File \"clash.c\", line 5, characters 13-41 *) (result0 = 0 /\ y = y).
+  forall (y_0: Z),
+  forall (HW_2: y_0 = 0),
+  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-37 *)
+  (y_0 = 0 /\ y = y).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1781-1804 *)
-Lemma h_impl_po_1 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_1 : 
   forall (x: Z),
-  forall (y_0_1: Z),
-  forall (Post1: y_0_1 = 2),
-  forall (Test2: x = 0),
-  forall (y_1_1: Z),
-  forall (Post3: y_1_1 = 1),
-  forall (result2: Z),
-  forall (Post4: result2 = y_1_1),
-  (* File \"clash.c\", line 27, characters 13-65 *)
-  (((x = 0 -> result2 = 1)) /\ ((x <> 0 -> result2 = 2))).
+  forall (y_0: Z),
+  forall (HW_2: y_0 = 2),
+  forall (HW_3: x = 0),
+  forall (y_1: Z),
+  forall (HW_5: y_1 = 1),
+  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-61 *)
+  (((x = 0 -> y_1 = 1)) /\ ((x <> 0 -> y_1 = 2))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1823-1824 *)
-Lemma h_impl_po_2 : 
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_2 : 
   forall (x: Z),
-  forall (y_0_1: Z),
-  forall (Post1: y_0_1 = 2),
-  forall (Test1: x <> 0),
-  forall (result1: Z),
-  forall (Post2: result1 = y_0_1),
-  (* File \"clash.c\", line 27, characters 13-65 *)
-  (((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2))).
+  forall (y_0: Z),
+  forall (HW_2: y_0 = 2),
+  forall (HW_6: x <> 0),
+  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-61 *)
+  (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
 Save.

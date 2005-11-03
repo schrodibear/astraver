@@ -3,6 +3,6 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_int_int  (x:pointer) (t:pointer)
+(*Why predicate*) Definition separation_int_int  (t:pointer) (x:pointer)
   := ~((base_addr t) = (base_addr x)).
 

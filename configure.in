@@ -60,8 +60,6 @@ echo "ocaml library path is $OCAMLLIB"
 case $OCAMLVERSION in
   0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*|3.07*)
         AC_MSG_ERROR(You need Objective 3.08 or later);;
-  3.07*)
-	OCAMLV=307;;
   3.08.2)
 	OCAMLV=3082;;
   3.08*)
@@ -138,19 +136,19 @@ fi
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
-# camlp4 
-AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
-if test "$CAMLP4O" = no ; then
-	AC_MSG_ERROR(Cannot find camlp4o.)
-fi
-CAMLP4LIB=`camlp4o -where`
-CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
-AC_MSG_CHECKING(camlp4 version)
-if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
-    AC_MSG_ERROR(differs from ocaml version)
-else
-    AC_MSG_RESULT(ok)
-fi
+#  # camlp4 
+#  AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
+#  if test "$CAMLP4O" = no ; then
+#  	AC_MSG_ERROR(Cannot find camlp4o.)
+#  fi
+#  CAMLP4LIB=`camlp4o -where`
+#  CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
+#  AC_MSG_CHECKING(camlp4 version)
+#  if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
+#      AC_MSG_ERROR(differs from ocaml version)
+#  else
+#      AC_MSG_RESULT(ok)
+#  fi
 
 #  AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
 #  if test "CAMLP4OOPT" != no ; then
@@ -251,8 +249,8 @@ AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
-AC_SUBST(CAMLP4O)
-AC_SUBST(CAMLP4LIB)
+# AC_SUBST(CAMLP4O)
+# AC_SUBST(CAMLP4LIB)
 
 AC_SUBST(COQ)
 AC_SUBST(COQC7)

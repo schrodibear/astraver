@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.42 2005-06-22 06:53:57 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.43 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -48,7 +48,7 @@ val wp_only : bool
 val black : bool
 val white : bool
 val wbb : bool
-val split : bool
+val lvlmax : int
 val all_vc : bool
 
 (*s Prover options *)
@@ -89,3 +89,8 @@ val files : string list
 (*s GUI? *)
 
 val gui : bool ref
+
+val prelude : bool
+val prelude_file : string
+
+

@@ -7,7 +7,7 @@
 
 parameter x : int ref
 
-let p = 
+let p () = 
   { x >= 0 }
   init:
   while !x > 0 do 

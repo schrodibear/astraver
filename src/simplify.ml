@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.35 2005-07-15 08:07:05 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.36 2005-11-03 14:11:37 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -125,15 +125,15 @@ and print_terms fmt tl =
   print_list space print_term fmt tl
 
 let external_type = function
-  | PTexternal _ | PTarray (PTexternal _) -> true
+  | PTexternal _ -> true
   | _ -> false
 
 let has_type ty fmt id = match ty with
-  | PTexternal(_, ty) ->
-      fprintf fmt "(EQ (IS%a %a) |@@true|)" Ident.print ty Ident.print id
-  | PTarray (PTexternal(_,ty)) ->
+  | PTexternal([PTexternal (_,ty)], id) when id == farray ->
       fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
 	Ident.print ty Ident.print id
+  | PTexternal(_, ty) ->
+      fprintf fmt "(EQ (IS%a %a) |@@true|)" Ident.print ty Ident.print id
   | _ -> 
       assert false
 
@@ -142,7 +142,7 @@ let rec print_predicate pos fmt p =
   match p with
   | Ptrue ->
       fprintf fmt "TRUE"
-  | Pvar id when id == default_post ->
+  | Pvar id when id == Ident.default_post ->
       fprintf fmt "TRUE"
   | Pfalse ->
       fprintf fmt "FALSE"
@@ -227,7 +227,7 @@ let print_sequent fmt (hyps,concl) =
   print_seq fmt hyps
 
 let print_obligation fmt (loc, o, s) = 
-  fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation loc;
+  fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
   fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s
 
 let push_foralls p =

@@ -17,8 +17,9 @@
     of characters, [w1] of size [n1] and [w2] of size [n2]. *)
 
 parameter n1 : int
-
 parameter n2 : int
+
+type A
 
 parameter w1 : A array
 parameter w2 : A array
@@ -37,8 +38,8 @@ external parameter test_char : a:A -> b:A -> {} bool { if result then a=b else n
 
 external parameter Zmin : int -> int -> int
 
-external logic min_suffix : A array, A array, int, int, int -> prop
-external logic word_of_array : int, A array -> word
+external logic min_suffix : A farray, A farray, int, int, int -> prop
+external logic word_of_array : int, A farray -> word
 external logic min_dist : word, word, int -> prop
 
 (*s The program. *)

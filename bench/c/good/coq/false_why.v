@@ -3,38 +3,43 @@
 
 Require Export false_spec_why.
 
-(* Why obligation from file "why/false.why", characters 40-134 *)
+(* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false0_impl_po_1 : 
-  forall (result: unit),
-  forall (Post1: result = tt),
-  (* File \"false.c\", line 16, characters 13-19 *) False.
+  (* File \"false.c819618234.c1069824147.i\", line 0, characters 9-15 *)
+  False.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/false.why", characters 260-316 *)
+(* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (y: ((memory) pointer)),
   forall (z: pointer),
-  forall (Pre5: (valid1_range y 5) /\ (valid1 y)),
+  forall (HW_1: (valid1_range y 5) /\ (valid1 y)),
+  forall (result: pointer),
+  forall (HW_2: result = (acc y z)),
+  forall (result0: pointer),
+  forall (HW_3: result0 = (shift result 5)),
+  (valid alloc result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/false.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma false1_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (y: ((memory) pointer)),
+  forall (z: pointer),
+  forall (HW_1: (valid1_range y 5) /\ (valid1 y)),
   (valid alloc z).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/false.why", characters 324-351 *)
-(*Why goal*) Lemma false1_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (y: ((memory) pointer)),
-  forall (z: pointer),
-  forall (Pre5: (valid1_range y 5) /\ (valid1 y)),
-  forall (Pre4: (valid alloc z)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift (acc y z) 5)),
-  (valid alloc caduceus_2).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -50,32 +55,27 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/false.why", characters 574-601 *)
+(* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x_0: pointer),
-  forall (Pre4: (valid_range alloc x_0 0 3)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift x_0 (Zopp 1))),
-  (valid alloc caduceus_2).
+  forall (HW_1: (valid_range alloc x_0 0 3)),
+  forall (result: pointer),
+  forall (HW_2: result = (shift x_0 (Zopp 1))),
+  (valid alloc result).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/false.why", characters 760-787 *)
+(* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (y_0: pointer),
-  forall (Pre4: (valid_range alloc y_0 0 4)),
-  forall (caduceus_1: pointer),
-  forall (Post3: caduceus_1 = (shift y_0 5)),
-  (valid alloc caduceus_1).
+  forall (HW_1: (valid_range alloc y_0 0 4)),
+  forall (result: pointer),
+  forall (HW_2: result = (shift y_0 5)),
+  (valid alloc result).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

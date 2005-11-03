@@ -13,7 +13,7 @@ external parameter is_odd : n:int -> { } bool { if result then Zodd(n) else Zeve
 
 external logic Zpower : int,int -> int
 
-let power1 =
+let power1 () =
   { n >= 0 }
   init:
   begin

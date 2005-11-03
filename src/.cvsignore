@@ -10,3 +10,5 @@ linenum.ml
 float_lexer.ml
 compat.ml
 *.annot
+lexer.ml
+parser.mli

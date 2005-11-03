@@ -3,38 +3,47 @@
 
 Require Export call_spec_why.
 
-(* Why obligation from file "why/call.why", characters 202-248 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "why/call.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (y: Z),
   forall (ddd: Z),
   forall (z: Z),
-  forall (Pre1: (* File \"call.c\", line 11, characters 14-22 *) y = ddd),
+  forall (HW_1: (* File \"call.c819618234.c1069824147.i\", line 0, characters 10-18 *)
+                y = ddd),
   forall (u: Z),
-  forall (Post4: u = z),
-  forall (caduceus: Z),
-  forall (Post3: caduceus = u),
-  forall (u1: Z),
-  forall (Post1: u1 = (caduceus + 1)),
-  forall (result0: Z),
-  forall (Post2: result0 = caduceus),
-  (* File \"call.c\", line 11, characters 48-60 *) result0 = z.
+  forall (HW_2: u = (z + 1)),
+  (* File \"call.c819618234.c\", line 0, characters 8-20 *) z = z.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/call.why", characters 442-476 *)
-Lemma main_impl_po_1 : 
+(* Why obligation from file "why/call.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x = 0),
   forall (x0: Z),
-  forall (Post1: x0 = 0),
+  forall (HW_2: x0 = (x + 1)),
+  forall (result: Z),
+  forall (HW_3: (* File \"call.c819618234.c\", line 0, characters 8-20 *)
+                result = 2),
   forall (x1: Z),
-  forall (Post6: x1 = (x0 + 1)),
-  forall (result1: Z),
-  forall (Post7: result1 = x1),
-  (forall (result:Z),
-   ((* File \"call.c\", line 11, characters 48-60 *) result = 2 ->
-    (* File \"call.c\", line 18, characters 13-19 *) result = 2)) /\
-  (* File \"call.c\", line 11, characters 14-22 *) 1 = result1.
+  forall (HW_4: x1 = result),
+  (* File \"call.c819618234.c1069824147.i\", line 0, characters 9-15 *) x1 =
+  2.
 Proof.
 intuition.
+Save.
+
+(* Why obligation from file "why/call.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_2 : 
+  forall (x: Z),
+  forall (HW_1: x = 0),
+  forall (x0: Z),
+  forall (HW_2: x0 = (x + 1)),
+  (* File \"call.c819618234.c1069824147.i\", line 0, characters 10-18 *) 1 =
+  x0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

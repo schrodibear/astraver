@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.12 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.13 2005-11-03 14:11:35 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -59,3 +59,20 @@ type 'a cc_term =
   | CC_type of cc_type
   | CC_any of cc_type
 
+(* Proofs *)
+
+type proof = 
+  | Lemma of string * Ident.t list
+  | True
+  | Reflexivity of term
+  | Assumption of Ident.t
+  | Proj1 of Ident.t
+  | Proj2 of Ident.t
+  | Conjunction of Ident.t * Ident.t
+  | WfZwf of term
+  | Loop_variant_1 of Ident.t * Ident.t
+  | Absurd of Ident.t
+  | ProofTerm of proof cc_term
+  | ShouldBeAWp
+
+type proof_term = proof cc_term

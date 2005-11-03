@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.83 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.84 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -135,6 +135,10 @@ let push_function id p = match prover () with
   | SmtLib -> () (* Smtlib.push_function id p *)
   | Dispatcher -> Dispatcher.push_function id p
 
+let push_type id vl = match prover () with
+  | Coq _ -> Coq.push_type id vl
+  | _ -> () (*TODO*)
+
 let output fwe = 
   if wol then begin
     let cout = open_out (fwe ^ ".wol") in
@@ -168,50 +172,61 @@ let interp_program id p =
   if_debug eprintf "* typing with effects@.";
   let env = Env.empty in
   let p = Typing.typef Label.empty env p in
-  let c = p.info.kappa in
+  if effect p <> Effect.bottom then
+    raise_located ploc (GlobalWithEffects (id, effect p));
+  let c = type_c_of_typing_info [] p.info in
   let c = 
-    { c with c_post = optpost_app (change_label p.info.label "") c.c_post }
+    { c with c_post = optpost_app (change_label p.info.t_label "") c.c_post }
   in
   let v = c.c_result_type in
   check_for_not_mutable ploc v;
   Env.add_global id v None;
   print_if_debug print_type_c c;
-  print_if_debug print_prog p;
+  print_if_debug print_expr p;
   if type_only then raise Exit;
 
-  let p = if black then begin
-    if_debug eprintf "* purification@.";
-    let p = Annot.purify p in
-    print_if_debug print_prog p;
-    p
-  end else 
-    p
-  in
+  (***
+  if_debug eprintf "* purification@.";
+  let p = Purify.purify p in
+  print_if_debug print_expr p;
+  ***)
 
   if_debug eprintf "* weakest preconditions@.";
   let p,wp = Wp.wp p in
   if !Options.gui then typed_progs := p :: !typed_progs;
   print_if_debug print_wp wp;
-  print_if_debug print_prog p;
+  (* print_if_debug print_expr p; *)
   if wp_only then raise Exit;
 
   if ocaml then begin Ocaml.push_program id p; raise Exit end;
 
+  (***
   if_debug eprintf "* functionalization@.";
   let ren = initial_renaming env in
-  let cc = Mlize.trans p ren in
+  let cc = Mlize.trad p ren in
   if_debug_3 eprintf "  %a@\n  -----@." print_cc_term cc;
   let cc = Red.red cc in
   print_if_debug print_cc_term cc;
+  ***)
 
   if_debug eprintf "* generating obligations@.";
   let ids = Ident.string id in
-  let ol,v = Vcg.vcg ids cc in
-  let ol = if fpi then Fpi.split ol else ol in
-  push_obligations ol;
+  (*let ol,v = Vcg.vcg ids cc in*)
+  begin match wp with
+    | None -> 
+	if_debug eprintf "no WP => no obligation@."
+    | Some wp -> 
+	let ol,pr = Vcg.vcg_from_wp ids wp in
+	let ol = if fpi then Fpi.split ol else ol in
+	push_obligations ol;
+	push_validation (ids ^ "_wp") (TTpred wp.a_value) (CC_hole pr)
+  end;
+
+  (*** TODO
   let tt = Monad.trad_type_c ren env c in
   push_validation ids tt v;
   if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
+  ***)
   flush stderr
 
 (*s Processing of a program. *)
@@ -223,7 +238,7 @@ let add_external loc v id =
 let add_parameter v tv id =
   push_parameter (Ident.string id) v tv
 
-let interp_decl d = 
+let interp_decl ?(prelude=false) d = 
   let env = Env.empty in
   let lab = Label.empty in
   let lenv = Env.logical_env env in
@@ -286,30 +301,54 @@ let interp_decl d =
       if (generalize_predicate p).scheme_vars <> [] then 
 	raise_located loc PolymorphicGoal;
       push_obligations [(loc, Ident.string id, ([], p))]
+  | TypeDecl (loc, ext, vl, id) ->
+      Env.add_type loc vl id;
+      if not ext then push_type (Ident.string id) vl
+
+(*s Prelude *)
+
+let load_prelude () =
+  try
+    let c = open_in prelude_file in
+    let p = Lexer.parse_file (Lexing.from_channel c) in
+    List.iter (interp_decl ~prelude:true) p;
+    close_in c;
+    (* Monomorph requires the prelude to be analyzed *)
+    begin match prover () with
+      | Pvs | CVCLite ->
+	  let prover_prelude = Filename.temp_file "why_prelude" "" in
+	  (*eprintf "prover prelude in %s@." prover_prelude;*)
+	  output prover_prelude
+      | _ ->
+	  ()
+    end
+  with e ->
+    eprintf "anomaly while reading prelude: %a@." Report.explain_exception e;
+    exit 1
 
 (*s Processing of a channel / a file. *)
 
-let ml_parser c = 
-   let st = Stream.of_channel c in
-   Grammar.Entry.parse Parser.decls st
+let why_parser c = 
+   let lb = Lexing.from_channel c in
+   Lexer.parse_file lb
  
 let deal_channel parsef cin =
   let p = parsef cin in
-  if parse_only then exit 0;
-  List.iter interp_decl p
+  if not parse_only then List.iter interp_decl p
 
 let deal_file f =
   Loc.set_file f;
   reset ();
   let cin = open_in f in 
-  deal_channel ml_parser cin;
+  deal_channel why_parser cin;
   close_in cin;
   let fwe = Filename.chop_extension f in
   output (Options.file fwe)
 
 let main () =
+  if prelude then load_prelude ();
   if files = [] then begin
-    deal_channel ml_parser stdin;
+    deal_channel why_parser stdin;
     output "Output" 
   end else
     List.iter deal_file files

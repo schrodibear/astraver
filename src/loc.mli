@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.10 2005-06-16 07:30:34 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.11 2005-11-03 14:11:36 filliatr Exp $ i*)
 
 open Format
 
@@ -23,8 +23,6 @@ open Format
 type t = int * int
 
 val dummy : t
-
-val join : t -> t -> t
 
 val set_file : string -> unit
 val get_file : unit -> string (* for C's __FILE__ *)
@@ -42,4 +40,16 @@ val string : t -> string
 val report : formatter -> t -> unit
 val report_obligation : formatter -> t -> unit
 
+(* Lexing positions *)
+
+type position = Lexing.position * Lexing.position
+
+val dummy_position : position
+
+val report_position : formatter -> position -> unit
+val report_obligation_position : formatter -> position -> unit
+
+(* for both type [t] and [position] *)
+
+val join : 'a * 'b -> 'a * 'b -> 'a * 'b
 
