@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.16 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.17 2005-11-04 10:39:55 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -23,7 +23,6 @@ open Options
 open Ident
 open Logic
 open Misc
-open Util
 open Types
 open Env
 open Ast
@@ -48,11 +47,18 @@ let post print_assertion fmt q =
 
 let identifiers = print_list comma Ident.print
 
+let print_predicate = Util.print_predicate
+let print_assertion = Util.print_assertion
+
 let rec typev fmt = function
+  | PureType PTreal -> 
+      fprintf fmt "float"
   | PureType pt -> 
-      print_pure_type fmt pt
+      Util.print_pure_type fmt pt
+  | Ref (PTexternal ([t], id)) when id == farray  -> 
+      fprintf fmt "(%a array)" Util.print_pure_type t
   | Ref v -> 
-      fprintf fmt "(%a ref)" print_pure_type v
+      fprintf fmt "(%a ref)" Util.print_pure_type v
   | Arrow (bl, c) -> 
       fprintf fmt "%a ->@ %a" (print_list arrow binder_type) bl typec c
 
@@ -85,7 +91,7 @@ let constant fmt = function
 
 (*s logical expressions *)
 
-let caml_infix id = is_arith_binop id || is_relation id
+let caml_infix id = is_arith_binop id || is_relation_ id
 
 let infix id = 
   if id == t_add_int then "+" 
@@ -93,17 +99,17 @@ let infix id =
   else if id == t_mul_int then "*"
   else if id == t_div_int then "/"
   else if id == t_mod_int then "mod"
-  else if id == t_add_int then "+." 
-  else if id == t_sub_int then "-." 
-  else if id == t_mul_int then "*."
-  else if id == t_div_int then "/."
-  else if is_eq id then "="
-  else if is_neq id then "<>"
-  else if id == t_lt_int || id == t_lt_real then "<"
-  else if id == t_le_int || id == t_le_real then "<="
-  else if id == t_gt_int || id == t_gt_real then ">"
-  else if id == t_ge_int || id == t_ge_real then ">="
-  else assert false
+  else if id == t_add_real then "+." 
+  else if id == t_sub_real then "-." 
+  else if id == t_mul_real then "*."
+  else if id == t_div_real then "/."
+  else if is_eq id || is_eq_ id then "="
+  else if is_neq id || is_neq_ id then "<>"
+  else if id == t_lt_int_ || id == t_lt_real_ then "<"
+  else if id == t_le_int_ || id == t_le_real_ then "<="
+  else if id == t_gt_int_ || id == t_gt_real_ then ">"
+  else if id == t_ge_int_ || id == t_ge_real_ then ">="
+  else begin eprintf "infix id = %a@." Ident.print id; assert false end
 
 let prefix fmt id = fprintf fmt "( %s )" (infix id)
 
@@ -150,7 +156,7 @@ and exprd fmt = function
   | Var id ->
       Ident.print fmt id
   | Seq (e1, e2) ->
-      fprintf fmt "@[<hv>begin@;<1 2>%a@ %a end@]" expr e1 expr e2
+      fprintf fmt "@[<hv>begin@;<1 2>%a;@ %a end@]" expr e1 expr e2
   | Loop (inv, var, e2) ->
       fprintf fmt "@[<hv>while true do@;<1 2>%a@ done@]" expr e2
   | If (e1, e2, e3) ->
@@ -194,12 +200,12 @@ and exprd fmt = function
       assert false (*TODO*)
   | Post (e, q, _) ->
       let q = post_app a_value q in
-      fprintf fmt "@[(%a@ %a)@]" print_expr e (post print_predicate) q
+      fprintf fmt "@[(%a@ %a)@]" expr e (post print_predicate) q
   | Label (l, e) -> 
-      fprintf fmt "@[(* label %s *)@ %a@]" l print_expr e
+      fprintf fmt "@[(* label %s *)@ %a@]" l expr e
 
 and expr_pre fmt (p,e) =
-  fprintf fmt "@[%a %a@]" (print_list newline print_assertion) p expr e
+  fprintf fmt "@[%a@ %a@]" (pre print_assertion) p expr e
 
 and handler fmt = function
   | (id, None), e -> 

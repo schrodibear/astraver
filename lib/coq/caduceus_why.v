@@ -45,6 +45,45 @@ Admitted.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (*Why type*) Parameter pointer: Set.
 
 (*Why type*) Parameter addr: Set.
@@ -202,6 +241,19 @@ Admitted.
     ((base_addr p1) = (base_addr p2) -> (sub_pointer p1 p2) =
      ((offset p1) - (offset p2))))).
 Admitted.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

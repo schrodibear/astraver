@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.53 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.54 2005-11-04 10:39:55 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -220,24 +220,46 @@ let is_int_comparison id =
   id == t_eq_int || id == t_neq_int ||
   id == t_lt_int || id == t_le_int || id == t_gt_int || id == t_ge_int 
 
+let is_int_comparison_ id =
+  id == t_eq_int_ || id == t_neq_int_ ||
+  id == t_lt_int_ || id == t_le_int_ || id == t_gt_int_ || id == t_ge_int_ 
+
 let is_real_comparison id = 
   id == t_eq_real || id == t_neq_real ||
   id == t_lt_real || id == t_le_real || id == t_gt_real || id == t_ge_real 
 
+let is_real_comparison_ id = 
+  id == t_eq_real_ || id == t_neq_real_ ||
+  id == t_lt_real_ || id == t_le_real_ || id == t_gt_real_ || id == t_ge_real_ 
+
 let is_bool_comparison id = id == t_eq_bool || id == t_neq_bool
+let is_bool_comparison_ id = id == t_eq_bool_ || id == t_neq_bool_
+
 let is_unit_comparison id = id == t_eq_unit || id == t_neq_unit
+let is_unit_comparison_ id = id == t_eq_unit_ || id == t_neq_unit_
 
 let is_eq id = 
-  id == t_eq || id == t_eq_int || id == t_eq_real || 
-  id == t_eq_bool || id == t_eq_unit
+  id == t_eq || 
+  id == t_eq_int || id == t_eq_real || id == t_eq_bool || id == t_eq_unit
+
+let is_eq_ id = 
+  id == t_eq_int_ || id == t_eq_real_ || id == t_eq_bool_ || id == t_eq_unit_
 
 let is_neq id = 
   id == t_neq || id == t_neq_int || id == t_neq_real || 
   id == t_neq_bool || id == t_neq_unit
 
+let is_neq_ id = 
+  id == t_neq_int_ || id == t_neq_real_ || 
+  id == t_neq_bool_ || id == t_neq_unit_
+
 let is_relation id = 
   is_comparison id || is_int_comparison id || is_real_comparison id ||
   is_bool_comparison id || is_unit_comparison id
+
+let is_relation_ id = 
+  is_comparison id || is_int_comparison_ id || is_real_comparison_ id ||
+  is_bool_comparison_ id || is_unit_comparison_ id
 
 let is_int_arith_binop id =
   id == t_add_int || id == t_sub_int || id == t_mul_int || id == t_div_int ||

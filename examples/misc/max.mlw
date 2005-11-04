@@ -14,7 +14,7 @@ parameter swap :
       a[i] = a@[j] and a[j] = a@[i] and
       forall k:int. 0 <= k < l -> k <> i -> k <> j -> a[k] = a@[k] }
 
-let pgm_max_end =
+let pgm_max_end () =
   { array_length(a) = l }
   begin
     x := 0;

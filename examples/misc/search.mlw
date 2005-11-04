@@ -9,7 +9,7 @@ parameter t : int array
 
 exception Found of int
 
-let search1 = 
+let search1 () = 
   {} 
   try
     let i = ref 0 in begin
@@ -32,7 +32,7 @@ let search1 =
 
 exception Break
 
-let search2 = 
+let search2 () = 
   {} 
   let i = ref 0 in 
   try
@@ -54,7 +54,7 @@ let search2 =
 
 (* 3. With a recursive function *)
 
-let search3 =
+let search3 () =
   { 0 <= array_length(t) }
   (let rec search_rec (i:int) : int { variant array_length(t) - i } =
      { 0 <= i <= array_length(t) }

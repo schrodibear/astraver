@@ -7,221 +7,140 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; add1_po_1, Why obligation from file "peano.mlw", characters 272-300
+;; add1_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(FORALL (y)
+(FORALL (x) (IMPLIES (>= y 0) (AND (<= 0 y) (EQ x (+ x (- y y)))))))
+
+;; add1_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
+(FORALL (x0)
 (FORALL (z)
-(IMPLIES (EQ z y)
-(FORALL (Variant1)
-(FORALL (x0)
-(FORALL (z1)
-(IMPLIES (EQ Variant1 z1)
-(IMPLIES (AND (<= 0 z1) (EQ x0 (+ x (- y z1))))
-(IMPLIES (> z1 0)
+(IMPLIES (AND (<= 0 z) (EQ x0 (+ x (- y z))))
+(IMPLIES (> z 0)
 (FORALL (x1)
 (IMPLIES (EQ x1 (+ x0 1))
-(FORALL (z2)
-(IMPLIES (EQ z2 (- z1 1))
-(AND (AND (<= 0 z2) (EQ x1 (+ x (- y z2)))) (AND (<= 0 z1) (< z2 z1))))))))))))))))))
+(FORALL (z0)
+(IMPLIES (EQ z0 (- z 1))
+(AND (AND (<= 0 z0) (EQ x1 (+ x (- y z0)))) (AND (<= 0 z) (< z0 z))))))))))))))
 
-;; add1_po_2, Why obligation from file "peano.mlw", characters 178-305
+;; add1_po_3, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
+(FORALL (x0)
 (FORALL (z)
-(IMPLIES (EQ z y)
-(FORALL (Variant1)
-(FORALL (x0)
-(FORALL (z1)
-(IMPLIES (EQ Variant1 z1)
-(IMPLIES (AND (<= 0 z1) (EQ x0 (+ x (- y z1))))
-(IMPLIES (<= z1 0) (EQ x0 (+ x y)))))))))))))
+(IMPLIES (AND (<= 0 z) (EQ x0 (+ x (- y z))))
+(IMPLIES (<= z 0) (EQ x0 (+ x y)))))))))
 
-;; add1_po_3, Why obligation from file "peano.mlw", characters 211-246
+;; u1_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(FORALL (r) (IMPLIES (EQ r (+ 3 7)) (EQ r 10)))
+
+;; u1_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(>= 7 0)
+
+;; rec_add1_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
-(FORALL (z) (IMPLIES (EQ z y) (AND (<= 0 z) (EQ x (+ x (- y z)))))))))
-
-;; u1_po_1, Why obligation from file "peano.mlw", characters 367-390
-(FORALL (r)
-(IMPLIES (EQ r 3) (FORALL (result) (IMPLIES (EQ result 7) (>= 7 0)))))
-
-;; u1_po_2, Why obligation from file "peano.mlw", characters 367-390
-(FORALL (r)
-(IMPLIES (EQ r 3)
-(FORALL (result)
-(IMPLIES (EQ result 7)
-(IMPLIES (>= 7 0) (FORALL (r1) (IMPLIES (EQ r1 (+ r 7)) (EQ r1 10))))))))
-
-;; rec_add1_po_1, Why obligation from file "peano.mlw", characters 527-544
-(FORALL (y)
-(IMPLIES (>= y 0)
-(FORALL (Variant1)
-(FORALL (y0)
+(IMPLIES (< 0 y)
 (FORALL (x0)
-(IMPLIES (EQ Variant1 y0)
-(IMPLIES (>= y0 0)
-(IMPLIES (< 0 y0) (FORALL (x1) (IMPLIES (EQ x1 (+ x0 1)) (>= (- y0 1) 0)))))))))))
+(IMPLIES (EQ x0 (+ x 1))
+(FORALL (x1) (IMPLIES (EQ x1 (+ x0 (- y 1))) (EQ x1 (+ x y))))))))))
 
-;; rec_add1_po_2, Why obligation from file "peano.mlw", characters 480-566
+;; rec_add1_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
+(FORALL (x)
 (IMPLIES (>= y 0)
-(FORALL (Variant1)
-(FORALL (y0)
-(FORALL (x0)
-(IMPLIES (EQ Variant1 y0)
-(IMPLIES (>= y0 0)
-(IMPLIES (< 0 y0)
-(FORALL (x1)
-(IMPLIES (EQ x1 (+ x0 1))
-(IMPLIES (>= (- y0 1) 0)
-(FORALL (result1)
-(IMPLIES (EQ result1 (- y0 1))
-(IMPLIES (>= (- y0 1) 0) (AND (<= 0 Variant1) (< result1 Variant1))))))))))))))))
+(IMPLIES (< 0 y)
+(FORALL (x0) (IMPLIES (EQ x0 (+ x 1)) (AND (<= 0 y) (< (- y 1) y))))))))
 
-;; rec_add1_po_3, Why obligation from file "peano.mlw", characters 508-546
+;; rec_add1_po_3, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
+(FORALL (x)
 (IMPLIES (>= y 0)
-(FORALL (Variant1)
-(FORALL (y0)
-(FORALL (x0)
-(IMPLIES (EQ Variant1 y0)
-(IMPLIES (>= y0 0)
-(IMPLIES (< 0 y0)
-(FORALL (x1)
-(IMPLIES (EQ x1 (+ x0 1))
-(IMPLIES (>= (- y0 1) 0)
-(FORALL (x2) (IMPLIES (EQ x2 (+ x1 (- y0 1))) (EQ x2 (+ x0 y0)))))))))))))))
+(IMPLIES (< 0 y) (FORALL (x0) (IMPLIES (EQ x0 (+ x 1)) (>= (- y 1) 0)))))))
 
-;; rec_add1_po_4, Why obligation from file "peano.mlw", characters 546-546
+;; rec_add1_po_4, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
-(IMPLIES (>= y 0)
-(FORALL (Variant1)
-(FORALL (y0)
-(FORALL (x0)
-(IMPLIES (EQ Variant1 y0)
-(IMPLIES (>= y0 0)
-(IMPLIES (>= 0 y0)
-(FORALL (result0) (IMPLIES (EQ result0 tt) (EQ x0 (+ x0 y0))))))))))))
+(FORALL (x) (IMPLIES (>= y 0) (IMPLIES (>= 0 y) (EQ x (+ x y))))))
 
-;; u11_po_1, Why obligation from file "peano.mlw", characters 608-635
-(FORALL (r)
-(IMPLIES (EQ r 3) (FORALL (result) (IMPLIES (EQ result 7) (>= 7 0)))))
+;; u11_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(FORALL (r) (IMPLIES (EQ r (+ 3 7)) (EQ r 10)))
 
-;; u11_po_2, Why obligation from file "peano.mlw", characters 608-635
-(FORALL (r)
-(IMPLIES (EQ r 3)
-(FORALL (result)
-(IMPLIES (EQ result 7)
-(IMPLIES (>= 7 0) (FORALL (r1) (IMPLIES (EQ r1 (+ r 7)) (EQ r1 10))))))))
+;; u11_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(>= 7 0)
 
-;; mult1_po_1, Why obligation from file "peano.mlw", characters 933-946
+;; mult1_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (z)
-(IMPLIES (EQ z y)
-(FORALL (savex)
-(IMPLIES (EQ savex x)
 (FORALL (x0)
-(IMPLIES (EQ x0 0)
-(FORALL (Variant1)
-(FORALL (x1)
-(FORALL (z1)
-(IMPLIES (EQ Variant1 z1)
-(IMPLIES (AND (<= 0 z1) (EQ x1 (* x (- y z1))))
-(IMPLIES (> z1 0) (>= savex 0))))))))))))))))
+(IMPLIES (EQ x0 0) (LBLNEG |I| (AND (<= 0 y) (EQ x0 (* x (- y y))))))))))
 
-;; mult1_po_2, Why obligation from file "peano.mlw", characters 933-966
+;; mult1_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (z)
-(IMPLIES (EQ z y)
-(FORALL (savex)
-(IMPLIES (EQ savex x)
 (FORALL (x0)
 (IMPLIES (EQ x0 0)
-(FORALL (Variant1)
 (FORALL (x1)
-(FORALL (z1)
-(IMPLIES (EQ Variant1 z1)
-(IMPLIES (AND (<= 0 z1) (EQ x1 (* x (- y z1))))
-(IMPLIES (> z1 0)
-(IMPLIES (>= savex 0)
+(FORALL (z)
+(IMPLIES (LBLPOS |I| (AND (<= 0 z) (EQ x1 (* x (- y z)))))
+(IMPLIES (> z 0)
 (FORALL (x2)
-(IMPLIES (EQ x2 (+ x1 savex))
-(FORALL (z2)
-(IMPLIES (EQ z2 (- z1 1))
-(AND (AND (<= 0 z2) (EQ x2 (* x (- y z2)))) (AND (<= 0 z1) (< z2 z1)))))))))))))))))))))))
+(IMPLIES (EQ x2 (+ x1 x))
+(FORALL (z0)
+(IMPLIES (EQ z0 (- z 1))
+(AND (LBLNEG |I| (AND (<= 0 z0) (EQ x2 (* x (- y z0)))))
+(AND (<= 0 z) (< z0 z))))))))))))))))
 
-;; mult1_po_3, Why obligation from file "peano.mlw", characters 833-973
+;; mult1_po_3, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (z)
-(IMPLIES (EQ z y)
-(FORALL (savex)
-(IMPLIES (EQ savex x)
 (FORALL (x0)
 (IMPLIES (EQ x0 0)
-(FORALL (Variant1)
 (FORALL (x1)
-(FORALL (z1)
-(IMPLIES (EQ Variant1 z1)
-(IMPLIES (AND (<= 0 z1) (EQ x1 (* x (- y z1))))
-(IMPLIES (<= z1 0) (EQ x1 (* x y)))))))))))))))))
-
-;; mult1_po_4, Why obligation from file "peano.mlw", characters 868-903
-(FORALL (y)
-(FORALL (x)
-(IMPLIES (AND (>= x 0) (>= y 0))
 (FORALL (z)
-(IMPLIES (EQ z y)
-(FORALL (savex)
-(IMPLIES (EQ savex x)
-(FORALL (x0) (IMPLIES (EQ x0 0) (AND (<= 0 z) (EQ x0 (* x (- y z)))))))))))))
+(IMPLIES (LBLPOS |I| (AND (<= 0 z) (EQ x1 (* x (- y z)))))
+(IMPLIES (<= z 0) (EQ x1 (* x y)))))))))))
 
-;; u2_po_1, Why obligation from file "peano.mlw", characters 1042-1066
-(FORALL (r)
-(IMPLIES (EQ r 4)
-(FORALL (result) (IMPLIES (EQ result 6) (AND (>= r 0) (>= 6 0))))))
+;; u2_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(FORALL (r) (IMPLIES (EQ r (* 4 6)) (EQ r 24)))
 
-;; u2_po_2, Why obligation from file "peano.mlw", characters 1042-1066
-(FORALL (r)
-(IMPLIES (EQ r 4)
-(FORALL (result)
-(IMPLIES (EQ result 6)
-(IMPLIES (AND (>= r 0) (>= 6 0))
-(FORALL (r1) (IMPLIES (EQ r1 (* r 6)) (EQ r1 24))))))))
+;; u2_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(AND (>= 4 0) (>= 6 0))
 
-;; mult2_po_1, Why obligation from file "peano.mlw", characters 1330-1374
+;; mult2_po_1, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (Variant1)
-(FORALL (x0)
-(FORALL (y0)
-(IMPLIES (EQ Variant1 x0)
-(IMPLIES (AND (>= x0 0) (>= y0 0))
-(IMPLIES (NEQ x0 0)
-(AND (AND (AND (>= (- x0 1) 0) (>= y0 0)) (>= y0 0)) (>= y0 0)))))))))))
+(FORALL (a)
+(FORALL (b) (IMPLIES (>= a 0) (IMPLIES (EQ a 0) (EQ b (+ a b)))))))))
 
-;; mult2_po_2, Why obligation from file "peano.mlw", characters 1185-1390
+;; mult2_po_2, Why obligation from file "peano.mlw", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (Variant1)
-(FORALL (x0)
-(FORALL (y0)
-(IMPLIES (EQ Variant1 x0)
-(IMPLIES (AND (>= x0 0) (>= y0 0))
-(IMPLIES (IMPLIES (NEQ x0 0)
-         (AND (AND (AND (>= (- x0 1) 0) (>= y0 0)) (>= y0 0)) (>= y0 0)))
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (>= a 0)
+(IMPLIES (NEQ a 0)
 (FORALL (result)
-(IMPLIES (OR (AND (EQ x0 0) (EQ result 0))
-         (AND (NEQ x0 0) (EQ result (+ y0 (* (- x0 1) y0)))))
-(EQ result (* x0 y0)))))))))))))
+(IMPLIES (EQ result (+ (- a 1) (+ b 1))) (EQ result (+ a b)))))))))))
+
+;; mult2_po_3, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(IMPLIES (>= a 0) (IMPLIES (NEQ a 0) (AND (<= 0 a) (< (- a 1) a))))))))
+
+;; mult2_po_4, Why obligation from file "peano.mlw", line 0, characters 0-0:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a) (IMPLIES (>= a 0) (IMPLIES (NEQ a 0) (>= (- a 1) 0)))))))
 

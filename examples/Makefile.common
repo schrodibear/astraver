@@ -7,7 +7,7 @@ WHYOPTIONS=--coq-v8 --valid
 
 dp: simplify cvcl
 
-simplify: $(VO:_why.vo=_why.sx)
+simplify: $(VO:_valid.vo=_why.sx)
 	dp -timeout 10 $^
 
 cvcl: $(VO:_why.vo=_why.cvc)
