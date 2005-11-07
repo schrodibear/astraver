@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.42 2005-06-20 12:17:47 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.43 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -26,12 +26,11 @@ open Cast
 open Clogic
 open Int64
 
-(* Automatic invariants expressing validity of local/global variables *)
 
 let int_nconstant n = 
   { nterm_node = NTconstant (IntConstant n); 
-    nterm_loc = Loc.dummy;
-    nterm_type = c_int }
+    nterm_loc = Loc.dummy_position;
+    nterm_type = c_int;}
 
 let nzero = int_nconstant "0"
 
@@ -41,347 +40,6 @@ let eval_array_size e =
     nterm_loc = e.nexpr_loc;
     nterm_type = c_int }
 *)
-
-open Clogic
-
-let tpred t = match t.nterm_node with
-  | NTconstant (IntConstant c) -> 
-      let c = string_of_int (int_of_string c - 1) in
-      { t with nterm_node = NTconstant (IntConstant c) }
-  | _ ->
-      { t with nterm_node = NTbinop (t, Bsub, int_nconstant "1") }
-
-let make_and p1 p2 = match p1.npred_node, p2.npred_node with
-  | NPtrue, _ -> p2
-  | _, NPtrue -> p1
-  | _ -> { p1 with npred_node = NPand (p1, p2) }
-
-let dummy_pred p = { npred_node = p; npred_loc = Loc.dummy }
-let nprel (t1, r, t2) = dummy_pred (NPrel (t1, r, t2))
-let npand (p1, p2) = make_and p1 p2
-let npvalid t = dummy_pred (NPvalid t)
-let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
-let npfresh t = dummy_pred (NPfresh t)
-let nptrue = dummy_pred NPtrue
-let npapp (f, l) = dummy_pred (NPapp (f, l))
-
-let make_implies p1 p2 = match p2.npred_node with
-  | NPtrue -> { p1 with npred_node = NPtrue }
-  | _ -> { p1 with npred_node = NPimplies (p1, p2) }
-
-let make_forall q p = match p.npred_node with
-  | NPtrue -> { p with npred_node = NPtrue }
-  | _ -> { p with npred_node = NPforall (q, p) }
-
-let make_valid_range_from_0 t ts=
-  if ts = Int64.one
-  then
-    npvalid t
-  else
-    npvalid_range (t, nzero, int_nconstant (Int64.to_string (Int64.pred ts)))
-
-
-let fresh_index = 
-  let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
-
-
-let indirection loc ty t =
-  { nterm_node = NTstar t; 
-    nterm_loc = loc; 	   
-    nterm_type = ty}
-
-(*
-  [make_forall_range loc t b f] builds the formula
-
-   forall i, 0 <= i < b -> (f t i)
-
-  unless b is 1, in which case it produces (f t 0)
-
-*)
-let make_forall_range loc t b f =
-  if b = Int64.one
-  then f t nzero
-  else
-    let i = default_var_info (fresh_index ()) in
-    let vari = { nterm_node = NTvar i; 
-		 nterm_loc = loc;
-		 nterm_type = c_int } in
-    let ti = 
-      { nterm_node = NTbinop (t, Badd, vari); 
-	nterm_loc = loc;
-	nterm_type = t.nterm_type }
-    in
-    let ineq = npand (nprel (nzero, Le, vari),
-		      nprel (vari, Lt, int_nconstant (Int64.to_string b))) in
-    make_forall [c_int, i] (make_implies ineq (f ti vari))
-
-let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
-  let rec valid_fields valid_for_current n (t : Cast.nterm) = 
-    begin match tag_type_definition n with
-      | TTStructUnion (Tstruct (_), fl) ->
-	  List.fold_right 
-	    (fun f acc -> 
-	       let tf = 
-		 { nterm_node = NTarrow (t, f); 
-		   nterm_loc = loc;
-		   nterm_type = f.var_type } 
-	       in
-	       make_and acc (valid_for tf))
-	    fl 
-	    (if valid_for_current then 
-	       if fresh then npand(npvalid t, npfresh t) else npvalid t 
-	     else nptrue)
-      | TTIncomplete ->
-	  error loc ("`" ^ name ^ "' has incomplete type")
-      | _ ->
-	  assert false
-    end
-  and valid_for (t : Cast.nterm) = match t.nterm_type.Ctypes.ctype_node with
-    | Tstruct (n) ->
- 	valid_fields true n t
-    | Tarray (ty, None) ->
-	error loc ("array size missing in `" ^ name ^ "'")
-    | Tarray (ty, Some s) ->
-	let ts = Int64.to_string s in
-	let vrange = make_valid_range_from_0 t s in
-	let valid_form =
-	  make_and
-	    vrange
-	    (if fresh then npfresh t else nptrue)
-	in		   
-	begin match ty.Ctypes.ctype_node with
-	  | Tstruct n ->	      
-	      let vti t i = valid_fields false n t in
-	      make_and valid_form (make_forall_range loc t s vti)
-	  | _ ->
-	      make_and valid_form
-		(make_forall_range loc t s 
-		   (fun t i -> valid_for 
-			(indirection loc ty t)))
-	end
-    | _ -> 
-	nptrue
-  in
-  valid_for t
-
-
-let not_alias loc x y = 
-  let ba t = { nterm_node = NTbase_addr t; 
-	       nterm_loc = loc;
-	       nterm_type = c_addr } in 
-  nprel (ba x, Neq, ba y)
-
-
-let var_to_term loc v =
-  {
-    nterm_node = NTvar v; 
-    nterm_loc = loc;
-    nterm_type = v.var_type}
-
-let in_struct v1 v = 
-  match v1.nterm_node with
-    | NTstar(x) ->
-	{ nterm_node = NTarrow (x, v); 
-	  nterm_loc = v1.nterm_loc;
-	  nterm_type = v.var_type }
-    | _ -> 
-	{ nterm_node = NTarrow (v1, v); 
-	  nterm_loc = v1.nterm_loc;
-	  nterm_type = v.var_type }
-
-	
-let compatible_type ty1 ty2 = 
-  match ty1.Ctypes.ctype_node,ty2.Ctypes.ctype_node with
-    | Tfun _ , _  | Tenum _, _ | Tpointer _ , _ 
-    | Ctypes.Tvar _ , _ | Tvoid, _ | Tint _, _ | Tfloat _, _ -> false
-    | _, Tfun _ | _, Tenum _| _, Tpointer _  
-    | _, Ctypes.Tvar _ | _, Tvoid | _, Tint _ | _, Tfloat _ -> false
-    | _, _ -> true 
-
-let full_compatible_type ty1 ty2 = 
-  match ty1.Ctypes.ctype_node,ty2.Ctypes.ctype_node with
-    | Tfun _ , _  | Tenum _, _  
-    | Ctypes.Tvar _ , _ | Tvoid, _ | Tint _, _ | Tfloat _, _ -> false
-    | _, Tfun _ | _, Tenum _  
-    | _, Ctypes.Tvar _ | _, Tvoid | _, Tint _ | _, Tfloat _ -> false
-    | _, _ -> true
-
-(* assumes v2 is an array of objects of type ty *)
-let rec tab_struct mark loc v1 v2 s ty n n1 n2=
-  let l = begin
-    match  tag_type_definition n with
-      | TTStructUnion ((Tstruct _),fl) ->
-	  fl
-      | _ -> assert false
-  end in
-  if mark then
-    List.fold_left 
-      (fun p t -> 
-	 if  compatible_type t.var_type v2.nterm_type 
-	 then make_and p (not_alias loc v2 (in_struct v1 t))
-	 else p)
-      nptrue l
-  else
-  make_and (List.fold_left 
-	      (fun p t -> 
-		 if  compatible_type t.var_type v2.nterm_type 
-		 then make_and p (not_alias loc v2 (in_struct v1 t))
-		 else p)
-	      nptrue l)
-    (make_forall_range loc v2 s 
-       (fun t i -> 
-	  local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
-
-and local_separation  mark loc n1 v1 n2 v2 =
-  match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
-  with
-    | Tarray (ty, None), _ ->
-	error loc ("array size missing in `" ^ n1 ^ "'")
-    | _, Tarray (ty, None) ->
-	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n , Tarray (ty,Some s) -> 
-	tab_struct  mark loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> 
-	tab_struct mark loc v2 v1 s ty n n1 n2
-    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
-	make_and
-	  (if compatible_type v1.nterm_type v2.nterm_type
-	   then
-	     (not_alias loc v1 v2)
-	   else
-	     nptrue)
-	  (make_and 
-	     (make_forall_range loc v1 s1 
-		(fun t i -> local_separation mark loc (n1^"[i]") 
-		     (indirection loc ty1 t) n2 v2))
-	     (make_forall_range loc v2 s2  
-		(fun t i -> local_separation true loc n1 v1 (n2^"[j]")
-		     (indirection loc ty2 t))))
-     | _, _ -> nptrue
-
-    
-let separation loc v1 v2 =
-  local_separation false loc v1.var_name (var_to_term loc v1) 
-    v2.var_name (var_to_term loc v2)
-
-let rec full_tab_struct mark loc v1 v2 s ty n n1 n2=
-  let l = begin
-    match  tag_type_definition n with
-      | TTStructUnion ((Tstruct _),fl) ->
-	  fl
-      | _ -> assert false
-  end in
-  if mark then
-    List.fold_left 
-      (fun p t -> 
-	 if  full_compatible_type t.var_type v2.nterm_type 
-	 then make_and p (not_alias loc v2 (in_struct v1 t))
-	 else p)
-      nptrue l
-  else
-  make_and (List.fold_left 
-	      (fun p t -> 
-		 if  full_compatible_type t.var_type v2.nterm_type 
-		 then make_and p (not_alias loc v2 (in_struct v1 t))
-		 else p)
-	      nptrue l)
-    (make_forall_range loc v2 s 
-       (fun t i -> 
-	  full_local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
-
-and full_local_separation  mark loc n1 v1 n2 v2 =
-  match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
-  with
-    | Tarray (ty, None), _ ->
-	error loc ("array size missing in `" ^ n1 ^ "'")
-    | _, Tarray (ty, None) ->
-	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n , Tarray (ty,Some s) -> 
-	full_tab_struct  mark loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> 
-	full_tab_struct mark loc v2 v1 s ty n n1 n2
-    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
-	make_and
-	  (if full_compatible_type v1.nterm_type v2.nterm_type
-	   then
-	     (not_alias loc v1 v2)
-	   else
-	     nptrue)
-	  (make_and 
-	     (make_forall_range loc v1 s1 
-		(fun t i -> full_local_separation mark loc (n1^"[i]") 
-		     (indirection loc ty1 t) n2 v2))
-	     (make_forall_range loc v2 s2  
-		(fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
-		     (indirection loc ty2 t))))
-    | Tpointer ty1 , Tpointer ty2 ->
-	if full_compatible_type v1.nterm_type v2.nterm_type
-	then
-	  (not_alias loc v1 v2)
-	else
-	  nptrue
-    | Tarray (ty2,Some s2) ,  Tpointer ty1
-    | Tpointer ty1, Tarray (ty2,Some s2) ->
-	make_and
-	  (if full_compatible_type v1.nterm_type v2.nterm_type
-	   then
-	     (not_alias loc v1 v2)
-	   else
-	     nptrue)
-	  (make_forall_range loc v2 s2  
-	     (fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
-		(indirection loc ty2 t)))
-    | Tstruct n, Tpointer ty  ->
-	 let l = begin
-	   match  tag_type_definition n with
-	     | TTStructUnion ((Tstruct _),fl) ->
-		 fl
-	     | _ -> assert false
-	 end in 
-	 (List.fold_left 
-	    (fun p t -> 
-	       make_and p (full_local_separation mark loc n2 v2 n1 
-			     (in_struct v1 t)))
-	    nptrue l)
-    |  Tpointer ty, Tstruct n ->
-	 let l = begin
-	   match  tag_type_definition n with
-	     | TTStructUnion ((Tstruct _),fl) ->
-		 fl
-	     | _ -> assert false
-	 end in 
-	 (List.fold_left 
-	    (fun p t -> 
-	       make_and p (full_local_separation mark loc n1 v1 n2 
-			     (in_struct v2 t)))
-	    nptrue l)
-    | Tstruct n1, Tstruct n2 ->
-	let l2 = begin
-	   match  tag_type_definition n2 with
-	     | TTStructUnion ((Tstruct _),fl) ->
-		 fl
-	     | _ -> assert false
-	 end in	
-	let l1 = begin
-	   match  tag_type_definition n1 with
-	     | TTStructUnion ((Tstruct _),fl) ->
-		 fl
-	     | _ -> assert false
-	end in
-	(List.fold_left 
-	    (fun p1 t1 ->
-	       (List.fold_left 
-		  (fun p2 t2 ->
-		     make_and p2 (full_local_separation mark loc n1 
-				    (in_struct v1 t1) 
-				    n2  (in_struct v2 t2)))
-		  p1 l2))
-		 nptrue l1)
-    | _, _ -> nptrue
-
-let fullseparation loc v1 v2 =
-  full_local_separation false loc v1.var_name (var_to_term loc v1) 
-    v2.var_name (var_to_term loc v2)
 
 
 let noption f o =
@@ -540,14 +198,16 @@ let rec term_node loc t =
       let t1 = term t1 and t2 = term t2 in
       NTstar { nterm_node = NTbinop(t1, Clogic.Badd, t2);
 	       nterm_loc = loc;
-	       nterm_type = t1.nterm_type }
+	       nterm_type = t1.nterm_type}
   | Tif (t1, t2, t3) -> NTif (term t1, term t2 , term t3)
   | Told t1 -> NTold (term t1)
   | Tat (t1, s) -> NTat (term t1, s)
   | Tbase_addr t -> NTbase_addr (term t)
   | Tblock_length t -> NTblock_length (term t)
-  | Tresult -> NTresult
+(*
+  | Tresult v -> NTresult v
   | Tnull -> NTnull
+*)
   | Tcast (ty, t) -> NTcast (ty, term t)
   | Trange (t1, t2, t3) -> NTrange (term t1, term_option t2, term_option t3)
 
@@ -555,7 +215,7 @@ and term t =
 { 
   nterm_node = term_node t.term_loc t.term_node;
   nterm_loc = t.term_loc;
-  nterm_type = t.term_type;
+  nterm_type = t.term_type
 }
 
 and term_option = function None -> None | Some t -> Some (term t)
@@ -597,6 +257,7 @@ and predicate_node = function
     | Pold p -> NPold (predicate p)
     | Pat (p, s) -> NPat ((predicate p),s)
     | Pseparated (t1,t2) ->
+(*
 	let loc = t1.term_loc in
 	let t1 =
 	  match t1.term_node with
@@ -613,7 +274,10 @@ and predicate_node = function
 	    | _ -> assert false
 	in
 	(separation loc t1 t2).npred_node
+*)
+	assert false (* TODO *)
     | Pfullseparated (t1,t2) ->
+(*
 	let loc = t1.term_loc in
 	let t1 =
 	  match t1.term_node with
@@ -630,6 +294,8 @@ and predicate_node = function
 	    | _ -> assert false
 	in
 	(fullseparation loc t1 t2).npred_node
+	*)
+	assert false (* TODO *)
     | Pvalid (t) -> NPvalid (term t) 
     | Pvalid_index (t1 , t2) -> NPvalid_index (term t1 , term t2) 
     | Pvalid_range (t1,t2,t3) -> NPvalid_range (term t1, term t2 , term t3)
@@ -673,6 +339,31 @@ let ilist = function
 
 let variant v = let (x,y) = v in ((term x), y)
 
+
+let make_and p1 p2 = match p1.npred_node, p2.npred_node with
+  | NPtrue, _ -> p2
+  | _, NPtrue -> p1
+  | _ -> { p1 with npred_node = NPand (p1, p2) }
+
+
+let make_implies p1 p2 = match p2.npred_node with
+  | NPtrue -> { p1 with npred_node = NPtrue }
+  | _ -> { p1 with npred_node = NPimplies (p1, p2) }
+
+let make_forall q p = match p.npred_node with
+  | NPtrue -> { p with npred_node = NPtrue }
+  | _ -> { p with npred_node = NPforall (q, p) }
+
+
+let dummy_pred p = { npred_node = p; npred_loc = Loc.dummy_position }
+let nprel (t1, r, t2) = dummy_pred (NPrel (t1, r, t2))
+let npand (p1, p2) = make_and p1 p2
+let npvalid t = dummy_pred (NPvalid t)
+let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
+let npfresh t = dummy_pred (NPfresh t)
+let nptrue = dummy_pred NPtrue
+let npapp (f, l) = dummy_pred (NPapp (f, l))
+
 let spec ?(add=nptrue) s = 
   let pred = match s.requires with 
     | None -> add
@@ -685,6 +376,7 @@ let spec ?(add=nptrue) s =
     ensures = noption predicate s.ensures;
     decreases = noption variant s.decreases;
   }
+
 
 let noattr loc ty e =
   { texpr_node = e;
@@ -865,9 +557,11 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "base_addr can't be used here"
 	| NTblock_length t -> error t.nterm_loc 
 	      "block_length can't be used here"
+(*
 	| NTresult -> error t.nterm_loc 
 	      "result can't be used here"
 	| NTnull -> NEconstant (IntConstant "0")
+*)
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
 	| NTrange _ -> 
 	    error t.nterm_loc "range cannot by used here"
@@ -1068,10 +762,11 @@ let global_decl e1 =
 	  (fun acc y ->
 	     let x = y.var_type in
 	     match x.Ctypes.ctype_node with
-	       | Tstruct _ | Tunion _ -> npand (npvalid 
-						  {nterm_node = NTvar y;
-						   nterm_type = x;
-						   nterm_loc = Loc.dummy},acc)
+	       | Tstruct _ | Tunion _ -> 
+		   npand (npvalid 
+			    {nterm_node = NTvar y;
+			     nterm_type = x;
+			     nterm_loc = Loc.dummy_position},acc)
 	       | _ -> acc) 
 	  nptrue f.args in
       set_var_type (Fun_info f) (f.fun_type);

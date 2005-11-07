@@ -1,5 +1,11 @@
 Note: These are the changes for Caduceus.
 
+
+ o support for the major changes in why
+ o addition of zones into memory model.  
+ o bug fix in location of errors
+ o various bug fixes
+
 version 0.82, September 1st, 2005
 =================================
 

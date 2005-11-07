@@ -3,9 +3,78 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition valid_dim2  (intPP:((memory) pointer))
-  (alloc:alloc_table) (t_0:pointer) (i:Z) (j:Z) (k:Z) (l:Z)
-  := (* File \"<built-in>\", line 0, characters 3-82 *)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z1: Set.
+
+(*Why type*) Parameter Z2: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why type*) Parameter Z5: Set.
+
+(*Why predicate*) Definition valid_dim2  (int_Z3_Z2:((memory) ((pointer) Z3)
+  Z2)) (alloc:alloc_table) (t_0:((pointer) Z2)) (i:Z) (j:Z) (k:Z) (l:Z)
+  := (* File \"array.c\", line 8, characters 7-86:\n *)
      ((valid_range alloc t_0 i j) /\
      (forall (n:Z),
-      (i <= n /\ n <= j -> (valid_range alloc (acc intPP (shift t_0 n)) k l)))).
+      (i <= n /\ n <= j ->
+       (valid_range alloc (acc int_Z3_Z2 (shift t_0 n)) k l)))).

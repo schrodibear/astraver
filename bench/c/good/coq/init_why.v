@@ -6,33 +6,32 @@ Require Export init_spec_why.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+                 (acc int_Z5 (shift t 1)) = 2 /\
+                (* File \"init.c\", line 13, characters 25-51:\n *)
+                ((acc int_Z1 (acc b_Z7 s)) = 1 /\
+                (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc intP result)),
-  forall (result1: pointer),
-  forall (HW_4: result1 = (acc b s)),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (acc b_Z7 s)),
   forall (result2: Z),
-  forall (HW_5: result2 = (acc intP result1)),
-  forall (result3: pointer),
-  forall (HW_6: result3 = (acc b s)),
-  forall (result4: pointer),
+  forall (HW_5: result2 = (acc int_Z1 result1)),
+  forall (result3: ((pointer) Z1)),
+  forall (HW_6: result3 = (acc b_Z7 s)),
+  forall (result4: ((pointer) Z1)),
   forall (HW_7: result4 = (shift result3 2)),
   forall (result5: Z),
-  forall (HW_8: result5 = (acc intP result4)),
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 9-21 *)
+  forall (HW_8: result5 = (acc int_Z1 result4)),
+  (* File \"init.c\", line 15, characters 13-25:\n *)
   (result0 + result2 + result5) = 7.
 Proof.
 intuition.
@@ -42,29 +41,28 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+                 (acc int_Z5 (shift t 1)) = 2 /\
+                (* File \"init.c\", line 13, characters 25-51:\n *)
+                ((acc int_Z1 (acc b_Z7 s)) = 1 /\
+                (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc intP result)),
-  forall (result1: pointer),
-  forall (HW_4: result1 = (acc b s)),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (acc b_Z7 s)),
   forall (result2: Z),
-  forall (HW_5: result2 = (acc intP result1)),
-  forall (result3: pointer),
-  forall (HW_6: result3 = (acc b s)),
-  forall (result4: pointer),
+  forall (HW_5: result2 = (acc int_Z1 result1)),
+  forall (result3: ((pointer) Z1)),
+  forall (HW_6: result3 = (acc b_Z7 s)),
+  forall (result4: ((pointer) Z1)),
   forall (HW_7: result4 = (shift result3 2)),
   (valid alloc result4).
 Proof.
@@ -75,26 +73,25 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+                 (acc int_Z5 (shift t 1)) = 2 /\
+                (* File \"init.c\", line 13, characters 25-51:\n *)
+                ((acc int_Z1 (acc b_Z7 s)) = 1 /\
+                (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc intP result)),
-  forall (result1: pointer),
-  forall (HW_4: result1 = (acc b s)),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (acc b_Z7 s)),
   forall (result2: Z),
-  forall (HW_5: result2 = (acc intP result1)),
+  forall (HW_5: result2 = (acc int_Z1 result1)),
   (valid alloc s).
 Proof.
 intuition.
@@ -104,24 +101,23 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+                 (acc int_Z5 (shift t 1)) = 2 /\
+                (* File \"init.c\", line 13, characters 25-51:\n *)
+                ((acc int_Z1 (acc b_Z7 s)) = 1 /\
+                (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc intP result)),
-  forall (result1: pointer),
-  forall (HW_4: result1 = (acc b s)),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (acc b_Z7 s)),
   (valid alloc result1).
 Proof.
 intuition.
@@ -131,22 +127,21 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+                 (acc int_Z5 (shift t 1)) = 2 /\
+                (* File \"init.c\", line 13, characters 25-51:\n *)
+                ((acc int_Z1 (acc b_Z7 s)) = 1 /\
+                (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc intP result)),
+  forall (HW_3: result0 = (acc int_Z5 result)),
   (valid alloc s).
 Proof.
 intuition.
@@ -155,19 +150,18 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+                 (acc int_Z5 (shift t 1)) = 2 /\
+                (* File \"init.c\", line 13, characters 25-51:\n *)
+                ((acc int_Z1 (acc b_Z7 s)) = 1 /\
+                (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   (valid alloc result).
 Proof.
@@ -178,39 +172,23 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z3: ((memory) Z Z3)),
+  forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 2 /\
                 (valid_range alloc0 result 0 (2 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 4)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result0 5)),
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: int_Z3_0 = (upd int_Z3 result 4)),
+  forall (result0: ((pointer) Z3)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z3_1: ((memory) Z Z3)),
+  forall (HW_4: int_Z3_1 = (upd int_Z3_0 result0 5)),
   forall (result1: Z),
-  forall (HW_6: result1 = (acc intP1 result)),
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 9-21 *)
-  result1 = 4 /\
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-  (acc intP1 (shift t 1)) = 2 /\
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-  ((acc intP1 (acc b s)) = 1 /\ (acc intP1 (shift (acc b s) 2)) = 4).
+  forall (HW_5: result1 = (acc int_Z3_1 result)),
+  (* File \"init.c\", line 22, characters 13-25:\n *) result1 = 4.
 Proof.
 intuition.
 Save.
@@ -218,30 +196,21 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z3: ((memory) Z Z3)),
+  forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 2 /\
                 (valid_range alloc0 result 0 (2 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 4)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  (valid alloc0 result0).
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: int_Z3_0 = (upd int_Z3 result 4)),
+  forall (result0: ((pointer) Z3)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z3_1: ((memory) Z Z3)),
+  forall (HW_4: int_Z3_1 = (upd int_Z3_0 result0 5)),
+  (valid alloc0 result).
 Proof.
 intuition.
 subst;auto.
@@ -250,19 +219,19 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  2 >= 1.
+  forall (int_Z3: ((memory) Z Z3)),
+  forall (result: ((pointer) Z3)),
+  forall (alloc0: alloc_table),
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 2 /\
+                (valid_range alloc0 result 0 (2 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: int_Z3_0 = (upd int_Z3 result 4)),
+  forall (result0: ((pointer) Z3)),
+  forall (HW_3: result0 = (shift result 1)),
+  (valid alloc0 result0).
 Proof.
 intuition;subst.
 rewrite acc_upd_neq;auto.
@@ -325,53 +294,62 @@ intuition.
 Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (result: ((pointer) Z3)),
+  forall (alloc0: alloc_table),
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 2 /\
+                (valid_range alloc0 result 0 (2 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  (valid alloc0 result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_5 : 
+  2 >= 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 3)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result0 4)),
-  forall (result1: pointer),
-  forall (HW_6: result1 = (shift result 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result1 5)),
+  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (HW_2: int_Z4_0 = (upd int_Z4 result 3)),
+  forall (result0: ((pointer) Z4)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z4_1: ((memory) Z Z4)),
+  forall (HW_4: int_Z4_1 = (upd int_Z4_0 result0 4)),
+  forall (result1: ((pointer) Z4)),
+  forall (HW_5: result1 = (shift result 2)),
+  forall (int_Z4_2: ((memory) Z Z4)),
+  forall (HW_6: int_Z4_2 = (upd int_Z4_1 result1 5)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc intP2 result)),
-  forall (result3: pointer),
-  forall (HW_9: result3 = (shift result 1)),
+  forall (HW_7: result2 = (acc int_Z4_2 result)),
+  forall (result3: ((pointer) Z4)),
+  forall (HW_8: result3 = (shift result 1)),
   forall (result4: Z),
-  forall (HW_10: result4 = (acc intP2 result3)),
-  forall (result5: pointer),
-  forall (HW_11: result5 = (shift result 2)),
+  forall (HW_9: result4 = (acc int_Z4_2 result3)),
+  forall (result5: ((pointer) Z4)),
+  forall (HW_10: result5 = (shift result 2)),
   forall (result6: Z),
-  forall (HW_12: result6 = (acc intP2 result5)),
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 9-22 *)
-  (result2 + result4 + result6) = 12 /\
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-  (acc intP2 (shift t 1)) = 2 /\
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-  ((acc intP2 (acc b s)) = 1 /\ (acc intP2 (shift (acc b s) 2)) = 4).
+  forall (HW_11: result6 = (acc int_Z4_2 result5)),
+  (* File \"init.c\", line 30, characters 13-26:\n *)
+  (result2 + result4 + result6) = 12.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -380,43 +358,32 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 3)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result0 4)),
-  forall (result1: pointer),
-  forall (HW_6: result1 = (shift result 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result1 5)),
+  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (HW_2: int_Z4_0 = (upd int_Z4 result 3)),
+  forall (result0: ((pointer) Z4)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z4_1: ((memory) Z Z4)),
+  forall (HW_4: int_Z4_1 = (upd int_Z4_0 result0 4)),
+  forall (result1: ((pointer) Z4)),
+  forall (HW_5: result1 = (shift result 2)),
+  forall (int_Z4_2: ((memory) Z Z4)),
+  forall (HW_6: int_Z4_2 = (upd int_Z4_1 result1 5)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc intP2 result)),
-  forall (result3: pointer),
-  forall (HW_9: result3 = (shift result 1)),
+  forall (HW_7: result2 = (acc int_Z4_2 result)),
+  forall (result3: ((pointer) Z4)),
+  forall (HW_8: result3 = (shift result 1)),
   forall (result4: Z),
-  forall (HW_10: result4 = (acc intP2 result3)),
-  forall (result5: pointer),
-  forall (HW_11: result5 = (shift result 2)),
+  forall (HW_9: result4 = (acc int_Z4_2 result3)),
+  forall (result5: ((pointer) Z4)),
+  forall (HW_10: result5 = (shift result 2)),
   (valid alloc0 result5).
 Proof.
 intuition;subst;auto.
@@ -425,39 +392,28 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 3)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result0 4)),
-  forall (result1: pointer),
-  forall (HW_6: result1 = (shift result 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result1 5)),
+  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (HW_2: int_Z4_0 = (upd int_Z4 result 3)),
+  forall (result0: ((pointer) Z4)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z4_1: ((memory) Z Z4)),
+  forall (HW_4: int_Z4_1 = (upd int_Z4_0 result0 4)),
+  forall (result1: ((pointer) Z4)),
+  forall (HW_5: result1 = (shift result 2)),
+  forall (int_Z4_2: ((memory) Z Z4)),
+  forall (HW_6: int_Z4_2 = (upd int_Z4_1 result1 5)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc intP2 result)),
-  forall (result3: pointer),
-  forall (HW_9: result3 = (shift result 1)),
+  forall (HW_7: result2 = (acc int_Z4_2 result)),
+  forall (result3: ((pointer) Z4)),
+  forall (HW_8: result3 = (shift result 1)),
   (valid alloc0 result3).
 Proof.
 intuition;subst;auto.
@@ -556,34 +512,25 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 3)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result0 4)),
-  forall (result1: pointer),
-  forall (HW_6: result1 = (shift result 2)),
-  (valid alloc0 result1).
+  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (HW_2: int_Z4_0 = (upd int_Z4 result 3)),
+  forall (result0: ((pointer) Z4)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z4_1: ((memory) Z Z4)),
+  forall (HW_4: int_Z4_1 = (upd int_Z4_0 result0 4)),
+  forall (result1: ((pointer) Z4)),
+  forall (HW_5: result1 = (shift result 2)),
+  forall (int_Z4_2: ((memory) Z Z4)),
+  forall (HW_6: int_Z4_2 = (upd int_Z4_1 result1 5)),
+  (valid alloc0 result).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -592,30 +539,23 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
-  forall (result: pointer),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP result 3)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (shift result 1)),
-  (valid alloc0 result0).
+  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (HW_2: int_Z4_0 = (upd int_Z4 result 3)),
+  forall (result0: ((pointer) Z4)),
+  forall (HW_3: result0 = (shift result 1)),
+  forall (int_Z4_1: ((memory) Z Z4)),
+  forall (HW_4: int_Z4_1 = (upd int_Z4_0 result0 4)),
+  forall (result1: ((pointer) Z4)),
+  forall (HW_5: result1 = (shift result 2)),
+  (valid alloc0 result1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -624,18 +564,42 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: ((* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-                 (acc intP (shift t 1)) = 2 /\
-                (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-47 *)
-                ((acc intP (acc b s)) = 1 /\ (acc intP (shift (acc b s) 2)) =
-                4)) /\ (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (result: ((pointer) Z4)),
+  forall (alloc0: alloc_table),
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 3 /\
+                (valid_range alloc0 result 0 (3 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (HW_2: int_Z4_0 = (upd int_Z4 result 3)),
+  forall (result0: ((pointer) Z4)),
+  forall (HW_3: result0 = (shift result 1)),
+  (valid alloc0 result0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_7 : 
+  forall (alloc: alloc_table),
+  forall (result: ((pointer) Z4)),
+  forall (alloc0: alloc_table),
+  forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 3 /\
+                (valid_range alloc0 result 0 (3 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  (valid alloc0 result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_8 : 
   3 >= 1.
 Proof.
 intuition.
@@ -644,92 +608,88 @@ Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
-  forall (result1: pointer),
-  forall (HW_9: result1 = (acc b s)),
-  forall (intP3: ((memory) Z)),
-  forall (HW_10: intP3 = (upd intP2 result1 1)),
-  forall (result2: pointer),
-  forall (HW_11: result2 = (acc b s)),
-  forall (result3: pointer),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_9: result1 = (acc b_Z7 s)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_10: int_Z1_0 = (upd int_Z1 result1 1)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_11: result2 = (acc b_Z7 s)),
+  forall (result3: ((pointer) Z1)),
   forall (HW_12: result3 = (shift result2 1)),
-  forall (intP4: ((memory) Z)),
-  forall (HW_13: intP4 = (upd intP3 result3 3)),
-  forall (result4: pointer),
-  forall (HW_14: result4 = (acc b s)),
-  forall (result5: pointer),
+  forall (int_Z1_1: ((memory) Z Z1)),
+  forall (HW_13: int_Z1_1 = (upd int_Z1_0 result3 3)),
+  forall (result4: ((pointer) Z1)),
+  forall (HW_14: result4 = (acc b_Z7 s)),
+  forall (result5: ((pointer) Z1)),
   forall (HW_15: result5 = (shift result4 2)),
-  forall (intP5: ((memory) Z)),
-  forall (HW_16: intP5 = (upd intP4 result5 4)),
-  (* File \"init.c819618234.c1069824147.i\", line 0, characters 21-30 *)
-  ((acc intP5 (shift t 1)) = 2 /\ (acc intP5 (acc b s)) = 1 /\
-  (acc intP5 (shift (acc b s) 2)) = 4).
+  forall (int_Z1_2: ((memory) Z Z1)),
+  forall (HW_16: int_Z1_2 = (upd int_Z1_1 result5 4)),
+  (* File \"init.c\", line 5, characters 25-34:\n *)
+  ((acc int_Z5_2 (shift t 1)) = 2 /\ (acc int_Z1_2 (acc b_Z7 s)) = 1 /\
+  (acc int_Z1_2 (shift (acc b_Z7 s) 2)) = 4).
 Proof.
 intuition;subst;auto.
 Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
-  forall (result1: pointer),
-  forall (HW_9: result1 = (acc b s)),
-  forall (intP3: ((memory) Z)),
-  forall (HW_10: intP3 = (upd intP2 result1 1)),
-  forall (result2: pointer),
-  forall (HW_11: result2 = (acc b s)),
-  forall (result3: pointer),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_9: result1 = (acc b_Z7 s)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_10: int_Z1_0 = (upd int_Z1 result1 1)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_11: result2 = (acc b_Z7 s)),
+  forall (result3: ((pointer) Z1)),
   forall (HW_12: result3 = (shift result2 1)),
-  forall (intP4: ((memory) Z)),
-  forall (HW_13: intP4 = (upd intP3 result3 3)),
-  forall (result4: pointer),
-  forall (HW_14: result4 = (acc b s)),
-  forall (result5: pointer),
+  forall (int_Z1_1: ((memory) Z Z1)),
+  forall (HW_13: int_Z1_1 = (upd int_Z1_0 result3 3)),
+  forall (result4: ((pointer) Z1)),
+  forall (HW_14: result4 = (acc b_Z7 s)),
+  forall (result5: ((pointer) Z1)),
   forall (HW_15: result5 = (shift result4 2)),
   (valid alloc result5).
 Proof.
@@ -764,40 +724,38 @@ Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
-  forall (result1: pointer),
-  forall (HW_9: result1 = (acc b s)),
-  forall (intP3: ((memory) Z)),
-  forall (HW_10: intP3 = (upd intP2 result1 1)),
-  forall (result2: pointer),
-  forall (HW_11: result2 = (acc b s)),
-  forall (result3: pointer),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_9: result1 = (acc b_Z7 s)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_10: int_Z1_0 = (upd int_Z1 result1 1)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_11: result2 = (acc b_Z7 s)),
+  forall (result3: ((pointer) Z1)),
   forall (HW_12: result3 = (shift result2 1)),
-  forall (intP4: ((memory) Z)),
-  forall (HW_13: intP4 = (upd intP3 result3 3)),
+  forall (int_Z1_1: ((memory) Z Z1)),
+  forall (HW_13: int_Z1_1 = (upd int_Z1_0 result3 3)),
   (valid alloc s).
 Proof.
 intuition.
@@ -806,37 +764,35 @@ Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
-  forall (result1: pointer),
-  forall (HW_9: result1 = (acc b s)),
-  forall (intP3: ((memory) Z)),
-  forall (HW_10: intP3 = (upd intP2 result1 1)),
-  forall (result2: pointer),
-  forall (HW_11: result2 = (acc b s)),
-  forall (result3: pointer),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_9: result1 = (acc b_Z7 s)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_10: int_Z1_0 = (upd int_Z1 result1 1)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_11: result2 = (acc b_Z7 s)),
+  forall (result3: ((pointer) Z1)),
   forall (HW_12: result3 = (shift result2 1)),
   (valid alloc result3).
 Proof.
@@ -846,34 +802,32 @@ Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
-  forall (result1: pointer),
-  forall (HW_9: result1 = (acc b s)),
-  forall (intP3: ((memory) Z)),
-  forall (HW_10: intP3 = (upd intP2 result1 1)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_9: result1 = (acc b_Z7 s)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_10: int_Z1_0 = (upd int_Z1 result1 1)),
   (valid alloc s).
 Proof.
 intuition.
@@ -882,32 +836,29 @@ Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_6 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
-  forall (result1: pointer),
-  forall (HW_9: result1 = (acc b s)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_9: result1 = (acc b_Z7 s)),
   (valid alloc result1).
 Proof.
 intuition.
@@ -916,30 +867,26 @@ Save.
 
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_7 : 
-  forall (a: ((memory) Z)),
+  forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
-  forall (a0: ((memory) Z)),
-  forall (HW_8: a0 = (upd a s 1)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
+  forall (a_Z7_0: ((memory) Z Z7)),
+  forall (HW_8: a_Z7_0 = (upd a_Z7 s 1)),
   (valid alloc s).
 Proof.
 intuition.
@@ -949,26 +896,22 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_8 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
-  forall (intP2: ((memory) Z)),
-  forall (HW_7: intP2 = (upd intP1 result0 3)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_2 = (upd int_Z5_1 result0 3)),
   (valid alloc s).
 Proof.
 intuition.
@@ -978,23 +921,19 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_9 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_5: intP1 = (upd intP0 result 2)),
-  forall (result0: pointer),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 result 2)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_6: result0 = (shift t 2)),
   (valid alloc result0).
 Proof.
@@ -1005,19 +944,15 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_10 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
-  forall (intP0: ((memory) Z)),
-  forall (HW_3: intP0 = (upd intP t 1)),
-  forall (result: pointer),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 1)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   (valid alloc result).
 Proof.
@@ -1028,13 +963,9 @@ Save.
 (* Why obligation from file "why/init.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_11 : 
   forall (alloc: alloc_table),
-  forall (b: ((memory) pointer)),
-  forall (s: pointer),
-  forall (t: pointer),
-  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
-                ~((base_addr t) = (base_addr (acc b s)))) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
-                (valid1 b) /\ (valid1_range b 3)),
+  forall (s: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
   forall (x: Z),
   forall (HW_2: x = 45),
   (valid alloc t).

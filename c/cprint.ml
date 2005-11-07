@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.16 2005-06-20 12:17:47 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.17 2005-11-07 15:13:29 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -75,18 +75,15 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\base_addr(%a)" nterm t
   | NTblock_length t ->
       fprintf fmt "\\block_length(%a)" nterm t
-  | NTresult ->
-      fprintf fmt "\\result"
-  | NTnull ->
-      fprintf fmt "null"
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
   | NTrange (t1, t2, t3) ->
       fprintf fmt "%a[%a..%a]" nterm t1 nterm_option t2 nterm_option t3
 
 and nterm_p fmt t = match t.nterm_node with
-  | NTconstant _ | NTvar _ | NTapp _ | NTresult | NTnull | NTold _ | NTat _ ->
+  | NTconstant _ | NTvar _ | NTapp _ | NTold _ | NTat _ ->
       nterm fmt t
+(* NTresult _ | NTnull | *)
   | _ ->
       fprintf fmt "(%a)" nterm t
 

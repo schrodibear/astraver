@@ -9,8 +9,7 @@ Require Export param_spec_why.
   forall (y: Z),
   forall (mutable_x: Z),
   forall (HW_1: mutable_x = (x + y)),
-  (* File \"param.c819618234.c1069824147.i\", line 0, characters 9-23 *)
-  mutable_x = (x + y).
+  (* File \"param.c\", line 1, characters 13-27:\n *) mutable_x = (x + y).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

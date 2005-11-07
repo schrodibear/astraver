@@ -5,70 +5,84 @@ Require Export clash_spec_why.
 
 (* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
-  forall (ma_structure: pointer),
+  forall (ma_structure: ((pointer) Z4)),
   forall (alloc: alloc_table),
-  forall (toto: ((memory) Z)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure)),
+  forall (toto_Z4: ((memory) Z Z4)),
+  forall (HW_1: (valid alloc ma_structure)),
   forall (toto_0: Z),
   forall (HW_3: toto_0 = 0),
-  forall (toto0: ((memory) Z)),
-  forall (HW_4: toto0 = (upd toto ma_structure toto_0)),
-  (not_assigns alloc toto toto0 (pset_singleton ma_structure)).
+  forall (toto_Z4_0: ((memory) Z Z4)),
+  forall (HW_4: toto_Z4_0 = (upd toto_Z4 ma_structure toto_0)),
+  (not_assigns alloc toto_Z4 toto_Z4_0 (pset_singleton ma_structure)).
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
-(*Why goal*) Lemma f2_impl_po_1 : 
-  forall (ma_structure: pointer),
+(*Why goal*) Lemma f1_impl_po_2 : 
+  forall (ma_structure: ((pointer) Z4)),
   forall (alloc: alloc_table),
-  forall (fst: ((memory) Z)),
-  forall (substruct: ((memory) pointer)),
-  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct ma_structure))) /\
-                (valid1 substruct) /\ (separation2 substruct substruct)),
-  forall (result: pointer),
+  forall (HW_1: (valid alloc ma_structure)),
+  forall (toto_0: Z),
+  forall (HW_3: toto_0 = 0),
+  (valid alloc ma_structure).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_1 : 
+  forall (ma_structure: ((pointer) Z5)),
+  forall (alloc: alloc_table),
+  forall (fst_Z1: ((memory) Z Z1)),
+  forall (fst_Z6: ((memory) Z Z6)),
+  forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z5 ma_structure))),
+  forall (result: ((pointer) Z6)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (fst0: ((memory) Z)),
-  forall (HW_3: fst0 = (upd fst result 0)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (acc substruct ma_structure)),
+  forall (fst_Z6_0: ((memory) Z Z6)),
+  forall (HW_3: fst_Z6_0 = (upd fst_Z6 result 0)),
+  forall (result0: ((pointer) Z1)),
+  forall (HW_4: result0 = (acc substruct_Z5 ma_structure)),
   forall (result1: Z),
-  forall (HW_5: result1 = (acc fst0 result)),
-  forall (fst1: ((memory) Z)),
-  forall (HW_6: fst1 = (upd fst0 result0 result1)),
-  (not_assigns alloc fst fst1 (pset_singleton (acc substruct ma_structure))).
+  forall (HW_5: result1 = (acc fst_Z6_0 result)),
+  forall (fst_Z1_0: ((memory) Z Z1)),
+  forall (HW_6: fst_Z1_0 = (upd fst_Z1 result0 result1)),
+  (not_assigns alloc fst_Z6 fst_Z6_0 pset_empty) /\
+  (not_assigns alloc fst_Z1 fst_Z1_0
+   (pset_singleton (acc substruct_Z5 ma_structure))).
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
-  forall (ma_structure: pointer),
+  forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
-  forall (fst: ((memory) Z)),
-  forall (substruct: ((memory) pointer)),
-  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct ma_structure))) /\
-                (valid1 substruct) /\ (separation2 substruct substruct)),
-  forall (result: pointer),
+  forall (fst_Z6: ((memory) Z Z6)),
+  forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z5 ma_structure))),
+  forall (result: ((pointer) Z6)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (fst0: ((memory) Z)),
-  forall (HW_3: fst0 = (upd fst result 0)),
-  forall (result0: pointer),
-  forall (HW_4: result0 = (acc substruct ma_structure)),
+  forall (fst_Z6_0: ((memory) Z Z6)),
+  forall (HW_3: fst_Z6_0 = (upd fst_Z6 result 0)),
+  forall (result0: ((pointer) Z1)),
+  forall (HW_4: result0 = (acc substruct_Z5 ma_structure)),
   forall (result1: Z),
-  forall (HW_5: result1 = (acc fst0 result)),
+  forall (HW_5: result1 = (acc fst_Z6_0 result)),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -78,23 +92,24 @@ Save.
 
 (* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_3 : 
-  forall (ma_structure: pointer),
+  forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
-  forall (fst: ((memory) Z)),
-  forall (substruct: ((memory) pointer)),
-  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct ma_structure))) /\
-                (valid1 substruct) /\ (separation2 substruct substruct)),
-  forall (result: pointer),
+  forall (fst_Z6: ((memory) Z Z6)),
+  forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z5 ma_structure))),
+  forall (result: ((pointer) Z6)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (fst0: ((memory) Z)),
-  forall (HW_3: fst0 = (upd fst result 0)),
-  (valid alloc0 ma_structure).
+  forall (fst_Z6_0: ((memory) Z Z6)),
+  forall (HW_3: fst_Z6_0 = (upd fst_Z6 result 0)),
+  forall (result0: ((pointer) Z1)),
+  forall (HW_4: result0 = (acc substruct_Z5 ma_structure)),
+  (valid alloc0 result).
 Proof.
 intuition.
 subst; apply alloc_stack_valid with substruct_0 alloc; auto.
@@ -102,13 +117,22 @@ Save.
 
 (* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_4 : 
-  forall (ma_structure: pointer),
+  forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
-  forall (substruct: ((memory) pointer)),
-  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct ma_structure))) /\
-                (valid1 substruct) /\ (separation2 substruct substruct)),
-  1 >= 1.
+  forall (fst_Z6: ((memory) Z Z6)),
+  forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z5 ma_structure))),
+  forall (result: ((pointer) Z6)),
+  forall (alloc0: alloc_table),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (fst_Z6_0: ((memory) Z Z6)),
+  forall (HW_3: fst_Z6_0 = (upd fst_Z6 result 0)),
+  (valid alloc0 ma_structure).
 Proof.
 intros.
 unfold not_assigns.
@@ -134,12 +158,45 @@ Save.
 
 
 (* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_5 : 
+  forall (ma_structure: ((pointer) Z5)),
+  forall (alloc: alloc_table),
+  forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z5 ma_structure))),
+  forall (result: ((pointer) Z6)),
+  forall (alloc0: alloc_table),
+  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  (valid alloc0 result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_6 : 
+  forall (ma_structure: ((pointer) Z5)),
+  forall (alloc: alloc_table),
+  forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z5 ma_structure))),
+  1 >= 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),
   forall (y_0: Z),
   forall (HW_3: y_0 = 1),
-  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-58 *)
+  (* File \"clash.c\", line 12, characters 13-62:\n *)
   (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
@@ -151,7 +208,7 @@ Save.
   forall (HW_4: x <> 0),
   forall (y_0: Z),
   forall (HW_6: y_0 = 2),
-  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-58 *)
+  (* File \"clash.c\", line 12, characters 13-62:\n *)
   (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
@@ -162,8 +219,7 @@ Save.
   forall (y: Z),
   forall (y_0: Z),
   forall (HW_2: y_0 = 0),
-  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-37 *)
-  (y_0 = 0 /\ y = y).
+  (* File \"clash.c\", line 5, characters 13-41:\n *) (y_0 = 0 /\ y = y).
 Proof.
 intuition.
 Save.
@@ -176,7 +232,7 @@ Save.
   forall (HW_3: x = 0),
   forall (y_1: Z),
   forall (HW_5: y_1 = 1),
-  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-61 *)
+  (* File \"clash.c\", line 27, characters 13-65:\n *)
   (((x = 0 -> y_1 = 1)) /\ ((x <> 0 -> y_1 = 2))).
 Proof.
 intuition.
@@ -188,7 +244,7 @@ Save.
   forall (y_0: Z),
   forall (HW_2: y_0 = 2),
   forall (HW_6: x <> 0),
-  (* File \"clash.c819618234.c1069824147.i\", line 0, characters 9-61 *)
+  (* File \"clash.c\", line 27, characters 13-65:\n *)
   (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.

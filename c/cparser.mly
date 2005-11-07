@@ -26,8 +26,8 @@
   open Parsing
   open Cerror
 
-  let loc () = (symbol_start (), symbol_end ())
-  let loc_i i = (rhs_start i, rhs_end i)
+  let loc () = (symbol_start_pos (), symbol_end_pos ())
+  let loc_i i = (rhs_start_pos i, rhs_end_pos i)
 
   let locate x = { node = x; loc = loc() }
   let locate_i i x = { node = x; loc = loc_i i }
@@ -40,7 +40,7 @@
   let unss s = error ("Unsupported C syntax: " ^ s)
 
   let warning s =
-    Format.eprintf "%a warning: %s\n" Loc.report_line (symbol_start ()) s
+    Format.eprintf "%a warning: %s\n" Loc.report_line (symbol_start_pos ()) s
   let vwarning s = if verbose then warning s
   let dwarning s = if debug then warning s
 
@@ -299,10 +299,10 @@
 
 %}
 
-%token <int * Cast.parsed_spec> SPEC
-%token <int * Cast.parsed_decl list> DECL
-%token <int * Cast.parsed_code_annot> CODE_ANNOT
-%token <int * Cast.parsed_loop_annot> LOOP_ANNOT
+%token <Cast.parsed_spec> SPEC
+%token <Cast.parsed_decl list> DECL
+%token <Cast.parsed_code_annot> CODE_ANNOT
+%token <Cast.parsed_loop_annot> LOOP_ANNOT
 
 %token <Clogic.constant> CONSTANT
 %token <string> IDENTIFIER STRING_LITERAL TYPE_NAME
@@ -537,8 +537,7 @@ declaration
 	  declaration_specifiers init_declarator_list attributes_opt SEMICOLON 
 	    { [locate (spec_declaration $1 $2 $3)] }
 	| DECL  /* ADDED FOR WHY */
-	    { let ofs,d = $1 in 
-	      List.map (fun d -> locate (Cspecdecl (ofs,d))) d }
+	    { List.map (fun d -> locate (Cspecdecl d)) $1 }
         ;
 
 /* the precedence specs indicates to keep going with declaration_specifiers */
@@ -709,7 +708,7 @@ direct_declarator
 /* ADDED FOR WHY */
 loop_annot
         : LOOP_ANNOT                   { $1 }
-        | /* epsilon */ %prec no_annot { symbol_start (), no_loop_annot }
+        | /* epsilon */ %prec no_annot { no_loop_annot }
         ;
 
 pointer

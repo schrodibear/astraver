@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cpp.mll,v 1.6 2005-01-19 16:19:20 hubert Exp $ i*)
+(*i $Id: cpp.mll,v 1.7 2005-11-07 15:13:29 hubert Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -87,11 +87,9 @@ and after = parse
       Sys.remove pf; 
       let pppf = after_cpp ppf in
       Sys.remove ppf; 
-      Loc.set_file pppf;
       (* if not debug then *) at_exit (fun () -> Sys.remove pppf);
       pppf
     end else begin
-      Loc.set_file f;
       f
     end
 

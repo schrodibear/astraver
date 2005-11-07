@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.18 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: clexer.mll,v 1.19 2005-11-07 15:13:28 hubert Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -26,22 +26,42 @@
   open Cerror
   open Clogic
 
-  let loc lexbuf = (lexeme_start lexbuf, lexeme_end lexbuf)
+  let loc lexbuf = (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
 
   let lex_error lexbuf s =
     Creport.raise_located (loc lexbuf) (AnyMessage ("lexical error: " ^ s))
 
-  let annot_start_pos = ref 0
+  let annot_start_pos = ref Lexing.dummy_pos
   let buf = Buffer.create 1024
 
   let make_annot s =
     let loc = !annot_start_pos in
     match Cllexer.annot (loc, s) with
-      | Cast.Adecl d -> DECL (loc, d)
-      | Cast.Aspec s -> SPEC (loc, s)
-      | Cast.Acode_annot a -> CODE_ANNOT (loc, a)
-      | Cast.Aloop_annot a -> LOOP_ANNOT (loc, a)
+      | Cast.Adecl d -> DECL d
+      | Cast.Aspec s -> SPEC s
+      | Cast.Acode_annot a -> CODE_ANNOT a
+      | Cast.Aloop_annot a -> LOOP_ANNOT a
 	 
+  let newline lexbuf =
+    let pos = lexbuf.lex_curr_p in
+    lexbuf.lex_curr_p <- 
+      { pos with pos_lnum = pos.pos_lnum + 1; pos_bol = pos.pos_cnum }
+
+  (* Update the current location with file name and line number. *)
+
+  let update_loc lexbuf file line absolute chars =
+    let pos = lexbuf.lex_curr_p in
+    let new_file = match file with
+      | None -> pos.pos_fname
+      | Some s -> s
+    in
+    lexbuf.lex_curr_p <- 
+      { pos with
+	  pos_fname = new_file;
+	  pos_lnum = if absolute then line else pos.pos_lnum + line;
+	  pos_bol = pos.pos_cnum - chars;
+      }
+
 }
 
 let space = [' ' '\t' '\012' '\r']
@@ -54,16 +74,17 @@ let rFS	= ('f'|'F'|'l'|'L')
 let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
-  | [' ' '\t' '\012' '\r' '\n']+        
-                            { token lexbuf }
+  | [' ' '\t' '\012' '\r']+ { token lexbuf }
+  | '\n'                    { newline lexbuf; token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
-  | "/*@"                   { annot_start_pos := lexeme_start lexbuf + 4;
+  | "/*@"                   { annot_start_pos := lexeme_start_p lexbuf;
 			      Buffer.clear buf; annot lexbuf }
-  | "//@" [^ '\n']* '\n'    { annot_start_pos := lexeme_start lexbuf + 4;
+  | "//@" [^ '\n']* '\n'    { annot_start_pos := lexeme_start_p lexbuf;
+			      newline lexbuf;
 			      let s = lexeme lexbuf in
 			      make_annot 
 				(String.sub s 3 (String.length s - 4)) }
-  | "//" [^ '\n']* '\n'     { token lexbuf }
+  | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
   | "auto"                  { AUTO }
   | "break"                 { BREAK }
   | "case"                  { CASE }
@@ -98,16 +119,20 @@ rule token = parse
   | "while"                 { WHILE }
 
   (* preprocessor, compiler-dependent extensions, etc. *)
-  | "__LINE__"              { let n = lexeme_start lexbuf in
-			      let s = string_of_int (Loc.line n) in
+  | "__LINE__"              { let n = lexeme_start_p lexbuf in
+			      let s = string_of_int n.pos_lnum in
 			      CONSTANT (IntConstant s) }
-  | "__FILE__"              { let f = Loc.get_file () in
+  | "__FILE__"              { let f = (lexeme_start_p lexbuf).pos_fname in
 			      STRING_LITERAL ("\"" ^ f ^ "\"") }
   | "__extension__"         { token lexbuf }
   | "__attribute__"         { ATTRIBUTE }
   | "__restrict"            { RESTRICT }
-  (* we skip # line directives *)
-  | '#' [^'\n']* '\n'       { token lexbuf }
+  | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
+        ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?
+        [^ '\010' '\013'] * '\n'
+      { update_loc lexbuf name (int_of_string num) true 0;
+        token lexbuf }
+  | '#' [^'\n']* '\n'       { newline lexbuf; token lexbuf }
 
   | rL (rL | rD)*       { let s = lexeme lexbuf in
 			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
@@ -177,11 +202,13 @@ rule token = parse
 and comment = parse
   | "*/" { () }
   | eof  { lex_error lexbuf "Unterminated_comment" }
+  | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }
 
 and annot = parse
   | "*/" { make_annot (Buffer.contents buf) }
   | eof  { lex_error lexbuf "Unterminated annotation" }
+  | '\n' { newline lexbuf; Buffer.add_char buf '\n'; annot lexbuf }
   | _    { Buffer.add_char buf (lexeme_char lexbuf 0); annot lexbuf }
 
 {

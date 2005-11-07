@@ -14,35 +14,19 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.11 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.12 2005-11-07 15:13:30 hubert Exp $ i*)
 
 open Format
 
-(*s Error location. *)
-
-type t = int * int
-
-val dummy : t
-
-val set_file : string -> unit
-val get_file : unit -> string (* for C's __FILE__ *)
-
 (*s Line number for an absolute position *)
 
-val line : int -> int
-
-val report_line : formatter -> int -> unit
-
-(*s Error reporting. *)
-
-val string : t -> string
-
-val report : formatter -> t -> unit
-val report_obligation : formatter -> t -> unit
+val report_line : formatter -> Lexing.position -> unit
 
 (* Lexing positions *)
 
 type position = Lexing.position * Lexing.position
+
+val string : position -> string
 
 val dummy_position : position
 
@@ -53,3 +37,5 @@ val report_obligation_position : formatter -> position -> unit
 
 val join : 'a * 'b -> 'a * 'b -> 'a * 'b
 
+val current_offset : int ref
+val reloc : Lexing.position -> Lexing.position

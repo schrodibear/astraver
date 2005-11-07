@@ -3,7 +3,56 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition purse_inv  (alloc:alloc_table)
-  (balance:((memory) Z)) (p:pointer)
-  := (valid alloc p) /\ (acc balance p) >= 0.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z10: Set.
+
+(*Why type*) Parameter Z11: Set.
+
+(*Why type*) Parameter Z12: Set.
+
+(*Why type*) Parameter Z13: Set.
+
+(*Why type*) Parameter Z16: Set.
+
+(*Why type*) Parameter Z17: Set.
+
+(*Why type*) Parameter Z2: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why type*) Parameter Z5: Set.
+
+(*Why type*) Parameter Z6: Set.
+
+(*Why type*) Parameter Z7: Set.
+
+(*Why type*) Parameter Z8: Set.
+
+(*Why type*) Parameter Z9: Set.
+
+(*Why type*) Parameter Z34: Set.
+
+(*Why type*) Parameter Z35: Set.
+
+(*Why predicate*) Definition purse_inv  (balance_Z34:((memory) Z Z34))
+  (alloc:alloc_table) (p:((pointer) Z34))
+  := (* File \"purse.c\", line 6, characters 37-65:\n *) ((valid alloc p) /\
+     (acc balance_Z34 p) >= 0).
 

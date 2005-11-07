@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.150 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.151 2005-11-07 15:13:28 hubert Exp $ i*)
 
 
 open Format
@@ -25,6 +25,9 @@ open Cast
 open Clogic
 open Creport
 open Ctypes
+open Cseparation
+
+(*
 
 let rec global_var_for_type t =
   match t.ctype_node with
@@ -43,6 +46,14 @@ let global_var_for_array_type t =
 	let name = global_var_for_type ty in
 	if t.ctype_ghost then "ghost_" ^ name else name
     | _ -> assert false
+*)
+
+
+let heap_var_name v =
+  match v.var_why_type with
+    | Info.Memory(_,z) ->
+	v.var_name ^ "_" ^ (found_repr z)
+    | _ -> v.var_unique_name
 
 
 let interp_int_rel = function
@@ -73,8 +84,9 @@ open Ctypes
 
 let float_of_int (t : nctype nterm) = 
   { nterm_type = c_float; 
-    nterm_loc = Loc.dummy;
-    nterm_node = NTunop (Ufloat_of_int, t) }
+    nterm_loc = Loc.dummy_position;
+    nterm_node = NTunop (Ufloat_of_int, t);
+  }
 
 let interp_rel (t1 : nctype nterm) t2 r = 
   match t1.nterm_type.ctype_node, t2.nterm_type.ctype_node with
@@ -157,11 +169,12 @@ let rec interp_term label old_label t =
 	unsupported t.nterm_loc "logic if-then-else"
     | NTarrow (t, field) -> 
 	let te = f t in
-	let var = field.var_unique_name in
+	let var = heap_field_var field.var_unique_name (type_why_for_term t) in
 	LApp("acc",[interp_var label var;te])
     | NTstar t1 -> 
 	let te1 = f t1 in
-	let var = global_var_for_array_type t1.nterm_type in
+(*	let var = global_var_for_array_type t1.nterm_type in*)
+	let var = heap_var (Cseparation.type_why_for_term t1) in
 	LApp("acc",[interp_var label var;te1])
     | NTunop (Utilde, t) -> 
 	LApp ("bw_compl", [f t])
@@ -178,13 +191,9 @@ let rec interp_term label old_label t =
     | NTapp (g, l) -> 
 	LApp(g.logic_name,
 	     (HeapVarSet.fold 
-		(fun x acc -> (interp_var label x.var_unique_name)::acc) 
-		g.logic_args []) 
+		(fun x acc -> (interp_var label (heap_var_name x))::acc) 
+		g.logic_heap_args []) 
 	     @ List.map f l)
-    | NTnull -> 
-	LVar "null"
-    | NTresult -> 
-	LVar "result" 
     | NTcast({ctype_node = Tpointer _}, 
 	    {nterm_node = NTconstant (IntConstant "0")}) ->
 	LVar "null"
@@ -218,7 +227,7 @@ and interp_term_address  label old_label e = match e.nterm_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_term  label old_label e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
-	    let var = f.var_unique_name in
+	    let var = heap_field_var f.var_unique_name (type_why_for_term e1) in
 	    LApp("acc",[interp_var label var; interp_term label old_label e1])
 	| _ -> unsupported e.nterm_loc "& operator on a field"
       end
@@ -239,14 +248,15 @@ let rec interp_predicate label old_label p =
     | NPtrue -> 
 	LTrue
     | NPexists (l, p) -> 
-	let l = List.fold_right(fun (t,x) l->(t,x.var_unique_name)::l) l [] in		     
 	List.fold_right
-	  (fun (t,x) p -> LExists(x,([],Ceffect.interp_type t),p)) l (f p)
+	  (fun (t,x) p -> 
+	     LExists(x.var_unique_name,
+		     Info.output_why_type x.var_why_type,p)) l (f p)
     | NPforall (l, p) ->	
-	let l = List.fold_right(fun (t,x) l->(t,x.var_unique_name)::l) l [] in
 	List.fold_right
-	  (fun (t,x) p -> LForall(x,([],Ceffect.interp_type t),p))
-	  l (interp_predicate label old_label p)
+	  (fun (t,x) p -> 
+	     LForall(x.var_unique_name,
+		     Info.output_why_type x.var_why_type,p)) l (f p)
     | NPif (t, p1, p2) -> 
 	let t = ft t in
 	let zero = LConst (Prim_int Int64.zero) in
@@ -279,8 +289,8 @@ let rec interp_predicate label old_label p =
        in
        let param = 
 	 HeapVarSet.fold 
-	   (fun x acc -> interp_var label x.var_unique_name :: acc)
-	   v.logic_args []
+	   (fun x acc -> interp_var label (heap_var_name x) :: acc)
+	   v.logic_heap_args []
        in
        let param = match param, num with
 	 | [x], 2 -> [x; x]
@@ -290,8 +300,8 @@ let rec interp_predicate label old_label p =
     | NPapp (v, tl) ->
 	LPred (v.logic_name,
 	       HeapVarSet.fold 
-		 (fun x acc -> (interp_var label x.var_unique_name) :: acc) 
-		 v.logic_args []
+		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
+		 v.logic_heap_args []
 	       @ List.map ft tl)
     | NPfalse -> 
 	LFalse
@@ -312,7 +322,7 @@ let rec interp_predicate label old_label p =
 
 let interp_predicate label old_label p = 
   let w = interp_predicate label old_label p in
-  if p.npred_loc = Loc.dummy then
+  if p.npred_loc = Loc.dummy_position then
     w
   else
     LNamed ("\"" ^ String.escaped (Loc.string p.npred_loc) ^ "\"", w)
@@ -502,11 +512,11 @@ let rec interp_expr e =
 	unsupported e.nexpr_loc "string literal"
     | NEarrow (e,s) ->
 	let te = interp_expr e in
-	let var = s.var_unique_name in
+	let var = heap_field_var s.var_unique_name (type_why e) in
 	Output.make_app "acc_" [Var(var);te]
     | NEstar e1 -> 
 	let te1 = interp_expr e1 in
-	let var = global_var_for_array_type e1.nexpr_type in
+	let var = heap_var (type_why e1) in
 	make_app "acc_" [Var var;te1]
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
@@ -641,10 +651,10 @@ and interp_lvalue e =
     | NEvar (Fun_info v) -> assert false
     | NEunary(Ustar,e1) -> assert false
     | NEstar(e1) ->
-	let var = global_var_for_array_type e1.nexpr_type in
+	let var = heap_var (type_why e1) in
 	HeapRef(var,interp_expr e1)
     | NEarrow (e1,f) ->
-	HeapRef(f.var_unique_name, interp_expr e1)
+	HeapRef(heap_field_var f.var_unique_name (type_why e1), interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
 
@@ -671,8 +681,9 @@ and interp_address e = match e.nexpr_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_expr e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
+	    let var = heap_field_var f.var_unique_name (type_why e1) in
             build_complex_app (Var "acc_") 
-	    [Var f.var_unique_name; interp_expr e1]
+	    [Var var; interp_expr e1]
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
       end
 (*
@@ -773,33 +784,35 @@ let collect_locations before acc loc =
      pointer, or as Pset s with s a Why term of type pset *)
   let rec term_or_pset t = match t.nterm_node with
     | NTarrow (e, f) ->
-	let m = interp_var (Some before) f.var_unique_name in
+	let m = 
+	  interp_var (Some before) 
+	    (heap_field_var f.var_unique_name (type_why_for_term e)) in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
     | NTstar e ->
-	let var = global_var_for_array_type e.nterm_type in
+	let var = heap_var (type_why_for_term e) in
 	let m = interp_var (Some before) var in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
     | NTrange (e, None, None) ->
-	let var = global_var_for_array_type e.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
     | NTrange (e, None, Some a) ->
-	let var = global_var_for_array_type e.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	Pset (LApp ("pset_acc_range_left", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
     | NTrange (e, Some a, None) ->
-	let var = global_var_for_array_type e.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	Pset (LApp ("pset_acc_range_right", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
     | NTrange (e, Some a, Some b) ->
-	let var = global_var_for_array_type e.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	Pset (LApp ("pset_acc_range", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a;
@@ -814,28 +827,28 @@ let collect_locations before acc loc =
   in
   let var,iloc = match loc.nterm_node with
     | NTarrow(e,f) ->
-	f.var_unique_name, Some (pset e)
+	heap_field_var f.var_unique_name (type_why_for_term e), Some (pset e)
     | NTstar e1 -> 
-	let var = global_var_for_array_type e1.nterm_type in
+	let var = heap_var (type_why_for_term e1) in
 	var, Some (pset e1)
     | NTvar v ->
 	v.var_unique_name, None
     | NTrange (t, None, None) -> 
-	let var = global_var_for_array_type t.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	let loc = LApp ("pset_all", [pset t]) in
 	var, Some loc
     | NTrange (t, None, Some a) -> 
-	let var = global_var_for_array_type t.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	let loc = LApp ("pset_range_left", 
 			[pset t; interp_term (Some before) before a]) in
 	var, Some loc
     | NTrange (t, Some a, None) -> 
-	let var = global_var_for_array_type t.nterm_type in
+	let var = heap_var (type_why_for_term t) in
 	let loc = LApp ("pset_range_right", 
 			[pset t; interp_term (Some before) before a]) in
 	var, Some loc
     | NTrange(t1, Some t2, Some t3) -> 
-	let var = global_var_for_array_type t1.nterm_type in
+	let var = heap_var (type_why_for_term t1) in
 	let loc = 
 	  LApp("pset_range",
 	       [pset t1;
@@ -851,7 +864,8 @@ let collect_locations before acc loc =
     (match p, iloc with
        | Reference _, None -> StringMap.add var (Reference true) acc
        | Memory l, Some iloc -> StringMap.add var (Memory (iloc::l)) acc
-       | _ -> assert false)
+       | Reference _,Some n -> eprintf "iloc = %a\n" fprintf_term n;assert false
+       | Memory _,_ -> assert false)
   with Not_found -> 
     (match iloc with
        | None -> StringMap.add var (Reference true) acc
@@ -868,9 +882,10 @@ let interp_assigns before assigns = function
 	HeapVarSet.fold
 	  (fun v m -> 
 	     let t = 
+(*	       eprintf "is_memory_var ( %s ) \n" v.var_unique_name; *)
 	       if Ceffect.is_memory_var v then Memory []  else Reference false
 	     in
-	     StringMap.add v.var_unique_name t m)
+	     StringMap.add (heap_var_name v) t m)
 	  assigns StringMap.empty
       in
       let l = 
@@ -926,7 +941,9 @@ let interp_strong_invariants () =
     (fun id (p,e,args) acc -> 
        let args = 
 	 HeapVarSet.fold 
-	   (fun x acc -> (x.var_unique_name, Ceffect.heap_var_type x) :: acc) 
+	   (fun x acc -> 
+	      (heap_var_name x, 
+	       Info.output_why_type x.var_why_type) :: acc) 
 	   e args
        in
        if args = [] then acc else
@@ -937,19 +954,35 @@ let interp_strong_invariants () =
 let strong_invariant_name id e =
   LPred(id, 
 	(HeapVarSet.fold 
-	   (fun x acc -> (LVar x.var_unique_name) :: acc) 
+	   (fun x acc -> (LVar (heap_var_name x)) :: acc) 
 	   e []))
 
+open Pp
+
+let print_effects fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
+    (HeapVarSet.elements l)
+
 let strong_invariants_for hvs =
+(*
+  eprintf "effects for function before invariants: reads %a @." 
+    print_effects hvs;
+*)
   Hashtbl.fold
     (fun id (p,e1,e2) acc -> 
+(*
+       eprintf "avant : %s ajout? %b effect %a@\n" id (HeapVarSet.subset e2 hvs)
+       print_effects e2;
+*)
        if HeapVarSet.subset e2 hvs then
+	 ((* eprintf "apres : %s@\n" id; *)
 	 make_and 
 	   (if (Ceffect.mem_strong_invariant_2 id) || (Cenv.mem_pred id)
 	    then
 	       strong_invariant_name id e1
 	    else
-	      strong_invariant id p e2)  acc
+	      strong_invariant id p e2)  acc)
        else acc) 
     Ceffect.strong_invariants LTrue
 
@@ -974,9 +1007,9 @@ let alloc_on_stack loc v t =
   let form = 
     Cnorm.make_and 
       (List.fold_left (fun x v2 -> Cnorm.make_and x 
-			   (Cnorm.separation loc v v2)) 
+			   (Cseparation.separation loc v v2)) 
 	 Cnorm.nptrue !Ceffect.global_var)
-      (Cnorm.valid_for_type ~fresh:true loc v.var_name t)
+      (Cseparation.valid_for_type ~fresh:true loc v.var_name t)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
 		      make_and 
@@ -1332,12 +1365,15 @@ let interp_predicate_args id args =
   let args =
     List.fold_right
       (fun (id,t) args -> 
-	 (id.var_unique_name,([],Ceffect.interp_type t))::args)
+	 (id.var_unique_name,id.var_why_type)::args)
       args []
   in
   (HeapVarSet.fold
-    (fun arg t -> (arg.var_unique_name,Ceffect.heap_var_type arg) :: t)
-    id.logic_args [])@args
+    (fun arg t -> (heap_var_name arg,arg.var_why_type) :: t)
+    id.logic_heap_args [])@args
+
+let type_to_base_type l = 
+  List.map (fun (x,y) -> (x,Info.output_why_type y)) l
 
 let cinterp_logic_symbol id ls =
   match ls with
@@ -1347,39 +1383,51 @@ let cinterp_logic_symbol id ls =
 	  List.fold_right 
 	    (fun (x,t) ty -> 
 	       Prod_type (x, Base_type t, ty)) 
-	    args (Base_type ([],"prop"))
+	     (type_to_base_type args) 
+	      (Base_type ([],"prop"))
 	in
 	Logic(false, id.logic_name, ty)
     | NPredicate_def(args,p) -> 
 	let a = interp_predicate None "" p in
 	let args = interp_predicate_args id args in
-	Predicate(false,id.logic_name,args,a)
+	Predicate(false,id.logic_name,(type_to_base_type args),a)
     | NFunction(args,ret,_) ->
+	let ret_type =
+	  match ret.Ctypes.ctype_node with
+	    | Tvar s -> base_type s
+	    | _ -> assert false
+	in
 	let local_type =
 	  List.fold_right
 	    (fun (id,ty) t -> 
-	       Prod_type(id.var_unique_name,base_type (Ceffect.interp_type ty),t))
-	    args (base_type (Ceffect.interp_type ret))
+	       Prod_type(id.var_unique_name,
+			 Base_type (Info.output_why_type id.var_why_type),t))
+	    args ret_type
 	in
 	let final_type =
 	  HeapVarSet.fold
 	    (fun arg t -> 
-	       let ty = Ceffect.heap_var_type arg in 
-	       Prod_type("",Base_type ty,t))
-	    id.logic_args local_type
+	       let ty = arg.var_why_type in 
+	       Prod_type("",Base_type (Info.output_why_type ty),t))
+	    id.logic_heap_args local_type
 	in
 	Logic(false,id.logic_name,final_type)
-    | NFunction_def(args,t,e) ->
+    | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
-	let t = [], Ceffect.interp_type t in
+	let ret_type =
+	  match ret.Ctypes.ctype_node with
+	    | Tvar s -> [],s
+	    | _ -> assert false
+	in
 	let args = interp_predicate_args id args in
-	Output.Function(false,id.logic_name,args,t,e)
+	Output.Function(false,id.logic_name,type_to_base_type args,ret_type,e)
 	  
 let interp_axiom p =
   let a = interp_predicate None "" p
   and e = Ceffect.predicate p in
   HeapVarSet.fold
-    (fun arg t -> LForall(arg.var_unique_name,Ceffect.heap_var_type arg,t))
+    (fun arg t -> LForall
+       (heap_var_name arg,Info.output_why_type arg.var_why_type,t))
     e a
 
 let interp_effects e =
@@ -1399,12 +1447,13 @@ let interp_fun_params params =
   then ["tt",unit_type]
   else List.fold_right 
     (fun (id) tpl ->
-       let tt = Ceffect.interp_type id.var_type in
-       (id.var_unique_name,base_type tt)::tpl)
+       let tt = Base_type (Info.output_why_type id.var_why_type) in
+       (id.var_unique_name,tt)::tpl)
  params []
 
+
 let heap_var_unique_names v =
-  HeapVarSet.fold (fun v l -> v.var_unique_name::l) v []
+  HeapVarSet.fold (fun v l -> heap_var_name v::l) v []
   
 
 let interp_function_spec id sp ty pl =
@@ -1418,7 +1467,7 @@ let interp_function_spec id sp ty pl =
   let w = heap_var_unique_names id.function_writes in
   let annot_type = 
     Annot_type
-      (pre, Base_type ([], Ceffect.interp_type ty), r, w, post, None)
+      (pre, Base_type (Info.output_why_type id.type_why_fun), r, w, post, None)
   in
   let ty = 
     List.fold_right 

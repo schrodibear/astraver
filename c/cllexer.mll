@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.33 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.34 2005-11-07 15:13:29 hubert Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -25,7 +25,8 @@
   open Cerror
   open Clogic
 
-  let loc lexbuf = (lexeme_start lexbuf, lexeme_end lexbuf)
+  let loc lexbuf = 
+    (Loc.reloc (lexeme_start_p lexbuf), Loc.reloc (lexeme_end_p lexbuf))
 
   let lex_error lexbuf s =
     Creport.raise_located (loc lexbuf) (AnyMessage ("lexical error: " ^ s))
@@ -68,6 +69,12 @@
       ];
     fun s -> try Hashtbl.find h s with Not_found -> IDENTIFIER s
 
+  let newline lexbuf =
+    let pos = lexbuf.lex_curr_p in
+    lexbuf.lex_curr_p <- 
+      { pos with 
+	  pos_lnum = pos.pos_lnum + 1; 
+	  pos_bol = pos.pos_cnum + !Loc.current_offset }
 }
 
 let space = [' ' '\t' '\012' '\r']
@@ -80,7 +87,8 @@ let rFS	= ('f'|'F'|'l'|'L')
 let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
-  | '@' | [' ' '\t' '\012' '\r' '\n']+ { token lexbuf }
+  | '@' | [' ' '\t' '\012' '\r']+ { token lexbuf }
+  | '\n' { newline lexbuf; token lexbuf }
   | "(*"                    { comment lexbuf; token lexbuf }
 
   | "\\forall"  { FORALL }
@@ -157,6 +165,7 @@ and comment = parse
   | "*)" { () }
   | "(*" { comment lexbuf; comment lexbuf }
   | eof  { lex_error lexbuf "Unterminated_comment" }
+  | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }
 
 
@@ -164,12 +173,18 @@ and comment = parse
 
   let parse_with_offset f (ofs, s) =
     let lb = from_string s in
+    Loc.current_offset := ofs.pos_cnum + 3;
+    lb.lex_curr_p <- ofs;
     try
       f token lb
-    with 
-      | Parsing.Parse_error as e -> 
-	  let loc = ofs + lexeme_start lb, ofs + lexeme_end lb in
-	  Creport.raise_located loc (AnyMessage "Syntax error")
+    with Parsing.Parse_error ->
+      let loc = loc lb in
+      let b,e = loc in
+      Format.eprintf
+	"lnum = %d bol = %d cnum = %d@." b.pos_lnum b.pos_bol b.pos_cnum;
+      Format.eprintf
+	"lnum = %d bol = %d cnum = %d@." e.pos_lnum e.pos_bol e.pos_cnum;
+      Creport.raise_located loc (AnyMessage "Syntax error in annotation")
 
   let annot = parse_with_offset Clparser.annot
 

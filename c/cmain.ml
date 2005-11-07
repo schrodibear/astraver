@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.59 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.60 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -90,8 +90,10 @@ let main () =
 	 fprintf fmt "%a@." Cprint.nfile p;
 	 close_out c) nfiles;
   end;
+  (* séparation*)
+  List.iter (fun (f,p) ->  Cseparation.file p)  nfiles;
   (*predicate*)
-  let nfiles = List.map (fun (f,p) -> (f, Invariant.add_predicates p)) 
+ let nfiles = List.map (fun (f,p) -> (f, Invariant.add_predicates p)) 
 		 nfiles in
   if print_norm then begin
     List.iter 
@@ -109,7 +111,7 @@ let main () =
   done;
   Queue.iter 
     (fun (loc,msg) ->
-       lprintf "%a %s@." Loc.report loc msg;
+       lprintf "%a %s@." Loc.report_position loc msg;
        warning loc msg)
     Ceffect.warnings;
   lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
@@ -120,17 +122,28 @@ let main () =
   in
   (* Why specs *)
   List.iter
-    (fun f -> 
-       let f = Filename.chop_extension f in
-       let file = Lib.file "why" (f ^ "_spec") in
-       Pp.print_in_file 
+  (fun f -> 
+     let f = Filename.chop_extension f in
+     let file = Lib.file "why" (f ^ "_spec") in
+     Pp.print_in_file 
 	 (fun fmt -> 
 	    fprintf fmt 
 	      "(* this file was automatically generated; do not edit *)@\n@\n";
-	    fprintf fmt "(* heap variables *)@\n";
+	    fprintf fmt "(* zone variables *)@.";
+	    Hashtbl.iter 
+	      (fun name z ->
+		 match z.Info.repr with 
+		   | None ->
+		       let d = Type (name,[]) in
+		       fprintf fmt "@[%a@]" fprintf_why_decls [d]
+		   | Some _ -> ())
+	      Cenv.zone_table;
+	    fprintf fmt "(* heap variables *)@.";
 	    Hashtbl.iter 
 	      (fun v bt -> 
-		 let d = Param (false, v, Ref_type (Base_type bt)) in
+		 let d = Param 
+		   (false, v, 
+		    Ref_type (Base_type (Info.output_why_type bt.Info.var_why_type))) in
 		 fprintf fmt "@[%a@]" fprintf_why_decls [d])
 	      Ceffect.heap_vars;
 	    fprintf fmt "(* functions specifications *)@\n";
@@ -149,7 +162,7 @@ let rec explain_exception fmt = function
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
   | Error (Some loc, e) ->
-      fprintf fmt "%a%a" Loc.report loc report e
+      fprintf fmt "%a%a" Loc.report_position loc report e
   | Error (_, e) ->
       report fmt e
   | e ->
@@ -159,7 +172,10 @@ let rec explain_exception fmt = function
 
 (* for debugging *)
 
-(*let () = main (); exit 1*)
+
+(*
+let () = main (); exit 1
+*)
 
 let () =
   try

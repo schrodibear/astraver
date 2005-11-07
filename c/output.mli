@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.14 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.15 2005-11-07 15:13:29 hubert Exp $ i*)
 
 type constant =
   | Prim_int of int64
@@ -28,6 +28,8 @@ type term =
   | LVar of string
   | LVarAtLabel of string * string     (*r x@L *)
 ;;
+
+val fprintf_term : Format.formatter -> term -> unit
 
 type base_type = string list * string       (*r int, float, int list, ... *)
 
@@ -153,6 +155,7 @@ type why_decl =
   | Axiom of string * assertion            (*r Axiom *)
   | Predicate of bool * string * (string * base_type) list * assertion  
   | Function of bool * string * (string * base_type) list * base_type * term
+  | Type of string * string list
 
 type prover_decl =
   | Parameter  of string * why_type       (*r Parameter *)

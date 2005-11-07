@@ -5,15 +5,15 @@ Require Export passing_spec_why.
 
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (x: pointer),
+  forall (x: ((pointer) Z7)),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (HW_1: (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-27 *)
+  forall (int_Z7: ((memory) Z Z7)),
+  forall (HW_1: (* File \"passing.c\", line 21, characters 14-31:\n *)
                 (valid_index alloc x 0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: intP0 = (upd intP x 1)),
-  (* File \"passing.c819618234.c\", line 0, characters 10-19 *)
-  (acc intP0 x) = 1 /\ (not_assigns alloc intP intP0 (pset_singleton x)).
+  forall (int_Z7_0: ((memory) Z Z7)),
+  forall (HW_2: int_Z7_0 = (upd int_Z7 x 1)),
+  (* File \"passing.c\", line 21, characters 53-62:\n *) (acc int_Z7_0 x) = 1 /\
+  (not_assigns alloc int_Z7 int_Z7_0 (pset_singleton x)).
 Proof.
 intuition.
 subst; auto.
@@ -22,9 +22,9 @@ Save.
 
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (x: pointer),
+  forall (x: ((pointer) Z7)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-27 *)
+  forall (HW_1: (* File \"passing.c\", line 21, characters 14-31:\n *)
                 (valid_index alloc x 0)),
   (valid alloc x).
 Proof.
@@ -35,18 +35,17 @@ Save.
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (r: pointer),
-  forall (HW_1: (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-19 *)
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (r: ((pointer) Z5)),
+  forall (HW_1: (* File \"passing.c\", line 13, characters 14-23:\n *)
                 (valid alloc r)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"passing.c819618234.c\", line 0, characters 0-7 *)
-                (acc intP0 r) = 0 /\
-                (not_assigns alloc intP intP0 (pset_singleton r))),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_2: (* File \"passing.c\", line 8, characters 43-50:\n *)
+                (acc int_Z5_0 r) = 0 /\
+                (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton r))),
   forall (result: Z),
-  forall (HW_3: result = (acc intP0 r)),
-  (* File \"passing.c819618234.c1069824147.i\", line 0, characters 28-40 *)
-  result = 0.
+  forall (HW_3: result = (acc int_Z5_0 r)),
+  (* File \"passing.c\", line 13, characters 32-44:\n *) result = 0.
 Proof.
 intuition.
 Save.
@@ -54,14 +53,14 @@ Save.
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g2_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (r: pointer),
-  forall (HW_1: (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-19 *)
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (r: ((pointer) Z5)),
+  forall (HW_1: (* File \"passing.c\", line 13, characters 14-23:\n *)
                 (valid alloc r)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"passing.c819618234.c\", line 0, characters 0-7 *)
-                (acc intP0 r) = 0 /\
-                (not_assigns alloc intP intP0 (pset_singleton r))),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_2: (* File \"passing.c\", line 8, characters 43-50:\n *)
+                (acc int_Z5_0 r) = 0 /\
+                (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton r))),
   (valid alloc r).
 Proof.
 intuition.
@@ -74,16 +73,28 @@ intuition.
 Save.
 
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_1 : 
-  forall (x: pointer),
+(*Why goal*) Lemma g2_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (HW_1: (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-19 *)
+  forall (r: ((pointer) Z5)),
+  forall (HW_1: (* File \"passing.c\", line 13, characters 14-23:\n *)
+                (valid alloc r)),
+  (* File \"passing.c\", line 8, characters 14-23:\n *) (valid alloc r).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_1 : 
+  forall (x: ((pointer) Z5)),
+  forall (alloc: alloc_table),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"passing.c\", line 8, characters 14-23:\n *)
                 (valid alloc x)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: intP0 = (upd intP x 0)),
-  (* File \"passing.c819618234.c\", line 0, characters 0-7 *) (acc intP0 x) =
-  0 /\ (not_assigns alloc intP intP0 (pset_singleton x)).
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_2: int_Z5_0 = (upd int_Z5 x 0)),
+  (* File \"passing.c\", line 8, characters 43-50:\n *) (acc int_Z5_0 x) = 0 /\
+  (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton x)).
 Proof.
 intuition.
 Save.
@@ -91,9 +102,9 @@ Save.
 
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
-  forall (x: pointer),
+  forall (x: ((pointer) Z5)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-19 *)
+  forall (HW_1: (* File \"passing.c\", line 8, characters 14-23:\n *)
                 (valid alloc x)),
   (valid alloc x).
 Proof.
@@ -104,15 +115,14 @@ Save.
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (t: pointer),
+  forall (int_Z7: ((memory) Z Z7)),
+  forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 1)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"passing.c819618234.c\", line 0, characters 10-19 *)
-                (acc intP0 t) = 1 /\
-                (not_assigns alloc intP intP0 (pset_singleton t))),
-  (* File \"passing.c819618234.c1069824147.i\", line 0, characters 9-18 *)
-  (acc intP0 t) = 1.
+  forall (int_Z7_0: ((memory) Z Z7)),
+  forall (HW_2: (* File \"passing.c\", line 21, characters 53-62:\n *)
+                (acc int_Z7_0 t) = 1 /\
+                (not_assigns alloc int_Z7 int_Z7_0 (pset_singleton t))),
+  (* File \"passing.c\", line 28, characters 13-22:\n *) (acc int_Z7_0 t) = 1.
 Proof.
 intuition.
 Save.
@@ -120,9 +130,9 @@ Save.
 (* Why obligation from file "why/passing.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (t: pointer),
+  forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 1)),
-  (* File \"passing.c819618234.c1069824147.i\", line 0, characters 10-27 *)
+  (* File \"passing.c\", line 21, characters 14-31:\n *)
   (valid_index alloc t 0).
 Proof.
 intuition.

@@ -21,7 +21,7 @@
   open Cast
   open Clogic
 
-  let loc () = (symbol_start (), symbol_end ())
+  let loc () = (Loc.reloc (symbol_start_pos ()), Loc.reloc (symbol_end_pos ()))
   let loc_i i = (rhs_start i, rhs_end i)
   let info x = { Clogic.lexpr_node = x; lexpr_loc = loc () }
 

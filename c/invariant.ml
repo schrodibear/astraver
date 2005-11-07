@@ -5,6 +5,7 @@ open Clogic
 open Cenv
 open Cnorm
 open Cprint
+open Cseparation
 
 let var_to_term loc v =
   {
@@ -15,7 +16,7 @@ let var_to_term loc v =
 let indirection loc ty t =
   { nterm_node = NTstar t; 
     nterm_loc = loc; 	   
-    nterm_type = ty}
+    nterm_type = ty;}
 
 let noattr_type ty =
   {ctype_node = ty;
@@ -27,8 +28,8 @@ let noattr_type ty =
 
 let noattr_term ty t= 
   { nterm_node = t; 
-    nterm_loc = Loc.dummy;
-    nterm_type = ty }
+    nterm_loc = Loc.dummy_position;
+    nterm_type = ty;}
 
 let find_pred x = snd (find_pred x)
   
@@ -40,7 +41,7 @@ let rec predicate_for name t =
 	  (*,
  	    NPapp (find_pred ("valid_" ^ n), [t]))*)
     | Tarray (ty, None) ->
-	error Loc.dummy ("array size missing in `" ^ name ^ "'")
+	error Loc.dummy_position ("array size missing in `" ^ name ^ "'")
     | Tarray (ty, Some s) ->
 	  let i = default_var_info "counter" in
 	  let vari = noattr_term c_int (NTvar i) in
@@ -64,12 +65,6 @@ let rec predicate_for name t =
      | _ -> nptrue
 
 
-let not_alias loc x y = 
-  let ba t = { nterm_node = NTbase_addr t; 
-	       nterm_loc = loc;
-	       nterm_type = c_addr } in 
-  nprel (ba x, Neq, ba y)
-
 let fresh_index = 
   let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
 
@@ -80,11 +75,11 @@ let make_forall_range loc t b f =
     let i = default_var_info (fresh_index ()) in
     let vari = { nterm_node = NTvar i; 
 		 nterm_loc = loc;
-		 nterm_type = c_int } in
+		 nterm_type = c_int;} in
     let ti = 
       { nterm_node = NTbinop (t, Badd, vari); 
 	nterm_loc = loc;
-	nterm_type = t.nterm_type }
+	nterm_type = t.nterm_type;}
     in
     let pred = (f ti vari) in
     if pred = nptrue
@@ -131,33 +126,33 @@ and local_separation loc n1 v1 n2 v2 =
 let rec separation_intern2  n1 v1 =
   match v1.nterm_type.Ctypes.ctype_node with
     | Tarray (_,None) -> 
-	error Loc.dummy ("array size missing in `" ^ n1 ^ "'")
+	error Loc.dummy_position ("array size missing in `" ^ n1 ^ "'")
     | Tarray(ty,Some s) ->
 	  begin
 	    match ty.Ctypes.ctype_node with
 	      | Tarray (_,None) -> 
-		error Loc.dummy ("array size missing in `" ^ n1 
+		error Loc.dummy_position ("array size missing in `" ^ n1 
 				 ^ "[i]'")
 	      | Tstruct _ ->
-		  (make_forall_range Loc.dummy v1 s 
+		  (make_forall_range Loc.dummy_position v1 s 
 		     (fun t1 i1 ->
-			make_forall_range Loc.dummy v1 s
+			make_forall_range Loc.dummy_position v1 s
 			  (fun t2 i2 -> 
 			     if i1 = nzero && i2 = nzero then nptrue 
 			     else
 			       make_implies (nprel (i1, Neq, i2)) 
-				 (not_alias Loc.dummy t1 t2))))
+				 (not_alias Loc.dummy_position t1 t2))))
 	      | Tarray (_,_)->  
 		  make_and
-		    (make_forall_range Loc.dummy v1 s 
+		    (make_forall_range Loc.dummy_position v1 s 
 		       (fun t1 i1 ->
-			  make_forall_range Loc.dummy v1 s
+			  make_forall_range Loc.dummy_position v1 s
 			    (fun t2 i2 -> 
 			       if i1 = nzero && i2 = nzero then nptrue 
 			       else
 				 make_implies (nprel (i1, Neq, i2)) 
-				   (not_alias Loc.dummy t1 t2))))
-		    (make_forall_range Loc.dummy v1 s 
+				   (not_alias Loc.dummy_position t1 t2))))
+		    (make_forall_range Loc.dummy_position v1 s 
 		       (fun t i -> 
 			  separation_intern2 n1 
 			    (noattr_term ty t.nterm_node)))    
@@ -219,15 +214,9 @@ let rec fold_2 f l =
     | v::l ->
 	List.fold_left (fun acc x ->(f v x)@acc) (fold_2 f l) l
     | _ -> [] 
-(*
-let create_term n =
-  let v = (default_var_info n) in
-  set_var_type (Var_info v) (pointer memory);
-  set_static v;
-  (var_to_term Loc.dummy v)
-*)
+
 let noattr_located n =  
-  { Cast.node = n; Cast.loc = Loc.dummy }
+  { Cast.node = n; Cast.loc = Loc.dummy_position }
 
 
 let separation_first mark diag v1 v2 =
@@ -236,13 +225,13 @@ let separation_first mark diag v1 v2 =
   let n2 =  v2.var_unique_name in
   match v1.var_type.Ctypes.ctype_node,v2.var_type.Ctypes.ctype_node with
     | Tarray (_,None), _  ->
-	error Loc.dummy ("array size missing in `" ^ n1 ^ "[i]'") 
+	error Loc.dummy_position ("array size missing in `" ^ n1 ^ "[i]'") 
     | _ , Tarray (_,None) ->
-	error Loc.dummy ("array size missing in `" ^ n2 ^ "[i]'") 
+	error Loc.dummy_position ("array size missing in `" ^ n2 ^ "[i]'") 
     | Tstruct _ , Tstruct _ ->
 	let pre = sep ^ n1 ^ "_" ^ n2 in
 	let info = Info.default_logic_info (pre) in
-	info.logic_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	Cenv.add_pred (pre)  ([], info);
 	[noattr_located (
 	   Cast.Ninvariant_strong (
@@ -253,7 +242,7 @@ let separation_first mark diag v1 v2 =
 	if compatible_type ty v2.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
 	  [noattr_located 
 	     (Cast.Ninvariant_strong (
@@ -269,7 +258,7 @@ let separation_first mark diag v1 v2 =
 	if compatible_type ty v1.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
 	  [noattr_located
 	     (Cast.Ninvariant_strong (
@@ -287,7 +276,7 @@ let separation_first mark diag v1 v2 =
 	if mark then
 	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
 	  let ty = noattr_type (Tpointer (noattr_type (Tvoid))) in
 	  let var = default_var_info (fresh_index()) in
@@ -301,20 +290,20 @@ let separation_first mark diag v1 v2 =
 		  "separation_" ^ n1 ^ "_" ^ n2,
 		  make_forall 
 		    [ty,var] 
-		    (local_separation Loc.dummy n1 
+		    (local_separation Loc.dummy_position n1 
 		       (make_sub_term term ty1 v1) n2
 		       (make_sub_term term ty2 v2))))]
 	else
  	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in
-	  info.logic_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
+	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
 	  let ty = noattr_type (Tpointer (noattr_type (Tvoid))) in
 	  let var1 = default_var_info (fresh_index()) in
 	  let var2 = default_var_info (fresh_index()) in
 	  let term1 = noattr_term ty (NTvar var1) in
 	  let term2 = noattr_term ty (NTvar var2) in
-	  let pred = (local_separation Loc.dummy n1 
+	  let pred = (local_separation Loc.dummy_position n1 
 			(make_sub_term term1 ty1 v1)
 			n2 
 			(make_sub_term term2 ty2 v2)) in
@@ -352,7 +341,7 @@ let rec separation_intern n =
     let n1 = v1.var_unique_name in
     match v1.var_type.Ctypes.ctype_node with
       | Tarray (_,None) -> 
-	  error Loc.dummy ("array size missing in `" 
+	  error Loc.dummy_position ("array size missing in `" 
 			       ^ n1 ^ "[i]'")
       | Tarray (ty,Some s) ->
 	  begin
@@ -360,7 +349,7 @@ let rec separation_intern n =
 	      | Tstruct _ -> 
 		  let pre = "%separation1_range_" ^ n1  in 
 		  let info = Info.default_logic_info (pre) in
-		  info.logic_args <- HeapVarSet.singleton v1 ; 
+		  info.logic_heap_args <- HeapVarSet.singleton v1 ; 
 		  Cenv.add_pred (pre)  ([], info);
 		  [noattr_located (Cast.Ninvariant_strong (
 				    "internal_separation_" ^ n1 ^ "_array1" , 
@@ -375,7 +364,7 @@ let rec separation_intern n =
 	      |Tarray _ ->	
 		 let pre = "%separation1_range_" ^ n1  in 
 		 let info = Info.default_logic_info (pre) in
-		 info.logic_args <- HeapVarSet.singleton v1 ; 
+		 info.logic_heap_args <- HeapVarSet.singleton v1 ; 
 		 Cenv.add_pred (pre)  ([], info);
 		 noattr_located (Cast.Ninvariant_strong (
 				   "internal_separation_" ^ n1 ^ "_array1" , 
@@ -389,8 +378,8 @@ let rec separation_intern n =
 					       (Int64.to_string s)))])))::
 		   noattr_located (Cast.Ninvariant_strong (
 				     "internal_separation_" ^ n1 ^ "_array2",
-				     (make_forall_range Loc.dummy 
-					(var_to_term Loc.dummy v1) s 
+				     (make_forall_range Loc.dummy_position 
+					(var_to_term Loc.dummy_position v1) s 
 					(fun t i -> 
 					    separation_intern2 n1 
 					      (noattr_term 
@@ -423,7 +412,7 @@ let add_predicates l =
 	     | Tstruct n ->
 		 let pre = "%valid1" ^ n  in 
 		 let info = Info.default_logic_info (pre) in
-		 info.logic_args <- HeapVarSet.singleton f; 
+		 info.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre)  ([], info);
 		 [noattr_located (
 		    Cast.Ninvariant_strong (
@@ -432,11 +421,11 @@ let add_predicates l =
 		 let n1 = f.var_unique_name in
 		 let pre = "%valid1_" ^ n1 in 
 		 let info = Info.default_logic_info (pre) in
-		 info.logic_args <- HeapVarSet.singleton f; 
+		 info.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre)  ([], info);
 		 let pre2 = "%valid1_range_" ^ n1  in 
 		 let info2 = Info.default_logic_info (pre2) in
-		 info2.logic_args <- HeapVarSet.singleton f; 
+		 info2.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre2)  ([], info2);
 		 noattr_located (
 		 Cast.Ninvariant_strong ("valid_array"^ n1,
@@ -451,14 +440,15 @@ let add_predicates l =
 		   begin
 		     match ty.ctype_node with
 		       | Tarray (ty, None)->
-			   error Loc.dummy 
+			   error Loc.dummy_position 
 			     ("array size missing in `" ^ f.var_name ^ "'")
 		       | Tarray (ty, Some s1) ->
 			 [noattr_located (
 			    Cast.Ninvariant_strong 
 			      ("valid_matrice" ^ n1,
 			       make_forall_range 
-				 Loc.dummy (var_to_term Loc.dummy f) s 
+				 Loc.dummy_position 
+				 (var_to_term Loc.dummy_position f) s 
 				 (fun t i -> predicate_for f.var_name 
 				     (noattr_term (noattr_type (Tpointer ty)) 
 					(NTbinop (t,Badd,i))))))]

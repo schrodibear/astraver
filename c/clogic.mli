@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.48 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.49 2005-11-07 15:13:29 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -40,7 +40,7 @@ type relation = Lt | Gt | Le | Ge | Eq | Neq
 
 type lexpr = {
   lexpr_node : lexpr_node;
-  lexpr_loc : Loc.t
+  lexpr_loc : Loc.position
 }
 
 and lexpr_node = 
@@ -86,8 +86,8 @@ and lexpr_node =
 
 type 'ctype term = {
   term_node : 'ctype term_node;
-  term_loc : Loc.t;
-  term_type : 'ctype
+  term_loc : Loc.position;
+  term_type : 'ctype;
 }
 
 and 'ctype term_node =
@@ -104,8 +104,10 @@ and 'ctype term_node =
   | Tat of 'ctype term * string
   | Tbase_addr of 'ctype term
   | Tblock_length of 'ctype term
-  | Tresult
+(*
+  | Tresult of Info.env_info
   | Tnull
+*)
   | Tcast of 'ctype * 'ctype term
   | Trange of 'ctype term * 'ctype term option * 'ctype term option
 
@@ -113,7 +115,7 @@ and 'ctype term_node =
 
 type 'ctype predicate = {
   pred_node : 'ctype predicate_node;
-  pred_loc : Loc.t;
+  pred_loc : Loc.position;
 }
 
 and 'ctype predicate_node = 
@@ -170,8 +172,8 @@ normalized AST
 
 type 'ctype nterm = {
   nterm_node : 'ctype nterm_node;
-  nterm_loc : Loc.t;
-  nterm_type : 'ctype
+  nterm_loc : Loc.position;
+  nterm_type : 'ctype;
 }
 
 and 'ctype nterm_node =
@@ -187,14 +189,16 @@ and 'ctype nterm_node =
   | NTat of 'ctype nterm * string
   | NTbase_addr of 'ctype nterm
   | NTblock_length of 'ctype nterm
-  | NTresult
+(*
+  | NTresult of Info.env_info
   | NTnull
+*)
   | NTcast of 'ctype * 'ctype nterm
   | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option
 
 type 'ctype npredicate = {
   npred_node : 'ctype npredicate_node;
-  npred_loc : Loc.t
+  npred_loc : Loc.position
 }
 
 and 'ctype npredicate_node =

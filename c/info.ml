@@ -14,9 +14,78 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.25 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.26 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Ctypes
+open Creport
+
+type why_type = 
+  | Memory of why_type * zone
+  | Pointer of zone
+  | Int
+  | Float
+  | Unit
+  | Why_Logic of string
+
+and zone = 
+    {
+      mutable repr : zone option;
+      name : string;
+      mutable type_why_zone : why_type;
+    }
+
+
+let rec repr_aux z =
+  match z.repr with
+    | None -> z
+    | Some z -> repr_aux z
+
+(* path compression *)
+let repr z =
+  match z.repr with
+    | None -> z
+    | Some z' -> 
+	let z'' = repr_aux z' in
+	z.repr <- Some z''; z''
+
+
+let same_zone z1 z2 =
+   (repr z1) = (repr z2)
+  
+let rec same_why_type wt1 wt2 =
+  match wt1, wt2 with
+    | Pointer z1 , Pointer z2 ->
+	same_zone z1 z2 
+    | Memory(a1,z1),Memory(a2,z2) ->
+	same_zone z1 z2 && same_why_type a1 a2
+    | Int,Int -> true
+    | Float,Float -> true
+    | Unit,Unit -> true
+    | Why_Logic s1,Why_Logic s2 -> s1=s2
+    | _, _ -> false
+
+let rec same_why_type2 wt1 wt2 =
+  match wt1, wt2 with
+    | Pointer z1 , Pointer z2 -> true
+    | Memory(a1,z1),Memory(a2,z2) ->
+	same_why_type2 a1 a2
+    | Int,Int -> true
+    | Float,Float -> true
+    | Unit,Unit -> true
+    | Why_Logic s1,Why_Logic s2 -> s1=s2
+    | _, _ -> false
+
+let found_repr z = (repr z).name
+
+let rec output_why_type ty =
+    match ty with
+    | Int -> [], "int"
+    | Float -> [], "real"
+    | Pointer z -> [] , found_repr z ^ " pointer"
+    | Memory(t,z) -> (snd (output_why_type t))::[found_repr z], " memory"
+    | Unit -> [], "unit"
+    | Why_Logic v -> [], v
+
 
 type var_info =
     {
@@ -29,6 +98,7 @@ type var_info =
       mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
       mutable var_type : Ctypes.ctype;
+      mutable var_why_type : why_type;
     }
 
 let tag_counter = ref 0
@@ -44,6 +114,7 @@ let default_var_info x =
     var_is_a_formal_param = false;
     enum_constant_value = Int64.zero;
     var_type = c_void;
+    var_why_type = Int;
   }
 
 let set_assigned v = v.var_is_assigned <- true
@@ -84,12 +155,17 @@ let print_hvs fmt s =
 type logic_info =
     {
       logic_name : string;
-      mutable logic_args : HeapVarSet.t;
+      mutable logic_heap_args : HeapVarSet.t;
+      mutable logic_args : var_info list;
+      mutable logic_why_type : why_type;
     }
 
 let default_logic_info x =
   { logic_name = x;
-    logic_args = HeapVarSet.empty }
+    logic_heap_args = HeapVarSet.empty;
+    logic_args = [];
+    logic_why_type = Unit;
+  }
 
 type fun_info =
     {
@@ -101,6 +177,7 @@ type fun_info =
       mutable fun_type : Ctypes.ctype;
       mutable args : var_info list;
       mutable graph : fun_info list;
+      mutable type_why_fun : why_type;
     }
 
 let default_fun_info x =
@@ -112,6 +189,7 @@ let default_fun_info x =
     fun_type = c_void;
     args = [];
     graph = [];
+    type_why_fun = Int;
   }
 
 
@@ -133,10 +211,19 @@ let var_type d =
     | Var_info v -> v.var_type
     | Fun_info f -> f.fun_type
 
-let set_var_type d ty = match d with
+let set_var_type d ty whyty = match d with
   | Var_info v ->   
       Coptions.lprintf "set_var_type %s <- %a@." v.var_name Ctypes.ctype ty;
-      v.var_type <- ty
+      v.var_type <- ty;
+      v.var_why_type <- whyty
   | Fun_info f -> 
       Coptions.lprintf "set_var_type %s <- %a@." f.fun_name Ctypes.ctype ty;
-      f.fun_type <- ty
+      f.fun_type <- ty;
+      f.type_why_fun <- whyty
+
+let set_var_type_why d whyty = match d with
+  | Var_info v ->   
+      v.var_why_type <- whyty
+  | Fun_info f -> 
+      f.type_why_fun <- whyty
+

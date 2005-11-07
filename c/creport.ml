@@ -14,13 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.15 2005-06-17 12:57:15 marche Exp $ i*)
+(*i $Id: creport.ml,v 1.16 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Format
 open Cerror
 open Ctypes
 
-exception Error of (Loc.t option) * Cerror.t
+exception Error of (Loc.position option) * Cerror.t
 
 (*s Pretty-printing of types *)
 
@@ -99,12 +99,12 @@ let with_offset ofs f x =
 
 let option_app f = function Some x -> Some (f x) | None -> None
 
-let raise_located loc e = raise (Error (Some (reloc loc), e))
+let raise_located loc e = raise (Error (Some (loc), e))
 let raise_unlocated e = raise (Error (None, e))
-let raise_locop locop e = raise (Error (option_app reloc locop, e))
-let unsupported loc s = raise (Error (Some (reloc loc), Unsupported s))
+let raise_locop locop e = raise (Error (locop, e))
+let unsupported loc s = raise (Error (Some loc, Unsupported s))
 
-let error l s = raise (Error (Some (reloc l), AnyMessage s))
+let error l s = raise (Error (Some l, AnyMessage s))
 
 let wtbl = Hashtbl.create 17;;
 
@@ -113,7 +113,6 @@ let warning l s =
   if n <= 2 then
     begin
       Hashtbl.add wtbl s (n+1);
-      let l = reloc l in
       Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s;
       if n = 2 then Format.eprintf "(this repeated warning will not appear anymore)@.";
       if Coptions.werror then exit 1

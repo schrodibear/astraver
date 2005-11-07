@@ -26,3 +26,26 @@ Require Export Caduceus.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z1: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why predicate*) Definition separation_int_int  (y:((pointer) Z3))
+  (x:((pointer) Z3)) := ~((base_addr y) = (base_addr x)).
+

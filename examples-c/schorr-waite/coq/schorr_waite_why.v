@@ -5,92 +5,84 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_1 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
   (well_founded order_mark_m_and_c_and_stack).
 Proof.
 intros; apply order_mark_m_and_c_and_stack_wf.
 Qed.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_2 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
+  forall (c_Z47: ((memory) Z Z47)),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47 r_Z47 alloc root x) \/
+      (reachable l_Z47 r_Z47 alloc null x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47 r_Z47 alloc root x) \/
+     (reachable l_Z47 r_Z47 alloc null x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47 l_Z47 r_Z47 alloc null stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47 x) = 0 ->
+     (unmarked_reachable m_Z47 l_Z47 r_Z47 alloc root x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47 l_Z47 r_Z47 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons root stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47 x) = (acc m_Z47 x))))).
 Proof.
 (* validity of access t->m in the condition of while *)
 intros root alloc l m r (A,_) t _ p _
@@ -105,73 +97,131 @@ assumption.
 left; exists (@nil pointer); constructor.
 Qed.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_3 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  (~(t1 = null) -> (valid alloc t1)).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_6: result <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_7: t0 = p),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_8: result0 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_9: p0 = result0),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_10: r_Z47_1 = (upd r_Z47_0 t0 t)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_0 r_Z47_1 alloc p0 x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_0 r_Z47_1 alloc p0 x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_0 l_Z47_0 r_Z47_1 alloc p0 stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_1 alloc
+                                 p0 t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
 Proof.
 (* validity of access to t->m in the condition of the first if *)
 intros root alloc l m r (A,_) t _ p _
@@ -186,75 +236,87 @@ assumption.
 left; exists (@nil pointer); constructor.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_4 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  (valid alloc p1).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_6: result <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_7: t0 = p),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_8: result0 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_9: p0 = result0),
+  (valid alloc t0).
 Proof.
 (* validity of access to p->c in the condition 
    of the second if *)
@@ -273,206 +335,218 @@ right; exists (@nil pointer); constructor.
 clear Test6; intuition.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_5 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test4: (acc c0 p1) <> 0),
-  forall (q: pointer),
-  forall (Post31: q = t1),
-  forall (t2: pointer),
-  forall (Post26: t2 = p1),
-  forall (p2: pointer),
-  forall (Post27: p2 = (acc r0 p1)),
-  forall (caduceus_7: pointer),
-  forall (Post30: caduceus_7 = t2),
-  (valid alloc caduceus_7).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_6: result <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_7: t0 = p),
+  (valid alloc p).
 Proof.
 (* validity of t in 't->r = q' 
    in the first branch of if *)
 intros; subst;auto.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_6 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test4: (acc c0 p1) <> 0),
-  forall (q: pointer),
-  forall (Post31: q = t1),
-  forall (t2: pointer),
-  forall (Post26: t2 = p1),
-  forall (p2: pointer),
-  forall (Post27: p2 = (acc r0 p1)),
-  forall (caduceus_7: pointer),
-  forall (Post30: caduceus_7 = t2),
-  forall (Pre31: (valid alloc caduceus_7)),
-  forall (r1: ((memory) pointer)),
-  forall (Post66: r1 = (upd r0 caduceus_7 q)),
-  (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_11: result = 0),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_12: result0 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_13: t0 = result0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_14: result1 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_15: r_Z47_1 = (upd r_Z47_0 p result1)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_16: l_Z47_1 = (upd l_Z47_0 p t)),
+  forall (c_Z47_1: ((memory) Z Z47)),
+  forall (HW_17: c_Z47_1 = (upd c_Z47_0 p 1)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
   (((* I1 *)
-    (forall (x:pointer),
-     ((reachable alloc l r root x) -> (reachable alloc l0 r1 t2 x) \/
-      (reachable alloc l0 r1 p2 x))) /\
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_1 r_Z47_1 alloc p x))) /\
   (* I2 *)
-  (forall (x:pointer),
+  (forall (x:((pointer) Z47)),
    (~(x = null) ->
-    ((reachable alloc l0 r1 t2 x) \/ (reachable alloc l0 r1 p2 x) ->
-     (reachable alloc l r root x))))) /\
+    ((reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_1 r_Z47_1 alloc p x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
   (* I0 *)
-  (exists stack:plist, (((((* I3 *) (clr_list alloc c0 l0 r1 p2 stack) /\
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_1 l_Z47_1 r_Z47_1 alloc p stack) /\
    (* I4 *)
-   (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
    (* I5 *)
-   (forall (x:pointer),
-    (((valid alloc x) /\ (reachable alloc l r root x)) /\ (acc m0 x) = 0 ->
-     (unmarked_reachable alloc m0 l0 r1 t2 x) \/
-     (exists y:pointer, (in_list y stack) /\
-      (unmarked_reachable alloc m0 l0 r1 (acc r1 y) x))))) /\
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
    (* I6 *)
-   (forall (x:pointer),
-    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\ (acc l0 x) = (acc l x)))) /\
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
    (* I7 *)
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     ((pair_in_list p1 p2 (cons t2 stack)) ->
-      (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\ (acc r p2) = p1)) /\
-      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
    (* I8 *)
-   (forall (x:pointer),
-    (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))) /\
-  (order_mark_m_and_c_and_stack (weight alloc m0 c0 l0 r1 p2 t2)
-   (weight alloc m0 c0 l0 r0 p1 t1)).
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_1 m_Z47_0 l_Z47_1 r_Z47_1 alloc
+                                 p t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
 Proof.
 (* preservation of loop invariant for the first branch of if "pop" *)
 intros.
@@ -1146,86 +1220,91 @@ auto.
 Save.
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_7 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test3: (acc c0 p1) = 0),
-  forall (q: pointer),
-  forall (Post25: q = t1),
-  forall (t2: pointer),
-  forall (Post14: t2 = (acc r0 p1)),
-  forall (caduceus_6: pointer),
-  forall (Post18: caduceus_6 = p1),
-  forall (Pre19: (valid alloc p1)),
-  forall (aux_1: pointer),
-  forall (Post17: aux_1 = (acc l0 p1)),
-  (valid alloc caduceus_6).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_11: result = 0),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_12: result0 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_13: t0 = result0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_14: result1 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_15: r_Z47_1 = (upd r_Z47_0 p result1)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_16: l_Z47_1 = (upd l_Z47_0 p t)),
+  (valid alloc p).
 Proof.
 (* validity of p in "p->r = p->l" in second branch of if "swing" *)
 intros; subst;auto.
@@ -1233,135 +1312,89 @@ Qed.
 
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_8 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test3: (acc c0 p1) = 0),
-  forall (q: pointer),
-  forall (Post25: q = t1),
-  forall (t2: pointer),
-  forall (Post14: t2 = (acc r0 p1)),
-  forall (caduceus_6: pointer),
-  forall (Post18: caduceus_6 = p1),
-  forall (Pre19: (valid alloc p1)),
-  forall (aux_1: pointer),
-  forall (Post17: aux_1 = (acc l0 p1)),
-  forall (Pre17: (valid alloc caduceus_6)),
-  forall (r1: ((memory) pointer)),
-  forall (Post58: r1 = (upd r0 caduceus_6 aux_1)),
-  (forall (result:pointer),
-   (result = p1 ->
-    (forall (l1:((memory) pointer)),
-     (l1 = (upd l0 result q) ->
-      (forall (result:pointer),
-       (result = p1 ->
-        (forall (c:((memory) Z)),
-         (c = (upd c0 result 1) ->
-          (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-          (((* I1 *)
-            (forall (x:pointer),
-             ((reachable alloc l r root x) -> (reachable alloc l1 r1 t2 x) \/
-              (reachable alloc l1 r1 p1 x))) /\
-          (* I2 *)
-          (forall (x:pointer),
-           (~(x = null) ->
-            ((reachable alloc l1 r1 t2 x) \/ (reachable alloc l1 r1 p1 x) ->
-             (reachable alloc l r root x))))) /\
-          (* I0 *)
-          (exists stack:plist,
-           (((((* I3 *) (clr_list alloc c l1 r1 p1 stack) /\
-           (* I4 *)
-           (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-           (* I5 *)
-           (forall (x:pointer),
-            (((valid alloc x) /\ (reachable alloc l r root x)) /\
-             (acc m0 x) = 0 -> (unmarked_reachable alloc m0 l1 r1 t2 x) \/
-             (exists y:pointer, (in_list y stack) /\
-              (unmarked_reachable alloc m0 l1 r1 (acc r1 y) x))))) /\
-           (* I6 *)
-           (forall (x:pointer),
-            (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
-             (acc l1 x) = (acc l x)))) /\
-           (* I7 *)
-           (forall (p1:pointer),
-            (forall (p2:pointer),
-             ((pair_in_list p1 p2 (cons t2 stack)) ->
-              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
-                (acc r p2) = p1)) /\
-              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
-           (* I8 *)
-           (forall (x:pointer),
-            (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))) /\
-          (order_mark_m_and_c_and_stack (weight alloc m0 c l1 r1 p1 t2)
-           (weight alloc m0 c0 l0 r0 p1 t1)))) /\
-        (valid alloc result))))) /\
-    (valid alloc result))).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_11: result = 0),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_12: result0 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_13: t0 = result0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_14: result1 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_15: r_Z47_1 = (upd r_Z47_0 p result1)),
+  (valid alloc p).
 Proof.
 intros.
 split;subst;auto with *.
@@ -2248,290 +2281,249 @@ left.
 unfold reachable; exists (@nil pointer);constructor.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_9 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (q: pointer),
-  forall (Post13: q = p1),
-  forall (p2: pointer),
-  forall (Post2: p2 = t1),
-  (valid alloc t1).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_11: result = 0),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_12: result0 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_13: t0 = result0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_14: result1 = (acc l_Z47_0 p)),
+  (valid alloc p).
 Proof.
 intuition.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_10 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (q: pointer),
-  forall (Post13: q = p1),
-  forall (p2: pointer),
-  forall (Post2: p2 = t1),
-  forall (t2: pointer),
-  forall (Post3: t2 = (acc l0 t1)),
-  forall (caduceus_3: pointer),
-  forall (Post6: caduceus_3 = p2),
-  (valid alloc caduceus_3).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_11: result = 0),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_12: result0 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_13: t0 = result0),
+  (valid alloc p).
 Proof.
 intros;subst;tauto.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_11 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (q: pointer),
-  forall (Post13: q = p1),
-  forall (p2: pointer),
-  forall (Post2: p2 = t1),
-  forall (t2: pointer),
-  forall (Post3: t2 = (acc l0 t1)),
-  forall (caduceus_3: pointer),
-  forall (Post6: caduceus_3 = p2),
-  forall (Pre7: (valid alloc caduceus_3)),
-  forall (l1: ((memory) pointer)),
-  forall (Post50: l1 = (upd l0 caduceus_3 q)),
-  (forall (result:pointer),
-   (result = p2 ->
-    (forall (m1:((memory) Z)),
-     (m1 = (upd m0 result 1) ->
-      (forall (result:pointer),
-       (result = p2 ->
-        (forall (c:((memory) Z)),
-         (c = (upd c0 result 0) ->
-          (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-          (((* I1 *)
-            (forall (x:pointer),
-             ((reachable alloc l r root x) -> (reachable alloc l1 r0 t2 x) \/
-              (reachable alloc l1 r0 p2 x))) /\
-          (* I2 *)
-          (forall (x:pointer),
-           (~(x = null) ->
-            ((reachable alloc l1 r0 t2 x) \/ (reachable alloc l1 r0 p2 x) ->
-             (reachable alloc l r root x))))) /\
-          (* I0 *)
-          (exists stack:plist,
-           (((((* I3 *) (clr_list alloc c l1 r0 p2 stack) /\
-           (* I4 *)
-           (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
-           (* I5 *)
-           (forall (x:pointer),
-            (((valid alloc x) /\ (reachable alloc l r root x)) /\
-             (acc m1 x) = 0 -> (unmarked_reachable alloc m1 l1 r0 t2 x) \/
-             (exists y:pointer, (in_list y stack) /\
-              (unmarked_reachable alloc m1 l1 r0 (acc r0 y) x))))) /\
-           (* I6 *)
-           (forall (x:pointer),
-            (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-             (acc l1 x) = (acc l x)))) /\
-           (* I7 *)
-           (forall (p1:pointer),
-            (forall (p2:pointer),
-             ((pair_in_list p1 p2 (cons t2 stack)) ->
-              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
-                (acc r p2) = p1)) /\
-              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r0 p2))))))) /\
-           (* I8 *)
-           (forall (x:pointer),
-            (~(reachable alloc l r root x) -> (acc m1 x) = (acc m x))))) /\
-          (order_mark_m_and_c_and_stack (weight alloc m1 c l1 r0 p2 t2)
-           (weight alloc m0 c0 l0 r0 p1 t1)))) /\
-        (valid alloc result))))) /\
-    (valid alloc result))).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  forall (result: Z),
+  forall (HW_5: result = (acc c_Z47_0 p)),
+  forall (HW_11: result = 0),
+  (valid alloc p).
 Proof.
 (*push*)
 intros.
@@ -3205,122 +3197,78 @@ Save.
 
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_12 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (c1: ((memory) Z)),
-  forall (l1: ((memory) pointer)),
-  forall (m1: ((memory) Z)),
-  forall (p2: pointer),
-  forall (r1: ((memory) pointer)),
-  forall (t2: pointer),
-  forall (Post36: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                  (((* I1 *)
-                    (forall (x:pointer),
-                     ((reachable alloc l r root x) ->
-                      (reachable alloc l1 r1 t2 x) \/
-                      (reachable alloc l1 r1 p2 x))) /\
-                  (* I2 *)
-                  (forall (x:pointer),
-                   (~(x = null) ->
-                    ((reachable alloc l1 r1 t2 x) \/
-                     (reachable alloc l1 r1 p2 x) ->
-                     (reachable alloc l r root x))))) /\
-                  (* I0 *)
-                  (exists stack:plist,
-                   (((((* I3 *) (clr_list alloc c1 l1 r1 p2 stack) /\
-                   (* I4 *)
-                   (forall (p_0:pointer),
-                    ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
-                   (* I5 *)
-                   (forall (x:pointer),
-                    (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                     (acc m1 x) = 0 ->
-                     (unmarked_reachable alloc m1 l1 r1 t2 x) \/
-                     (exists y:pointer, (in_list y stack) /\
-                      (unmarked_reachable alloc m1 l1 r1 (acc r1 y) x))))) /\
-                   (* I6 *)
-                   (forall (x:pointer),
-                    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
-                     (acc l1 x) = (acc l x)))) /\
-                   (* I7 *)
-                   (forall (p1:pointer),
-                    (forall (p2:pointer),
-                     ((pair_in_list p1 p2 (cons t2 stack)) ->
-                      (((acc c1 p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
-                        (acc r p2) = p1)) /\
-                      (((acc c1 p2) = 0 -> (acc l p2) = p1 /\
-                        (acc r p2) = (acc r1 p2))))))) /\
-                   (* I8 *)
-                   (forall (x:pointer),
-                    (~(reachable alloc l r root x) -> (acc m1 x) = (acc m x))))) /\
-                  (order_mark_m_and_c_and_stack (weight alloc m1 c1 l1 r1 p2
-                                                 t2)
-                   (weight alloc m0 c0 l0 r0 p1 t1))),
-  (order_mark_m_and_c_and_stack (weight alloc m1 c1 l1 r1 p2 t2) Variant1).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_4: t = null),
+  (valid alloc p).
 Proof.
 intros.
 inversion_clear Post36.
@@ -3331,78 +3279,134 @@ Save.
 
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_13 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-                 (((* I1 *)
-                   (forall (x:pointer),
-                    ((reachable alloc l r root x) ->
-                     (reachable alloc l0 r0 t1 x) \/
-                     (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x)))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test1: p1 = null /\ (t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0)),
-  (* File \"schorr_waite.c\", line 63, characters 5-202 *)
-  (((forall (x:pointer), (acc l x) = (acc l0 x) /\ (acc r x) = (acc r0 x)) /\
-  (forall (x:pointer),
-   ((valid alloc x) /\ (reachable alloc l0 r0 root x) -> (acc m0 x) <> 0))) /\
-  (forall (x:pointer),
-   (~(reachable alloc l0 r0 root x) -> (acc m0 x) = (acc m x)))).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_22: result0 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_23: t0 = p),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_24: result1 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_25: p0 = result1),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_26: r_Z47_1 = (upd r_Z47_0 t0 t)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_0 r_Z47_1 alloc p0 x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_0 r_Z47_1 alloc p0 x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_0 l_Z47_0 r_Z47_1 alloc p0 stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_1 alloc
+                                 p0 t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
 Proof.
 (* post-condition of the function *)
 intros.
@@ -3525,54 +3529,90 @@ auto.
 apply H2;auto.
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma schorr_waite_impl_po_14 : 
-  forall (root: pointer),
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (c: ((memory) Z)),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (* File \"schorr_waite.c\", line 59, characters 5-138 *)
-                 ((forall (x:pointer),
-                   (~(x = null) /\ (reachable alloc l r root x) ->
-                    (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0)))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  (* File \"schorr_waite.c\", line 75, characters 7-1023 *)
-  (((* I1 *)
-    (forall (x:pointer),
-     ((reachable alloc l r root x) -> (reachable alloc l r t x) \/
-      (reachable alloc l r p x))) /\
-  (* I2 *)
-  (forall (x:pointer),
-   (~(x = null) ->
-    ((reachable alloc l r t x) \/ (reachable alloc l r p x) ->
-     (reachable alloc l r root x))))) /\
-  (* I0 *)
-  (exists stack:plist, (((((* I3 *) (clr_list alloc c l r p stack) /\
-   (* I4 *) (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m p_0) <> 0))) /\
-   (* I5 *)
-   (forall (x:pointer),
-    (((valid alloc x) /\ (reachable alloc l r root x)) /\ (acc m x) = 0 ->
-     (unmarked_reachable alloc m l r t x) \/
-     (exists y:pointer, (in_list y stack) /\
-      (unmarked_reachable alloc m l r (acc r y) x))))) /\
-   (* I6 *)
-   (forall (x:pointer),
-    (~(in_list x stack) -> (acc r x) = (acc r x) /\ (acc l x) = (acc l x)))) /\
-   (* I7 *)
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     ((pair_in_list p1 p2 (cons t stack)) ->
-      (((acc c p2) <> 0 -> (acc l p2) = (acc l p2) /\ (acc r p2) = p1)) /\
-      (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r p2))))))) /\
-   (* I8 *)
-   (forall (x:pointer),
-    (~(reachable alloc l r root x) -> (acc m x) = (acc m x))))).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_22: result0 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_23: t0 = p),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_24: result1 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_25: p0 = result1),
+  (valid alloc t0).
 Proof.
 
 (* loop invariant true at the beginning *)
@@ -3614,1186 +3654,4192 @@ simpl in H1; tauto.
 simpl in H1; tauto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
-Lemma schorr_waite_impl_po_1 : 
-  forall (root: pointer),
-  forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  (well_founded order_mark_m_and_c_and_stack).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 409-620 *)
-Lemma schorr_waite_impl_po_2 : 
-  forall (root: pointer),
-  forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3041-3163 *)
-Lemma schorr_waite_impl_po_3 : 
-  forall (root: pointer),
-  forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  (~(t1 = null) -> (valid alloc t1)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3193-3250 *)
-Lemma schorr_waite_impl_po_4 : 
-  forall (root: pointer),
-  forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  (valid alloc p1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3423-3447 *)
-Lemma schorr_waite_impl_po_5 : 
-  forall (root: pointer),
-  forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test4: (acc c0 p1) <> 0),
-  forall (q: pointer),
-  forall (Post31: q = t1),
-  forall (t2: pointer),
-  forall (Post26: t2 = p1),
-  forall (p2: pointer),
-  forall (Post27: p2 = (acc r0 p1)),
-  forall (caduceus_7: pointer),
-  forall (Post30: caduceus_7 = t2),
-  (valid alloc caduceus_7).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3400-3447 *)
-Lemma schorr_waite_impl_po_6 : 
-  forall (root: pointer),
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_15 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test4: (acc c0 p1) <> 0),
-  forall (q: pointer),
-  forall (Post31: q = t1),
-  forall (t2: pointer),
-  forall (Post26: t2 = p1),
-  forall (p2: pointer),
-  forall (Post27: p2 = (acc r0 p1)),
-  forall (caduceus_7: pointer),
-  forall (Post30: caduceus_7 = t2),
-  forall (Pre31: (valid alloc caduceus_7)),
-  forall (r1: ((memory) pointer)),
-  forall (Post66: r1 = (upd r0 caduceus_7 q)),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_22: result0 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_23: t0 = p),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_16 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_27: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_28: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_29: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_30: result2 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_31: r_Z47_1 = (upd r_Z47_0 p result2)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_32: l_Z47_1 = (upd l_Z47_0 p t)),
+  forall (c_Z47_1: ((memory) Z Z47)),
+  forall (HW_33: c_Z47_1 = (upd c_Z47_0 p 1)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
   (((* I1 *)
-    (forall (x:pointer),
-     ((reachable alloc l r root x) -> (reachable alloc l0 r1 t2 x) \/
-      (reachable alloc l0 r1 p2 x))) /\
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_1 r_Z47_1 alloc p x))) /\
   (* I2 *)
-  (forall (x:pointer),
+  (forall (x:((pointer) Z47)),
    (~(x = null) ->
-    ((reachable alloc l0 r1 t2 x) \/ (reachable alloc l0 r1 p2 x) ->
-     (reachable alloc l r root x))))) /\
+    ((reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_1 r_Z47_1 alloc p x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
   (* I0 *)
-  (exists stack:plist, (((((* I3 *) (clr_list alloc c0 l0 r1 p2 stack) /\
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_1 l_Z47_1 r_Z47_1 alloc p stack) /\
    (* I4 *)
-   (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
    (* I5 *)
-   (forall (x:pointer),
-    (((valid alloc x) /\ (reachable alloc l r root x)) /\ (acc m0 x) = 0 ->
-     (unmarked_reachable alloc m0 l0 r1 t2 x) \/
-     (exists y:pointer, (in_list y stack) /\
-      (unmarked_reachable alloc m0 l0 r1 (acc r1 y) x))))) /\
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
    (* I6 *)
-   (forall (x:pointer),
-    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\ (acc l0 x) = (acc l x)))) /\
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
    (* I7 *)
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     ((pair_in_list p1 p2 (cons t2 stack)) ->
-      (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\ (acc r p2) = p1)) /\
-      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
    (* I8 *)
-   (forall (x:pointer),
-    (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))) /\
-  (order_mark_m_and_c_and_stack (weight alloc m0 c0 l0 r1 p2 t2)
-   (weight alloc m0 c0 l0 r0 p1 t1)).
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_1 m_Z47_0 l_Z47_1 r_Z47_1 alloc
+                                 p t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3629-3665 *)
-Lemma schorr_waite_impl_po_7 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_17 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test3: (acc c0 p1) = 0),
-  forall (q: pointer),
-  forall (Post25: q = t1),
-  forall (t2: pointer),
-  forall (Post14: t2 = (acc r0 p1)),
-  forall (caduceus_6: pointer),
-  forall (Post18: caduceus_6 = p1),
-  forall (Pre19: (valid alloc p1)),
-  forall (aux_1: pointer),
-  forall (Post17: aux_1 = (acc l0 p1)),
-  (valid alloc caduceus_6).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_27: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_28: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_29: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_30: result2 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_31: r_Z47_1 = (upd r_Z47_0 p result2)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_32: l_Z47_1 = (upd l_Z47_0 p t)),
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3629-3665 *)
-Lemma schorr_waite_impl_po_8 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_18 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
-  forall (Pre32: (valid alloc p1)),
-  forall (Test3: (acc c0 p1) = 0),
-  forall (q: pointer),
-  forall (Post25: q = t1),
-  forall (t2: pointer),
-  forall (Post14: t2 = (acc r0 p1)),
-  forall (caduceus_6: pointer),
-  forall (Post18: caduceus_6 = p1),
-  forall (Pre19: (valid alloc p1)),
-  forall (aux_1: pointer),
-  forall (Post17: aux_1 = (acc l0 p1)),
-  forall (Pre17: (valid alloc caduceus_6)),
-  forall (r1: ((memory) pointer)),
-  forall (Post58: r1 = (upd r0 caduceus_6 aux_1)),
-  (forall (result:pointer),
-   (result = p1 ->
-    (forall (l1:((memory) pointer)),
-     (l1 = (upd l0 result q) ->
-      (forall (result:pointer),
-       (result = p1 ->
-        (forall (c:((memory) Z)),
-         (c = (upd c0 result 1) ->
-          (((* I1 *)
-            (forall (x:pointer),
-             ((reachable alloc l r root x) -> (reachable alloc l1 r1 t2 x) \/
-              (reachable alloc l1 r1 p1 x))) /\
-          (* I2 *)
-          (forall (x:pointer),
-           (~(x = null) ->
-            ((reachable alloc l1 r1 t2 x) \/ (reachable alloc l1 r1 p1 x) ->
-             (reachable alloc l r root x))))) /\
-          (* I0 *)
-          (exists stack:plist,
-           (((((* I3 *) (clr_list alloc c l1 r1 p1 stack) /\
-           (* I4 *)
-           (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-           (* I5 *)
-           (forall (x:pointer),
-            (((valid alloc x) /\ (reachable alloc l r root x)) /\
-             (acc m0 x) = 0 -> (unmarked_reachable alloc m0 l1 r1 t2 x) \/
-             (exists y:pointer, (in_list y stack) /\
-              (unmarked_reachable alloc m0 l1 r1 (acc r1 y) x))))) /\
-           (* I6 *)
-           (forall (x:pointer),
-            (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
-             (acc l1 x) = (acc l x)))) /\
-           (* I7 *)
-           (forall (p1:pointer),
-            (forall (p2:pointer),
-             ((pair_in_list p1 p2 (cons t2 stack)) ->
-              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
-                (acc r p2) = p1)) /\
-              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
-           (* I8 *)
-           (forall (x:pointer),
-            (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))) /\
-          (order_mark_m_and_c_and_stack (weight alloc m0 c l1 r1 p1 t2)
-           (weight alloc m0 c0 l0 r0 p1 t1)))) /\
-        (valid alloc result))))) /\
-    (valid alloc result))).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_27: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_28: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_29: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_30: result2 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_31: r_Z47_1 = (upd r_Z47_0 p result2)),
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3940-3952 *)
-Lemma schorr_waite_impl_po_9 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_19 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (q: pointer),
-  forall (Post13: q = p1),
-  forall (p2: pointer),
-  forall (Post2: p2 = t1),
-  (valid alloc t1).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_27: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_28: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_29: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_30: result2 = (acc l_Z47_0 p)),
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3991-4015 *)
-Lemma schorr_waite_impl_po_10 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_20 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (q: pointer),
-  forall (Post13: q = p1),
-  forall (p2: pointer),
-  forall (Post2: p2 = t1),
-  forall (t2: pointer),
-  forall (Post3: t2 = (acc l0 t1)),
-  forall (caduceus_3: pointer),
-  forall (Post6: caduceus_3 = p2),
-  (valid alloc caduceus_3).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_27: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_28: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_29: t0 = result1),
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3968-4015 *)
-Lemma schorr_waite_impl_po_11 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_21 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
-  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (q: pointer),
-  forall (Post13: q = p1),
-  forall (p2: pointer),
-  forall (Post2: p2 = t1),
-  forall (t2: pointer),
-  forall (Post3: t2 = (acc l0 t1)),
-  forall (caduceus_3: pointer),
-  forall (Post6: caduceus_3 = p2),
-  forall (Pre7: (valid alloc caduceus_3)),
-  forall (l1: ((memory) pointer)),
-  forall (Post50: l1 = (upd l0 caduceus_3 q)),
-  (forall (result:pointer),
-   (result = p2 ->
-    (forall (m1:((memory) Z)),
-     (m1 = (upd m0 result 1) ->
-      (forall (result:pointer),
-       (result = p2 ->
-        (forall (c:((memory) Z)),
-         (c = (upd c0 result 0) ->
-          (((* I1 *)
-            (forall (x:pointer),
-             ((reachable alloc l r root x) -> (reachable alloc l1 r0 t2 x) \/
-              (reachable alloc l1 r0 p2 x))) /\
-          (* I2 *)
-          (forall (x:pointer),
-           (~(x = null) ->
-            ((reachable alloc l1 r0 t2 x) \/ (reachable alloc l1 r0 p2 x) ->
-             (reachable alloc l r root x))))) /\
-          (* I0 *)
-          (exists stack:plist,
-           (((((* I3 *) (clr_list alloc c l1 r0 p2 stack) /\
-           (* I4 *)
-           (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
-           (* I5 *)
-           (forall (x:pointer),
-            (((valid alloc x) /\ (reachable alloc l r root x)) /\
-             (acc m1 x) = 0 -> (unmarked_reachable alloc m1 l1 r0 t2 x) \/
-             (exists y:pointer, (in_list y stack) /\
-              (unmarked_reachable alloc m1 l1 r0 (acc r0 y) x))))) /\
-           (* I6 *)
-           (forall (x:pointer),
-            (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-             (acc l1 x) = (acc l x)))) /\
-           (* I7 *)
-           (forall (p1:pointer),
-            (forall (p2:pointer),
-             ((pair_in_list p1 p2 (cons t2 stack)) ->
-              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
-                (acc r p2) = p1)) /\
-              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r0 p2))))))) /\
-           (* I8 *)
-           (forall (x:pointer),
-            (~(reachable alloc l r root x) -> (acc m1 x) = (acc m x))))) /\
-          (order_mark_m_and_c_and_stack (weight alloc m1 c l1 r0 p2 t2)
-           (weight alloc m0 c0 l0 r0 p1 t1)))) /\
-        (valid alloc result))))) /\
-    (valid alloc result))).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  forall (result0: Z),
+  forall (HW_21: result0 = (acc c_Z47_0 p)),
+  forall (HW_27: result0 = 0),
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
-Lemma schorr_waite_impl_po_12 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_22 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
-  forall (c1: ((memory) Z)),
-  forall (l1: ((memory) pointer)),
-  forall (m1: ((memory) Z)),
-  forall (p2: pointer),
-  forall (r1: ((memory) pointer)),
-  forall (t2: pointer),
-  forall (Post36: (((* I1 *)
-                    (forall (x:pointer),
-                     ((reachable alloc l r root x) ->
-                      (reachable alloc l1 r1 t2 x) \/
-                      (reachable alloc l1 r1 p2 x))) /\
-                  (* I2 *)
-                  (forall (x:pointer),
-                   (~(x = null) ->
-                    ((reachable alloc l1 r1 t2 x) \/
-                     (reachable alloc l1 r1 p2 x) ->
-                     (reachable alloc l r root x))))) /\
-                  (* I0 *)
-                  (exists stack:plist,
-                   (((((* I3 *) (clr_list alloc c1 l1 r1 p2 stack) /\
-                   (* I4 *)
-                   (forall (p_0:pointer),
-                    ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
-                   (* I5 *)
-                   (forall (x:pointer),
-                    (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                     (acc m1 x) = 0 ->
-                     (unmarked_reachable alloc m1 l1 r1 t2 x) \/
-                     (exists y:pointer, (in_list y stack) /\
-                      (unmarked_reachable alloc m1 l1 r1 (acc r1 y) x))))) /\
-                   (* I6 *)
-                   (forall (x:pointer),
-                    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
-                     (acc l1 x) = (acc l x)))) /\
-                   (* I7 *)
-                   (forall (p1:pointer),
-                    (forall (p2:pointer),
-                     ((pair_in_list p1 p2 (cons t2 stack)) ->
-                      (((acc c1 p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
-                        (acc r p2) = p1)) /\
-                      (((acc c1 p2) = 0 -> (acc l p2) = p1 /\
-                        (acc r p2) = (acc r1 p2))))))) /\
-                   (* I8 *)
-                   (forall (x:pointer),
-                    (~(reachable alloc l r root x) -> (acc m1 x) = (acc m x))))) /\
-                  (order_mark_m_and_c_and_stack (weight alloc m1 c1 l1 r1 p2
-                                                 t2)
-                   (weight alloc m0 c0 l0 r0 p1 t1))),
-  (order_mark_m_and_c_and_stack (weight alloc m1 c1 l1 r1 p2 t2) Variant1).
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_20: result <> 0),
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 402-4181 *)
-Lemma schorr_waite_impl_po_13 : 
-  forall (root: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_23 : 
+  forall (root: ((pointer) Z47)),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  forall (Variant1: weight_type),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre36: Variant1 = (weight alloc m0 c0 l0 r0 p1 t1)),
-  forall (Pre35: ((* I1 *)
-                  (forall (x:pointer),
-                   ((reachable alloc l r root x) ->
-                    (reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x))) /\
-                 (* I2 *)
-                 (forall (x:pointer),
-                  (~(x = null) ->
-                   ((reachable alloc l0 r0 t1 x) \/
-                    (reachable alloc l0 r0 p1 x) ->
-                    (reachable alloc l r root x))))) /\
-                 (* I0 *)
-                 (exists stack:plist,
-                  (((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
-                  (* I4 *)
-                  (forall (p_0:pointer),
-                   ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
-                  (* I5 *)
-                  (forall (x:pointer),
-                   (((valid alloc x) /\ (reachable alloc l r root x)) /\
-                    (acc m0 x) = 0 ->
-                    (unmarked_reachable alloc m0 l0 r0 t1 x) \/
-                    (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x))))) /\
-                  (* I6 *)
-                  (forall (x:pointer),
-                   (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
-                  (* I7 *)
-                  (forall (p1:pointer),
-                   (forall (p2:pointer),
-                    ((pair_in_list p1 p2 (cons t1 stack)) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
-                       (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
-                       (acc r p2) = (acc r0 p2))))))) /\
-                  (* I8 *)
-                  (forall (x:pointer),
-                   (~(reachable alloc l r root x) -> (acc m0 x) = (acc m x))))),
-  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
-  forall (Test1: p1 = null /\ (t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0)),
-  ((forall (x:pointer), (acc l x) = (acc l0 x) /\ (acc r x) = (acc r0 x)) /\
-  (forall (x:pointer),
-   ((valid alloc x) /\ (reachable alloc l0 r0 root x) -> (acc m0 x) <> 0))) /\
-  (forall (x:pointer),
-   (~(reachable alloc l0 r0 root x) -> (acc m0 x) = (acc m x))).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/schorr_waite.why", characters 658-2929 *)
-Lemma schorr_waite_impl_po_14 : 
-  forall (root: pointer),
-  forall (alloc: alloc_table),
-  forall (c: ((memory) Z)),
-  forall (l: ((memory) pointer)),
-  forall (m: ((memory) Z)),
-  forall (r: ((memory) pointer)),
-  forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
-                   (valid alloc x) /\ (acc m x) = 0)) /\
-                 (exists l_0:plist,
-                  (reachable_elements alloc l r root root l_0))),
-  forall (t: pointer),
-  forall (Post35: t = root),
-  forall (p: pointer),
-  forall (Post34: p = null),
-  ((* I1 *)
-   (forall (x:pointer),
-    ((reachable alloc l r root x) -> (reachable alloc l r t x) \/
-     (reachable alloc l r p x))) /\
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_34: result = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_35: p0 = t),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_36: result0 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_37: t0 = result0),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_38: l_Z47_1 = (upd l_Z47_0 p0 p)),
+  forall (m_Z47_1: ((memory) Z Z47)),
+  forall (HW_39: m_Z47_1 = (upd m_Z47_0 p0 1)),
+  forall (c_Z47_1: ((memory) Z Z47)),
+  forall (HW_40: c_Z47_1 = (upd c_Z47_0 p0 0)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_1 r_Z47_0 alloc t0 x) \/
+      (reachable l_Z47_1 r_Z47_0 alloc p0 x))) /\
   (* I2 *)
-  (forall (x:pointer),
+  (forall (x:((pointer) Z47)),
    (~(x = null) ->
-    ((reachable alloc l r t x) \/ (reachable alloc l r p x) ->
-     (reachable alloc l r root x))))) /\
+    ((reachable l_Z47_1 r_Z47_0 alloc t0 x) \/
+     (reachable l_Z47_1 r_Z47_0 alloc p0 x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
   (* I0 *)
-  (exists stack:plist, (((((* I3 *) (clr_list alloc c l r p stack) /\
-   (* I4 *) (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m p_0) <> 0))) /\
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_1 l_Z47_1 r_Z47_0 alloc p0 stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
    (* I5 *)
-   (forall (x:pointer),
-    (((valid alloc x) /\ (reachable alloc l r root x)) /\ (acc m x) = 0 ->
-     (unmarked_reachable alloc m l r t x) \/
-     (exists y:pointer, (in_list y stack) /\
-      (unmarked_reachable alloc m l r (acc r y) x))))) /\
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_1 x) = 0 ->
+     (unmarked_reachable m_Z47_1 l_Z47_1 r_Z47_0 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_1 l_Z47_1 r_Z47_0 alloc (acc r_Z53 y) x))))) /\
    (* I6 *)
-   (forall (x:pointer),
-    (~(in_list x stack) -> (acc r x) = (acc r x) /\ (acc l x) = (acc l x)))) /\
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
    (* I7 *)
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     ((pair_in_list p1 p2 (cons t stack)) ->
-      (((acc c p2) <> 0 -> (acc l p2) = (acc l p2) /\ (acc r p2) = p1)) /\
-      (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r p2))))))) /\
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
    (* I8 *)
-   (forall (x:pointer),
-    (~(reachable alloc l r root x) -> (acc m x) = (acc m x)))).
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_1 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_1 m_Z47_1 l_Z47_1 r_Z47_0 alloc
+                                 p0 t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_24 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_34: result = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_35: p0 = t),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_36: result0 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_37: t0 = result0),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_38: l_Z47_1 = (upd l_Z47_0 p0 p)),
+  forall (m_Z47_1: ((memory) Z Z47)),
+  forall (HW_39: m_Z47_1 = (upd m_Z47_0 p0 1)),
+  (valid alloc p0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_25 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_34: result = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_35: p0 = t),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_36: result0 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_37: t0 = result0),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_38: l_Z47_1 = (upd l_Z47_0 p0 p)),
+  (valid alloc p0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_26 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_34: result = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_35: p0 = t),
+  forall (result0: ((pointer) Z47)),
+  forall (HW_36: result0 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_37: t0 = result0),
+  (valid alloc p0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_27 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  forall (result: Z),
+  forall (HW_19: result = (acc m_Z47_0 t)),
+  forall (HW_34: result = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_35: p0 = t),
+  (valid alloc t).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_28 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_3: ~(p = null)),
+  forall (HW_18: ~(t = null)),
+  (valid alloc t).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_29 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z41: ((memory) ((pointer) Z47) Z41)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z41: ((memory) ((pointer) Z47) Z41)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_44: result <> 0),
+  (* File \"schorr_waite.c\", line 63, characters 5-202:\n *)
+  (((forall (x:((pointer) Z41)), (acc l_Z41 x) = (acc l_Z41 x) /\
+     (acc r_Z41 x) = (acc r_Z41 x)) /\
+  (forall (x:((pointer) Z47)),
+   ((valid alloc x) /\ (reachable l_Z47_0 r_Z47_0 alloc root x) ->
+    (acc m_Z47_0 x) <> 0))) /\
+  (forall (x:((pointer) Z47)),
+   (~(reachable l_Z47_0 r_Z47_0 alloc root x) -> (acc m_Z47_0 x) =
+    (acc m_Z47 x)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_30 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_48: result0 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_49: t0 = p),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_50: result1 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_51: p0 = result1),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_52: r_Z47_1 = (upd r_Z47_0 t0 t)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_0 r_Z47_1 alloc p0 x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_0 r_Z47_1 alloc p0 x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_0 l_Z47_0 r_Z47_1 alloc p0 stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_1 alloc
+                                 p0 t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_31 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_48: result0 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_49: t0 = p),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_50: result1 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_51: p0 = result1),
+  (valid alloc t0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_32 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_48: result0 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_49: t0 = p),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_33 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_53: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_54: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_55: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_56: result2 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_57: r_Z47_1 = (upd r_Z47_0 p result2)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_58: l_Z47_1 = (upd l_Z47_0 p t)),
+  forall (c_Z47_1: ((memory) Z Z47)),
+  forall (HW_59: c_Z47_1 = (upd c_Z47_0 p 1)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_1 r_Z47_1 alloc p x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_1 r_Z47_1 alloc p x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_1 l_Z47_1 r_Z47_1 alloc p stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_1 m_Z47_0 l_Z47_1 r_Z47_1 alloc
+                                 p t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_34 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_53: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_54: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_55: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_56: result2 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_57: r_Z47_1 = (upd r_Z47_0 p result2)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_58: l_Z47_1 = (upd l_Z47_0 p t)),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_35 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_53: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_54: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_55: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_56: result2 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_57: r_Z47_1 = (upd r_Z47_0 p result2)),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_36 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_53: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_54: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_55: t0 = result1),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_56: result2 = (acc l_Z47_0 p)),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_37 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_53: result0 = 0),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_54: result1 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_55: t0 = result1),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_38 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  forall (result0: Z),
+  forall (HW_47: result0 = (acc c_Z47_0 p)),
+  forall (HW_53: result0 = 0),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_39 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_46: t = null),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_40 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_64: result1 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_65: t0 = p),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_66: result2 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_67: p0 = result2),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_68: r_Z47_1 = (upd r_Z47_0 t0 t)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_0 r_Z47_1 alloc p0 x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_0 r_Z47_1 alloc p0 x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_0 l_Z47_0 r_Z47_1 alloc p0 stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_1 alloc
+                                 p0 t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_41 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_64: result1 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_65: t0 = p),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_66: result2 = (acc r_Z47_0 p)),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_67: p0 = result2),
+  (valid alloc t0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_42 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_64: result1 <> 0),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_65: t0 = p),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_43 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_69: result1 = 0),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_70: result2 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_71: t0 = result2),
+  forall (result3: ((pointer) Z47)),
+  forall (HW_72: result3 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_73: r_Z47_1 = (upd r_Z47_0 p result3)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_74: l_Z47_1 = (upd l_Z47_0 p t)),
+  forall (c_Z47_1: ((memory) Z Z47)),
+  forall (HW_75: c_Z47_1 = (upd c_Z47_0 p 1)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+      (reachable l_Z47_1 r_Z47_1 alloc p x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (reachable l_Z47_1 r_Z47_1 alloc p x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_1 l_Z47_1 r_Z47_1 alloc p stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_0 x) = 0 ->
+     (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_0 l_Z47_1 r_Z47_1 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_1 m_Z47_0 l_Z47_1 r_Z47_1 alloc
+                                 p t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_44 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_69: result1 = 0),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_70: result2 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_71: t0 = result2),
+  forall (result3: ((pointer) Z47)),
+  forall (HW_72: result3 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_73: r_Z47_1 = (upd r_Z47_0 p result3)),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_74: l_Z47_1 = (upd l_Z47_0 p t)),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_45 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_69: result1 = 0),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_70: result2 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_71: t0 = result2),
+  forall (result3: ((pointer) Z47)),
+  forall (HW_72: result3 = (acc l_Z47_0 p)),
+  forall (r_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_73: r_Z47_1 = (upd r_Z47_0 p result3)),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_46 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_69: result1 = 0),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_70: result2 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_71: t0 = result2),
+  forall (result3: ((pointer) Z47)),
+  forall (HW_72: result3 = (acc l_Z47_0 p)),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_47 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_69: result1 = 0),
+  forall (result2: ((pointer) Z47)),
+  forall (HW_70: result2 = (acc r_Z47_0 p)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_71: t0 = result2),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_48 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  forall (result1: Z),
+  forall (HW_63: result1 = (acc c_Z47_0 p)),
+  forall (HW_69: result1 = 0),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_49 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_62: result0 <> 0),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_50 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_76: result0 = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_77: p0 = t),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_78: result1 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_79: t0 = result1),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_80: l_Z47_1 = (upd l_Z47_0 p0 p)),
+  forall (m_Z47_1: ((memory) Z Z47)),
+  forall (HW_81: m_Z47_1 = (upd m_Z47_0 p0 1)),
+  forall (c_Z47_1: ((memory) Z Z47)),
+  forall (HW_82: c_Z47_1 = (upd c_Z47_0 p0 0)),
+  (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+  (((* I1 *)
+    (forall (x:((pointer) Z47)),
+     ((reachable l_Z47 r_Z47 alloc root x) ->
+      (reachable l_Z47_1 r_Z47_0 alloc t0 x) \/
+      (reachable l_Z47_1 r_Z47_0 alloc p0 x))) /\
+  (* I2 *)
+  (forall (x:((pointer) Z47)),
+   (~(x = null) ->
+    ((reachable l_Z47_1 r_Z47_0 alloc t0 x) \/
+     (reachable l_Z47_1 r_Z47_0 alloc p0 x) ->
+     (reachable l_Z47 r_Z47 alloc root x))))) /\
+  (* I0 *)
+  (exists stack:plist,
+   (((((* I3 *) (clr_list c_Z47_1 l_Z47_1 r_Z47_0 alloc p0 stack) /\
+   (* I4 *)
+   (forall (p_0:((pointer) Z53)),
+    ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+   (* I5 *)
+   (forall (x:((pointer) Z47)),
+    (((valid alloc x) /\ (reachable l_Z47 r_Z47 alloc root x)) /\
+     (acc m_Z47_1 x) = 0 ->
+     (unmarked_reachable m_Z47_1 l_Z47_1 r_Z47_0 alloc t0 x) \/
+     (exists y:((pointer) Z53), (in_list y stack) /\
+      (unmarked_reachable m_Z47_1 l_Z47_1 r_Z47_0 alloc (acc r_Z53 y) x))))) /\
+   (* I6 *)
+   (forall (x:((pointer) Z53)),
+    (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+     (acc l_Z53 x) = (acc l_Z53 x)))) /\
+   (* I7 *)
+   (forall (p1:((pointer) Z47)),
+    (forall (p2:((pointer) Z51)),
+     ((pair_in_list p1 p2 (cons t0 stack)) ->
+      (((acc c_Z51 p2) <> 0 -> (acc l_Z51 p2) = (acc l_Z51 p2) /\
+        (acc r_Z51 p2) = p1)) /\
+      (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+        (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+   (* I8 *)
+   (forall (x:((pointer) Z47)),
+    (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_1 x) = (acc m_Z47 x))))) /\
+  (order_mark_m_and_c_and_stack (weight c_Z47_1 m_Z47_1 l_Z47_1 r_Z47_0 alloc
+                                 p0 t0)
+   (weight c_Z47_0 m_Z47_0 l_Z47_0 r_Z47_0 alloc p t)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_51 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_76: result0 = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_77: p0 = t),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_78: result1 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_79: t0 = result1),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_80: l_Z47_1 = (upd l_Z47_0 p0 p)),
+  forall (m_Z47_1: ((memory) Z Z47)),
+  forall (HW_81: m_Z47_1 = (upd m_Z47_0 p0 1)),
+  (valid alloc p0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_52 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_76: result0 = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_77: p0 = t),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_78: result1 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_79: t0 = result1),
+  forall (l_Z47_1: ((memory) ((pointer) Z47) Z47)),
+  forall (HW_80: l_Z47_1 = (upd l_Z47_0 p0 p)),
+  (valid alloc p0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_53 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_76: result0 = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_77: p0 = t),
+  forall (result1: ((pointer) Z47)),
+  forall (HW_78: result1 = (acc l_Z47_0 t)),
+  forall (t0: ((pointer) Z47)),
+  forall (HW_79: t0 = result1),
+  (valid alloc p0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_54 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  forall (result0: Z),
+  forall (HW_61: result0 = (acc m_Z47_0 t)),
+  forall (HW_76: result0 = 0),
+  forall (p0: ((pointer) Z47)),
+  forall (HW_77: p0 = t),
+  (valid alloc t).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_55 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  forall (result: Z),
+  forall (HW_43: result = (acc m_Z47_0 t)),
+  forall (HW_45: result = 0),
+  forall (HW_60: ~(t = null)),
+  (valid alloc t).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_56 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_42: ~(t = null)),
+  (valid alloc t).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma schorr_waite_impl_po_57 : 
+  forall (root: ((pointer) Z47)),
+  forall (alloc: alloc_table),
+  forall (c_Z51: ((memory) Z Z51)),
+  forall (l_Z41: ((memory) ((pointer) Z47) Z41)),
+  forall (l_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (l_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (l_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (m_Z47: ((memory) Z Z47)),
+  forall (m_Z53: ((memory) Z Z53)),
+  forall (r_Z41: ((memory) ((pointer) Z47) Z41)),
+  forall (r_Z47: ((memory) ((pointer) Z47) Z47)),
+  forall (r_Z51: ((memory) ((pointer) Z47) Z51)),
+  forall (r_Z53: ((memory) ((pointer) Z47) Z53)),
+  forall (HW_1: (* File \"schorr_waite.c\", line 59, characters 5-138:\n *)
+                ((forall (x:((pointer) Z47)),
+                  (~(x = null) /\ (reachable l_Z47 r_Z47 alloc root x) ->
+                   (valid alloc x) /\ (acc m_Z47 x) = 0)) /\
+                (exists l_0:plist,
+                 (reachable_elements l_Z47 r_Z47 alloc root root l_0)))),
+  forall (c_Z47_0: ((memory) Z Z47)),
+  forall (l_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (m_Z47_0: ((memory) Z Z47)),
+  forall (p: ((pointer) Z47)),
+  forall (r_Z47_0: ((memory) ((pointer) Z47) Z47)),
+  forall (t: ((pointer) Z47)),
+  forall (HW_2: (* File \"schorr_waite.c\", line 75, characters 7-1023:\n *)
+                (((* I1 *)
+                  (forall (x:((pointer) Z47)),
+                   ((reachable l_Z47 r_Z47 alloc root x) ->
+                    (reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                    (reachable l_Z47_0 r_Z47_0 alloc p x))) /\
+                (* I2 *)
+                (forall (x:((pointer) Z47)),
+                 (~(x = null) ->
+                  ((reachable l_Z47_0 r_Z47_0 alloc t x) \/
+                   (reachable l_Z47_0 r_Z47_0 alloc p x) ->
+                   (reachable l_Z47 r_Z47 alloc root x))))) /\
+                (* I0 *)
+                (exists stack:plist,
+                 (((((* I3 *)
+                     (clr_list c_Z47_0 l_Z47_0 r_Z47_0 alloc p stack) /\
+                 (* I4 *)
+                 (forall (p_0:((pointer) Z53)),
+                  ((in_list p_0 stack) -> (acc m_Z53 p_0) <> 0))) /\
+                 (* I5 *)
+                 (forall (x:((pointer) Z47)),
+                  (((valid alloc x) /\
+                   (reachable l_Z47 r_Z47 alloc root x)) /\ (acc m_Z47_0 x) =
+                   0 ->
+                   (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc t x) \/
+                   (exists y:((pointer) Z53), (in_list y stack) /\
+                    (unmarked_reachable m_Z47_0 l_Z47_0 r_Z47_0 alloc
+                     (acc r_Z53 y) x))))) /\
+                 (* I6 *)
+                 (forall (x:((pointer) Z53)),
+                  (~(in_list x stack) -> (acc r_Z53 x) = (acc r_Z53 x) /\
+                   (acc l_Z53 x) = (acc l_Z53 x)))) /\
+                 (* I7 *)
+                 (forall (p1:((pointer) Z47)),
+                  (forall (p2:((pointer) Z51)),
+                   ((pair_in_list p1 p2 (cons t stack)) ->
+                    (((acc c_Z51 p2) <> 0 ->
+                      (acc l_Z51 p2) = (acc l_Z51 p2) /\ (acc r_Z51 p2) = p1)) /\
+                    (((acc c_Z51 p2) = 0 -> (acc l_Z51 p2) = p1 /\
+                      (acc r_Z51 p2) = (acc r_Z51 p2))))))) /\
+                 (* I8 *)
+                 (forall (x:((pointer) Z47)),
+                  (~(reachable l_Z47 r_Z47 alloc root x) -> (acc m_Z47_0 x) =
+                   (acc m_Z47 x)))))),
+  forall (HW_41: p = null),
+  forall (HW_83: t = null),
+  (* File \"schorr_waite.c\", line 63, characters 5-202:\n *)
+  (((forall (x:((pointer) Z41)), (acc l_Z41 x) = (acc l_Z41 x) /\
+     (acc r_Z41 x) = (acc r_Z41 x)) /\
+  (forall (x:((pointer) Z47)),
+   ((valid alloc x) /\ (reachable l_Z47_0 r_Z47_0 alloc root x) ->
+    (acc m_Z47_0 x) <> 0))) /\
+  (forall (x:((pointer) Z47)),
+   (~(reachable l_Z47_0 r_Z47_0 alloc root x) -> (acc m_Z47_0 x) =
+    (acc m_Z47 x)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

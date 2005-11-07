@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cconst.mli,v 1.2 2004-11-30 14:31:22 hubert Exp $ i*)
+(*i $Id: cconst.mli,v 1.3 2005-11-07 15:13:28 hubert Exp $ i*)
 
 (* Evaluation of constant literals *)
 
@@ -22,7 +22,7 @@ exception Constant_too_large
 
 exception Invalid of string
 
-val int : Loc.t -> string -> Int64.t
+val int : Loc.position -> string -> Int64.t
 
 module IntMap : Map.S with type key = int64
 

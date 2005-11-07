@@ -1,7 +1,7 @@
 
 open Cast
 
-val pop_initializer : Loc.t -> Cast.tctype ->
+val pop_initializer : Loc.position -> Cast.tctype ->
     Cast.texpr Cast.c_initializer list ->
     Cast.texpr * Cast.texpr Cast.c_initializer list
 

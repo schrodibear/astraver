@@ -3,8 +3,71 @@
 
 Require Export Caduceus.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z1: Set.
+
+(*Why type*) Parameter Z2: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why type*) Parameter Z5: Set.
+
+(*Why type*) Parameter Z9: Set.
+
 (*Why predicate*) Definition swap_ord  (a2:Z) (b2:Z) (a1:Z) (b1:Z)
-  := (* File \"sort.c819618234.c\", line 0, characters 19-98 *)
+  := (* File \"sort.c\", line 48, characters 5-84:\n *)
      (((a1 <= b1 -> a2 = a1 /\ b2 = b1)) /\
      ((a1 > b1 -> a2 = b1 /\ b2 = a1))).
 

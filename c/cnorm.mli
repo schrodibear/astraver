@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.8 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: cnorm.mli,v 1.9 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Cast
 
@@ -29,16 +29,7 @@ val int_nconstant : string -> nterm
 
 val nzero : nterm
 
-val valid_for_type : 
-  ?fresh:bool -> Loc.t -> string -> 
-    nterm -> npredicate
-
-val separation :
-    Loc.t -> Info.var_info -> Info.var_info -> Ctypes.ctype Clogic.npredicate
-
 val file : tdecl located list -> ndecl located list
-
-val in_struct :  nterm -> Info.var_info -> nterm 
 
 (* smart constructors for predicates *)
 
@@ -52,6 +43,8 @@ val nprel : nterm * Clogic.relation * nterm -> npredicate
 val npvalid : nterm -> npredicate
 val npvalid_range : nterm * nterm * nterm -> npredicate
 val npapp : Info.logic_info * nterm list -> npredicate
+val npfresh : nterm -> npredicate
+
 
 
 

@@ -3,9 +3,62 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition constant_c  (intP:((memory) Z)) (c:pointer)
-  (alloc:alloc_table) := (acc intP c) = 12 /\ (acc intP (shift c 1)) = 14.
 
-(*Why predicate*) Definition separation_int_anonymous_0  (c:pointer)
-  (s:pointer) := ~((base_addr c) = (base_addr s)).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z1: Set.
+
+(*Why type*) Parameter Z2: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why type*) Parameter Z5: Set.
+
+(*Why predicate*) Definition constant_c  (int_Z5:((memory) Z Z5))
+  (c:((pointer) Z5)) (alloc:alloc_table)
+  := (acc int_Z5 c) = 12 /\ (acc int_Z5 (shift c 1)) = 14.
+
 

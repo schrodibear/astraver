@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.12 2005-06-09 08:31:22 filliatr Exp $ i*)
+(*i $Id: ctypes.ml,v 1.13 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -113,6 +113,3 @@ and ctype_node fmt = function
   | Tunion s -> fprintf fmt "union %s" s
   | Tenum s -> fprintf fmt "enum %s" s
   | Tfun _ -> fprintf fmt "<fun>"
-
-
-      

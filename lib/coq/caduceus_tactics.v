@@ -3,8 +3,10 @@ Require Export caduceus_why.
 
 Notation " p # f " := (acc f p) (at level 30, f at level 0).
 
+(*
 Hint Rewrite shift_zero : caduceus.
 Hint Rewrite shift_shift : caduceus.
+*)
 
 (* tactic to prove the equality of two pointers *)
 Ltac eq_pointer :=
@@ -138,10 +140,11 @@ Ltac AssignsRec :=
 Ltac Assigns := CleanAssigns; AssignsRec.
 
 Lemma not_not_in_pset_singleton : 
-  forall p, ~ (not_in_pset p (pset_singleton p)).
+  forall z : Set,
+  forall p : pointer z, ~ (not_in_pset p (pset_singleton p)).
 Proof.
-  intro; red; intro H.
-  elim (pset_singleton_elim  p p H); auto.
+  intros z p; red; intro H.
+  elim (pset_singleton_elim H); auto.
 Save.
 Hint Resolve not_not_in_pset_singleton.
 

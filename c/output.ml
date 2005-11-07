@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.27 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.28 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Format;;
 
@@ -581,6 +581,7 @@ type why_decl =
   | Axiom of string * assertion         (*r Axiom *)
   | Predicate of bool * string * (string * base_type) list * assertion  
   | Function of bool * string * (string * base_type) list * base_type * term
+  | Type of string * string list
 
 type prover_decl =
   | Parameter  of string * why_type    (*r Parameter *)
@@ -599,7 +600,8 @@ let get_why_id d =
     | Axiom(id,_) -> id
     | Predicate(_,id,_,_) -> id
     | Function(_,id,_,_,_) -> id
-      
+    | Type (id,_) -> id
+    
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
@@ -613,7 +615,8 @@ let iter_why_decl f d =
 	List.iter (fun (_,t) -> iter_base_type f t) args;
 	iter_base_type f t;
 	iter_term f p
-    
+    | Type(t,args) -> List.iter f args
+
 let get_prover_id d =
   match d with
     | Parameter(id,_) -> id
@@ -637,18 +640,20 @@ module StringMap = Map.Make(String);;
 exception Recursion;;
 *)
 
-let rec do_topo decl_map iter_fun output_fun d =
+let rec do_topo decl_map iter_fun output_fun id d =
   match d.state with
     | `DONE -> ()
     | `RUNNING -> 
-	Creport.warning Loc.dummy "Recursive definition in generated file"
+	Creport.warning 
+	  Loc.dummy_position 
+	  ("Recursive definition of " ^ id ^ " in generated file")
     | `TODO ->
 	d.state <- `RUNNING;
 	iter_fun
 	  (fun id ->
 	     try 
 	       let s = StringMap.find id decl_map in
-	       do_topo decl_map iter_fun output_fun s
+	       do_topo decl_map iter_fun output_fun id s
 	     with
 		 Not_found -> ())
 	  d.decl;	
@@ -699,7 +704,14 @@ let fprintf_why_decl form d =
 	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
 	fprintf form ") : %a =@ %a@]@.@." fprintf_base_type t 
 	  fprintf_term e
-
+    | Type (id, []) ->
+	fprintf form "@[type %s@]@." id
+    | Type (id, [t]) ->
+	fprintf form "@[type '%s %s@]@." t id
+    | Type (id, t::l) ->
+	fprintf form "@[type ('%s" t;
+	List.iter (fun t -> fprintf form ", '%s" t) l;
+	fprintf form ") %s@]@." id
 
 let iter_prover_decl f d =
   match d with
@@ -737,7 +749,7 @@ let output_decls get_id iter_decl output_decl decls =
   let map = build_map get_id decls in
   StringMap.iter
     (fun id decl ->
-       do_topo map iter_decl output_decl decl)
+       do_topo map iter_decl output_decl id decl)
     map
 ;;
 

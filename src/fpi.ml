@@ -52,7 +52,7 @@ let print_hyp fmt = function
 let print_hyps = print_list space print_hyp
 
 let print_obligation fmt (loc,s,o) =
-  fprintf fmt "%% %s from %a@\n" s Loc.report loc;
+  fprintf fmt "%% %s from %a@\n" s Loc.report_position loc;
   begin match o with
     | [], p -> 
 	fprintf fmt "(@[%a@])" print_pred p

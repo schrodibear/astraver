@@ -5,40 +5,40 @@ Require Export struct_spec_why.
 
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (t2: pointer),
+  forall (t2: ((pointer) Z8)),
   forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-34 *)
-                ((valid alloc t2) /\ (acc x t2) = 0)),
+  forall (x_Z8: ((memory) Z Z8)),
+  forall (y_Z8: ((memory) Z Z8)),
+  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+                ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
-  forall (HW_2: result = (acc x t2)),
-  forall (x0: ((memory) Z)),
-  forall (HW_3: x0 = (upd x t2 (result + 1))),
+  forall (HW_2: result = (acc x_Z8 t2)),
+  forall (x_Z8_0: ((memory) Z Z8)),
+  forall (HW_3: x_Z8_0 = (upd x_Z8 t2 (result + 1))),
   forall (result0: Z),
-  forall (HW_4: result0 = (acc x0 t2)),
-  forall (x1: ((memory) Z)),
-  forall (HW_5: x1 = (upd x0 t2 (1 + result0))),
-  (* File \"<built-in>\", line 0, characters 1-51 *) ((result0 = 1 /\
-  (acc x1 t2) = 2) /\ (acc y t2) = (acc y t2)) /\
-  (not_assigns alloc x x1 (pset_singleton t2)).
+  forall (HW_4: result0 = (acc x_Z8_0 t2)),
+  forall (x_Z8_1: ((memory) Z Z8)),
+  forall (HW_5: x_Z8_1 = (upd x_Z8_0 t2 (1 + result0))),
+  (* File \"struct.c\", line 9, characters 13-63:\n *) ((result0 = 1 /\
+  (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) = (acc y_Z8 t2)) /\
+  (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2)).
 Proof.
 intuition; subst; auto.
 Save.
 
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (t2: pointer),
+  forall (t2: ((pointer) Z8)),
   forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-34 *)
-                ((valid alloc t2) /\ (acc x t2) = 0)),
+  forall (x_Z8: ((memory) Z Z8)),
+  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+                ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
-  forall (HW_2: result = (acc x t2)),
-  forall (x0: ((memory) Z)),
-  forall (HW_3: x0 = (upd x t2 (result + 1))),
+  forall (HW_2: result = (acc x_Z8 t2)),
+  forall (x_Z8_0: ((memory) Z Z8)),
+  forall (HW_3: x_Z8_0 = (upd x_Z8 t2 (result + 1))),
   forall (result0: Z),
-  forall (HW_4: result0 = (acc x0 t2)),
+  forall (HW_4: result0 = (acc x_Z8_0 t2)),
   (valid alloc t2).
 Proof.
 intuition; subst; caduceus; auto.
@@ -46,15 +46,15 @@ Save.
 
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
-  forall (t2: pointer),
+  forall (t2: ((pointer) Z8)),
   forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-34 *)
-                ((valid alloc t2) /\ (acc x t2) = 0)),
+  forall (x_Z8: ((memory) Z Z8)),
+  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+                ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
-  forall (HW_2: result = (acc x t2)),
-  forall (x0: ((memory) Z)),
-  forall (HW_3: x0 = (upd x t2 (result + 1))),
+  forall (HW_2: result = (acc x_Z8 t2)),
+  forall (x_Z8_0: ((memory) Z Z8)),
+  forall (HW_3: x_Z8_0 = (upd x_Z8 t2 (result + 1))),
   (valid alloc t2).
 Proof.
 intuition.
@@ -63,13 +63,13 @@ Save.
 
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
-  forall (t2: pointer),
+  forall (t2: ((pointer) Z8)),
   forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-34 *)
-                ((valid alloc t2) /\ (acc x t2) = 0)),
+  forall (x_Z8: ((memory) Z Z8)),
+  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+                ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
-  forall (HW_2: result = (acc x t2)),
+  forall (HW_2: result = (acc x_Z8 t2)),
   (valid alloc t2).
 Proof.
 intuition.
@@ -78,11 +78,11 @@ Save.
 
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
-  forall (t2: pointer),
+  forall (t2: ((pointer) Z8)),
   forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-34 *)
-                ((valid alloc t2) /\ (acc x t2) = 0)),
+  forall (x_Z8: ((memory) Z Z8)),
+  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+                ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   (valid alloc t2).
 Proof.
 intuition.
@@ -92,29 +92,27 @@ Save.
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-20 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
-                (valid1 t) /\ (separation2 t t)),
-  forall (ps0: pointer),
+  forall (ps: ((pointer) Z11)),
+  forall (s: ((pointer) Z11)),
+  forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
+  forall (x_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+  forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
-  forall (result: pointer),
-  forall (HW_4: result = (acc t s)),
-  forall (p: pointer),
+  forall (result: ((pointer) Z2)),
+  forall (HW_4: result = (acc t_Z11 s)),
+  forall (p: ((pointer) Z2)),
   forall (HW_5: p = result),
-  forall (result0: pointer),
-  forall (HW_6: result0 = (acc t ps0)),
-  forall (x0: ((memory) Z)),
-  forall (HW_7: x0 = (upd x result0 1)),
-  forall (result1: pointer),
-  forall (HW_8: result1 = (acc t s)),
+  forall (result0: ((pointer) Z2)),
+  forall (HW_6: result0 = (acc t_Z11 ps0)),
+  forall (x_Z2_0: ((memory) Z Z2)),
+  forall (HW_7: x_Z2_0 = (upd x_Z2 result0 1)),
+  forall (result1: ((pointer) Z2)),
+  forall (HW_8: result1 = (acc t_Z11 s)),
   forall (result2: Z),
-  forall (HW_9: result2 = (acc x0 result1)),
-  (* File \"struct.c819618234.c1069824147.i\", line 0, characters 33-45 *)
-  result2 = 1.
+  forall (HW_9: result2 = (acc x_Z2_0 result1)),
+  (* File \"struct.c\", line 20, characters 13-25:\n *) result2 = 1.
 Proof.
  intuition.
 Save.
@@ -122,25 +120,24 @@ Save.
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-20 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
-                (valid1 t) /\ (separation2 t t)),
-  forall (ps0: pointer),
+  forall (ps: ((pointer) Z11)),
+  forall (s: ((pointer) Z11)),
+  forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
+  forall (x_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+  forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
-  forall (result: pointer),
-  forall (HW_4: result = (acc t s)),
-  forall (p: pointer),
+  forall (result: ((pointer) Z2)),
+  forall (HW_4: result = (acc t_Z11 s)),
+  forall (p: ((pointer) Z2)),
   forall (HW_5: p = result),
-  forall (result0: pointer),
-  forall (HW_6: result0 = (acc t ps0)),
-  forall (x0: ((memory) Z)),
-  forall (HW_7: x0 = (upd x result0 1)),
-  forall (result1: pointer),
-  forall (HW_8: result1 = (acc t s)),
+  forall (result0: ((pointer) Z2)),
+  forall (HW_6: result0 = (acc t_Z11 ps0)),
+  forall (x_Z2_0: ((memory) Z Z2)),
+  forall (HW_7: x_Z2_0 = (upd x_Z2 result0 1)),
+  forall (result1: ((pointer) Z2)),
+  forall (HW_8: result1 = (acc t_Z11 s)),
   (valid alloc result1).
 Proof.
  intuition.
@@ -150,23 +147,22 @@ Save.
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-20 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
-                (valid1 t) /\ (separation2 t t)),
-  forall (ps0: pointer),
+  forall (ps: ((pointer) Z11)),
+  forall (s: ((pointer) Z11)),
+  forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
+  forall (x_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+  forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
-  forall (result: pointer),
-  forall (HW_4: result = (acc t s)),
-  forall (p: pointer),
+  forall (result: ((pointer) Z2)),
+  forall (HW_4: result = (acc t_Z11 s)),
+  forall (p: ((pointer) Z2)),
   forall (HW_5: p = result),
-  forall (result0: pointer),
-  forall (HW_6: result0 = (acc t ps0)),
-  forall (x0: ((memory) Z)),
-  forall (HW_7: x0 = (upd x result0 1)),
+  forall (result0: ((pointer) Z2)),
+  forall (HW_6: result0 = (acc t_Z11 ps0)),
+  forall (x_Z2_0: ((memory) Z Z2)),
+  forall (HW_7: x_Z2_0 = (upd x_Z2 result0 1)),
   (valid alloc s).
 Proof.
 intuition.
@@ -177,20 +173,19 @@ Save.
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-20 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
-                (valid1 t) /\ (separation2 t t)),
-  forall (ps0: pointer),
+  forall (ps: ((pointer) Z11)),
+  forall (s: ((pointer) Z11)),
+  forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
+  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+  forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
-  forall (result: pointer),
-  forall (HW_4: result = (acc t s)),
-  forall (p: pointer),
+  forall (result: ((pointer) Z2)),
+  forall (HW_4: result = (acc t_Z11 s)),
+  forall (p: ((pointer) Z2)),
   forall (HW_5: p = result),
-  forall (result0: pointer),
-  forall (HW_6: result0 = (acc t ps0)),
+  forall (result0: ((pointer) Z2)),
+  forall (HW_6: result0 = (acc t_Z11 ps0)),
   (valid alloc result0).
 Proof.
 intuition; subst; auto.
@@ -200,17 +195,16 @@ Save.
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-20 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
-                (valid1 t) /\ (separation2 t t)),
-  forall (ps0: pointer),
+  forall (ps: ((pointer) Z11)),
+  forall (s: ((pointer) Z11)),
+  forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
+  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+  forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
-  forall (result: pointer),
-  forall (HW_4: result = (acc t s)),
-  forall (p: pointer),
+  forall (result: ((pointer) Z2)),
+  forall (HW_4: result = (acc t_Z11 s)),
+  forall (p: ((pointer) Z2)),
   forall (HW_5: p = result),
   (valid alloc ps0).
 Proof.
@@ -221,13 +215,11 @@ Save.
 (* Why obligation from file "why/struct.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (HW_1: (* File \"struct.c819618234.c1069824147.i\", line 0, characters 10-20 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
-                (valid1 t) /\ (separation2 t t)),
-  forall (ps0: pointer),
+  forall (ps: ((pointer) Z11)),
+  forall (s: ((pointer) Z11)),
+  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+  forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
   (valid alloc s).
 Proof.

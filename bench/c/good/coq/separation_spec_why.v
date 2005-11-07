@@ -3,115 +3,545 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_anonymous_0_int  (tab:pointer)
-  (x:((memory) pointer)) (v:pointer) (alloc:alloc_table)
-  := ~((base_addr tab) = (base_addr v)) /\
-     (forall (index_3:Z),
-      (0 <= index_3 /\ index_3 < 5 ->
-       ~((base_addr v) = (base_addr (acc x (shift tab index_3)))))).
 
-(*Why predicate*) Definition separation_anonymous_0_s1  (tab:pointer)
-  (x:((memory) pointer)) (s:pointer) (u:((memory) pointer))
-  (t:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr tab) = (base_addr s)) /\
-     (forall (index_6:Z),
-      (0 <= index_6 /\ index_6 < 5 ->
-       ~((base_addr s) = (base_addr (acc x (shift tab index_6)))))) /\
-     ~((base_addr tab) = (base_addr (acc t s))) /\
-     ~((base_addr tab) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_anonymous_1_anonymous_0  (u1:pointer)
-  (p2:((memory) pointer)) (p1:((memory) pointer)) (tab:pointer)
-  (x:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr u1) = (base_addr tab)) /\
-     (~((base_addr tab) = (base_addr (acc p1 u1))) /\
-     ~((base_addr tab) = (base_addr (acc p2 u1)))) /\
-     (forall (index_7:Z),
-      (0 <= index_7 /\ index_7 < 5 ->
-       ~((base_addr u1) = (base_addr (acc x (shift tab index_7)))))).
 
-(*Why predicate*) Definition separation_anonymous_1_anonymous_1  (u2:pointer)
-  (u1:pointer) (p2:((memory) pointer)) (p1:((memory) pointer))
-  (alloc:alloc_table)
-  := ~((base_addr u2) = (base_addr u1)) /\
-     (~((base_addr u1) = (base_addr (acc p1 u2))) /\
-     ~((base_addr u1) = (base_addr (acc p2 u2)))) /\
-     ~((base_addr u2) = (base_addr (acc p1 u1))) /\
-     ~((base_addr u2) = (base_addr (acc p2 u1))).
 
-(*Why predicate*) Definition separation_anonymous_1_int  (u1:pointer)
-  (p2:((memory) pointer)) (p1:((memory) pointer)) (v:pointer)
-  (alloc:alloc_table)
-  := ~((base_addr u1) = (base_addr v)) /\
-     ~((base_addr v) = (base_addr (acc p1 u1))) /\
-     ~((base_addr v) = (base_addr (acc p2 u1))).
 
-(*Why predicate*) Definition separation_anonymous_1_s1  (u1:pointer)
-  (p2:((memory) pointer)) (p1:((memory) pointer)) (s:pointer)
-  (u:((memory) pointer)) (t:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr u1) = (base_addr s)) /\
-     (~((base_addr s) = (base_addr (acc p1 u1))) /\
-     ~((base_addr s) = (base_addr (acc p2 u1)))) /\
-     ~((base_addr u1) = (base_addr (acc t s))) /\
-     ~((base_addr u1) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_anonymous_2_anonymous_0  (u3:pointer)
-  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
-  (tab:pointer) (x:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr u3) = (base_addr tab)) /\
-     (~((base_addr tab) = (base_addr (acc anonymous_2_p1 u3))) /\
-     ~((base_addr tab) = (base_addr (acc anonymous_2_p2 u3)))) /\
-     (forall (index_15:Z),
-      (0 <= index_15 /\ index_15 < 5 ->
-       ~((base_addr u3) = (base_addr (acc x (shift tab index_15)))))).
 
-(*Why predicate*) Definition separation_anonymous_2_anonymous_1  (u3:pointer)
-  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
-  (u1:pointer) (p2:((memory) pointer)) (p1:((memory) pointer))
-  (alloc:alloc_table)
-  := ~((base_addr u3) = (base_addr u1)) /\
-     (~((base_addr u1) = (base_addr (acc anonymous_2_p1 u3))) /\
-     ~((base_addr u1) = (base_addr (acc anonymous_2_p2 u3)))) /\
-     ~((base_addr u3) = (base_addr (acc p1 u1))) /\
-     ~((base_addr u3) = (base_addr (acc p2 u1))).
 
-(*Why predicate*) Definition separation_anonymous_2_anonymous_2  (u4:pointer)
-  (u3:pointer) (anonymous_2_p2:((memory) pointer))
-  (anonymous_2_p1:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr u4) = (base_addr u3)) /\
-     (~((base_addr u3) = (base_addr (acc anonymous_2_p1 u4))) /\
-     ~((base_addr u3) = (base_addr (acc anonymous_2_p2 u4)))) /\
-     ~((base_addr u4) = (base_addr (acc anonymous_2_p1 u3))) /\
-     ~((base_addr u4) = (base_addr (acc anonymous_2_p2 u3))).
 
-(*Why predicate*) Definition separation_anonymous_2_int  (u3:pointer)
-  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
-  (v:pointer) (alloc:alloc_table)
-  := ~((base_addr u3) = (base_addr v)) /\
-     ~((base_addr v) = (base_addr (acc anonymous_2_p1 u3))) /\
-     ~((base_addr v) = (base_addr (acc anonymous_2_p2 u3))).
 
-(*Why predicate*) Definition separation_anonymous_2_s1  (u3:pointer)
-  (anonymous_2_p2:((memory) pointer)) (anonymous_2_p1:((memory) pointer))
-  (s:pointer) (u:((memory) pointer)) (t:((memory) pointer))
-  (alloc:alloc_table)
-  := ~((base_addr u3) = (base_addr s)) /\
-     (~((base_addr s) = (base_addr (acc anonymous_2_p1 u3))) /\
-     ~((base_addr s) = (base_addr (acc anonymous_2_p2 u3)))) /\
-     ~((base_addr u3) = (base_addr (acc t s))) /\
-     ~((base_addr u3) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_int_s1  (v:pointer) (s:pointer)
-  (u:((memory) pointer)) (t:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr v) = (base_addr s)) /\
-     ~((base_addr v) = (base_addr (acc t s))) /\
-     ~((base_addr v) = (base_addr (acc u s))).
 
-(*Why predicate*) Definition separation_s1_s1  (ss:pointer) (s:pointer)
-  (u:((memory) pointer)) (t:((memory) pointer)) (alloc:alloc_table)
-  := ~((base_addr ss) = (base_addr s)) /\
-     (~((base_addr s) = (base_addr (acc t ss))) /\
-     ~((base_addr s) = (base_addr (acc u ss)))) /\
-     ~((base_addr ss) = (base_addr (acc t s))) /\
-     ~((base_addr ss) = (base_addr (acc u s))).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z62: Set.
+
+(*Why type*) Parameter Z10: Set.
+
+(*Why type*) Parameter Z63: Set.
+
+(*Why type*) Parameter Z11: Set.
+
+(*Why type*) Parameter Z64: Set.
+
+(*Why type*) Parameter Z12: Set.
+
+(*Why type*) Parameter Z13: Set.
+
+(*Why type*) Parameter Z14: Set.
+
+(*Why type*) Parameter Z67: Set.
+
+(*Why type*) Parameter Z15: Set.
+
+(*Why type*) Parameter Z16: Set.
+
+(*Why type*) Parameter Z17: Set.
+
+(*Why type*) Parameter Z18: Set.
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z19: Set.
+
+(*Why type*) Parameter Z1: Set.
+
+(*Why type*) Parameter Z2: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why type*) Parameter Z5: Set.
+
+(*Why type*) Parameter Z6: Set.
+
+(*Why type*) Parameter Z7: Set.
+
+(*Why type*) Parameter Z8: Set.
+
+(*Why type*) Parameter Z70: Set.
+
+(*Why type*) Parameter Z9: Set.
+
+(*Why type*) Parameter Z20: Set.
+
+(*Why type*) Parameter Z73: Set.
+
+(*Why type*) Parameter Z21: Set.
+
+(*Why type*) Parameter Z22: Set.
+
+(*Why type*) Parameter Z23: Set.
+
+(*Why type*) Parameter Z100: Set.
+
+(*Why type*) Parameter Z76: Set.
+
+(*Why type*) Parameter Z24: Set.
+
+(*Why type*) Parameter Z101: Set.
+
+(*Why type*) Parameter Z25: Set.
+
+(*Why type*) Parameter Z102: Set.
+
+(*Why type*) Parameter Z26: Set.
+
+(*Why type*) Parameter Z103: Set.
+
+(*Why type*) Parameter Z79: Set.
+
+(*Why type*) Parameter Z27: Set.
+
+(*Why type*) Parameter Z104: Set.
+
+(*Why type*) Parameter Z28: Set.
+
+(*Why type*) Parameter Z105: Set.
+
+(*Why type*) Parameter Z29: Set.
+
+(*Why type*) Parameter Z106: Set.
+
+(*Why type*) Parameter Z107: Set.
+
+(*Why type*) Parameter Z108: Set.
+
+(*Why type*) Parameter Z109: Set.
+
+(*Why type*) Parameter Z82: Set.
+
+(*Why type*) Parameter Z30: Set.
+
+(*Why type*) Parameter Z31: Set.
+
+(*Why type*) Parameter Z32: Set.
+
+(*Why type*) Parameter Z85: Set.
+
+(*Why type*) Parameter Z33: Set.
+
+(*Why type*) Parameter Z110: Set.
+
+(*Why type*) Parameter Z34: Set.
+
+(*Why type*) Parameter Z111: Set.
+
+(*Why type*) Parameter Z35: Set.
+
+(*Why type*) Parameter Z112: Set.
+
+(*Why type*) Parameter Z88: Set.
+
+(*Why type*) Parameter Z36: Set.
+
+(*Why type*) Parameter Z113: Set.
+
+(*Why type*) Parameter Z37: Set.
+
+(*Why type*) Parameter Z114: Set.
+
+(*Why type*) Parameter Z38: Set.
+
+(*Why type*) Parameter Z115: Set.
+
+(*Why type*) Parameter Z39: Set.
+
+(*Why type*) Parameter Z116: Set.
+
+(*Why type*) Parameter Z117: Set.
+
+(*Why type*) Parameter Z118: Set.
+
+(*Why type*) Parameter Z119: Set.
+
+(*Why type*) Parameter Z91: Set.
+
+(*Why type*) Parameter Z40: Set.
+
+(*Why type*) Parameter Z41: Set.
+
+(*Why type*) Parameter Z94: Set.
+
+(*Why type*) Parameter Z42: Set.
+
+(*Why type*) Parameter Z43: Set.
+
+(*Why type*) Parameter Z120: Set.
+
+(*Why type*) Parameter Z44: Set.
+
+(*Why type*) Parameter Z121: Set.
+
+(*Why type*) Parameter Z97: Set.
+
+(*Why type*) Parameter Z45: Set.
+
+(*Why type*) Parameter Z122: Set.
+
+(*Why type*) Parameter Z46: Set.
+
+(*Why type*) Parameter Z123: Set.
+
+(*Why type*) Parameter Z47: Set.
+
+(*Why type*) Parameter Z124: Set.
+
+(*Why type*) Parameter Z48: Set.
+
+(*Why type*) Parameter Z125: Set.
+
+(*Why type*) Parameter Z49: Set.
+
+(*Why type*) Parameter Z126: Set.
+
+(*Why type*) Parameter Z127: Set.
+
+(*Why type*) Parameter Z128: Set.
+
+(*Why type*) Parameter Z129: Set.
+
+(*Why type*) Parameter Z50: Set.
+
+(*Why type*) Parameter Z51: Set.
+
+(*Why type*) Parameter Z52: Set.
+
+(*Why type*) Parameter Z53: Set.
+
+(*Why type*) Parameter Z130: Set.
+
+(*Why type*) Parameter Z54: Set.
+
+(*Why type*) Parameter Z131: Set.
+
+(*Why type*) Parameter Z55: Set.
+
+(*Why type*) Parameter Z132: Set.
+
+(*Why type*) Parameter Z56: Set.
+
+(*Why type*) Parameter Z59: Set.
+
+(*Why predicate*) Definition separation_anonymous_1_anonymous_1  (u2:((pointer) Z63))
+  (u1:((pointer) Z63)) := ~((base_addr u2) = (base_addr u1)).
+
+
+
+
+
+(*Why predicate*) Definition separation_anonymous_2_anonymous_2  (u4:((pointer) Z101))
+  (u3:((pointer) Z101)) := ~((base_addr u4) = (base_addr u3)).
+
+
+
+
 

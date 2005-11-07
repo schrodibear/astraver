@@ -14,9 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.21 2005-04-22 13:37:01 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.22 2005-11-07 15:13:28 hubert Exp $ i*)
 
+(*
 val interp_type : Cast.nctype -> string
+*)
 
 open Info
 
@@ -31,10 +33,18 @@ val global_var :  Info.var_info list ref
 val intersect_only_alloc : HeapVarSet.t -> HeapVarSet.t -> bool
 
 (* all heap vars and their associated types *)
-val heap_vars : (string, Output.base_type) Hashtbl.t
+val heap_vars : (string, Info.var_info) Hashtbl.t
+
+(*
+val zone_type : (string, Info.zone) Hashtbl.t
+*)
+
 val print_heap_vars : Format.formatter -> unit -> unit
 
-val heap_var_type : var_info -> Output.base_type
+
+(*
+val heap_var_type : var_info -> Info.why_type
+*)
 val is_memory_var : var_info -> bool
 
 (*val location : Cast.nterm Clogic.location -> HeapVarSet.t*)
@@ -68,5 +78,5 @@ val strong_invariants_2 :
 val mem_strong_invariant_2 : string -> bool
     
 (* table of warnings from computation of effects *)
-val warnings : (Loc.t * string) Queue.t
+val warnings : (Loc.position * string) Queue.t
 

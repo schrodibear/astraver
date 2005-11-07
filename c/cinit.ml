@@ -17,7 +17,7 @@ let split_decl e ((invs,inits) as acc) =
 
 let split_decls d = List.fold_right split_decl d ([],[])
 
-let dummy_pred p = { pred_node = p; pred_loc = Loc.dummy }
+let dummy_pred p = { pred_node = p; pred_loc = Loc.dummy_position }
 
 let rec combine_inv = function
   | [] -> dummy_pred Ptrue
@@ -35,7 +35,7 @@ let rec pop_initializer loc t i =
   match i with 
     | [] ->{ texpr_node = 
 	       (match t.ctype_node with
-		  |  Tint _ -> TEconstant(IntConstant "0")
+		  | Tint _ -> TEconstant(IntConstant "0")
 		  | Tfloat _ -> TEconstant(FloatConstant "0.0")
 		  | Tpointer _ -> TEcast (t,Ctyping.tezero)
 		  | _ -> assert false);
@@ -145,8 +145,8 @@ let add_init l =
 		st_continue = false; 
 		st_return = false;   
 		st_term = true;     
-		st_loc =Loc.dummy 
+		st_loc = Loc.dummy_position 
 	       })
     in
-    { node = init_fun; loc = Loc.dummy } :: l
+    { node = init_fun; loc = Loc.dummy_position } :: l
     

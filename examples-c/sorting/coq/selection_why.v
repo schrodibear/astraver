@@ -3,136 +3,117 @@
 
 Require Export selection_spec_why.
 
-(* Why obligation from file "why/selection.why", characters 1571-1688 *)
-Lemma selection_impl_po_1 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_1 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
-                 (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test6: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post3: min2 = i2),
-  forall (j2: Z),
-  forall (Post4: j2 = (i2 + 1)),
-  forall (Variant3: Z),
-  forall (j3: Z),
-  forall (min3: Z),
-  forall (Pre8: Variant3 = (n - j3)),
-  forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
-  forall (Test5: j3 < n),
-  (valid alloc (shift t j3)).
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  (* File \"selection.c\", line 29, characters 7-183:\n *) ((((0 <= i /\ i <=
+  (n - 1)) /\ (sorted int_Z5 alloc t 0 (i - 1))) /\
+  (mset int_Z5 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0 (n - 1))) /\
+  (forall (k:Z),
+   (forall (l:Z),
+    (0 <= k /\ k < i ->
+     (i <= l /\ l < n -> (acc int_Z5 (shift t k)) <= (acc int_Z5 (shift t l))))))).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1571-1688 *)
-Lemma selection_impl_po_2 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_2 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
-                 (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test6: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post3: min2 = i2),
-  forall (j2: Z),
-  forall (Post4: j2 = (i2 + 1)),
-  forall (Variant3: Z),
-  forall (j3: Z),
-  forall (min3: Z),
-  forall (Pre8: Variant3 = (n - j3)),
-  forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
                 (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
-  forall (Test5: j3 < n),
-  forall (Pre4: (valid alloc (shift t j3))),
-  (valid alloc (shift t min3)).
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  (* File \"selection.c\", line 40, characters 9-101:\n *) ((((i0 + 1) <=
+  j /\ j <= n) /\ i0 <= min /\ min < n) /\
+  (forall (k:Z),
+   (i0 <= k /\ k < j -> (acc int_Z5_0 (shift t min)) <=
+    (acc int_Z5_0 (shift t k))))).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1707-1715 *)
-Lemma selection_impl_po_3 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_3 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
-                 (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test6: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post3: min2 = i2),
-  forall (j2: Z),
-  forall (Post4: j2 = (i2 + 1)),
-  forall (Variant3: Z),
-  forall (j3: Z),
-  forall (min3: Z),
-  forall (Pre8: Variant3 = (n - j3)),
-  forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
                 (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
-  forall (Test5: j3 < n),
-  forall (Pre4: (valid alloc (shift t j3))),
-  forall (Pre6: (valid alloc (shift t min3))),
-  forall (Test4: (acc intP0 (shift t j3)) < (acc intP0 (shift t min3))),
-  forall (min4: Z),
-  forall (Post7: min4 = j3),
-  (forall (j:Z),
-   (j = (j3 + 1) -> ((((i2 + 1) <= j /\ j <= n) /\ i2 <= min4 /\ min4 < n) /\
-    (forall (k:Z),
-     (i2 <= k /\ k < j -> (acc intP0 (shift t min4)) <=
-      (acc intP0 (shift t k))))) /\
-    (Zwf 0 (n - j) (n - j3)))).
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  forall (j0: Z),
+  forall (min0: Z),
+  forall (HW_10: (* File \"selection.c\", line 40, characters 9-101:\n *)
+                 ((((i0 + 1) <= j0 /\ j0 <= n) /\ i0 <= min0 /\ min0 < n) /\
+                 (forall (k:Z),
+                  (i0 <= k /\ k < j0 -> (acc int_Z5_0 (shift t min0)) <=
+                   (acc int_Z5_0 (shift t k)))))),
+  forall (HW_11: j0 < n),
+  forall (result: ((pointer) Z5)),
+  forall (HW_12: result = (shift t j0)),
+  forall (result0: Z),
+  forall (HW_13: result0 = (acc int_Z5_0 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_14: result1 = (shift t min0)),
+  forall (result2: Z),
+  forall (HW_15: result2 = (acc int_Z5_0 result1)),
+  forall (HW_16: result0 < result2),
+  forall (min1: Z),
+  forall (HW_17: min1 = j0),
+  forall (j1: Z),
+  forall (HW_18: j1 = (j0 + 1)),
+  (* File \"selection.c\", line 40, characters 9-101:\n *) ((((i0 + 1) <=
+  j1 /\ j1 <= n) /\ i0 <= min1 /\ min1 < n) /\
+  (forall (k:Z),
+   (i0 <= k /\ k < j1 -> (acc int_Z5_0 (shift t min1)) <=
+    (acc int_Z5_0 (shift t k))))) /\
+  (Zwf 0 (n - j1) (n - j0)).
 Proof.
 intuition.
 Admitted.
@@ -191,53 +172,58 @@ subst; auto.
 
 ***)
 
-(* Why obligation from file "why/selection.why", characters 1734-1734 *)
-Lemma selection_impl_po_4 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_4 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
-                 (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test6: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post3: min2 = i2),
-  forall (j2: Z),
-  forall (Post4: j2 = (i2 + 1)),
-  forall (Variant3: Z),
-  forall (j3: Z),
-  forall (min3: Z),
-  forall (Pre8: Variant3 = (n - j3)),
-  forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
                 (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
-  forall (Test5: j3 < n),
-  forall (Pre4: (valid alloc (shift t j3))),
-  forall (Pre6: (valid alloc (shift t min3))),
-  forall (Test3: (acc intP0 (shift t j3)) >= (acc intP0 (shift t min3))),
-  forall (result5: unit),
-  forall (Post6: result5 = tt),
-  (forall (j:Z),
-   (j = (j3 + 1) -> ((((i2 + 1) <= j /\ j <= n) /\ i2 <= min3 /\ min3 < n) /\
-    (forall (k:Z),
-     (i2 <= k /\ k < j -> (acc intP0 (shift t min3)) <=
-      (acc intP0 (shift t k))))) /\
-    (Zwf 0 (n - j) (n - j3)))).
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  forall (j0: Z),
+  forall (min0: Z),
+  forall (HW_10: (* File \"selection.c\", line 40, characters 9-101:\n *)
+                 ((((i0 + 1) <= j0 /\ j0 <= n) /\ i0 <= min0 /\ min0 < n) /\
+                 (forall (k:Z),
+                  (i0 <= k /\ k < j0 -> (acc int_Z5_0 (shift t min0)) <=
+                   (acc int_Z5_0 (shift t k)))))),
+  forall (HW_11: j0 < n),
+  forall (result: ((pointer) Z5)),
+  forall (HW_12: result = (shift t j0)),
+  forall (result0: Z),
+  forall (HW_13: result0 = (acc int_Z5_0 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_14: result1 = (shift t min0)),
+  forall (result2: Z),
+  forall (HW_15: result2 = (acc int_Z5_0 result1)),
+  forall (HW_19: result0 >= result2),
+  forall (j1: Z),
+  forall (HW_20: j1 = (j0 + 1)),
+  (* File \"selection.c\", line 40, characters 9-101:\n *) ((((i0 + 1) <=
+  j1 /\ j1 <= n) /\ i0 <= min0 /\ min0 < n) /\
+  (forall (k:Z),
+   (i0 <= k /\ k < j1 -> (acc int_Z5_0 (shift t min0)) <=
+    (acc int_Z5_0 (shift t k))))) /\
+  (Zwf 0 (n - j1) (n - j0)).
 Proof.
 intuition.
 
@@ -246,61 +232,48 @@ omega.
 subst; omega.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1182-1785 *)
-Lemma selection_impl_po_5 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_5 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
-                 (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test6: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post3: min2 = i2),
-  forall (j2: Z),
-  forall (Post4: j2 = (i2 + 1)),
-  forall (Variant3: Z),
-  forall (j3: Z),
-  forall (min3: Z),
-  forall (Pre8: Variant3 = (n - j3)),
-  forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
                 (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
-  forall (Test2: j3 >= n),
-  (forall (result:Z),
-   (result = min3 ->
-    (forall (intP1:((memory) Z)),
-     (((acc intP1 (shift t result)) = (acc intP0 (shift t i2)) /\
-      (acc intP1 (shift t i2)) = (acc intP0 (shift t result))) /\
-      (not_assigns alloc intP0 intP1
-       (pset_union (pset_singleton (shift t i2))
-        (pset_singleton (shift t result)))) ->
-      (forall (i:Z),
-       (i = (i2 + 1) -> ((((0 <= i /\ i <= (n - 1)) /\
-        (sorted alloc intP1 t 0 (i - 1))) /\
-        (mset alloc intP1 t 0 (n - 1)) = (mset alloc intP t 0 (n - 1))) /\
-        (forall (k:Z),
-         (forall (l:Z),
-          (0 <= k /\ k < i ->
-           (i <= l /\ l < n -> (acc intP1 (shift t k)) <=
-            (acc intP1 (shift t l))))))) /\
-        (Zwf 0 (n - i) (n - i2)))))) /\
-    (valid_index alloc t result) /\ (valid_index alloc t i2))).
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  forall (j0: Z),
+  forall (min0: Z),
+  forall (HW_10: (* File \"selection.c\", line 40, characters 9-101:\n *)
+                 ((((i0 + 1) <= j0 /\ j0 <= n) /\ i0 <= min0 /\ min0 < n) /\
+                 (forall (k:Z),
+                  (i0 <= k /\ k < j0 -> (acc int_Z5_0 (shift t min0)) <=
+                   (acc int_Z5_0 (shift t k)))))),
+  forall (HW_11: j0 < n),
+  forall (result: ((pointer) Z5)),
+  forall (HW_12: result = (shift t j0)),
+  forall (result0: Z),
+  forall (HW_13: result0 = (acc int_Z5_0 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_14: result1 = (shift t min0)),
+  (valid alloc result1).
 Proof.
 intuition.
 unfold sorted in *|-*; intuition.
@@ -310,37 +283,44 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/selection.why", characters 1245-1517 *)
-Lemma selection_impl_po_6 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_6 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
+                (forall (k:Z),
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  forall (j0: Z),
+  forall (min0: Z),
+  forall (HW_10: (* File \"selection.c\", line 40, characters 9-101:\n *)
+                 ((((i0 + 1) <= j0 /\ j0 <= n) /\ i0 <= min0 /\ min0 < n) /\
                  (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test6: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post3: min2 = i2),
-  forall (j2: Z),
-  forall (Post4: j2 = (i2 + 1)),
-  (((i2 + 1) <= j2 /\ j2 <= n) /\ i2 <= min2 /\ min2 < n) /\
-  (forall (k:Z),
-   (i2 <= k /\ k < j2 -> (acc intP0 (shift t min2)) <=
-    (acc intP0 (shift t k)))).
+                  (i0 <= k /\ k < j0 -> (acc int_Z5_0 (shift t min0)) <=
+                   (acc int_Z5_0 (shift t k)))))),
+  forall (HW_11: j0 < n),
+  forall (result: ((pointer) Z5)),
+  forall (HW_12: result = (shift t j0)),
+  (valid alloc result).
 Proof.
 intuition.
 red; intuition.
@@ -348,83 +328,197 @@ Save.
 
 
 
-(* Why obligation from file "why/selection.why", characters 373-1908 *)
-Lemma selection_impl_po_7 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_7 : 
+  forall (t: ((pointer) Z5)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0
-                                                   (n - 1))) /\
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
+                (forall (k:Z),
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  forall (j0: Z),
+  forall (min0: Z),
+  forall (HW_10: (* File \"selection.c\", line 40, characters 9-101:\n *)
+                 ((((i0 + 1) <= j0 /\ j0 <= n) /\ i0 <= min0 /\ min0 < n) /\
                  (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test1: i2 >= (n - 1)),
-  (sorted alloc intP0 t 0 (n - 1)) /\
-  (mset alloc intP0 t 0 (n - 1)) = (mset alloc intP t 0 (n - 1)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/selection.why", characters 448-1051 *)
-Lemma selection_impl_po_8 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
+                  (i0 <= k /\ k < j0 -> (acc int_Z5_0 (shift t min0)) <=
+                   (acc int_Z5_0 (shift t k)))))),
+  forall (HW_21: j0 >= n),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_22: (* File \"selection.c\", line 6, characters 13-53:\n *)
+                 ((acc int_Z5_1 (shift t min0)) =
+                 (acc int_Z5_0 (shift t i0)) /\ (acc int_Z5_1 (shift t i0)) =
+                 (acc int_Z5_0 (shift t min0))) /\
+                 (not_assigns alloc int_Z5_0 int_Z5_1
+                  (pset_union (pset_singleton (shift t i0))
+                   (pset_singleton (shift t min0))))),
   forall (i1: Z),
-  forall (Post1: i1 = 0),
-  (((0 <= i1 /\ i1 <= (n - 1)) /\ (sorted alloc intP t 0 (i1 - 1))) /\
-  (mset alloc intP t 0 (n - 1)) = (mset alloc intP t 0 (n - 1))) /\
+  forall (HW_23: i1 = (i0 + 1)),
+  (* File \"selection.c\", line 29, characters 7-183:\n *) ((((0 <= i1 /\
+  i1 <= (n - 1)) /\ (sorted int_Z5_1 alloc t 0 (i1 - 1))) /\
+  (mset int_Z5_1 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0 (n - 1))) /\
   (forall (k:Z),
    (forall (l:Z),
     (0 <= k /\ k < i1 ->
-     (i1 <= l /\ l < n -> (acc intP (shift t k)) <= (acc intP (shift t l)))))).
+     (i1 <= l /\ l < n -> (acc int_Z5_1 (shift t k)) <=
+      (acc int_Z5_1 (shift t l))))))) /\
+  (Zwf 0 (n - i1) (n - i0)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2308-2335 *)
-Lemma swap_impl_po_1 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_8 : 
+  forall (t: ((pointer) Z5)),
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
+                (forall (k:Z),
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_7: i0 < (n - 1)),
+  forall (min: Z),
+  forall (HW_8: min = i0),
+  forall (j: Z),
+  forall (HW_9: j = (i0 + 1)),
+  forall (j0: Z),
+  forall (min0: Z),
+  forall (HW_10: (* File \"selection.c\", line 40, characters 9-101:\n *)
+                 ((((i0 + 1) <= j0 /\ j0 <= n) /\ i0 <= min0 /\ min0 < n) /\
+                 (forall (k:Z),
+                  (i0 <= k /\ k < j0 -> (acc int_Z5_0 (shift t min0)) <=
+                   (acc int_Z5_0 (shift t k)))))),
+  forall (HW_21: j0 >= n),
+  (* File \"selection.c\", line 4, characters 14-52:\n *)
+  ((valid_index alloc t min0) /\ (valid_index alloc t i0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_impl_po_9 : 
+  forall (t: ((pointer) Z5)),
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 21, characters 14-45:\n *)
+                (n >= 1 /\ (valid_range alloc t 0 (n - 1)))),
+  forall (i: Z),
+  forall (HW_5: i = 0),
+  forall (i0: Z),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_6: (* File \"selection.c\", line 29, characters 7-183:\n *)
+                ((((0 <= i0 /\ i0 <= (n - 1)) /\
+                (sorted int_Z5_0 alloc t 0 (i0 - 1))) /\
+                (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0
+                                                     (n - 1))) /\
+                (forall (k:Z),
+                 (forall (l:Z),
+                  (0 <= k /\ k < i0 ->
+                   (i0 <= l /\ l < n -> (acc int_Z5_0 (shift t k)) <=
+                    (acc int_Z5_0 (shift t l)))))))),
+  forall (HW_24: i0 >= (n - 1)),
+  (* File \"selection.c\", line 22, characters 13-68:\n *)
+  ((sorted int_Z5_0 alloc t 0 (n - 1)) /\
+  (mset int_Z5_0 alloc t 0 (n - 1)) = (mset int_Z5 alloc t 0 (n - 1))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_1 : 
+  forall (t: ((pointer) Z5)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  (valid alloc (shift t i)).
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 4, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z5)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z5)),
+  forall (HW_5: result2 = (shift t j)),
+  forall (result3: Z),
+  forall (HW_6: result3 = (acc int_Z5 result2)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_0 = (upd int_Z5 result1 result3)),
+  forall (result4: ((pointer) Z5)),
+  forall (HW_8: result4 = (shift t j)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_1 = (upd int_Z5_0 result4 result0)),
+  (* File \"selection.c\", line 6, characters 13-53:\n *)
+  ((acc int_Z5_1 (shift t i)) = (acc int_Z5 (shift t j)) /\
+  (acc int_Z5_1 (shift t j)) = (acc int_Z5 (shift t i))) /\
+  (not_assigns alloc int_Z5 int_Z5_1
+   (pset_union (pset_singleton (shift t j)) (pset_singleton (shift t i)))).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2435-2462 *)
-Lemma swap_impl_po_2 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_2 : 
+  forall (t: ((pointer) Z5)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  forall (Pre9: (valid alloc (shift t i))),
-  forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t i))),
-  forall (caduceus_2: pointer),
-  forall (Post4: caduceus_2 = (shift t i)),
-  (valid alloc (shift t j)).
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 4, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z5)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z5)),
+  forall (HW_5: result2 = (shift t j)),
+  forall (result3: Z),
+  forall (HW_6: result3 = (acc int_Z5 result2)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_7: int_Z5_0 = (upd int_Z5 result1 result3)),
+  forall (result4: ((pointer) Z5)),
+  forall (HW_8: result4 = (shift t j)),
+  (valid alloc result4).
 Proof.
 intuition.
 assert (i=j \/ i <> j).
@@ -458,56 +552,65 @@ subst; auto.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2409-2463 *)
-Lemma swap_impl_po_3 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_3 : 
+  forall (t: ((pointer) Z5)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  forall (Pre9: (valid alloc (shift t i))),
-  forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t i))),
-  forall (caduceus_2: pointer),
-  forall (Post4: caduceus_2 = (shift t i)),
-  forall (Pre4: (valid alloc (shift t j))),
-  forall (aux_3: Z),
-  forall (Post3: aux_3 = (acc intP (shift t j))),
-  (valid alloc caduceus_2).
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 4, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z5)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z5)),
+  forall (HW_5: result2 = (shift t j)),
+  forall (result3: Z),
+  forall (HW_6: result3 = (acc int_Z5 result2)),
+  (valid alloc result1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2409-2463 *)
-Lemma swap_impl_po_4 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_4 : 
+  forall (t: ((pointer) Z5)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  forall (Pre9: (valid alloc (shift t i))),
-  forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t i))),
-  forall (caduceus_2: pointer),
-  forall (Post4: caduceus_2 = (shift t i)),
-  forall (Pre4: (valid alloc (shift t j))),
-  forall (aux_3: Z),
-  forall (Post3: aux_3 = (acc intP (shift t j))),
-  forall (Pre1: (valid alloc caduceus_2)),
-  forall (intP0: ((memory) Z)),
-  forall (Post12: intP0 = (upd intP caduceus_2 aux_3)),
-  (forall (result:pointer),
-   (result = (shift t j) ->
-    (forall (intP1:((memory) Z)),
-     (intP1 = (upd intP0 result tmp) -> ((acc intP1 (shift t i)) =
-      (acc intP (shift t j)) /\ (acc intP1 (shift t j)) =
-      (acc intP (shift t i))) /\
-      (not_assigns alloc intP intP1
-       (pset_union (pset_singleton (shift t j)) (pset_singleton (shift t i)))))) /\
-    (valid alloc result))).
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File \"selection.c\", line 4, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z5)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z5 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z5)),
+  forall (HW_5: result2 = (shift t j)),
+  (valid alloc result2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_5 : 
+  forall (t: ((pointer) Z5)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (alloc: alloc_table),
+  forall (HW_1: (* File \"selection.c\", line 4, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z5)),
+  forall (HW_2: result = (shift t i)),
+  (valid alloc result).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

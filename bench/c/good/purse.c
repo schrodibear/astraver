@@ -49,7 +49,3 @@ int test2() {
     withdraw(p2,100);
     return p1->balance + p2->balance;
 }
-
-
-
-

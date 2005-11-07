@@ -3,84 +3,76 @@
 
 Require Export search_spec_why.
 
-(* Why obligation from file "why/search.why", characters 458-541 *)
-Lemma index_impl_po_1 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma index_impl_po_1 : 
+  forall (t: ((pointer) Z1)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 (n - 1))),
-  forall (i: Z),
-  forall (Post6: i = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (Pre5: Variant1 = (n - i1)),
-  forall (Pre4: 0 <= i1 /\
-                (forall (k:Z),
-                 (0 <= k /\ k < i1 -> (acc intP (shift t k)) <> v))),
-  forall (Test4: i1 < n),
-  (valid alloc (shift t i1)).
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"search.c\", line 1, characters 14-35:\n *)
+                (valid_range alloc t 0 (n - 1))),
+  (* File \"search.c\", line 8, characters 17-65:\n *) (0 <= 0 /\
+  (forall (k:Z), (0 <= k /\ k < 0 -> (acc int_Z1 (shift t k)) <> v))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 556-562 *)
-Lemma index_impl_po_2 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma index_impl_po_2 : 
+  forall (t: ((pointer) Z1)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 (n - 1))),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"search.c\", line 1, characters 14-35:\n *)
+                (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (Post6: i = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (Pre5: Variant1 = (n - i1)),
-  forall (Pre4: 0 <= i1 /\
+  forall (HW_2: (* File \"search.c\", line 8, characters 17-65:\n *) (0 <=
+                i /\
                 (forall (k:Z),
-                 (0 <= k /\ k < i1 -> (acc intP (shift t k)) <> v))),
-  forall (Test4: i1 < n),
-  forall (Pre3: (valid alloc (shift t i1))),
-  forall (Test3: (acc intP (shift t i1)) = v),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = i1 ->
-      ((0 <= result /\ result < n -> (acc intP (shift t result)) = v)) /\
-      ((result = n ->
-        (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))))))).
+                 (0 <= k /\ k < i -> (acc int_Z1 (shift t k)) <> v)))),
+  forall (HW_3: i < n),
+  forall (result: ((pointer) Z1)),
+  forall (HW_4: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (acc int_Z1 result)),
+  forall (HW_6: result0 = v),
+  (* File \"search.c\", line 3, characters 5-106:\n *)
+  (((0 <= i /\ i < n -> (acc int_Z1 (shift t i)) = v)) /\
+  ((i = n ->
+    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z1 (shift t i)) <> v))))).
 Proof.
 intuition.
 subst.
 auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 581-601 *)
-Lemma index_impl_po_3 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma index_impl_po_3 : 
+  forall (t: ((pointer) Z1)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 (n - 1))),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"search.c\", line 1, characters 14-35:\n *)
+                (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (Post6: i = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (Pre5: Variant1 = (n - i1)),
-  forall (Pre4: 0 <= i1 /\
+  forall (HW_2: (* File \"search.c\", line 8, characters 17-65:\n *) (0 <=
+                i /\
                 (forall (k:Z),
-                 (0 <= k /\ k < i1 -> (acc intP (shift t k)) <> v))),
-  forall (Test4: i1 < n),
-  forall (Pre3: (valid alloc (shift t i1))),
-  forall (Test2: (acc intP (shift t i1)) <> v),
-  forall (i2: Z),
-  forall (Post3: i2 = (i1 + 1)),
-  (0 <= i2 /\
-  (forall (k:Z), (0 <= k /\ k < i2 -> (acc intP (shift t k)) <> v))) /\
-  (Zwf 0 (n - i2) (n - i1)).
+                 (0 <= k /\ k < i -> (acc int_Z1 (shift t k)) <> v)))),
+  forall (HW_3: i < n),
+  forall (result: ((pointer) Z1)),
+  forall (HW_4: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (acc int_Z1 result)),
+  forall (HW_7: result0 <> v),
+  forall (i0: Z),
+  forall (HW_8: i0 = (i + 1)),
+  (* File \"search.c\", line 8, characters 17-65:\n *) (0 <= i0 /\
+  (forall (k:Z), (0 <= k /\ k < i0 -> (acc int_Z1 (shift t k)) <> v))) /\
+  (Zwf 0 (n - i0) (n - i)).
 Proof.
 intuition.
 assert (k<i1 \/ k=i1).
@@ -91,28 +83,24 @@ apply Test2.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 208-610 *)
-Lemma index_impl_po_4 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma index_impl_po_4 : 
+  forall (t: ((pointer) Z1)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 (n - 1))),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"search.c\", line 1, characters 14-35:\n *)
+                (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (Post6: i = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (Pre5: Variant1 = (n - i1)),
-  forall (Pre4: 0 <= i1 /\
+  forall (HW_2: (* File \"search.c\", line 8, characters 17-65:\n *) (0 <=
+                i /\
                 (forall (k:Z),
-                 (0 <= k /\ k < i1 -> (acc intP (shift t k)) <> v))),
-  forall (Test1: i1 >= n),
-  (forall (result:Z),
-   (result = i1 ->
-    ((0 <= result /\ result < n -> (acc intP (shift t result)) = v)) /\
-    ((result = n ->
-      (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))))).
+                 (0 <= k /\ k < i -> (acc int_Z1 (shift t k)) <> v)))),
+  forall (HW_3: i < n),
+  forall (result: ((pointer) Z1)),
+  forall (HW_4: result = (shift t i)),
+  (valid alloc result).
 Proof.
 intuition.
 apply H0 with i0.
@@ -120,17 +108,25 @@ omega.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 263-412 *)
-Lemma index_impl_po_5 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma index_impl_po_5 : 
+  forall (t: ((pointer) Z1)),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 (n - 1))),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"search.c\", line 1, characters 14-35:\n *)
+                (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
-  forall (Post6: i = 0),
-  0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
+  forall (HW_2: (* File \"search.c\", line 8, characters 17-65:\n *) (0 <=
+                i /\
+                (forall (k:Z),
+                 (0 <= k /\ k < i -> (acc int_Z1 (shift t k)) <> v)))),
+  forall (HW_9: i >= n),
+  (* File \"search.c\", line 3, characters 5-106:\n *)
+  (((0 <= i /\ i < n -> (acc int_Z1 (shift t i)) = v)) /\
+  ((i = n ->
+    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z1 (shift t i)) <> v))))).
 Proof.
 intuition.
 Save.

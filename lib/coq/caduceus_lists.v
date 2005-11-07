@@ -34,28 +34,34 @@ End MoreList.
 
 (** the Coq pointer list associated to a (finite) linked list *)
 
-Definition plist := list pointer.
+Definition plist (Z:Set) := list (pointer Z).
 
-Definition in_list := (@In pointer).
+Definition in_list (Z:Set) := (@In (pointer Z)).
 
 (** * Paths *)
+
+Section Paths.
+
+Variable Z: Set.
 
 (** [(lpath t p1 l p2)] :
     there is a path from pointer [p1] to pointer [p2] using links in store [t],
     and the list of pointers along this path is [l]. *)
 
-Inductive lpath (a: alloc_table) (next: pointer -> pointer) : pointer -> plist -> pointer -> Prop :=
-  | Path_null : forall p:pointer, lpath a next p nil p
+Inductive lpath (a: alloc_table)  (next: pointer Z -> pointer Z) : 
+      pointer Z -> plist Z -> pointer Z -> Prop :=
+  | Path_null : forall p:pointer Z, lpath a next p nil p
   | Path_cons :
-      forall p1 p2:pointer,
+      forall p1 p2:pointer Z,
         ~(p1 = null) -> valid a p1 ->
-        forall l:list pointer,
+        forall l:list (pointer Z),
           lpath a next (next p1) l p2 -> lpath a next  p1 (cons p1 l) p2.
 
 Hint Constructors lpath.
 
-Lemma lpath_eq_fun : forall (a: alloc_table) (f g :pointer -> pointer) (p q: pointer)
-(l : list pointer),
+Lemma lpath_eq_fun : 
+  forall (a: alloc_table) (f g :pointer Z -> pointer Z) (p q: pointer Z)
+(l : list (pointer Z)),
  (forall p, In p l -> f p = g p) ->
  lpath a f p l q  -> lpath a g p l q
 .
@@ -76,7 +82,8 @@ Qed.
 (** [(llist t p l)]: there is a (finite) linked list starting from pointer [p]
     using links in store [t], and this list of pointers is [l] *)
 
-Definition llist (a: alloc_table) (next : pointer -> pointer) (p:pointer) (l:plist) :=
+Definition llist (a: alloc_table) (next : pointer Z -> pointer Z) (p:pointer Z) 
+  (l:plist Z) :=
   lpath a next p l null.
 
 Hint Unfold llist .
@@ -85,20 +92,21 @@ Hint Unfold llist .
     inductive definition of [llist])  *)
 
 Lemma llist_null :
- forall (a: alloc_table) (next : pointer -> pointer) (p:pointer), llist a next p nil -> p = null.
+ forall (a: alloc_table) (next : pointer Z -> pointer Z) (p:pointer Z), 
+  llist a next p nil -> p = null.
 Proof.
 unfold llist; inversion 1; trivial.
 Qed.
 
 Lemma llist_cons :
- forall (a: alloc_table) (next : pointer-> pointer) (p1 p2:pointer) (l:plist),
+ forall (a: alloc_table) (next : pointer Z -> pointer Z) (p1 p2:pointer Z) (l:plist Z),
    llist a next p1 (cons p2 l) -> p1 = p2 /\ llist a next (next p2) l.
 Proof.
 unfold llist; inversion 1; intuition.
 Qed.
 
 Lemma llist_head :
- forall (a: alloc_table) (next : pointer-> pointer) (p1 p2:pointer) (l:plist),
+ forall (a: alloc_table) (next : pointer Z -> pointer Z) (p1 p2:pointer Z) (l:plist Z),
    llist a next p1 (cons p2 l) -> p1 = p2.
 Proof.
 unfold llist; inversion 1; intuition.
@@ -107,14 +115,14 @@ Qed.
 Hint Resolve llist_head.
 
 Lemma llist_start :
- forall (a: alloc_table) (next : pointer-> pointer) (p1:pointer) (l:plist),
+ forall (a: alloc_table) (next : pointer Z -> pointer Z ) (p1:pointer Z) (l:plist Z),
    llist a next p1 l -> p1 <> null -> l = p1 :: tail l.
 Proof.
 unfold llist; inversion 1; intuition.
 Qed.
 
 Lemma llist_head_non_null :
- forall (a: alloc_table) (next : pointer-> pointer) (p1 p2:pointer) (l:plist),
+ forall (a: alloc_table) (next : pointer Z-> pointer Z) (p1 p2:pointer Z) (l:plist Z),
    llist a next p1 (cons p2 l) -> p1 <> null.
 Proof.
 unfold llist; inversion 1; intuition.
@@ -139,7 +147,7 @@ Hint Resolve llist_pset_same .
 (** [llist] is a function *)
 
 Lemma llist_function :
- forall (a a': alloc_table) (next : pointer-> pointer) (l1 l2:plist) (p:pointer),
+ forall (a a': alloc_table) (next : pointer Z -> pointer Z) (l1 l2:plist Z) (p:pointer Z),
    llist a next p l1 -> llist a' next p l2 -> l1 = l2.
 Proof.
 (* induction l1; intuition. *)
@@ -162,9 +170,9 @@ Qed.
 Implicit Arguments llist_function.
 
 Lemma llist_append :
- forall (a: alloc_table) (next : pointer -> pointer) (l1 l2:plist) (p:pointer),
+ forall (a: alloc_table) (next : pointer Z -> pointer Z) (l1 l2:plist Z) (p:pointer Z),
    llist a next p (app l1 l2) ->
-    exists p' : pointer, lpath a next p l1 p' /\ llist a next p' l2.
+    exists p' : pointer Z, lpath a next p l1 p' /\ llist a next p' l2.
 Proof.
 simple induction l1; simpl; intuition.
 exists p; auto.
@@ -195,7 +203,7 @@ Qed.
 (** a list starting with [p] does not contain [p] in its remaining elements *)
 
 Lemma llist_not_starting :
- forall (a: alloc_table) (next: pointer -> pointer) (p:pointer) (l:plist),
+ forall (a: alloc_table) (next: pointer Z -> pointer Z) (p:pointer Z) (l:plist Z),
    llist a next (next p) l -> ~ In p l.
 Proof.
 red; intros.
@@ -209,8 +217,9 @@ intro; apply (list_length_absurd _ x0 (app x (cons p x0))); auto.
 rewrite length_app; simpl; omega.
 Qed.
 
-Lemma llist_no_rep: forall (a : alloc_table)(next : pointer->pointer)(p q : pointer)
-(l : list pointer) , llist a next p (q :: l) -> p=q /\ ~ In p l.
+Lemma llist_no_rep: 
+  forall (a : alloc_table)(next : pointer Z ->pointer Z)(p q : pointer Z)
+(l : plist Z) , llist a next p (q :: l) -> p=q /\ ~ In p l.
 unfold llist.
 intros.
 inversion H.
@@ -222,27 +231,28 @@ Qed.
 
 (** * Finite lists characterization *)
 
-Inductive is_list (a: alloc_table) (next: pointer-> pointer) : pointer -> Prop :=
+Inductive is_list (a: alloc_table) (next: pointer Z -> pointer Z) : 
+   pointer Z -> Prop :=
   | List_null : is_list a next null
   | List_cons :
-      forall p:pointer,
+      forall p:pointer Z,
         ~(p = null) -> valid a p -> is_list a next (next p) -> is_list a next p.
 
 Hint Constructors is_list.
 
 
 Lemma is_list_llist :
- forall (a: alloc_table) (next: pointer-> pointer) (p:pointer),
-   is_list a next p -> exists l : plist, llist a next p l.
+ forall (a: alloc_table) (next: pointer Z -> pointer Z) (p:pointer Z),
+   is_list a next p -> exists l : plist Z, llist a next p l.
 Proof.
 intros; elim H.
-exists (nil (A:=pointer)); intuition.
+exists (nil (A:=pointer Z)); intuition.
 intros. elim H3; intros.
 exists (cons p0 x); intuition.
 Qed.
 
 Lemma llist_is_list :
- forall (a: alloc_table) (next: pointer-> pointer) (l:plist) (p:pointer),
+ forall (a: alloc_table) (next: pointer Z -> pointer Z) (l:plist Z) (p:pointer Z),
    llist a next p l -> is_list a next p.
 Proof.
 simple induction l; intuition.
@@ -408,11 +418,11 @@ Admitted.
 End Cyclicity.
 *)
 
-Axiom eq_pointer_dec : forall p1 p2 : pointer, {p1 = p2} + {p1 <> p2}.
+Axiom eq_pointer_dec : forall p1 p2 : pointer Z, {p1 = p2} + {p1 <> p2}.
 
 Section NoRepetition.
 
-Fixpoint no_rep (l:list pointer) {struct l}: Prop :=
+Fixpoint no_rep (l:plist Z) {struct l}: Prop :=
 match l with
 | nil => True
 | (a::l) => (if In_dec eq_pointer_dec a l then False else True)  /\ no_rep l
@@ -430,7 +440,7 @@ Qed.
 Implicit Arguments split_list.
 
 Lemma no_rep_sublist1 :
- forall (l : list pointer)(p:pointer),
+ forall (l : plist Z)(p:pointer Z),
   no_rep (p::l) -> no_rep l.
 intros.
 destruct H.
@@ -438,7 +448,7 @@ apply H0.
 Qed.
 
 Lemma no_rep_sublist :
-  forall (l l1 l2 : list pointer),
+  forall (l l1 l2 : plist Z),
   no_rep l -> l = l1 ++ l2 -> no_rep l2.
 induction l.
 intros.
@@ -459,7 +469,7 @@ Qed.
 
 Ltac caseq t := generalize (refl_equal t);pattern t at -1;case t.
 
-Lemma no_rep_p : forall (p1:pointer)(lp:list pointer), no_rep(p1::lp)->
+Lemma no_rep_p : forall (p1:pointer Z)(lp: plist Z), no_rep(p1::lp)->
 ~In p1 lp.
 intros.
 simpl in H.
@@ -473,7 +483,7 @@ intros i.
 elim (i H0).
 Qed.
 
-Lemma no_rep_sublist2 : forall (l l1 l2 : list pointer) ( a : pointer), no_rep l ->
+Lemma no_rep_sublist2 : forall (l l1 l2 : plist Z) (a : pointer Z), no_rep l ->
 l = l1 ++a::l2 -> no_rep (l1++l2).
 induction l.
 intros.
@@ -504,7 +514,7 @@ intuition.
 apply IHl with a0;auto.
 Qed.
 
-Lemma no_rep_sublist_bis : forall (l2 l l1  : list pointer), no_rep l ->
+Lemma no_rep_sublist_bis : forall (l2 l l1  : plist Z), no_rep l ->
 l = l1 ++ l2 -> no_rep l1.
 induction l2.
 intros.
@@ -520,7 +530,7 @@ intro.
 apply IHl2 with (l1++l2);auto.
 Qed.
 
-Lemma no_rep_false : forall (p1 : pointer)(lp : list pointer),
+Lemma no_rep_false : forall (p1 : pointer Z)(lp : plist Z),
 no_rep (p1 :: p1 :: lp) -> False.
 intros.
 simpl in H.
@@ -531,7 +541,7 @@ apply n.
 left;auto.
 Qed.
 
-Lemma no_rep_false2 : forall (p1 : pointer)(lp1 lp2 : list pointer),
+Lemma no_rep_false2 : forall (p1 : pointer Z)(lp1 lp2 : plist Z),
 no_rep (p1 ::lp1 ++ p1 :: lp2) -> False.
 intros.
 simpl in H.
@@ -545,7 +555,7 @@ simpl;left;auto.
 right;auto.
 Qed.
 
-Lemma no_rep_p_bis : forall (p1:pointer)(lp1 lp2:list pointer), no_rep(lp1++p1::lp2)->
+Lemma no_rep_p_bis : forall (p1:pointer Z)(lp1 lp2:plist Z), no_rep(lp1++p1::lp2)->
 ~In p1 lp1.
 intros.
 intro.
@@ -564,12 +574,12 @@ Qed.
 
 
 Lemma no_rep_in_app :
-  forall p : pointer,
-  forall lp1 lp2a lp2b : list pointer,
+  forall p : pointer Z,
+  forall lp1 lp2a lp2b : plist Z,
   no_rep (p::lp1) -> no_rep (lp2a++p::lp2b) ->
-  (forall q : pointer,
+  (forall q : pointer Z,
      In q (p::lp1) -> In q (lp2a++p::lp2b)) ->
-  forall q : pointer, In q lp1 -> In q (lp2a ++ lp2b).
+  forall q : pointer Z, In q lp1 -> In q (lp2a ++ lp2b).
 intros.
 case (eq_pointer_dec q p).
 intro.
@@ -591,7 +601,7 @@ apply H1.
 right;auto.
 Qed.
 
-Lemma no_rep_sublist3 : forall (l l1 l2 : list pointer) ( a : pointer), no_rep l ->
+Lemma no_rep_sublist3 : forall (l l1 l2 : plist Z) ( a : pointer Z), no_rep l ->
 l = l1 ++a::l2 -> no_rep (a::l1++l2).
 induction l.
 intros.
@@ -643,12 +653,12 @@ apply no_rep_sublist1 with a0;auto.
 Qed.
 
 Lemma no_rep_in_app2 :
-  forall p : pointer,
-  forall lp1 lp2a lp2b : list pointer,
+  forall p : pointer Z,
+  forall lp1 lp2a lp2b : plist Z,
   no_rep (p::lp1) -> no_rep (lp2a++p::lp2b) ->
-  (forall q : pointer,
+  (forall q : pointer Z,
     In q (lp2a++p::lp2b) -> In q (p::lp1)) ->
-  forall q : pointer, In q (lp2a ++ lp2b) -> In q lp1.
+  forall q : pointer Z, In q (lp2a ++ lp2b) -> In q lp1.
 intros.
 case (eq_pointer_dec q p).
 intro.
@@ -684,7 +694,7 @@ End NoRepetition.
 
 (* consecutives pairs in a list *)
 
-Fixpoint pair_in_list (p1:pointer) (p2:pointer)(l:list pointer) {struct l} : Prop :=
+Fixpoint pair_in_list (p1:pointer Z) (p2:pointer Z)(l: plist Z) {struct l} : Prop :=
   match l with
   | nil => False
   | b :: m => (b = p1 /\ match  m with
@@ -695,7 +705,7 @@ Fixpoint pair_in_list (p1:pointer) (p2:pointer)(l:list pointer) {struct l} : Pro
   end.
 
 Lemma pair_in_list_in :
-  forall (l : plist) (p1 p2 p3: pointer),
+  forall (l : plist Z) (p1 p2 p3: pointer Z),
     pair_in_list p1 p2 (p3::l) -> In p2 l.
 induction l.
 simpl; tauto.
@@ -704,7 +714,7 @@ intros; subst; intuition.
 intros; intuition.
 subst; intuition.
 right.
-apply IHl with p1 null.
+apply IHl with p1 (@null Z).
 simpl; right; auto.
 Qed.
 
@@ -713,3 +723,8 @@ Qed.
 (*   | List_cons : *)
 (*       forall p:pointer, *)
 (*         ~(p = null) -> valid a p -> is_list a next (next p) -> is_list a next p. *)
+
+
+End Paths.
+
+

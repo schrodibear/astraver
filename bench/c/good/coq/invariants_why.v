@@ -7,31 +7,30 @@ Require Export invariants_spec_why.
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: ((* File \"invariants.c819618234.c1069824147.i\", line 0, characters 10-14 *)
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: ((* File \"invariants.c\", line 11, characters 14-18:\n *)
                  n >= 0 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 21-29 *)
-                (acc intP c) = 12 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-                ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100)) /\ (valid_range alloc s 0 0) /\
-                (constant_c intP c alloc) /\ (valid_range alloc c 0 1) /\
-                ~((base_addr c) = (base_addr s))),
+                (* File \"invariants.c\", line 9, characters 25-33:\n *)
+                (acc int_Z5 c) = 12 /\
+                (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
+                (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x s)),
+  forall (HW_2: result = (acc x_Z3 s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y s)),
+  forall (HW_3: result0 = (acc y_Z3 s)),
   forall (HW_4: (result + n) <= (result0 - 20)),
   forall (result1: Z),
-  forall (HW_5: result1 = (acc intP c)),
-  forall (x0: ((memory) Z)),
-  forall (HW_6: x0 = (upd x s (result + n + result1))),
-  (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-  ((0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100).
+  forall (HW_5: result1 = (acc int_Z5 c)),
+  forall (x_Z3_0: ((memory) Z Z3)),
+  forall (HW_6: x_Z3_0 = (upd x_Z3 s (result + n + result1))),
+  (* File \"invariants.c\", line 6, characters 18-54:\n *) ((0 <=
+  (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <= (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100).
 Proof.
 intuition.
 Save.
@@ -40,27 +39,26 @@ Save.
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: ((* File \"invariants.c819618234.c1069824147.i\", line 0, characters 10-14 *)
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: ((* File \"invariants.c\", line 11, characters 14-18:\n *)
                  n >= 0 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 21-29 *)
-                (acc intP c) = 12 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-                ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100)) /\ (valid_range alloc s 0 0) /\
-                (constant_c intP c alloc) /\ (valid_range alloc c 0 1) /\
-                ~((base_addr c) = (base_addr s))),
+                (* File \"invariants.c\", line 9, characters 25-33:\n *)
+                (acc int_Z5 c) = 12 /\
+                (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
+                (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x s)),
+  forall (HW_2: result = (acc x_Z3 s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y s)),
+  forall (HW_3: result0 = (acc y_Z3 s)),
   forall (HW_4: (result + n) <= (result0 - 20)),
   forall (result1: Z),
-  forall (HW_5: result1 = (acc intP c)),
+  forall (HW_5: result1 = (acc int_Z5 c)),
   (valid alloc s).
 Proof.
 intuition.
@@ -70,24 +68,23 @@ Save.
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: ((* File \"invariants.c819618234.c1069824147.i\", line 0, characters 10-14 *)
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: ((* File \"invariants.c\", line 11, characters 14-18:\n *)
                  n >= 0 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 21-29 *)
-                (acc intP c) = 12 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-                ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100)) /\ (valid_range alloc s 0 0) /\
-                (constant_c intP c alloc) /\ (valid_range alloc c 0 1) /\
-                ~((base_addr c) = (base_addr s))),
+                (* File \"invariants.c\", line 9, characters 25-33:\n *)
+                (acc int_Z5 c) = 12 /\
+                (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
+                (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x s)),
+  forall (HW_2: result = (acc x_Z3 s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y s)),
+  forall (HW_3: result0 = (acc y_Z3 s)),
   forall (HW_4: (result + n) <= (result0 - 20)),
   (valid alloc c).
 Proof.
@@ -99,27 +96,26 @@ Save.
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: ((* File \"invariants.c819618234.c1069824147.i\", line 0, characters 10-14 *)
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: ((* File \"invariants.c\", line 11, characters 14-18:\n *)
                  n >= 0 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 21-29 *)
-                (acc intP c) = 12 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-                ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100)) /\ (valid_range alloc s 0 0) /\
-                (constant_c intP c alloc) /\ (valid_range alloc c 0 1) /\
-                ~((base_addr c) = (base_addr s))),
+                (* File \"invariants.c\", line 9, characters 25-33:\n *)
+                (acc int_Z5 c) = 12 /\
+                (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
+                (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x s)),
+  forall (HW_2: result = (acc x_Z3 s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y s)),
+  forall (HW_3: result0 = (acc y_Z3 s)),
   forall (HW_7: (result + n) > (result0 - 20)),
-  (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-  ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100).
+  (* File \"invariants.c\", line 6, characters 18-54:\n *) ((0 <=
+  (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100).
 Proof.
 intuition;subst; caduceus.
 Save.
@@ -128,22 +124,21 @@ Save.
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: ((* File \"invariants.c819618234.c1069824147.i\", line 0, characters 10-14 *)
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: ((* File \"invariants.c\", line 11, characters 14-18:\n *)
                  n >= 0 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 21-29 *)
-                (acc intP c) = 12 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-                ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100)) /\ (valid_range alloc s 0 0) /\
-                (constant_c intP c alloc) /\ (valid_range alloc c 0 1) /\
-                ~((base_addr c) = (base_addr s))),
+                (* File \"invariants.c\", line 9, characters 25-33:\n *)
+                (acc int_Z5 c) = 12 /\
+                (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
+                (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x s)),
+  forall (HW_2: result = (acc x_Z3 s)),
   (valid alloc s).
 Proof.
 intuition.
@@ -153,20 +148,19 @@ Save.
 (*Why goal*) Lemma f_impl_po_6 : 
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: ((* File \"invariants.c819618234.c1069824147.i\", line 0, characters 10-14 *)
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: ((* File \"invariants.c\", line 11, characters 14-18:\n *)
                  n >= 0 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 21-29 *)
-                (acc intP c) = 12 /\
-                (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-                ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100)) /\ (valid_range alloc s 0 0) /\
-                (constant_c intP c alloc) /\ (valid_range alloc c 0 1) /\
-                ~((base_addr c) = (base_addr s))),
+                (* File \"invariants.c\", line 9, characters 25-33:\n *)
+                (acc int_Z5 c) = 12 /\
+                (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
+                (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   (valid alloc s).
 Proof.
 intuition.
@@ -176,26 +170,26 @@ Save.
 (* Why obligation from file "why/invariants.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c intP c alloc) /\
-                (valid_range alloc c 0 1) /\ ~((base_addr c) = (base_addr s))),
-  forall (x0: ((memory) Z)),
-  forall (HW_2: x0 = (upd x s 0)),
-  forall (y0: ((memory) Z)),
-  forall (HW_3: y0 = (upd y s 0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_4: intP0 = (upd intP c 12)),
-  forall (result: pointer),
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
+                (valid_range alloc c 0 1)),
+  forall (x_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: x_Z3_0 = (upd x_Z3 s 0)),
+  forall (y_Z3_0: ((memory) Z Z3)),
+  forall (HW_3: y_Z3_0 = (upd y_Z3 s 0)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_4: int_Z5_0 = (upd int_Z5 c 12)),
+  forall (result: ((pointer) Z5)),
   forall (HW_5: result = (shift c 1)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_6: intP1 = (upd intP0 result 14)),
-  (* File \"invariants.c819618234.c1069824147.i\", line 0, characters 14-50 *)
-  (((0 <= (acc x0 s) /\ (acc x0 s) <= (acc y0 s)) /\ (acc y0 s) <= 100) /\
-  (acc intP1 c) = 12).
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 14)),
+  (* File \"invariants.c\", line 6, characters 18-54:\n *) (((0 <=
+  (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <= (acc y_Z3_0 s)) /\ (acc y_Z3_0 s) <=
+  100) /\ (acc int_Z5_1 c) = 12).
 Proof.
 intros;subst.
 inversion_clear Pre13.
@@ -206,20 +200,20 @@ Save.
 (* Why obligation from file "why/invariants.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c intP c alloc) /\
-                (valid_range alloc c 0 1) /\ ~((base_addr c) = (base_addr s))),
-  forall (x0: ((memory) Z)),
-  forall (HW_2: x0 = (upd x s 0)),
-  forall (y0: ((memory) Z)),
-  forall (HW_3: y0 = (upd y s 0)),
-  forall (intP0: ((memory) Z)),
-  forall (HW_4: intP0 = (upd intP c 12)),
-  forall (result: pointer),
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
+                (valid_range alloc c 0 1)),
+  forall (x_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: x_Z3_0 = (upd x_Z3 s 0)),
+  forall (y_Z3_0: ((memory) Z Z3)),
+  forall (HW_3: y_Z3_0 = (upd y_Z3 s 0)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_4: int_Z5_0 = (upd int_Z5 c 12)),
+  forall (result: ((pointer) Z5)),
   forall (HW_5: result = (shift c 1)),
   (valid alloc result).
 Proof.
@@ -237,17 +231,17 @@ Qed.
 (* Why obligation from file "why/invariants.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c intP c alloc) /\
-                (valid_range alloc c 0 1) /\ ~((base_addr c) = (base_addr s))),
-  forall (x0: ((memory) Z)),
-  forall (HW_2: x0 = (upd x s 0)),
-  forall (y0: ((memory) Z)),
-  forall (HW_3: y0 = (upd y s 0)),
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
+  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
+                (valid_range alloc c 0 1)),
+  forall (x_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: x_Z3_0 = (upd x_Z3 s 0)),
+  forall (y_Z3_0: ((memory) Z Z3)),
+  forall (HW_3: y_Z3_0 = (upd y_Z3 s 0)),
   (valid alloc c).
 Proof.
 intuition.
@@ -257,14 +251,14 @@ Save.
 (* Why obligation from file "why/invariants.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (x: ((memory) Z)),
-  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c intP c alloc) /\
-                (valid_range alloc c 0 1) /\ ~((base_addr c) = (base_addr s))),
-  forall (x0: ((memory) Z)),
-  forall (HW_2: x0 = (upd x s 0)),
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
+                (valid_range alloc c 0 1)),
+  forall (x_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: x_Z3_0 = (upd x_Z3 s 0)),
   (valid alloc s).
 Proof.
 intuition.
@@ -274,11 +268,11 @@ Save.
 (* Why obligation from file "why/invariants.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (c: pointer),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c intP c alloc) /\
-                (valid_range alloc c 0 1) /\ ~((base_addr c) = (base_addr s))),
+  forall (c: ((pointer) Z5)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) Z3)),
+  forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
+                (valid_range alloc c 0 1)),
   (valid alloc s).
 Proof.
 intuition.

@@ -14,16 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.60 2005-06-15 07:08:28 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.61 2005-11-07 15:13:28 hubert Exp $ i*)
 
 (*s C types *)
 
 open Clogic
 open Ctypes
 
-type 'a located = { node : 'a; loc : Loc.t }
-
-type offset = int
+type 'a located = { node : 'a; loc : Loc.position }
 
 type 'expr cinteger = Char | Short | Int | Long | LongLong | Bitfield of 'expr
 
@@ -154,9 +152,9 @@ and cstatement_node =
   | CSnop
   | CSexpr of cexpr
   | CSif of cexpr * cstatement * cstatement
-  | CSwhile of (offset * parsed_loop_annot) * cexpr * cstatement
-  | CSdowhile of (offset * parsed_loop_annot) * cstatement * cexpr
-  | CSfor of (offset * parsed_loop_annot) * cexpr * cexpr * cexpr * cstatement
+  | CSwhile of parsed_loop_annot * cexpr * cstatement
+  | CSdowhile of parsed_loop_annot * cstatement * cexpr
+  | CSfor of parsed_loop_annot * cexpr * cexpr * cexpr * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -166,20 +164,18 @@ and cstatement_node =
   | CScase of cexpr * cstatement
   | CSdefault of cstatement
   | CSgoto of string
-  | CSannot of (offset * parsed_code_annot)
-  | CSspec of (offset * parsed_spec) * cstatement
+  | CSannot of parsed_code_annot
+  | CSspec of parsed_spec * cstatement
 
 and block = decl located list * cstatement list
 
 and decl = 
-  | Cspecdecl of offset * parsed_decl
+  | Cspecdecl of parsed_decl
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
   | Cdecl of cexpr ctype * string * cexpr c_initializer option
-  | Cfunspec of 
-      (offset * parsed_spec) * cexpr ctype * string * cexpr parameter list
-  | Cfundef of 
-      (offset * parsed_spec) option * 
+  | Cfunspec of parsed_spec * cexpr ctype * string * cexpr parameter list
+  | Cfundef of parsed_spec option * 
       cexpr ctype * string * cexpr parameter list * cstatement
 
 type file = decl located list
@@ -191,7 +187,7 @@ open Clogic
 type texpr = {
   texpr_node : texpr_node;
   texpr_type : tctype;
-  texpr_loc  : Loc.t
+  texpr_loc  : Loc.position;
 }
 
 and texpr_node =
@@ -233,7 +229,7 @@ type tstatement = {
   st_continue : bool; (* may continue *)
   st_return : bool;   (* may return *)
   st_term : bool;     (* may terminate normally *)
-  st_loc : Loc.t
+  st_loc : Loc.position
 }
 
 and tstatement_node =
@@ -282,7 +278,7 @@ normalized AST
 type nexpr = {
   nexpr_node : nexpr_node;
   nexpr_type : nctype;
-  nexpr_loc  : Loc.t
+  nexpr_loc  : Loc.position;
 }
 
 and nexpr_node =
@@ -322,7 +318,7 @@ type nstatement = {
   nst_continue : bool; (* may continue *)
   nst_return : bool;   (* may return *)
   nst_term : bool;     (* may terminate normally *)
-  nst_loc : Loc.t
+  nst_loc : Loc.position
 }
 
 and nstatement_node =

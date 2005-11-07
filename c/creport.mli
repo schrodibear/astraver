@@ -14,25 +14,23 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.mli,v 1.9 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: creport.mli,v 1.10 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Format
 
-exception Error of (Loc.t option) * Cerror.t
+exception Error of (Loc.position option) * Cerror.t
 
 val report : formatter -> Cerror.t -> unit
 
-val raise_located : Loc.t -> Cerror.t -> 'a 
+val raise_located : Loc.position -> Cerror.t -> 'a 
 val raise_unlocated : Cerror.t -> 'a
-val raise_locop : Loc.t option -> Cerror.t -> 'a
-val unsupported : Loc.t -> string -> 'a
+val raise_locop : Loc.position option -> Cerror.t -> 'a
+val unsupported : Loc.position -> string -> 'a
 
 val print_type : formatter -> Ctypes.ctype -> unit
 val print_type_node : formatter -> Ctypes.ctype_node -> unit
 
-val error : Loc.t -> string -> 'a
-val warning : Loc.t -> string -> unit
+val error : Loc.position -> string -> 'a
+val warning : Loc.position -> string -> unit
 
-val reloc : Loc.t -> Loc.t
-val with_offset : int -> ('a -> 'b) -> 'a -> 'b
 

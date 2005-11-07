@@ -4,13 +4,23 @@
 Require Export Caduceus.
 Require Export MSet.
 
+
+
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z5: Set.
+
 (*Why logic*) Definition mset :
-  alloc_table -> ((memory) Z) -> pointer -> Z -> Z -> intmset.
+  ((memory) Z Z5) -> alloc_table -> ((pointer) Z5) -> Z -> Z -> intmset.
 Admitted.
 
-(*Why predicate*) Definition sorted  (alloc:alloc_table) (intP:((memory) Z))
-  (t:pointer) (i:Z) (j:Z)
-  := (forall (k:Z),
-      (i <= k /\ k < j -> (acc intP (shift t k)) <=
-       (acc intP (shift t (k + 1))))).
+(*Why predicate*) Definition sorted  (int_Z5:((memory) Z Z5))
+  (alloc:alloc_table) (t:((pointer) Z5)) (i:Z) (j:Z)
+  := (* File \"selection.c\", line 17, characters 5-48:\n *)
+     (forall (k:Z),
+      (i <= k /\ k < j -> (acc int_Z5 (shift t k)) <=
+       (acc int_Z5 (shift t (k + 1))))).
 

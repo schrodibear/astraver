@@ -14,7 +14,32 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.20 2005-06-20 12:17:47 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.21 2005-11-07 15:13:29 hubert Exp $ i*)
+
+type why_type = 
+  | Memory of why_type * zone
+  | Pointer of zone
+  | Int
+  | Float
+  | Unit
+  | Why_Logic of string 
+
+and zone = 
+    {
+      mutable repr : zone option;
+      name : string;
+      mutable type_why_zone : why_type
+    }
+
+val same_why_type : why_type -> why_type -> bool
+
+val same_why_type2 : why_type -> why_type -> bool
+
+val repr : zone -> zone
+
+val found_repr : zone -> string
+
+val output_why_type : why_type -> string list * string
 
 type var_info = private 
     {
@@ -27,6 +52,7 @@ type var_info = private
       mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
       mutable var_type : Ctypes.ctype;
+      mutable var_why_type : why_type;
     }
 
 val default_var_info : string -> var_info
@@ -54,7 +80,9 @@ val print_hvs : Format.formatter -> HeapVarSet.t -> unit
 type logic_info =
     {
       logic_name : string;
-      mutable logic_args : HeapVarSet.t;
+      mutable logic_heap_args : HeapVarSet.t;
+      mutable logic_args : var_info list;
+      mutable logic_why_type : why_type;
     }
 
 val default_logic_info : string -> logic_info
@@ -68,7 +96,8 @@ type fun_info =
       mutable has_assigns : bool;
       mutable fun_type : Ctypes.ctype;
       mutable args : var_info list;
-      mutable graph : fun_info list;    
+      mutable graph : fun_info list;
+      mutable type_why_fun : why_type;
     }
 
 val default_fun_info : string -> fun_info
@@ -81,4 +110,9 @@ val set_unique_name : env_info -> string -> unit
 
 val var_type : env_info -> Ctypes.ctype
 
-val set_var_type : env_info -> Ctypes.ctype -> unit
+val set_var_type : env_info -> Ctypes.ctype -> why_type -> unit
+
+val set_var_type_why : env_info -> why_type -> unit
+
+
+

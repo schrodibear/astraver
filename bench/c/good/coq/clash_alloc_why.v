@@ -5,9 +5,9 @@ Require Export clash_alloc_spec_why.
 
 (* Why obligation from file "why/clash_alloc.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (p: pointer),
+  forall (p: ((pointer) Z2)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"clash_alloc.c819618234.c1069824147.i\", line 0, characters 10-19 *)
+  forall (HW_1: (* File \"clash_alloc.c\", line 6, characters 14-23:\n *)
                 (valid alloc p)),
   (valid alloc p).
 Proof.

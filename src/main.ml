@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.84 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.85 2005-11-07 15:13:31 hubert Exp $ i*)
 
 open Options
 open Ptree
@@ -337,7 +337,6 @@ let deal_channel parsef cin =
   if not parse_only then List.iter interp_decl p
 
 let deal_file f =
-  Loc.set_file f;
   reset ();
   let cin = open_in f in 
   deal_channel why_parser cin;

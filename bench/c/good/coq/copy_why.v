@@ -5,19 +5,17 @@ Require Export copy_spec_why.
 
 (* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_1 : 
-  forall (t1: pointer),
-  forall (t2: pointer),
+  forall (t1: ((pointer) Z2)),
+  forall (t2: ((pointer) Z3)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (HW_1: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 10-94 *)
-                (((valid_range alloc t1 0 n) /\
-                (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2)))),
-  (* File \"copy.c819618234.c1069824147.i\", line 0, characters 11-64 *)
-  (n <= n /\
+  forall (int_Z2: ((memory) Z Z2)),
+  forall (int_Z3: ((memory) Z Z3)),
+  forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
+                ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
+  (* File \"copy.c\", line 9, characters 17-70:\n *) (n <= n /\
   (forall (k:Z),
-   (n <= k /\ k < n -> (acc intP (shift t2 k)) = (acc intP (shift t1 k))))).
+   (n <= k /\ k < n -> (acc int_Z3 (shift t2 k)) = (acc int_Z2 (shift t1 k))))).
 Proof.
 intuition; subst; auto.
 assert (k=i1-1 \/ i1<=k). 
@@ -27,36 +25,34 @@ Save.
 
 (* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_2 : 
-  forall (t1: pointer),
-  forall (t2: pointer),
+  forall (t1: ((pointer) Z2)),
+  forall (t2: ((pointer) Z3)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 10-94 *)
-                (((valid_range alloc t1 0 n) /\
-                (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2)))),
+  forall (int_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
+                ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (i: Z),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 11-64 *)
-                (i <= n /\
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
-                 (i <= k /\ k < n -> (acc intP0 (shift t2 k)) =
-                  (acc intP0 (shift t1 k)))))),
+                 (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
   forall (HW_3: i0 = (i - 1)),
   forall (HW_4: i > 0),
-  forall (result: pointer),
+  forall (result: ((pointer) Z3)),
   forall (HW_5: result = (shift t2 i0)),
-  forall (result0: pointer),
+  forall (result0: ((pointer) Z2)),
   forall (HW_6: result0 = (shift t1 i0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (acc intP0 result0)),
-  forall (intP1: ((memory) Z)),
-  forall (HW_8: intP1 = (upd intP0 result result1)),
-  (* File \"copy.c819618234.c1069824147.i\", line 0, characters 11-64 *)
-  (i0 <= n /\
+  forall (HW_7: result1 = (acc int_Z2 result0)),
+  forall (int_Z3_1: ((memory) Z Z3)),
+  forall (HW_8: int_Z3_1 = (upd int_Z3_0 result result1)),
+  (* File \"copy.c\", line 9, characters 17-70:\n *) (i0 <= n /\
   (forall (k:Z),
-   (i0 <= k /\ k < n -> (acc intP1 (shift t2 k)) = (acc intP1 (shift t1 k))))) /\
+   (i0 <= k /\ k < n -> (acc int_Z3_1 (shift t2 k)) =
+    (acc int_Z2 (shift t1 k))))) /\
   (Zwf 0 i0 i).
 Proof.
 intuition.
@@ -64,30 +60,28 @@ Save.
 
 (* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_3 : 
-  forall (t1: pointer),
-  forall (t2: pointer),
+  forall (t1: ((pointer) Z2)),
+  forall (t2: ((pointer) Z3)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 10-94 *)
-                (((valid_range alloc t1 0 n) /\
-                (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2)))),
+  forall (int_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
+                ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (i: Z),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 11-64 *)
-                (i <= n /\
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
-                 (i <= k /\ k < n -> (acc intP0 (shift t2 k)) =
-                  (acc intP0 (shift t1 k)))))),
+                 (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
   forall (HW_3: i0 = (i - 1)),
   forall (HW_4: i > 0),
-  forall (result: pointer),
+  forall (result: ((pointer) Z3)),
   forall (HW_5: result = (shift t2 i0)),
-  forall (result0: pointer),
+  forall (result0: ((pointer) Z2)),
   forall (HW_6: result0 = (shift t1 i0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (acc intP0 result0)),
+  forall (HW_7: result1 = (acc int_Z2 result0)),
   (valid alloc result).
 Proof.
 intuition.
@@ -96,27 +90,25 @@ Save.
 
 (* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_4 : 
-  forall (t1: pointer),
-  forall (t2: pointer),
+  forall (t1: ((pointer) Z2)),
+  forall (t2: ((pointer) Z3)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 10-94 *)
-                (((valid_range alloc t1 0 n) /\
-                (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2)))),
+  forall (int_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
+                ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (i: Z),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 11-64 *)
-                (i <= n /\
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
-                 (i <= k /\ k < n -> (acc intP0 (shift t2 k)) =
-                  (acc intP0 (shift t1 k)))))),
+                 (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
   forall (HW_3: i0 = (i - 1)),
   forall (HW_4: i > 0),
-  forall (result: pointer),
+  forall (result: ((pointer) Z3)),
   forall (HW_5: result = (shift t2 i0)),
-  forall (result0: pointer),
+  forall (result0: ((pointer) Z2)),
   forall (HW_6: result0 = (shift t1 i0)),
   (valid alloc result0).
 Proof.
@@ -126,27 +118,26 @@ Save.
 
 (* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_5 : 
-  forall (t1: pointer),
-  forall (t2: pointer),
+  forall (t1: ((pointer) Z2)),
+  forall (t2: ((pointer) Z3)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 10-94 *)
-                (((valid_range alloc t1 0 n) /\
-                (valid_range alloc t2 0 n)) /\
-                ~((base_addr t1) = (base_addr t2)))),
+  forall (int_Z2: ((memory) Z Z2)),
+  forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
+                ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (i: Z),
-  forall (intP0: ((memory) Z)),
-  forall (HW_2: (* File \"copy.c819618234.c1069824147.i\", line 0, characters 11-64 *)
-                (i <= n /\
+  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
-                 (i <= k /\ k < n -> (acc intP0 (shift t2 k)) =
-                  (acc intP0 (shift t1 k)))))),
+                 (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
   forall (HW_3: i0 = (i - 1)),
   forall (HW_9: i <= 0),
-  (* File \"copy.c819618234.c\", line 0, characters 9-52 *)
+  (* File \"copy.c\", line 5, characters 13-56:\n *)
   (forall (k:Z),
-   (0 <= k /\ k < n -> (acc intP0 (shift t2 k)) = (acc intP0 (shift t1 k)))).
+   (0 <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
+    (acc int_Z2 (shift t1 k)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

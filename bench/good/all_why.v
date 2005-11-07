@@ -37,6 +37,7 @@ Require Import Omega.
 
 
 
+
 (*Why type*) Parameter foo: Set.
 
 (*Why*) Parameter v5 : foo.

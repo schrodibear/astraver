@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.102 2005-07-12 10:03:40 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.103 2005-11-07 15:13:28 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -27,55 +27,9 @@ open Pp
 open Output
 open Ctypes
 open Cenv
+open Cseparation
 
-let interp_type ctype =
-  match ctype.ctype_node with
-  | Tvoid -> "unit"
-  | Tenum _ | Tint _ -> "int"
-  | Tfloat(cfloat) -> "real"
-  | Tarray(t,None) -> "pointer"      
-  | Tarray(t,Some e) -> "pointer"
-  | Tpointer(t) -> "pointer"      
-  | Tunion _
-  | Tstruct _ -> "pointer"
-  | Tvar x -> x (* must be a logic type *)
-  | Tfun _ -> unsupported Loc.dummy "first-class functions"
-
-let rec pointer_heap_var ty =
-  match ty.ctype_node with
-    | Tvar v -> assert false (* should have been expanded *)
-    | Tvoid -> failwith "void * not supported"
-    | Tint _ -> "int", "int"
-    | Tenum _ -> "int", "int"
-    | Tfloat _ -> "real", "real"
-    | Tarray ({ctype_node = Tstruct _ | Tunion _}, _) 
-    | Tpointer {ctype_node = Tstruct _ | Tunion _} ->
-	"pointer", "pointer"
-    | Tarray (ty,_)
-    | Tpointer ty ->
-	let v,_ = pointer_heap_var ty in
-	(v ^ "P", "pointer")
-    | Tstruct _ 
-    | Tunion _ -> "pointer", "pointer" 
-    | Tfun _ -> unsupported Loc.dummy "first-class functions"
-
-let memory_type t = ([t],"memory")
-
-let pointer_heap_array_var ty =
-  match ty.ctype_node with
-    | Tarray (ty',_)
-    | Tpointer ty' ->
-	let v,ty'' = pointer_heap_var ty' in
-	let v = if ty.ctype_ghost then "ghost_"^v^"P" else v^"P" in
-	let info = 
-	  match Cenv.add_sym Loc.dummy v 
-	    Ctypes.c_void (Var_info (default_var_info v)) 
-	  with
-	    | Var_info v -> v
-	    | Fun_info f -> assert false
-	in
-	(info, memory_type ty'')
-    | _ -> assert false (* location wrongly typed *)
+let memory_type t1 t2 = ([t1;t2],"memory")
 
 let heap_vars = Hashtbl.create 97
 
@@ -87,65 +41,99 @@ let print_heap_vars fmt () =
   in
   fprintf fmt "@[";
   Hashtbl.iter 
-    (fun s t -> fprintf fmt "(%s:%a)" s base_type t) heap_vars;
+    (fun s t -> fprintf fmt "(%s:%a)" s base_type 
+       (Info.output_why_type t.var_why_type)) 
+    heap_vars;
   fprintf fmt "@]"
 
 let alloc = 
   let x = "alloc" in
-  match Cenv.add_sym Loc.dummy x Ctypes.c_void (Var_info (default_var_info x)) 
-  with
+  let v = 
+    Cenv.add_sym 
+      Loc.dummy_position x Ctypes.c_void (Var_info (default_var_info x)) 
+  in
+  set_var_type_why v (Why_Logic "alloc_table");
+  match v with
     | Var_info v -> v
     | Fun_info _ -> assert false
 
 
 
-let heap_var_type v = 
-  if v == alloc
-  then ([], "alloc_table")
-  else 
-    try
-      Hashtbl.find heap_vars v.var_unique_name
-    with Not_found -> 
-      eprintf "variable %s not found@." v.var_unique_name;
-      assert false
-
 let is_memory_var v = 
   if v == alloc then false
   else
-    try 
-      let (_,t) = Hashtbl.find heap_vars v.var_unique_name in 
-      t = "memory"
-    with Not_found -> assert false
+    match v.var_why_type with 
+      | Memory _ -> true 
+      | _ -> false
 
-let declare_heap_var v ty =
-  (*eprintf "declare_heap_var %s (%a)%s\n" v (print_list comma pp_print_string) (fst ty) (snd ty); flush stderr;*)
-  if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty
-  else assert (Hashtbl.find heap_vars v = ty)
+let declare_heap_var info name =
+try
+  let info' = Hashtbl.find heap_vars name in
+    if not (same_why_type2 info.var_why_type info'.var_why_type)
+    then
+      let ty' = Info.output_why_type info'.var_why_type in
+      let ty =  Info.output_why_type info.var_why_type in
+	eprintf "declare_heap_var : %s ; oldtype = (%a)%s ; newtype = (%a)%s \n" name (print_list comma pp_print_string) (fst ty') (snd ty') (print_list comma pp_print_string) (fst ty) (snd ty) ; flush stderr;
+      assert false
+    else 
+      info'
+with
+    Not_found ->
+      begin
+	Hashtbl.add heap_vars name info;
+	info
+      end
+
 
 let empty = HeapVarSet.empty
 let union = HeapVarSet.union
 
-let add_var v ty s =
-  let tyi=
-    if v.var_is_referenced then Ctypes.c_pointer ty
-    else ty
-  in
-  declare_heap_var v.var_unique_name ([], interp_type tyi);
-  HeapVarSet.add v s
+
+
+let add_var v (ty : Info.why_type) s =
+  let info = declare_heap_var v v.var_unique_name in
+  HeapVarSet.add info s
 
   
 let add_alloc s = HeapVarSet.add alloc s
 
-let add_field_var v ty s =
-   let n = v.var_unique_name in
-   let _,ty = pointer_heap_var ty in
-   declare_heap_var n (memory_type ty);
-   HeapVarSet.add v s
+let add_heap_var n z ty s =
+(*
+  let info = 
+    match Cenv.add_sym Loc.dummy_position n 
+      Ctypes.c_void (Var_info (default_var_info n)) 
+    with
+      | Var_info v -> v
+      | Fun_info f -> assert false
+  in
+*)
+  let ty' = Memory(ty,z) in
+  let info = default_var_info n in
+  let n' = info.var_name ^ "_" ^ (found_repr z) in
+  set_var_type_why (Var_info info) ty';
+  let info = declare_heap_var info n' in
+  HeapVarSet.add info s
+	  
 
-let add_pointer_var ty s =
-  let v,ty = pointer_heap_array_var ty in
-  declare_heap_var v.var_unique_name ty;
-  HeapVarSet.add v s
+let add_field_var v ty s =
+  match ty with
+    | Pointer z ->
+	let ty' = v.var_why_type in
+	let n = v.var_unique_name in
+	add_heap_var n z ty' s 
+    | Unit -> assert false
+    | Info.Int -> assert false
+    | _ -> assert false
+	
+
+let add_pointer_var (ty : Info.why_type) s =
+  match ty with 
+    | Pointer z ->
+	let ty' = z.type_why_zone in
+	let n = heap_var ty' in
+	add_heap_var n z ty' s 
+    | _ -> assert false
+	  
 
 type effect =
     {
@@ -172,12 +160,12 @@ let assigns_add_pointer_var ty e =
 let rec term t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
-      then add_var v t.nterm_type empty
+      then add_var v v.var_why_type empty
       else empty
   | NTarrow (t1,f) -> 
-      add_alloc (add_field_var f t.nterm_type (term t1))
+      add_alloc (add_field_var f (Cseparation.type_why_for_term t1) (term t1))
   | NTstar t ->
-      add_alloc (add_pointer_var t.nterm_type (term t))
+      add_alloc (add_pointer_var (Cseparation.type_why_for_term t) (term t))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
@@ -194,14 +182,12 @@ let rec term t = match t.nterm_node with
   | NTbinop (t1, _, t2) -> 
       union (term t1) (term t2) 
   | NTapp (id, l) -> 
-      List.fold_left (fun acc t -> union acc (term t)) id.logic_args l
+      List.fold_left (fun acc t -> union acc (term t)) id.logic_heap_args l
   | NTconstant _ -> empty
-  | NTnull -> empty
-  | NTresult -> empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3) ->
       add_alloc 
-	(add_pointer_var t1.nterm_type 
+	(add_pointer_var (Cseparation.type_why_for_term t1)
 	   (union (term t1) (union (term_option t2) (term_option t3))))
 
 and term_option = function None -> empty | Some t -> term t
@@ -216,14 +202,14 @@ let locations ll =
 let rec assign_location t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
-      then { reads = empty; assigns = add_var v t.nterm_type empty }
+      then { reads = empty; assigns = add_var v (Cseparation.type_why_for_term t) empty }
       else ef_empty
   | NTarrow (t1,f) -> 
       { reads = add_alloc (term t1);
-	assigns = add_field_var f t.nterm_type empty }
+	assigns = add_field_var f (Cseparation.type_why_for_term t1) empty }
   | NTstar t1 ->
       { reads = add_alloc (term t1);
-	assigns = add_pointer_var t1.nterm_type empty }
+	assigns = add_pointer_var (Cseparation.type_why_for_term t1) empty }
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
@@ -237,14 +223,12 @@ let rec assign_location t = match t.nterm_node with
   | NTbinop (_, _, _)  
   | NTapp (_, _)  
   | NTconstant _  
-  | NTnull  
-  | NTresult  
   | NTcast (_, _) -> 
       error t.nterm_loc "invalid location"
   | NTrange (t1, t2, t3) ->
       { reads = add_alloc 
 	  (union (term t1) (union (term_option t2) (term_option t3)));
-	assigns = add_pointer_var t1.nterm_type empty }
+	assigns = add_pointer_var (Cseparation.type_why_for_term t1) empty }
 
 (***
 let assign_location loc =
@@ -282,7 +266,7 @@ let rec predicate p =
     | NPapp (id, tl) -> 
 	List.fold_left 
 	  (fun acc t -> union acc (term t)) 
-	  id.logic_args
+	  id.logic_heap_args
 	  tl 
     | NPrel (t1, _, t2) -> union (term t1) (term t2)
     | NPand (p1, p2)
@@ -389,18 +373,18 @@ let rec expr e = match e.nexpr_node with
   | NEstring_literal _ -> ef_empty
   | NEvar (Var_info v) ->
       if v.var_is_static 
-      then reads_add_var v e.nexpr_type ef_empty
+      then reads_add_var v (type_why e) ef_empty
       else ef_empty
   | NEvar (Fun_info v) ->
       ef_empty
   | NEarrow (e1, f) ->	
-      reads_add_alloc (reads_add_field_var f e.nexpr_type (expr e1))
+      reads_add_alloc (reads_add_field_var f (type_why e1) (expr e1))
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr e1) (expr e2)
   | NEassign (lv, e) | NEassign_op (lv, _, e) ->
       ef_union (assign_expr lv) (expr e)
   | NEstar e ->
-      reads_add_alloc (reads_add_pointer_var e.nexpr_type (expr e))
+      reads_add_alloc (reads_add_pointer_var (type_why e) (expr e))
   | NEunary (Ustar , _ ) -> assert false
   | NEunary (Uamp, e) ->
       address_expr e
@@ -425,15 +409,15 @@ let rec expr e = match e.nexpr_node with
 and assign_expr e = match e.nexpr_node with
   | NEvar (Var_info v) -> 
       if v.var_is_static
-      then assigns_add_var v e.nexpr_type ef_empty
+      then assigns_add_var v v.var_why_type ef_empty
       else ef_empty
   | NEvar (Fun_info _) ->
       ef_empty
   | NEstar e ->
-      reads_add_alloc (assigns_add_pointer_var e.nexpr_type (expr e))
+      reads_add_alloc (assigns_add_pointer_var (type_why e) (expr e))
   | NEunary (Ustar,_) -> assert false
   | NEarrow (e1, f) ->
-      reads_add_alloc (assigns_add_field_var f e.nexpr_type (expr e1))
+      reads_add_alloc (assigns_add_field_var f (type_why e1) (expr e1))
   | NEcast (_, e1) ->
       assign_expr e1
   | _ -> 
@@ -451,7 +435,7 @@ and address_expr e = match e.nexpr_node with
   | NEarrow (e1, f) ->
       begin match e1.nexpr_type.Ctypes.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> expr e1
-	| _ -> reads_add_field_var f e.nexpr_type (expr e1)
+	| _ -> reads_add_field_var f (type_why e1) (expr e1)
       end
  (* | NEcast (_, e1) ->
       address_expr e1*)
@@ -534,7 +518,7 @@ and ctype_node = function
   | Tfloat _ -> sprintf "float"
   | Ctypes.Tvar s -> sprintf "%s" s
   | Tarray (ty, _) -> sprintf "%s" (ctype ty)
-  | Tpointer ty -> sprintf "%s_pointer" (ctype ty)
+  | Tpointer ty -> sprintf "%s_Pointer" (ctype ty)
   | Tstruct s -> sprintf "%s" s;
   | Tunion s -> sprintf "%s" s
   | Tenum s -> sprintf "%s" s
@@ -549,7 +533,7 @@ let invariant_for_global loc v =
       (fun p x ->
 	 ("separation_" ^ (ctype v.var_type) ^ "_" ^ (ctype x.var_type),
 	   "separation_"^v.var_name^"_"^x.var_name,
-	  Cnorm.separation loc v x,
+	  Cseparation.separation loc v x,
 	  HeapVarSet.add v (HeapVarSet.singleton x)) :: p) 
       [] !global_var 
   in 
@@ -626,7 +610,7 @@ let unop = function
 
 let rec term_of_expr e =
   let make n = 
-    { nterm_node = n; nterm_type = e.nexpr_type; nterm_loc = e.nexpr_loc }
+    { nterm_node = n; nterm_type = e.nexpr_type; nterm_loc = e.nexpr_loc}
   in
   match e.nexpr_node with 
   | NEconstant e -> make (NTconstant e)
@@ -732,7 +716,7 @@ let rec term_of_expr e =
 let noattr loc ty e =
   { nterm_node = e;
     nterm_type = ty;
-    nterm_loc  = loc
+    nterm_loc  = loc;
   }
 
 let rec pop_initializer loc t i =
@@ -745,10 +729,11 @@ let rec pop_initializer loc t i =
 		      NTcast (t,
 			      {nterm_node = NTconstant (IntConstant "0");
 			       nterm_type = c_int;
-			       nterm_loc  = loc})
+			       nterm_loc  = loc;})
 		  | _ -> assert false);
 	     nterm_type = t;
-	     nterm_loc  = loc
+	     nterm_loc  = loc;
+
 	    },[]
     | (Iexpr e)::l -> term_of_expr e,l
     | (Ilist [])::l -> pop_initializer loc t l
@@ -772,7 +757,7 @@ let rec invariant_for_constant loc t lvalue initializers =
 		   }  in 
 		   let block, init' =
 		     invariant_for_constant loc tyf 
-		       (Cnorm.in_struct lvalue f) init
+		       (Cseparation.in_struct lvalue f) init
 		   in 
 		   if tyf.Ctypes.ctype_const then
 		     (npand (acc,block),init')
@@ -836,16 +821,19 @@ let rec validity x ty size =
 	let i = default_var_info "counter" in
 	let vari = { nterm_node = NTvar i; 
 		     nterm_loc = x.nterm_loc;
-		     nterm_type = c_int } in
+		     nterm_type = c_int;
+		     } in
 	let j = default_var_info "counter2" in
 	let varj = { nterm_node = NTvar j; 
 		     nterm_loc = x.nterm_loc;
-		     nterm_type = c_int } in	  
+		     nterm_type = c_int;
+		     } in	  
 	let term_sup = { nterm_node = 
    	                   NTconstant (IntConstant 
 					 (Int64.to_string (Int64.pred size))); 
 			 nterm_loc = x.nterm_loc;
-			 nterm_type = c_int } in
+			 nterm_type = c_int;
+			 } in
 	let ineq = npand 
 		     (nprel (Cnorm.nzero, Le, vari),
 		      nprel (vari, Lt, 
@@ -888,7 +876,8 @@ let rec validity x ty size =
 	                   NTconstant 
 	                     (IntConstant (Int64.to_string (Int64.pred size)));
 			 nterm_loc = x.nterm_loc;
-			 nterm_type = c_int } in
+			 nterm_type = c_int;
+			 } in
       npvalid_range (x, Cnorm.nzero,term_sup), nptrue
 
 let decl d =
@@ -898,11 +887,14 @@ let decl d =
 	lprintf 
 	  "effects of logic declaration of %s: @[%a@]@." id.logic_name
 	  print_effects l;
-	id.logic_args <- l
+	id.logic_heap_args <- l
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
     | Ninvariant_strong(id,p) -> 
 	let pre = (predicate p) in 
+	lprintf 
+	  "effects of strong invariant %s: @[%a@]@." id
+	  print_effects pre;
 	add_strong_invariant id p pre	  
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
@@ -913,7 +905,8 @@ let decl d =
 		 v.var_name;
 	       let t = { nterm_node = NTvar v; 
 			 nterm_loc = d.loc;
-			 nterm_type = ty } in
+			 nterm_type = ty ;
+			 } in
 	       let name1 = "valid_range_" ^ v.var_name in
 	       let (pre1,pre2) = validity t typ s in
 	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
@@ -928,8 +921,9 @@ let decl d =
 	  lprintf "adding implicit invariant for constant %s@." v.var_name;
 	  let id = "constant_" ^ v.var_name in
 	  let t = {nterm_node = NTvar v; 
-		   nterm_loc = Loc.dummy;
-		   nterm_type = ty } in
+		   nterm_loc = Loc.dummy_position;
+		   nterm_type = ty ;
+		     } in
 	  let (pre,_) = invariant_for_constant d.loc ty t init in
 	  let info = Info.default_logic_info id in 
 	  add_strong_invariant_2 id pre [] ;

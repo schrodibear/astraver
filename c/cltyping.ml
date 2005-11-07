@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.81 2005-06-16 07:30:33 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.82 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -28,7 +28,7 @@ let option_app f = function Some x -> Some (f x) | None -> None
 (* Typing terms *)
 
 let is_null t = match t.term_node with
-  | Tnull -> true
+  | Clogic.Tvar v -> v.Info.var_name = "null"
   | Tconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
   | _ -> false
 
@@ -84,7 +84,7 @@ let set_referenced t = match t.term_node with
 
 let rec type_term env t =
   let t', ty = type_term_node t.lexpr_loc env t.lexpr_node in
-  { term_node = t'; term_loc = reloc t.lexpr_loc; term_type = ty }
+  { term_node = t'; term_loc = t.lexpr_loc; term_type = ty}
 
 and type_term_node loc env = function
   | PLconstant (IntConstant _ as c) -> 
@@ -119,13 +119,14 @@ and type_term_node loc env = function
   | PLunop (Ustar, t) -> 
       let t = type_term env t in
       begin match t.term_type.ctype_node with
-	| Tpointer ty | Tarray (ty,_) -> Tunop (Ustar, t), ty
+	| Tpointer ty | Tarray (ty,_) -> 
+	    Tunop (Ustar, t), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
       set_referenced t;
-      Tunop (Uamp, t), noattr (Tpointer t.term_type)
+      Tunop (Uamp, t), noattr (Tpointer t.term_type) 
   | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
@@ -154,7 +155,7 @@ and type_term_node loc env = function
 	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    let mt2 = { term_node = Tunop (Uminus, t2); 
 			term_loc = t2.term_loc;
-			term_type = ty2 } in
+			term_type = ty2} in
 	    Tbinop (t1, Badd, mt2), ty1
 	| (Tpointer _ | Tarray _), (Tpointer _ | Tarray _) ->
 	    Tbinop (t1, Bsub, t2), c_int (* TODO check types *)
@@ -178,7 +179,7 @@ and type_term_node loc env = function
 	    let a = 
 	      { term_node = Tbinop (e1, Badd, e2); 
 		term_loc = t.term_loc;
-		term_type = e1.term_type }
+		term_type = e1.term_type}
 	    in
 	    Tarrow (a, x)
 	| _ -> 
@@ -232,10 +233,18 @@ and type_term_node loc env = function
 	 | Tarray _ | Tpointer _ -> Tblock_length t, c_int
 	 | _ -> error loc "subscripted value is neither array nor pointer")
   | PLresult ->
-      (try let t = Env.find "\\result" env in Tresult, (var_type t)
+      (try 
+	 let t = Env.find "result" env in 
+	 begin match t with
+	   | Var_info v -> Clogic.Tvar v, v.var_type
+	   | Fun_info f -> 
+               error loc ("result is a function")
+	 end
        with Not_found -> error loc "\\result meaningless")
   | PLnull ->
-      Tnull, c_void_star
+      let info = default_var_info "null" in 
+      Cenv.set_var_type (Var_info info) c_void_star;
+      Clogic.Tvar info, c_void_star
   | PLcast (ty, t) ->
       let t = type_term env t in
       let tt = t.term_type in
@@ -291,7 +300,7 @@ and type_terms loc env at tl =
 
 let rec type_ghost_lvalue env t =
   let t', ty =   type_ghost_lvalue_node t.lexpr_loc env t.lexpr_node in
-  { term_node = t'; term_loc = reloc t.lexpr_loc; term_type = ty }
+  { term_node = t'; term_loc = t.lexpr_loc; term_type = ty}
 
 and type_ghost_lvalue_node loc env t =
   match t with
@@ -365,8 +374,8 @@ let add_quantifiers q env =
 
 let int_constant n = 
   { term_node = Tconstant (IntConstant n); 
-    term_loc = Loc.dummy;
-    term_type = c_int }
+    term_loc = Loc.dummy_position;
+    term_type = c_int}
 
 let zero = int_constant "0"
 
@@ -377,12 +386,12 @@ let compat_pointers ty1 ty2 =
 
 let rec type_term env t =
   let t', ty = type_term_node t.lexpr_loc env t.lexpr_node in
-  { term_node = t'; term_loc = reloc t.lexpr_loc; term_type = ty }
+  { term_node = t'; term_loc = t.lexpr_loc; term_type = ty}
 
 
 let rec type_predicate env p0 = 
   let p' = type_predicate_node env p0 in
-  { pred_node = p'; pred_loc = reloc p0.lexpr_loc }
+  { pred_node = p'; pred_loc = p0.lexpr_loc }
 
 and type_predicate_node env p0 = match p0.lexpr_node with
   | PLfalse -> Pfalse
@@ -390,7 +399,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
   | PLrel ({lexpr_node = PLrel (_, _, t2)} as p1, op, t3) ->
       let p1 = type_predicate env p1 in
       let p2 = { lexpr_node = PLrel (t2, op, t3); 
-		 lexpr_loc = reloc p0.lexpr_loc } in
+		 lexpr_loc = p0.lexpr_loc } in
       let p2 = type_predicate env p2 in
       Pand (p1, p2)
   | PLrel (t1, (Lt | Le | Gt | Ge as r), t2) -> 
@@ -552,7 +561,8 @@ let type_spec result env s =
   let p = option_app (type_predicate env) s.requires in
   let env' = match result with
     | None -> env
-    | Some ty -> Env.add "\\result" ty (Var_info (Info.default_var_info "\\result")) env
+    | Some ty ->
+	Env.add "result" ty (Var_info (Info.default_var_info "result")) env
   in
   let q = option_app (type_predicate env') s.ensures in
   let v = option_app (type_variant env) s.decreases in

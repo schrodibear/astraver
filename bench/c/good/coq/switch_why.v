@@ -11,8 +11,7 @@ Require Export switch_spec_why.
   forall (HW_3: y = 1),
   forall (y0: Z),
   forall (HW_4: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y0 = 2)).
+  (* File \"switch.c\", line 1, characters 13-31:\n *) ((x = 4 -> y0 = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -27,8 +26,7 @@ Save.
   forall (HW_7: y = 1),
   forall (y0: Z),
   forall (HW_8: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y0 = 2)).
+  (* File \"switch.c\", line 1, characters 13-31:\n *) ((x = 4 -> y0 = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -42,8 +40,7 @@ Save.
   forall (HW_10: x = 2),
   forall (y: Z),
   forall (HW_11: y = 2),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 1, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -58,8 +55,7 @@ Save.
   forall (HW_13: x = 4),
   forall (y: Z),
   forall (HW_14: y = 2),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 1, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -75,8 +71,7 @@ Save.
   forall (HW_16: x = 3),
   forall (y: Z),
   forall (HW_17: y = 3),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 1, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -99,8 +94,7 @@ Save.
   forall (HW_24: y = 4),
   forall (y0: Z),
   forall (HW_25: y0 = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y0 = 2)).
+  (* File \"switch.c\", line 1, characters 13-31:\n *) ((x = 4 -> y0 = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -120,7 +114,7 @@ Save.
   forall (HW_21: x <> 2),
   forall (HW_22: x <> 3),
   forall (HW_26: x = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  (* File \"switch.c\", line 1, characters 13-31:\n *)
   ((x = 4 -> result = 2)).
 Proof.
 intuition.
@@ -140,7 +134,7 @@ Save.
   forall (HW_20: x <> 1),
   forall (HW_21: x <> 2),
   forall (HW_27: x = 3),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  (* File \"switch.c\", line 1, characters 13-31:\n *)
   ((x = 4 -> result = 2)).
 Proof.
 intuition.
@@ -159,7 +153,7 @@ Save.
   forall (HW_19: x <> 0),
   forall (HW_20: x <> 1),
   forall (HW_28: x = 2),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  (* File \"switch.c\", line 1, characters 13-31:\n *)
   ((x = 4 -> result = 2)).
 Proof.
 intuition.
@@ -177,7 +171,7 @@ Save.
   forall (HW_18: x <> 3),
   forall (HW_19: x <> 0),
   forall (HW_29: x = 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  (* File \"switch.c\", line 1, characters 13-31:\n *)
   ((x = 4 -> result = 2)).
 Proof.
 intuition.
@@ -194,7 +188,7 @@ Save.
   forall (HW_15: x <> 4),
   forall (HW_18: x <> 3),
   forall (HW_30: x = 0),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
+  (* File \"switch.c\", line 1, characters 13-31:\n *)
   ((x = 4 -> result = 2)).
 Proof.
 intuition.
@@ -211,8 +205,7 @@ Save.
   forall (HW_4: y0 = 4),
   forall (y1: Z),
   forall (HW_5: y1 = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y1 = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y1 = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -229,8 +222,7 @@ Save.
   forall (HW_9: y0 = 4),
   forall (y1: Z),
   forall (HW_10: y1 = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y1 = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y1 = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -244,8 +236,7 @@ Save.
   forall (HW_12: x = 2),
   forall (y: Z),
   forall (HW_13: y = 2),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -260,8 +251,7 @@ Save.
   forall (HW_15: x = 4),
   forall (y: Z),
   forall (HW_16: y = 2),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -277,8 +267,7 @@ Save.
   forall (HW_18: x = 3),
   forall (y: Z),
   forall (HW_19: y = 3),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -301,8 +290,7 @@ Save.
   forall (HW_26: y = 4),
   forall (y0: Z),
   forall (HW_27: y0 = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y0 = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y0 = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -323,8 +311,7 @@ Save.
   forall (HW_28: x = 4),
   forall (y: Z),
   forall (HW_29: y = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -344,8 +331,7 @@ Save.
   forall (HW_30: x = 3),
   forall (y: Z),
   forall (HW_31: y = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -364,8 +350,7 @@ Save.
   forall (HW_32: x = 2),
   forall (y: Z),
   forall (HW_33: y = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -383,8 +368,7 @@ Save.
   forall (HW_34: x = 1),
   forall (y: Z),
   forall (HW_35: y = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -401,8 +385,7 @@ Save.
   forall (HW_36: x = 0),
   forall (y: Z),
   forall (HW_37: y = 5),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 4 -> y = 2)).
+  (* File \"switch.c\", line 23, characters 13-31:\n *) ((x = 4 -> y = 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -422,8 +405,7 @@ Save.
   forall (HW_7: y1 = 3),
   forall (y2: Z),
   forall (HW_8: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition; discriminate.
 Save.
@@ -443,8 +425,7 @@ Save.
   forall (HW_11: y1 = 3),
   forall (y2: Z),
   forall (HW_12: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition; discriminate.
 Save.
@@ -465,8 +446,7 @@ Save.
   forall (HW_15: y1 = 3),
   forall (y2: Z),
   forall (HW_16: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -489,8 +469,7 @@ Save.
   forall (HW_19: y1 = 3),
   forall (y2: Z),
   forall (HW_20: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -514,8 +493,7 @@ Save.
   forall (HW_23: y1 = 3),
   forall (y2: Z),
   forall (HW_24: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -537,8 +515,7 @@ Save.
   forall (HW_25: x <> 4),
   forall (y1: Z),
   forall (HW_26: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -559,8 +536,7 @@ Save.
   forall (HW_31: y1 = 3),
   forall (y2: Z),
   forall (HW_32: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -582,8 +558,7 @@ Save.
   forall (HW_35: y1 = 3),
   forall (y2: Z),
   forall (HW_36: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -606,8 +581,7 @@ Save.
   forall (HW_39: y1 = 3),
   forall (y2: Z),
   forall (HW_40: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -631,8 +605,7 @@ Save.
   forall (HW_43: y1 = 3),
   forall (y2: Z),
   forall (HW_44: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -657,8 +630,7 @@ Save.
   forall (HW_47: y1 = 3),
   forall (y2: Z),
   forall (HW_48: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -681,8 +653,7 @@ Save.
   forall (HW_49: x <> 4),
   forall (y1: Z),
   forall (HW_50: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -704,8 +675,7 @@ Save.
   forall (HW_55: y1 = 3),
   forall (y2: Z),
   forall (HW_56: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -728,8 +698,7 @@ Save.
   forall (HW_59: y1 = 3),
   forall (y2: Z),
   forall (HW_60: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -753,8 +722,7 @@ Save.
   forall (HW_63: y1 = 3),
   forall (y2: Z),
   forall (HW_64: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -779,8 +747,7 @@ Save.
   forall (HW_67: y1 = 3),
   forall (y2: Z),
   forall (HW_68: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -806,8 +773,7 @@ Save.
   forall (HW_71: y1 = 3),
   forall (y2: Z),
   forall (HW_72: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -831,8 +797,7 @@ Save.
   forall (HW_73: x <> 4),
   forall (y1: Z),
   forall (HW_74: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -855,8 +820,7 @@ Save.
   forall (HW_79: y1 = 3),
   forall (y2: Z),
   forall (HW_80: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -880,8 +844,7 @@ Save.
   forall (HW_83: y1 = 3),
   forall (y2: Z),
   forall (HW_84: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -906,8 +869,7 @@ Save.
   forall (HW_87: y1 = 3),
   forall (y2: Z),
   forall (HW_88: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -933,8 +895,7 @@ Save.
   forall (HW_91: y1 = 3),
   forall (y2: Z),
   forall (HW_92: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -961,8 +922,7 @@ Save.
   forall (HW_95: y1 = 3),
   forall (y2: Z),
   forall (HW_96: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -987,8 +947,7 @@ Save.
   forall (HW_97: x <> 4),
   forall (y1: Z),
   forall (HW_98: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1009,8 +968,7 @@ Save.
   forall (HW_101: y0 = 3),
   forall (y1: Z),
   forall (HW_102: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1032,8 +990,7 @@ Save.
   forall (HW_105: y0 = 3),
   forall (y1: Z),
   forall (HW_106: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1056,8 +1013,7 @@ Save.
   forall (HW_109: y0 = 3),
   forall (y1: Z),
   forall (HW_110: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1081,8 +1037,7 @@ Save.
   forall (HW_113: y0 = 3),
   forall (y1: Z),
   forall (HW_114: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1107,8 +1062,7 @@ Save.
   forall (HW_117: y0 = 3),
   forall (y1: Z),
   forall (HW_118: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1131,8 +1085,7 @@ Save.
   forall (HW_119: x <> 4),
   forall (y0: Z),
   forall (HW_120: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1153,8 +1106,7 @@ Save.
   forall (HW_127: y1 = 3),
   forall (y2: Z),
   forall (HW_128: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1176,8 +1128,7 @@ Save.
   forall (HW_131: y1 = 3),
   forall (y2: Z),
   forall (HW_132: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1200,8 +1151,7 @@ Save.
   forall (HW_135: y1 = 3),
   forall (y2: Z),
   forall (HW_136: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1225,8 +1175,7 @@ Save.
   forall (HW_139: y1 = 3),
   forall (y2: Z),
   forall (HW_140: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1251,8 +1200,7 @@ Save.
   forall (HW_143: y1 = 3),
   forall (y2: Z),
   forall (HW_144: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1275,8 +1223,7 @@ Save.
   forall (HW_145: x <> 4),
   forall (y1: Z),
   forall (HW_146: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1298,8 +1245,7 @@ Save.
   forall (HW_151: y1 = 3),
   forall (y2: Z),
   forall (HW_152: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1322,8 +1268,7 @@ Save.
   forall (HW_155: y1 = 3),
   forall (y2: Z),
   forall (HW_156: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1347,8 +1292,7 @@ Save.
   forall (HW_159: y1 = 3),
   forall (y2: Z),
   forall (HW_160: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1373,8 +1317,7 @@ Save.
   forall (HW_163: y1 = 3),
   forall (y2: Z),
   forall (HW_164: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1400,8 +1343,7 @@ Save.
   forall (HW_167: y1 = 3),
   forall (y2: Z),
   forall (HW_168: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1425,8 +1367,7 @@ Save.
   forall (HW_169: x <> 4),
   forall (y1: Z),
   forall (HW_170: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1449,8 +1390,7 @@ Save.
   forall (HW_175: y1 = 3),
   forall (y2: Z),
   forall (HW_176: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1474,8 +1414,7 @@ Save.
   forall (HW_179: y1 = 3),
   forall (y2: Z),
   forall (HW_180: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1500,8 +1439,7 @@ Save.
   forall (HW_183: y1 = 3),
   forall (y2: Z),
   forall (HW_184: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1527,8 +1465,7 @@ Save.
   forall (HW_187: y1 = 3),
   forall (y2: Z),
   forall (HW_188: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1555,8 +1492,7 @@ Save.
   forall (HW_191: y1 = 3),
   forall (y2: Z),
   forall (HW_192: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1581,8 +1517,7 @@ Save.
   forall (HW_193: x <> 4),
   forall (y1: Z),
   forall (HW_194: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1606,8 +1541,7 @@ Save.
   forall (HW_199: y1 = 3),
   forall (y2: Z),
   forall (HW_200: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1632,8 +1566,7 @@ Save.
   forall (HW_203: y1 = 3),
   forall (y2: Z),
   forall (HW_204: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1659,8 +1592,7 @@ Save.
   forall (HW_207: y1 = 3),
   forall (y2: Z),
   forall (HW_208: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1687,8 +1619,7 @@ Save.
   forall (HW_211: y1 = 3),
   forall (y2: Z),
   forall (HW_212: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1716,8 +1647,7 @@ Save.
   forall (HW_215: y1 = 3),
   forall (y2: Z),
   forall (HW_216: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1743,8 +1673,7 @@ Save.
   forall (HW_217: x <> 4),
   forall (y1: Z),
   forall (HW_218: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1766,8 +1695,7 @@ Save.
   forall (HW_221: y0 = 3),
   forall (y1: Z),
   forall (HW_222: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1790,8 +1718,7 @@ Save.
   forall (HW_225: y0 = 3),
   forall (y1: Z),
   forall (HW_226: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1815,8 +1742,7 @@ Save.
   forall (HW_229: y0 = 3),
   forall (y1: Z),
   forall (HW_230: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1841,8 +1767,7 @@ Save.
   forall (HW_233: y0 = 3),
   forall (y1: Z),
   forall (HW_234: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1868,8 +1793,7 @@ Save.
   forall (HW_237: y0 = 3),
   forall (y1: Z),
   forall (HW_238: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1893,8 +1817,7 @@ Save.
   forall (HW_239: x <> 4),
   forall (y0: Z),
   forall (HW_240: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1913,8 +1836,7 @@ Save.
   forall (HW_245: y0 = 3),
   forall (y1: Z),
   forall (HW_246: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1934,8 +1856,7 @@ Save.
   forall (HW_249: y0 = 3),
   forall (y1: Z),
   forall (HW_250: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1956,8 +1877,7 @@ Save.
   forall (HW_253: y0 = 3),
   forall (y1: Z),
   forall (HW_254: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1979,8 +1899,7 @@ Save.
   forall (HW_257: y0 = 3),
   forall (y1: Z),
   forall (HW_258: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2003,8 +1922,7 @@ Save.
   forall (HW_261: y0 = 3),
   forall (y1: Z),
   forall (HW_262: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2025,8 +1943,7 @@ Save.
   forall (HW_263: x <> 4),
   forall (y0: Z),
   forall (HW_264: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2046,8 +1963,7 @@ Save.
   forall (HW_269: y0 = 3),
   forall (y1: Z),
   forall (HW_270: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2068,8 +1984,7 @@ Save.
   forall (HW_273: y0 = 3),
   forall (y1: Z),
   forall (HW_274: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2091,8 +2006,7 @@ Save.
   forall (HW_277: y0 = 3),
   forall (y1: Z),
   forall (HW_278: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2115,8 +2029,7 @@ Save.
   forall (HW_281: y0 = 3),
   forall (y1: Z),
   forall (HW_282: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2140,8 +2053,7 @@ Save.
   forall (HW_285: y0 = 3),
   forall (y1: Z),
   forall (HW_286: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2163,8 +2075,7 @@ Save.
   forall (HW_287: x <> 4),
   forall (y0: Z),
   forall (HW_288: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2185,8 +2096,7 @@ Save.
   forall (HW_293: y0 = 3),
   forall (y1: Z),
   forall (HW_294: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2208,8 +2118,7 @@ Save.
   forall (HW_297: y0 = 3),
   forall (y1: Z),
   forall (HW_298: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2232,8 +2141,7 @@ Save.
   forall (HW_301: y0 = 3),
   forall (y1: Z),
   forall (HW_302: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2257,8 +2165,7 @@ Save.
   forall (HW_305: y0 = 3),
   forall (y1: Z),
   forall (HW_306: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2283,8 +2190,7 @@ Save.
   forall (HW_309: y0 = 3),
   forall (y1: Z),
   forall (HW_310: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2307,8 +2213,7 @@ Save.
   forall (HW_311: x <> 4),
   forall (y0: Z),
   forall (HW_312: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2330,8 +2235,7 @@ Save.
   forall (HW_317: y0 = 3),
   forall (y1: Z),
   forall (HW_318: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2354,8 +2258,7 @@ Save.
   forall (HW_321: y0 = 3),
   forall (y1: Z),
   forall (HW_322: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2379,8 +2282,7 @@ Save.
   forall (HW_325: y0 = 3),
   forall (y1: Z),
   forall (HW_326: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2405,8 +2307,7 @@ Save.
   forall (HW_329: y0 = 3),
   forall (y1: Z),
   forall (HW_330: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2432,8 +2333,7 @@ Save.
   forall (HW_333: y0 = 3),
   forall (y1: Z),
   forall (HW_334: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2457,8 +2357,7 @@ Save.
   forall (HW_335: x <> 4),
   forall (y0: Z),
   forall (HW_336: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2478,8 +2377,7 @@ Save.
   forall (HW_339: y = 3),
   forall (y0: Z),
   forall (HW_340: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2500,8 +2398,7 @@ Save.
   forall (HW_343: y = 3),
   forall (y0: Z),
   forall (HW_344: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2523,8 +2420,7 @@ Save.
   forall (HW_347: y = 3),
   forall (y0: Z),
   forall (HW_348: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2547,8 +2443,7 @@ Save.
   forall (HW_351: y = 3),
   forall (y0: Z),
   forall (HW_352: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2572,8 +2467,7 @@ Save.
   forall (HW_355: y = 3),
   forall (y0: Z),
   forall (HW_356: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2595,8 +2489,7 @@ Save.
   forall (HW_357: x <> 4),
   forall (y: Z),
   forall (HW_358: y = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
-  4.
+  (* File \"switch.c\", line 45, characters 13-23:\n *) y = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2617,8 +2510,7 @@ Save.
   forall (HW_8: y1 = 3),
   forall (y2: Z),
   forall (HW_9: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition; discriminate.
 Save.
@@ -2636,8 +2528,7 @@ Save.
   forall (HW_10: x = 2),
   forall (y1: Z),
   forall (HW_11: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition; discriminate.
 Save.
@@ -2655,8 +2546,7 @@ Save.
   forall (HW_14: y0 = 3),
   forall (y1: Z),
   forall (HW_15: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2673,8 +2563,7 @@ Save.
   forall (HW_16: x = 2),
   forall (y0: Z),
   forall (HW_17: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2692,8 +2581,7 @@ Save.
   forall (HW_20: y0 = 3),
   forall (y1: Z),
   forall (HW_21: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2708,8 +2596,7 @@ Save.
   forall (HW_22: x = 2),
   forall (y0: Z),
   forall (HW_23: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2731,8 +2618,7 @@ Save.
   forall (HW_31: y1 = 3),
   forall (y2: Z),
   forall (HW_32: y2 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y2 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y2 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2752,8 +2638,7 @@ Save.
   forall (HW_33: x = 2),
   forall (y1: Z),
   forall (HW_34: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2773,8 +2658,7 @@ Save.
   forall (HW_37: y0 = 3),
   forall (y1: Z),
   forall (HW_38: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2792,8 +2676,7 @@ Save.
   forall (HW_39: x = 2),
   forall (y0: Z),
   forall (HW_40: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2812,8 +2695,7 @@ Save.
   forall (HW_43: y0 = 3),
   forall (y1: Z),
   forall (HW_44: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2829,8 +2711,7 @@ Save.
   forall (HW_45: x = 2),
   forall (y0: Z),
   forall (HW_46: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2850,8 +2731,7 @@ Save.
   forall (HW_52: y0 = 3),
   forall (y1: Z),
   forall (HW_53: y1 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y1 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y1 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2869,8 +2749,7 @@ Save.
   forall (HW_54: x = 2),
   forall (y0: Z),
   forall (HW_55: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2888,8 +2767,7 @@ Save.
   forall (HW_58: y = 3),
   forall (y0: Z),
   forall (HW_59: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2905,8 +2783,7 @@ Save.
   forall (HW_60: x = 2),
   forall (y: Z),
   forall (HW_61: y = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
-  4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2923,8 +2800,7 @@ Save.
   forall (HW_64: y = 3),
   forall (y0: Z),
   forall (HW_65: y0 = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *)
-  y0 = 4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y0 = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2938,8 +2814,7 @@ Save.
   forall (HW_66: x = 2),
   forall (y: Z),
   forall (HW_67: y = 4),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
-  4.
+  (* File \"switch.c\", line 64, characters 13-23:\n *) y = 4.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -2949,8 +2824,7 @@ Save.
 (*Why goal*) Lemma f4_impl_po_1 : 
   forall (x: Z),
   forall (HW_2: x = 0),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) 0 =
-  0.
+  (* File \"switch.c\", line 82, characters 13-23:\n *) 0 = 0.
 Proof.
 intuition.
 Save.
@@ -2962,8 +2836,7 @@ Save.
   forall (HW_3: x <> 0),
   forall (y: Z),
   forall (HW_4: y = 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) y =
-  0.
+  (* File \"switch.c\", line 82, characters 13-23:\n *) y = 0.
 Proof.
 intuition.
 Save.
@@ -2972,8 +2845,7 @@ Save.
 (*Why goal*) Lemma f4_impl_po_3 : 
   forall (x: Z),
   forall (HW_5: x <> 0),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-19 *) 0 =
-  0.
+  (* File \"switch.c\", line 82, characters 13-23:\n *) 0 = 0.
 Proof.
 intuition.
 Save.
@@ -2985,8 +2857,7 @@ Save.
   forall (HW_3: x > 0),
   forall (y: Z),
   forall (HW_4: y = 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 1 -> y = 1)).
+  (* File \"switch.c\", line 94, characters 13-31:\n *) ((x = 1 -> y = 1)).
 Proof.
 intuition.
 Save.
@@ -2998,8 +2869,7 @@ Save.
   forall (HW_5: x <= 0),
   forall (y: Z),
   forall (HW_6: y = 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 1 -> y = 1)).
+  (* File \"switch.c\", line 94, characters 13-31:\n *) ((x = 1 -> y = 1)).
 Proof.
 intuition.
 subst;auto.
@@ -3009,8 +2879,7 @@ Save.
 (*Why goal*) Lemma f5_impl_po_3 : 
   forall (x: Z),
   forall (HW_7: x <> 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 1 -> 0 = 1)).
+  (* File \"switch.c\", line 94, characters 13-31:\n *) ((x = 1 -> 0 = 1)).
 Proof.
 intuition.
 Save.
@@ -3025,8 +2894,7 @@ Save.
   forall (HW_1: x = (1 + 1)),
   forall (y: Z),
   forall (HW_2: y = 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 2 -> y = 1)).
+  (* File \"switch.c\", line 106, characters 13-31:\n *) ((x = 2 -> y = 1)).
 Proof.
 intuition.
 Save.
@@ -3035,8 +2903,7 @@ Save.
 (*Why goal*) Lemma f6_impl_po_2 : 
   forall (x: Z),
   forall (HW_3: x <> (1 + 1)),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = 2 -> 0 = 1)).
+  (* File \"switch.c\", line 106, characters 13-31:\n *) ((x = 2 -> 0 = 1)).
 Proof.
 intuition.
 Save.
@@ -3047,8 +2914,7 @@ Save.
   forall (HW_1: x = A),
   forall (y: Z),
   forall (HW_2: y = 1),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = A -> y = 1)).
+  (* File \"switch.c\", line 119, characters 13-31:\n *) ((x = A -> y = 1)).
 Proof.
 intuition.
 Save.
@@ -3057,8 +2923,7 @@ Save.
 (*Why goal*) Lemma f7_impl_po_2 : 
   forall (x: Z),
   forall (HW_3: x <> A),
-  (* File \"switch.c819618234.c1069824147.i\", line 0, characters 9-27 *)
-  ((x = A -> 0 = 1)).
+  (* File \"switch.c\", line 119, characters 13-31:\n *) ((x = A -> 0 = 1)).
 Proof.
 intuition.
 Save.

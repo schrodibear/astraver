@@ -3,15 +3,26 @@
 
 Require Export max_spec_why.
 
-(* Why obligation from file "why/max.why", characters 45-242 *)
-Lemma max_impl_po_1 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma max_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
-  forall (result: Z),
-  forall (Post1: x > y /\ result = x \/ x <= y /\ result = y),
-  (result >= x /\ result >= y) /\
-  (forall (z:Z), (z >= x /\ z >= y -> z >= result)).
+  forall (HW_1: x > y),
+  (* File \"max.c\", line 2, characters 5-88:\n *) ((x >= x /\ x >= y) /\
+  (forall (z:Z), (z >= x /\ z >= y -> z >= x))).
 Proof.
 intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma max_impl_po_2 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_2: x <= y),
+  (* File \"max.c\", line 2, characters 5-88:\n *) ((y >= x /\ y >= y) /\
+  (forall (z:Z), (z >= x /\ z >= y -> z >= y))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

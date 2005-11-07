@@ -6,16 +6,13 @@ Require Export LinkedLists.
 
 (* Definition eq_list := (@eq (list pointer)). *)
 
-(* Why obligation from file "why/reverse.why", characters 202-756 *)
-Lemma rev_impl_po_1 : 
-  forall (p0: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma rev_impl_po_1 : 
+  forall (p0: ((pointer) Z18)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
+  forall (tl_Z18: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_1: (* File \"reverse.c\", line 6, characters 14-25:\n *)
+                (is_list tl_Z18 alloc p0)),
   (well_founded length_order).
 Proof.
 intuition.
@@ -31,30 +28,19 @@ rewrite app_ass; auto.
 Qed.
 
 
-(* Why obligation from file "why/reverse.why", characters 688-701 *)
-Lemma rev_impl_po_2 : 
-  forall (p0: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma rev_impl_po_2 : 
+  forall (p0: ((pointer) Z18)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
-  forall (Variant1: Length),
-  forall (p2: pointer),
-  forall (r1: pointer),
-  forall (tl0: ((memory) pointer)),
-  forall (Pre9: Variant1 = (length alloc tl0 r1)),
-  forall (Pre8: (exists lp:plist,
-                 (exists lr:plist, (((llist alloc tl0 p2 lp) /\
-                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
-                  (forall (l:plist),
-                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test2: ~(r1 = null)),
-  forall (q: pointer),
-  forall (Post6: q = r1),
-  (valid alloc r1).
+  forall (tl_Z18: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_1: (* File \"reverse.c\", line 6, characters 14-25:\n *)
+                (is_list tl_Z18 alloc p0)),
+  (* File \"reverse.c\", line 13, characters 9-194:\n *)
+  (exists lp:plist,
+   (exists lr:plist, (((llist tl_Z18 alloc null lp) /\
+    (llist tl_Z18 alloc p0 lr)) /\ (disjoint lp lr)) /\
+    (forall (l:plist),
+     ((llist tl_Z18 alloc p0 l) -> (app (rev lr) lp) = (rev l))))).
 Proof.
 intuition.
 elim Pre8; clear Pre8; intuition.
@@ -62,32 +48,38 @@ elim H; clear H; intuition.
 inversion H3; intuition.
 Qed.
 
-(* Why obligation from file "why/reverse.why", characters 704-721 *)
-Lemma rev_impl_po_3 : 
-  forall (p0: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma rev_impl_po_3 : 
+  forall (p0: ((pointer) Z18)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
-  forall (Variant1: Length),
-  forall (p2: pointer),
-  forall (r1: pointer),
-  forall (tl0: ((memory) pointer)),
-  forall (Pre9: Variant1 = (length alloc tl0 r1)),
-  forall (Pre8: (exists lp:plist,
-                 (exists lr:plist, (((llist alloc tl0 p2 lp) /\
-                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+  forall (tl_Z18: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_1: (* File \"reverse.c\", line 6, characters 14-25:\n *)
+                (is_list tl_Z18 alloc p0)),
+  forall (p: ((pointer) Z18)),
+  forall (r: ((pointer) Z18)),
+  forall (tl_Z18_0: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_2: (* File \"reverse.c\", line 13, characters 9-194:\n *)
+                (exists lp:plist,
+                 (exists lr:plist, (((llist tl_Z18_0 alloc p lp) /\
+                  (llist tl_Z18_0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test2: ~(r1 = null)),
-  forall (q: pointer),
-  forall (Post6: q = r1),
-  forall (r2: pointer),
-  forall (Post2: r2 = (acc tl0 r1)),
-  (valid alloc q).
+                   ((llist tl_Z18 alloc p0 l) -> (app (rev lr) lp) = (rev l)))))),
+  forall (HW_3: ~(r = null)),
+  forall (result: ((pointer) Z18)),
+  forall (HW_4: result = (acc tl_Z18_0 r)),
+  forall (r0: ((pointer) Z18)),
+  forall (HW_5: r0 = result),
+  forall (tl_Z18_1: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_6: tl_Z18_1 = (upd tl_Z18_0 r p)),
+  forall (p1: ((pointer) Z18)),
+  forall (HW_7: p1 = r),
+  (* File \"reverse.c\", line 13, characters 9-194:\n *)
+  (exists lp:plist,
+   (exists lr:plist, (((llist tl_Z18_1 alloc p1 lp) /\
+    (llist tl_Z18_1 alloc r0 lr)) /\ (disjoint lp lr)) /\
+    (forall (l:plist),
+     ((llist tl_Z18 alloc p0 l) -> (app (rev lr) lp) = (rev l))))) /\
+  (length_order (length tl_Z18_1 alloc r0) (length tl_Z18_0 alloc r)).
 Proof.
 intros; subst; intuition.
 elim Pre8;intros;elim H;intros;elim H0;intuition.
@@ -95,41 +87,28 @@ inversion H7;auto.
 elim Test2;auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 675-731 *)
-Lemma rev_impl_po_4 : 
-  forall (p0: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma rev_impl_po_4 : 
+  forall (p0: ((pointer) Z18)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
-  forall (Variant1: Length),
-  forall (p2: pointer),
-  forall (r1: pointer),
-  forall (tl0: ((memory) pointer)),
-  forall (Pre9: Variant1 = (length alloc tl0 r1)),
-  forall (Pre8: (exists lp:plist,
-                 (exists lr:plist, (((llist alloc tl0 p2 lp) /\
-                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+  forall (tl_Z18: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_1: (* File \"reverse.c\", line 6, characters 14-25:\n *)
+                (is_list tl_Z18 alloc p0)),
+  forall (p: ((pointer) Z18)),
+  forall (r: ((pointer) Z18)),
+  forall (tl_Z18_0: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_2: (* File \"reverse.c\", line 13, characters 9-194:\n *)
+                (exists lp:plist,
+                 (exists lr:plist, (((llist tl_Z18_0 alloc p lp) /\
+                  (llist tl_Z18_0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test2: ~(r1 = null)),
-  forall (q: pointer),
-  forall (Post6: q = r1),
-  forall (r2: pointer),
-  forall (Post2: r2 = (acc tl0 r1)),
-  forall (Pre7: (valid alloc q)),
-  forall (tl1: ((memory) pointer)),
-  forall (Post19: tl1 = (upd tl0 q p2)),
-  forall (p3: pointer),
-  forall (Post5: p3 = q),
-  (exists lp:plist,
-   (exists lr:plist, (((llist alloc tl1 p3 lp) /\ (llist alloc tl1 r2 lr)) /\
-    (disjoint lp lr)) /\
-    (forall (l:plist), ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
-  (length_order (length alloc tl1 r2) (length alloc tl0 r1)).
+                   ((llist tl_Z18 alloc p0 l) -> (app (rev lr) lp) = (rev l)))))),
+  forall (HW_3: ~(r = null)),
+  forall (result: ((pointer) Z18)),
+  forall (HW_4: result = (acc tl_Z18_0 r)),
+  forall (r0: ((pointer) Z18)),
+  forall (HW_5: r0 = result),
+  (valid alloc r).
 Proof.
 intuition.
 elim Pre8; clear Pre8; intuition.
@@ -162,66 +141,48 @@ apply llist_not_starting with alloc tl0; auto.
 rewrite <- H6; simpl; omega.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 202-756 *)
-Lemma rev_impl_po_5 : 
-  forall (p0: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma rev_impl_po_5 : 
+  forall (p0: ((pointer) Z18)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
-  forall (Variant1: Length),
-  forall (p2: pointer),
-  forall (r1: pointer),
-  forall (tl0: ((memory) pointer)),
-  forall (Pre9: Variant1 = (length alloc tl0 r1)),
-  forall (Pre8: (exists lp:plist,
-                 (exists lr:plist, (((llist alloc tl0 p2 lp) /\
-                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+  forall (tl_Z18: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_1: (* File \"reverse.c\", line 6, characters 14-25:\n *)
+                (is_list tl_Z18 alloc p0)),
+  forall (p: ((pointer) Z18)),
+  forall (r: ((pointer) Z18)),
+  forall (tl_Z18_0: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_2: (* File \"reverse.c\", line 13, characters 9-194:\n *)
+                (exists lp:plist,
+                 (exists lr:plist, (((llist tl_Z18_0 alloc p lp) /\
+                  (llist tl_Z18_0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test2: ~(r1 = null)),
-  forall (p3: pointer),
-  forall (r2: pointer),
-  forall (tl1: ((memory) pointer)),
-  forall (Post10: (exists lp:plist,
-                   (exists lr:plist, (((llist alloc tl1 p3 lp) /\
-                    (llist alloc tl1 r2 lr)) /\ (disjoint lp lr)) /\
-                    (forall (l:plist),
-                     ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
-                  (length_order (length alloc tl1 r2) (length alloc tl0 r1))),
-  (length_order (length alloc tl1 r2) Variant1).
+                   ((llist tl_Z18 alloc p0 l) -> (app (rev lr) lp) = (rev l)))))),
+  forall (HW_3: ~(r = null)),
+  (valid alloc r).
 Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 202-756 *)
-Lemma rev_impl_po_6 : 
-  forall (p0: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma rev_impl_po_6 : 
+  forall (p0: ((pointer) Z18)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
-  forall (Variant1: Length),
-  forall (p2: pointer),
-  forall (r1: pointer),
-  forall (tl0: ((memory) pointer)),
-  forall (Pre9: Variant1 = (length alloc tl0 r1)),
-  forall (Pre8: (exists lp:plist,
-                 (exists lr:plist, (((llist alloc tl0 p2 lp) /\
-                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+  forall (tl_Z18: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_1: (* File \"reverse.c\", line 6, characters 14-25:\n *)
+                (is_list tl_Z18 alloc p0)),
+  forall (p: ((pointer) Z18)),
+  forall (r: ((pointer) Z18)),
+  forall (tl_Z18_0: ((memory) ((pointer) Z18) Z18)),
+  forall (HW_2: (* File \"reverse.c\", line 13, characters 9-194:\n *)
+                (exists lp:plist,
+                 (exists lr:plist, (((llist tl_Z18_0 alloc p lp) /\
+                  (llist tl_Z18_0 alloc r lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
-                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test1: r1 = null),
-  (forall (result:pointer),
-   (result = p2 ->
-    (forall (l0:plist),
-     ((llist alloc tl p0 l0) -> (llist alloc tl0 result (rev l0)))))).
+                   ((llist tl_Z18 alloc p0 l) -> (app (rev lr) lp) = (rev l)))))),
+  forall (HW_8: r = null),
+  (* File \"reverse.c\", line 7, characters 13-77:\n *)
+  (forall (l0:plist),
+   ((llist tl_Z18 alloc p0 l0) -> (llist tl_Z18_0 alloc p (rev l0)))).
 Proof.
 intuition.
 elim Pre8; clear Pre8; intuition.
@@ -236,20 +197,6 @@ generalize (H3 l0 H0); simpl; intro.
 rewrite <- H; auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 267-566 *)
-Lemma rev_impl_po_7 : 
-  forall (p0: pointer),
-  forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre10: (is_list alloc tl p0)),
-  forall (r: pointer),
-  forall (Post9: r = p0),
-  forall (p: pointer),
-  forall (Post8: p = null),
-  (exists lp:plist,
-   (exists lr:plist, (((llist alloc tl p lp) /\ (llist alloc tl r lr)) /\
-    (disjoint lp lr)) /\
-    (forall (l:plist), ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))).
 Proof.
 intros; subst.
 exists (nil (A:=pointer)).

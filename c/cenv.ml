@@ -179,6 +179,51 @@ let rec next_name ?local_names n i =
 
 let unique_name ?local_names n = try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
+(* type why *)
+
+let count = ref Int64.zero
+
+let zone_table = Hashtbl.create 97
+
+let make_zone ty =
+  let z = { repr = None;
+	    name =  "Z" ^ Int64.to_string !count;
+	    type_why_zone = Unit;
+	  } in
+  Hashtbl.add zone_table z.name z;
+  count := Int64.succ !count;
+  z
+
+let rec type_type_why ty =
+  match ty.ctype_node with
+    | Tint _ | Tenum _ -> Int
+    | Tfloat _ -> Float
+    | Tarray (ty,_)  
+    | Tpointer ty -> 
+	let z = make_zone ty in
+	z.type_why_zone <- type_type_why ty;
+	Pointer z
+    | Tvoid -> Unit
+    | Tfun (_,ty) -> type_type_why ty
+    | Tvar v -> 
+	begin
+	  try
+	    type_type_why (find_typedef v)
+	  with Not_found -> 
+	    (* v is a logic type *)
+	    Why_Logic v
+	end
+    | Tunion _ -> 
+	let z = make_zone ty in
+	Pointer z
+    | Tstruct _ -> 
+	let z = make_zone ty in
+	Pointer z
+
+
+let set_var_type info ty =
+  Info.set_var_type info ty (type_type_why ty)
+
 (* global variables and functions *)
 
 let (sym_t : (string, env_info) Hashtbl.t) = Hashtbl.create 97
@@ -196,11 +241,12 @@ let add_sym l x ty info =
   if n <> x then Coptions.lprintf "renaming %s into %s@." x n;
   try
     let d = find_sym x in
-    if not (eq_type (var_type d) ty) then 
+    let varty = var_type d in
+    if not (eq_type varty ty) then 
       (* TODO accepter fonctions avec arguments si aucun la première fois 
 	 Question de Claude: accepter aussi un raffinement des specs ? *)
       begin
-	eprintf "t : %a, ty : %a@." print_type  (var_type d) print_type  ty;
+	eprintf "t : %a, ty : %a@." print_type  varty print_type  ty;
 	error l ("conflicting types for " ^ x);
       end;
     d

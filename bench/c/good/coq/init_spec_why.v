@@ -3,8 +3,49 @@
 
 Require Export Caduceus.
 
-(*Why predicate*) Definition separation_S_int  (s:pointer)
-  (b:((memory) pointer)) (t:pointer) (alloc:alloc_table)
-  := ~((base_addr s) = (base_addr t)) /\
-     ~((base_addr t) = (base_addr (acc b s))).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Parameter Z0: Set.
+
+(*Why type*) Parameter Z1: Set.
+
+(*Why type*) Parameter Z2: Set.
+
+(*Why type*) Parameter Z3: Set.
+
+(*Why type*) Parameter Z4: Set.
+
+(*Why type*) Parameter Z5: Set.
+
+(*Why type*) Parameter Z6: Set.
+
+(*Why type*) Parameter Z7: Set.
+
+(*Why type*) Parameter Z8: Set.
 

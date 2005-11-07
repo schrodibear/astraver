@@ -125,7 +125,7 @@ CCMO = src/lib.cmo src/linenum.cmo \
 	c/cgraph.cmo c/cinit.cmo \
 	c/cast_misc.cmo c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
-	c/output.cmo c/cprint.cmo c/cnorm.cmo  \
+	c/output.cmo c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
 	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
@@ -542,7 +542,7 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
 
-depend.coq: lib/coq*/*.v
+.depend.coq: lib/coq*/*.v
 	if test @COQ@ = yes; then \
 	  rm -f .depend.coq; \
 	  $(COQDEP) -I lib/coq lib/coq/*.v > .depend.coq; \

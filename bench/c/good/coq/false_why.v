@@ -5,8 +5,7 @@ Require Export false_spec_why.
 
 (* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false0_impl_po_1 : 
-  (* File \"false.c819618234.c1069824147.i\", line 0, characters 9-15 *)
-  False.
+  (* File \"false.c\", line 16, characters 13-19:\n *) False.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -15,13 +14,12 @@ Save.
 (* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (y: ((memory) pointer)),
-  forall (z: pointer),
-  forall (HW_1: (valid1_range y 5) /\ (valid1 y)),
-  forall (result: pointer),
-  forall (HW_2: result = (acc y z)),
-  forall (result0: pointer),
-  forall (HW_3: result0 = (shift result 5)),
+  forall (y_Z7: ((memory) ((pointer) Z1) Z7)),
+  forall (z: ((pointer) Z7)),
+  forall (result: ((pointer) Z1)),
+  forall (HW_1: result = (acc y_Z7 z)),
+  forall (result0: ((pointer) Z1)),
+  forall (HW_2: result0 = (shift result 5)),
   (valid alloc result0).
 Proof.
 intuition.
@@ -31,9 +29,7 @@ Save.
 (* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (y: ((memory) pointer)),
-  forall (z: pointer),
-  forall (HW_1: (valid1_range y 5) /\ (valid1 y)),
+  forall (z: ((pointer) Z7)),
   (valid alloc z).
 Proof.
 intuition.
@@ -58,9 +54,9 @@ Save.
 (* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x_0: pointer),
+  forall (x_0: ((pointer) Z12)),
   forall (HW_1: (valid_range alloc x_0 0 3)),
-  forall (result: pointer),
+  forall (result: ((pointer) Z12)),
   forall (HW_2: result = (shift x_0 (Zopp 1))),
   (valid alloc result).
 Proof.
@@ -71,9 +67,9 @@ Save.
 (* Why obligation from file "why/false.why", line 0, characters 0-0: *)
 (*Why goal*) Lemma false3_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (y_0: pointer),
+  forall (y_0: ((pointer) Z13)),
   forall (HW_1: (valid_range alloc y_0 0 4)),
-  forall (result: pointer),
+  forall (result: ((pointer) Z13)),
   forall (HW_2: result = (shift y_0 5)),
   (valid alloc result).
 Proof.

@@ -42,8 +42,7 @@ typedef struct {
     int titi;    
 } S1;
 
-/*@ requires \valid(ma_structure)
-  @ assigns  ma_structure.toto */
+/*@ assigns ma_structure.toto */
 void f1(S1 ma_structure)
 {
     int toto;

@@ -3,87 +3,128 @@
 
 Require Export swap_spec_why.
 
-(* Why obligation from file "why/swap.why", characters 157-184 *)
-Lemma swap_impl_po_1 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_1 : 
+  forall (t: ((pointer) Z1)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  (valid alloc (shift t i)).
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"swap.c\", line 1, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z1)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z1 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_5: result2 = (shift t j)),
+  forall (result3: Z),
+  forall (HW_6: result3 = (acc int_Z1 result2)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_7: int_Z1_0 = (upd int_Z1 result1 result3)),
+  forall (result4: ((pointer) Z1)),
+  forall (HW_8: result4 = (shift t j)),
+  forall (int_Z1_1: ((memory) Z Z1)),
+  forall (HW_9: int_Z1_1 = (upd int_Z1_0 result4 result0)),
+  (* File \"swap.c\", line 2, characters 13-53:\n *)
+  ((acc int_Z1_1 (shift t i)) = (acc int_Z1 (shift t j)) /\
+  (acc int_Z1_1 (shift t j)) = (acc int_Z1 (shift t i))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 284-311 *)
-Lemma swap_impl_po_2 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_2 : 
+  forall (t: ((pointer) Z1)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  forall (Pre9: (valid alloc (shift t i))),
-  forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t i))),
-  forall (caduceus_2: pointer),
-  forall (Post4: caduceus_2 = (shift t i)),
-  (valid alloc (shift t j)).
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"swap.c\", line 1, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z1)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z1 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_5: result2 = (shift t j)),
+  forall (result3: Z),
+  forall (HW_6: result3 = (acc int_Z1 result2)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_7: int_Z1_0 = (upd int_Z1 result1 result3)),
+  forall (result4: ((pointer) Z1)),
+  forall (HW_8: result4 = (shift t j)),
+  (valid alloc result4).
 Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 258-312 *)
-Lemma swap_impl_po_3 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_3 : 
+  forall (t: ((pointer) Z1)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  forall (Pre9: (valid alloc (shift t i))),
-  forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t i))),
-  forall (caduceus_2: pointer),
-  forall (Post4: caduceus_2 = (shift t i)),
-  forall (Pre4: (valid alloc (shift t j))),
-  forall (aux_3: Z),
-  forall (Post3: aux_3 = (acc intP (shift t j))),
-  (valid alloc caduceus_2).
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"swap.c\", line 1, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z1)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z1 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_5: result2 = (shift t j)),
+  forall (result3: Z),
+  forall (HW_6: result3 = (acc int_Z1 result2)),
+  (valid alloc result1).
 Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 258-312 *)
-Lemma swap_impl_po_4 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_4 : 
+  forall (t: ((pointer) Z1)),
   forall (i: Z),
   forall (j: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: (valid_index alloc t i) /\ (valid_index alloc t j)),
-  forall (Pre9: (valid alloc (shift t i))),
-  forall (tmp: Z),
-  forall (Post8: tmp = (acc intP (shift t i))),
-  forall (caduceus_2: pointer),
-  forall (Post4: caduceus_2 = (shift t i)),
-  forall (Pre4: (valid alloc (shift t j))),
-  forall (aux_3: Z),
-  forall (Post3: aux_3 = (acc intP (shift t j))),
-  forall (Pre1: (valid alloc caduceus_2)),
-  forall (intP0: ((memory) Z)),
-  forall (Post12: intP0 = (upd intP caduceus_2 aux_3)),
-  (forall (result:pointer),
-   (result = (shift t j) ->
-    (forall (intP1:((memory) Z)),
-     (intP1 = (upd intP0 result tmp) -> (acc intP1 (shift t i)) =
-      (acc intP (shift t j)) /\ (acc intP1 (shift t j)) =
-      (acc intP (shift t i)))) /\
-    (valid alloc result))).
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_1: (* File \"swap.c\", line 1, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z1)),
+  forall (HW_2: result = (shift t i)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z1 result)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_4: result1 = (shift t i)),
+  forall (result2: ((pointer) Z1)),
+  forall (HW_5: result2 = (shift t j)),
+  (valid alloc result2).
 Proof.
 intros.
 assert (i=j\/i<>j).
 omega.
 intuition; subst; auto; caduceus.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_impl_po_5 : 
+  forall (t: ((pointer) Z1)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (alloc: alloc_table),
+  forall (HW_1: (* File \"swap.c\", line 1, characters 14-52:\n *)
+                ((valid_index alloc t i) /\ (valid_index alloc t j))),
+  forall (result: ((pointer) Z1)),
+  forall (HW_2: result = (shift t i)),
+  (valid alloc result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

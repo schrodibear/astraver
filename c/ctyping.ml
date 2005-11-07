@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.98 2005-11-03 14:11:32 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.99 2005-11-07 15:13:29 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -32,7 +32,7 @@ open Int64
 
 let int_teconstant n = 
   { texpr_node = TEconstant (IntConstant n); 
-    texpr_loc = Loc.dummy;
+    texpr_loc = Loc.dummy_position;
     texpr_type = c_int }
 
 let tezero = int_teconstant "0"
@@ -120,19 +120,8 @@ let located_app f x = { node = f x.node; loc = x.loc }
 
 let option_app f = function Some x -> Some (f x) | None -> None
 
-let offset ofs (ls, le) = (ofs + ls, ofs + le)
+let type_spec ?result env s = type_spec result env s
 
-let with_offset ofs f x =
-  try
-    f x
-  with 
-    | Error (Some loc, e) ->
-	raise (Error (Some (offset ofs loc), e))
-
-let type_location ofs env l = with_offset ofs (type_location env) l
-let type_predicate ofs env p = with_offset ofs (type_predicate env) p
-let type_spec ?result env (ofs,s) = with_offset ofs (type_spec result env) s
-let type_loop_annot env (ofs,a) = with_offset ofs (type_loop_annot env) a
 
 (*s Some predefined types, subtype relation, etc. *)
 
@@ -183,7 +172,7 @@ let is_bitfield ty = match ty.ctype_node with
   | _ -> false
 
 let va_list = Ctypes.noattr (Ctypes.Tvar "va_list")
-let _ = add_typedef Loc.dummy "__builtin_va_list" va_list
+let _ = add_typedef Loc.dummy_position "__builtin_va_list" va_list
 
 (* Coercions (ints to floats, floats to int) *)
 
@@ -249,7 +238,7 @@ let warn_for_read_only loc e =
   | TEvar (Var_info x) when e.texpr_type.ctype_const ->
       warning loc ("assignment of read-only variable `" ^ x.var_name ^ "'")
   | TEvar (Var_info x) ->
-      Loc.report Coptions.log loc;
+      Loc.report_position Coptions.log loc;
       fprintf Coptions.log "Variable %s is assigned@." x.var_name;
       set_assigned x
   | TEvar (Fun_info f) ->
@@ -839,12 +828,12 @@ and type_statement_node loc env et = function
   | CSdefault (s) ->
       let s,st = type_statement env et s in
       TSdefault (s), st
-  | CSannot (ofs, Assert p) ->
-      let p = type_predicate ofs env p in
+  | CSannot (Assert p) ->
+      let p = type_predicate env p in
       TSassert p, mt_status
-  | CSannot (_, Label l) ->
+  | CSannot (Label l) ->
       TSlogic_label l, mt_status
-  | CSannot (_, GhostSet(x,t)) ->
+  | CSannot (GhostSet(x,t)) ->
       TSset (type_ghost_lvalue env x,type_term env t), mt_status
   | CSspec (spec, s) ->
       let spec = type_spec env spec in
@@ -919,31 +908,35 @@ let type_logic_parameters env pl =
     pl 
     ([], env)
 
-let type_spec_decl loc ofs = function
+let type_spec_decl loc = function
   | LDaxiom (id, p) -> 
-      Taxiom (id, type_predicate ofs (Env.empty ()) p)
+      Taxiom (id, type_predicate (Env.empty ()) p)
   | LDinvariant (id, p) -> 
-      Tinvariant (id, type_predicate ofs (Env.empty ()) p)
+      Tinvariant (id, type_predicate (Env.empty ()) p)
   | LDlogic (id, ty, pl, ll) ->
       let ty = type_logic_type (Env.empty ()) ty in
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
-      let ll = List.map (type_location ofs env') ll in
+      id.logic_args <- List.map fst pl;
+      let ll = List.map (type_location env') ll in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
   | LDlogic_def (id, ty, pl, t) ->
       let ty = type_logic_type (Env.empty ()) ty in
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
-      let t = with_offset ofs (type_term env') t in
+      id.logic_args <- List.map fst pl;
+      let t = type_term env' t in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function_def (pl, ty, t))
   | LDpredicate_reads (id, pl, ll) ->
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
-      let ll = List.map (type_location ofs env') ll in
+      id.logic_args <- List.map fst pl;
+      let ll = List.map (type_location env') ll in
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_reads (pl, ll))
   | LDpredicate_def (id, pl, p) ->
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
-      let p = type_predicate ofs env' p in
+      id.logic_args <- List.map fst pl;
+      let p = type_predicate env' p in
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
   | LDghost (ty,x,cinit) -> 
@@ -992,8 +985,8 @@ let function_spec loc f = function
 	 Hashtbl.add function_specs f s; s)
 
 let type_decl d = match d.node with
-  | Cspecdecl (ofs, s) -> 
-      type_spec_decl d.loc ofs s
+  | Cspecdecl s -> 
+      type_spec_decl d.loc s
   | Ctypedef (ty, x) -> 
       let ty = type_type d.loc (Env.empty ()) ty in
       add_typedef d.loc x ty;
@@ -1025,7 +1018,7 @@ let type_decl d = match d.node with
 		| Fun_info _ -> assert false
 	    in
 	    set_static info;
-	    Loc.report Coptions.log d.loc;
+	    Loc.report_position Coptions.log d.loc;
 	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
 	    set_assigned info; (* ????? *)
 	    let i = type_initializer_option d.loc (Env.empty ()) ty i in
