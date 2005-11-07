@@ -14,8 +14,7 @@ pvstc.el
 .depend
 a.out
 caduceus_why.v
-caduceus_spec_why.v
+*_spec_why.v
 caduceus_tactics.v
 test_why.v
-caduceus_why.v
-caduceus_spec_why.v
+
