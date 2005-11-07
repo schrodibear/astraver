@@ -44,7 +44,8 @@ Save.
   (0 < x0 /\ 0 < y /\ (gcd x0 y) = (gcd a b)) /\ (Zwf 0 (max x0 y) (max x y)).
 Proof.
 intuition.
-subst; rewrite <- H4; auto.
+subst.
+transitivity (gcd x y); auto.
 unfold Zwf, max.
 case (Z_le_gt_dec x0 y); case (Z_le_gt_dec x y); intros; omega.
 Save.
@@ -64,7 +65,8 @@ Save.
   (0 < x /\ 0 < y0 /\ (gcd x y0) = (gcd a b)) /\ (Zwf 0 (max x y0) (max x y)).
 Proof.
 intuition.
-subst; rewrite <- H4; auto.
+subst.
+transitivity (gcd x y); auto.
 unfold Zwf, max.
 assert (h: x <> y).
  assumption.
@@ -83,7 +85,7 @@ Save.
   x = (gcd a b).
 Proof.
 intuition; subst.
-rewrite <- H4; auto. 
+transitivity (gcd y y); auto.
 Save.
 
 (* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
@@ -119,7 +121,7 @@ assert (h1_y0: (y > 0)).
 generalize (Z_mod_lt x y h1_y0); intro.
 subst; tauto.
 subst.
-rewrite <- H4; auto.
+transitivity (gcd x y); auto.
 unfold Zwf.
 assert (h_y0: y <> 0).
  assumption.
@@ -140,6 +142,6 @@ Save.
   x = (gcd a b).
 Proof.
 intuition; subst.
-rewrite <- H4; auto.
+transitivity (gcd x 0); auto.
 Save.
 

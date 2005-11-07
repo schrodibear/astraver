@@ -139,9 +139,10 @@ Qed.
 Proof.
 simpl; intros.
 repeat split; try omega.
-decompose [and] HW_4; clear HW_4.
-rewrite (Zodd_div2 n0 H0 HW_6) in H.
-rewrite H.
+intuition.
+assert (h: x ^ n = y0 * m0 ^ (2 * Zdiv2 n0 + 1)).
+rewrite <- (Zodd_div2 n0 H0); auto.
+rewrite h.
 rewrite Zpower_exp.
 replace (Zpower m0 1) with m0.
 rewrite Zpower_2n.
@@ -176,18 +177,17 @@ Qed.
   forall (HW_12: n1 = (div2 n0)),
   ((Zpower x n) = (y0 * (Zpower m1 n1)) /\ n1 >= 0) /\ (Zwf 0 n1 n0).
 Proof.
-simpl; intros.
-repeat split; try omega.
-decompose [and] HW_4; clear HW_4.
-rewrite (Zeven_div2 n0 HW_10) in H.
-rewrite H.
+simpl; intuition.
+assert (h: x ^ n = y0 * m0 ^ (2 * Zdiv2 n0)).
+rewrite <- (Zeven_div2 n0); auto.
+rewrite h.
 rewrite Zpower_2n.
 unfold square.
 subst; unfold div2.
 ring.
 generalize (Zdiv2_ge_0 n0); omega.
 subst; apply Zdiv2_ge_0; omega.
-subst; apply Zdiv2_lt; omega.
+subst; unfold Zwf; intuition; apply Zdiv2_lt; omega.
 Qed.
 
 (* Why obligation from file "power.mlw", line 0, characters 0-0: *)
@@ -207,7 +207,7 @@ Qed.
 Proof.
 intros.
 intuition.
-rewrite H.
+transitivity (y0 * m0 ^ n0); auto.
 replace n0 with 0%Z.
 simpl; ring.
 omega.

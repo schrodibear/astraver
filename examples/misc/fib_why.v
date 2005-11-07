@@ -119,13 +119,14 @@ Save.
 Proof.
 intuition.
 subst; symmetry.
-generalize H1.
+cut (1 <= x).
  replace x with (x + 1 - 1)%Z.
  generalize (x + 1)%Z.
 intros; ring (z - 1 + 1)%Z; replace (z - 1 - 1)%Z with (z - 2)%Z.
  auto with *.
 omega.
 omega.
+assumption.
 subst; ring (x + 1 - 1)%Z; trivial.
 Save.
 
@@ -181,13 +182,14 @@ Save.
 Proof.
 intuition.
 subst; symmetry.
-generalize H1.
+cut (1 <= k).
  replace k with (k + 1 - 1)%Z.
  generalize (k + 1)%Z.
 intros; ring (z - 1 + 1)%Z; replace (z - 1 - 1)%Z with (z - 2)%Z.
  auto with *.
 omega.
 omega.
+assumption.
 subst; ring (k + 1 - 1)%Z; trivial.
 Save.
 
@@ -283,7 +285,9 @@ intuition; subst.
 repeat rewrite array_length_update; assumption.
 assert (i<k \/ i=k). omega. intuition; subst.
 AccessOther; auto.
-AccessSame; repeat rewrite H5; try omega.
+AccessSame.
+replace (access t2 (k-1)) with (F (k-1)); symmetry; auto with *.
+replace (access t2 (k-2)) with (F (k-2)); symmetry; auto with *.
 symmetry; auto with *.
 Save.
 
@@ -413,7 +417,7 @@ Save.
   0 <= 1 /\ 1 < (array_length t0).
 Proof.
 intuition.
-subst; rewrite array_length_update; auto with *.
+ArraySubst t0.
 Save.
 
 (* Why obligation from file "fib.mlw", line 0, characters 0-0: *)

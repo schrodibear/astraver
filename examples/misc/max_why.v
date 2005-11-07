@@ -5,52 +5,174 @@ Parameter l : Z.
 Axiom l_pos : (0 < l)%Z.
 
 
-Proof.
-auto with *.
-Qed.
+(*Why*) Parameter swap :
+  forall (i: Z), forall (j: Z), forall (a: (array Z)),
+  forall (_: (array_length a) = l),
+  (sig_2 (array Z) unit
+   (fun (a0: (array Z)) (result: unit)  => ((array_length a0) = l /\
+    (access a0 i) = (access a j) /\ (access a0 j) = (access a i) /\
+    (forall (k:Z),
+     (0 <= k /\ k < l -> (k <> i -> (k <> j -> (access a0 k) = (access a k)))))))).
 
+(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_1 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  (0 <= y /\ y <= l) /\ (0 <= x /\ x < l) /\
+  (forall (k:Z), (0 <= k /\ k < y -> (access a k) <= (access a x))).
 Proof.
-auto with *.
-Qed.
+intuition; subst.
+generalize l_pos; auto with *.
+generalize l_pos; auto with *.
+assert (k=0). omega. subst; auto with *.
+Save.
 
+(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_2 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_5: y0 < l),
+  forall (result: Z),
+  forall (HW_6: result = (access a y0)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (access a x0)),
+  forall (HW_8: result > result0),
+  forall (x1: Z),
+  forall (HW_9: x1 = y0),
+  forall (y1: Z),
+  forall (HW_10: y1 = (y0 + 1)),
+  ((0 <= y1 /\ y1 <= l) /\ (0 <= x1 /\ x1 < l) /\
+  (forall (k:Z), (0 <= k /\ k < y1 -> (access a k) <= (access a x1)))) /\
+  (Zwf 0 (l - y1) (l - y0)).
 Proof.
 intuition.
-assert ((k < y1)%Z \/ k = y1).
+assert ((k < y0)%Z \/ k = y0).
  omega.
- intuition.
-subst; generalize (H7 k); intuition.
-subst; intuition.
-Qed.
+ intuition; subst.
+assert (access a k <= access a x0); auto with *.
+intuition.
+Save.
 
+(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_3 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_5: y0 < l),
+  forall (result: Z),
+  forall (HW_6: result = (access a y0)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (access a x0)),
+  forall (HW_11: result <= result0),
+  forall (y1: Z),
+  forall (HW_12: y1 = (y0 + 1)),
+  ((0 <= y1 /\ y1 <= l) /\ (0 <= x0 /\ x0 < l) /\
+  (forall (k:Z), (0 <= k /\ k < y1 -> (access a k) <= (access a x0)))) /\
+  (Zwf 0 (l - y1) (l - y0)).
 Proof.
 intuition.
-assert ((k < y1)%Z \/ k = y1).
- omega.
- intuition.
-subst; intuition.
-Qed.
-
-Proof.
-intuition.
-assert (k = x1 \/ k <> x1).
- omega.
- intuition.
-subst; intuition.
-rewrite H6; rewrite H5; apply H3; omega.
-rewrite H5.
- rewrite H8; try omega.
-apply H3; omega.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-generalize l_pos; intuition.
-assert (k = 0%Z \/ (0 < k)%Z).
+assert ((k < y0)%Z \/ k = y0).
  omega.
  intuition.
 subst; intuition.
 Save.
 
+(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_4 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_5: y0 < l),
+  forall (result: Z),
+  forall (HW_6: result = (access a y0)),
+  0 <= x0 /\ x0 < (array_length a).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_5 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_5: y0 < l),
+  0 <= y0 /\ y0 < (array_length a).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_6 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_13: y0 >= l),
+  forall (a0: (array Z)),
+  forall (HW_14: (array_length a0) = l /\ (access a0 x0) =
+                 (access a (l - 1)) /\ (access a0 (l - 1)) = (access a x0) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k < l ->
+                   (k <> x0 -> (k <> (l - 1) -> (access a0 k) = (access a k)))))),
+  (forall (k:Z),
+   (0 <= k /\ k < (l - 1) -> (k <> x0 -> (access a0 k) = (access a k)))) /\
+  (access a0 x0) = (access a (l - 1)) /\ (access a0 (l - 1)) =
+  (access a x0) /\
+  (forall (k:Z),
+   (0 <= k /\ k < (l - 1) -> (access a0 k) <= (access a0 (l - 1)))).
+Proof.
+intuition.
+assert (y0 = l). omega. subst.
+replace (access a0 (l-1)) with (access a x0); auto with *.
+assert (k = x0 \/ k <> x0).
+ omega.
+ intuition.
+subst; intuition.
+replace (access a0 x0) with (access a (l-1)); auto with *.
+replace (access a0 k) with (access a k); auto with *.
+symmetry; auto with *.
+Qed.

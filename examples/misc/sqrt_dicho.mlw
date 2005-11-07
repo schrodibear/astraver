@@ -8,7 +8,7 @@ let sqrt = fun (x : int) ->
     begin
       while (!inf +1 <> !sup) do
 	  { invariant 
-	      inf*inf <= x
+                inf*inf <= x
 	    and x < sup*sup
 	    and inf < sup
 	      variant (sup - inf)}

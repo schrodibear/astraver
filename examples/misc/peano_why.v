@@ -165,7 +165,7 @@ Proof.
 simpl; intros.
 repeat split; unfold Zwf; try omega.
 subst x2 z0.
-decompose [and] HW_3.
+intuition.
 subst.
 ring.
 Qed.
@@ -182,15 +182,11 @@ Qed.
   forall (HW_3: (* I *) (0 <= z /\ x1 = (x * (y - z)))),
   forall (HW_7: z <= 0),
   x1 = (x * y).
- Proof.
- simpl; intros.
-cut (z = 0%Z).
-intros eq; rewrite eq in HW_3.
- intuition.
-generalize H2.
- ring (x * (y - 0))%Z.
- intro; ring; assumption.
-omega.
+Proof.
+simpl; intros.
+assert (z = 0%Z). omega.
+intuition; subst.
+ring.
 Qed.
 
 (* Why obligation from file "peano.mlw", line 0, characters 0-0: *)
@@ -198,16 +194,16 @@ Qed.
   forall (r: Z),
   forall (HW_1: r = (4 * 6)),
   r = 24.
- Proof.
+Proof.
  intros; omega.
- Qed.
+Qed.
 
 (* Why obligation from file "peano.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma u2_po_2 : 
   4 >= 0 /\ 6 >= 0.
- Proof.
+Proof.
  intros; omega.
- Qed.
+Qed.
 
 
 (* Why obligation from file "peano.mlw", line 0, characters 0-0: *)

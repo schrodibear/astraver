@@ -3,66 +3,47 @@
 
 Require Import Why.
 
-(* Why obligation from file "sum.mlw", characters 167-197 *)
-Lemma sum_po_1 : 
+(* Why obligation from file "sum.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sum_po_1 : 
   forall (n: Z),
-  forall (Pre4: n >= 0),
+  forall (HW_1: n >= 0),
+  (2 * 0) = (0 * (0 + 1)) /\ 0 <= n.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "sum.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sum_po_2 : 
+  forall (n: Z),
+  forall (HW_1: n >= 0),
   forall (i: Z),
-  forall (Post6: i = 0),
   forall (s: Z),
-  forall (Post5: s = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (s1: Z),
-  forall (Pre3: Variant1 = (n - i1)),
-  forall (Pre2: (2 * s1) = (i1 * (i1 + 1)) /\ i1 <= n),
-  forall (Test2: i1 < n),
-  forall (i2: Z),
-  forall (Post2: i2 = (i1 + 1)),
-  forall (s2: Z),
-  forall (Post3: s2 = (s1 + i2)),
-  ((2 * s2) = (i2 * (i2 + 1)) /\ i2 <= n) /\ (Zwf 0 (n - i2) (n - i1)).
+  forall (HW_2: (2 * s) = (i * (i + 1)) /\ i <= n),
+  forall (HW_3: i < n),
+  forall (i0: Z),
+  forall (HW_4: i0 = (i + 1)),
+  forall (s0: Z),
+  forall (HW_5: s0 = (s + i0)),
+  ((2 * s0) = (i0 * (i0 + 1)) /\ i0 <= n) /\ (Zwf 0 (n - i0) (n - i)).
 Proof.
 intuition.
 subst.
 ring.
-rewrite H.
-ring.
+assert (h: 2 * s = i * (i + 1)). assumption.
+rewrite h; ring.
 Save.
 
-(* Why obligation from file "sum.mlw", characters 80-203 *)
-Lemma sum_po_2 : 
+(* Why obligation from file "sum.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sum_po_3 : 
   forall (n: Z),
-  forall (Pre4: n >= 0),
+  forall (HW_1: n >= 0),
   forall (i: Z),
-  forall (Post6: i = 0),
   forall (s: Z),
-  forall (Post5: s = 0),
-  forall (Variant1: Z),
-  forall (i1: Z),
-  forall (s1: Z),
-  forall (Pre3: Variant1 = (n - i1)),
-  forall (Pre2: (2 * s1) = (i1 * (i1 + 1)) /\ i1 <= n),
-  forall (Test1: i1 >= n),
-  (forall (result:Z), (result = s1 -> (2 * result) = (n * (n + 1)))).
+  forall (HW_2: (2 * s) = (i * (i + 1)) /\ i <= n),
+  forall (HW_6: i >= n),
+  (2 * s) = (n * (n + 1)).
 Proof.
 intuition.
-assert (i1 = n).
-omega.
-subst; auto.
-Save.
-
-(* Why obligation from file "sum.mlw", characters 114-137 *)
-Lemma sum_po_3 : 
-  forall (n: Z),
-  forall (Pre4: n >= 0),
-  forall (i: Z),
-  forall (Post6: i = 0),
-  forall (s: Z),
-  forall (Post5: s = 0),
-  (2 * s) = (i * (i + 1)) /\ i <= n.
-Proof.
-intuition.
-subst; auto with arith.
+assert (i=n). omega. subst; auto with arith.
 Save.
 

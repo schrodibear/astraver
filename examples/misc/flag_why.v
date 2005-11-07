@@ -67,7 +67,43 @@ Qed.
   (monochrome t2 r N red) /\ (array_length t2) = N) /\
   (Zwf 0 (r - i0) (r - i)).
 Proof.
-intuition.
+unfold monochrome, Zwf; intuition try omega.
+assert (h: (k < b)%Z \/ k = b).
+ omega.
+ intuition.
+subst t2; AccessOther.
+subst t1; AccessOther.
+auto.
+subst; simpl; auto.
+subst; simpl; omega.
+ArraySubst t1.
+assert (h: b = i \/ (b < i)).
+ omega.
+ intuition.
+subst.
+AccessSame.
+assumption.
+subst t2; AccessOther.
+subst; AccessSame.
+assumption.
+subst t1; simpl; omega.
+subst t1; simpl; omega.
+assert (h: k = i \/ (k < i)).
+ omega.
+ intuition.
+subst; AccessSame.
+auto with *.
+subst t2; AccessOther.
+subst; AccessOther.
+auto with *.
+subst t1; simpl; omega.
+subst t1; simpl; omega.
+subst t2; AccessOther.
+subst; AccessOther.
+auto with *.
+subst t1; simpl; omega.
+subst t1; simpl; omega.
+subst t2 t1; simpl; auto.
 Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -94,6 +130,7 @@ Qed.
   0 <= i /\ i < (array_length t1).
 Proof.
 intuition.
+ArraySubst t1.
 Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -117,42 +154,7 @@ Qed.
   forall (HW_7: result1 = (access t0 i)),
   0 <= b /\ b < (array_length t0).
 Proof.
-unfold monochrome, Zwf; intuition try omega.
-assert (h: (k < b1)%Z \/ k = b1).
- omega.
- intuition.
-subst t2; AccessOther.
-subst t1; AccessOther.
-auto.
-subst; simpl; auto.
-subst; simpl; omega.
-assert (h: b1 = i1 \/ (b1 < i1)).
- omega.
- intuition.
-subst.
-AccessSame.
-assumption.
-subst t2; AccessOther.
-subst; AccessSame.
-assumption.
-subst t1; simpl; omega.
-subst t1; simpl; omega.
-assert (h: k = i1 \/ (k < i1)).
- omega.
- intuition.
-subst; AccessSame.
-apply H7; omega.
-subst t2; AccessOther.
-subst; AccessOther.
-apply H7; omega.
-subst t1; simpl; omega.
-subst t1; simpl; omega.
-subst t2; AccessOther.
-subst; AccessOther.
-apply H9; omega.
-subst t1; simpl; omega.
-subst t1; simpl; omega.
-subst t2 t1; simpl; auto.
+intuition.
 Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -194,11 +196,7 @@ Qed.
   forall (HW_5: result = blue),
   0 <= b /\ b < (array_length t0).
 Proof.
-unfold monochrome, Zwf; intuition try omega.
-assert (h: (k < i1)%Z \/ k = i1).
- omega.
- intuition.
-subst k; assumption.
+intuition.
 Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -225,7 +223,11 @@ Qed.
   (monochrome t0 b i0 white) /\ (monochrome t0 r N red) /\
   (array_length t0) = N) /\ (Zwf 0 (r - i0) (r - i)).
 Proof.
-intuition; subst; omega.
+unfold monochrome, Zwf; intuition try omega.
+assert (h: (k < i)%Z \/ k = i).
+ omega.
+ intuition.
+subst; assumption.
 Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -260,7 +262,24 @@ Qed.
   (monochrome t2 b i white) /\ (monochrome t2 r0 N red) /\
   (array_length t2) = N) /\ (Zwf 0 (r0 - i) (r - i)).
 Proof.
-intuition; subst; omega.
+unfold monochrome, Zwf; intuition try omega.
+subst t2 t1; do 2 AccessOther.
+apply H; omega.
+subst t2 t1; do 2 AccessOther.
+ auto with *.
+assert (h: k = r0 \/ (r0 < k)).
+ omega.
+ intuition.
+assert (h': k = i \/ (i < k)).
+ omega.
+ intuition.
+subst; subst i; AccessSame.
+destruct (access t0 (r-1)); tauto.
+subst; AccessOther.
+destruct (access t0 i); tauto.
+subst; do 2 AccessOther.
+auto with *.
+subst t2 t1; simpl; trivial.
 Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -291,27 +310,9 @@ Qed.
   forall (HW_20: t1 = (update t0 r0 result2)),
   0 <= i /\ i < (array_length t1).
 Proof.
-unfold monochrome, Zwf; intuition try omega.
-subst t2 t1; do 2 AccessOther.
-apply H; omega.
-subst t2 t1; do 2 AccessOther.
- apply H7; omega.
-assert (h: k = r2 \/ (r2 < k)).
- omega.
- intuition.
-assert (h': k = i1 \/ (i1 < k)).
- omega.
- intuition.
-generalize H19; clear H19; subst t2 k result0 i1; AccessSame. intro H19.
-subst.
-generalize Test4; generalize Test2; case (access t0 (r1-1)); tauto.
-subst; simpl; auto.
-subst; AccessOther.
-generalize Test4; generalize Test2; case (access t0 i1); tauto.
-subst; do 2 AccessOther.
-apply H9; omega.
-subst t2 t1; simpl; trivial.
- Qed.
+intuition.
+ArraySubst t1.
+Qed.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_10 : 
@@ -340,7 +341,6 @@ subst t2 t1; simpl; trivial.
   0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
-subst; simpl; auto.
 Qed.
 
 
@@ -369,9 +369,6 @@ Qed.
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
-replace r1 with i1.
- trivial.
- omega.
 Save.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -397,10 +394,6 @@ Save.
   0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
-subst; exact N_non_negative.
-unfold monochrome; intros; absurd (0 < 0)%Z; omega.
-unfold monochrome; intros; absurd (0 < 0)%Z; omega.
-unfold monochrome; intros; absurd (N < N)%Z; omega.
 Save.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -420,7 +413,7 @@ Save.
   forall (HW_12: ~(result = blue)),
   0 <= i /\ i < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -437,7 +430,7 @@ Save.
   forall (HW_3: i < r),
   0 <= i /\ i < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
@@ -455,6 +448,9 @@ Save.
   (monochrome t0 0 b blue) /\ (monochrome t0 b r white) /\
   (monochrome t0 r N red).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+replace r with i.
+ trivial.
+ omega.
 Save.
 

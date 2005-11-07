@@ -27,57 +27,111 @@ Qed.
 
 Hint Resolve mean1 mean2 .
 
+(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  (0 * 0) <= x /\ x < ((x + 1) * (x + 1)) /\ 0 < (x + 1).
 Proof.
 intuition.
-Qed.
+ring ((x+1)*(x+1)).
+assert (0 <= x*x); auto with *.
+Save.
 
+(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_2 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (inf: Z),
+  forall (sup: Z),
+  forall (HW_2: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
+  forall (HW_3: (inf + 1) <> sup),
+  forall (result: Z),
+  forall (HW_4: result = ((Zdiv (inf + sup + 1) 2))),
+  forall (mil: Z),
+  forall (HW_5: mil = result),
+  forall (HW_6: x < (mil * mil)),
+  forall (sup0: Z),
+  forall (HW_7: sup0 = mil),
+  ((inf * inf) <= x /\ x < (sup0 * sup0) /\ inf < sup0) /\
+  (Zwf 0 (sup0 - inf) (sup - inf)).
 Proof.
 intuition.
-subst sup2; trivial.
-subst mil2 sup2.
-replace (inf1 + (sup1 + 1))%Z with (inf1 + (sup1 - 1) + 1 * 2)%Z;
+subst sup0; trivial.
+subst.
+replace (inf + sup + 1)%Z with (inf + (sup - 1) + 1 * 2)%Z;
  try omega.
 rewrite Z_div_plus; try omega.
-assert (inf1 <= (inf1 + (sup1 - 1)) / 2)%Z.
+assert (inf <= (inf + (sup - 1)) / 2)%Z.
 apply mean1; omega.
 omega.
 unfold Zwf.
 split; try omega.
-subst mil2 sup2.
- replace (inf1 + (sup1 + 1))%Z with (inf1 + 1 + sup1)%Z; try omega.
-assert ((inf1 + 1 + sup1) / 2 < sup1)%Z.
+subst.
+ replace (inf + sup + 1)%Z with (inf + 1 + sup)%Z; try omega.
+assert ((inf + 1 + sup) / 2 < sup)%Z.
 apply mean2; omega.
 omega.
-Qed.
+Save.
 
+(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_3 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (inf: Z),
+  forall (sup: Z),
+  forall (HW_2: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
+  forall (HW_3: (inf + 1) <> sup),
+  forall (result: Z),
+  forall (HW_4: result = ((Zdiv (inf + sup + 1) 2))),
+  forall (mil: Z),
+  forall (HW_5: mil = result),
+  forall (HW_8: x >= (mil * mil)),
+  forall (inf0: Z),
+  forall (HW_9: inf0 = mil),
+  ((inf0 * inf0) <= x /\ x < (sup * sup) /\ inf0 < sup) /\
+  (Zwf 0 (sup - inf0) (sup - inf)).
 Proof.
 intuition.
-subst mil2 inf2; omega.
-subst mil2 inf2.
-replace (inf1 + (sup1 + 1))%Z with (inf1 + 1 + sup1)%Z; try omega.
-assert ((inf1 + 1 + sup1) / 2 < sup1)%Z.
+subst; omega.
+subst.
+replace (inf + sup + 1)%Z with (inf + 1 + sup)%Z; try omega.
+assert ((inf + 1 + sup) / 2 < sup)%Z.
 apply mean2; omega.
 omega.
 unfold Zwf; split; try omega.
-subst inf2 mil2.
-replace (inf1 + (sup1 + 1))%Z with (inf1 + 1 + sup1)%Z; try omega.
-assert (inf1 + 1 <= (inf1 + 1 + sup1) / 2)%Z.
+subst.
+replace (inf + sup + 1)%Z with (inf + 1 + sup)%Z; try omega.
+assert (inf + 1 <= (inf + 1 + sup) / 2)%Z.
 apply mean1; omega.
 omega.
-Qed.
+Save.
 
-Proof.
-intuition; subst; auto.
-Qed.
-
+(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_4 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (inf: Z),
+  forall (sup: Z),
+  forall (HW_2: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
+  forall (HW_3: (inf + 1) <> sup),
+  2 <> 0.
 Proof.
 intuition.
-subst inf; omega.
-subst sup.
-ring ((x + 1) * (x + 1))%Z.
-assert (0 <= x * x)%Z.
-auto with *.
-omega.
+Save.
+
+(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_5 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (inf: Z),
+  forall (sup: Z),
+  forall (HW_2: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
+  forall (HW_10: (inf + 1) = sup),
+  (inf * inf) <= x /\ x < ((inf + 1) * (inf + 1)).
+Proof.
+intuition.
+subst sup; omega.
 Qed.
 
 
