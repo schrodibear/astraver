@@ -4,7 +4,7 @@
 Require Import Why.
 
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_1 : 
   forall (t: (array Z)),
   0 <= 0 /\ (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0)).
@@ -12,7 +12,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_2 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -29,7 +29,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_3 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -51,7 +51,7 @@ assert (k=i \/ k<i). omega.
 intuition; subst; eauto. 
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_4 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -65,7 +65,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_5 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -81,7 +81,7 @@ subst.
 apply H0 with k; auto with *.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_1 : 
   forall (t: (array Z)),
   0 <= 0 /\ (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0)).
@@ -89,7 +89,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_2 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -106,7 +106,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_3 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -128,7 +128,7 @@ assert (k=i \/ k<i). omega.
 intuition; subst; eauto.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_4 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -142,7 +142,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_5 : 
   forall (t: (array Z)),
   forall (i: Z),
@@ -158,7 +158,7 @@ subst.
 apply H0 with k; auto with *.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search3_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: 0 <= (array_length t)),
@@ -173,7 +173,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search3_po_2 : 
   forall (t: (array Z)),
   forall (HW_1: 0 <= (array_length t)),
@@ -191,7 +191,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search3_po_3 : 
   forall (t: (array Z)),
   forall (HW_1: 0 <= (array_length t)),
@@ -215,7 +215,7 @@ intuition; subst; auto with *.
 eauto.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search3_po_4 : 
   forall (t: (array Z)),
   forall (HW_1: 0 <= (array_length t)),
@@ -233,7 +233,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search3_po_5 : 
   forall (t: (array Z)),
   forall (HW_1: 0 <= (array_length t)),
@@ -251,7 +251,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "search.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search3_po_6 : 
   forall (t: (array Z)),
   forall (HW_1: 0 <= (array_length t)),

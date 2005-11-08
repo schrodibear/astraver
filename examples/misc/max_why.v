@@ -14,7 +14,7 @@ Axiom l_pos : (0 < l)%Z.
     (forall (k:Z),
      (0 <= k /\ k < l -> (k <> i -> (k <> j -> (access a0 k) = (access a k)))))))).
 
-(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_1 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
@@ -31,7 +31,7 @@ generalize l_pos; auto with *.
 assert (k=0). omega. subst; auto with *.
 Save.
 
-(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_2 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
@@ -66,7 +66,7 @@ assert (access a k <= access a x0); auto with *.
 intuition.
 Save.
 
-(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_3 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
@@ -98,7 +98,7 @@ assert ((k < y0)%Z \/ k = y0).
 subst; intuition.
 Save.
 
-(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_4 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
@@ -119,7 +119,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_5 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
@@ -138,7 +138,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "max.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_6 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),

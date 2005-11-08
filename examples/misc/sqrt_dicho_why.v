@@ -27,7 +27,7 @@ Qed.
 
 Hint Resolve mean1 mean2 .
 
-(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sqrt_po_1 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
@@ -38,7 +38,7 @@ ring ((x+1)*(x+1)).
 assert (0 <= x*x); auto with *.
 Save.
 
-(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sqrt_po_2 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
@@ -74,7 +74,7 @@ apply mean2; omega.
 omega.
 Save.
 
-(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sqrt_po_3 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
@@ -107,7 +107,7 @@ apply mean1; omega.
 omega.
 Save.
 
-(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sqrt_po_4 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
@@ -120,7 +120,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "sqrt_dicho.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sqrt_po_5 : 
   forall (x: Z),
   forall (HW_1: x >= 0),

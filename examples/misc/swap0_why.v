@@ -1,7 +1,7 @@
 Require Import Why.
 Require Import Omega.
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap1_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -15,7 +15,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap2_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -29,7 +29,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap3_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -42,7 +42,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma call_swap3_y_x_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -56,7 +56,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap4_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -72,7 +72,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma call_swap4_x_y_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -86,7 +86,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma call_swap4_y_x_po_1 : 
   forall (x: Z),
   forall (y: Z),

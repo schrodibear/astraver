@@ -598,6 +598,7 @@ let rec split lvl ctx = function
   | Pand (true, p1, p2) when lvl < lvlmax ->
       let o1,pr1 = split (succ lvl) ctx p1 in
       let n1 = List.length o1 in
+      let p2 = Pimplies (true, p1, p2) in
       let o2,pr2 = split (succ lvl) ctx p2 in
       o1 @ o2, 
       (fun pl -> 

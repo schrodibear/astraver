@@ -9,7 +9,7 @@ Axiom F_1 : F 1 = 1%Z.
 Axiom F_n : forall n:Z, (n >= 2)%Z -> F n = (F (n - 1) + F (n - 2))%Z.
 Hint Resolve F_0 F_1 F_n .
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib1_po_1 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -20,7 +20,7 @@ intuition.
 assert (n=0 \/ n=1). omega. intuition; subst; auto.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib1_po_2 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -35,7 +35,7 @@ intuition.
 subst; symmetry; auto with *.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib1_po_3 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -47,7 +47,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib1_po_4 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -59,7 +59,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib1_po_5 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -69,7 +69,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib1_po_6 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -79,7 +79,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_aux_po_1 : 
   forall (n: Z),
   forall (x: Z),
@@ -93,7 +93,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_aux_po_2 : 
   forall (n: Z),
   forall (x: Z),
@@ -106,7 +106,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_aux_po_3 : 
   forall (n: Z),
   forall (x: Z),
@@ -130,7 +130,7 @@ assumption.
 subst; ring (x + 1 - 1)%Z; trivial.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_po_1 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -141,7 +141,7 @@ intuition.
 assert (n=0 \/ n=1). omega. intuition; subst; auto.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_po_2 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -151,7 +151,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib3_po_1 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -161,7 +161,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib3_po_2 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -193,7 +193,7 @@ assumption.
 subst; ring (k + 1 - 1)%Z; trivial.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib3_po_3 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -210,7 +210,7 @@ subst.
 assert (k=n). omega. subst; auto.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib3_po_4 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -221,7 +221,7 @@ intuition.
 assert (n=0 \/ n=1). omega. intuition; subst; auto.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_1 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -233,7 +233,7 @@ intuition.
 assert (n=0 \/ n=1). omega. intuition; subst; auto.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_2 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -253,7 +253,7 @@ AccessOther; auto with *.
 AccessSame; auto with *.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_3 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -291,7 +291,7 @@ replace (access t2 (k-2)) with (F (k-2)); symmetry; auto with *.
 symmetry; auto with *.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_4 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -316,7 +316,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_5 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -339,7 +339,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_6 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -360,7 +360,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_7 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -385,7 +385,7 @@ subst.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_8 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -406,7 +406,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_9 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -420,7 +420,7 @@ intuition.
 ArraySubst t0.
 Save.
 
-(* Why obligation from file "fib.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_10 : 
   forall (n: Z),
   forall (t: (array Z)),

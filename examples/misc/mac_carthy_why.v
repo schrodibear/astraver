@@ -9,7 +9,7 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
-(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_1 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
@@ -24,7 +24,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_2 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
@@ -43,7 +43,7 @@ subst result.
 case (Z_le_gt_dec 0 (101 - (n + 11 - 10))); intuition; omega.
 Save.
 
-(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_3 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
@@ -55,7 +55,7 @@ case (Z_le_gt_dec 0 (101 - n)); intuition.
 case (Z_le_gt_dec 0 (101 - (n+11))); intuition.
 Save.
 
-(* Why obligation from file "mac_carthy.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_4 : 
   forall (n: Z),
   forall (HW_4: n > 100),

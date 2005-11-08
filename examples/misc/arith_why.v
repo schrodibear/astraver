@@ -6,7 +6,7 @@ Require Import Omega.
 Require Import Zdiv.
 Require Import ZArithRing.
 
-(* Why obligation from file "arith.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -16,7 +16,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "arith.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -51,7 +51,7 @@ unfold Zwf.
 subst; apply Z_div_lt; try omega.
 Save.
 
-(* Why obligation from file "arith.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -69,7 +69,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "arith.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_4 : 
   forall (x: Z),
   forall (y: Z),
@@ -105,7 +105,7 @@ repeat split; try omega.
 subst; apply Z_div_lt; try omega.
 Save.
 
-(* Why obligation from file "arith.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_5 : 
   forall (x: Z),
   forall (y: Z),
@@ -121,7 +121,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "arith.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_6 : 
   forall (x: Z),
   forall (y: Z),

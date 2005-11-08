@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p7_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -13,7 +13,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p8_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -23,7 +23,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p9_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -33,7 +33,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p13_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 2),
@@ -43,7 +43,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p13a_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 1),
@@ -55,7 +55,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "good/exns.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p14_po_1 : 
   forall (x: Z),
   forall (HW_2: x <> 1),

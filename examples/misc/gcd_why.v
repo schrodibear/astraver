@@ -19,7 +19,7 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd1_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -29,7 +29,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd1_po_2 : 
   forall (a: Z),
   forall (b: Z),
@@ -50,7 +50,7 @@ unfold Zwf, max.
 case (Z_le_gt_dec x0 y); case (Z_le_gt_dec x y); intros; omega.
 Save.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd1_po_3 : 
   forall (a: Z),
   forall (b: Z),
@@ -73,7 +73,7 @@ assert (h: x <> y).
  case (Z_le_gt_dec x y0); case (Z_le_gt_dec x y); intros; omega.
 Save.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd1_po_4 : 
   forall (a: Z),
   forall (b: Z),
@@ -88,7 +88,7 @@ intuition; subst.
 transitivity (gcd y y); auto.
 Save.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd2_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -98,7 +98,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd2_po_2 : 
   forall (a: Z),
   forall (b: Z),
@@ -130,7 +130,7 @@ assert (h1_y0: (y > 0)).
 generalize (Z_mod_lt x y h1_y0); omega.
 Save.
 
-(* Why obligation from file "gcd.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd2_po_3 : 
   forall (a: Z),
   forall (b: Z),

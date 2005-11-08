@@ -101,7 +101,7 @@ Qed.
 
 (*Why*) Parameter x : Z.
 
-(* Why obligation from file "power.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma power1_po_1 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -115,7 +115,7 @@ intuition; subst.
 ring; auto.
 Qed.
 
-(* Why obligation from file "power.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma power1_po_2 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -157,7 +157,7 @@ subst; apply Zdiv2_ge_0; omega.
 subst; apply Zdiv2_lt; omega.
 Qed.
 
-(* Why obligation from file "power.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma power1_po_3 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -190,7 +190,7 @@ subst; apply Zdiv2_ge_0; omega.
 subst; unfold Zwf; intuition; apply Zdiv2_lt; omega.
 Qed.
 
-(* Why obligation from file "power.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma power1_po_4 : 
   forall (n: Z),
   forall (HW_1: n >= 0),

@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "sum.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sum_po_1 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -12,7 +12,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "sum.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sum_po_2 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
@@ -33,7 +33,7 @@ assert (h: 2 * s = i * (i + 1)). assumption.
 rewrite h; ring.
 Save.
 
-(* Why obligation from file "sum.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sum_po_3 : 
   forall (n: Z),
   forall (HW_1: n >= 0),

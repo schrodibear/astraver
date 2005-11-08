@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/see.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_po_1 : 
   forall (b: Z),
   forall (b0: Z),
@@ -13,7 +13,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/see.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma k_po_1 : 
   forall (b: Z),
   forall (HW_1: b = 0),

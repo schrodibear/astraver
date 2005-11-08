@@ -6,39 +6,8 @@ Require Import Omega.
 
 (*Why*) Parameter v3 : Z.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 (*Why type*) Definition foo: Set.
+Admitted.
 
 (*Why*) Parameter v5 : foo.
 

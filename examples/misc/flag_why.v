@@ -24,7 +24,7 @@ Definition eq_white c := bool_of_sumbool (eq_color_dec c white).
 Definition monochrome (t:array color) (i j:Z) (c:color) : Prop :=
   forall k:Z, (i <= k < j)%Z -> access t k = c.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_1 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -35,7 +35,7 @@ unfold monochrome; intuition; try (elimtype False; omega).
 exact N_non_negative.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_2 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -106,7 +106,7 @@ subst t1; simpl; omega.
 subst t2 t1; simpl; auto.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_3 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -133,7 +133,7 @@ intuition.
 ArraySubst t1.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_4 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -157,7 +157,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_5 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -179,7 +179,7 @@ Proof.
 intuition; subst; auto.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_6 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -199,7 +199,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_7 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -230,7 +230,7 @@ assert (h: (k < i)%Z \/ k = i).
 subst; assumption.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_8 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -282,7 +282,7 @@ auto with *.
 subst t2 t1; simpl; trivial.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_9 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -314,7 +314,7 @@ intuition.
 ArraySubst t1.
 Qed.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_10 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -344,7 +344,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_11 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -371,7 +371,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_12 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -396,7 +396,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_13 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -416,7 +416,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_14 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
@@ -433,7 +433,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_15 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),

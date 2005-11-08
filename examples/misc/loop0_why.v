@@ -2,7 +2,7 @@
 Require Import Why.
 Require Import Omega.
 
-(* Why obligation from file "loop0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
@@ -11,7 +11,7 @@ Require Import Omega.
  intuition.
  Qed.
 
-(* Why obligation from file "loop0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_2 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
@@ -25,7 +25,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "loop0.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_3 : 
   forall (x: Z),
   forall (HW_1: x >= 0),

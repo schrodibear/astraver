@@ -3,10 +3,8 @@
 
 Require Import Why.
 
-
-
-
-(*Why type*) Parameter color: Set.
+(*Why type*) Definition color: Set.
+Admitted.
 
 (*Why logic*) Definition blue : color.
 Admitted.
@@ -25,10 +23,8 @@ Admitted.
   (sig_1 bool
    (fun (result: bool)  => ((if result then c1 = c2 else ~(c1 = c2))))).
 
-
-
-
-(*Why type*) Parameter color_array: Set.
+(*Why type*) Definition color_array: Set.
+Admitted.
 
 (*Why logic*) Definition acc : color_array -> Z -> color.
 Admitted.
@@ -69,7 +65,7 @@ Admitted.
 (*Why predicate*) Definition monochrome  (t:color_array) (i:Z) (j:Z)
   (c:color) := (forall (k:Z), (i <= k /\ k < j -> (acc t k) = c)).
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_1 : 
   forall (i: Z),
   forall (j: Z),
@@ -88,7 +84,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_2 : 
   forall (i: Z),
   forall (j: Z),
@@ -106,7 +102,7 @@ intuition; subst.
 rewrite length_update; intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_1 : 
   forall (n: Z),
   forall (t: color_array),
@@ -122,7 +118,7 @@ absurd (0<0); intuition.
 absurd (n<n); intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_2 : 
   forall (n: Z),
   forall (t: color_array),
@@ -175,7 +171,7 @@ subst; rewrite acc_upd_eq; intuition.
 subst; rewrite acc_upd_eq; intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_3 : 
   forall (n: Z),
   forall (t: color_array),
@@ -198,7 +194,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_4 : 
   forall (n: Z),
   forall (t: color_array),
@@ -231,7 +227,7 @@ assert (k<i \/ k=i). omega. intuition.
 subst; intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_5 : 
   forall (n: Z),
   forall (t: color_array),
@@ -284,7 +280,7 @@ subst; rewrite acc_upd_eq; intuition.
 subst; rewrite acc_upd_eq; intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_6 : 
   forall (n: Z),
   forall (t: color_array),
@@ -312,7 +308,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_7 : 
   forall (n: Z),
   forall (t: color_array),
@@ -335,7 +331,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_8 : 
   forall (n: Z),
   forall (t: color_array),
@@ -355,7 +351,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "flag_ax.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_9 : 
   forall (n: Z),
   forall (t: color_array),
