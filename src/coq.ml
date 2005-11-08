@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.137 2005-11-03 14:11:35 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.138 2005-11-08 14:55:14 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -778,10 +778,12 @@ let reprint_predicate fmt id p =
 let print_predicate fmt id p = reprint_predicate fmt id p
 
 let reprint_type fmt id vl =
-  fprintf fmt "@[<hov 2>(*Why type*) Parameter %s: @[%aSet@].@]@\n"
+  fprintf fmt "@[<hov 2>(*Why type*) Definition %s: @[%aSet@].@]@\n"
     id (print_list space (fun fmt _ -> fprintf fmt "Set ->")) vl
 
-let print_type = reprint_type
+let print_type fmt id vl = 
+  reprint_type fmt id vl;
+  fprintf fmt "Admitted.@\n"
 
 let reprint_function fmt id p =
   let (l,(bl,t,e)) = Env.specialize_function_def p in
@@ -889,7 +891,9 @@ let _ =
   Gen.add_regexp 
     "(\\*Why function\\*) Definition[ ]+\\([^ ]*\\) " Fun;
   Gen.add_regexp 
-    "(\\*Why type\\*) Parameter[ ]+\\([^ ]*\\) " Ty
+    "(\\*Why type\\*) Parameter[ ]+\\([^ ]*\\):" Ty;
+  Gen.add_regexp 
+    "(\\*Why type\\*) Definition[ ]+\\([^ ]*\\):" Ty
 
 (* validations *)
 

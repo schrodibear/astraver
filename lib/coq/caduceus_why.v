@@ -27,11 +27,32 @@ Set Implicit Arguments.
 
 
 
-(*Why type*) Parameter pointer: Set ->Set.
 
-(*Why type*) Parameter addr: Set ->Set.
 
-(*Why type*) Parameter alloc_table: Set.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*Why type*) Definition pointer: Set ->Set.
+Admitted.
+
+(*Why type*) Definition addr: Set ->Set.
+Admitted.
+
+(*Why type*) Definition alloc_table: Set.
+Admitted.
 
 (*Why*) Parameter null : forall (A43: Set), ((pointer) A43).
 
@@ -216,7 +237,14 @@ Admitted.
 
 
 
-(*Why type*) Parameter memory: Set -> Set ->Set.
+
+
+
+
+
+
+(*Why type*) Definition memory: Set -> Set ->Set.
+Admitted.
 
 (*Why logic*) Definition acc :
   forall (A461:Set), forall (A462:Set), ((memory) A462 A461)
@@ -257,7 +285,9 @@ Admitted.
 (*Why axiom*) Lemma false_not_true : ~(false = true).
 Admitted.
 
-Parameter pset : Set -> Set.
+
+(*Why type*) Definition pset: Set ->Set.
+Admitted.
 
 (*Why logic*) Definition pset_empty : forall (A471:Set), ((pset) A471).
 Admitted.

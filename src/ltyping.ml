@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.38 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.39 2005-11-08 14:55:14 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -36,6 +36,20 @@ let expected_num loc =
 
 let expected_type loc et =
   raise_located loc (ExpectedType (fun fmt -> print_type_v fmt et))
+
+let rec pure_type = function
+  | PPTint -> PTint
+  | PPTbool -> PTbool
+  | PPTreal -> PTreal
+  | PPTunit -> PTunit
+  | PPTvar x -> PTvar x
+  | PPTvarid (x, _) -> PTvarid x
+  | PPTexternal (p, id, loc) ->
+      if not (is_type id) then raise_located loc (UnboundType id);
+      let np = List.length p in
+      let a = type_arity id in
+      if np <> a then raise_located loc (TypeArity (id, a, np));
+      PTexternal (List.map pure_type p, id)
 
 (*s Typing predicates *)
 
@@ -215,11 +229,11 @@ and desc_predicate loc lab env lenv = function
 	 | _ -> 
 	     raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, a) ->
-      let v = PureType pt in
+      let v = PureType (pure_type pt) in
       forall id v 
 	(predicate lab env (Env.add_logic ~generalize:false id v lenv) a)
   | PPexists (id, pt, a) ->
-      let v = PureType pt in
+      let v = PureType (pure_type pt) in
       exists id v (predicate lab env (Env.add_logic id v lenv) a)
   | PPfpi (e, f1, f2) ->
       (match term lab env lenv e with
@@ -398,28 +412,18 @@ let warn_refs loc env p =
 	 ef)
     (predicate_refs env p)
 
-let rec type_pure_type loc = function
-  | PTint | PTbool | PTreal | PTunit 
-  | PTvar _ | PTvarid _ as pt -> pt
-  | PTexternal (p, id) ->
-      if not (is_type id) then raise_located loc (UnboundType id);
-      let np = List.length p in
-      let a = type_arity id in
-      if np <> a then raise_located loc (TypeArity (id, a, np));
-      PTexternal (List.map (type_pure_type loc) p, id)
-
 let rec type_v loc lab env lenv = function
   | PVpure pt -> 
-      PureType (type_pure_type loc pt)
+      PureType (pure_type pt)
   | PVref v -> 
-      Ref (type_pure_type loc v)
+      Ref (pure_type v)
   | PVarrow (bl, c) -> 
       let bl',env',lenv' = binders loc lab env lenv bl in 
       make_arrow bl' (type_c loc lab env' lenv' c)
 
 and pure_type_v loc lab env lenv = function
   | PVpure pt ->
-      PureType (type_pure_type loc pt)
+      PureType (pure_type pt)
   | _ ->
       raise_located loc MutableMutable
 
@@ -448,3 +452,8 @@ and binders loc lab env lenv = function
 	  (Env.add_logic ~generalize:false id v lenv) bl 
       in
       (id, v) :: bl', env', lenv'
+
+let logic_type = function
+  | PPredicate pl -> Predicate (List.map pure_type pl)
+  | PFunction (pl, t) -> Function (List.map pure_type pl, pure_type t)
+

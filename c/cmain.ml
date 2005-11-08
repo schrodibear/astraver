@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.60 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.61 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -138,6 +138,8 @@ let main () =
 		       fprintf fmt "@[%a@]" fprintf_why_decls [d]
 		   | Some _ -> ())
 	      Cenv.zone_table;
+	    fprintf fmt "(* logic types *)@.";
+	    Cenv.iter_types (fun t -> fprintf fmt "@[type %s@\n@]" t);
 	    fprintf fmt "(* heap variables *)@.";
 	    Hashtbl.iter 
 	      (fun v bt -> 

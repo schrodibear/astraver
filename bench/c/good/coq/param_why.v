@@ -3,7 +3,7 @@
 
 Require Export param_spec_why.
 
-(* Why obligation from file "why/param.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),

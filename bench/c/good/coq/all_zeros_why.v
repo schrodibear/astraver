@@ -3,7 +3,7 @@
 
 Require Export all_zeros_spec_why.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_1 : 
   forall (t: ((pointer) Z3)),
   forall (n: Z),
@@ -19,7 +19,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_2 : 
   forall (t: ((pointer) Z3)),
   forall (n: Z),
@@ -47,7 +47,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_3 : 
   forall (t: ((pointer) Z3)),
   forall (n: Z),
@@ -79,7 +79,7 @@ assert (i=k2 \/ i<k2). omega. intuition.
 subst; intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_4 : 
   forall (t: ((pointer) Z3)),
   forall (n: Z),
@@ -102,7 +102,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_5 : 
   forall (t: ((pointer) Z3)),
   forall (n: Z),
@@ -126,7 +126,7 @@ intuition.
 unfold valid_range in Pre6; intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_1 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),
@@ -142,7 +142,7 @@ assert (i=mutable_n1-1 \/ mutable_n1<=i). omega. intuition.
 subst; intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_2 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),
@@ -171,7 +171,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_3 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),
@@ -201,7 +201,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_4 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),
@@ -230,7 +230,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_5 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),
@@ -254,7 +254,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_6 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),
@@ -278,7 +278,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all_zeros.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_7 : 
   forall (t: ((pointer) Z2)),
   forall (n: Z),

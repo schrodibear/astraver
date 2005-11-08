@@ -3,7 +3,7 @@
 
 Require Export call_spec_why.
 
-(* Why obligation from file "why/call.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (y: Z),
   forall (ddd: Z),
@@ -16,7 +16,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/call.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),
@@ -32,7 +32,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/call.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
   forall (x: Z),
   forall (HW_1: x = 0),

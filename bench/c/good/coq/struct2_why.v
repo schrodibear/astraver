@@ -3,7 +3,7 @@
 
 Require Export struct2_spec_why.
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
@@ -21,7 +21,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
@@ -41,7 +41,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (s0: ((pointer) Z5)),
@@ -52,7 +52,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
@@ -73,7 +73,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
@@ -91,7 +91,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
@@ -107,7 +107,7 @@ unfold valid1_range in H4.
 generalize (H4 (u#d) alloc Pre6);intuition.
 Save.
 
-(* Why obligation from file "why/struct2.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (u: ((pointer) Z8)),

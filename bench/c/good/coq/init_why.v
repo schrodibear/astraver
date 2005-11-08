@@ -3,7 +3,7 @@
 
 Require Export init_spec_why.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
@@ -38,7 +38,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
@@ -70,7 +70,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
@@ -98,7 +98,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
@@ -124,7 +124,7 @@ intuition.
 generalize (H8 s alloc Pre6);intuition.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
@@ -147,7 +147,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
@@ -169,7 +169,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (int_Z3: ((memory) Z Z3)),
@@ -193,7 +193,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (int_Z3: ((memory) Z Z3)),
@@ -216,7 +216,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (int_Z3: ((memory) Z Z3)),
@@ -293,7 +293,7 @@ generalize (H8 s alloc H17).
 intuition.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (result: ((pointer) Z3)),
@@ -309,7 +309,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_5 : 
   2 >= 1.
 Proof.
@@ -317,7 +317,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
@@ -355,7 +355,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
@@ -389,7 +389,7 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
@@ -509,7 +509,7 @@ generalize (H8 _ _ H17).
 intuition.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
@@ -536,7 +536,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
@@ -561,7 +561,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
@@ -582,7 +582,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (result: ((pointer) Z4)),
@@ -598,7 +598,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_8 : 
   3 >= 1.
 Proof.
@@ -606,7 +606,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -653,7 +653,7 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -722,7 +722,7 @@ generalize (H5 _ _ H4).
 intuition.
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -762,7 +762,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -800,7 +800,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -834,7 +834,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_6 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -865,7 +865,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_7 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
@@ -893,7 +893,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
@@ -918,7 +918,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
@@ -941,7 +941,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
@@ -960,7 +960,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (s: ((pointer) Z7)),

@@ -28,6 +28,10 @@ val add_typedef : Loc.position -> string -> ctype -> unit
 val find_typedef : string -> ctype
 
 (* Logic environment *)
+val add_type : string -> unit
+val mem_type : string -> bool
+val iter_types : (string -> unit) -> unit
+
 val add_fun : string -> ctype list * ctype * Info.logic_info -> unit
 val find_fun : string -> ctype list * ctype * Info.logic_info
 

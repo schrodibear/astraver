@@ -3,7 +3,7 @@
 
 Require Export sort_spec_why.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_1 : 
   forall (result: Z),
   forall (result0: Z),
@@ -50,7 +50,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_2 : 
   forall (result: Z),
   forall (result0: Z),
@@ -91,7 +91,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_3 : 
   forall (result: Z),
   forall (result0: Z),
@@ -133,7 +133,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_4 : 
   forall (result: Z),
   forall (result0: Z),
@@ -169,7 +169,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_5 : 
   forall (result: Z),
   forall (result0: Z),
@@ -211,7 +211,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_6 : 
   forall (result: Z),
   forall (result0: Z),
@@ -247,7 +247,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_7 : 
   forall (result: Z),
   forall (result0: Z),
@@ -283,7 +283,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_8 : 
   forall (result: Z),
   forall (result0: Z),
@@ -313,7 +313,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_9 : 
   forall (result: Z),
   forall (result0: Z),
@@ -355,7 +355,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_10 : 
   forall (result: Z),
   forall (result0: Z),
@@ -391,7 +391,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_11 : 
   forall (result: Z),
   forall (result0: Z),
@@ -427,7 +427,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_12 : 
   forall (result: Z),
   forall (result0: Z),
@@ -457,7 +457,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_13 : 
   forall (result: Z),
   forall (result0: Z),
@@ -493,7 +493,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_14 : 
   forall (result: Z),
   forall (result0: Z),
@@ -523,7 +523,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_15 : 
   forall (result: Z),
   forall (result0: Z),
@@ -553,7 +553,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_16 : 
   forall (result: Z),
   forall (result0: Z),
@@ -577,7 +577,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_17 : 
   forall (result: Z),
   forall (result0: Z),
@@ -619,7 +619,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_18 : 
   forall (result: Z),
   forall (result0: Z),
@@ -655,7 +655,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_19 : 
   forall (result: Z),
   forall (result0: Z),
@@ -691,7 +691,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_20 : 
   forall (result: Z),
   forall (result0: Z),
@@ -721,7 +721,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_21 : 
   forall (result: Z),
   forall (result0: Z),
@@ -757,7 +757,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_22 : 
   forall (result: Z),
   forall (result0: Z),
@@ -787,7 +787,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_23 : 
   forall (result: Z),
   forall (result0: Z),
@@ -817,7 +817,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_24 : 
   forall (result: Z),
   forall (result0: Z),
@@ -841,7 +841,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_25 : 
   forall (result: Z),
   forall (result0: Z),
@@ -877,7 +877,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_26 : 
   forall (result: Z),
   forall (result0: Z),
@@ -907,7 +907,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_27 : 
   forall (result: Z),
   forall (result0: Z),
@@ -937,7 +937,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_28 : 
   forall (result: Z),
   forall (result0: Z),
@@ -961,7 +961,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_29 : 
   forall (result: Z),
   forall (result0: Z),
@@ -991,7 +991,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_30 : 
   forall (result: Z),
   forall (result0: Z),
@@ -1015,7 +1015,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_31 : 
   forall (result: Z),
   forall (result0: Z),
@@ -1039,7 +1039,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_1_impl_po_32 : 
   forall (result: Z),
   forall (result0: Z),
@@ -1057,7 +1057,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_1 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1092,7 +1092,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_2 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1143,7 +1143,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_3 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1221,7 +1221,7 @@ generalize (pset_singleton_elim _ _ H11).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_4 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1303,7 +1303,7 @@ intuition.
 red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_5 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1400,7 +1400,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_6 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1494,7 +1494,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_7 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1596,7 +1596,7 @@ generalize (pset_singleton_elim _ _ H13).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_8 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1684,7 +1684,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_9 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1770,7 +1770,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_10 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1852,7 +1852,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_11 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -1950,7 +1950,7 @@ generalize (pset_singleton_elim _ _ H15).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_12 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2034,7 +2034,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_13 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2113,7 +2113,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_14 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2190,7 +2190,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_15 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2277,7 +2277,7 @@ generalize (pset_singleton_elim _ _ H17).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_16 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2350,7 +2350,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_17 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2421,7 +2421,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_18 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2488,7 +2488,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_19 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2571,7 +2571,7 @@ generalize (pset_singleton_elim _ _ H19).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_20 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2657,7 +2657,7 @@ Proof.
 intuition;red;intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_21 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2773,7 +2773,7 @@ Admitted.
 
 
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_22 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2854,7 +2854,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_23 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -2933,7 +2933,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_24 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3010,7 +3010,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_25 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3083,7 +3083,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_26 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3160,7 +3160,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_27 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3235,7 +3235,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_28 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3305,7 +3305,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_29 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3373,7 +3373,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_30 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3438,7 +3438,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_31 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3501,7 +3501,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_32 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3562,7 +3562,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_33 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3621,7 +3621,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_34 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3678,7 +3678,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_35 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3731,7 +3731,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_36 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3788,7 +3788,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_37 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3860,7 +3860,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_38 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -3947,7 +3947,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_39 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4032,7 +4032,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_40 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4113,7 +4113,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_41 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4192,7 +4192,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_42 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4269,7 +4269,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_43 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4342,7 +4342,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_44 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4419,7 +4419,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_45 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4494,7 +4494,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_46 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4564,7 +4564,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_47 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4632,7 +4632,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_48 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4698,7 +4698,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_49 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4762,7 +4762,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_50 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4824,7 +4824,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_51 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4882,7 +4882,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_52 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -4944,7 +4944,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_53 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5021,7 +5021,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_54 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5096,7 +5096,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_55 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5167,7 +5167,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_56 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5236,7 +5236,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_57 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5303,7 +5303,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_58 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5366,7 +5366,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_59 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5433,7 +5433,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_60 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5498,7 +5498,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_61 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5558,7 +5558,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_62 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5616,7 +5616,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_63 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5671,7 +5671,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_64 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5724,7 +5724,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_65 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5774,7 +5774,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_66 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5822,7 +5822,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_67 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5868,7 +5868,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_68 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5912,7 +5912,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_69 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5954,7 +5954,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_70 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -5992,7 +5992,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_71 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6034,7 +6034,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_72 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6091,7 +6091,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_73 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6163,7 +6163,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_74 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6250,7 +6250,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_75 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6335,7 +6335,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_76 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6416,7 +6416,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_77 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6495,7 +6495,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_78 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6572,7 +6572,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_79 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6645,7 +6645,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_80 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6722,7 +6722,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_81 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6797,7 +6797,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_82 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6867,7 +6867,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_83 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -6935,7 +6935,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_84 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7001,7 +7001,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_85 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7065,7 +7065,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_86 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7127,7 +7127,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_87 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7185,7 +7185,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_88 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7247,7 +7247,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_89 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7324,7 +7324,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_90 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7399,7 +7399,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_91 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7470,7 +7470,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_92 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7539,7 +7539,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_93 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7606,7 +7606,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_94 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7669,7 +7669,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_95 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7736,7 +7736,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_96 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7801,7 +7801,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_97 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7861,7 +7861,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_98 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7919,7 +7919,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_99 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -7974,7 +7974,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_100 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8027,7 +8027,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_101 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8078,7 +8078,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_102 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8127,7 +8127,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_103 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8174,7 +8174,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_104 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8217,7 +8217,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_105 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8264,7 +8264,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_106 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8326,7 +8326,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_107 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8403,7 +8403,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_108 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8478,7 +8478,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_109 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8549,7 +8549,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_110 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8618,7 +8618,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_111 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8685,7 +8685,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_112 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8748,7 +8748,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_113 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8815,7 +8815,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_114 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8880,7 +8880,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_115 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8940,7 +8940,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_116 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -8998,7 +8998,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_117 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9054,7 +9054,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_118 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9108,7 +9108,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_119 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9160,7 +9160,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_120 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9208,7 +9208,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_121 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9260,7 +9260,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_122 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9327,7 +9327,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_123 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9392,7 +9392,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_124 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9453,7 +9453,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_125 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9512,7 +9512,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_126 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9569,7 +9569,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_127 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9622,7 +9622,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_128 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9679,7 +9679,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_129 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9734,7 +9734,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_130 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9784,7 +9784,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_131 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9832,7 +9832,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_132 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9877,7 +9877,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_133 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9920,7 +9920,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_134 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9960,7 +9960,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_135 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -9998,7 +9998,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_136 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10033,7 +10033,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_137 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10066,7 +10066,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_138 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10097,7 +10097,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_139 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10126,7 +10126,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_140 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10153,7 +10153,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_141 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10176,7 +10176,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_142 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10202,7 +10202,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_143 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10243,7 +10243,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_144 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10300,7 +10300,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_145 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10372,7 +10372,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_146 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10459,7 +10459,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_147 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10544,7 +10544,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_148 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10625,7 +10625,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_149 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10704,7 +10704,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_150 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10781,7 +10781,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_151 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10854,7 +10854,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_152 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -10931,7 +10931,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_153 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11006,7 +11006,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_154 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11076,7 +11076,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_155 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11144,7 +11144,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_156 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11210,7 +11210,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_157 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11274,7 +11274,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_158 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11336,7 +11336,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_159 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11394,7 +11394,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_160 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11456,7 +11456,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_161 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11533,7 +11533,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_162 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11608,7 +11608,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_163 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11679,7 +11679,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_164 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11748,7 +11748,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_165 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11815,7 +11815,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_166 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11878,7 +11878,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_167 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -11945,7 +11945,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_168 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12010,7 +12010,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_169 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12070,7 +12070,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_170 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12128,7 +12128,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_171 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12183,7 +12183,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_172 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12236,7 +12236,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_173 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12287,7 +12287,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_174 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12336,7 +12336,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_175 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12383,7 +12383,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_176 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12426,7 +12426,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_177 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12473,7 +12473,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_178 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12535,7 +12535,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_179 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12612,7 +12612,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_180 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12687,7 +12687,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_181 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12758,7 +12758,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_182 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12827,7 +12827,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_183 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12894,7 +12894,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_184 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -12957,7 +12957,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_185 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13024,7 +13024,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_186 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13089,7 +13089,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_187 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13149,7 +13149,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_188 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13207,7 +13207,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_189 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13263,7 +13263,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_190 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13317,7 +13317,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_191 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13369,7 +13369,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_192 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13417,7 +13417,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_193 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13469,7 +13469,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_194 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13536,7 +13536,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_195 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13601,7 +13601,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_196 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13662,7 +13662,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_197 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13721,7 +13721,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_198 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13778,7 +13778,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_199 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13831,7 +13831,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_200 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13888,7 +13888,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_201 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13943,7 +13943,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_202 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -13993,7 +13993,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_203 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14041,7 +14041,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_204 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14086,7 +14086,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_205 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14129,7 +14129,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_206 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14169,7 +14169,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_207 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14207,7 +14207,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_208 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14243,7 +14243,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_209 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14277,7 +14277,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_210 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14309,7 +14309,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_211 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14337,7 +14337,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_212 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14368,7 +14368,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_213 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14414,7 +14414,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_214 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14476,7 +14476,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_215 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14553,7 +14553,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_216 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14628,7 +14628,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_217 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14699,7 +14699,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_218 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14768,7 +14768,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_219 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14835,7 +14835,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_220 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14898,7 +14898,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_221 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -14965,7 +14965,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_222 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15030,7 +15030,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_223 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15090,7 +15090,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_224 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15148,7 +15148,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_225 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15204,7 +15204,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_226 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15258,7 +15258,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_227 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15310,7 +15310,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_228 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15358,7 +15358,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_229 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15410,7 +15410,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_230 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15477,7 +15477,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_231 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15542,7 +15542,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_232 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15603,7 +15603,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_233 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15662,7 +15662,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_234 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15719,7 +15719,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_235 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15772,7 +15772,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_236 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15829,7 +15829,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_237 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15884,7 +15884,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_238 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15934,7 +15934,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_239 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -15982,7 +15982,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_240 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16027,7 +16027,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_241 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16070,7 +16070,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_242 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16111,7 +16111,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_243 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16150,7 +16150,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_244 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16187,7 +16187,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_245 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16220,7 +16220,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_246 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16256,7 +16256,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_247 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16307,7 +16307,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_248 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16374,7 +16374,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_249 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16439,7 +16439,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_250 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16500,7 +16500,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_251 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16559,7 +16559,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_252 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16616,7 +16616,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_253 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16669,7 +16669,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_254 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16726,7 +16726,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_255 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16781,7 +16781,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_256 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16831,7 +16831,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_257 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16879,7 +16879,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_258 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16925,7 +16925,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_259 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -16969,7 +16969,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_260 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17011,7 +17011,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_261 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17049,7 +17049,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_262 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17090,7 +17090,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_263 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17146,7 +17146,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_264 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17201,7 +17201,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_265 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17252,7 +17252,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_266 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17301,7 +17301,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_267 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17348,7 +17348,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_268 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17391,7 +17391,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_269 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17437,7 +17437,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_270 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17482,7 +17482,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_271 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17522,7 +17522,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_272 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17560,7 +17560,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_273 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17595,7 +17595,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_274 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17628,7 +17628,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_275 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17658,7 +17658,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_276 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17686,7 +17686,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_277 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17711,7 +17711,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_278 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17734,7 +17734,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_279 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17754,7 +17754,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_3_impl_po_280 : 
   forall (a: ((pointer) Z9)),
   forall (b: ((pointer) Z9)),
@@ -17771,7 +17771,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_1 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -17909,7 +17909,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_2 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18042,7 +18042,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_3 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18171,7 +18171,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_4 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18297,7 +18297,7 @@ Admitted.
 Proof.
 intuition.
 Admitted.
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_5 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18417,7 +18417,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_6 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18538,7 +18538,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_7 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18653,7 +18653,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_8 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18764,7 +18764,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_9 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18871,7 +18871,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_10 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -18974,7 +18974,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_11 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19075,7 +19075,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_12 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19168,7 +19168,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_13 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19289,7 +19289,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_14 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19405,7 +19405,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_15 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19517,7 +19517,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_16 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19627,7 +19627,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_17 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19729,7 +19729,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_18 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19832,7 +19832,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_19 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -19929,7 +19929,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_20 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20022,7 +20022,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_21 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20110,7 +20110,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_22 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20194,7 +20194,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_23 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20274,7 +20274,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_24 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20350,7 +20350,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_25 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20424,7 +20424,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_26 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20492,7 +20492,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_27 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20617,7 +20617,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_28 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20737,7 +20737,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_29 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20853,7 +20853,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_30 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -20967,7 +20967,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_31 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21073,7 +21073,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_32 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21180,7 +21180,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_33 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21281,7 +21281,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_34 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21378,7 +21378,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_35 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21471,7 +21471,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_36 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21560,7 +21560,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_37 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21647,7 +21647,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_38 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21726,7 +21726,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_39 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21833,7 +21833,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_40 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -21935,7 +21935,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_41 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22033,7 +22033,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_42 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22129,7 +22129,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_43 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22217,7 +22217,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_44 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22306,7 +22306,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_45 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22389,7 +22389,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_46 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22468,7 +22468,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_47 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22542,7 +22542,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_48 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22612,7 +22612,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_49 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22677,7 +22677,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_50 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22738,7 +22738,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_51 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22797,7 +22797,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_52 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22852,7 +22852,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_53 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22905,7 +22905,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_54 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -22950,7 +22950,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_55 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23071,7 +23071,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_56 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23187,7 +23187,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_57 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23299,7 +23299,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_58 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23409,7 +23409,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_59 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23511,7 +23511,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_60 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23614,7 +23614,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_61 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23711,7 +23711,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_62 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23804,7 +23804,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_63 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23893,7 +23893,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_64 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -23978,7 +23978,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_65 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24061,7 +24061,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_66 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24136,7 +24136,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_67 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24239,7 +24239,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_68 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24337,7 +24337,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_69 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24431,7 +24431,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_70 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24523,7 +24523,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_71 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24607,7 +24607,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_72 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24692,7 +24692,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_73 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24771,7 +24771,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_74 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24846,7 +24846,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_75 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24916,7 +24916,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_76 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -24982,7 +24982,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_77 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25044,7 +25044,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_78 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25102,7 +25102,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_79 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25158,7 +25158,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_80 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25208,7 +25208,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_81 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25315,7 +25315,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_82 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25417,7 +25417,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_83 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25515,7 +25515,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_84 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25611,7 +25611,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_85 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25699,7 +25699,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_86 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25788,7 +25788,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_87 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25871,7 +25871,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_88 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -25950,7 +25950,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_89 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26025,7 +26025,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_90 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26096,7 +26096,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_91 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26165,7 +26165,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_92 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26226,7 +26226,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_93 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26315,7 +26315,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_94 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26399,7 +26399,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_95 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26479,7 +26479,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_96 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26557,7 +26557,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_97 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26627,7 +26627,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_98 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26698,7 +26698,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_99 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26763,7 +26763,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_100 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26824,7 +26824,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_101 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26880,7 +26880,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_102 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26932,7 +26932,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_103 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -26979,7 +26979,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_104 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27022,7 +27022,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_105 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27062,7 +27062,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_106 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27098,7 +27098,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_107 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27130,7 +27130,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_108 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27158,7 +27158,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_109 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27184,7 +27184,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_110 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27204,7 +27204,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_111 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27329,7 +27329,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_112 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27449,7 +27449,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_113 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27565,7 +27565,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_114 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27679,7 +27679,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_115 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27785,7 +27785,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_116 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27892,7 +27892,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_117 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -27993,7 +27993,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_118 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28090,7 +28090,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_119 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28183,7 +28183,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_120 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28272,7 +28272,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_121 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28359,7 +28359,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_122 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28438,7 +28438,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_123 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28545,7 +28545,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_124 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28647,7 +28647,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_125 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28745,7 +28745,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_126 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28841,7 +28841,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_127 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -28929,7 +28929,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_128 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29018,7 +29018,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_129 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29101,7 +29101,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_130 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29180,7 +29180,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_131 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29254,7 +29254,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_132 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29324,7 +29324,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_133 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29390,7 +29390,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_134 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29452,7 +29452,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_135 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29512,7 +29512,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_136 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29566,7 +29566,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_137 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29677,7 +29677,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_138 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29783,7 +29783,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_139 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29885,7 +29885,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_140 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -29985,7 +29985,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_141 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30077,7 +30077,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_142 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30170,7 +30170,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_143 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30257,7 +30257,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_144 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30340,7 +30340,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_145 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30419,7 +30419,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_146 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30494,7 +30494,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_147 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30567,7 +30567,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_148 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30632,7 +30632,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_149 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30725,7 +30725,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_150 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30813,7 +30813,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_151 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30897,7 +30897,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_152 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -30979,7 +30979,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_153 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31053,7 +31053,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_154 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31128,7 +31128,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_155 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31197,7 +31197,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_156 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31262,7 +31262,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_157 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31322,7 +31322,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_158 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31378,7 +31378,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_159 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31429,7 +31429,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_160 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31476,7 +31476,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_161 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31521,7 +31521,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_162 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31562,7 +31562,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_163 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31601,7 +31601,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_164 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31632,7 +31632,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_165 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31739,7 +31739,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_166 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31841,7 +31841,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_167 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -31939,7 +31939,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_168 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32035,7 +32035,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_169 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32123,7 +32123,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_170 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32212,7 +32212,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_171 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32295,7 +32295,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_172 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32374,7 +32374,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_173 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32449,7 +32449,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_174 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32520,7 +32520,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_175 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32589,7 +32589,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_176 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32650,7 +32650,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_177 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32739,7 +32739,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_178 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32823,7 +32823,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_179 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32903,7 +32903,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_180 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -32981,7 +32981,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_181 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33051,7 +33051,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_182 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33122,7 +33122,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_183 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33187,7 +33187,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_184 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33248,7 +33248,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_185 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33304,7 +33304,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_186 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33356,7 +33356,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_187 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33404,7 +33404,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_188 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33448,7 +33448,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_189 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33490,7 +33490,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_190 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33526,7 +33526,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_191 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33619,7 +33619,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_192 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33707,7 +33707,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_193 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33791,7 +33791,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_194 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33873,7 +33873,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_195 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -33947,7 +33947,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_196 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34022,7 +34022,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_197 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34091,7 +34091,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_198 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34156,7 +34156,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_199 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34217,7 +34217,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_200 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34274,7 +34274,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_201 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34329,7 +34329,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_202 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34376,7 +34376,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_203 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34451,7 +34451,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_204 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34521,7 +34521,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_205 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34587,7 +34587,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_206 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34651,7 +34651,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_207 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34707,7 +34707,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_208 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34764,7 +34764,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_209 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34815,7 +34815,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_210 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34862,7 +34862,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_211 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34904,7 +34904,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_212 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34942,7 +34942,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_213 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -34975,7 +34975,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_214 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -35004,7 +35004,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_215 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -35030,7 +35030,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_216 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -35052,7 +35052,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_217 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -35069,7 +35069,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_218 : 
   forall (t: ((pointer) Z5)),
   forall (alloc: alloc_table),

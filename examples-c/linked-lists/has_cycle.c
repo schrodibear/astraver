@@ -1,6 +1,8 @@
 
 #include "list.h"
 
+/*@ type Has_cycle_variant */
+
 /*@ logic Has_cycle_variant has_cycle_variant(list l, list l1, list l2)
   reads l->tl */
 

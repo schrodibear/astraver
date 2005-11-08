@@ -3,7 +3,7 @@
 
 Require Export logic_cast_spec_why.
 
-(* Why obligation from file "why/logic_cast.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: ((pointer) Z1)),
@@ -17,7 +17,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: ((pointer) Z1)),
@@ -41,7 +41,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: ((pointer) Z1)),

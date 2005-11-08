@@ -3,7 +3,7 @@
 
 Require Export enum_spec_why.
 
-(* Why obligation from file "why/enum.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   (* File \"enum.c\", line 4, characters 13-19:\n *) y = 4.
 Proof.

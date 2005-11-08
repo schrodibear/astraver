@@ -3,7 +3,7 @@
 
 Require Export search_spec_why.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index2_impl_po_1 : 
   forall (t: ((pointer) Z4)),
   forall (n: Z),
@@ -18,7 +18,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index2_impl_po_2 : 
   forall (t: ((pointer) Z4)),
   forall (n: Z),
@@ -45,7 +45,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index2_impl_po_3 : 
   forall (t: ((pointer) Z4)),
   forall (n: Z),
@@ -79,7 +79,7 @@ subst; auto.
 apply H0 with k; auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index2_impl_po_4 : 
   forall (t: ((pointer) Z4)),
   forall (n: Z),
@@ -101,7 +101,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index2_impl_po_5 : 
   forall (t: ((pointer) Z4)),
   forall (n: Z),
@@ -122,7 +122,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index_impl_po_1 : 
   forall (t: ((pointer) Z5)),
   forall (n: Z),
@@ -137,7 +137,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index_impl_po_2 : 
   forall (t: ((pointer) Z5)),
   forall (n: Z),
@@ -166,7 +166,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index_impl_po_3 : 
   forall (t: ((pointer) Z5)),
   forall (n: Z),
@@ -200,7 +200,7 @@ subst; auto.
 apply H0 with k;auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index_impl_po_4 : 
   forall (t: ((pointer) Z5)),
   forall (n: Z),
@@ -224,7 +224,7 @@ subst.
 apply H0 with i0; auto with *.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma index_impl_po_5 : 
   forall (t: ((pointer) Z5)),
   forall (n: Z),
@@ -247,7 +247,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: ((pointer) Z5)),

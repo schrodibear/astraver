@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.27 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.28 2005-11-08 14:55:14 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -33,6 +33,15 @@ type pp_infix =
 type pp_prefix = 
   PPneg | PPnot
 
+type ppure_type =
+  | PPTint
+  | PPTbool
+  | PPTreal
+  | PPTunit
+  | PPTvarid of Ident.t * Loc.position
+  | PPTvar of type_var
+  | PPTexternal of ppure_type list * Ident.t * Loc.position
+
 type lexpr = 
   { pp_loc : loc; pp_desc : pp_desc }
 
@@ -45,12 +54,10 @@ and pp_desc =
   | PPinfix of lexpr * pp_infix * lexpr
   | PPprefix of pp_prefix * lexpr
   | PPif of lexpr * lexpr * lexpr
-  | PPforall of Ident.t * pure_type * lexpr
-  | PPexists of Ident.t * pure_type * lexpr
+  | PPforall of Ident.t * ppure_type * lexpr
+  | PPexists of Ident.t * ppure_type * lexpr
   | PPfpi of lexpr * real_constant * real_constant
   | PPnamed of string * lexpr
-
-(*s Parsed types *)
 
 type assertion = { 
   pa_name : Ident.name; 
@@ -60,9 +67,11 @@ type assertion = {
 
 type postcondition = assertion * (Ident.t * assertion) list
 
+(*s Parsed types *)
+
 type ptype_v =
-  | PVpure  of pure_type
-  | PVref   of pure_type
+  | PVpure  of ppure_type
+  | PVref   of ppure_type
   | PVarrow of ptype_v binder list * ptype_c
 
 and ptype_c =
@@ -113,14 +122,18 @@ type parsed_program = t
 
 type external_ = bool
 
+type plogic_type =
+  | PPredicate of ppure_type list
+  | PFunction of ppure_type list * ppure_type
+
 type decl = 
   | Program of Ident.t * parsed_program
   | Parameter of loc * external_ * Ident.t list * ptype_v
-  | Exception of loc * Ident.t * pure_type option
-  | Logic of loc * external_ * Ident.t list * logic_type
-  | Predicate_def of loc * Ident.t * (Ident.t * pure_type) list * lexpr
+  | Exception of loc * Ident.t * ppure_type option
+  | Logic of loc * external_ * Ident.t list * plogic_type
+  | Predicate_def of loc * Ident.t * (Ident.t * ppure_type) list * lexpr
   | Function_def 
-      of loc * Ident.t * (Ident.t * pure_type) list * pure_type * lexpr
+      of loc * Ident.t * (Ident.t * ppure_type) list * ppure_type * lexpr
   | Axiom of loc * Ident.t * lexpr
   | Goal of loc * Ident.t * lexpr
   | TypeDecl of loc * external_ * Ident.t list * Ident.t

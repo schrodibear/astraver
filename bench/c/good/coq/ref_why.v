@@ -3,7 +3,7 @@
 
 Require Export ref_spec_why.
 
-(* Why obligation from file "why/ref.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
@@ -26,7 +26,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ref.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
@@ -46,7 +46,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ref.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (result: ((pointer) Z2)),
@@ -71,7 +71,7 @@ generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
 tauto.
 Save.
 
-(* Why obligation from file "why/ref.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   1 >= 1.
 Proof.
@@ -79,7 +79,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/ref.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (p: ((pointer) Z2)),
   forall (alloc: alloc_table),
@@ -94,7 +94,7 @@ Proof.
 intuition; subst; caduceus.
 Save.
 
-(* Why obligation from file "why/ref.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (p: ((pointer) Z2)),
   forall (alloc: alloc_table),

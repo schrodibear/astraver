@@ -3,7 +3,7 @@
 
 Require Export struct3_spec_why.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x_Z3: ((memory) Z Z3)),
@@ -26,7 +26,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (x_Z3: ((memory) Z Z3)),
@@ -49,7 +49,7 @@ caduceus;
 red;auto.
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (x_Z3: ((memory) Z Z3)),
@@ -68,7 +68,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (result: ((pointer) Z3)),
@@ -84,7 +84,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   1 >= 1.
 Proof.
@@ -92,7 +92,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
@@ -125,7 +125,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
@@ -156,7 +156,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
@@ -184,7 +184,7 @@ Save.
 Proof.
 intuition; subst; auto; caduceus.
 Save.
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
@@ -211,7 +211,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
@@ -236,7 +236,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
@@ -258,7 +258,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (z_Z5: ((memory) Z Z5)),
@@ -277,7 +277,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (result: ((pointer) Z5)),
@@ -293,7 +293,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_9 : 
   1 >= 1.
 Proof.

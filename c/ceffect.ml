@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.103 2005-11-07 15:13:28 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.104 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -933,6 +933,7 @@ let decl d =
     | Naxiom(id,p) -> () (* TODO *)
     | Ntypedef(ctype,id) -> () 
     | Ntypedecl(ctype) -> ()
+    | Ntype _ -> ()
     | Nfunspec(spec,ctype,id) -> () (* TODO *)
     | Nfundef(spec,ctype,id,block) -> () (* TODO *)
 

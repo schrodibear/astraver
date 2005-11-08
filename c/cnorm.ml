@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.43 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.44 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -782,6 +782,8 @@ let global_decl e1 =
       in
       Info.set_assigned x;
       Ndecl(x.var_type,x,cinit)
+  | Ttype s ->
+      Ntype s
       
       
 	

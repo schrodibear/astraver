@@ -3,7 +3,7 @@
 
 Require Export clash_spec_why.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
   forall (ma_structure: ((pointer) Z4)),
   forall (alloc: alloc_table),
@@ -18,7 +18,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_2 : 
   forall (ma_structure: ((pointer) Z4)),
   forall (alloc: alloc_table),
@@ -31,7 +31,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -62,7 +62,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -90,7 +90,7 @@ apply alloc_stack_valid with substruct_0 alloc; auto.
 
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_3 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -115,7 +115,7 @@ intuition.
 subst; apply alloc_stack_valid with substruct_0 alloc; auto.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_4 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -157,7 +157,7 @@ Save.
 
 
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_5 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -177,7 +177,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_6 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
@@ -190,7 +190,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),
@@ -202,7 +202,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (x: Z),
   forall (HW_4: x <> 0),
@@ -214,7 +214,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (y: Z),
   forall (y_0: Z),
@@ -224,7 +224,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (x: Z),
   forall (y_0: Z),
@@ -238,7 +238,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (x: Z),
   forall (y_0: Z),

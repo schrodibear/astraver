@@ -3,7 +3,7 @@
 
 Require Export see_spec_why.
 
-(* Why obligation from file "why/see.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (b: Z),
   forall (b0: Z),
@@ -14,7 +14,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/see.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma k_impl_po_1 : 
   forall (b: Z),
   forall (HW_1: b = 1),

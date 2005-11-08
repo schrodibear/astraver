@@ -3,7 +3,7 @@
 
 Require Export array_spec_why.
 
-(* Why obligation from file "why/array.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (int_Z5_Z4: ((memory) ((pointer) Z5) Z4)),
@@ -26,7 +26,7 @@ Proof.
 intuition; subst; auto with *.
 Save.
 
-(* Why obligation from file "why/array.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma getcell_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (int_Z5_Z4: ((memory) ((pointer) Z5) Z4)),

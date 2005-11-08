@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.99 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.100 2005-11-08 14:55:14 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -951,7 +951,10 @@ let type_spec_decl loc = function
 	  | _ -> assert false(*TODO*)
       in
       Tghost (info, cinit)
-
+  | LDtype (id, loc) ->
+      if Cenv.mem_type id then error loc ("clash with previous type " ^ id);
+      Cenv.add_type id;
+      Ttype id
 
 (* table storing function specifications *)
 let function_specs = Hashtbl.create 97

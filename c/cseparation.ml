@@ -654,8 +654,11 @@ let global_decl e =
   match e with 
     | Naxiom (_,sp) | Ninvariant (_,sp) | Ninvariant_strong (_,sp) ->
 	predicate sp
+    | Nlogic (_, NPredicate_def (_,p)) -> predicate p
+    | Nlogic (_, NFunction_def (_,_,t)) -> term t
+    | Nlogic _ -> ()
     | Nfunspec (sp,_,_) -> spec sp
-    | Nlogic _  | Ntypedef _ | Ntypedecl _ | Ndecl (_,_,None)  -> ()
+    | Ntypedef _ | Ntypedecl _ | Ndecl (_,_,None) | Ntype _ -> ()
     | Ndecl (_, v, Some i) -> c_initializer v.var_type v.var_why_type i
     | Nfundef (sp, _, f, st) -> spec sp; statement f.type_why_fun st
 

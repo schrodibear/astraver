@@ -6,6 +6,8 @@ typedef struct struct_list {
 
 #define NULL ((void*)0)
 
+/*@ type plist */
+
 /*@ logic plist nil() */ 
 
 /*@ logic plist cons(list p, plist l) */
@@ -30,6 +32,8 @@ typedef struct struct_list {
 /*@ predicate finite(list l) reads l->tl */
 
 /*@ predicate cyclic(list l) reads l->tl */
+
+/*@ type Length */
 
 /*@ logic Length length(list l) reads l->tl */
 

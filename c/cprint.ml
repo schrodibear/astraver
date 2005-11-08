@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.17 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.18 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -364,6 +364,8 @@ and ndecl fmt d = match d.node with
   | Nfundef (s, ty, fi, st) ->
       fprintf fmt "%a%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
 	 parameters fi.args nstatement st
+  | Ntype s ->
+      fprintf fmt "/*@@ type %s */@\n" s
 
 let nfile fmt p = 
   fprintf fmt "@[";

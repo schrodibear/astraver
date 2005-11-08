@@ -3,7 +3,7 @@
 
 Require Export separation3_spec_why.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -36,7 +36,7 @@ rewrite acc_upd_eq;auto.
 rewrite acc_upd_eq;auto.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -66,7 +66,7 @@ rewrite acc_upd_eq;auto.
 
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -91,7 +91,7 @@ intuition; subst; try caduceus.
 valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -114,7 +114,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -134,7 +134,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -151,7 +151,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (l: ((pointer) Z12)),
@@ -163,7 +163,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -195,7 +195,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -227,7 +227,7 @@ generalize (H5 s0 alloc Pre4);
  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -260,7 +260,7 @@ intuition.
 generalize (H3 s0 alloc Pre4);  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -284,7 +284,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -303,7 +303,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
@@ -319,7 +319,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (s0: ((pointer) Z9)),
@@ -330,7 +330,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (a_Z2: ((memory) Z Z2)),
   forall (a_Z9: ((memory) Z Z9)),
@@ -352,7 +352,7 @@ Proof.
 intuition; subst; valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (a_Z2: ((memory) Z Z2)),
   forall (a_Z9: ((memory) Z Z9)),
@@ -380,7 +380,7 @@ apply H0.
 apply valid_range_valid with 0 0;auto with *.
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (a_Z9: ((memory) Z Z9)),
   forall (alloc: alloc_table),
@@ -398,7 +398,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (a_Z9: ((memory) Z Z9)),
   forall (alloc: alloc_table),
@@ -413,7 +413,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (l: ((pointer) Z12)),

@@ -3,7 +3,7 @@
 
 Require Export rec_spec_why.
 
-(* Why obligation from file "why/rec.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (HW_1: (* File \"rec.c\", line 4, characters 14-20:\n *) x >= 0),
@@ -13,7 +13,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/rec.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (x: Z),
   forall (HW_1: (* File \"rec.c\", line 4, characters 14-20:\n *) x >= 0),

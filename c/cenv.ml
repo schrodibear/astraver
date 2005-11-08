@@ -257,6 +257,11 @@ let add_sym l x ty info =
 
 (*s Environments for the logical side *)
 
+let types = Hashtbl.create 17
+let add_type x = Hashtbl.add types x ()
+let mem_type = Hashtbl.mem types
+let iter_types f = Hashtbl.iter (fun s _ -> f s) types
+
 let functions = 
   (Hashtbl.create 97 : 
      (string, ctype list * ctype * Info.logic_info) Hashtbl.t)

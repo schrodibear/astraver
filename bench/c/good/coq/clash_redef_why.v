@@ -5,7 +5,7 @@ Require Export clash_redef_spec_why.
 
 
 
-(* Why obligation from file "why/clash_redef.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (p1: ((pointer) Z13)),
   forall (p2_0: ((pointer) Z15)),
@@ -21,7 +21,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/clash_redef.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (p1: ((pointer) Z13)),
   forall (alloc: alloc_table),

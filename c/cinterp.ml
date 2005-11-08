@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.151 2005-11-07 15:13:28 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.152 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 
 open Format
@@ -1025,6 +1025,7 @@ let interp_decl d acc =
 	acc
     | Ntypedecl { Ctypes.ctype_node = Tenum _ } -> 
 	unsupported d.loc "local enum type"
+    | Ntype _
     | Ndecl _
     | Ntypedecl _
     | Nfunspec _
@@ -1518,6 +1519,8 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       why
   | Ntypedecl _ ->
       assert false
+  | Ntype _ ->
+      why
   | Ndecl(ctype,v,init) -> 
       (* global initialisations already handled in cinit.ml *)
       why

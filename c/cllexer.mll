@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.34 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: cllexer.mll,v 1.35 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -66,6 +66,7 @@
 	"union", UNION;
 	"ghost", GHOST;
 	"set", SET;
+	"type", TYPE;
       ];
     fun s -> try Hashtbl.find h s with Not_found -> IDENTIFIER s
 

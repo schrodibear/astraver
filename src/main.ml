@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.85 2005-11-07 15:13:31 hubert Exp $ i*)
+(*i $Id: main.ml,v 1.86 2005-11-08 14:55:14 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -258,10 +258,12 @@ let interp_decl ?(prelude=false) d =
 	List.iter (add_parameter v tv) ids
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
+      let v = option_app Ltyping.pure_type v in
       add_exception id v
   | Logic (loc, ext, ids, t) ->
       let add id =
 	if is_logic id lenv then raise_located loc (Clash id);
+	let t = Ltyping.logic_type t in
 	let t = generalize_logic_type t in
 	add_global_logic id t;
 	if not ext then push_logic (Ident.string id) t
@@ -269,6 +271,7 @@ let interp_decl ?(prelude=false) d =
       List.iter add ids
   | Predicate_def (loc, id, pl, p) ->
       if is_logic id lenv then raise_located loc (Clash id);
+      let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type t)) pl in
       let t = Predicate (List.map snd pl) in
       let t = generalize_logic_type t in
       add_global_logic id t;
@@ -281,6 +284,8 @@ let interp_decl ?(prelude=false) d =
       push_predicate (Ident.string id) p
   | Function_def (loc, id, pl, ty, e) ->
       if is_logic id lenv then raise_located loc (Clash id);
+      let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type t)) pl in
+      let ty = Ltyping.pure_type ty in
       let t = Function (List.map snd pl, ty) in
       let t = generalize_logic_type t in
       add_global_logic id t;
@@ -328,8 +333,9 @@ let load_prelude () =
 
 (*s Processing of a channel / a file. *)
 
-let why_parser c = 
+let why_parser f c = 
    let lb = Lexing.from_channel c in
+   lb.Lexing.lex_curr_p <- { lb.Lexing.lex_curr_p with Lexing.pos_fname = f };
    Lexer.parse_file lb
  
 let deal_channel parsef cin =
@@ -339,7 +345,7 @@ let deal_channel parsef cin =
 let deal_file f =
   reset ();
   let cin = open_in f in 
-  deal_channel why_parser cin;
+  deal_channel (why_parser f) cin;
   close_in cin;
   let fwe = Filename.chop_extension f in
   output (Options.file fwe)
@@ -347,7 +353,7 @@ let deal_file f =
 let main () =
   if prelude then load_prelude ();
   if files = [] then begin
-    deal_channel why_parser stdin;
+    deal_channel (why_parser "standard input") stdin;
     output "Output" 
   end else
     List.iter deal_file files

@@ -4,14 +4,14 @@
 Require Export break_spec_why.
 Require Export Why.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
   (* File \"break.c\", line 8, characters 17-22:\n *) True.
 Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_2 : 
   forall (HW_1: (* File \"break.c\", line 8, characters 17-22:\n *) True),
   forall (HW_2: 1 <> 0),
@@ -21,7 +21,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_3 : 
   forall (HW_1: (* File \"break.c\", line 8, characters 17-22:\n *) True),
   forall (HW_3: 1 = 0),
@@ -31,14 +31,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
   (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= 10.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
   forall (n: Z),
   forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
@@ -51,7 +51,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_3 : 
   forall (n: Z),
   forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
@@ -65,7 +65,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_4 : 
   forall (n: Z),
   forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
@@ -75,14 +75,14 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= 10.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (n: Z),
   forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
@@ -95,7 +95,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_3 : 
   forall (n: Z),
   forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
@@ -109,7 +109,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_4 : 
   forall (n: Z),
   forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
@@ -119,7 +119,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_1 : 
   forall (i: Z),
   forall (HW_1: i = 0),
@@ -128,7 +128,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_2 : 
   forall (i: Z),
   forall (HW_1: i = 0),
@@ -141,7 +141,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_3 : 
   forall (i: Z),
   forall (HW_1: i = 0),
@@ -157,7 +157,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_4 : 
   forall (i: Z),
   forall (HW_1: i = 0),

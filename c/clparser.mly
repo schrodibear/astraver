@@ -22,7 +22,7 @@
   open Clogic
 
   let loc () = (Loc.reloc (symbol_start_pos ()), Loc.reloc (symbol_end_pos ()))
-  let loc_i i = (rhs_start i, rhs_end i)
+  let loc_i i = (rhs_start_pos i, rhs_end_pos i)
   let info x = { Clogic.lexpr_node = x; lexpr_loc = loc () }
 
   type ghost_decl =
@@ -62,7 +62,7 @@
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
-%token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION
+%token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION TYPE
 
 %right prec_named
 %nonassoc prec_forall prec_exists
@@ -311,6 +311,7 @@ decl:
     { LDpredicate_def (Info.default_logic_info $2, $4, $7) }
 | AXIOM IDENTIFIER COLON lexpr { LDaxiom ($2, $4) }
 | INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($2, $4) }
+| TYPE IDENTIFIER { LDtype ($2, loc_i 2) }
 ;
 
 ghost_decl:

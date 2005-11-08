@@ -4,7 +4,7 @@
 Require Export assigns_spec_why.
 
 
-(* Why obligation from file "why/assigns.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_1 : 
   forall (p: ((pointer) Z1)),
   forall (size: Z),
@@ -29,7 +29,7 @@ autorewrite with caduceus.
 replace  (- (mutable_size1 - 1)) with (-mutable_size1+1); auto with *.
 Save.
 
-(* Why obligation from file "why/assigns.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_2 : 
   forall (p: ((pointer) Z1)),
   forall (size: Z),
@@ -67,7 +67,7 @@ replace (size + - size) with 0; auto with *.
 autorewrite with caduceus; auto.
 Save.
 
-(* Why obligation from file "why/assigns.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_3 : 
   forall (p: ((pointer) Z1)),
   forall (size: Z),
@@ -92,7 +92,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/assigns.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_4 : 
   forall (p: ((pointer) Z1)),
   forall (size: Z),

@@ -38,7 +38,7 @@ Require Import Omega.
 
 
 
-(*Why type*) Parameter foo: Set.
+(*Why type*) Definition foo: Set.
 
 (*Why*) Parameter v5 : foo.
 
@@ -107,70 +107,70 @@ Require Import Omega.
 
 
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_1 : 
   ~False.
 Proof.
 tauto.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_1 : 
   True /\ True.
 Proof.
 tauto.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_1 : 
   True \/ False.
 Proof.
 tauto.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p5_po_1 : 
   False \/ ~False.
 Proof.
 tauto.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p6_po_1 : 
   (True -> ~False).
 Proof.
 tauto.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p7_po_1 : 
   (forall (x:Z), x = x).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p8_po_1 : 
   True /\ (forall (x:Z), x = x).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p9_po_1 : 
   (forall (x:Z), (forall (y:Z), (x = y -> x = y))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma ar6_po_1 : 
   1 <> 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr1_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
@@ -179,7 +179,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr2_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 4),
@@ -188,7 +188,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr3_po_1 : 
   forall (v4: Z),
   forall (v6: (array Z)),
@@ -198,7 +198,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr4_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -209,7 +209,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr4_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -218,7 +218,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr5_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
@@ -227,7 +227,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr6_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 4),
@@ -236,7 +236,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr7_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -247,7 +247,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr7_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -256,14 +256,14 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fc3_po_1 : 
   0 >= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/all.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma an2_po_1 : 
   forall (v4: Z),
   forall (HW_1: v4 >= 0),

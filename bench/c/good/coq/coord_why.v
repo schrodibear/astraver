@@ -3,7 +3,7 @@
 
 Require Export coord_spec_why.
 
-(* Why obligation from file "why/coord.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (index: Z),
   forall (alloc: alloc_table),
@@ -22,7 +22,7 @@ Proof.
 intros.
 intuition.
 Save.
-(* Why obligation from file "why/coord.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (index: Z),
   forall (alloc: alloc_table),

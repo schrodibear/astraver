@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.61 2005-11-07 15:13:28 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.62 2005-11-08 14:55:13 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -130,6 +130,7 @@ type parsed_decl =
   | LDaxiom of string * parsed_predicate
   | LDinvariant of string * parsed_predicate
   | LDghost of cexpr ctype * string * lexpr c_initializer option
+  | LDtype of string * Loc.position
 
 type ghost_lvalue = lexpr
 
@@ -260,6 +261,7 @@ and tdecl =
   | Taxiom of string * predicate
   | Tinvariant of string * predicate
   | Tghost of Info.var_info *  tterm c_initializer option
+  | Ttype of string
   | Ttypedef of tctype * string
   | Ttypedecl of tctype
   | Tdecl of tctype * Info.var_info * texpr c_initializer option
@@ -352,5 +354,6 @@ and ndecl =
   | Ndecl of nctype * Info.var_info * nexpr c_initializer option
   | Nfunspec of nspec * nctype * Info.fun_info 
   | Nfundef of nspec * nctype * Info.fun_info * nstatement
+  | Ntype of string
 
 type nfile = ndecl located list

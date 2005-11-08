@@ -3,7 +3,7 @@
 
 Require Export copy_spec_why.
 
-(* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_1 : 
   forall (t1: ((pointer) Z2)),
   forall (t2: ((pointer) Z3)),
@@ -23,7 +23,7 @@ assert (k=i1-1 \/ i1<=k).
 intuition; subst; caduceus.
 Save.
 
-(* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_2 : 
   forall (t1: ((pointer) Z2)),
   forall (t2: ((pointer) Z3)),
@@ -58,7 +58,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_3 : 
   forall (t1: ((pointer) Z2)),
   forall (t2: ((pointer) Z3)),
@@ -88,7 +88,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_4 : 
   forall (t1: ((pointer) Z2)),
   forall (t2: ((pointer) Z3)),
@@ -116,7 +116,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/copy.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_5 : 
   forall (t1: ((pointer) Z2)),
   forall (t2: ((pointer) Z3)),

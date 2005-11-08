@@ -27,6 +27,7 @@
 
   let loc () = (symbol_start_pos (), symbol_end_pos ())
   let loc_i i = (rhs_start_pos i, rhs_end_pos i)
+  let loc_ij i j = (rhs_start_pos i, rhs_end_pos j)
 
   let mk_ppl loc d = { pp_loc = loc; pp_desc = d }
   let mk_pp d = mk_ppl (loc ()) d
@@ -163,11 +164,11 @@ decl:
 | GOAL ident COLON lexpr
    { Goal (loc (), $2, $4) }
 | external_ TYPE ident
-   { TypeDecl (loc (), $1, [], $3) }
+   { TypeDecl (loc_i 3, $1, [], $3) }
 | external_ TYPE type_var ident
-   { TypeDecl (loc (), $1, [$3], $4) }
+   { TypeDecl (loc_ij 2 3, $1, [$3], $4) }
 | external_ TYPE LEFTPAR list1_type_var_sep_comma RIGHTPAR ident
-   { TypeDecl (loc (), $1, $4, $6) }
+   { TypeDecl (loc_ij 3 6, $1, $4, $6) }
 ;
 
 type_v:
@@ -180,7 +181,7 @@ type_v:
 ;
 
 simple_type_v:
-| primitive_type ARRAY    { PVref (PTexternal ([$1], Ident.farray)) }
+| primitive_type ARRAY    { PVref (PPTexternal ([$1], Ident.farray, loc_i 2)) }
 | primitive_type REF      { PVref $1 }
 | primitive_type          { PVpure $1 }
 | LEFTPAR type_v RIGHTPAR { $2 }
@@ -188,21 +189,21 @@ simple_type_v:
 
 primitive_type:
 | INT 
-   { PTint }
+   { PPTint }
 | BOOL 
-   { PTbool }
+   { PPTbool }
 | REAL 
-   { PTreal }
+   { PPTreal }
 | UNIT 
-   { PTunit }
+   { PPTunit }
 | type_var 
-   { PTvarid $1 }
+   { PPTvarid ($1, loc ()) }
 | ident 
-   { PTexternal ([], $1) }
+   { PPTexternal ([], $1, loc ()) }
 | primitive_type ident
-   { PTexternal ([$1], $2) }
+   { PPTexternal ([$1], $2, loc_i 2) }
 | LEFTPAR primitive_type COMMA list1_primitive_type_sep_comma RIGHTPAR ident
-   { PTexternal ($2 :: $4, $6) }
+   { PPTexternal ($2 :: $4, $6, loc_i 6) }
 /*
 | LEFTPAR list1_primitive_type_sep_comma RIGHTPAR
    { match $2 with [p] -> p | _ -> raise Parse_error }
@@ -299,11 +300,11 @@ exn_condition:
 
 logic_type:
 | list0_primitive_type_sep_comma ARROW PROP
-   { Predicate $1 }
+   { PPredicate $1 }
 | list0_primitive_type_sep_comma ARROW primitive_type
-   { Function ($1, $3) }
+   { PFunction ($1, $3) }
 | primitive_type
-   { Function ([], $1) }
+   { PFunction ([], $1) }
 ;
 
 list0_primitive_type_sep_comma:
@@ -327,8 +328,10 @@ list1_logic_binder_sep_comma:
 ;
 
 logic_binder:
-| ident COLON primitive_type       { ($1, $3) }
-| ident COLON primitive_type ARRAY { ($1, PTexternal ([$3], Ident.farray)) }
+| ident COLON primitive_type       
+    { ($1, $3) }
+| ident COLON primitive_type ARRAY 
+    { ($1, PPTexternal ([$3], Ident.farray, loc_i 3)) }
 ;
 
 external_:
@@ -593,7 +596,7 @@ list1_binder:
 
 binder:
 | LEFTPAR RIGHTPAR
-   { [Ident.anonymous, PVpure PTunit] }
+   { [Ident.anonymous, PVpure PPTunit] }
 | LEFTPAR list1_ident_sep_comma COLON type_v RIGHTPAR 
    { List.map (fun s -> (s, $4)) $2 }
 ;
