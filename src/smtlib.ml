@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.3 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.4 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -141,7 +141,7 @@ let rec print_predicate fmt = function
   | Pif (a, b, c) ->
       fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_predicate b
 	print_predicate c
-  | Pand (_, a, b) | Forallb (_, a, b) ->
+  | Pand (_, _, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(and@ %a@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "@[(or@ %a@ %a)@]" print_predicate a print_predicate b

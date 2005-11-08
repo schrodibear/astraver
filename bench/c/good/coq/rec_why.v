@@ -18,6 +18,11 @@ Save.
   forall (x: Z),
   forall (HW_1: (* File \"rec.c\", line 4, characters 14-20:\n *) x >= 0),
   forall (HW_3: x <> 0),
+  forall (HW_5: (forall (result:Z),
+                 ((* File \"rec.c\", line 4, characters 62-74:\n *) result =
+                  0 ->
+                  (* File \"rec.c\", line 4, characters 62-74:\n *) result =
+                  0))),
   (* File \"rec.c\", line 4, characters 14-20:\n *) (x - 1) >= 0.
 Proof.
 intuition.

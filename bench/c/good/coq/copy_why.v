@@ -30,25 +30,30 @@ Save.
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
+  forall (int_Z3: ((memory) Z Z3)),
   forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (n <= n /\
+                (forall (k:Z),
+                 (n <= k /\ k < n -> (acc int_Z3 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i: Z),
   forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
+  forall (HW_3: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
                   (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
-  forall (HW_3: i0 = (i - 1)),
-  forall (HW_4: i > 0),
+  forall (HW_4: i0 = (i - 1)),
+  forall (HW_5: i > 0),
   forall (result: ((pointer) Z3)),
-  forall (HW_5: result = (shift t2 i0)),
+  forall (HW_6: result = (shift t2 i0)),
   forall (result0: ((pointer) Z2)),
-  forall (HW_6: result0 = (shift t1 i0)),
+  forall (HW_7: result0 = (shift t1 i0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (acc int_Z2 result0)),
+  forall (HW_8: result1 = (acc int_Z2 result0)),
   forall (int_Z3_1: ((memory) Z Z3)),
-  forall (HW_8: int_Z3_1 = (upd int_Z3_0 result result1)),
+  forall (HW_9: int_Z3_1 = (upd int_Z3_0 result result1)),
   (* File \"copy.c\", line 9, characters 17-70:\n *) (i0 <= n /\
   (forall (k:Z),
    (i0 <= k /\ k < n -> (acc int_Z3_1 (shift t2 k)) =
@@ -65,23 +70,36 @@ Save.
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
+  forall (int_Z3: ((memory) Z Z3)),
   forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (n <= n /\
+                (forall (k:Z),
+                 (n <= k /\ k < n -> (acc int_Z3 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i: Z),
   forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
+  forall (HW_3: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
                   (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
-  forall (HW_3: i0 = (i - 1)),
-  forall (HW_4: i > 0),
+  forall (HW_4: i0 = (i - 1)),
+  forall (HW_5: i > 0),
   forall (result: ((pointer) Z3)),
-  forall (HW_5: result = (shift t2 i0)),
+  forall (HW_6: result = (shift t2 i0)),
   forall (result0: ((pointer) Z2)),
-  forall (HW_6: result0 = (shift t1 i0)),
+  forall (HW_7: result0 = (shift t1 i0)),
   forall (result1: Z),
-  forall (HW_7: result1 = (acc int_Z2 result0)),
+  forall (HW_8: result1 = (acc int_Z2 result0)),
+  forall (HW_10: (forall (int_Z3:((memory) Z Z3)),
+                  (int_Z3 = (upd int_Z3_0 result result1) ->
+                   (* File \"copy.c\", line 9, characters 17-70:\n *) (i0 <=
+                   n /\
+                   (forall (k:Z),
+                    (i0 <= k /\ k < n -> (acc int_Z3 (shift t2 k)) =
+                     (acc int_Z2 (shift t1 k))))) /\
+                   (Zwf 0 i0 i)))),
   (valid alloc result).
 Proof.
 intuition.
@@ -95,21 +113,37 @@ Save.
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
+  forall (int_Z3: ((memory) Z Z3)),
   forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (n <= n /\
+                (forall (k:Z),
+                 (n <= k /\ k < n -> (acc int_Z3 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i: Z),
   forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
+  forall (HW_3: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
                   (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
-  forall (HW_3: i0 = (i - 1)),
-  forall (HW_4: i > 0),
+  forall (HW_4: i0 = (i - 1)),
+  forall (HW_5: i > 0),
   forall (result: ((pointer) Z3)),
-  forall (HW_5: result = (shift t2 i0)),
+  forall (HW_6: result = (shift t2 i0)),
   forall (result0: ((pointer) Z2)),
-  forall (HW_6: result0 = (shift t1 i0)),
+  forall (HW_7: result0 = (shift t1 i0)),
+  forall (HW_11: (forall (result1:Z),
+                  (result1 = (acc int_Z2 result0) ->
+                   (forall (int_Z3:((memory) Z Z3)),
+                    (int_Z3 = (upd int_Z3_0 result result1) ->
+                     (* File \"copy.c\", line 9, characters 17-70:\n *)
+                     (i0 <= n /\
+                     (forall (k:Z),
+                      (i0 <= k /\ k < n -> (acc int_Z3 (shift t2 k)) =
+                       (acc int_Z2 (shift t1 k))))) /\
+                     (Zwf 0 i0 i))) /\
+                   (valid alloc result)))),
   (valid alloc result0).
 Proof.
 intuition.
@@ -123,17 +157,22 @@ Save.
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
+  forall (int_Z3: ((memory) Z Z3)),
   forall (HW_1: (* File \"copy.c\", line 4, characters 14-58:\n *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
+  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (n <= n /\
+                (forall (k:Z),
+                 (n <= k /\ k < n -> (acc int_Z3 (shift t2 k)) =
+                  (acc int_Z2 (shift t1 k)))))),
   forall (i: Z),
   forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
+  forall (HW_3: (* File \"copy.c\", line 9, characters 17-70:\n *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =
                   (acc int_Z2 (shift t1 k)))))),
   forall (i0: Z),
-  forall (HW_3: i0 = (i - 1)),
-  forall (HW_9: i <= 0),
+  forall (HW_4: i0 = (i - 1)),
+  forall (HW_12: i <= 0),
   (* File \"copy.c\", line 5, characters 13-56:\n *)
   (forall (k:Z),
    (0 <= k /\ k < n -> (acc int_Z3_0 (shift t2 k)) =

@@ -13,8 +13,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_2 : 
-  forall (HW_1: (* File \"break.c\", line 8, characters 17-22:\n *) True),
-  forall (HW_2: 1 <> 0),
+  forall (HW_2: (* File \"break.c\", line 8, characters 17-22:\n *) True),
+  forall (HW_3: 1 <> 0),
   (* File \"break.c\", line 5, characters 13-26:\n *) 12 = 12.
 Proof.
 intuition.
@@ -23,8 +23,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_3 : 
-  forall (HW_1: (* File \"break.c\", line 8, characters 17-22:\n *) True),
-  forall (HW_3: 1 = 0),
+  forall (HW_2: (* File \"break.c\", line 8, characters 17-22:\n *) True),
+  forall (HW_4: 1 = 0),
   (* File \"break.c\", line 5, characters 13-26:\n *) 12 = 12.
 Proof.
 intuition.
@@ -40,12 +40,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
+  forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= 10),
   forall (n: Z),
-  forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
-  forall (HW_2: n >= 0),
-  forall (HW_3: n = 0),
+  forall (HW_2: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
+  forall (HW_3: n >= 0),
+  forall (HW_4: n = 0),
   forall (n0: Z),
-  forall (HW_4: n0 = (n + 1)),
+  forall (HW_5: n0 = (n + 1)),
   (* File \"break.c\", line 13, characters 13-25:\n *) n0 = 1.
 Proof.
 intuition.
@@ -53,12 +54,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_3 : 
+  forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= 10),
   forall (n: Z),
-  forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
-  forall (HW_2: n >= 0),
-  forall (HW_5: n <> 0),
+  forall (HW_2: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
+  forall (HW_3: n >= 0),
+  forall (HW_6: n <> 0),
   forall (n0: Z),
-  forall (HW_6: n0 = (n - 1)),
+  forall (HW_7: n0 = (n - 1)),
   (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n0 /\
   (Zwf 0 n0 n).
 Proof.
@@ -67,9 +69,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_4 : 
+  forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= 10),
   forall (n: Z),
-  forall (HW_1: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
-  forall (HW_7: n < 0),
+  forall (HW_2: (* File \"break.c\", line 18, characters 17-23:\n *) 0 <= n),
+  forall (HW_8: n < 0),
   (* File \"break.c\", line 13, characters 13-25:\n *) n = 1.
 Proof.
 intuition.
@@ -84,12 +87,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
+  forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= 10),
   forall (n: Z),
-  forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
-  forall (HW_2: n >= 0),
-  forall (HW_3: n = 1),
+  forall (HW_2: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
+  forall (HW_3: n >= 0),
+  forall (HW_4: n = 1),
   forall (n0: Z),
-  forall (HW_4: n0 = (n + 1)),
+  forall (HW_5: n0 = (n + 1)),
   (* File \"break.c\", line 27, characters 13-25:\n *) n0 = 2.
 Proof.
 intuition.
@@ -97,12 +101,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_3 : 
+  forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= 10),
   forall (n: Z),
-  forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
-  forall (HW_2: n >= 0),
-  forall (HW_5: n <> 1),
+  forall (HW_2: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
+  forall (HW_3: n >= 0),
+  forall (HW_6: n <> 1),
   forall (n0: Z),
-  forall (HW_6: n0 = (n - 1)),
+  forall (HW_7: n0 = (n - 1)),
   (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n0 /\
   (Zwf 0 n0 n).
 Proof.
@@ -111,9 +116,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_4 : 
+  forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= 10),
   forall (n: Z),
-  forall (HW_1: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
-  forall (HW_7: n < 0),
+  forall (HW_2: (* File \"break.c\", line 31, characters 17-23:\n *) 1 <= n),
+  forall (HW_8: n < 0),
   (* File \"break.c\", line 27, characters 13-25:\n *) n = 2.
 Proof.
 intuition.
@@ -132,10 +138,11 @@ Save.
 (*Why goal*) Lemma f4_impl_po_2 : 
   forall (i: Z),
   forall (HW_1: i = 0),
+  forall (HW_2: (* File \"break.c\", line 43, characters 17-23:\n *) i <= 3),
   forall (i0: Z),
-  forall (HW_2: (* File \"break.c\", line 43, characters 17-23:\n *) i0 <= 3),
-  forall (HW_3: i0 < 10),
-  forall (HW_4: i0 = 3),
+  forall (HW_3: (* File \"break.c\", line 43, characters 17-23:\n *) i0 <= 3),
+  forall (HW_4: i0 < 10),
+  forall (HW_5: i0 = 3),
   (* File \"break.c\", line 39, characters 13-25:\n *) i0 = 3.
 Proof.
 intuition.
@@ -145,12 +152,13 @@ Save.
 (*Why goal*) Lemma f4_impl_po_3 : 
   forall (i: Z),
   forall (HW_1: i = 0),
+  forall (HW_2: (* File \"break.c\", line 43, characters 17-23:\n *) i <= 3),
   forall (i0: Z),
-  forall (HW_2: (* File \"break.c\", line 43, characters 17-23:\n *) i0 <= 3),
-  forall (HW_3: i0 < 10),
-  forall (HW_5: i0 <> 3),
+  forall (HW_3: (* File \"break.c\", line 43, characters 17-23:\n *) i0 <= 3),
+  forall (HW_4: i0 < 10),
+  forall (HW_6: i0 <> 3),
   forall (i1: Z),
-  forall (HW_6: i1 = (i0 + 1)),
+  forall (HW_7: i1 = (i0 + 1)),
   (* File \"break.c\", line 43, characters 17-23:\n *) i1 <= 3 /\
   (Zwf 0 (10 - i1) (10 - i0)).
 Proof.
@@ -161,9 +169,10 @@ Save.
 (*Why goal*) Lemma f4_impl_po_4 : 
   forall (i: Z),
   forall (HW_1: i = 0),
+  forall (HW_2: (* File \"break.c\", line 43, characters 17-23:\n *) i <= 3),
   forall (i0: Z),
-  forall (HW_2: (* File \"break.c\", line 43, characters 17-23:\n *) i0 <= 3),
-  forall (HW_7: i0 >= 10),
+  forall (HW_3: (* File \"break.c\", line 43, characters 17-23:\n *) i0 <= 3),
+  forall (HW_8: i0 >= 10),
   (* File \"break.c\", line 39, characters 13-25:\n *) i0 = 3.
 Proof.
 intuition.

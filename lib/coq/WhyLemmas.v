@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.18 2004-09-30 15:32:33 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.19 2005-11-08 15:44:44 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -103,3 +103,8 @@ Require Import WhyTuples.
 Parameter why_any_int : forall x_:unit, sig_1 Z (fun result:Z => True).
 Parameter
   why_any_unit : forall x_:unit, sig_1 unit (fun result:unit => True).
+
+Lemma why_asym_conj : forall (a b : Prop), a -> (a -> b) -> a /\ b.
+Proof.
+  tauto.
+Qed.

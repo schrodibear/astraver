@@ -24,17 +24,19 @@ Save.
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
+  forall (HW_4: (* File \"logic_cast.c\", line 10, characters 11-25:\n *)
+                (0 <= I /\ I <= 4)),
   forall (I0: Z),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (HW_4: (* File \"logic_cast.c\", line 10, characters 11-25:\n *)
+  forall (HW_5: (* File \"logic_cast.c\", line 10, characters 11-25:\n *)
                 (0 <= I0 /\ I0 <= 4)),
-  forall (HW_5: I0 < 4),
+  forall (HW_6: I0 < 4),
   forall (result: ((pointer) Z1)),
-  forall (HW_6: result = (shift t I0)),
+  forall (HW_7: result = (shift t I0)),
   forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_7: int_Z1_0 = (upd int_Z1 result I0)),
+  forall (HW_8: int_Z1_0 = (upd int_Z1 result I0)),
   forall (I1: Z),
-  forall (HW_8: I1 = (I0 + 1)),
+  forall (HW_9: I1 = (I0 + 1)),
   (* File \"logic_cast.c\", line 10, characters 11-25:\n *) (0 <= I1 /\ I1 <=
   4) /\ (Zwf 0 (4 - I1) (4 - I0)).
 Proof.
@@ -48,12 +50,21 @@ Save.
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
-  forall (I0: Z),
   forall (HW_4: (* File \"logic_cast.c\", line 10, characters 11-25:\n *)
+                (0 <= I /\ I <= 4)),
+  forall (I0: Z),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_5: (* File \"logic_cast.c\", line 10, characters 11-25:\n *)
                 (0 <= I0 /\ I0 <= 4)),
-  forall (HW_5: I0 < 4),
+  forall (HW_6: I0 < 4),
   forall (result: ((pointer) Z1)),
-  forall (HW_6: result = (shift t I0)),
+  forall (HW_7: result = (shift t I0)),
+  forall (HW_10: (forall (int_Z1_0:((memory) Z Z1)),
+                  (int_Z1_0 = (upd int_Z1 result I0) ->
+                   (forall (I:Z),
+                    (I = (I0 + 1) ->
+                     (* File \"logic_cast.c\", line 10, characters 11-25:\n *)
+                     (0 <= I /\ I <= 4) /\ (Zwf 0 (4 - I) (4 - I0))))))),
   (valid alloc result).
 Proof.
 intuition.

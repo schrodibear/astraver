@@ -15,11 +15,12 @@ Require Import Omega.
 (*Why goal*) Lemma p_po_2 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
+  forall (HW_2: 0 <= x /\ x <= x),
   forall (x0: Z),
-  forall (HW_2: 0 <= x0 /\ x0 <= x),
-  forall (HW_3: x0 > 0),
+  forall (HW_3: 0 <= x0 /\ x0 <= x),
+  forall (HW_4: x0 > 0),
   forall (x1: Z),
-  forall (HW_4: x1 = (x0 - 1)),
+  forall (HW_5: x1 = (x0 - 1)),
   (0 <= x1 /\ x1 <= x) /\ (Zwf 0 x1 x0).
 Proof.
 intuition.
@@ -29,9 +30,10 @@ Qed.
 (*Why goal*) Lemma p_po_3 : 
   forall (x: Z),
   forall (HW_1: x >= 0),
+  forall (HW_2: 0 <= x /\ x <= x),
   forall (x0: Z),
-  forall (HW_2: 0 <= x0 /\ x0 <= x),
-  forall (HW_5: x0 <= 0),
+  forall (HW_3: 0 <= x0 /\ x0 <= x),
+  forall (HW_6: x0 <= 0),
   x0 = 0.
 Proof.
 intuition.

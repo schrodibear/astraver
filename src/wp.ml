@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.88 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.89 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -127,7 +127,7 @@ let abstract_wp (q',ql') (q,ql) res out =
     let pt = find_exception x in
     quantify a' a (option_app (fun t -> (result, PureType t)) pt)
   in
-  pands ~is_wp:true (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
+  wpands (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
 
 (* simple version when [q'] is absent *)
 let abstract_wp_0 (q,ql) res out =
@@ -139,7 +139,7 @@ let abstract_wp_0 (q,ql) res out =
     let pt = find_exception x in
     quantify a (option_app (fun t -> (result, PureType t)) pt)
   in
-  pands ~is_wp:true (quantify q (Some res) :: List.map quantify_h ql)
+  wpands (quantify q (Some res) :: List.map quantify_h ql)
 
 let opaque_wp q' q info = match q', q with
   | Some q', Some q ->
@@ -157,7 +157,7 @@ let opaque_wp q' q info = match q', q with
 
 let pand_wp info w1 w2 = match w1, w2 with
   | Some w1, Some w2 -> 
-      Some (wp_named info.t_loc (pand ~is_wp:true w1.a_value w2.a_value))
+      Some (wp_named info.t_loc (wpand w1.a_value w2.a_value))
   | Some _, None -> w1
   | None, Some _ -> w2
   | None, None -> None
@@ -178,9 +178,9 @@ let add_to_wp loc al w =
     w
   else match w with
     | Some w -> 
-	Some (asst_app (fun w -> List.fold_left wpand w al) w) 
+	Some (asst_app (fun w -> List.fold_left (wpand ~is_sym:false) w al) w) 
     | None -> 
-	Some (wp_named loc (pands ~is_wp:true al))
+	Some (wp_named loc (wpands ~is_sym:false al))
 
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
@@ -292,7 +292,8 @@ and wp_desc info d q =
 	  | Some {a_value=i}, Some {a_value=we} ->
 	      let vars = output_info info in
 	      wpand wfr
-		(wpand i (foralls ~is_wp:true vars (Pimplies (true, i, we))))
+		(wpand ~is_sym:false 
+		   i (foralls ~is_wp:true vars (Pimplies (true, i, we))))
 	in
 	let w = Some (wp_named info.t_loc w) in
 	Loop (inv, var, e'), w

@@ -39,29 +39,32 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_2 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_5: result = blue),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_6: result = blue),
   forall (result0: color),
-  forall (HW_6: result0 = (access t0 b)),
+  forall (HW_7: result0 = (access t0 b)),
   forall (result1: color),
-  forall (HW_7: result1 = (access t0 i)),
+  forall (HW_8: result1 = (access t0 i)),
   forall (t1: (array color)),
-  forall (HW_8: t1 = (update t0 b result1)),
+  forall (HW_9: t1 = (update t0 b result1)),
   forall (t2: (array color)),
-  forall (HW_9: t2 = (update t1 i result0)),
+  forall (HW_10: t2 = (update t1 i result0)),
   forall (b0: Z),
-  forall (HW_10: b0 = (b + 1)),
+  forall (HW_11: b0 = (b + 1)),
   forall (i0: Z),
-  forall (HW_11: i0 = (i + 1)),
+  forall (HW_12: i0 = (i + 1)),
   ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\ r <= N) /\
   (monochrome t2 0 b0 blue) /\ (monochrome t2 b0 i0 white) /\
   (monochrome t2 r N red) /\ (array_length t2) = N) /\
@@ -110,23 +113,36 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_3 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_5: result = blue),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_6: result = blue),
   forall (result0: color),
-  forall (HW_6: result0 = (access t0 b)),
+  forall (HW_7: result0 = (access t0 b)),
   forall (result1: color),
-  forall (HW_7: result1 = (access t0 i)),
+  forall (HW_8: result1 = (access t0 i)),
   forall (t1: (array color)),
-  forall (HW_8: t1 = (update t0 b result1)),
+  forall (HW_9: t1 = (update t0 b result1)),
+  forall (HW_13: (forall (t:(array color)),
+                  (t = (update t1 i result0) ->
+                   (forall (b0:Z),
+                    (b0 = (b + 1) ->
+                     (forall (i0:Z),
+                      (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\
+                       r <= N) /\ (monochrome t 0 b0 blue) /\
+                       (monochrome t b0 i0 white) /\
+                       (monochrome t r N red) /\ (array_length t) = N) /\
+                       (Zwf 0 (r - i0) (r - i))))))))),
   0 <= i /\ i < (array_length t1).
 Proof.
 intuition.
@@ -137,21 +153,37 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_4 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_5: result = blue),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_6: result = blue),
   forall (result0: color),
-  forall (HW_6: result0 = (access t0 b)),
+  forall (HW_7: result0 = (access t0 b)),
   forall (result1: color),
-  forall (HW_7: result1 = (access t0 i)),
+  forall (HW_8: result1 = (access t0 i)),
+  forall (HW_14: (forall (t:(array color)),
+                  (t = (update t0 b result1) ->
+                   (forall (t0:(array color)),
+                    (t0 = (update t i result0) ->
+                     (forall (b0:Z),
+                      (b0 = (b + 1) ->
+                       (forall (i0:Z),
+                        (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <=
+                         r /\ r <= N) /\ (monochrome t0 0 b0 blue) /\
+                         (monochrome t0 b0 i0 white) /\
+                         (monochrome t0 r N red) /\ (array_length t0) = N) /\
+                         (Zwf 0 (r - i0) (r - i)))))))) /\
+                   0 <= i /\ i < (array_length t)))),
   0 <= b /\ b < (array_length t0).
 Proof.
 intuition.
@@ -161,19 +193,38 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_5 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_5: result = blue),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_6: result = blue),
   forall (result0: color),
-  forall (HW_6: result0 = (access t0 b)),
+  forall (HW_7: result0 = (access t0 b)),
+  forall (HW_15: (forall (result:color),
+                  (result = (access t0 i) ->
+                   (forall (t:(array color)),
+                    (t = (update t0 b result) ->
+                     (forall (t0:(array color)),
+                      (t0 = (update t i result0) ->
+                       (forall (b0:Z),
+                        (b0 = (b + 1) ->
+                         (forall (i0:Z),
+                          (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <=
+                           r /\ r <= N) /\ (monochrome t0 0 b0 blue) /\
+                           (monochrome t0 b0 i0 white) /\
+                           (monochrome t0 r N red) /\ (array_length t0) =
+                           N) /\ (Zwf 0 (r - i0) (r - i)))))))) /\
+                     0 <= i /\ i < (array_length t))) /\
+                   0 <= b /\ b < (array_length t0)))),
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition; subst; auto.
@@ -183,17 +234,39 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_6 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_5: result = blue),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_6: result = blue),
+  forall (HW_16: (forall (result:color),
+                  (result = (access t0 b) ->
+                   (forall (result0:color),
+                    (result0 = (access t0 i) ->
+                     (forall (t:(array color)),
+                      (t = (update t0 b result0) ->
+                       (forall (t0:(array color)),
+                        (t0 = (update t i result) ->
+                         (forall (b0:Z),
+                          (b0 = (b + 1) ->
+                           (forall (i0:Z),
+                            (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <=
+                             r /\ r <= N) /\ (monochrome t0 0 b0 blue) /\
+                             (monochrome t0 b0 i0 white) /\
+                             (monochrome t0 r N red) /\ (array_length t0) =
+                             N) /\ (Zwf 0 (r - i0) (r - i)))))))) /\
+                       0 <= i /\ i < (array_length t))) /\
+                     0 <= b /\ b < (array_length t0))) /\
+                   0 <= i /\ i < (array_length t0)))),
   0 <= b /\ b < (array_length t0).
 Proof.
 intuition.
@@ -203,22 +276,25 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_7 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
   forall (result0: color),
-  forall (HW_13: result0 = (access t0 i)),
-  forall (HW_14: result0 = white),
+  forall (HW_18: result0 = (access t0 i)),
+  forall (HW_19: result0 = white),
   forall (i0: Z),
-  forall (HW_15: i0 = (i + 1)),
+  forall (HW_20: i0 = (i + 1)),
   ((0 <= b /\ b <= i0) /\ (i0 <= r /\ r <= N) /\ (monochrome t0 0 b blue) /\
   (monochrome t0 b i0 white) /\ (monochrome t0 r N red) /\
   (array_length t0) = N) /\ (Zwf 0 (r - i0) (r - i)).
@@ -234,30 +310,33 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_8 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
   forall (result0: color),
-  forall (HW_13: result0 = (access t0 i)),
-  forall (HW_16: ~(result0 = white)),
+  forall (HW_18: result0 = (access t0 i)),
+  forall (HW_21: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_17: r0 = (r - 1)),
+  forall (HW_22: r0 = (r - 1)),
   forall (result1: color),
-  forall (HW_18: result1 = (access t0 r0)),
+  forall (HW_23: result1 = (access t0 r0)),
   forall (result2: color),
-  forall (HW_19: result2 = (access t0 i)),
+  forall (HW_24: result2 = (access t0 i)),
   forall (t1: (array color)),
-  forall (HW_20: t1 = (update t0 r0 result2)),
+  forall (HW_25: t1 = (update t0 r0 result2)),
   forall (t2: (array color)),
-  forall (HW_21: t2 = (update t1 i result1)),
+  forall (HW_26: t2 = (update t1 i result1)),
   ((0 <= b /\ b <= i) /\ (i <= r0 /\ r0 <= N) /\ (monochrome t2 0 b blue) /\
   (monochrome t2 b i white) /\ (monochrome t2 r0 N red) /\
   (array_length t2) = N) /\ (Zwf 0 (r0 - i) (r - i)).
@@ -286,28 +365,36 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_9 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
   forall (result0: color),
-  forall (HW_13: result0 = (access t0 i)),
-  forall (HW_16: ~(result0 = white)),
+  forall (HW_18: result0 = (access t0 i)),
+  forall (HW_21: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_17: r0 = (r - 1)),
+  forall (HW_22: r0 = (r - 1)),
   forall (result1: color),
-  forall (HW_18: result1 = (access t0 r0)),
+  forall (HW_23: result1 = (access t0 r0)),
   forall (result2: color),
-  forall (HW_19: result2 = (access t0 i)),
+  forall (HW_24: result2 = (access t0 i)),
   forall (t1: (array color)),
-  forall (HW_20: t1 = (update t0 r0 result2)),
+  forall (HW_25: t1 = (update t0 r0 result2)),
+  forall (HW_27: (forall (t:(array color)),
+                  (t = (update t1 i result1) -> ((0 <= b /\ b <= i) /\ (i <=
+                   r0 /\ r0 <= N) /\ (monochrome t 0 b blue) /\
+                   (monochrome t b i white) /\ (monochrome t r0 N red) /\
+                   (array_length t) = N) /\ (Zwf 0 (r0 - i) (r - i))))),
   0 <= i /\ i < (array_length t1).
 Proof.
 intuition.
@@ -318,26 +405,37 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_10 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
   forall (result0: color),
-  forall (HW_13: result0 = (access t0 i)),
-  forall (HW_16: ~(result0 = white)),
+  forall (HW_18: result0 = (access t0 i)),
+  forall (HW_21: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_17: r0 = (r - 1)),
+  forall (HW_22: r0 = (r - 1)),
   forall (result1: color),
-  forall (HW_18: result1 = (access t0 r0)),
+  forall (HW_23: result1 = (access t0 r0)),
   forall (result2: color),
-  forall (HW_19: result2 = (access t0 i)),
+  forall (HW_24: result2 = (access t0 i)),
+  forall (HW_28: (forall (t:(array color)),
+                  (t = (update t0 r0 result2) ->
+                   (forall (t0:(array color)),
+                    (t0 = (update t i result1) -> ((0 <= b /\ b <= i) /\
+                     (i <= r0 /\ r0 <= N) /\ (monochrome t0 0 b blue) /\
+                     (monochrome t0 b i white) /\ (monochrome t0 r0 N red) /\
+                     (array_length t0) = N) /\ (Zwf 0 (r0 - i) (r - i)))) /\
+                   0 <= i /\ i < (array_length t)))),
   0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
@@ -348,24 +446,39 @@ Qed.
 (*Why goal*) Lemma dutch_flag_po_11 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
   forall (result0: color),
-  forall (HW_13: result0 = (access t0 i)),
-  forall (HW_16: ~(result0 = white)),
+  forall (HW_18: result0 = (access t0 i)),
+  forall (HW_21: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_17: r0 = (r - 1)),
+  forall (HW_22: r0 = (r - 1)),
   forall (result1: color),
-  forall (HW_18: result1 = (access t0 r0)),
+  forall (HW_23: result1 = (access t0 r0)),
+  forall (HW_29: (forall (result:color),
+                  (result = (access t0 i) ->
+                   (forall (t:(array color)),
+                    (t = (update t0 r0 result) ->
+                     (forall (t0:(array color)),
+                      (t0 = (update t i result1) -> ((0 <= b /\ b <= i) /\
+                       (i <= r0 /\ r0 <= N) /\ (monochrome t0 0 b blue) /\
+                       (monochrome t0 b i white) /\
+                       (monochrome t0 r0 N red) /\ (array_length t0) = N) /\
+                       (Zwf 0 (r0 - i) (r - i)))) /\
+                     0 <= i /\ i < (array_length t))) /\
+                   0 <= r0 /\ r0 < (array_length t0)))),
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
@@ -375,22 +488,40 @@ Save.
 (*Why goal*) Lemma dutch_flag_po_12 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
   forall (result0: color),
-  forall (HW_13: result0 = (access t0 i)),
-  forall (HW_16: ~(result0 = white)),
+  forall (HW_18: result0 = (access t0 i)),
+  forall (HW_21: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_17: r0 = (r - 1)),
+  forall (HW_22: r0 = (r - 1)),
+  forall (HW_30: (forall (result:color),
+                  (result = (access t0 r0) ->
+                   (forall (result0:color),
+                    (result0 = (access t0 i) ->
+                     (forall (t:(array color)),
+                      (t = (update t0 r0 result0) ->
+                       (forall (t0:(array color)),
+                        (t0 = (update t i result) -> ((0 <= b /\ b <= i) /\
+                         (i <= r0 /\ r0 <= N) /\ (monochrome t0 0 b blue) /\
+                         (monochrome t0 b i white) /\
+                         (monochrome t0 r0 N red) /\ (array_length t0) =
+                         N) /\ (Zwf 0 (r0 - i) (r - i)))) /\
+                       0 <= i /\ i < (array_length t))) /\
+                     0 <= r0 /\ r0 < (array_length t0))) /\
+                   0 <= i /\ i < (array_length t0)))),
   0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
@@ -400,17 +531,50 @@ Save.
 (*Why goal*) Lemma dutch_flag_po_13 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
   forall (result: color),
-  forall (HW_4: result = (access t0 i)),
-  forall (HW_12: ~(result = blue)),
+  forall (HW_5: result = (access t0 i)),
+  forall (HW_17: ~(result = blue)),
+  forall (HW_31: (forall (result:color),
+                  (result = (access t0 i) ->
+                   ((result = white ->
+                     (forall (i0:Z),
+                      (i0 = (i + 1) -> ((0 <= b /\ b <= i0) /\ (i0 <= r /\
+                       r <= N) /\ (monochrome t0 0 b blue) /\
+                       (monochrome t0 b i0 white) /\
+                       (monochrome t0 r N red) /\ (array_length t0) = N) /\
+                       (Zwf 0 (r - i0) (r - i)))))) /\
+                   ((~(result = white) ->
+                     (forall (r0:Z),
+                      (r0 = (r - 1) ->
+                       (forall (result:color),
+                        (result = (access t0 r0) ->
+                         (forall (result0:color),
+                          (result0 = (access t0 i) ->
+                           (forall (t:(array color)),
+                            (t = (update t0 r0 result0) ->
+                             (forall (t0:(array color)),
+                              (t0 = (update t i result) -> ((0 <= b /\ b <=
+                               i) /\ (i <= r0 /\ r0 <= N) /\
+                               (monochrome t0 0 b blue) /\
+                               (monochrome t0 b i white) /\
+                               (monochrome t0 r0 N red) /\
+                               (array_length t0) = N) /\
+                               (Zwf 0 (r0 - i) (r - i)))) /\
+                             0 <= i /\ i < (array_length t))) /\
+                           0 <= r0 /\ r0 < (array_length t0))) /\
+                         0 <= i /\ i < (array_length t0))) /\
+                       0 <= r0 /\ r0 < (array_length t0)))))))),
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
@@ -420,14 +584,74 @@ Save.
 (*Why goal*) Lemma dutch_flag_po_14 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_3: i < r),
+  forall (HW_4: i < r),
+  forall (HW_32: (forall (result:color),
+                  (result = (access t0 i) ->
+                   ((result = blue ->
+                     (forall (result:color),
+                      (result = (access t0 b) ->
+                       (forall (result0:color),
+                        (result0 = (access t0 i) ->
+                         (forall (t:(array color)),
+                          (t = (update t0 b result0) ->
+                           (forall (t0:(array color)),
+                            (t0 = (update t i result) ->
+                             (forall (b0:Z),
+                              (b0 = (b + 1) ->
+                               (forall (i0:Z),
+                                (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\
+                                 (i0 <= r /\ r <= N) /\
+                                 (monochrome t0 0 b0 blue) /\
+                                 (monochrome t0 b0 i0 white) /\
+                                 (monochrome t0 r N red) /\
+                                 (array_length t0) = N) /\
+                                 (Zwf 0 (r - i0) (r - i)))))))) /\
+                           0 <= i /\ i < (array_length t))) /\
+                         0 <= b /\ b < (array_length t0))) /\
+                       0 <= i /\ i < (array_length t0))) /\
+                     0 <= b /\ b < (array_length t0))) /\
+                   ((~(result = blue) ->
+                     (forall (result:color),
+                      (result = (access t0 i) ->
+                       ((result = white ->
+                         (forall (i0:Z),
+                          (i0 = (i + 1) -> ((0 <= b /\ b <= i0) /\ (i0 <=
+                           r /\ r <= N) /\ (monochrome t0 0 b blue) /\
+                           (monochrome t0 b i0 white) /\
+                           (monochrome t0 r N red) /\ (array_length t0) =
+                           N) /\ (Zwf 0 (r - i0) (r - i)))))) /\
+                       ((~(result = white) ->
+                         (forall (r0:Z),
+                          (r0 = (r - 1) ->
+                           (forall (result:color),
+                            (result = (access t0 r0) ->
+                             (forall (result0:color),
+                              (result0 = (access t0 i) ->
+                               (forall (t:(array color)),
+                                (t = (update t0 r0 result0) ->
+                                 (forall (t0:(array color)),
+                                  (t0 = (update t i result) -> ((0 <= b /\
+                                   b <= i) /\ (i <= r0 /\ r0 <= N) /\
+                                   (monochrome t0 0 b blue) /\
+                                   (monochrome t0 b i white) /\
+                                   (monochrome t0 r0 N red) /\
+                                   (array_length t0) = N) /\
+                                   (Zwf 0 (r0 - i) (r - i)))) /\
+                                 0 <= i /\ i < (array_length t))) /\
+                               0 <= r0 /\ r0 < (array_length t0))) /\
+                             0 <= i /\ i < (array_length t0))) /\
+                           0 <= r0 /\ r0 < (array_length t0))))))) /\
+                     0 <= i /\ i < (array_length t0)))))),
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
@@ -437,14 +661,17 @@ Save.
 (*Why goal*) Lemma dutch_flag_po_15 : 
   forall (t: (array color)),
   forall (HW_1: (array_length t) = N),
+  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= N /\ N <= N) /\
+                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
+                (monochrome t N N red) /\ (array_length t) = N),
   forall (b: Z),
   forall (i: Z),
   forall (r: Z),
   forall (t0: (array color)),
-  forall (HW_2: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
+  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= N) /\
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
-  forall (HW_22: i >= r),
+  forall (HW_33: i >= r),
   (monochrome t0 0 b blue) /\ (monochrome t0 b r white) /\
   (monochrome t0 r N red).
 Proof.

@@ -35,6 +35,13 @@ Save.
                 ((purse_inv balance_Z26 alloc p) /\ s >= 0)),
   forall (result: Z),
   forall (HW_2: result = (acc balance_Z26 p)),
+  forall (HW_4: (forall (balance_Z26_0:((memory) Z Z26)),
+                 (balance_Z26_0 = (upd balance_Z26 p (result + s)) ->
+                  (* File \"purse.c\", line 10, characters 13-63:\n *)
+                  ((purse_inv balance_Z26_0 alloc p) /\
+                  (acc balance_Z26_0 p) = ((acc balance_Z26 p) + s)) /\
+                  (not_assigns alloc balance_Z26 balance_Z26_0
+                   (pset_singleton p))))),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
@@ -50,6 +57,16 @@ Save.
   forall (balance_Z26: ((memory) Z Z26)),
   forall (HW_1: (* File \"purse.c\", line 8, characters 14-36:\n *)
                 ((purse_inv balance_Z26 alloc p) /\ s >= 0)),
+  forall (HW_5: (forall (result:Z),
+                 (result = (acc balance_Z26 p) ->
+                  (forall (balance_Z26_0:((memory) Z Z26)),
+                   (balance_Z26_0 = (upd balance_Z26 p (result + s)) ->
+                    (* File \"purse.c\", line 10, characters 13-63:\n *)
+                    ((purse_inv balance_Z26_0 alloc p) /\
+                    (acc balance_Z26_0 p) = ((acc balance_Z26 p) + s)) /\
+                    (not_assigns alloc balance_Z26 balance_Z26_0
+                     (pset_singleton p)))) /\
+                  (valid alloc p)))),
   (valid alloc p).
 Proof.
 intuition.
@@ -99,6 +116,12 @@ Save.
                 (acc balance_Z26_1 p2) = ((acc balance_Z26_0 p2) + 100)) /\
                 (not_assigns alloc balance_Z26_0 balance_Z26_1
                  (pset_singleton p2))),
+  forall (HW_5: (forall (result:Z),
+                 (result = (acc balance_Z26_1 p1) ->
+                  (* File \"purse.c\", line 27, characters 13-25:\n *)
+                  result = 0 /\
+                  (not_assigns alloc balance_Z26 balance_Z26_1
+                   (pset_union (pset_singleton p2) (pset_singleton p1)))))),
   (valid alloc p1).
 Proof.
 unfold purse_inv; intuition.
@@ -116,6 +139,19 @@ Save.
                 (purse_inv balance_Z26 alloc p2)) /\ ~(p1 = p2))),
   forall (balance_Z26_0: ((memory) Z Z26)),
   forall (HW_2: balance_Z26_0 = (upd balance_Z26 p1 0)),
+  forall (HW_6: (forall (balance_Z26_1:((memory) Z Z26)),
+                 ((* File \"purse.c\", line 10, characters 13-63:\n *)
+                  ((purse_inv balance_Z26_1 alloc p2) /\
+                  (acc balance_Z26_1 p2) = ((acc balance_Z26_0 p2) + 100)) /\
+                  (not_assigns alloc balance_Z26_0 balance_Z26_1
+                   (pset_singleton p2)) ->
+                  (forall (result:Z),
+                   (result = (acc balance_Z26_1 p1) ->
+                    (* File \"purse.c\", line 27, characters 13-25:\n *)
+                    result = 0 /\
+                    (not_assigns alloc balance_Z26 balance_Z26_1
+                     (pset_union (pset_singleton p2) (pset_singleton p1))))) /\
+                  (valid alloc p1)))),
   (* File \"purse.c\", line 8, characters 14-36:\n *)
   ((purse_inv balance_Z26_0 alloc p2) /\ 100 >= 0).
 Proof.
@@ -147,6 +183,23 @@ Save.
   forall (HW_1: (* File \"purse.c\", line 25, characters 14-56:\n *)
                 (((purse_inv balance_Z26 alloc p1) /\
                 (purse_inv balance_Z26 alloc p2)) /\ ~(p1 = p2))),
+  forall (HW_7: (forall (balance_Z26_0:((memory) Z Z26)),
+                 (balance_Z26_0 = (upd balance_Z26 p1 0) ->
+                  (forall (balance_Z26_1:((memory) Z Z26)),
+                   ((* File \"purse.c\", line 10, characters 13-63:\n *)
+                    ((purse_inv balance_Z26_1 alloc p2) /\
+                    (acc balance_Z26_1 p2) = ((acc balance_Z26_0 p2) + 100)) /\
+                    (not_assigns alloc balance_Z26_0 balance_Z26_1
+                     (pset_singleton p2)) ->
+                    (forall (result:Z),
+                     (result = (acc balance_Z26_1 p1) ->
+                      (* File \"purse.c\", line 27, characters 13-25:\n *)
+                      result = 0 /\
+                      (not_assigns alloc balance_Z26 balance_Z26_1
+                       (pset_union (pset_singleton p2) (pset_singleton p1))))) /\
+                    (valid alloc p1))) /\
+                  (* File \"purse.c\", line 8, characters 14-36:\n *)
+                  ((purse_inv balance_Z26_0 alloc p2) /\ 100 >= 0)))),
   (valid alloc p1).
 Proof.
 intuition.
@@ -249,6 +302,10 @@ Save.
                  (pset_singleton result0))),
   forall (result1: Z),
   forall (HW_7: result1 = (acc balance_Z26_3 result)),
+  forall (HW_9: (forall (result:Z),
+                 (result = (acc balance_Z26_3 result0) ->
+                  (* File \"purse.c\", line 41, characters 13-27:\n *)
+                  (result1 + result) = 150))),
   (valid alloc result0).
 Proof.
 unfold purse_inv; intuition.
@@ -303,6 +360,13 @@ Save.
                 ((acc balance_Z26_2 result0) - 100)) /\
                 (not_assigns alloc balance_Z26_2 balance_Z26_3
                  (pset_singleton result0))),
+  forall (HW_10: (forall (result1:Z),
+                  (result1 = (acc balance_Z26_3 result) ->
+                   (forall (result:Z),
+                    (result = (acc balance_Z26_3 result0) ->
+                     (* File \"purse.c\", line 41, characters 13-27:\n *)
+                     (result1 + result) = 150)) /\
+                   (valid alloc result0)))),
   (valid alloc result).
 Proof.
 unfold purse_inv; intuition.
@@ -353,6 +417,21 @@ Save.
                 ((acc balance_Z26_1 result) - 50)) /\
                 (not_assigns alloc balance_Z26_1 balance_Z26_2
                  (pset_singleton result))),
+  forall (HW_11: (forall (balance_Z26:((memory) Z Z26)),
+                  ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                   ((purse_inv balance_Z26 alloc result0) /\
+                   (acc balance_Z26 result0) =
+                   ((acc balance_Z26_2 result0) - 100)) /\
+                   (not_assigns alloc balance_Z26_2 balance_Z26
+                    (pset_singleton result0)) ->
+                   (forall (result1:Z),
+                    (result1 = (acc balance_Z26 result) ->
+                     (forall (result:Z),
+                      (result = (acc balance_Z26 result0) ->
+                       (* File \"purse.c\", line 41, characters 13-27:\n *)
+                       (result1 + result) = 150)) /\
+                     (valid alloc result0))) /\
+                   (valid alloc result)))),
   (* File \"purse.c\", line 16, characters 14-50:\n *)
   ((purse_inv balance_Z26_2 alloc result0) /\ 0 <= 100 /\ 100 <=
   (acc balance_Z26_2 result0)).
@@ -399,6 +478,31 @@ Save.
                 ((acc balance_Z26_0 result0) + 200)) /\
                 (not_assigns alloc balance_Z26_0 balance_Z26_1
                  (pset_singleton result0))),
+  forall (HW_12: (forall (balance_Z26:((memory) Z Z26)),
+                  ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                   ((purse_inv balance_Z26 alloc result) /\
+                   (acc balance_Z26 result) =
+                   ((acc balance_Z26_1 result) - 50)) /\
+                   (not_assigns alloc balance_Z26_1 balance_Z26
+                    (pset_singleton result)) ->
+                   (forall (balance_Z26_0:((memory) Z Z26)),
+                    ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                     ((purse_inv balance_Z26_0 alloc result0) /\
+                     (acc balance_Z26_0 result0) =
+                     ((acc balance_Z26 result0) - 100)) /\
+                     (not_assigns alloc balance_Z26 balance_Z26_0
+                      (pset_singleton result0)) ->
+                     (forall (result1:Z),
+                      (result1 = (acc balance_Z26_0 result) ->
+                       (forall (result:Z),
+                        (result = (acc balance_Z26_0 result0) ->
+                         (* File \"purse.c\", line 41, characters 13-27:\n *)
+                         (result1 + result) = 150)) /\
+                       (valid alloc result0))) /\
+                     (valid alloc result))) /\
+                   (* File \"purse.c\", line 16, characters 14-50:\n *)
+                   ((purse_inv balance_Z26 alloc result0) /\ 0 <= 100 /\
+                   100 <= (acc balance_Z26 result0))))),
   (* File \"purse.c\", line 16, characters 14-50:\n *)
   ((purse_inv balance_Z26_1 alloc result) /\ 0 <= 50 /\ 50 <=
   (acc balance_Z26_1 result)).
@@ -429,6 +533,41 @@ Save.
                 ((acc balance_Z26 result) + 100)) /\
                 (not_assigns alloc balance_Z26 balance_Z26_0
                  (pset_singleton result))),
+  forall (HW_13: (forall (balance_Z26:((memory) Z Z26)),
+                  ((* File \"purse.c\", line 10, characters 13-63:\n *)
+                   ((purse_inv balance_Z26 alloc result0) /\
+                   (acc balance_Z26 result0) =
+                   ((acc balance_Z26_0 result0) + 200)) /\
+                   (not_assigns alloc balance_Z26_0 balance_Z26
+                    (pset_singleton result0)) ->
+                   (forall (balance_Z26_0:((memory) Z Z26)),
+                    ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                     ((purse_inv balance_Z26_0 alloc result) /\
+                     (acc balance_Z26_0 result) =
+                     ((acc balance_Z26 result) - 50)) /\
+                     (not_assigns alloc balance_Z26 balance_Z26_0
+                      (pset_singleton result)) ->
+                     (forall (balance_Z26:((memory) Z Z26)),
+                      ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                       ((purse_inv balance_Z26 alloc result0) /\
+                       (acc balance_Z26 result0) =
+                       ((acc balance_Z26_0 result0) - 100)) /\
+                       (not_assigns alloc balance_Z26_0 balance_Z26
+                        (pset_singleton result0)) ->
+                       (forall (result1:Z),
+                        (result1 = (acc balance_Z26 result) ->
+                         (forall (result:Z),
+                          (result = (acc balance_Z26 result0) ->
+                           (* File \"purse.c\", line 41, characters 13-27:\n *)
+                           (result1 + result) = 150)) /\
+                         (valid alloc result0))) /\
+                       (valid alloc result))) /\
+                     (* File \"purse.c\", line 16, characters 14-50:\n *)
+                     ((purse_inv balance_Z26_0 alloc result0) /\ 0 <= 100 /\
+                     100 <= (acc balance_Z26_0 result0)))) /\
+                   (* File \"purse.c\", line 16, characters 14-50:\n *)
+                   ((purse_inv balance_Z26 alloc result) /\ 0 <= 50 /\ 50 <=
+                   (acc balance_Z26 result))))),
   (* File \"purse.c\", line 8, characters 14-36:\n *)
   ((purse_inv balance_Z26_0 alloc result0) /\ 200 >= 0).
 Proof.
@@ -450,6 +589,50 @@ Save.
                 (((fresh alloc result0) /\
                 (purse_inv balance_Z26 alloc result0)) /\
                 (acc balance_Z26 result0) = 0)),
+  forall (HW_14: (forall (balance_Z26_0:((memory) Z Z26)),
+                  ((* File \"purse.c\", line 10, characters 13-63:\n *)
+                   ((purse_inv balance_Z26_0 alloc result) /\
+                   (acc balance_Z26_0 result) =
+                   ((acc balance_Z26 result) + 100)) /\
+                   (not_assigns alloc balance_Z26 balance_Z26_0
+                    (pset_singleton result)) ->
+                   (forall (balance_Z26:((memory) Z Z26)),
+                    ((* File \"purse.c\", line 10, characters 13-63:\n *)
+                     ((purse_inv balance_Z26 alloc result0) /\
+                     (acc balance_Z26 result0) =
+                     ((acc balance_Z26_0 result0) + 200)) /\
+                     (not_assigns alloc balance_Z26_0 balance_Z26
+                      (pset_singleton result0)) ->
+                     (forall (balance_Z26_0:((memory) Z Z26)),
+                      ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                       ((purse_inv balance_Z26_0 alloc result) /\
+                       (acc balance_Z26_0 result) =
+                       ((acc balance_Z26 result) - 50)) /\
+                       (not_assigns alloc balance_Z26 balance_Z26_0
+                        (pset_singleton result)) ->
+                       (forall (balance_Z26:((memory) Z Z26)),
+                        ((* File \"purse.c\", line 18, characters 13-63:\n *)
+                         ((purse_inv balance_Z26 alloc result0) /\
+                         (acc balance_Z26 result0) =
+                         ((acc balance_Z26_0 result0) - 100)) /\
+                         (not_assigns alloc balance_Z26_0 balance_Z26
+                          (pset_singleton result0)) ->
+                         (forall (result1:Z),
+                          (result1 = (acc balance_Z26 result) ->
+                           (forall (result:Z),
+                            (result = (acc balance_Z26 result0) ->
+                             (* File \"purse.c\", line 41, characters 13-27:\n *)
+                             (result1 + result) = 150)) /\
+                           (valid alloc result0))) /\
+                         (valid alloc result))) /\
+                       (* File \"purse.c\", line 16, characters 14-50:\n *)
+                       ((purse_inv balance_Z26_0 alloc result0) /\ 0 <=
+                       100 /\ 100 <= (acc balance_Z26_0 result0)))) /\
+                     (* File \"purse.c\", line 16, characters 14-50:\n *)
+                     ((purse_inv balance_Z26 alloc result) /\ 0 <= 50 /\
+                     50 <= (acc balance_Z26 result)))) /\
+                   (* File \"purse.c\", line 8, characters 14-36:\n *)
+                   ((purse_inv balance_Z26_0 alloc result0) /\ 200 >= 0)))),
   (* File \"purse.c\", line 8, characters 14-36:\n *)
   ((purse_inv balance_Z26 alloc result) /\ 100 >= 0).
 Proof.
@@ -501,6 +684,13 @@ Save.
                 (acc balance_Z26 p))),
   forall (result: Z),
   forall (HW_2: result = (acc balance_Z26 p)),
+  forall (HW_4: (forall (balance_Z26_0:((memory) Z Z26)),
+                 (balance_Z26_0 = (upd balance_Z26 p (result - s)) ->
+                  (* File \"purse.c\", line 18, characters 13-63:\n *)
+                  ((purse_inv balance_Z26_0 alloc p) /\
+                  (acc balance_Z26_0 p) = ((acc balance_Z26 p) - s)) /\
+                  (not_assigns alloc balance_Z26 balance_Z26_0
+                   (pset_singleton p))))),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
@@ -517,6 +707,16 @@ Save.
   forall (HW_1: (* File \"purse.c\", line 16, characters 14-50:\n *)
                 ((purse_inv balance_Z26 alloc p) /\ 0 <= s /\ s <=
                 (acc balance_Z26 p))),
+  forall (HW_5: (forall (result:Z),
+                 (result = (acc balance_Z26 p) ->
+                  (forall (balance_Z26_0:((memory) Z Z26)),
+                   (balance_Z26_0 = (upd balance_Z26 p (result - s)) ->
+                    (* File \"purse.c\", line 18, characters 13-63:\n *)
+                    ((purse_inv balance_Z26_0 alloc p) /\
+                    (acc balance_Z26_0 p) = ((acc balance_Z26 p) - s)) /\
+                    (not_assigns alloc balance_Z26 balance_Z26_0
+                     (pset_singleton p)))) /\
+                  (valid alloc p)))),
   (valid alloc p).
 Proof.
 intuition.

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.106 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.107 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -203,7 +203,7 @@ let rec occur_predicate id = function
       occur_term id a || occur_predicate id b || occur_predicate id c
   | Forallb (_, a, b) 
   | Pimplies (_, a, b) 
-  | Pand (_, a, b) 
+  | Pand (_, _, a, b) 
   | Piff (a, b) 
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
   | Pnot a -> occur_predicate id a
@@ -252,7 +252,7 @@ let forall ?(is_wp=false) x v p = match v with
   | PureType PTbool ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
-      Pand (true, simplify ptrue, simplify pfalse)
+      Pand (true, true, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
@@ -330,7 +330,8 @@ let make_raw_access env (id,id') c =
 let make_pre_access env id c =
   let pt = array_info env id in
   let c = unref_term c in
-  Pand (false, le_int (Tconst (ConstInt "0")) c, lt_int c (array_length id pt))
+  Pand (false, true, 
+	le_int (Tconst (ConstInt "0")) c, lt_int c (array_length id pt))
       
 let make_raw_store env (id,id') c1 c2 =
   let pt = array_info env id in
@@ -473,7 +474,7 @@ let rec print_predicate fmt = function
   | Pif (a, b, c) -> 
       fprintf fmt "(@[if %a then@ %a else@ %a@])" 
 	print_term a print_predicate b print_predicate c
-  | Pand (_, a, b) ->
+  | Pand (_, _, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
   | Forallb (_, ptrue, pfalse) ->
       fprintf fmt "(@[forallb(%a,@ %a)@])" 

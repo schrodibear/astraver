@@ -199,7 +199,7 @@ let rec print_predicate fmt = function
   | Pif (a, b, c) ->
       fprintf fmt "(@[if %a@ then %a@ else %a@])" 
 	print_term a print_predicate b print_predicate c
-  | Pand (_, a, b) | Forallb (_, a, b) ->
+  | Pand (_, _, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(%a &@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "@[(%a |@ %a)@]" print_predicate a print_predicate b

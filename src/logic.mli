@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.29 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.30 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -52,6 +52,7 @@ type substitution = term Ident.map
 type var_substitution = Ident.t Ident.map
 
 type is_wp = bool
+type is_sym = bool
 
 type predicate =
   | Pvar of Ident.t
@@ -60,7 +61,7 @@ type predicate =
   | Pfalse
   | Pimplies of is_wp * predicate * predicate
   | Pif of term * predicate * predicate
-  | Pand of is_wp * predicate * predicate
+  | Pand of is_wp * is_sym * predicate * predicate
   | Por of predicate * predicate
   | Piff of predicate * predicate
   | Pnot of predicate

@@ -25,12 +25,16 @@ Save.
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
+  forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc s0 0 0)),
   forall (result: ((pointer) Z0)),
   forall (HW_2: result = (acc b_Z5 s0)),
   forall (result0: ((pointer) Z0)),
   forall (HW_3: result0 = (shift result 2)),
+  forall (HW_5: (forall (int_Z0_0:((memory) Z Z0)),
+                 (int_Z0_0 = (upd int_Z0 result0 1) ->
+                  (* File \"struct2.c\", line 6, characters 13-18:\n *) True))),
   (valid alloc result0).
 Proof.
 intuition.
@@ -44,8 +48,19 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
+  forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
+  forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_6: (forall (result:((pointer) Z0)),
+                 (result = (acc b_Z5 s0) ->
+                  (forall (result0:((pointer) Z0)),
+                   (result0 = (shift result 2) ->
+                    (forall (int_Z0_0:((memory) Z Z0)),
+                     (int_Z0_0 = (upd int_Z0 result0 1) ->
+                      (* File \"struct2.c\", line 6, characters 13-18:\n *)
+                      True)) /\
+                    (valid alloc result0)))))),
   (valid alloc s0).
 Proof.
 intuition.
@@ -78,6 +93,7 @@ Save.
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
+  forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
   forall (result: ((pointer) Z2)),
@@ -86,6 +102,9 @@ Save.
   forall (HW_3: result0 = (acc b_Z2 result)),
   forall (result1: ((pointer) Z0)),
   forall (HW_4: result1 = (shift result0 2)),
+  forall (HW_6: (forall (int_Z0_0:((memory) Z Z0)),
+                 (int_Z0_0 = (upd int_Z0 result1 1) ->
+                  (* File \"struct2.c\", line 16, characters 13-18:\n *) True))),
   (valid alloc result1).
 Proof.
 intuition.
@@ -94,11 +113,22 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
+  forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
+  forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
   forall (result: ((pointer) Z2)),
   forall (HW_2: result = (acc d_Z8 u)),
+  forall (HW_7: (forall (result0:((pointer) Z0)),
+                 (result0 = (acc b_Z2 result) ->
+                  (forall (result:((pointer) Z0)),
+                   (result = (shift result0 2) ->
+                    (forall (int_Z0_0:((memory) Z Z0)),
+                     (int_Z0_0 = (upd int_Z0 result 1) ->
+                      (* File \"struct2.c\", line 16, characters 13-18:\n *)
+                      True)) /\
+                    (valid alloc result)))))),
   (valid alloc result).
 Proof.
 intuition.
@@ -110,8 +140,23 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
+  forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
+  forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
+  forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
+  forall (HW_8: (forall (result:((pointer) Z2)),
+                 (result = (acc d_Z8 u) ->
+                  (forall (result0:((pointer) Z0)),
+                   (result0 = (acc b_Z2 result) ->
+                    (forall (result:((pointer) Z0)),
+                     (result = (shift result0 2) ->
+                      (forall (int_Z0_0:((memory) Z Z0)),
+                       (int_Z0_0 = (upd int_Z0 result 1) ->
+                        (* File \"struct2.c\", line 16, characters 13-18:\n *)
+                        True)) /\
+                      (valid alloc result))))) /\
+                  (valid alloc result)))),
   (valid alloc u).
 Proof.
 intuition.

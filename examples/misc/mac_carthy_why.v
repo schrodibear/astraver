@@ -31,6 +31,10 @@ Qed.
   forall (result: Z),
   forall (HW_2: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
                 (n + 11 - 10)),
+  forall (HW_4: (forall (result0:Z),
+                 (result <= 100 /\ result0 = 91 \/ result >= 101 /\ result0 =
+                  (result - 10) -> n <= 100 /\ result0 = 91 \/ n >= 101 /\
+                  result0 = (n - 10)))),
   (Zwf 0 (max 0 (101 - result)) (max 0 (101 - n))).
 Proof.
 intros n.
@@ -47,6 +51,14 @@ Save.
 (*Why goal*) Lemma f91_po_3 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
+  forall (HW_5: (forall (result:Z),
+                 ((n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\
+                  result = (n + 11 - 10) ->
+                  (forall (result0:Z),
+                   (result <= 100 /\ result0 = 91 \/ result >= 101 /\
+                    result0 = (result - 10) -> n <= 100 /\ result0 = 91 \/
+                    n >= 101 /\ result0 = (n - 10))) /\
+                  (Zwf 0 (max 0 (101 - result)) (max 0 (101 - n)))))),
   (Zwf 0 (max 0 (101 - (n + 11))) (max 0 (101 - n))).
 Proof.
 unfold Zwf, max; intuition.
@@ -58,7 +70,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_4 : 
   forall (n: Z),
-  forall (HW_4: n > 100),
+  forall (HW_6: n > 100),
   n <= 100 /\ (n - 10) = 91 \/ n >= 101 /\ (n - 10) = (n - 10).
 Proof.
 intuition.

@@ -38,6 +38,12 @@ Save.
   forall (HW_1: x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
+  forall (HW_5: (forall (result:Z),
+                 ((* File \"call.c\", line 11, characters 48-60:\n *)
+                  result = 2 ->
+                  (forall (x:Z),
+                   (x = result ->
+                    (* File \"call.c\", line 18, characters 13-19:\n *) x = 2))))),
   (* File \"call.c\", line 11, characters 14-22:\n *) 1 = x0.
 Proof.
 intuition.

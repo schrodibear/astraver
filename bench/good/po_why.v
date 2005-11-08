@@ -224,6 +224,9 @@ Save.
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
                 10),
+  forall (HW_3: (forall (result:Z),
+                 (result = (access t 0) -> 0 <= result /\ result <
+                  (array_length t)))),
   0 <= 0 /\ 0 < (array_length t).
 Proof.
 intuition.
@@ -250,6 +253,8 @@ Save.
   forall (HW_1: (array_length t) = 10),
   forall (x: Z),
   forall (HW_2: x = 0),
+  forall (HW_4: (forall (t0:(array Z)),
+                 (t0 = (update t x x) -> (access t0 0) = x))),
   0 <= x /\ x < (array_length t).
 Proof.
 intuition.

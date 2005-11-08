@@ -72,8 +72,8 @@ let reflexivity = function
 (* ..., h:P, ...|- P  and ..., h:P and Q, ...|- P *)
 let assumption concl = function
   | Spred (id, p) when p = concl -> Assumption id 
-  | Spred (id, Pand (_, a, _)) when a = concl -> Proj1 id
-  | Spred (id, Pand (_, _, b)) when b = concl -> Proj2 id
+  | Spred (id, Pand (_, _, a, _)) when a = concl -> Proj1 id
+  | Spred (id, Pand (_, _, _, b)) when b = concl -> Proj2 id
   | _ -> raise Exit
 
 (* alpha-equivalence ? *)
@@ -99,7 +99,7 @@ let boolean_destruct_2 = Ident.create "why_boolean_destruct_2"
 let boolean_destruct ctx concl = 
   let test_1 = function
     | Spred (id, 
-	     Pand (_, 
+	     Pand (_, _,
 		   Pimplies 
 		     (_, Papp (eq1, [Tconst (ConstBool b1); t1], _), c1),
 	           Pimplies
@@ -118,7 +118,7 @@ let boolean_destruct ctx concl =
 
 (* ..., h:A, ..., h':B, ... |- A and B *)
 let conjunction ctx = function
-  | Pand (_, a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
+  | Pand (_, _, a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
   | _ -> raise Exit
 
 (* ... |- (well_founded (Zwf 0)) *)
@@ -137,7 +137,7 @@ let loop_variant_1 hyps concl =
 	raise Exit
   in
   let rec lookup_h' phi1 phi0 = function
-    | Spred (h', Pand (_, _, Papp (id, [t1; t0], _))) 
+    | Spred (h', Pand (_, _, _, Papp (id, [t1; t0], _))) 
       when id == t_zwf_zero && t1 = phi1 && t0 = phi0 -> h'
     | _ -> raise Exit
   in
@@ -175,7 +175,7 @@ let rec unif_pred u = function
   | Ptrue, Ptrue | Pfalse, Pfalse -> u
   | Forallb (_, a, b), Forallb (_, a', b')
   | Pimplies (_, a, b), Pimplies (_, a', b') 
-  | Pand (_, a, b), Pand (_, a', b')
+  | Pand (_, _, a, b), Pand (_, _, a', b')
   | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
   | Pif (a, b, c), Pif (a', b', c') ->
       unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
@@ -337,7 +337,7 @@ let linear ctx concl =
     | Spred (id, p) :: _ when alpha_eq p concl ->
 	Assumption id
     (* and-elimination *)
-    | Spred (id, Pand (true, a, b)) :: ctx ->
+    | Spred (id, Pand (true, _, a, b)) :: ctx ->
 	begin try
 	  search ctx
 	with Exit ->
@@ -372,7 +372,7 @@ let linear ctx concl =
 		       (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
 				  CC_hole (search ctx'))))
 		  ctx
-	    | Pand (true, p1, p2) ->
+	    | Pand (true, _, p1, p2) ->
             (* 3. we have [a and b]: split under the quantifiers *)
                 let h1 = fresh_hyp () in
 		let h2 = fresh_hyp () in
@@ -594,8 +594,20 @@ let conj = match prover () with
   | Coq V7 -> Ident.create "conj ? ?"
   | _ -> Ident.create "conj"
 
+let asym_conj = Ident.create "why_asym_conj"
+
 let rec split lvl ctx = function
-  | Pand (true, p1, p2) when lvl < lvlmax ->
+  | Pand (true, true, p1, p2) when lvl < lvlmax ->
+      let o1,pr1 = split (succ lvl) ctx p1 in
+      let n1 = List.length o1 in
+      let o2,pr2 = split (succ lvl) ctx p2 in
+      o1 @ o2, 
+      (fun pl -> 
+	 let l1,l2 = split_list n1 pl in 
+	 ProofTerm 
+	   (cc_applist (cc_var conj) [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
+  (* asymetric conjunction *)
+  | Pand (true, false, p1, p2) when lvl < lvlmax ->
       let o1,pr1 = split (succ lvl) ctx p1 in
       let n1 = List.length o1 in
       let p2 = Pimplies (true, p1, p2) in
@@ -604,7 +616,8 @@ let rec split lvl ctx = function
       (fun pl -> 
 	 let l1,l2 = split_list n1 pl in 
 	 ProofTerm 
-	   (cc_applist (cc_var conj) [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
+	   (cc_applist (cc_var asym_conj) 
+	      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
   | Pimplies (true, _, _)
   | Forall (true, _, _, _, _) as concl ->
       let ctx',concl',pr_intros = intros ctx concl in

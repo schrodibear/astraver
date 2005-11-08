@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.98 2005-11-04 10:39:55 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.99 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -259,7 +259,7 @@ let rec collect_term s = function
 let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
   | Papp (_, l, _) -> List.fold_left collect_term s l
-  | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) | Piff (a, b)
+  | Pimplies (_, a, b) | Pand (_, _, a, b) | Por (a, b) | Piff (a, b)
   | Forallb (_, a, b) -> 
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
@@ -299,7 +299,7 @@ let rec tsubst_in_term s = function
 let rec map_predicate f = function
   | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
   | Pif (a, b, c) -> Pif (a, f b, f c)
-  | Pand (w, a, b) -> Pand (w, f a, f b)
+  | Pand (w, s, a, b) -> Pand (w, s, f a, f b)
   | Por (a, b) -> Por (f a, f b)
   | Piff (a, b) -> Piff (f a, f b)
   | Pnot a -> Pnot (f a)
@@ -464,14 +464,15 @@ let le_int = relation t_le_int
 let pif a b c =
   if a = ttrue then b else if a = tfalse then c else Pif (a, b ,c)
 
-let pand ?(is_wp=false) a b = 
+let pand ?(is_wp=false) ?(is_sym=true) a b = 
   if a = Ptrue then b else if b = Ptrue then a else
   if a = Pfalse || b = Pfalse then Pfalse else
-  Pand (is_wp, a, b)
+  Pand (is_wp, is_sym, a, b)
 
 let wpand = pand ~is_wp:true
 
-let pands ?(is_wp=false) = List.fold_left (pand ~is_wp) Ptrue
+let pands ?(is_wp=false) ?(is_sym=true) = 
+  List.fold_left (pand ~is_wp ~is_sym) Ptrue
 
 let wpands = pands ~is_wp:true
 
@@ -507,7 +508,7 @@ module Size = struct
   let rec predicate = function
     | Pvar _ | Ptrue | Pfalse -> 1
     | Papp (_, tl, _) -> List.fold_left (fun s t -> s + term t) 1 tl
-    | Pand (_, p1, p2) 
+    | Pand (_, _, p1, p2) 
     | Por (p1, p2) 
     | Piff (p1, p2) 
     | Pimplies (_, p1, p2) -> 1 + predicate p1 + predicate p2

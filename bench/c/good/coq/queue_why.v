@@ -62,6 +62,7 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -96,6 +97,14 @@ Save.
   forall (HW_14: last_Z7_0 = (upd last_Z7 q 0)),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (HW_15: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_17: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 1) ->
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7_0 q) 0
+                      ((acc length_Z7_0 q) - 1)) /\
+                   0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                   (acc length_Z7_0 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                   (acc last_Z7_0 q) < (acc length_Z7_0 q))))),
   (valid alloc q).
 Proof.
 intuition;subst;auto;
@@ -107,7 +116,9 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -140,6 +151,17 @@ Save.
   forall (HW_13: first_Z7_0 = (upd first_Z7 q 0)),
   forall (last_Z7_0: ((memory) Z Z7)),
   forall (HW_14: last_Z7_0 = (upd last_Z7 q 0)),
+  forall (HW_18: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                   (forall (full_Z7_0:((memory) Z Z7)),
+                    (full_Z7_0 = (upd full_Z7 q 1) ->
+                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                     (((valid_range alloc (acc contents_Z7_0 q) 0
+                        ((acc length_Z7_0 q) - 1)) /\
+                     0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                     (acc length_Z7_0 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                     (acc last_Z7_0 q) < (acc length_Z7_0 q)))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -150,8 +172,11 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
@@ -180,6 +205,20 @@ Save.
   forall (HW_12: length_Z7_0 = (upd length_Z7 q 5)),
   forall (first_Z7_0: ((memory) Z Z7)),
   forall (HW_13: first_Z7_0 = (upd first_Z7 q 0)),
+  forall (HW_19: (forall (last_Z7_0:((memory) Z Z7)),
+                  (last_Z7_0 = (upd last_Z7 q 0) ->
+                   (forall (empty_Z7_0:((memory) Z Z7)),
+                    (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                     (forall (full_Z7_0:((memory) Z Z7)),
+                      (full_Z7_0 = (upd full_Z7 q 1) ->
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7_0 q) 0
+                          ((acc length_Z7_0 q) - 1)) /\
+                       0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                       (acc length_Z7_0 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                       (acc last_Z7_0 q) < (acc length_Z7_0 q)))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -190,7 +229,11 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
@@ -217,6 +260,23 @@ Save.
   forall (HW_11: contents_Z7_0 = (upd contents_Z7 q t)),
   forall (length_Z7_0: ((memory) Z Z7)),
   forall (HW_12: length_Z7_0 = (upd length_Z7 q 5)),
+  forall (HW_20: (forall (first_Z7_0:((memory) Z Z7)),
+                  (first_Z7_0 = (upd first_Z7 q 0) ->
+                   (forall (last_Z7_0:((memory) Z Z7)),
+                    (last_Z7_0 = (upd last_Z7 q 0) ->
+                     (forall (empty_Z7_0:((memory) Z Z7)),
+                      (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 1) ->
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7_0 q) 0
+                            ((acc length_Z7_0 q) - 1)) /\
+                         0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                         (acc length_Z7_0 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                         (acc last_Z7_0 q) < (acc length_Z7_0 q)))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -227,7 +287,12 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
@@ -251,6 +316,26 @@ Save.
   forall (HW_10: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
   forall (HW_11: contents_Z7_0 = (upd contents_Z7 q t)),
+  forall (HW_21: (forall (length_Z7_0:((memory) Z Z7)),
+                  (length_Z7_0 = (upd length_Z7 q 5) ->
+                   (forall (first_Z7_0:((memory) Z Z7)),
+                    (first_Z7_0 = (upd first_Z7 q 0) ->
+                     (forall (last_Z7_0:((memory) Z Z7)),
+                      (last_Z7_0 = (upd last_Z7 q 0) ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 1) ->
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7_0 q) 0
+                              ((acc length_Z7_0 q) - 1)) /\
+                           0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                           (acc length_Z7_0 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                           (acc last_Z7_0 q) < (acc length_Z7_0 q)))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -260,7 +345,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_7 : 
   forall (alloc: alloc_table),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
@@ -282,6 +373,30 @@ Save.
   forall (HW_9: result2 = (shift t 4)),
   forall (int_Z5_4: ((memory) Z Z5)),
   forall (HW_10: int_Z5_4 = (upd int_Z5_3 result2 0)),
+  forall (HW_22: (forall (contents_Z7_0:((memory) ((pointer) Z5) Z7)),
+                  (contents_Z7_0 = (upd contents_Z7 q t) ->
+                   (forall (length_Z7_0:((memory) Z Z7)),
+                    (length_Z7_0 = (upd length_Z7 q 5) ->
+                     (forall (first_Z7_0:((memory) Z Z7)),
+                      (first_Z7_0 = (upd first_Z7 q 0) ->
+                       (forall (last_Z7_0:((memory) Z Z7)),
+                        (last_Z7_0 = (upd last_Z7 q 0) ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                           (forall (full_Z7_0:((memory) Z Z7)),
+                            (full_Z7_0 = (upd full_Z7 q 1) ->
+                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (((valid_range alloc (acc contents_Z7_0 q) 0
+                                ((acc length_Z7_0 q) - 1)) /\
+                             0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                             (acc length_Z7_0 q)) /\ 0 <=
+                             (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                             (acc length_Z7_0 q)))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -291,7 +406,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_8 : 
   forall (alloc: alloc_table),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
@@ -311,6 +432,33 @@ Save.
   forall (HW_8: int_Z5_3 = (upd int_Z5_2 result1 0)),
   forall (result2: ((pointer) Z5)),
   forall (HW_9: result2 = (shift t 4)),
+  forall (HW_23: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_3 result2 0) ->
+                   (forall (contents_Z7_0:((memory) ((pointer) Z5) Z7)),
+                    (contents_Z7_0 = (upd contents_Z7 q t) ->
+                     (forall (length_Z7_0:((memory) Z Z7)),
+                      (length_Z7_0 = (upd length_Z7 q 5) ->
+                       (forall (first_Z7_0:((memory) Z Z7)),
+                        (first_Z7_0 = (upd first_Z7 q 0) ->
+                         (forall (last_Z7_0:((memory) Z Z7)),
+                          (last_Z7_0 = (upd last_Z7 q 0) ->
+                           (forall (empty_Z7_0:((memory) Z Z7)),
+                            (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                             (forall (full_Z7_0:((memory) Z Z7)),
+                              (full_Z7_0 = (upd full_Z7 q 1) ->
+                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (((valid_range alloc (acc contents_Z7_0 q) 0
+                                  ((acc length_Z7_0 q) - 1)) /\
+                               0 <= (acc first_Z7_0 q) /\
+                               (acc first_Z7_0 q) < (acc length_Z7_0 q)) /\
+                               0 <= (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                               (acc length_Z7_0 q)))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc result2).
 Proof.
 intuition.
@@ -320,7 +468,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_9 : 
   forall (alloc: alloc_table),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
@@ -336,6 +490,39 @@ Save.
   forall (HW_6: int_Z5_2 = (upd int_Z5_1 result0 0)),
   forall (result1: ((pointer) Z5)),
   forall (HW_7: result1 = (shift t 3)),
+  forall (HW_24: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_2 result1 0) ->
+                   (forall (result:((pointer) Z5)),
+                    (result = (shift t 4) ->
+                     (forall (int_Z5_0:((memory) Z Z5)),
+                      (int_Z5_0 = (upd int_Z5 result 0) ->
+                       (forall (contents_Z7_0:((memory) ((pointer) Z5) Z7)),
+                        (contents_Z7_0 = (upd contents_Z7 q t) ->
+                         (forall (length_Z7_0:((memory) Z Z7)),
+                          (length_Z7_0 = (upd length_Z7 q 5) ->
+                           (forall (first_Z7_0:((memory) Z Z7)),
+                            (first_Z7_0 = (upd first_Z7 q 0) ->
+                             (forall (last_Z7_0:((memory) Z Z7)),
+                              (last_Z7_0 = (upd last_Z7 q 0) ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 1) ->
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7_0 q)
+                                      0 ((acc length_Z7_0 q) - 1)) /\
+                                   0 <= (acc first_Z7_0 q) /\
+                                   (acc first_Z7_0 q) <
+                                   (acc length_Z7_0 q)) /\ 0 <=
+                                   (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                                   (acc length_Z7_0 q)))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc result)))))),
   (valid alloc result1).
 Proof.
 intuition.
@@ -345,7 +532,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_10 : 
   forall (alloc: alloc_table),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
@@ -357,6 +550,47 @@ Save.
   forall (HW_4: int_Z5_1 = (upd int_Z5_0 result 0)),
   forall (result0: ((pointer) Z5)),
   forall (HW_5: result0 = (shift t 2)),
+  forall (HW_25: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_1 result0 0) ->
+                   (forall (result:((pointer) Z5)),
+                    (result = (shift t 3) ->
+                     (forall (int_Z5_0:((memory) Z Z5)),
+                      (int_Z5_0 = (upd int_Z5 result 0) ->
+                       (forall (result:((pointer) Z5)),
+                        (result = (shift t 4) ->
+                         (forall (int_Z5:((memory) Z Z5)),
+                          (int_Z5 = (upd int_Z5_0 result 0) ->
+                           (forall (contents_Z7_0:((memory) ((pointer) Z5)
+                            Z7)),
+                            (contents_Z7_0 = (upd contents_Z7 q t) ->
+                             (forall (length_Z7_0:((memory) Z Z7)),
+                              (length_Z7_0 = (upd length_Z7 q 5) ->
+                               (forall (first_Z7_0:((memory) Z Z7)),
+                                (first_Z7_0 = (upd first_Z7 q 0) ->
+                                 (forall (last_Z7_0:((memory) Z Z7)),
+                                  (last_Z7_0 = (upd last_Z7 q 0) ->
+                                   (forall (empty_Z7_0:((memory) Z Z7)),
+                                    (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                     (forall (full_Z7_0:((memory) Z Z7)),
+                                      (full_Z7_0 = (upd full_Z7 q 1) ->
+                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (((valid_range alloc
+                                          (acc contents_Z7_0 q) 0
+                                          ((acc length_Z7_0 q) - 1)) /\
+                                       0 <= (acc first_Z7_0 q) /\
+                                       (acc first_Z7_0 q) <
+                                       (acc length_Z7_0 q)) /\ 0 <=
+                                       (acc last_Z7_0 q) /\
+                                       (acc last_Z7_0 q) <
+                                       (acc length_Z7_0 q)))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc result))))) /\
+                     (valid alloc result)))))),
   (valid alloc result0).
 Proof.
 intuition.
@@ -366,7 +600,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_11 : 
   forall (alloc: alloc_table),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
@@ -374,6 +614,52 @@ Save.
   forall (HW_2: int_Z5_0 = (upd int_Z5 t 0)),
   forall (result: ((pointer) Z5)),
   forall (HW_3: result = (shift t 1)),
+  forall (HW_26: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_0 result 0) ->
+                   (forall (result:((pointer) Z5)),
+                    (result = (shift t 2) ->
+                     (forall (int_Z5_0:((memory) Z Z5)),
+                      (int_Z5_0 = (upd int_Z5 result 0) ->
+                       (forall (result:((pointer) Z5)),
+                        (result = (shift t 3) ->
+                         (forall (int_Z5:((memory) Z Z5)),
+                          (int_Z5 = (upd int_Z5_0 result 0) ->
+                           (forall (result:((pointer) Z5)),
+                            (result = (shift t 4) ->
+                             (forall (int_Z5_0:((memory) Z Z5)),
+                              (int_Z5_0 = (upd int_Z5 result 0) ->
+                               (forall (contents_Z7_0:((memory) ((pointer) Z5)
+                                Z7)),
+                                (contents_Z7_0 = (upd contents_Z7 q t) ->
+                                 (forall (length_Z7_0:((memory) Z Z7)),
+                                  (length_Z7_0 = (upd length_Z7 q 5) ->
+                                   (forall (first_Z7_0:((memory) Z Z7)),
+                                    (first_Z7_0 = (upd first_Z7 q 0) ->
+                                     (forall (last_Z7_0:((memory) Z Z7)),
+                                      (last_Z7_0 = (upd last_Z7 q 0) ->
+                                       (forall (empty_Z7_0:((memory) Z Z7)),
+                                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                         (forall (full_Z7_0:((memory) Z Z7)),
+                                          (full_Z7_0 = (upd full_Z7 q 1) ->
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7_0 q) 0
+                                              ((acc length_Z7_0 q) - 1)) /\
+                                           0 <= (acc first_Z7_0 q) /\
+                                           (acc first_Z7_0 q) <
+                                           (acc length_Z7_0 q)) /\ 0 <=
+                                           (acc last_Z7_0 q) /\
+                                           (acc last_Z7_0 q) <
+                                           (acc length_Z7_0 q)))) /\
+                                         (valid alloc q))) /\
+                                       (valid alloc q))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc result))))) /\
+                         (valid alloc result))))) /\
+                     (valid alloc result)))))),
   (valid alloc result).
 Proof.
 intuition.
@@ -383,9 +669,69 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_12 : 
   forall (alloc: alloc_table),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_27: (forall (int_Z5_0:((memory) Z Z5)),
+                  (int_Z5_0 = (upd int_Z5 t 0) ->
+                   (forall (result:((pointer) Z5)),
+                    (result = (shift t 1) ->
+                     (forall (int_Z5:((memory) Z Z5)),
+                      (int_Z5 = (upd int_Z5_0 result 0) ->
+                       (forall (result:((pointer) Z5)),
+                        (result = (shift t 2) ->
+                         (forall (int_Z5_0:((memory) Z Z5)),
+                          (int_Z5_0 = (upd int_Z5 result 0) ->
+                           (forall (result:((pointer) Z5)),
+                            (result = (shift t 3) ->
+                             (forall (int_Z5:((memory) Z Z5)),
+                              (int_Z5 = (upd int_Z5_0 result 0) ->
+                               (forall (result:((pointer) Z5)),
+                                (result = (shift t 4) ->
+                                 (forall (int_Z5_0:((memory) Z Z5)),
+                                  (int_Z5_0 = (upd int_Z5 result 0) ->
+                                   (forall (contents_Z7_0:((memory) ((pointer) Z5)
+                                    Z7)),
+                                    (contents_Z7_0 = (upd contents_Z7 q t) ->
+                                     (forall (length_Z7_0:((memory) Z Z7)),
+                                      (length_Z7_0 = (upd length_Z7 q 5) ->
+                                       (forall (first_Z7_0:((memory) Z Z7)),
+                                        (first_Z7_0 = (upd first_Z7 q 0) ->
+                                         (forall (last_Z7_0:((memory) Z Z7)),
+                                          (last_Z7_0 = (upd last_Z7 q 0) ->
+                                           (forall (empty_Z7_0:((memory) Z
+                                            Z7)),
+                                            (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                             (forall (full_Z7_0:((memory) Z
+                                              Z7)),
+                                              (full_Z7_0 = (upd full_Z7 q 1) ->
+                                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                               (((valid_range alloc
+                                                  (acc contents_Z7_0 q) 0
+                                                  ((acc length_Z7_0 q) - 1)) /\
+                                               0 <= (acc first_Z7_0 q) /\
+                                               (acc first_Z7_0 q) <
+                                               (acc length_Z7_0 q)) /\ 0 <=
+                                               (acc last_Z7_0 q) /\
+                                               (acc last_Z7_0 q) <
+                                               (acc length_Z7_0 q)))) /\
+                                             (valid alloc q))) /\
+                                           (valid alloc q))) /\
+                                         (valid alloc q))) /\
+                                       (valid alloc q))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc result))))) /\
+                             (valid alloc result))))) /\
+                         (valid alloc result))))) /\
+                     (valid alloc result)))))),
   (valid alloc t).
 Proof.
 intuition.
@@ -495,6 +841,20 @@ Save.
   forall (result6: Z),
   forall (HW_13: result6 = (acc last_Z7 q)),
   forall (HW_14: result5 = result6),
+  forall (HW_16: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   ((acc full_Z7_0 q) = 0 /\ result2 =
+                   (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+                   (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                   (acc last_Z7 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -545,9 +905,9 @@ Save.
   forall (HW_12: result5 = (acc first_Z7_1 q)),
   forall (result6: Z),
   forall (HW_13: result6 = (acc last_Z7 q)),
-  forall (HW_16: result5 <> result6),
+  forall (HW_17: result5 <> result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_17: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_18: empty_Z7_0 = (upd empty_Z7 q 0)),
   (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
   0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
@@ -606,7 +966,21 @@ Save.
   forall (HW_12: result5 = (acc first_Z7_1 q)),
   forall (result6: Z),
   forall (HW_13: result6 = (acc last_Z7 q)),
-  forall (HW_16: result5 <> result6),
+  forall (HW_17: result5 <> result6),
+  forall (HW_19: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   ((acc full_Z7_0 q) = 0 /\ result2 =
+                   (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+                   (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                   (acc last_Z7 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -654,6 +1028,48 @@ Save.
   forall (HW_11: full_Z7_0 = (upd full_Z7 q 0)),
   forall (result5: Z),
   forall (HW_12: result5 = (acc first_Z7_1 q)),
+  forall (HW_20: (forall (result:Z),
+                  (result = (acc last_Z7 q) ->
+                   ((result5 = result ->
+                     (forall (empty_Z7_0:((memory) Z Z7)),
+                      (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       ((acc full_Z7_0 q) = 0 /\ result2 =
+                       (acc int_Z5
+                        (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                       (((not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q)) /\
+                       (not_assigns alloc first_Z7 first_Z7_1
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                       (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q))) /\
+                   ((result5 <> result ->
+                     (forall (empty_Z7_0:((memory) Z Z7)),
+                      (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       ((acc full_Z7_0 q) = 0 /\ result2 =
+                       (acc int_Z5
+                        (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                       (((not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q)) /\
+                       (not_assigns alloc first_Z7 first_Z7_1
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                       (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -699,6 +1115,51 @@ Save.
   forall (HW_10: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_11: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_21: (forall (result:Z),
+                  (result = (acc first_Z7_1 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc last_Z7 q) ->
+                     ((result = result0 ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         ((acc full_Z7_0 q) = 0 /\ result2 =
+                         (acc int_Z5
+                          (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                         (((not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q)) /\
+                         (not_assigns alloc first_Z7 first_Z7_1
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                         (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))) /\
+                     ((result <> result0 ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         ((acc full_Z7_0 q) = 0 /\ result2 =
+                         (acc int_Z5
+                          (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                         (((not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q)) /\
+                         (not_assigns alloc first_Z7 first_Z7_1
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                         (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -711,6 +1172,7 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -741,6 +1203,54 @@ Save.
   forall (HW_9: result3 = result4),
   forall (first_Z7_1: ((memory) Z Z7)),
   forall (HW_10: first_Z7_1 = (upd first_Z7_0 q 0)),
+  forall (HW_22: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                   (forall (result:Z),
+                    (result = (acc first_Z7_1 q) ->
+                     (forall (result0:Z),
+                      (result0 = (acc last_Z7 q) ->
+                       ((result = result0 ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           ((acc full_Z7_0 q) = 0 /\ result2 =
+                           (acc int_Z5
+                            (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                           (((not_assigns alloc full_Z7 full_Z7_0
+                              (pset_singleton q)) /\
+                           (not_assigns alloc first_Z7 first_Z7_1
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                           (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))) /\
+                       ((result <> result0 ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           ((acc full_Z7_0 q) = 0 /\ result2 =
+                           (acc int_Z5
+                            (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                           (((not_assigns alloc full_Z7 full_Z7_0
+                              (pset_singleton q)) /\
+                           (not_assigns alloc first_Z7 first_Z7_1
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                           (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -753,6 +1263,7 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -781,6 +1292,57 @@ Save.
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
   forall (HW_9: result3 = result4),
+  forall (HW_23: (forall (first_Z7_1:((memory) Z Z7)),
+                  (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                   (forall (full_Z7_0:((memory) Z Z7)),
+                    (full_Z7_0 = (upd full_Z7 q 0) ->
+                     (forall (result:Z),
+                      (result = (acc first_Z7_1 q) ->
+                       (forall (result0:Z),
+                        (result0 = (acc last_Z7 q) ->
+                         ((result = result0 ->
+                           (forall (empty_Z7_0:((memory) Z Z7)),
+                            (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                             ((acc full_Z7_0 q) = 0 /\ result2 =
+                             (acc int_Z5
+                              (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                             (((not_assigns alloc full_Z7 full_Z7_0
+                                (pset_singleton q)) /\
+                             (not_assigns alloc first_Z7 first_Z7_1
+                              (pset_singleton q))) /\
+                             (not_assigns alloc empty_Z7 empty_Z7_0
+                              (pset_singleton q))) /\
+                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (((valid_range alloc (acc contents_Z7 q) 0
+                                ((acc length_Z7 q) - 1)) /\
+                             0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                             (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                             (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                           (valid alloc q))) /\
+                         ((result <> result0 ->
+                           (forall (empty_Z7_0:((memory) Z Z7)),
+                            (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                             ((acc full_Z7_0 q) = 0 /\ result2 =
+                             (acc int_Z5
+                              (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                             (((not_assigns alloc full_Z7 full_Z7_0
+                                (pset_singleton q)) /\
+                             (not_assigns alloc first_Z7 first_Z7_1
+                              (pset_singleton q))) /\
+                             (not_assigns alloc empty_Z7 empty_Z7_0
+                              (pset_singleton q))) /\
+                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (((valid_range alloc (acc contents_Z7 q) 0
+                                ((acc length_Z7 q) - 1)) /\
+                             0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
+                             (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                             (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                           (valid alloc q))))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -821,16 +1383,16 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
   forall (result5: Z),
-  forall (HW_20: result5 = (acc first_Z7_0 q)),
+  forall (HW_26: result5 = (acc first_Z7_0 q)),
   forall (result6: Z),
-  forall (HW_21: result6 = (acc last_Z7 q)),
-  forall (HW_22: result5 = result6),
+  forall (HW_27: result6 = (acc last_Z7 q)),
+  forall (HW_28: result5 = result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_23: empty_Z7_0 = (upd empty_Z7 q 1)),
+  forall (HW_29: empty_Z7_0 = (upd empty_Z7 q 1)),
   (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
   0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
@@ -879,14 +1441,28 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
   forall (result5: Z),
-  forall (HW_20: result5 = (acc first_Z7_0 q)),
+  forall (HW_26: result5 = (acc first_Z7_0 q)),
   forall (result6: Z),
-  forall (HW_21: result6 = (acc last_Z7 q)),
-  forall (HW_22: result5 = result6),
+  forall (HW_27: result6 = (acc last_Z7 q)),
+  forall (HW_28: result5 = result6),
+  forall (HW_30: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   ((acc full_Z7_0 q) = 0 /\ result2 =
+                   (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+                   (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                   (acc last_Z7 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -927,16 +1503,16 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
   forall (result5: Z),
-  forall (HW_20: result5 = (acc first_Z7_0 q)),
+  forall (HW_26: result5 = (acc first_Z7_0 q)),
   forall (result6: Z),
-  forall (HW_21: result6 = (acc last_Z7 q)),
-  forall (HW_24: result5 <> result6),
+  forall (HW_27: result6 = (acc last_Z7 q)),
+  forall (HW_31: result5 <> result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
   0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
@@ -985,14 +1561,28 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
   forall (result5: Z),
-  forall (HW_20: result5 = (acc first_Z7_0 q)),
+  forall (HW_26: result5 = (acc first_Z7_0 q)),
   forall (result6: Z),
-  forall (HW_21: result6 = (acc last_Z7 q)),
-  forall (HW_24: result5 <> result6),
+  forall (HW_27: result6 = (acc last_Z7 q)),
+  forall (HW_31: result5 <> result6),
+  forall (HW_33: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   ((acc full_Z7_0 q) = 0 /\ result2 =
+                   (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+                   (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                   (acc last_Z7 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1033,11 +1623,53 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
   forall (result5: Z),
-  forall (HW_20: result5 = (acc first_Z7_0 q)),
+  forall (HW_26: result5 = (acc first_Z7_0 q)),
+  forall (HW_34: (forall (result:Z),
+                  (result = (acc last_Z7 q) ->
+                   ((result5 = result ->
+                     (forall (empty_Z7_0:((memory) Z Z7)),
+                      (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       ((acc full_Z7_0 q) = 0 /\ result2 =
+                       (acc int_Z5
+                        (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                       (((not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q)) /\
+                       (not_assigns alloc first_Z7 first_Z7_0
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                       (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q))) /\
+                   ((result5 <> result ->
+                     (forall (empty_Z7_0:((memory) Z Z7)),
+                      (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       ((acc full_Z7_0 q) = 0 /\ result2 =
+                       (acc int_Z5
+                        (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                       (((not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q)) /\
+                       (not_assigns alloc first_Z7 first_Z7_0
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                       (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1078,9 +1710,54 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_35: (forall (result:Z),
+                  (result = (acc first_Z7_0 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc last_Z7 q) ->
+                     ((result = result0 ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         ((acc full_Z7_0 q) = 0 /\ result2 =
+                         (acc int_Z5
+                          (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                         (((not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q)) /\
+                         (not_assigns alloc first_Z7 first_Z7_0
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                         (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))) /\
+                     ((result <> result0 ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         ((acc full_Z7_0 q) = 0 /\ result2 =
+                         (acc int_Z5
+                          (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                         (((not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q)) /\
+                         (not_assigns alloc first_Z7 first_Z7_0
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                         (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1093,6 +1770,7 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -1120,7 +1798,55 @@ Save.
   forall (HW_7: result3 = (acc first_Z7_0 q)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc length_Z7 q)),
-  forall (HW_18: result3 <> result4),
+  forall (HW_24: result3 <> result4),
+  forall (HW_36: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                   (forall (result:Z),
+                    (result = (acc first_Z7_0 q) ->
+                     (forall (result0:Z),
+                      (result0 = (acc last_Z7 q) ->
+                       ((result = result0 ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           ((acc full_Z7_0 q) = 0 /\ result2 =
+                           (acc int_Z5
+                            (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                           (((not_assigns alloc full_Z7 full_Z7_0
+                              (pset_singleton q)) /\
+                           (not_assigns alloc first_Z7 first_Z7_0
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                           (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))) /\
+                       ((result <> result0 ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           ((acc full_Z7_0 q) = 0 /\ result2 =
+                           (acc int_Z5
+                            (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                           (((not_assigns alloc full_Z7 full_Z7_0
+                              (pset_singleton q)) /\
+                           (not_assigns alloc first_Z7 first_Z7_0
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                           (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1133,6 +1859,7 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -1158,6 +1885,115 @@ Save.
   forall (HW_6: result2 = (acc int_Z5 result1)),
   forall (result3: Z),
   forall (HW_7: result3 = (acc first_Z7_0 q)),
+  forall (HW_37: (forall (result:Z),
+                  (result = (acc length_Z7 q) ->
+                   ((result3 = result ->
+                     (forall (first_Z7_1:((memory) Z Z7)),
+                      (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 0) ->
+                         (forall (result:Z),
+                          (result = (acc first_Z7_1 q) ->
+                           (forall (result0:Z),
+                            (result0 = (acc last_Z7 q) ->
+                             ((result = result0 ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 ((acc full_Z7_0 q) = 0 /\ result2 =
+                                 (acc int_Z5
+                                  (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                                 (((not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q)) /\
+                                 (not_assigns alloc first_Z7 first_Z7_1
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7_1 q) /\
+                                 (acc first_Z7_1 q) < (acc length_Z7 q)) /\
+                                 0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))) /\
+                             ((result <> result0 ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 ((acc full_Z7_0 q) = 0 /\ result2 =
+                                 (acc int_Z5
+                                  (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                                 (((not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q)) /\
+                                 (not_assigns alloc first_Z7 first_Z7_1
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7_1 q) /\
+                                 (acc first_Z7_1 q) < (acc length_Z7 q)) /\
+                                 0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   ((result3 <> result ->
+                     (forall (full_Z7_0:((memory) Z Z7)),
+                      (full_Z7_0 = (upd full_Z7 q 0) ->
+                       (forall (result:Z),
+                        (result = (acc first_Z7_0 q) ->
+                         (forall (result0:Z),
+                          (result0 = (acc last_Z7 q) ->
+                           ((result = result0 ->
+                             (forall (empty_Z7_0:((memory) Z Z7)),
+                              (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                               (* File \"queue.c\", line 35, characters 13-60:\n *)
+                               ((acc full_Z7_0 q) = 0 /\ result2 =
+                               (acc int_Z5
+                                (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                               (((not_assigns alloc full_Z7 full_Z7_0
+                                  (pset_singleton q)) /\
+                               (not_assigns alloc first_Z7 first_Z7_0
+                                (pset_singleton q))) /\
+                               (not_assigns alloc empty_Z7 empty_Z7_0
+                                (pset_singleton q))) /\
+                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (((valid_range alloc (acc contents_Z7 q) 0
+                                  ((acc length_Z7 q) - 1)) /\
+                               0 <= (acc first_Z7_0 q) /\
+                               (acc first_Z7_0 q) < (acc length_Z7 q)) /\
+                               0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                               (acc length_Z7 q)))) /\
+                             (valid alloc q))) /\
+                           ((result <> result0 ->
+                             (forall (empty_Z7_0:((memory) Z Z7)),
+                              (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                               (* File \"queue.c\", line 35, characters 13-60:\n *)
+                               ((acc full_Z7_0 q) = 0 /\ result2 =
+                               (acc int_Z5
+                                (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                               (((not_assigns alloc full_Z7 full_Z7_0
+                                  (pset_singleton q)) /\
+                               (not_assigns alloc first_Z7 first_Z7_0
+                                (pset_singleton q))) /\
+                               (not_assigns alloc empty_Z7 empty_Z7_0
+                                (pset_singleton q))) /\
+                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (((valid_range alloc (acc contents_Z7 q) 0
+                                  ((acc length_Z7 q) - 1)) /\
+                               0 <= (acc first_Z7_0 q) /\
+                               (acc first_Z7_0 q) < (acc length_Z7 q)) /\
+                               0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                               (acc length_Z7 q)))) /\
+                             (valid alloc q))))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1170,6 +2006,7 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
@@ -1193,6 +2030,120 @@ Save.
   forall (HW_5: result1 = (shift result result0)),
   forall (result2: Z),
   forall (HW_6: result2 = (acc int_Z5 result1)),
+  forall (HW_38: (forall (result:Z),
+                  (result = (acc first_Z7_0 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc length_Z7 q) ->
+                     ((result = result0 ->
+                       (forall (first_Z7_1:((memory) Z Z7)),
+                        (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 0) ->
+                           (forall (result:Z),
+                            (result = (acc first_Z7_1 q) ->
+                             (forall (result0:Z),
+                              (result0 = (acc last_Z7 q) ->
+                               ((result = result0 ->
+                                 (forall (empty_Z7_0:((memory) Z Z7)),
+                                  (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   ((acc full_Z7_0 q) = 0 /\ result2 =
+                                   (acc int_Z5
+                                    (shift (acc contents_Z7 q)
+                                     (acc first_Z7 q)))) /\
+                                   (((not_assigns alloc full_Z7 full_Z7_0
+                                      (pset_singleton q)) /\
+                                   (not_assigns alloc first_Z7 first_Z7_1
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7_1 q) /\
+                                   (acc first_Z7_1 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                   (acc length_Z7 q)))) /\
+                                 (valid alloc q))) /\
+                               ((result <> result0 ->
+                                 (forall (empty_Z7_0:((memory) Z Z7)),
+                                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   ((acc full_Z7_0 q) = 0 /\ result2 =
+                                   (acc int_Z5
+                                    (shift (acc contents_Z7 q)
+                                     (acc first_Z7 q)))) /\
+                                   (((not_assigns alloc full_Z7 full_Z7_0
+                                      (pset_singleton q)) /\
+                                   (not_assigns alloc first_Z7 first_Z7_1
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7_1 q) /\
+                                   (acc first_Z7_1 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                   (acc length_Z7 q)))) /\
+                                 (valid alloc q))))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     ((result <> result0 ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 0) ->
+                         (forall (result:Z),
+                          (result = (acc first_Z7_0 q) ->
+                           (forall (result0:Z),
+                            (result0 = (acc last_Z7 q) ->
+                             ((result = result0 ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 ((acc full_Z7_0 q) = 0 /\ result2 =
+                                 (acc int_Z5
+                                  (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                                 (((not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q)) /\
+                                 (not_assigns alloc first_Z7 first_Z7_0
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7_0 q) /\
+                                 (acc first_Z7_0 q) < (acc length_Z7 q)) /\
+                                 0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))) /\
+                             ((result <> result0 ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 ((acc full_Z7_0 q) = 0 /\ result2 =
+                                 (acc int_Z5
+                                  (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                                 (((not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q)) /\
+                                 (not_assigns alloc first_Z7 first_Z7_0
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7_0 q) /\
+                                 (acc first_Z7_0 q) < (acc length_Z7 q)) /\
+                                 0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1205,6 +2156,8 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -1225,6 +2178,127 @@ Save.
   forall (HW_4: first_Z7_0 = (upd first_Z7 q (1 + result0))),
   forall (result1: ((pointer) Z5)),
   forall (HW_5: result1 = (shift result result0)),
+  forall (HW_39: (forall (result:Z),
+                  (result = (acc int_Z5 result1) ->
+                   (forall (result0:Z),
+                    (result0 = (acc first_Z7_0 q) ->
+                     (forall (result1:Z),
+                      (result1 = (acc length_Z7 q) ->
+                       ((result0 = result1 ->
+                         (forall (first_Z7_1:((memory) Z Z7)),
+                          (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                           (forall (full_Z7_0:((memory) Z Z7)),
+                            (full_Z7_0 = (upd full_Z7 q 0) ->
+                             (forall (result0:Z),
+                              (result0 = (acc first_Z7_1 q) ->
+                               (forall (result1:Z),
+                                (result1 = (acc last_Z7 q) ->
+                                 ((result0 = result1 ->
+                                   (forall (empty_Z7_0:((memory) Z Z7)),
+                                    (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                     (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                     ((acc full_Z7_0 q) = 0 /\ result =
+                                     (acc int_Z5
+                                      (shift (acc contents_Z7 q)
+                                       (acc first_Z7 q)))) /\
+                                     (((not_assigns alloc full_Z7 full_Z7_0
+                                        (pset_singleton q)) /\
+                                     (not_assigns alloc first_Z7 first_Z7_1
+                                      (pset_singleton q))) /\
+                                     (not_assigns alloc empty_Z7 empty_Z7_0
+                                      (pset_singleton q))) /\
+                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (((valid_range alloc (acc contents_Z7 q)
+                                        0 ((acc length_Z7 q) - 1)) /\
+                                     0 <= (acc first_Z7_1 q) /\
+                                     (acc first_Z7_1 q) <
+                                     (acc length_Z7 q)) /\ 0 <=
+                                     (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                     (acc length_Z7 q)))) /\
+                                   (valid alloc q))) /\
+                                 ((result0 <> result1 ->
+                                   (forall (empty_Z7_0:((memory) Z Z7)),
+                                    (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                     (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                     ((acc full_Z7_0 q) = 0 /\ result =
+                                     (acc int_Z5
+                                      (shift (acc contents_Z7 q)
+                                       (acc first_Z7 q)))) /\
+                                     (((not_assigns alloc full_Z7 full_Z7_0
+                                        (pset_singleton q)) /\
+                                     (not_assigns alloc first_Z7 first_Z7_1
+                                      (pset_singleton q))) /\
+                                     (not_assigns alloc empty_Z7 empty_Z7_0
+                                      (pset_singleton q))) /\
+                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (((valid_range alloc (acc contents_Z7 q)
+                                        0 ((acc length_Z7 q) - 1)) /\
+                                     0 <= (acc first_Z7_1 q) /\
+                                     (acc first_Z7_1 q) <
+                                     (acc length_Z7 q)) /\ 0 <=
+                                     (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                     (acc length_Z7 q)))) /\
+                                   (valid alloc q))))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       ((result0 <> result1 ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 0) ->
+                           (forall (result0:Z),
+                            (result0 = (acc first_Z7_0 q) ->
+                             (forall (result1:Z),
+                              (result1 = (acc last_Z7 q) ->
+                               ((result0 = result1 ->
+                                 (forall (empty_Z7_0:((memory) Z Z7)),
+                                  (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   ((acc full_Z7_0 q) = 0 /\ result =
+                                   (acc int_Z5
+                                    (shift (acc contents_Z7 q)
+                                     (acc first_Z7 q)))) /\
+                                   (((not_assigns alloc full_Z7 full_Z7_0
+                                      (pset_singleton q)) /\
+                                   (not_assigns alloc first_Z7 first_Z7_0
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7_0 q) /\
+                                   (acc first_Z7_0 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                   (acc length_Z7 q)))) /\
+                                 (valid alloc q))) /\
+                               ((result0 <> result1 ->
+                                 (forall (empty_Z7_0:((memory) Z Z7)),
+                                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   ((acc full_Z7_0 q) = 0 /\ result =
+                                   (acc int_Z5
+                                    (shift (acc contents_Z7 q)
+                                     (acc first_Z7 q)))) /\
+                                   (((not_assigns alloc full_Z7 full_Z7_0
+                                      (pset_singleton q)) /\
+                                   (not_assigns alloc first_Z7 first_Z7_0
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7_0 q) /\
+                                   (acc first_Z7_0 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                   (acc length_Z7 q)))) /\
+                                 (valid alloc q))))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc result1).
 Proof.
 intuition.
@@ -1237,6 +2311,8 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -1253,6 +2329,138 @@ Save.
   forall (HW_2: result = (acc contents_Z7 q)),
   forall (result0: Z),
   forall (HW_3: result0 = (acc first_Z7 q)),
+  forall (HW_40: (forall (first_Z7_0:((memory) Z Z7)),
+                  (first_Z7_0 = (upd first_Z7 q (1 + result0)) ->
+                   (forall (result1:((pointer) Z5)),
+                    (result1 = (shift result result0) ->
+                     (forall (result:Z),
+                      (result = (acc int_Z5 result1) ->
+                       (forall (result0:Z),
+                        (result0 = (acc first_Z7_0 q) ->
+                         (forall (result1:Z),
+                          (result1 = (acc length_Z7 q) ->
+                           ((result0 = result1 ->
+                             (forall (first_Z7_1:((memory) Z Z7)),
+                              (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                               (forall (full_Z7_0:((memory) Z Z7)),
+                                (full_Z7_0 = (upd full_Z7 q 0) ->
+                                 (forall (result0:Z),
+                                  (result0 = (acc first_Z7_1 q) ->
+                                   (forall (result1:Z),
+                                    (result1 = (acc last_Z7 q) ->
+                                     ((result0 = result1 ->
+                                       (forall (empty_Z7_0:((memory) Z Z7)),
+                                        (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         ((acc full_Z7_0 q) = 0 /\ result =
+                                         (acc int_Z5
+                                          (shift (acc contents_Z7 q)
+                                           (acc first_Z7 q)))) /\
+                                         (((not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q)) /\
+                                         (not_assigns alloc first_Z7
+                                          first_Z7_1 (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7_1 q) /\
+                                         (acc first_Z7_1 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))) /\
+                                     ((result0 <> result1 ->
+                                       (forall (empty_Z7_0:((memory) Z Z7)),
+                                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         ((acc full_Z7_0 q) = 0 /\ result =
+                                         (acc int_Z5
+                                          (shift (acc contents_Z7 q)
+                                           (acc first_Z7 q)))) /\
+                                         (((not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q)) /\
+                                         (not_assigns alloc first_Z7
+                                          first_Z7_1 (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7_1 q) /\
+                                         (acc first_Z7_1 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))) /\
+                           ((result0 <> result1 ->
+                             (forall (full_Z7_0:((memory) Z Z7)),
+                              (full_Z7_0 = (upd full_Z7 q 0) ->
+                               (forall (result0:Z),
+                                (result0 = (acc first_Z7_0 q) ->
+                                 (forall (result1:Z),
+                                  (result1 = (acc last_Z7 q) ->
+                                   ((result0 = result1 ->
+                                     (forall (empty_Z7_0:((memory) Z Z7)),
+                                      (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                       ((acc full_Z7_0 q) = 0 /\ result =
+                                       (acc int_Z5
+                                        (shift (acc contents_Z7 q)
+                                         (acc first_Z7 q)))) /\
+                                       (((not_assigns alloc full_Z7 full_Z7_0
+                                          (pset_singleton q)) /\
+                                       (not_assigns alloc first_Z7 first_Z7_0
+                                        (pset_singleton q))) /\
+                                       (not_assigns alloc empty_Z7 empty_Z7_0
+                                        (pset_singleton q))) /\
+                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (((valid_range alloc
+                                          (acc contents_Z7 q) 0
+                                          ((acc length_Z7 q) - 1)) /\
+                                       0 <= (acc first_Z7_0 q) /\
+                                       (acc first_Z7_0 q) <
+                                       (acc length_Z7 q)) /\ 0 <=
+                                       (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                       (acc length_Z7 q)))) /\
+                                     (valid alloc q))) /\
+                                   ((result0 <> result1 ->
+                                     (forall (empty_Z7_0:((memory) Z Z7)),
+                                      (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                       ((acc full_Z7_0 q) = 0 /\ result =
+                                       (acc int_Z5
+                                        (shift (acc contents_Z7 q)
+                                         (acc first_Z7 q)))) /\
+                                       (((not_assigns alloc full_Z7 full_Z7_0
+                                          (pset_singleton q)) /\
+                                       (not_assigns alloc first_Z7 first_Z7_0
+                                        (pset_singleton q))) /\
+                                       (not_assigns alloc empty_Z7 empty_Z7_0
+                                        (pset_singleton q))) /\
+                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (((valid_range alloc
+                                          (acc contents_Z7 q) 0
+                                          ((acc length_Z7 q) - 1)) /\
+                                       0 <= (acc first_Z7_0 q) /\
+                                       (acc first_Z7_0 q) <
+                                       (acc length_Z7 q)) /\ 0 <=
+                                       (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                       (acc length_Z7 q)))) /\
+                                     (valid alloc q))))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc result1)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1265,6 +2473,8 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -1279,6 +2489,145 @@ Save.
                 (valid_range alloc q 0 0)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (acc contents_Z7 q)),
+  forall (HW_41: (forall (result0:Z),
+                  (result0 = (acc first_Z7 q) ->
+                   (forall (first_Z7_0:((memory) Z Z7)),
+                    (first_Z7_0 = (upd first_Z7 q (1 + result0)) ->
+                     (forall (result1:((pointer) Z5)),
+                      (result1 = (shift result result0) ->
+                       (forall (result:Z),
+                        (result = (acc int_Z5 result1) ->
+                         (forall (result0:Z),
+                          (result0 = (acc first_Z7_0 q) ->
+                           (forall (result1:Z),
+                            (result1 = (acc length_Z7 q) ->
+                             ((result0 = result1 ->
+                               (forall (first_Z7_1:((memory) Z Z7)),
+                                (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                                   (forall (result0:Z),
+                                    (result0 = (acc first_Z7_1 q) ->
+                                     (forall (result1:Z),
+                                      (result1 = (acc last_Z7 q) ->
+                                       ((result0 = result1 ->
+                                         (forall (empty_Z7_0:((memory) Z
+                                          Z7)),
+                                          (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           ((acc full_Z7_0 q) = 0 /\ result =
+                                           (acc int_Z5
+                                            (shift (acc contents_Z7 q)
+                                             (acc first_Z7 q)))) /\
+                                           (((not_assigns alloc full_Z7
+                                              full_Z7_0 (pset_singleton q)) /\
+                                           (not_assigns alloc first_Z7
+                                            first_Z7_1 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7_1 q) /\
+                                           (acc first_Z7_1 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7 q) /\
+                                           (acc last_Z7 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))) /\
+                                       ((result0 <> result1 ->
+                                         (forall (empty_Z7_0:((memory) Z
+                                          Z7)),
+                                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           ((acc full_Z7_0 q) = 0 /\ result =
+                                           (acc int_Z5
+                                            (shift (acc contents_Z7 q)
+                                             (acc first_Z7 q)))) /\
+                                           (((not_assigns alloc full_Z7
+                                              full_Z7_0 (pset_singleton q)) /\
+                                           (not_assigns alloc first_Z7
+                                            first_Z7_1 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7_1 q) /\
+                                           (acc first_Z7_1 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7 q) /\
+                                           (acc last_Z7 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             ((result0 <> result1 ->
+                               (forall (full_Z7_0:((memory) Z Z7)),
+                                (full_Z7_0 = (upd full_Z7 q 0) ->
+                                 (forall (result0:Z),
+                                  (result0 = (acc first_Z7_0 q) ->
+                                   (forall (result1:Z),
+                                    (result1 = (acc last_Z7 q) ->
+                                     ((result0 = result1 ->
+                                       (forall (empty_Z7_0:((memory) Z Z7)),
+                                        (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         ((acc full_Z7_0 q) = 0 /\ result =
+                                         (acc int_Z5
+                                          (shift (acc contents_Z7 q)
+                                           (acc first_Z7 q)))) /\
+                                         (((not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q)) /\
+                                         (not_assigns alloc first_Z7
+                                          first_Z7_0 (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7_0 q) /\
+                                         (acc first_Z7_0 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))) /\
+                                     ((result0 <> result1 ->
+                                       (forall (empty_Z7_0:((memory) Z Z7)),
+                                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         ((acc full_Z7_0 q) = 0 /\ result =
+                                         (acc int_Z5
+                                          (shift (acc contents_Z7 q)
+                                           (acc first_Z7 q)))) /\
+                                         (((not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q)) /\
+                                         (not_assigns alloc first_Z7
+                                          first_Z7_0 (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7_0 q) /\
+                                         (acc first_Z7_0 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7 q) /\ (acc last_Z7 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc result1))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1291,6 +2640,8 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -1303,6 +2654,154 @@ Save.
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
+  forall (HW_42: (forall (result:((pointer) Z5)),
+                  (result = (acc contents_Z7 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc first_Z7 q) ->
+                     (forall (first_Z7_0:((memory) Z Z7)),
+                      (first_Z7_0 = (upd first_Z7 q (1 + result0)) ->
+                       (forall (result1:((pointer) Z5)),
+                        (result1 = (shift result result0) ->
+                         (forall (result:Z),
+                          (result = (acc int_Z5 result1) ->
+                           (forall (result0:Z),
+                            (result0 = (acc first_Z7_0 q) ->
+                             (forall (result1:Z),
+                              (result1 = (acc length_Z7 q) ->
+                               ((result0 = result1 ->
+                                 (forall (first_Z7_1:((memory) Z Z7)),
+                                  (first_Z7_1 = (upd first_Z7_0 q 0) ->
+                                   (forall (full_Z7_0:((memory) Z Z7)),
+                                    (full_Z7_0 = (upd full_Z7 q 0) ->
+                                     (forall (result0:Z),
+                                      (result0 = (acc first_Z7_1 q) ->
+                                       (forall (result1:Z),
+                                        (result1 = (acc last_Z7 q) ->
+                                         ((result0 = result1 ->
+                                           (forall (empty_Z7_0:((memory) Z
+                                            Z7)),
+                                            (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                             ((acc full_Z7_0 q) = 0 /\
+                                             result =
+                                             (acc int_Z5
+                                              (shift (acc contents_Z7 q)
+                                               (acc first_Z7 q)))) /\
+                                             (((not_assigns alloc full_Z7
+                                                full_Z7_0 (pset_singleton q)) /\
+                                             (not_assigns alloc first_Z7
+                                              first_Z7_1 (pset_singleton q))) /\
+                                             (not_assigns alloc empty_Z7
+                                              empty_Z7_0 (pset_singleton q))) /\
+                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (((valid_range alloc
+                                                (acc contents_Z7 q) 0
+                                                ((acc length_Z7 q) - 1)) /\
+                                             0 <= (acc first_Z7_1 q) /\
+                                             (acc first_Z7_1 q) <
+                                             (acc length_Z7 q)) /\ 0 <=
+                                             (acc last_Z7 q) /\
+                                             (acc last_Z7 q) <
+                                             (acc length_Z7 q)))) /\
+                                           (valid alloc q))) /\
+                                         ((result0 <> result1 ->
+                                           (forall (empty_Z7_0:((memory) Z
+                                            Z7)),
+                                            (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                             ((acc full_Z7_0 q) = 0 /\
+                                             result =
+                                             (acc int_Z5
+                                              (shift (acc contents_Z7 q)
+                                               (acc first_Z7 q)))) /\
+                                             (((not_assigns alloc full_Z7
+                                                full_Z7_0 (pset_singleton q)) /\
+                                             (not_assigns alloc first_Z7
+                                              first_Z7_1 (pset_singleton q))) /\
+                                             (not_assigns alloc empty_Z7
+                                              empty_Z7_0 (pset_singleton q))) /\
+                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (((valid_range alloc
+                                                (acc contents_Z7 q) 0
+                                                ((acc length_Z7 q) - 1)) /\
+                                             0 <= (acc first_Z7_1 q) /\
+                                             (acc first_Z7_1 q) <
+                                             (acc length_Z7 q)) /\ 0 <=
+                                             (acc last_Z7 q) /\
+                                             (acc last_Z7 q) <
+                                             (acc length_Z7 q)))) /\
+                                           (valid alloc q))))) /\
+                                       (valid alloc q))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               ((result0 <> result1 ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                                   (forall (result0:Z),
+                                    (result0 = (acc first_Z7_0 q) ->
+                                     (forall (result1:Z),
+                                      (result1 = (acc last_Z7 q) ->
+                                       ((result0 = result1 ->
+                                         (forall (empty_Z7_0:((memory) Z
+                                          Z7)),
+                                          (empty_Z7_0 = (upd empty_Z7 q 1) ->
+                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           ((acc full_Z7_0 q) = 0 /\ result =
+                                           (acc int_Z5
+                                            (shift (acc contents_Z7 q)
+                                             (acc first_Z7 q)))) /\
+                                           (((not_assigns alloc full_Z7
+                                              full_Z7_0 (pset_singleton q)) /\
+                                           (not_assigns alloc first_Z7
+                                            first_Z7_0 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7_0 q) /\
+                                           (acc first_Z7_0 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7 q) /\
+                                           (acc last_Z7 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))) /\
+                                       ((result0 <> result1 ->
+                                         (forall (empty_Z7_0:((memory) Z
+                                          Z7)),
+                                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           ((acc full_Z7_0 q) = 0 /\ result =
+                                           (acc int_Z5
+                                            (shift (acc contents_Z7 q)
+                                             (acc first_Z7 q)))) /\
+                                           (((not_assigns alloc full_Z7
+                                              full_Z7_0 (pset_singleton q)) /\
+                                           (not_assigns alloc first_Z7
+                                            first_Z7_0 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7_0 q) /\
+                                           (acc first_Z7_0 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7 q) /\
+                                           (acc last_Z7 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc result1))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1416,6 +2915,24 @@ Save.
   forall (result5: Z),
   forall (HW_13: result5 = (acc last_Z7_1 q)),
   forall (HW_14: result4 = result5),
+  forall (HW_16: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 1) ->
+                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   ((acc empty_Z7_0 q) = 0 /\
+                   (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                   c) /\
+                   ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
+                   (not_assigns alloc int_Z5 int_Z5_0
+                    (pset_singleton (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))))) /\
+                   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                   (acc last_Z7_1 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1466,9 +2983,9 @@ Save.
   forall (HW_12: result4 = (acc first_Z7 q)),
   forall (result5: Z),
   forall (HW_13: result5 = (acc last_Z7_1 q)),
-  forall (HW_16: result4 <> result5),
+  forall (HW_17: result4 <> result5),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_17: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_18: full_Z7_0 = (upd full_Z7 q 0)),
   (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
   0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
@@ -1530,7 +3047,25 @@ Save.
   forall (HW_12: result4 = (acc first_Z7 q)),
   forall (result5: Z),
   forall (HW_13: result5 = (acc last_Z7_1 q)),
-  forall (HW_16: result4 <> result5),
+  forall (HW_17: result4 <> result5),
+  forall (HW_19: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   ((acc empty_Z7_0 q) = 0 /\
+                   (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                   c) /\
+                   ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
+                   (not_assigns alloc int_Z5 int_Z5_0
+                    (pset_singleton (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))))) /\
+                   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                   (acc last_Z7_1 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1579,6 +3114,56 @@ Save.
   forall (HW_11: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (result4: Z),
   forall (HW_12: result4 = (acc first_Z7 q)),
+  forall (HW_20: (forall (result:Z),
+                  (result = (acc last_Z7_1 q) ->
+                   ((result4 = result ->
+                     (forall (full_Z7_0:((memory) Z Z7)),
+                      (full_Z7_0 = (upd full_Z7 q 1) ->
+                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       ((acc empty_Z7_0 q) = 0 /\
+                       (acc int_Z5_0
+                        (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                       c) /\
+                       ((((not_assigns alloc last_Z7 last_Z7_1
+                           (pset_singleton q)) /\
+                       (not_assigns alloc int_Z5 int_Z5_0
+                        (pset_singleton (shift (acc contents_Z7 q)
+                                         (acc last_Z7 q))))) /\
+                       (not_assigns alloc full_Z7 full_Z7_0
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                       (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q))) /\
+                   ((result4 <> result ->
+                     (forall (full_Z7_0:((memory) Z Z7)),
+                      (full_Z7_0 = (upd full_Z7 q 0) ->
+                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       ((acc empty_Z7_0 q) = 0 /\
+                       (acc int_Z5_0
+                        (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                       c) /\
+                       ((((not_assigns alloc last_Z7 last_Z7_1
+                           (pset_singleton q)) /\
+                       (not_assigns alloc int_Z5 int_Z5_0
+                        (pset_singleton (shift (acc contents_Z7 q)
+                                         (acc last_Z7 q))))) /\
+                       (not_assigns alloc full_Z7 full_Z7_0
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                       (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1625,6 +3210,59 @@ Save.
   forall (HW_10: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (HW_11: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_21: (forall (result:Z),
+                  (result = (acc first_Z7 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc last_Z7_1 q) ->
+                     ((result = result0 ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 1) ->
+                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         ((acc empty_Z7_0 q) = 0 /\
+                         (acc int_Z5_0
+                          (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                         c) /\
+                         ((((not_assigns alloc last_Z7 last_Z7_1
+                             (pset_singleton q)) /\
+                         (not_assigns alloc int_Z5 int_Z5_0
+                          (pset_singleton (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))))) /\
+                         (not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                         (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))) /\
+                     ((result <> result0 ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 0) ->
+                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         ((acc empty_Z7_0 q) = 0 /\
+                         (acc int_Z5_0
+                          (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                         c) /\
+                         ((((not_assigns alloc last_Z7 last_Z7_1
+                             (pset_singleton q)) /\
+                         (not_assigns alloc int_Z5 int_Z5_0
+                          (pset_singleton (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))))) /\
+                         (not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                         (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1636,6 +3274,7 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
@@ -1668,6 +3307,62 @@ Save.
   forall (HW_9: result2 = result3),
   forall (last_Z7_1: ((memory) Z Z7)),
   forall (HW_10: last_Z7_1 = (upd last_Z7_0 q 0)),
+  forall (HW_22: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                   (forall (result:Z),
+                    (result = (acc first_Z7 q) ->
+                     (forall (result0:Z),
+                      (result0 = (acc last_Z7_1 q) ->
+                       ((result = result0 ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 1) ->
+                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           ((acc empty_Z7_0 q) = 0 /\
+                           (acc int_Z5_0
+                            (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                           c) /\
+                           ((((not_assigns alloc last_Z7 last_Z7_1
+                               (pset_singleton q)) /\
+                           (not_assigns alloc int_Z5 int_Z5_0
+                            (pset_singleton (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))))) /\
+                           (not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                           (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))) /\
+                       ((result <> result0 ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 0) ->
+                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           ((acc empty_Z7_0 q) = 0 /\
+                           (acc int_Z5_0
+                            (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                           c) /\
+                           ((((not_assigns alloc last_Z7 last_Z7_1
+                               (pset_singleton q)) /\
+                           (not_assigns alloc int_Z5 int_Z5_0
+                            (pset_singleton (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))))) /\
+                           (not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                           (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1679,6 +3374,7 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
@@ -1709,6 +3405,65 @@ Save.
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
   forall (HW_9: result2 = result3),
+  forall (HW_23: (forall (last_Z7_1:((memory) Z Z7)),
+                  (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                   (forall (empty_Z7_0:((memory) Z Z7)),
+                    (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                     (forall (result:Z),
+                      (result = (acc first_Z7 q) ->
+                       (forall (result0:Z),
+                        (result0 = (acc last_Z7_1 q) ->
+                         ((result = result0 ->
+                           (forall (full_Z7_0:((memory) Z Z7)),
+                            (full_Z7_0 = (upd full_Z7 q 1) ->
+                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                             ((acc empty_Z7_0 q) = 0 /\
+                             (acc int_Z5_0
+                              (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                             c) /\
+                             ((((not_assigns alloc last_Z7 last_Z7_1
+                                 (pset_singleton q)) /\
+                             (not_assigns alloc int_Z5 int_Z5_0
+                              (pset_singleton (shift (acc contents_Z7 q)
+                                               (acc last_Z7 q))))) /\
+                             (not_assigns alloc full_Z7 full_Z7_0
+                              (pset_singleton q))) /\
+                             (not_assigns alloc empty_Z7 empty_Z7_0
+                              (pset_singleton q))) /\
+                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (((valid_range alloc (acc contents_Z7 q) 0
+                                ((acc length_Z7 q) - 1)) /\
+                             0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                             (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                             (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                           (valid alloc q))) /\
+                         ((result <> result0 ->
+                           (forall (full_Z7_0:((memory) Z Z7)),
+                            (full_Z7_0 = (upd full_Z7 q 0) ->
+                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                             ((acc empty_Z7_0 q) = 0 /\
+                             (acc int_Z5_0
+                              (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                             c) /\
+                             ((((not_assigns alloc last_Z7 last_Z7_1
+                                 (pset_singleton q)) /\
+                             (not_assigns alloc int_Z5 int_Z5_0
+                              (pset_singleton (shift (acc contents_Z7 q)
+                                               (acc last_Z7 q))))) /\
+                             (not_assigns alloc full_Z7 full_Z7_0
+                              (pset_singleton q))) /\
+                             (not_assigns alloc empty_Z7 empty_Z7_0
+                              (pset_singleton q))) /\
+                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (((valid_range alloc (acc contents_Z7 q) 0
+                                ((acc length_Z7 q) - 1)) /\
+                             0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                             (acc length_Z7 q)) /\ 0 <= (acc last_Z7_1 q) /\
+                             (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                           (valid alloc q))))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1750,16 +3505,16 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (result4: Z),
-  forall (HW_20: result4 = (acc first_Z7 q)),
+  forall (HW_26: result4 = (acc first_Z7 q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc last_Z7_0 q)),
-  forall (HW_22: result4 = result5),
+  forall (HW_27: result5 = (acc last_Z7_0 q)),
+  forall (HW_28: result4 = result5),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_23: full_Z7_0 = (upd full_Z7 q 1)),
+  forall (HW_29: full_Z7_0 = (upd full_Z7 q 1)),
   (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
   0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
@@ -1811,14 +3566,32 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (result4: Z),
-  forall (HW_20: result4 = (acc first_Z7 q)),
+  forall (HW_26: result4 = (acc first_Z7 q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc last_Z7_0 q)),
-  forall (HW_22: result4 = result5),
+  forall (HW_27: result5 = (acc last_Z7_0 q)),
+  forall (HW_28: result4 = result5),
+  forall (HW_30: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 1) ->
+                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   ((acc empty_Z7_0 q) = 0 /\
+                   (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                   c) /\
+                   ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
+                   (not_assigns alloc int_Z5 int_Z5_0
+                    (pset_singleton (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))))) /\
+                   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                   (acc last_Z7_0 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1860,16 +3633,16 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (result4: Z),
-  forall (HW_20: result4 = (acc first_Z7 q)),
+  forall (HW_26: result4 = (acc first_Z7 q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc last_Z7_0 q)),
-  forall (HW_24: result4 <> result5),
+  forall (HW_27: result5 = (acc last_Z7_0 q)),
+  forall (HW_31: result4 <> result5),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_25: full_Z7_0 = (upd full_Z7 q 0)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
   0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
@@ -1921,14 +3694,32 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (result4: Z),
-  forall (HW_20: result4 = (acc first_Z7 q)),
+  forall (HW_26: result4 = (acc first_Z7 q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc last_Z7_0 q)),
-  forall (HW_24: result4 <> result5),
+  forall (HW_27: result5 = (acc last_Z7_0 q)),
+  forall (HW_31: result4 <> result5),
+  forall (HW_33: (forall (full_Z7_0:((memory) Z Z7)),
+                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   ((acc empty_Z7_0 q) = 0 /\
+                   (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                   c) /\
+                   ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
+                   (not_assigns alloc int_Z5 int_Z5_0
+                    (pset_singleton (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))))) /\
+                   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+                   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
+                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (((valid_range alloc (acc contents_Z7 q) 0
+                      ((acc length_Z7 q) - 1)) /\
+                   0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                   (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                   (acc last_Z7_0 q) < (acc length_Z7 q))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -1970,11 +3761,61 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (result4: Z),
-  forall (HW_20: result4 = (acc first_Z7 q)),
+  forall (HW_26: result4 = (acc first_Z7 q)),
+  forall (HW_34: (forall (result:Z),
+                  (result = (acc last_Z7_0 q) ->
+                   ((result4 = result ->
+                     (forall (full_Z7_0:((memory) Z Z7)),
+                      (full_Z7_0 = (upd full_Z7 q 1) ->
+                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       ((acc empty_Z7_0 q) = 0 /\
+                       (acc int_Z5_0
+                        (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                       c) /\
+                       ((((not_assigns alloc last_Z7 last_Z7_0
+                           (pset_singleton q)) /\
+                       (not_assigns alloc int_Z5 int_Z5_0
+                        (pset_singleton (shift (acc contents_Z7 q)
+                                         (acc last_Z7 q))))) /\
+                       (not_assigns alloc full_Z7 full_Z7_0
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                       (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q))) /\
+                   ((result4 <> result ->
+                     (forall (full_Z7_0:((memory) Z Z7)),
+                      (full_Z7_0 = (upd full_Z7 q 0) ->
+                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       ((acc empty_Z7_0 q) = 0 /\
+                       (acc int_Z5_0
+                        (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                       c) /\
+                       ((((not_assigns alloc last_Z7 last_Z7_0
+                           (pset_singleton q)) /\
+                       (not_assigns alloc int_Z5 int_Z5_0
+                        (pset_singleton (shift (acc contents_Z7 q)
+                                         (acc last_Z7 q))))) /\
+                       (not_assigns alloc full_Z7 full_Z7_0
+                        (pset_singleton q))) /\
+                       (not_assigns alloc empty_Z7 empty_Z7_0
+                        (pset_singleton q))) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                       (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2016,9 +3857,62 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
   forall (empty_Z7_0: ((memory) Z Z7)),
-  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
+  forall (HW_35: (forall (result:Z),
+                  (result = (acc first_Z7 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc last_Z7_0 q) ->
+                     ((result = result0 ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 1) ->
+                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         ((acc empty_Z7_0 q) = 0 /\
+                         (acc int_Z5_0
+                          (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                         c) /\
+                         ((((not_assigns alloc last_Z7 last_Z7_0
+                             (pset_singleton q)) /\
+                         (not_assigns alloc int_Z5 int_Z5_0
+                          (pset_singleton (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))))) /\
+                         (not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                         (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))) /\
+                     ((result <> result0 ->
+                       (forall (full_Z7_0:((memory) Z Z7)),
+                        (full_Z7_0 = (upd full_Z7 q 0) ->
+                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         ((acc empty_Z7_0 q) = 0 /\
+                         (acc int_Z5_0
+                          (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                         c) /\
+                         ((((not_assigns alloc last_Z7 last_Z7_0
+                             (pset_singleton q)) /\
+                         (not_assigns alloc int_Z5 int_Z5_0
+                          (pset_singleton (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))))) /\
+                         (not_assigns alloc full_Z7 full_Z7_0
+                          (pset_singleton q))) /\
+                         (not_assigns alloc empty_Z7 empty_Z7_0
+                          (pset_singleton q))) /\
+                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (((valid_range alloc (acc contents_Z7 q) 0
+                            ((acc length_Z7 q) - 1)) /\
+                         0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                         (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                         (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                       (valid alloc q))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2030,6 +3924,7 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
@@ -2059,7 +3954,63 @@ Save.
   forall (HW_7: result2 = (acc last_Z7_0 q)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc length_Z7 q)),
-  forall (HW_18: result2 <> result3),
+  forall (HW_24: result2 <> result3),
+  forall (HW_36: (forall (empty_Z7_0:((memory) Z Z7)),
+                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                   (forall (result:Z),
+                    (result = (acc first_Z7 q) ->
+                     (forall (result0:Z),
+                      (result0 = (acc last_Z7_0 q) ->
+                       ((result = result0 ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 1) ->
+                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           ((acc empty_Z7_0 q) = 0 /\
+                           (acc int_Z5_0
+                            (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                           c) /\
+                           ((((not_assigns alloc last_Z7 last_Z7_0
+                               (pset_singleton q)) /\
+                           (not_assigns alloc int_Z5 int_Z5_0
+                            (pset_singleton (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))))) /\
+                           (not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                           (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))) /\
+                       ((result <> result0 ->
+                         (forall (full_Z7_0:((memory) Z Z7)),
+                          (full_Z7_0 = (upd full_Z7 q 0) ->
+                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           ((acc empty_Z7_0 q) = 0 /\
+                           (acc int_Z5_0
+                            (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                           c) /\
+                           ((((not_assigns alloc last_Z7 last_Z7_0
+                               (pset_singleton q)) /\
+                           (not_assigns alloc int_Z5 int_Z5_0
+                            (pset_singleton (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))))) /\
+                           (not_assigns alloc full_Z7 full_Z7_0
+                            (pset_singleton q))) /\
+                           (not_assigns alloc empty_Z7 empty_Z7_0
+                            (pset_singleton q))) /\
+                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (((valid_range alloc (acc contents_Z7 q) 0
+                              ((acc length_Z7 q) - 1)) /\
+                           0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                           (acc length_Z7 q)) /\ 0 <= (acc last_Z7_0 q) /\
+                           (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                         (valid alloc q))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2071,6 +4022,7 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
@@ -2098,6 +4050,131 @@ Save.
   forall (HW_6: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (result2: Z),
   forall (HW_7: result2 = (acc last_Z7_0 q)),
+  forall (HW_37: (forall (result:Z),
+                  (result = (acc length_Z7 q) ->
+                   ((result2 = result ->
+                     (forall (last_Z7_1:((memory) Z Z7)),
+                      (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                         (forall (result:Z),
+                          (result = (acc first_Z7 q) ->
+                           (forall (result0:Z),
+                            (result0 = (acc last_Z7_1 q) ->
+                             ((result = result0 ->
+                               (forall (full_Z7_0:((memory) Z Z7)),
+                                (full_Z7_0 = (upd full_Z7 q 1) ->
+                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 ((acc empty_Z7_0 q) = 0 /\
+                                 (acc int_Z5_0
+                                  (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                                 c) /\
+                                 ((((not_assigns alloc last_Z7 last_Z7_1
+                                     (pset_singleton q)) /\
+                                 (not_assigns alloc int_Z5 int_Z5_0
+                                  (pset_singleton (shift (acc contents_Z7 q)
+                                                   (acc last_Z7 q))))) /\
+                                 (not_assigns alloc full_Z7 full_Z7_0
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                                 (acc length_Z7 q)) /\ 0 <=
+                                 (acc last_Z7_1 q) /\ (acc last_Z7_1 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))) /\
+                             ((result <> result0 ->
+                               (forall (full_Z7_0:((memory) Z Z7)),
+                                (full_Z7_0 = (upd full_Z7 q 0) ->
+                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 ((acc empty_Z7_0 q) = 0 /\
+                                 (acc int_Z5_0
+                                  (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                                 c) /\
+                                 ((((not_assigns alloc last_Z7 last_Z7_1
+                                     (pset_singleton q)) /\
+                                 (not_assigns alloc int_Z5 int_Z5_0
+                                  (pset_singleton (shift (acc contents_Z7 q)
+                                                   (acc last_Z7 q))))) /\
+                                 (not_assigns alloc full_Z7 full_Z7_0
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                                 (acc length_Z7 q)) /\ 0 <=
+                                 (acc last_Z7_1 q) /\ (acc last_Z7_1 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q))) /\
+                   ((result2 <> result ->
+                     (forall (empty_Z7_0:((memory) Z Z7)),
+                      (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                       (forall (result:Z),
+                        (result = (acc first_Z7 q) ->
+                         (forall (result0:Z),
+                          (result0 = (acc last_Z7_0 q) ->
+                           ((result = result0 ->
+                             (forall (full_Z7_0:((memory) Z Z7)),
+                              (full_Z7_0 = (upd full_Z7 q 1) ->
+                               (* File \"queue.c\", line 22, characters 13-54:\n *)
+                               ((acc empty_Z7_0 q) = 0 /\
+                               (acc int_Z5_0
+                                (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                               c) /\
+                               ((((not_assigns alloc last_Z7 last_Z7_0
+                                   (pset_singleton q)) /\
+                               (not_assigns alloc int_Z5 int_Z5_0
+                                (pset_singleton (shift (acc contents_Z7 q)
+                                                 (acc last_Z7 q))))) /\
+                               (not_assigns alloc full_Z7 full_Z7_0
+                                (pset_singleton q))) /\
+                               (not_assigns alloc empty_Z7 empty_Z7_0
+                                (pset_singleton q))) /\
+                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (((valid_range alloc (acc contents_Z7 q) 0
+                                  ((acc length_Z7 q) - 1)) /\
+                               0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                               (acc length_Z7 q)) /\ 0 <=
+                               (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                               (acc length_Z7 q)))) /\
+                             (valid alloc q))) /\
+                           ((result <> result0 ->
+                             (forall (full_Z7_0:((memory) Z Z7)),
+                              (full_Z7_0 = (upd full_Z7 q 0) ->
+                               (* File \"queue.c\", line 22, characters 13-54:\n *)
+                               ((acc empty_Z7_0 q) = 0 /\
+                               (acc int_Z5_0
+                                (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                               c) /\
+                               ((((not_assigns alloc last_Z7 last_Z7_0
+                                   (pset_singleton q)) /\
+                               (not_assigns alloc int_Z5 int_Z5_0
+                                (pset_singleton (shift (acc contents_Z7 q)
+                                                 (acc last_Z7 q))))) /\
+                               (not_assigns alloc full_Z7 full_Z7_0
+                                (pset_singleton q))) /\
+                               (not_assigns alloc empty_Z7 empty_Z7_0
+                                (pset_singleton q))) /\
+                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (((valid_range alloc (acc contents_Z7 q) 0
+                                  ((acc length_Z7 q) - 1)) /\
+                               0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                               (acc length_Z7 q)) /\ 0 <=
+                               (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                               (acc length_Z7 q)))) /\
+                             (valid alloc q))))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc q)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2109,6 +4186,7 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
   forall (int_Z5: ((memory) Z Z5)),
@@ -2134,6 +4212,136 @@ Save.
   forall (HW_5: result1 = (shift result result0)),
   forall (int_Z5_0: ((memory) Z Z5)),
   forall (HW_6: int_Z5_0 = (upd int_Z5 result1 c)),
+  forall (HW_38: (forall (result:Z),
+                  (result = (acc last_Z7_0 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc length_Z7 q) ->
+                     ((result = result0 ->
+                       (forall (last_Z7_1:((memory) Z Z7)),
+                        (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                           (forall (result:Z),
+                            (result = (acc first_Z7 q) ->
+                             (forall (result0:Z),
+                              (result0 = (acc last_Z7_1 q) ->
+                               ((result = result0 ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 1) ->
+                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   ((acc empty_Z7_0 q) = 0 /\
+                                   (acc int_Z5_0
+                                    (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))) =
+                                   c) /\
+                                   ((((not_assigns alloc last_Z7 last_Z7_1
+                                       (pset_singleton q)) /\
+                                   (not_assigns alloc int_Z5 int_Z5_0
+                                    (pset_singleton (shift (acc contents_Z7 q)
+                                                     (acc last_Z7 q))))) /\
+                                   (not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7 q) /\
+                                   (acc first_Z7 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7_1 q) /\
+                                   (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                                 (valid alloc q))) /\
+                               ((result <> result0 ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   ((acc empty_Z7_0 q) = 0 /\
+                                   (acc int_Z5_0
+                                    (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))) =
+                                   c) /\
+                                   ((((not_assigns alloc last_Z7 last_Z7_1
+                                       (pset_singleton q)) /\
+                                   (not_assigns alloc int_Z5 int_Z5_0
+                                    (pset_singleton (shift (acc contents_Z7 q)
+                                                     (acc last_Z7 q))))) /\
+                                   (not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7 q) /\
+                                   (acc first_Z7 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7_1 q) /\
+                                   (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                                 (valid alloc q))))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     ((result <> result0 ->
+                       (forall (empty_Z7_0:((memory) Z Z7)),
+                        (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                         (forall (result:Z),
+                          (result = (acc first_Z7 q) ->
+                           (forall (result0:Z),
+                            (result0 = (acc last_Z7_0 q) ->
+                             ((result = result0 ->
+                               (forall (full_Z7_0:((memory) Z Z7)),
+                                (full_Z7_0 = (upd full_Z7 q 1) ->
+                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 ((acc empty_Z7_0 q) = 0 /\
+                                 (acc int_Z5_0
+                                  (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                                 c) /\
+                                 ((((not_assigns alloc last_Z7 last_Z7_0
+                                     (pset_singleton q)) /\
+                                 (not_assigns alloc int_Z5 int_Z5_0
+                                  (pset_singleton (shift (acc contents_Z7 q)
+                                                   (acc last_Z7 q))))) /\
+                                 (not_assigns alloc full_Z7 full_Z7_0
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                                 (acc length_Z7 q)) /\ 0 <=
+                                 (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))) /\
+                             ((result <> result0 ->
+                               (forall (full_Z7_0:((memory) Z Z7)),
+                                (full_Z7_0 = (upd full_Z7 q 0) ->
+                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 ((acc empty_Z7_0 q) = 0 /\
+                                 (acc int_Z5_0
+                                  (shift (acc contents_Z7 q) (acc last_Z7 q))) =
+                                 c) /\
+                                 ((((not_assigns alloc last_Z7 last_Z7_0
+                                     (pset_singleton q)) /\
+                                 (not_assigns alloc int_Z5 int_Z5_0
+                                  (pset_singleton (shift (acc contents_Z7 q)
+                                                   (acc last_Z7 q))))) /\
+                                 (not_assigns alloc full_Z7 full_Z7_0
+                                  (pset_singleton q))) /\
+                                 (not_assigns alloc empty_Z7 empty_Z7_0
+                                  (pset_singleton q))) /\
+                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (((valid_range alloc (acc contents_Z7 q) 0
+                                    ((acc length_Z7 q) - 1)) /\
+                                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                                 (acc length_Z7 q)) /\ 0 <=
+                                 (acc last_Z7_0 q) /\ (acc last_Z7_0 q) <
+                                 (acc length_Z7 q)))) /\
+                               (valid alloc q))))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2142,10 +4350,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_18 : 
+  forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -2166,6 +4377,143 @@ Save.
   forall (HW_4: last_Z7_0 = (upd last_Z7 q (1 + result0))),
   forall (result1: ((pointer) Z5)),
   forall (HW_5: result1 = (shift result result0)),
+  forall (HW_39: (forall (int_Z5_0:((memory) Z Z5)),
+                  (int_Z5_0 = (upd int_Z5 result1 c) ->
+                   (forall (result:Z),
+                    (result = (acc last_Z7_0 q) ->
+                     (forall (result0:Z),
+                      (result0 = (acc length_Z7 q) ->
+                       ((result = result0 ->
+                         (forall (last_Z7_1:((memory) Z Z7)),
+                          (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                           (forall (empty_Z7_0:((memory) Z Z7)),
+                            (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                             (forall (result:Z),
+                              (result = (acc first_Z7 q) ->
+                               (forall (result0:Z),
+                                (result0 = (acc last_Z7_1 q) ->
+                                 ((result = result0 ->
+                                   (forall (full_Z7_0:((memory) Z Z7)),
+                                    (full_Z7_0 = (upd full_Z7 q 1) ->
+                                     (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                     ((acc empty_Z7_0 q) = 0 /\
+                                     (acc int_Z5_0
+                                      (shift (acc contents_Z7 q)
+                                       (acc last_Z7 q))) =
+                                     c) /\
+                                     ((((not_assigns alloc last_Z7 last_Z7_1
+                                         (pset_singleton q)) /\
+                                     (not_assigns alloc int_Z5 int_Z5_0
+                                      (pset_singleton (shift (acc contents_Z7
+                                                              q)
+                                                       (acc last_Z7 q))))) /\
+                                     (not_assigns alloc full_Z7 full_Z7_0
+                                      (pset_singleton q))) /\
+                                     (not_assigns alloc empty_Z7 empty_Z7_0
+                                      (pset_singleton q))) /\
+                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (((valid_range alloc (acc contents_Z7 q)
+                                        0 ((acc length_Z7 q) - 1)) /\
+                                     0 <= (acc first_Z7 q) /\
+                                     (acc first_Z7 q) < (acc length_Z7 q)) /\
+                                     0 <= (acc last_Z7_1 q) /\
+                                     (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                                   (valid alloc q))) /\
+                                 ((result <> result0 ->
+                                   (forall (full_Z7_0:((memory) Z Z7)),
+                                    (full_Z7_0 = (upd full_Z7 q 0) ->
+                                     (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                     ((acc empty_Z7_0 q) = 0 /\
+                                     (acc int_Z5_0
+                                      (shift (acc contents_Z7 q)
+                                       (acc last_Z7 q))) =
+                                     c) /\
+                                     ((((not_assigns alloc last_Z7 last_Z7_1
+                                         (pset_singleton q)) /\
+                                     (not_assigns alloc int_Z5 int_Z5_0
+                                      (pset_singleton (shift (acc contents_Z7
+                                                              q)
+                                                       (acc last_Z7 q))))) /\
+                                     (not_assigns alloc full_Z7 full_Z7_0
+                                      (pset_singleton q))) /\
+                                     (not_assigns alloc empty_Z7 empty_Z7_0
+                                      (pset_singleton q))) /\
+                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (((valid_range alloc (acc contents_Z7 q)
+                                        0 ((acc length_Z7 q) - 1)) /\
+                                     0 <= (acc first_Z7 q) /\
+                                     (acc first_Z7 q) < (acc length_Z7 q)) /\
+                                     0 <= (acc last_Z7_1 q) /\
+                                     (acc last_Z7_1 q) < (acc length_Z7 q)))) /\
+                                   (valid alloc q))))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       ((result <> result0 ->
+                         (forall (empty_Z7_0:((memory) Z Z7)),
+                          (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                           (forall (result:Z),
+                            (result = (acc first_Z7 q) ->
+                             (forall (result0:Z),
+                              (result0 = (acc last_Z7_0 q) ->
+                               ((result = result0 ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 1) ->
+                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   ((acc empty_Z7_0 q) = 0 /\
+                                   (acc int_Z5_0
+                                    (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))) =
+                                   c) /\
+                                   ((((not_assigns alloc last_Z7 last_Z7_0
+                                       (pset_singleton q)) /\
+                                   (not_assigns alloc int_Z5 int_Z5_0
+                                    (pset_singleton (shift (acc contents_Z7 q)
+                                                     (acc last_Z7 q))))) /\
+                                   (not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7 q) /\
+                                   (acc first_Z7 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7_0 q) /\
+                                   (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                                 (valid alloc q))) /\
+                               ((result <> result0 ->
+                                 (forall (full_Z7_0:((memory) Z Z7)),
+                                  (full_Z7_0 = (upd full_Z7 q 0) ->
+                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   ((acc empty_Z7_0 q) = 0 /\
+                                   (acc int_Z5_0
+                                    (shift (acc contents_Z7 q)
+                                     (acc last_Z7 q))) =
+                                   c) /\
+                                   ((((not_assigns alloc last_Z7 last_Z7_0
+                                       (pset_singleton q)) /\
+                                   (not_assigns alloc int_Z5 int_Z5_0
+                                    (pset_singleton (shift (acc contents_Z7 q)
+                                                     (acc last_Z7 q))))) /\
+                                   (not_assigns alloc full_Z7 full_Z7_0
+                                    (pset_singleton q))) /\
+                                   (not_assigns alloc empty_Z7 empty_Z7_0
+                                    (pset_singleton q))) /\
+                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (((valid_range alloc (acc contents_Z7 q) 0
+                                      ((acc length_Z7 q) - 1)) /\
+                                   0 <= (acc first_Z7 q) /\
+                                   (acc first_Z7 q) < (acc length_Z7 q)) /\
+                                   0 <= (acc last_Z7_0 q) /\
+                                   (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                                 (valid alloc q))))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc result1).
 Proof.
 intuition.
@@ -2174,10 +4522,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_19 : 
+  forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -2194,6 +4545,160 @@ Save.
   forall (HW_2: result = (acc contents_Z7 q)),
   forall (result0: Z),
   forall (HW_3: result0 = (acc last_Z7 q)),
+  forall (HW_40: (forall (last_Z7_0:((memory) Z Z7)),
+                  (last_Z7_0 = (upd last_Z7 q (1 + result0)) ->
+                   (forall (result1:((pointer) Z5)),
+                    (result1 = (shift result result0) ->
+                     (forall (int_Z5_0:((memory) Z Z5)),
+                      (int_Z5_0 = (upd int_Z5 result1 c) ->
+                       (forall (result:Z),
+                        (result = (acc last_Z7_0 q) ->
+                         (forall (result0:Z),
+                          (result0 = (acc length_Z7 q) ->
+                           ((result = result0 ->
+                             (forall (last_Z7_1:((memory) Z Z7)),
+                              (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                 (forall (result:Z),
+                                  (result = (acc first_Z7 q) ->
+                                   (forall (result0:Z),
+                                    (result0 = (acc last_Z7_1 q) ->
+                                     ((result = result0 ->
+                                       (forall (full_Z7_0:((memory) Z Z7)),
+                                        (full_Z7_0 = (upd full_Z7 q 1) ->
+                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         ((acc empty_Z7_0 q) = 0 /\
+                                         (acc int_Z5_0
+                                          (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))) =
+                                         c) /\
+                                         ((((not_assigns alloc last_Z7
+                                             last_Z7_1 (pset_singleton q)) /\
+                                         (not_assigns alloc int_Z5 int_Z5_0
+                                          (pset_singleton (shift (acc contents_Z7
+                                                                  q)
+                                                           (acc last_Z7 q))))) /\
+                                         (not_assigns alloc full_Z7 full_Z7_0
+                                          (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7 q) /\
+                                         (acc first_Z7 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7_1 q) /\
+                                         (acc last_Z7_1 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))) /\
+                                     ((result <> result0 ->
+                                       (forall (full_Z7_0:((memory) Z Z7)),
+                                        (full_Z7_0 = (upd full_Z7 q 0) ->
+                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         ((acc empty_Z7_0 q) = 0 /\
+                                         (acc int_Z5_0
+                                          (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))) =
+                                         c) /\
+                                         ((((not_assigns alloc last_Z7
+                                             last_Z7_1 (pset_singleton q)) /\
+                                         (not_assigns alloc int_Z5 int_Z5_0
+                                          (pset_singleton (shift (acc contents_Z7
+                                                                  q)
+                                                           (acc last_Z7 q))))) /\
+                                         (not_assigns alloc full_Z7 full_Z7_0
+                                          (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7 q) /\
+                                         (acc first_Z7 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7_1 q) /\
+                                         (acc last_Z7_1 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))) /\
+                           ((result <> result0 ->
+                             (forall (empty_Z7_0:((memory) Z Z7)),
+                              (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                               (forall (result:Z),
+                                (result = (acc first_Z7 q) ->
+                                 (forall (result0:Z),
+                                  (result0 = (acc last_Z7_0 q) ->
+                                   ((result = result0 ->
+                                     (forall (full_Z7_0:((memory) Z Z7)),
+                                      (full_Z7_0 = (upd full_Z7 q 1) ->
+                                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                       ((acc empty_Z7_0 q) = 0 /\
+                                       (acc int_Z5_0
+                                        (shift (acc contents_Z7 q)
+                                         (acc last_Z7 q))) =
+                                       c) /\
+                                       ((((not_assigns alloc last_Z7
+                                           last_Z7_0 (pset_singleton q)) /\
+                                       (not_assigns alloc int_Z5 int_Z5_0
+                                        (pset_singleton (shift (acc contents_Z7
+                                                                q)
+                                                         (acc last_Z7 q))))) /\
+                                       (not_assigns alloc full_Z7 full_Z7_0
+                                        (pset_singleton q))) /\
+                                       (not_assigns alloc empty_Z7 empty_Z7_0
+                                        (pset_singleton q))) /\
+                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (((valid_range alloc
+                                          (acc contents_Z7 q) 0
+                                          ((acc length_Z7 q) - 1)) /\
+                                       0 <= (acc first_Z7 q) /\
+                                       (acc first_Z7 q) <
+                                       (acc length_Z7 q)) /\ 0 <=
+                                       (acc last_Z7_0 q) /\
+                                       (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                                     (valid alloc q))) /\
+                                   ((result <> result0 ->
+                                     (forall (full_Z7_0:((memory) Z Z7)),
+                                      (full_Z7_0 = (upd full_Z7 q 0) ->
+                                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                       ((acc empty_Z7_0 q) = 0 /\
+                                       (acc int_Z5_0
+                                        (shift (acc contents_Z7 q)
+                                         (acc last_Z7 q))) =
+                                       c) /\
+                                       ((((not_assigns alloc last_Z7
+                                           last_Z7_0 (pset_singleton q)) /\
+                                       (not_assigns alloc int_Z5 int_Z5_0
+                                        (pset_singleton (shift (acc contents_Z7
+                                                                q)
+                                                         (acc last_Z7 q))))) /\
+                                       (not_assigns alloc full_Z7 full_Z7_0
+                                        (pset_singleton q))) /\
+                                       (not_assigns alloc empty_Z7 empty_Z7_0
+                                        (pset_singleton q))) /\
+                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (((valid_range alloc
+                                          (acc contents_Z7 q) 0
+                                          ((acc length_Z7 q) - 1)) /\
+                                       0 <= (acc first_Z7 q) /\
+                                       (acc first_Z7 q) <
+                                       (acc length_Z7 q)) /\ 0 <=
+                                       (acc last_Z7_0 q) /\
+                                       (acc last_Z7_0 q) < (acc length_Z7 q)))) /\
+                                     (valid alloc q))))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             (valid alloc q))))) /\
+                         (valid alloc q))) /\
+                       (valid alloc q))) /\
+                     (valid alloc result1)))))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2202,10 +4707,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_20 : 
+  forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -2220,6 +4728,165 @@ Save.
                 (valid_range alloc q 0 0)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (acc contents_Z7 q)),
+  forall (HW_41: (forall (result0:Z),
+                  (result0 = (acc last_Z7 q) ->
+                   (forall (last_Z7_0:((memory) Z Z7)),
+                    (last_Z7_0 = (upd last_Z7 q (1 + result0)) ->
+                     (forall (result1:((pointer) Z5)),
+                      (result1 = (shift result result0) ->
+                       (forall (int_Z5_0:((memory) Z Z5)),
+                        (int_Z5_0 = (upd int_Z5 result1 c) ->
+                         (forall (result:Z),
+                          (result = (acc last_Z7_0 q) ->
+                           (forall (result0:Z),
+                            (result0 = (acc length_Z7 q) ->
+                             ((result = result0 ->
+                               (forall (last_Z7_1:((memory) Z Z7)),
+                                (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                                 (forall (empty_Z7_0:((memory) Z Z7)),
+                                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                   (forall (result:Z),
+                                    (result = (acc first_Z7 q) ->
+                                     (forall (result0:Z),
+                                      (result0 = (acc last_Z7_1 q) ->
+                                       ((result = result0 ->
+                                         (forall (full_Z7_0:((memory) Z Z7)),
+                                          (full_Z7_0 = (upd full_Z7 q 1) ->
+                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           ((acc empty_Z7_0 q) = 0 /\
+                                           (acc int_Z5_0
+                                            (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))) =
+                                           c) /\
+                                           ((((not_assigns alloc last_Z7
+                                               last_Z7_1 (pset_singleton q)) /\
+                                           (not_assigns alloc int_Z5 int_Z5_0
+                                            (pset_singleton (shift (acc contents_Z7
+                                                                    q)
+                                                             (acc last_Z7 q))))) /\
+                                           (not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7 q) /\
+                                           (acc first_Z7 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7_1 q) /\
+                                           (acc last_Z7_1 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))) /\
+                                       ((result <> result0 ->
+                                         (forall (full_Z7_0:((memory) Z Z7)),
+                                          (full_Z7_0 = (upd full_Z7 q 0) ->
+                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           ((acc empty_Z7_0 q) = 0 /\
+                                           (acc int_Z5_0
+                                            (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))) =
+                                           c) /\
+                                           ((((not_assigns alloc last_Z7
+                                               last_Z7_1 (pset_singleton q)) /\
+                                           (not_assigns alloc int_Z5 int_Z5_0
+                                            (pset_singleton (shift (acc contents_Z7
+                                                                    q)
+                                                             (acc last_Z7 q))))) /\
+                                           (not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7 q) /\
+                                           (acc first_Z7 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7_1 q) /\
+                                           (acc last_Z7_1 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))) /\
+                             ((result <> result0 ->
+                               (forall (empty_Z7_0:((memory) Z Z7)),
+                                (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                 (forall (result:Z),
+                                  (result = (acc first_Z7 q) ->
+                                   (forall (result0:Z),
+                                    (result0 = (acc last_Z7_0 q) ->
+                                     ((result = result0 ->
+                                       (forall (full_Z7_0:((memory) Z Z7)),
+                                        (full_Z7_0 = (upd full_Z7 q 1) ->
+                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         ((acc empty_Z7_0 q) = 0 /\
+                                         (acc int_Z5_0
+                                          (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))) =
+                                         c) /\
+                                         ((((not_assigns alloc last_Z7
+                                             last_Z7_0 (pset_singleton q)) /\
+                                         (not_assigns alloc int_Z5 int_Z5_0
+                                          (pset_singleton (shift (acc contents_Z7
+                                                                  q)
+                                                           (acc last_Z7 q))))) /\
+                                         (not_assigns alloc full_Z7 full_Z7_0
+                                          (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7 q) /\
+                                         (acc first_Z7 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7_0 q) /\
+                                         (acc last_Z7_0 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))) /\
+                                     ((result <> result0 ->
+                                       (forall (full_Z7_0:((memory) Z Z7)),
+                                        (full_Z7_0 = (upd full_Z7 q 0) ->
+                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         ((acc empty_Z7_0 q) = 0 /\
+                                         (acc int_Z5_0
+                                          (shift (acc contents_Z7 q)
+                                           (acc last_Z7 q))) =
+                                         c) /\
+                                         ((((not_assigns alloc last_Z7
+                                             last_Z7_0 (pset_singleton q)) /\
+                                         (not_assigns alloc int_Z5 int_Z5_0
+                                          (pset_singleton (shift (acc contents_Z7
+                                                                  q)
+                                                           (acc last_Z7 q))))) /\
+                                         (not_assigns alloc full_Z7 full_Z7_0
+                                          (pset_singleton q))) /\
+                                         (not_assigns alloc empty_Z7
+                                          empty_Z7_0 (pset_singleton q))) /\
+                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (((valid_range alloc
+                                            (acc contents_Z7 q) 0
+                                            ((acc length_Z7 q) - 1)) /\
+                                         0 <= (acc first_Z7 q) /\
+                                         (acc first_Z7 q) <
+                                         (acc length_Z7 q)) /\ 0 <=
+                                         (acc last_Z7_0 q) /\
+                                         (acc last_Z7_0 q) <
+                                         (acc length_Z7 q)))) /\
+                                       (valid alloc q))))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               (valid alloc q))))) /\
+                           (valid alloc q))) /\
+                         (valid alloc q))) /\
+                       (valid alloc result1))))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2228,10 +4895,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_21 : 
+  forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
   forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -2244,6 +4914,174 @@ Save.
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
+  forall (HW_42: (forall (result:((pointer) Z5)),
+                  (result = (acc contents_Z7 q) ->
+                   (forall (result0:Z),
+                    (result0 = (acc last_Z7 q) ->
+                     (forall (last_Z7_0:((memory) Z Z7)),
+                      (last_Z7_0 = (upd last_Z7 q (1 + result0)) ->
+                       (forall (result1:((pointer) Z5)),
+                        (result1 = (shift result result0) ->
+                         (forall (int_Z5_0:((memory) Z Z5)),
+                          (int_Z5_0 = (upd int_Z5 result1 c) ->
+                           (forall (result:Z),
+                            (result = (acc last_Z7_0 q) ->
+                             (forall (result0:Z),
+                              (result0 = (acc length_Z7 q) ->
+                               ((result = result0 ->
+                                 (forall (last_Z7_1:((memory) Z Z7)),
+                                  (last_Z7_1 = (upd last_Z7_0 q 0) ->
+                                   (forall (empty_Z7_0:((memory) Z Z7)),
+                                    (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                     (forall (result:Z),
+                                      (result = (acc first_Z7 q) ->
+                                       (forall (result0:Z),
+                                        (result0 = (acc last_Z7_1 q) ->
+                                         ((result = result0 ->
+                                           (forall (full_Z7_0:((memory) Z
+                                            Z7)),
+                                            (full_Z7_0 = (upd full_Z7 q 1) ->
+                                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                             ((acc empty_Z7_0 q) = 0 /\
+                                             (acc int_Z5_0
+                                              (shift (acc contents_Z7 q)
+                                               (acc last_Z7 q))) =
+                                             c) /\
+                                             ((((not_assigns alloc last_Z7
+                                                 last_Z7_1 (pset_singleton q)) /\
+                                             (not_assigns alloc int_Z5
+                                              int_Z5_0
+                                              (pset_singleton (shift (
+                                                               acc contents_Z7
+                                                               q)
+                                                               (acc last_Z7 q))))) /\
+                                             (not_assigns alloc full_Z7
+                                              full_Z7_0 (pset_singleton q))) /\
+                                             (not_assigns alloc empty_Z7
+                                              empty_Z7_0 (pset_singleton q))) /\
+                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (((valid_range alloc
+                                                (acc contents_Z7 q) 0
+                                                ((acc length_Z7 q) - 1)) /\
+                                             0 <= (acc first_Z7 q) /\
+                                             (acc first_Z7 q) <
+                                             (acc length_Z7 q)) /\ 0 <=
+                                             (acc last_Z7_1 q) /\
+                                             (acc last_Z7_1 q) <
+                                             (acc length_Z7 q)))) /\
+                                           (valid alloc q))) /\
+                                         ((result <> result0 ->
+                                           (forall (full_Z7_0:((memory) Z
+                                            Z7)),
+                                            (full_Z7_0 = (upd full_Z7 q 0) ->
+                                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                             ((acc empty_Z7_0 q) = 0 /\
+                                             (acc int_Z5_0
+                                              (shift (acc contents_Z7 q)
+                                               (acc last_Z7 q))) =
+                                             c) /\
+                                             ((((not_assigns alloc last_Z7
+                                                 last_Z7_1 (pset_singleton q)) /\
+                                             (not_assigns alloc int_Z5
+                                              int_Z5_0
+                                              (pset_singleton (shift (
+                                                               acc contents_Z7
+                                                               q)
+                                                               (acc last_Z7 q))))) /\
+                                             (not_assigns alloc full_Z7
+                                              full_Z7_0 (pset_singleton q))) /\
+                                             (not_assigns alloc empty_Z7
+                                              empty_Z7_0 (pset_singleton q))) /\
+                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (((valid_range alloc
+                                                (acc contents_Z7 q) 0
+                                                ((acc length_Z7 q) - 1)) /\
+                                             0 <= (acc first_Z7 q) /\
+                                             (acc first_Z7 q) <
+                                             (acc length_Z7 q)) /\ 0 <=
+                                             (acc last_Z7_1 q) /\
+                                             (acc last_Z7_1 q) <
+                                             (acc length_Z7 q)))) /\
+                                           (valid alloc q))))) /\
+                                       (valid alloc q))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))) /\
+                               ((result <> result0 ->
+                                 (forall (empty_Z7_0:((memory) Z Z7)),
+                                  (empty_Z7_0 = (upd empty_Z7 q 0) ->
+                                   (forall (result:Z),
+                                    (result = (acc first_Z7 q) ->
+                                     (forall (result0:Z),
+                                      (result0 = (acc last_Z7_0 q) ->
+                                       ((result = result0 ->
+                                         (forall (full_Z7_0:((memory) Z Z7)),
+                                          (full_Z7_0 = (upd full_Z7 q 1) ->
+                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           ((acc empty_Z7_0 q) = 0 /\
+                                           (acc int_Z5_0
+                                            (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))) =
+                                           c) /\
+                                           ((((not_assigns alloc last_Z7
+                                               last_Z7_0 (pset_singleton q)) /\
+                                           (not_assigns alloc int_Z5 int_Z5_0
+                                            (pset_singleton (shift (acc contents_Z7
+                                                                    q)
+                                                             (acc last_Z7 q))))) /\
+                                           (not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7 q) /\
+                                           (acc first_Z7 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7_0 q) /\
+                                           (acc last_Z7_0 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))) /\
+                                       ((result <> result0 ->
+                                         (forall (full_Z7_0:((memory) Z Z7)),
+                                          (full_Z7_0 = (upd full_Z7 q 0) ->
+                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           ((acc empty_Z7_0 q) = 0 /\
+                                           (acc int_Z5_0
+                                            (shift (acc contents_Z7 q)
+                                             (acc last_Z7 q))) =
+                                           c) /\
+                                           ((((not_assigns alloc last_Z7
+                                               last_Z7_0 (pset_singleton q)) /\
+                                           (not_assigns alloc int_Z5 int_Z5_0
+                                            (pset_singleton (shift (acc contents_Z7
+                                                                    q)
+                                                             (acc last_Z7 q))))) /\
+                                           (not_assigns alloc full_Z7
+                                            full_Z7_0 (pset_singleton q))) /\
+                                           (not_assigns alloc empty_Z7
+                                            empty_Z7_0 (pset_singleton q))) /\
+                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (((valid_range alloc
+                                              (acc contents_Z7 q) 0
+                                              ((acc length_Z7 q) - 1)) /\
+                                           0 <= (acc first_Z7 q) /\
+                                           (acc first_Z7 q) <
+                                           (acc length_Z7 q)) /\ 0 <=
+                                           (acc last_Z7_0 q) /\
+                                           (acc last_Z7_0 q) <
+                                           (acc length_Z7 q)))) /\
+                                         (valid alloc q))))) /\
+                                     (valid alloc q))) /\
+                                   (valid alloc q))) /\
+                                 (valid alloc q))))) /\
+                             (valid alloc q))) /\
+                           (valid alloc q))) /\
+                         (valid alloc result1))))) /\
+                     (valid alloc q))) /\
+                   (valid alloc q)))),
   (valid alloc q).
 Proof.
 intuition.
@@ -2336,6 +5174,16 @@ Save.
                 0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))),
+  forall (HW_4: (forall (result:Z),
+                 (result = (acc empty_Z7_0 q1) ->
+                  (* File \"queue.c\", line 46, characters 13-39:\n *)
+                  result = (acc empty_Z7 q1) /\
+                  (* File \"queue.c\", line 14, characters 5-105:\n *)
+                  (((valid_range alloc (acc contents_Z7 q) 0
+                     ((acc length_Z7 q) - 1)) /\
+                  0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                  (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                  (acc last_Z7 q) < (acc length_Z7 q))))),
   (valid alloc q1).
 Proof.
 intuition.
@@ -2349,6 +5197,8 @@ Save.
   forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
@@ -2361,6 +5211,36 @@ Save.
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
+  forall (HW_5: (forall (result:Z),
+                 (forall (empty_Z7_0:((memory) Z Z7)),
+                  (forall (first_Z7_0:((memory) Z Z7)),
+                   (forall (full_Z7_0:((memory) Z Z7)),
+                    ((* File \"queue.c\", line 35, characters 13-60:\n *)
+                     ((acc full_Z7_0 q) = 0 /\ result =
+                     (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                     (((not_assigns alloc full_Z7 full_Z7_0
+                        (pset_singleton q)) /\
+                     (not_assigns alloc first_Z7 first_Z7_0
+                      (pset_singleton q))) /\
+                     (not_assigns alloc empty_Z7 empty_Z7_0
+                      (pset_singleton q))) /\
+                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                     (((valid_range alloc (acc contents_Z7 q) 0
+                        ((acc length_Z7 q) - 1)) /\
+                     0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                     (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                     (acc last_Z7 q) < (acc length_Z7 q)) ->
+                     (forall (result:Z),
+                      (result = (acc empty_Z7_0 q1) ->
+                       (* File \"queue.c\", line 46, characters 13-39:\n *)
+                       result = (acc empty_Z7 q1) /\
+                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (((valid_range alloc (acc contents_Z7 q) 0
+                          ((acc length_Z7 q) - 1)) /\
+                       0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                       (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                       (acc last_Z7 q) < (acc length_Z7 q)))) /\
+                     (valid alloc q1))))))),
   ((* File \"queue.c\", line 33, characters 14-22:\n *) (acc empty_Z7 q) = 0 /\
   (* File \"queue.c\", line 14, characters 5-105:\n *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=

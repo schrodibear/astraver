@@ -34,13 +34,14 @@ Save.
   forall (a: Z),
   forall (b: Z),
   forall (HW_1: a > 0 /\ b > 0),
+  forall (HW_2: 0 < a /\ 0 < b /\ (gcd a b) = (gcd a b)),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_2: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
-  forall (HW_3: x <> y),
-  forall (HW_4: x > y),
+  forall (HW_3: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
+  forall (HW_4: x <> y),
+  forall (HW_5: x > y),
   forall (x0: Z),
-  forall (HW_5: x0 = (x - y)),
+  forall (HW_6: x0 = (x - y)),
   (0 < x0 /\ 0 < y /\ (gcd x0 y) = (gcd a b)) /\ (Zwf 0 (max x0 y) (max x y)).
 Proof.
 intuition.
@@ -55,13 +56,14 @@ Save.
   forall (a: Z),
   forall (b: Z),
   forall (HW_1: a > 0 /\ b > 0),
+  forall (HW_2: 0 < a /\ 0 < b /\ (gcd a b) = (gcd a b)),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_2: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
-  forall (HW_3: x <> y),
-  forall (HW_6: x <= y),
+  forall (HW_3: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
+  forall (HW_4: x <> y),
+  forall (HW_7: x <= y),
   forall (y0: Z),
-  forall (HW_7: y0 = (y - x)),
+  forall (HW_8: y0 = (y - x)),
   (0 < x /\ 0 < y0 /\ (gcd x y0) = (gcd a b)) /\ (Zwf 0 (max x y0) (max x y)).
 Proof.
 intuition.
@@ -78,10 +80,11 @@ Save.
   forall (a: Z),
   forall (b: Z),
   forall (HW_1: a > 0 /\ b > 0),
+  forall (HW_2: 0 < a /\ 0 < b /\ (gcd a b) = (gcd a b)),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_2: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
-  forall (HW_8: x = y),
+  forall (HW_3: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
+  forall (HW_9: x = y),
   x = (gcd a b).
 Proof.
 intuition; subst.
@@ -103,14 +106,15 @@ Save.
   forall (a: Z),
   forall (b: Z),
   forall (HW_1: a >= 0 /\ b >= 0),
+  forall (HW_2: 0 <= a /\ 0 <= b /\ (gcd a b) = (gcd a b)),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_2: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
-  forall (HW_3: y <> 0),
+  forall (HW_3: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
+  forall (HW_4: y <> 0),
   forall (x0: Z),
-  forall (HW_4: x0 = y),
+  forall (HW_5: x0 = y),
   forall (y0: Z),
-  forall (HW_5: y0 = ((Zmod x y))),
+  forall (HW_6: y0 = ((Zmod x y))),
   (0 <= x0 /\ 0 <= y0 /\ (gcd x0 y0) = (gcd a b)) /\ (Zwf 0 y0 y).
 Proof.
 intuition.
@@ -135,10 +139,11 @@ Save.
   forall (a: Z),
   forall (b: Z),
   forall (HW_1: a >= 0 /\ b >= 0),
+  forall (HW_2: 0 <= a /\ 0 <= b /\ (gcd a b) = (gcd a b)),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_2: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
-  forall (HW_6: y = 0),
+  forall (HW_3: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
+  forall (HW_7: y = 0),
   x = (gcd a b).
 Proof.
 intuition; subst.

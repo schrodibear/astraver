@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.74 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.75 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -199,15 +199,15 @@ val neq : term -> term -> predicate
 val array_length : Ident.t -> pure_type -> term
 
 val pif : term -> predicate -> predicate -> predicate
-val pand : ?is_wp:is_wp -> predicate -> predicate -> predicate
-val pands : ?is_wp:is_wp -> predicate list -> predicate
+val pand : ?is_wp:is_wp -> ?is_sym:bool -> predicate -> predicate -> predicate
+val pands : ?is_wp:is_wp -> ?is_sym:bool -> predicate list -> predicate
 val por : predicate -> predicate -> predicate
 val pnot : predicate -> predicate
 val pimplies : ?is_wp:is_wp -> predicate -> predicate -> predicate
 
 (* WP connectives *)
-val wpand : predicate -> predicate -> predicate
-val wpands : predicate list -> predicate
+val wpand : ?is_sym:bool -> predicate -> predicate -> predicate
+val wpands : ?is_sym:bool -> predicate list -> predicate
 val wpimplies : predicate -> predicate -> predicate
 
 val simplify : predicate -> predicate

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.50 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.51 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -71,7 +71,7 @@ let rec find_predicate_vars acc p =
     | Pfalse -> acc
     | Pimplies (_,p1,p2) 
     | Pif (_,p1,p2)
-    | Pand (_,p1,p2)
+    | Pand (_,_,p1,p2)
     | Piff (p1,p2)
     | Por (p1,p2) ->
 	find_predicate_vars (find_predicate_vars acc p1) p2
@@ -134,7 +134,7 @@ let rec subst_predicate s p =
   match p with
   | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
   | Pif (a, b, c) -> Pif (subst_term s a, f b, f c)
-  | Pand (w, a, b) -> Pand (w, f a, f b)
+  | Pand (w, s, a, b) -> Pand (w, s, f a, f b)
   | Por (a, b) -> Por (f a, f b)
   | Piff (a, b) -> Piff (f a, f b)
   | Pnot a -> Pnot (f a)

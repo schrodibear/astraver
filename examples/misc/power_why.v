@@ -123,25 +123,27 @@ Qed.
   forall (HW_2: m = x),
   forall (y: Z),
   forall (HW_3: y = 1),
+  forall (HW_4: (Zpower x n) = (y * (Zpower m n)) /\ n >= 0),
   forall (m0: Z),
   forall (n0: Z),
   forall (y0: Z),
-  forall (HW_4: (Zpower x n) = (y0 * (Zpower m0 n0)) /\ n0 >= 0),
-  forall (HW_5: n0 > 0),
-  forall (HW_6: (Zodd n0)),
+  forall (HW_5: (Zpower x n) = (y0 * (Zpower m0 n0)) /\ n0 >= 0),
+  forall (HW_6: n0 > 0),
+  forall (HW_7: (Zodd n0)),
   forall (y1: Z),
-  forall (HW_7: y1 = (y0 * m0)),
+  forall (HW_8: y1 = (y0 * m0)),
   forall (m1: Z),
-  forall (HW_8: m1 = (m0 * m0)),
+  forall (HW_9: m1 = (m0 * m0)),
   forall (n1: Z),
-  forall (HW_9: n1 = (div2 n0)),
+  forall (HW_10: n1 = (div2 n0)),
   ((Zpower x n) = (y1 * (Zpower m1 n1)) /\ n1 >= 0) /\ (Zwf 0 n1 n0).
 Proof.
 simpl; intros.
 repeat split; try omega.
 intuition.
 assert (h: x ^ n = y0 * m0 ^ (2 * Zdiv2 n0 + 1)).
-rewrite <- (Zodd_div2 n0 H0); auto.
+assert (hn0 : n0 >= 0). assumption.
+rewrite <- (Zodd_div2 n0 hn0); auto.
 rewrite h.
 rewrite Zpower_exp.
 replace (Zpower m0 1) with m0.
@@ -165,16 +167,17 @@ Qed.
   forall (HW_2: m = x),
   forall (y: Z),
   forall (HW_3: y = 1),
+  forall (HW_4: (Zpower x n) = (y * (Zpower m n)) /\ n >= 0),
   forall (m0: Z),
   forall (n0: Z),
   forall (y0: Z),
-  forall (HW_4: (Zpower x n) = (y0 * (Zpower m0 n0)) /\ n0 >= 0),
-  forall (HW_5: n0 > 0),
-  forall (HW_10: (Zeven n0)),
+  forall (HW_5: (Zpower x n) = (y0 * (Zpower m0 n0)) /\ n0 >= 0),
+  forall (HW_6: n0 > 0),
+  forall (HW_11: (Zeven n0)),
   forall (m1: Z),
-  forall (HW_11: m1 = (m0 * m0)),
+  forall (HW_12: m1 = (m0 * m0)),
   forall (n1: Z),
-  forall (HW_12: n1 = (div2 n0)),
+  forall (HW_13: n1 = (div2 n0)),
   ((Zpower x n) = (y0 * (Zpower m1 n1)) /\ n1 >= 0) /\ (Zwf 0 n1 n0).
 Proof.
 simpl; intuition.
@@ -198,11 +201,12 @@ Qed.
   forall (HW_2: m = x),
   forall (y: Z),
   forall (HW_3: y = 1),
+  forall (HW_4: (Zpower x n) = (y * (Zpower m n)) /\ n >= 0),
   forall (m0: Z),
   forall (n0: Z),
   forall (y0: Z),
-  forall (HW_4: (Zpower x n) = (y0 * (Zpower m0 n0)) /\ n0 >= 0),
-  forall (HW_13: n0 <= 0),
+  forall (HW_5: (Zpower x n) = (y0 * (Zpower m0 n0)) /\ n0 >= 0),
+  forall (HW_14: n0 <= 0),
   y0 = (Zpower x n).
 Proof.
 intros.

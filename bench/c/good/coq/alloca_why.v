@@ -57,6 +57,10 @@ Save.
   forall (HW_6: int_Z0_2 = (upd int_Z0_1 result1 3)),
   forall (result2: ((pointer) Z0)),
   forall (HW_7: result2 = (shift result 2)),
+  forall (HW_9: (forall (result:Z),
+                 (result = (acc int_Z0_2 result2) ->
+                  (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                  result = 3))),
   (valid alloc0 result2).
 Proof.
 intuition.
@@ -82,6 +86,15 @@ Save.
   forall (HW_4: int_Z0_1 = (upd int_Z0_0 result0 2)),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result 2)),
+  forall (HW_10: (forall (int_Z0:((memory) Z Z0)),
+                  (int_Z0 = (upd int_Z0_1 result1 3) ->
+                   (forall (result0:((pointer) Z0)),
+                    (result0 = (shift result 2) ->
+                     (forall (result:Z),
+                      (result = (acc int_Z0 result0) ->
+                       (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                       result = 3)) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result1).
 Proof.
 intuition.
@@ -104,6 +117,20 @@ Save.
   forall (HW_2: int_Z0_0 = (upd int_Z0 result 1)),
   forall (result0: ((pointer) Z0)),
   forall (HW_3: result0 = (shift result 1)),
+  forall (HW_11: (forall (int_Z0:((memory) Z Z0)),
+                  (int_Z0 = (upd int_Z0_0 result0 2) ->
+                   (forall (result0:((pointer) Z0)),
+                    (result0 = (shift result 2) ->
+                     (forall (int_Z0_0:((memory) Z Z0)),
+                      (int_Z0_0 = (upd int_Z0 result0 3) ->
+                       (forall (result0:((pointer) Z0)),
+                        (result0 = (shift result 2) ->
+                         (forall (result:Z),
+                          (result = (acc int_Z0_0 result0) ->
+                           (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                           result = 3)) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -113,6 +140,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
+  forall (int_Z0: ((memory) Z Z0)),
   forall (result: ((pointer) Z0)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -120,6 +148,25 @@ Save.
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
+  forall (HW_12: (forall (int_Z0_0:((memory) Z Z0)),
+                  (int_Z0_0 = (upd int_Z0 result 1) ->
+                   (forall (result0:((pointer) Z0)),
+                    (result0 = (shift result 1) ->
+                     (forall (int_Z0:((memory) Z Z0)),
+                      (int_Z0 = (upd int_Z0_0 result0 2) ->
+                       (forall (result0:((pointer) Z0)),
+                        (result0 = (shift result 2) ->
+                         (forall (int_Z0_0:((memory) Z Z0)),
+                          (int_Z0_0 = (upd int_Z0 result0 3) ->
+                           (forall (result0:((pointer) Z0)),
+                            (result0 = (shift result 2) ->
+                             (forall (result:Z),
+                              (result = (acc int_Z0_0 result0) ->
+                               (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                               result = 3)) /\
+                             (valid alloc0 result0))))) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -128,6 +175,35 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (int_Z0: ((memory) Z Z0)),
+  forall (HW_13: (forall (result:((pointer) Z0)),
+                  (forall (alloc0:alloc_table),
+                   ((valid alloc0 result) /\ (offset result) = 0 /\
+                    (block_length alloc0 result) = 3 /\
+                    (valid_range alloc0 result 0 (3 - 1)) /\
+                    (fresh alloc result) /\ (on_stack alloc0 result) /\
+                    (alloc_stack result alloc alloc0) ->
+                    (forall (int_Z0_0:((memory) Z Z0)),
+                     (int_Z0_0 = (upd int_Z0 result 1) ->
+                      (forall (result0:((pointer) Z0)),
+                       (result0 = (shift result 1) ->
+                        (forall (int_Z0:((memory) Z Z0)),
+                         (int_Z0 = (upd int_Z0_0 result0 2) ->
+                          (forall (result0:((pointer) Z0)),
+                           (result0 = (shift result 2) ->
+                            (forall (int_Z0_0:((memory) Z Z0)),
+                             (int_Z0_0 = (upd int_Z0 result0 3) ->
+                              (forall (result0:((pointer) Z0)),
+                               (result0 = (shift result 2) ->
+                                (forall (result:Z),
+                                 (result = (acc int_Z0_0 result0) ->
+                                  (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                                  result = 3)) /\
+                                (valid alloc0 result0))))) /\
+                            (valid alloc0 result0))))) /\
+                        (valid alloc0 result0))))) /\
+                    (valid alloc0 result))))),
   3 >= 1.
 Proof.
 intuition.
@@ -188,6 +264,10 @@ Save.
   forall (HW_6: int_Z1_2 = (upd int_Z1_1 result1 3)),
   forall (result2: ((pointer) Z1)),
   forall (HW_7: result2 = (shift result 2)),
+  forall (HW_9: (forall (result:Z),
+                 (result = (acc int_Z1_2 result2) ->
+                  (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                  result = 3))),
   (valid alloc0 result2).
 Proof.
 intuition.
@@ -213,6 +293,15 @@ Save.
   forall (HW_4: int_Z1_1 = (upd int_Z1_0 result0 2)),
   forall (result1: ((pointer) Z1)),
   forall (HW_5: result1 = (shift result 2)),
+  forall (HW_10: (forall (int_Z1:((memory) Z Z1)),
+                  (int_Z1 = (upd int_Z1_1 result1 3) ->
+                   (forall (result0:((pointer) Z1)),
+                    (result0 = (shift result 2) ->
+                     (forall (result:Z),
+                      (result = (acc int_Z1 result0) ->
+                       (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                       result = 3)) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result1).
 Proof.
 intuition;subst;caduceus;auto.
@@ -233,6 +322,20 @@ Save.
   forall (HW_2: int_Z1_0 = (upd int_Z1 result 1)),
   forall (result0: ((pointer) Z1)),
   forall (HW_3: result0 = (shift result 1)),
+  forall (HW_11: (forall (int_Z1:((memory) Z Z1)),
+                  (int_Z1 = (upd int_Z1_0 result0 2) ->
+                   (forall (result0:((pointer) Z1)),
+                    (result0 = (shift result 2) ->
+                     (forall (int_Z1_0:((memory) Z Z1)),
+                      (int_Z1_0 = (upd int_Z1 result0 3) ->
+                       (forall (result0:((pointer) Z1)),
+                        (result0 = (shift result 2) ->
+                         (forall (result:Z),
+                          (result = (acc int_Z1_0 result0) ->
+                           (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                           result = 3)) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -242,6 +345,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_5 : 
   forall (alloc: alloc_table),
+  forall (int_Z1: ((memory) Z Z1)),
   forall (result: ((pointer) Z1)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -249,6 +353,25 @@ Save.
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
+  forall (HW_12: (forall (int_Z1_0:((memory) Z Z1)),
+                  (int_Z1_0 = (upd int_Z1 result 1) ->
+                   (forall (result0:((pointer) Z1)),
+                    (result0 = (shift result 1) ->
+                     (forall (int_Z1:((memory) Z Z1)),
+                      (int_Z1 = (upd int_Z1_0 result0 2) ->
+                       (forall (result0:((pointer) Z1)),
+                        (result0 = (shift result 2) ->
+                         (forall (int_Z1_0:((memory) Z Z1)),
+                          (int_Z1_0 = (upd int_Z1 result0 3) ->
+                           (forall (result0:((pointer) Z1)),
+                            (result0 = (shift result 2) ->
+                             (forall (result:Z),
+                              (result = (acc int_Z1_0 result0) ->
+                               (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                               result = 3)) /\
+                             (valid alloc0 result0))))) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -257,6 +380,35 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (HW_13: (forall (result:((pointer) Z1)),
+                  (forall (alloc0:alloc_table),
+                   ((valid alloc0 result) /\ (offset result) = 0 /\
+                    (block_length alloc0 result) = 3 /\
+                    (valid_range alloc0 result 0 (3 - 1)) /\
+                    (fresh alloc result) /\ (on_stack alloc0 result) /\
+                    (alloc_stack result alloc alloc0) ->
+                    (forall (int_Z1_0:((memory) Z Z1)),
+                     (int_Z1_0 = (upd int_Z1 result 1) ->
+                      (forall (result0:((pointer) Z1)),
+                       (result0 = (shift result 1) ->
+                        (forall (int_Z1:((memory) Z Z1)),
+                         (int_Z1 = (upd int_Z1_0 result0 2) ->
+                          (forall (result0:((pointer) Z1)),
+                           (result0 = (shift result 2) ->
+                            (forall (int_Z1_0:((memory) Z Z1)),
+                             (int_Z1_0 = (upd int_Z1 result0 3) ->
+                              (forall (result0:((pointer) Z1)),
+                               (result0 = (shift result 2) ->
+                                (forall (result:Z),
+                                 (result = (acc int_Z1_0 result0) ->
+                                  (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                                  result = 3)) /\
+                                (valid alloc0 result0))))) /\
+                            (valid alloc0 result0))))) /\
+                        (valid alloc0 result0))))) /\
+                    (valid alloc0 result))))),
   3 >= 1.
 Proof.
 intuition.
@@ -333,6 +485,10 @@ Save.
   forall (HW_9: int_Z3_3 = (upd int_Z3_2 result2 4)),
   forall (result3: ((pointer) Z11)),
   forall (HW_10: result3 = (shift u 2)),
+  forall (HW_12: (forall (result:Z),
+                  (result = (acc int_Z11 result3) ->
+                   (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                   result = 12))),
   (valid alloc0 result3).
 Proof.
 intuition.
@@ -366,6 +522,15 @@ Save.
   forall (HW_7: int_Z3_2 = (upd int_Z3_1 result1 3)),
   forall (result2: ((pointer) Z3)),
   forall (HW_8: result2 = (shift result 3)),
+  forall (HW_13: (forall (int_Z3:((memory) Z Z3)),
+                  (int_Z3 = (upd int_Z3_2 result2 4) ->
+                   (forall (result:((pointer) Z11)),
+                    (result = (shift u 2) ->
+                     (forall (result0:Z),
+                      (result0 = (acc int_Z11 result) ->
+                       (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                       result0 = 12)) /\
+                     (valid alloc0 result)))))),
   (valid alloc0 result2).
 Proof.
 assert (0<=2<=4).
@@ -448,6 +613,20 @@ Save.
   forall (HW_5: int_Z3_1 = (upd int_Z3_0 result0 2)),
   forall (result1: ((pointer) Z3)),
   forall (HW_6: result1 = (shift result 2)),
+  forall (HW_14: (forall (int_Z3:((memory) Z Z3)),
+                  (int_Z3 = (upd int_Z3_1 result1 3) ->
+                   (forall (result0:((pointer) Z3)),
+                    (result0 = (shift result 3) ->
+                     (forall (int_Z3_0:((memory) Z Z3)),
+                      (int_Z3_0 = (upd int_Z3 result0 4) ->
+                       (forall (result:((pointer) Z11)),
+                        (result = (shift u 2) ->
+                         (forall (result0:Z),
+                          (result0 = (acc int_Z11 result) ->
+                           (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                           result0 = 12)) /\
+                         (valid alloc0 result))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result1).
 Proof.
 intuition.
@@ -473,6 +652,25 @@ Save.
   forall (HW_3: int_Z3_0 = (upd int_Z3 result 1)),
   forall (result0: ((pointer) Z3)),
   forall (HW_4: result0 = (shift result 1)),
+  forall (HW_15: (forall (int_Z3:((memory) Z Z3)),
+                  (int_Z3 = (upd int_Z3_0 result0 2) ->
+                   (forall (result0:((pointer) Z3)),
+                    (result0 = (shift result 2) ->
+                     (forall (int_Z3_0:((memory) Z Z3)),
+                      (int_Z3_0 = (upd int_Z3 result0 3) ->
+                       (forall (result0:((pointer) Z3)),
+                        (result0 = (shift result 3) ->
+                         (forall (int_Z3:((memory) Z Z3)),
+                          (int_Z3 = (upd int_Z3_0 result0 4) ->
+                           (forall (result:((pointer) Z11)),
+                            (result = (shift u 2) ->
+                             (forall (result0:Z),
+                              (result0 = (acc int_Z11 result) ->
+                               (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                               result0 = 12)) /\
+                             (valid alloc0 result))))) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -483,6 +681,7 @@ Save.
 (*Why goal*) Lemma h_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
   forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
@@ -493,6 +692,30 @@ Save.
                 (valid_range alloc0 result 0 (4 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
+  forall (HW_16: (forall (int_Z3_0:((memory) Z Z3)),
+                  (int_Z3_0 = (upd int_Z3 result 1) ->
+                   (forall (result0:((pointer) Z3)),
+                    (result0 = (shift result 1) ->
+                     (forall (int_Z3:((memory) Z Z3)),
+                      (int_Z3 = (upd int_Z3_0 result0 2) ->
+                       (forall (result0:((pointer) Z3)),
+                        (result0 = (shift result 2) ->
+                         (forall (int_Z3_0:((memory) Z Z3)),
+                          (int_Z3_0 = (upd int_Z3 result0 3) ->
+                           (forall (result0:((pointer) Z3)),
+                            (result0 = (shift result 3) ->
+                             (forall (int_Z3:((memory) Z Z3)),
+                              (int_Z3 = (upd int_Z3_0 result0 4) ->
+                               (forall (result:((pointer) Z11)),
+                                (result = (shift u 2) ->
+                                 (forall (result0:Z),
+                                  (result0 = (acc int_Z11 result) ->
+                                   (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                                   result0 = 12)) /\
+                                 (valid alloc0 result))))) /\
+                             (valid alloc0 result0))))) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -503,9 +726,42 @@ Save.
 (*Why goal*) Lemma h_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
   forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+  forall (HW_17: (forall (result:((pointer) Z3)),
+                  (forall (alloc0:alloc_table),
+                   ((valid alloc0 result) /\ (offset result) = 0 /\
+                    (block_length alloc0 result) = 4 /\
+                    (valid_range alloc0 result 0 (4 - 1)) /\
+                    (fresh alloc result) /\ (on_stack alloc0 result) /\
+                    (alloc_stack result alloc alloc0) ->
+                    (forall (int_Z3_0:((memory) Z Z3)),
+                     (int_Z3_0 = (upd int_Z3 result 1) ->
+                      (forall (result0:((pointer) Z3)),
+                       (result0 = (shift result 1) ->
+                        (forall (int_Z3:((memory) Z Z3)),
+                         (int_Z3 = (upd int_Z3_0 result0 2) ->
+                          (forall (result0:((pointer) Z3)),
+                           (result0 = (shift result 2) ->
+                            (forall (int_Z3_0:((memory) Z Z3)),
+                             (int_Z3_0 = (upd int_Z3 result0 3) ->
+                              (forall (result0:((pointer) Z3)),
+                               (result0 = (shift result 3) ->
+                                (forall (int_Z3:((memory) Z Z3)),
+                                 (int_Z3 = (upd int_Z3_0 result0 4) ->
+                                  (forall (result:((pointer) Z11)),
+                                   (result = (shift u 2) ->
+                                    (forall (result0:Z),
+                                     (result0 = (acc int_Z11 result) ->
+                                      (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                                      result0 = 12)) /\
+                                    (valid alloc0 result))))) /\
+                                (valid alloc0 result0))))) /\
+                            (valid alloc0 result0))))) /\
+                        (valid alloc0 result0))))) /\
+                    (valid alloc0 result))))),
   4 >= 1.
 Proof.
 intuition.
@@ -626,6 +882,10 @@ Save.
   forall (HW_18: int_Z5_3 = (upd int_Z5_2 result8 0)),
   forall (result9: ((pointer) Z5)),
   forall (HW_19: result9 = (shift result3 2)),
+  forall (HW_21: (forall (result:Z),
+                  (result = (acc int_Z5_3 result9) ->
+                   (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                   result = 3))),
   (valid alloc1 result9).
 Proof.
 intuition.
@@ -682,6 +942,15 @@ Save.
   forall (HW_16: int_Z5_2 = (upd int_Z5_1 result5 result7)),
   forall (result8: ((pointer) Z5)),
   forall (HW_17: result8 = (shift result3 3)),
+  forall (HW_22: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_2 result8 0) ->
+                   (forall (result:((pointer) Z5)),
+                    (result = (shift result3 2) ->
+                     (forall (result0:Z),
+                      (result0 = (acc int_Z5 result) ->
+                       (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                       result0 = 3)) /\
+                     (valid alloc1 result)))))),
   (valid alloc1 result8).
 Proof.
 intuition;subst;caduceus.
@@ -745,6 +1014,20 @@ Save.
   forall (HW_14: result6 = (shift result 2)),
   forall (result7: Z),
   forall (HW_15: result7 = (acc int_Z4_3 result6)),
+  forall (HW_23: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_1 result5 result7) ->
+                   (forall (result:((pointer) Z5)),
+                    (result = (shift result3 3) ->
+                     (forall (int_Z5_0:((memory) Z Z5)),
+                      (int_Z5_0 = (upd int_Z5 result 0) ->
+                       (forall (result:((pointer) Z5)),
+                        (result = (shift result3 2) ->
+                         (forall (result0:Z),
+                          (result0 = (acc int_Z5_0 result) ->
+                           (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                           result0 = 3)) /\
+                         (valid alloc1 result))))) /\
+                     (valid alloc1 result)))))),
   (valid alloc1 result5).
 Proof.
 intuition.
@@ -794,6 +1077,23 @@ Save.
   forall (HW_13: result5 = (shift result3 2)),
   forall (result6: ((pointer) Z4)),
   forall (HW_14: result6 = (shift result 2)),
+  forall (HW_24: (forall (result:Z),
+                  (result = (acc int_Z4_3 result6) ->
+                   (forall (int_Z5:((memory) Z Z5)),
+                    (int_Z5 = (upd int_Z5_1 result5 result) ->
+                     (forall (result:((pointer) Z5)),
+                      (result = (shift result3 3) ->
+                       (forall (int_Z5_0:((memory) Z Z5)),
+                        (int_Z5_0 = (upd int_Z5 result 0) ->
+                         (forall (result:((pointer) Z5)),
+                          (result = (shift result3 2) ->
+                           (forall (result0:Z),
+                            (result0 = (acc int_Z5_0 result) ->
+                             (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                             result0 = 3)) /\
+                           (valid alloc1 result))))) /\
+                       (valid alloc1 result))))) /\
+                   (valid alloc1 result5)))),
   (valid alloc1 result6).
 Proof.
 intuition.
@@ -837,6 +1137,30 @@ Save.
   forall (HW_10: int_Z5_0 = (upd int_Z5 result3 0)),
   forall (result4: ((pointer) Z5)),
   forall (HW_11: result4 = (shift result3 1)),
+  forall (HW_25: (forall (int_Z5:((memory) Z Z5)),
+                  (int_Z5 = (upd int_Z5_0 result4 0) ->
+                   (forall (result0:((pointer) Z5)),
+                    (result0 = (shift result3 2) ->
+                     (forall (result1:((pointer) Z4)),
+                      (result1 = (shift result 2) ->
+                       (forall (result:Z),
+                        (result = (acc int_Z4_3 result1) ->
+                         (forall (int_Z5_0:((memory) Z Z5)),
+                          (int_Z5_0 = (upd int_Z5 result0 result) ->
+                           (forall (result:((pointer) Z5)),
+                            (result = (shift result3 3) ->
+                             (forall (int_Z5:((memory) Z Z5)),
+                              (int_Z5 = (upd int_Z5_0 result 0) ->
+                               (forall (result:((pointer) Z5)),
+                                (result = (shift result3 2) ->
+                                 (forall (result0:Z),
+                                  (result0 = (acc int_Z5 result) ->
+                                   (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                   result0 = 3)) /\
+                                 (valid alloc1 result))))) /\
+                             (valid alloc1 result))))) /\
+                         (valid alloc1 result0))) /\
+                       (valid alloc1 result1)))))))),
   (valid alloc1 result4).
 Proof.
 intuition.
@@ -847,6 +1171,7 @@ Save.
 (*Why goal*) Lemma two_local_arrays_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -875,6 +1200,35 @@ Save.
                 (valid_range alloc1 result3 0 (5 - 1)) /\
                 (fresh alloc0 result3) /\ (on_stack alloc1 result3) /\
                 (alloc_stack result3 alloc0 alloc1)),
+  forall (HW_26: (forall (int_Z5_0:((memory) Z Z5)),
+                  (int_Z5_0 = (upd int_Z5 result3 0) ->
+                   (forall (result0:((pointer) Z5)),
+                    (result0 = (shift result3 1) ->
+                     (forall (int_Z5:((memory) Z Z5)),
+                      (int_Z5 = (upd int_Z5_0 result0 0) ->
+                       (forall (result0:((pointer) Z5)),
+                        (result0 = (shift result3 2) ->
+                         (forall (result1:((pointer) Z4)),
+                          (result1 = (shift result 2) ->
+                           (forall (result:Z),
+                            (result = (acc int_Z4_3 result1) ->
+                             (forall (int_Z5_0:((memory) Z Z5)),
+                              (int_Z5_0 = (upd int_Z5 result0 result) ->
+                               (forall (result:((pointer) Z5)),
+                                (result = (shift result3 3) ->
+                                 (forall (int_Z5:((memory) Z Z5)),
+                                  (int_Z5 = (upd int_Z5_0 result 0) ->
+                                   (forall (result:((pointer) Z5)),
+                                    (result = (shift result3 2) ->
+                                     (forall (result0:Z),
+                                      (result0 = (acc int_Z5 result) ->
+                                       (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                       result0 = 3)) /\
+                                     (valid alloc1 result))))) /\
+                                 (valid alloc1 result))))) /\
+                             (valid alloc1 result0))) /\
+                           (valid alloc1 result1))))))) /\
+                     (valid alloc1 result0)))))),
   (valid alloc1 result3).
 Proof.
 intuition.
@@ -885,6 +1239,7 @@ Save.
 (*Why goal*) Lemma two_local_arrays_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -906,6 +1261,43 @@ Save.
   forall (HW_7: result2 = (shift result 3)),
   forall (int_Z4_3: ((memory) Z Z4)),
   forall (HW_8: int_Z4_3 = (upd int_Z4_2 result2 4)),
+  forall (HW_27: (forall (result0:((pointer) Z5)),
+                  (forall (alloc:alloc_table),
+                   ((valid alloc result0) /\ (offset result0) = 0 /\
+                    (block_length alloc result0) = 5 /\
+                    (valid_range alloc result0 0 (5 - 1)) /\
+                    (fresh alloc0 result0) /\ (on_stack alloc result0) /\
+                    (alloc_stack result0 alloc0 alloc) ->
+                    (forall (int_Z5_0:((memory) Z Z5)),
+                     (int_Z5_0 = (upd int_Z5 result0 0) ->
+                      (forall (result1:((pointer) Z5)),
+                       (result1 = (shift result0 1) ->
+                        (forall (int_Z5:((memory) Z Z5)),
+                         (int_Z5 = (upd int_Z5_0 result1 0) ->
+                          (forall (result1:((pointer) Z5)),
+                           (result1 = (shift result0 2) ->
+                            (forall (result2:((pointer) Z4)),
+                             (result2 = (shift result 2) ->
+                              (forall (result:Z),
+                               (result = (acc int_Z4_3 result2) ->
+                                (forall (int_Z5_0:((memory) Z Z5)),
+                                 (int_Z5_0 = (upd int_Z5 result1 result) ->
+                                  (forall (result:((pointer) Z5)),
+                                   (result = (shift result0 3) ->
+                                    (forall (int_Z5:((memory) Z Z5)),
+                                     (int_Z5 = (upd int_Z5_0 result 0) ->
+                                      (forall (result:((pointer) Z5)),
+                                       (result = (shift result0 2) ->
+                                        (forall (result0:Z),
+                                         (result0 = (acc int_Z5 result) ->
+                                          (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                          result0 = 3)) /\
+                                        (valid alloc result))))) /\
+                                    (valid alloc result))))) /\
+                                (valid alloc result1))) /\
+                              (valid alloc result2))))))) /\
+                        (valid alloc result1))))) /\
+                    (valid alloc result0))))),
   5 >= 1.
 Proof.
 intuition.
@@ -916,6 +1308,7 @@ Save.
 (*Why goal*) Lemma two_local_arrays_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -935,6 +1328,46 @@ Save.
   forall (HW_6: int_Z4_2 = (upd int_Z4_1 result1 3)),
   forall (result2: ((pointer) Z4)),
   forall (HW_7: result2 = (shift result 3)),
+  forall (HW_28: (forall (int_Z4:((memory) Z Z4)),
+                  (int_Z4 = (upd int_Z4_2 result2 4) ->
+                   (forall (result0:((pointer) Z5)),
+                    (forall (alloc:alloc_table),
+                     ((valid alloc result0) /\ (offset result0) = 0 /\
+                      (block_length alloc result0) = 5 /\
+                      (valid_range alloc result0 0 (5 - 1)) /\
+                      (fresh alloc0 result0) /\ (on_stack alloc result0) /\
+                      (alloc_stack result0 alloc0 alloc) ->
+                      (forall (int_Z5_0:((memory) Z Z5)),
+                       (int_Z5_0 = (upd int_Z5 result0 0) ->
+                        (forall (result1:((pointer) Z5)),
+                         (result1 = (shift result0 1) ->
+                          (forall (int_Z5:((memory) Z Z5)),
+                           (int_Z5 = (upd int_Z5_0 result1 0) ->
+                            (forall (result1:((pointer) Z5)),
+                             (result1 = (shift result0 2) ->
+                              (forall (result2:((pointer) Z4)),
+                               (result2 = (shift result 2) ->
+                                (forall (result:Z),
+                                 (result = (acc int_Z4 result2) ->
+                                  (forall (int_Z5_0:((memory) Z Z5)),
+                                   (int_Z5_0 = (upd int_Z5 result1 result) ->
+                                    (forall (result:((pointer) Z5)),
+                                     (result = (shift result0 3) ->
+                                      (forall (int_Z5:((memory) Z Z5)),
+                                       (int_Z5 = (upd int_Z5_0 result 0) ->
+                                        (forall (result:((pointer) Z5)),
+                                         (result = (shift result0 2) ->
+                                          (forall (result0:Z),
+                                           (result0 = (acc int_Z5 result) ->
+                                            (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                            result0 = 3)) /\
+                                          (valid alloc result))))) /\
+                                      (valid alloc result))))) /\
+                                  (valid alloc result1))) /\
+                                (valid alloc result2))))))) /\
+                          (valid alloc result1))))) /\
+                      (valid alloc result0)))) /\
+                   5 >= 1))),
   (valid alloc0 result2).
 Proof.
 intuition.
@@ -945,6 +1378,7 @@ Save.
 (*Why goal*) Lemma two_local_arrays_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -960,6 +1394,52 @@ Save.
   forall (HW_4: int_Z4_1 = (upd int_Z4_0 result0 2)),
   forall (result1: ((pointer) Z4)),
   forall (HW_5: result1 = (shift result 2)),
+  forall (HW_29: (forall (int_Z4:((memory) Z Z4)),
+                  (int_Z4 = (upd int_Z4_1 result1 3) ->
+                   (forall (result0:((pointer) Z4)),
+                    (result0 = (shift result 3) ->
+                     (forall (int_Z4_0:((memory) Z Z4)),
+                      (int_Z4_0 = (upd int_Z4 result0 4) ->
+                       (forall (result0:((pointer) Z5)),
+                        (forall (alloc:alloc_table),
+                         ((valid alloc result0) /\ (offset result0) = 0 /\
+                          (block_length alloc result0) = 5 /\
+                          (valid_range alloc result0 0 (5 - 1)) /\
+                          (fresh alloc0 result0) /\
+                          (on_stack alloc result0) /\
+                          (alloc_stack result0 alloc0 alloc) ->
+                          (forall (int_Z5_0:((memory) Z Z5)),
+                           (int_Z5_0 = (upd int_Z5 result0 0) ->
+                            (forall (result1:((pointer) Z5)),
+                             (result1 = (shift result0 1) ->
+                              (forall (int_Z5:((memory) Z Z5)),
+                               (int_Z5 = (upd int_Z5_0 result1 0) ->
+                                (forall (result1:((pointer) Z5)),
+                                 (result1 = (shift result0 2) ->
+                                  (forall (result2:((pointer) Z4)),
+                                   (result2 = (shift result 2) ->
+                                    (forall (result:Z),
+                                     (result = (acc int_Z4_0 result2) ->
+                                      (forall (int_Z5_0:((memory) Z Z5)),
+                                       (int_Z5_0 = (upd int_Z5 result1 result) ->
+                                        (forall (result:((pointer) Z5)),
+                                         (result = (shift result0 3) ->
+                                          (forall (int_Z5:((memory) Z Z5)),
+                                           (int_Z5 = (upd int_Z5_0 result 0) ->
+                                            (forall (result:((pointer) Z5)),
+                                             (result = (shift result0 2) ->
+                                              (forall (result0:Z),
+                                               (result0 = (acc int_Z5 result) ->
+                                                (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                result0 = 3)) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result))))) /\
+                                      (valid alloc result1))) /\
+                                    (valid alloc result2))))))) /\
+                              (valid alloc result1))))) /\
+                          (valid alloc result0)))) /\
+                       5 >= 1)) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result1).
 Proof.
 intuition.
@@ -970,6 +1450,7 @@ Save.
 (*Why goal*) Lemma two_local_arrays_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -981,6 +1462,61 @@ Save.
   forall (HW_2: int_Z4_0 = (upd int_Z4 result 1)),
   forall (result0: ((pointer) Z4)),
   forall (HW_3: result0 = (shift result 1)),
+  forall (HW_30: (forall (int_Z4:((memory) Z Z4)),
+                  (int_Z4 = (upd int_Z4_0 result0 2) ->
+                   (forall (result0:((pointer) Z4)),
+                    (result0 = (shift result 2) ->
+                     (forall (int_Z4_0:((memory) Z Z4)),
+                      (int_Z4_0 = (upd int_Z4 result0 3) ->
+                       (forall (result0:((pointer) Z4)),
+                        (result0 = (shift result 3) ->
+                         (forall (int_Z4:((memory) Z Z4)),
+                          (int_Z4 = (upd int_Z4_0 result0 4) ->
+                           (forall (result0:((pointer) Z5)),
+                            (forall (alloc:alloc_table),
+                             ((valid alloc result0) /\ (offset result0) =
+                              0 /\ (block_length alloc result0) = 5 /\
+                              (valid_range alloc result0 0 (5 - 1)) /\
+                              (fresh alloc0 result0) /\
+                              (on_stack alloc result0) /\
+                              (alloc_stack result0 alloc0 alloc) ->
+                              (forall (int_Z5_0:((memory) Z Z5)),
+                               (int_Z5_0 = (upd int_Z5 result0 0) ->
+                                (forall (result1:((pointer) Z5)),
+                                 (result1 = (shift result0 1) ->
+                                  (forall (int_Z5:((memory) Z Z5)),
+                                   (int_Z5 = (upd int_Z5_0 result1 0) ->
+                                    (forall (result1:((pointer) Z5)),
+                                     (result1 = (shift result0 2) ->
+                                      (forall (result2:((pointer) Z4)),
+                                       (result2 = (shift result 2) ->
+                                        (forall (result:Z),
+                                         (result = (acc int_Z4 result2) ->
+                                          (forall (int_Z5_0:((memory) Z Z5)),
+                                           (int_Z5_0 = (upd int_Z5 result1
+                                                        result) ->
+                                            (forall (result:((pointer) Z5)),
+                                             (result = (shift result0 3) ->
+                                              (forall (int_Z5:((memory) Z
+                                               Z5)),
+                                               (int_Z5 = (upd int_Z5_0 result
+                                                          0) ->
+                                                (forall (result:((pointer) Z5)),
+                                                 (result = (shift result0 2) ->
+                                                  (forall (result0:Z),
+                                                   (result0 = (acc int_Z5
+                                                               result) ->
+                                                    (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                    result0 = 3)) /\
+                                                  (valid alloc result))))) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result1))) /\
+                                        (valid alloc result2))))))) /\
+                                  (valid alloc result1))))) /\
+                              (valid alloc result0)))) /\
+                           5 >= 1)) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -990,6 +1526,8 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_impl_po_12 : 
   forall (alloc: alloc_table),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
   forall (result: ((pointer) Z4)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -997,6 +1535,68 @@ Save.
                 (valid_range alloc0 result 0 (4 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
+  forall (HW_31: (forall (int_Z4_0:((memory) Z Z4)),
+                  (int_Z4_0 = (upd int_Z4 result 1) ->
+                   (forall (result0:((pointer) Z4)),
+                    (result0 = (shift result 1) ->
+                     (forall (int_Z4:((memory) Z Z4)),
+                      (int_Z4 = (upd int_Z4_0 result0 2) ->
+                       (forall (result0:((pointer) Z4)),
+                        (result0 = (shift result 2) ->
+                         (forall (int_Z4_0:((memory) Z Z4)),
+                          (int_Z4_0 = (upd int_Z4 result0 3) ->
+                           (forall (result0:((pointer) Z4)),
+                            (result0 = (shift result 3) ->
+                             (forall (int_Z4:((memory) Z Z4)),
+                              (int_Z4 = (upd int_Z4_0 result0 4) ->
+                               (forall (result0:((pointer) Z5)),
+                                (forall (alloc:alloc_table),
+                                 ((valid alloc result0) /\ (offset result0) =
+                                  0 /\ (block_length alloc result0) = 5 /\
+                                  (valid_range alloc result0 0 (5 - 1)) /\
+                                  (fresh alloc0 result0) /\
+                                  (on_stack alloc result0) /\
+                                  (alloc_stack result0 alloc0 alloc) ->
+                                  (forall (int_Z5_0:((memory) Z Z5)),
+                                   (int_Z5_0 = (upd int_Z5 result0 0) ->
+                                    (forall (result1:((pointer) Z5)),
+                                     (result1 = (shift result0 1) ->
+                                      (forall (int_Z5:((memory) Z Z5)),
+                                       (int_Z5 = (upd int_Z5_0 result1 0) ->
+                                        (forall (result1:((pointer) Z5)),
+                                         (result1 = (shift result0 2) ->
+                                          (forall (result2:((pointer) Z4)),
+                                           (result2 = (shift result 2) ->
+                                            (forall (result:Z),
+                                             (result = (acc int_Z4 result2) ->
+                                              (forall (int_Z5_0:((memory) Z
+                                               Z5)),
+                                               (int_Z5_0 = (upd int_Z5
+                                                            result1 result) ->
+                                                (forall (result:((pointer) Z5)),
+                                                 (result = (shift result0 3) ->
+                                                  (forall (int_Z5:((memory) Z
+                                                   Z5)),
+                                                   (int_Z5 = (upd int_Z5_0
+                                                              result 0) ->
+                                                    (forall (result:((pointer) Z5)),
+                                                     (result = (shift result0
+                                                                2) ->
+                                                      (forall (result0:Z),
+                                                       (result0 = (acc int_Z5
+                                                                   result) ->
+                                                        (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                        result0 = 3)) /\
+                                                      (valid alloc result))))) /\
+                                                  (valid alloc result))))) /\
+                                              (valid alloc result1))) /\
+                                            (valid alloc result2))))))) /\
+                                      (valid alloc result1))))) /\
+                                  (valid alloc result0)))) /\
+                               5 >= 1)) /\
+                             (valid alloc0 result0))))) /\
+                         (valid alloc0 result0))))) /\
+                     (valid alloc0 result0)))))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -1005,6 +1605,81 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_impl_po_13 : 
+  forall (alloc: alloc_table),
+  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_32: (forall (result:((pointer) Z4)),
+                  (forall (alloc0:alloc_table),
+                   ((valid alloc0 result) /\ (offset result) = 0 /\
+                    (block_length alloc0 result) = 4 /\
+                    (valid_range alloc0 result 0 (4 - 1)) /\
+                    (fresh alloc result) /\ (on_stack alloc0 result) /\
+                    (alloc_stack result alloc alloc0) ->
+                    (forall (int_Z4_0:((memory) Z Z4)),
+                     (int_Z4_0 = (upd int_Z4 result 1) ->
+                      (forall (result0:((pointer) Z4)),
+                       (result0 = (shift result 1) ->
+                        (forall (int_Z4:((memory) Z Z4)),
+                         (int_Z4 = (upd int_Z4_0 result0 2) ->
+                          (forall (result0:((pointer) Z4)),
+                           (result0 = (shift result 2) ->
+                            (forall (int_Z4_0:((memory) Z Z4)),
+                             (int_Z4_0 = (upd int_Z4 result0 3) ->
+                              (forall (result0:((pointer) Z4)),
+                               (result0 = (shift result 3) ->
+                                (forall (int_Z4:((memory) Z Z4)),
+                                 (int_Z4 = (upd int_Z4_0 result0 4) ->
+                                  (forall (result0:((pointer) Z5)),
+                                   (forall (alloc:alloc_table),
+                                    ((valid alloc result0) /\
+                                     (offset result0) = 0 /\
+                                     (block_length alloc result0) = 5 /\
+                                     (valid_range alloc result0 0 (5 - 1)) /\
+                                     (fresh alloc0 result0) /\
+                                     (on_stack alloc result0) /\
+                                     (alloc_stack result0 alloc0 alloc) ->
+                                     (forall (int_Z5_0:((memory) Z Z5)),
+                                      (int_Z5_0 = (upd int_Z5 result0 0) ->
+                                       (forall (result1:((pointer) Z5)),
+                                        (result1 = (shift result0 1) ->
+                                         (forall (int_Z5:((memory) Z Z5)),
+                                          (int_Z5 = (upd int_Z5_0 result1 0) ->
+                                           (forall (result1:((pointer) Z5)),
+                                            (result1 = (shift result0 2) ->
+                                             (forall (result2:((pointer) Z4)),
+                                              (result2 = (shift result 2) ->
+                                               (forall (result:Z),
+                                                (result = (acc int_Z4 result2) ->
+                                                 (forall (int_Z5_0:((memory) Z
+                                                  Z5)),
+                                                  (int_Z5_0 = (upd int_Z5
+                                                               result1 result) ->
+                                                   (forall (result:((pointer) Z5)),
+                                                    (result = (shift result0
+                                                               3) ->
+                                                     (forall (int_Z5:((memory) Z
+                                                      Z5)),
+                                                      (int_Z5 = (upd int_Z5_0
+                                                                 result 0) ->
+                                                       (forall (result:((pointer) Z5)),
+                                                        (result = (shift result0
+                                                                   2) ->
+                                                         (forall (result0:Z),
+                                                          (result0 = (
+                                                           acc int_Z5 result) ->
+                                                           (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                           result0 = 3)) /\
+                                                         (valid alloc result))))) /\
+                                                     (valid alloc result))))) /\
+                                                 (valid alloc result1))) /\
+                                               (valid alloc result2))))))) /\
+                                         (valid alloc result1))))) /\
+                                     (valid alloc result0)))) /\
+                                  5 >= 1)) /\
+                                (valid alloc0 result0))))) /\
+                            (valid alloc0 result0))))) /\
+                        (valid alloc0 result0))))) /\
+                    (valid alloc0 result))))),
   4 >= 1.
 Proof.
 intuition.
@@ -1076,6 +1751,10 @@ Save.
   forall (HW_6: int_Z7_0 = (upd int_Z7 result2 1)),
   forall (result3: ((pointer) Z6)),
   forall (HW_7: result3 = (shift result 4)),
+  forall (HW_9: (forall (result:Z),
+                 (result = (acc int_Z6_0 result3) ->
+                  (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                  result = 3))),
   (valid alloc1 result3).
 Proof.
 intuition.
@@ -1085,6 +1764,7 @@ Save.
 (*Why goal*) Lemma two_local_arrays_not_alias_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (int_Z6: ((memory) Z Z6)),
+  forall (int_Z7: ((memory) Z Z7)),
   forall (result: ((pointer) Z6)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -1105,6 +1785,15 @@ Save.
   forall (HW_4: int_Z6_0 = (upd int_Z6 result1 3)),
   forall (result2: ((pointer) Z7)),
   forall (HW_5: result2 = (shift result0 4)),
+  forall (HW_10: (forall (int_Z7_0:((memory) Z Z7)),
+                  (int_Z7_0 = (upd int_Z7 result2 1) ->
+                   (forall (result0:((pointer) Z6)),
+                    (result0 = (shift result 4) ->
+                     (forall (result:Z),
+                      (result = (acc int_Z6_0 result0) ->
+                       (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                       result = 3)) /\
+                     (valid alloc1 result0)))))),
   (valid alloc1 result2).
 Proof.
 intuition;subst.
@@ -1118,6 +1807,8 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_not_alias_impl_po_4 : 
   forall (alloc: alloc_table),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (int_Z7: ((memory) Z Z7)),
   forall (result: ((pointer) Z6)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -1134,6 +1825,20 @@ Save.
                 (alloc_stack result0 alloc0 alloc1)),
   forall (result1: ((pointer) Z6)),
   forall (HW_3: result1 = (shift result 4)),
+  forall (HW_11: (forall (int_Z6_0:((memory) Z Z6)),
+                  (int_Z6_0 = (upd int_Z6 result1 3) ->
+                   (forall (result1:((pointer) Z7)),
+                    (result1 = (shift result0 4) ->
+                     (forall (int_Z7_0:((memory) Z Z7)),
+                      (int_Z7_0 = (upd int_Z7 result1 1) ->
+                       (forall (result0:((pointer) Z6)),
+                        (result0 = (shift result 4) ->
+                         (forall (result:Z),
+                          (result = (acc int_Z6_0 result0) ->
+                           (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                           result = 3)) /\
+                         (valid alloc1 result0))))) /\
+                     (valid alloc1 result1)))))),
   (valid alloc1 result1).
 Proof.
 intuition;subst;auto.
@@ -1153,6 +1858,8 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_not_alias_impl_po_5 : 
   forall (alloc: alloc_table),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (int_Z7: ((memory) Z Z7)),
   forall (result: ((pointer) Z6)),
   forall (alloc0: alloc_table),
   forall (HW_1: (valid alloc0 result) /\ (offset result) = 0 /\
@@ -1160,6 +1867,30 @@ Save.
                 (valid_range alloc0 result 0 (5 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
+  forall (HW_12: (forall (result0:((pointer) Z7)),
+                  (forall (alloc:alloc_table),
+                   ((valid alloc result0) /\ (offset result0) = 0 /\
+                    (block_length alloc result0) = 6 /\
+                    (valid_range alloc result0 0 (6 - 1)) /\
+                    (fresh alloc0 result0) /\ (on_stack alloc result0) /\
+                    (alloc_stack result0 alloc0 alloc) ->
+                    (forall (result1:((pointer) Z6)),
+                     (result1 = (shift result 4) ->
+                      (forall (int_Z6_0:((memory) Z Z6)),
+                       (int_Z6_0 = (upd int_Z6 result1 3) ->
+                        (forall (result1:((pointer) Z7)),
+                         (result1 = (shift result0 4) ->
+                          (forall (int_Z7_0:((memory) Z Z7)),
+                           (int_Z7_0 = (upd int_Z7 result1 1) ->
+                            (forall (result0:((pointer) Z6)),
+                             (result0 = (shift result 4) ->
+                              (forall (result:Z),
+                               (result = (acc int_Z6_0 result0) ->
+                                (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                                result = 3)) /\
+                              (valid alloc result0))))) /\
+                          (valid alloc result1))))) /\
+                      (valid alloc result1))))))),
   6 >= 1.
 Proof.
 intuition.
@@ -1168,6 +1899,41 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_not_alias_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (int_Z7: ((memory) Z Z7)),
+  forall (HW_13: (forall (result:((pointer) Z6)),
+                  (forall (alloc0:alloc_table),
+                   ((valid alloc0 result) /\ (offset result) = 0 /\
+                    (block_length alloc0 result) = 5 /\
+                    (valid_range alloc0 result 0 (5 - 1)) /\
+                    (fresh alloc result) /\ (on_stack alloc0 result) /\
+                    (alloc_stack result alloc alloc0) ->
+                    (forall (result0:((pointer) Z7)),
+                     (forall (alloc:alloc_table),
+                      ((valid alloc result0) /\ (offset result0) = 0 /\
+                       (block_length alloc result0) = 6 /\
+                       (valid_range alloc result0 0 (6 - 1)) /\
+                       (fresh alloc0 result0) /\ (on_stack alloc result0) /\
+                       (alloc_stack result0 alloc0 alloc) ->
+                       (forall (result1:((pointer) Z6)),
+                        (result1 = (shift result 4) ->
+                         (forall (int_Z6_0:((memory) Z Z6)),
+                          (int_Z6_0 = (upd int_Z6 result1 3) ->
+                           (forall (result1:((pointer) Z7)),
+                            (result1 = (shift result0 4) ->
+                             (forall (int_Z7_0:((memory) Z Z7)),
+                              (int_Z7_0 = (upd int_Z7 result1 1) ->
+                               (forall (result0:((pointer) Z6)),
+                                (result0 = (shift result 4) ->
+                                 (forall (result:Z),
+                                  (result = (acc int_Z6_0 result0) ->
+                                   (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                                   result = 3)) /\
+                                 (valid alloc result0))))) /\
+                             (valid alloc result1))))) /\
+                         (valid alloc result1)))))) /\
+                    6 >= 1)))),
   5 >= 1.
 Proof.
 intuition.

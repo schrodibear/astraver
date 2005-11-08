@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.26 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.27 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -201,7 +201,7 @@ let print_predicate fmt p =
     | p ->
 	print2 fmt p
   and print2 fmt = function
-    | Pand (_, a, b) | Forallb (_, a, b) ->
+    | Pand (_, _, a, b) | Forallb (_, a, b) ->
 	fprintf fmt "@[%a &@ %a@]" print3 a print2 b
     | p ->
 	print3 fmt p
@@ -277,7 +277,7 @@ let print_sequent fmt (hyps,concl) =
     print_seq hyps print_intros hyps
 
 let rec print_thesis fmt = function
-  | Pand (_, t1, t2) -> fprintf fmt "%a@ %a" print_thesis t1 print_thesis t2
+  | Pand (_, _, t1, t2) -> fprintf fmt "%a@ %a" print_thesis t1 print_thesis t2
   | t -> fprintf fmt "@[thus %a@];" print_predicate t
 
 let reprint_obligation fmt (loc,id,s) =

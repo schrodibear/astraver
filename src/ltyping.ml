@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.39 2005-11-08 14:55:14 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.40 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -202,7 +202,7 @@ and desc_predicate loc lab env lenv = function
   | PPconst _ ->
       predicate_expected loc
   | PPinfix (a, PPand, b) ->
-      Pand (false, predicate lab env lenv a, predicate lab env lenv b)
+      Pand (false, true, predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPiff, b) ->
       Piff (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPor, b) ->
@@ -213,7 +213,7 @@ and desc_predicate loc lab env lenv = function
       ({pp_desc = PPinfix (_, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), a)} as p, 
        (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
       let q = { pp_desc = PPinfix (a, r, b); pp_loc = loc } in
-      Pand (false, predicate lab env lenv p, predicate lab env lenv q)
+      Pand (false, true, predicate lab env lenv p, predicate lab env lenv q)
   | PPinfix (a, (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
       make_comparison a.pp_loc (term lab env lenv a, r, term lab env lenv b)
   | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv | PPmod), _) -> 

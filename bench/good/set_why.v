@@ -16,13 +16,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_1 : 
   forall (y: Z),
-  forall (HW_1: y >= 0),
+  forall (HW_2: y >= 0),
   forall (y0: Z),
-  forall (HW_2: y0 >= 0),
+  forall (HW_3: y0 >= 0),
   forall (x: Z),
-  forall (HW_3: x = y0 /\ x <> 0),
+  forall (HW_4: x = y0 /\ x <> 0),
   forall (y1: Z),
-  forall (HW_4: y1 = (y0 - 1)),
+  forall (HW_5: y1 = (y0 - 1)),
   y1 >= 0 /\ (Zwf 0 y1 y0).
 Proof.
 intuition.
@@ -31,11 +31,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_2 : 
   forall (y: Z),
-  forall (HW_1: y >= 0),
+  forall (HW_2: y >= 0),
   forall (y0: Z),
-  forall (HW_2: y0 >= 0),
+  forall (HW_3: y0 >= 0),
   forall (x: Z),
-  forall (HW_5: x = y0 /\ x = 0),
+  forall (HW_6: x = y0 /\ x = 0),
   y0 = 0.
 Proof.
 intuition.
@@ -44,13 +44,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_1 : 
   forall (y: Z),
-  forall (HW_1: y >= 0),
+  forall (HW_2: y >= 0),
   forall (y0: Z),
-  forall (HW_2: y0 >= 0),
+  forall (HW_3: y0 >= 0),
   forall (x: Z),
-  forall (HW_3: x = y0 /\ x <> 0),
+  forall (HW_4: x = y0 /\ x <> 0),
   forall (y1: Z),
-  forall (HW_4: y1 = (y0 - 1)),
+  forall (HW_5: y1 = (y0 - 1)),
   y1 >= 0 /\ (Zwf 0 y1 y0).
 Proof.
 intuition.
@@ -59,11 +59,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_2 : 
   forall (y: Z),
-  forall (HW_1: y >= 0),
+  forall (HW_2: y >= 0),
   forall (y0: Z),
-  forall (HW_2: y0 >= 0),
+  forall (HW_3: y0 >= 0),
   forall (x: Z),
-  forall (HW_5: x = y0 /\ x = 0),
+  forall (HW_6: x = y0 /\ x = 0),
   y0 = 0.
 Proof.
 intuition.
@@ -72,13 +72,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_1 : 
   forall (y: Z),
-  forall (HW_1: y >= 1),
+  forall (HW_2: y >= 1),
   forall (y0: Z),
-  forall (HW_2: y0 >= 1),
+  forall (HW_3: y0 >= 1),
   forall (y1: Z),
-  forall (HW_3: y1 = (y0 - 1)),
+  forall (HW_4: y1 = (y0 - 1)),
   forall (x: Z),
-  forall (HW_4: x = y1 /\ x <> 0),
+  forall (HW_5: x = y1 /\ x <> 0),
   y1 >= 1 /\ (Zwf 0 y1 y0).
 Proof.
 intuition.
@@ -87,13 +87,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_2 : 
   forall (y: Z),
-  forall (HW_1: y >= 1),
+  forall (HW_2: y >= 1),
   forall (y0: Z),
-  forall (HW_2: y0 >= 1),
+  forall (HW_3: y0 >= 1),
   forall (y1: Z),
-  forall (HW_3: y1 = (y0 - 1)),
+  forall (HW_4: y1 = (y0 - 1)),
   forall (x: Z),
-  forall (HW_5: x = y1 /\ x = 0),
+  forall (HW_6: x = y1 /\ x = 0),
   y1 = 0.
 Proof.
 intuition.

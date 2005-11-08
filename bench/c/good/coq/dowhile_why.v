@@ -25,15 +25,17 @@ Save.
   forall (HW_2: x0 = 0),
   forall (i: Z),
   forall (HW_3: i = 10),
+  forall (HW_4: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x0 =
+                (10 - i) /\ 10 >= i /\ i > 0)),
   forall (i0: Z),
   forall (x1: Z),
-  forall (HW_4: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x1 =
+  forall (HW_5: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x1 =
                 (10 - i0) /\ 10 >= i0 /\ i0 > 0)),
   forall (x2: Z),
-  forall (HW_5: x2 = (x1 + 1)),
+  forall (HW_6: x2 = (x1 + 1)),
   forall (i1: Z),
-  forall (HW_6: i1 = (i0 - 1)),
-  forall (HW_7: i1 > 0),
+  forall (HW_7: i1 = (i0 - 1)),
+  forall (HW_8: i1 > 0),
   (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x2 = (10 - i1) /\
   10 >= i1 /\ i1 > 0) /\ (Zwf 0 i1 i0).
 Proof.
@@ -48,15 +50,17 @@ Save.
   forall (HW_2: x0 = 0),
   forall (i: Z),
   forall (HW_3: i = 10),
+  forall (HW_4: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x0 =
+                (10 - i) /\ 10 >= i /\ i > 0)),
   forall (i0: Z),
   forall (x1: Z),
-  forall (HW_4: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x1 =
+  forall (HW_5: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x1 =
                 (10 - i0) /\ 10 >= i0 /\ i0 > 0)),
   forall (x2: Z),
-  forall (HW_5: x2 = (x1 + 1)),
+  forall (HW_6: x2 = (x1 + 1)),
   forall (i1: Z),
-  forall (HW_6: i1 = (i0 - 1)),
-  forall (HW_8: i1 <= 0),
+  forall (HW_7: i1 = (i0 - 1)),
+  forall (HW_9: i1 <= 0),
   (* File \"dowhile.c\", line 11, characters 29-36:\n *) x2 = 10.
 Proof.
 intuition.

@@ -42,6 +42,8 @@ Save.
   forall (HW_3: n > 1),
   forall (result: Z),
   forall (HW_4: result = (F (n - 1))),
+  forall (HW_6: (forall (result0:Z),
+                 (result0 = (F (n - 2)) -> (result + result0) = (F n)))),
   (Zwf 0 (n - 2) n).
 Proof.
 intuition.
@@ -54,6 +56,9 @@ Save.
   forall (HW_3: n > 1),
   forall (result: Z),
   forall (HW_4: result = (F (n - 1))),
+  forall (HW_7: (forall (result0:Z),
+                 (result0 = (F (n - 2)) -> (result + result0) = (F n))) /\
+                (Zwf 0 (n - 2) n)),
   (n - 2) >= 0.
 Proof.
 intuition.
@@ -64,6 +69,11 @@ Save.
   forall (n: Z),
   forall (HW_1: n >= 0),
   forall (HW_3: n > 1),
+  forall (HW_8: (forall (result:Z),
+                 (result = (F (n - 1)) ->
+                  ((forall (result0:Z),
+                    (result0 = (F (n - 2)) -> (result + result0) = (F n))) /\
+                  (Zwf 0 (n - 2) n)) /\ (n - 2) >= 0))),
   (Zwf 0 (n - 1) n).
 Proof.
 intuition.
@@ -74,6 +84,12 @@ Save.
   forall (n: Z),
   forall (HW_1: n >= 0),
   forall (HW_3: n > 1),
+  forall (HW_9: (forall (result:Z),
+                 (result = (F (n - 1)) ->
+                  ((forall (result0:Z),
+                    (result0 = (F (n - 2)) -> (result + result0) = (F n))) /\
+                  (Zwf 0 (n - 2) n)) /\ (n - 2) >= 0)) /\
+                (Zwf 0 (n - 1) n)),
   (n - 1) >= 0.
 Proof.
 intuition.
@@ -101,6 +117,7 @@ Save.
   forall (fx_1: Z),
   forall (HW_1: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
   forall (HW_3: x <> n),
+  forall (HW_5: (forall (result:Z), (result = (F n) -> result = (F n)))),
   (Zwf 0 (n - (x + 1)) (n - x)).
 Proof.
 intuition.
@@ -114,6 +131,8 @@ Save.
   forall (fx_1: Z),
   forall (HW_1: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
   forall (HW_3: x <> n),
+  forall (HW_6: (forall (result:Z), (result = (F n) -> result = (F n))) /\
+                (Zwf 0 (n - (x + 1)) (n - x))),
   (1 <= (x + 1) /\ (x + 1) <= n) /\ (fx + fx_1) = (F (x + 1)) /\ fx =
   (F (x + 1 - 1)).
 Proof.
@@ -146,6 +165,7 @@ Save.
   forall (n: Z),
   forall (HW_1: n >= 0),
   forall (HW_3: n > 1),
+  forall (HW_5: (forall (result:Z), (result = (F n) -> result = (F n)))),
   (1 <= 1 /\ 1 <= n) /\ 1 = (F 1) /\ 1 = (F (1 - 1)).
 Proof.
 intuition.
@@ -166,17 +186,18 @@ Save.
   forall (n: Z),
   forall (HW_1: n >= 0),
   forall (HW_2: n > 0),
+  forall (HW_3: (1 <= 1 /\ 1 <= n) /\ 1 = (F 1) /\ 1 = (F (1 - 1))),
   forall (k: Z),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_3: (1 <= k /\ k <= n) /\ x = (F k) /\ y = (F (k - 1))),
-  forall (HW_4: k < n),
+  forall (HW_4: (1 <= k /\ k <= n) /\ x = (F k) /\ y = (F (k - 1))),
+  forall (HW_5: k < n),
   forall (y0: Z),
-  forall (HW_5: y0 = x),
+  forall (HW_6: y0 = x),
   forall (x0: Z),
-  forall (HW_6: x0 = (x + y)),
+  forall (HW_7: x0 = (x + y)),
   forall (k0: Z),
-  forall (HW_7: k0 = (k + 1)),
+  forall (HW_8: k0 = (k + 1)),
   ((1 <= k0 /\ k0 <= n) /\ x0 = (F k0) /\ y0 = (F (k0 - 1))) /\
   (Zwf 0 (n - k0) (n - k)).
 Proof.
@@ -198,11 +219,12 @@ Save.
   forall (n: Z),
   forall (HW_1: n >= 0),
   forall (HW_2: n > 0),
+  forall (HW_3: (1 <= 1 /\ 1 <= n) /\ 1 = (F 1) /\ 1 = (F (1 - 1))),
   forall (k: Z),
   forall (x: Z),
   forall (y: Z),
-  forall (HW_3: (1 <= k /\ k <= n) /\ x = (F k) /\ y = (F (k - 1))),
-  forall (HW_8: k >= n),
+  forall (HW_4: (1 <= k /\ k <= n) /\ x = (F k) /\ y = (F (k - 1))),
+  forall (HW_9: k >= n),
   x = (F n).
 Proof.
 intuition.
@@ -214,7 +236,7 @@ Save.
 (*Why goal*) Lemma fib3_po_4 : 
   forall (n: Z),
   forall (HW_1: n >= 0),
-  forall (HW_9: n <= 0),
+  forall (HW_10: n <= 0),
   1 = (F n).
 Proof.
 intuition.
@@ -263,20 +285,23 @@ Save.
   forall (HW_4: t0 = (update t 0 1)),
   forall (t1: (array Z)),
   forall (HW_5: t1 = (update t0 1 1)),
+  forall (HW_6: (2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))),
   forall (k: Z),
   forall (t2: (array Z)),
-  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
+  forall (HW_7: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k -> (access t2 i) = (F i)))),
-  forall (HW_7: k <= n),
+  forall (HW_8: k <= n),
   forall (result: Z),
-  forall (HW_8: result = (access t2 (k - 1))),
+  forall (HW_9: result = (access t2 (k - 1))),
   forall (result0: Z),
-  forall (HW_9: result0 = (access t2 (k - 2))),
+  forall (HW_10: result0 = (access t2 (k - 2))),
   forall (t3: (array Z)),
-  forall (HW_10: t3 = (update t2 k (result + result0))),
+  forall (HW_11: t3 = (update t2 k (result + result0))),
   forall (k0: Z),
-  forall (HW_11: k0 = (k + 1)),
+  forall (HW_12: k0 = (k + 1)),
   ((2 <= k0 /\ k0 <= (n + 1)) /\ (array_length t3) = (array_length t) /\
   (forall (i:Z), (0 <= i /\ i < k0 -> (access t3 i) = (F i)))) /\
   (Zwf 0 (n + 1 - k0) (n + 1 - k)).
@@ -301,16 +326,27 @@ Save.
   forall (HW_4: t0 = (update t 0 1)),
   forall (t1: (array Z)),
   forall (HW_5: t1 = (update t0 1 1)),
+  forall (HW_6: (2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))),
   forall (k: Z),
   forall (t2: (array Z)),
-  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
+  forall (HW_7: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k -> (access t2 i) = (F i)))),
-  forall (HW_7: k <= n),
+  forall (HW_8: k <= n),
   forall (result: Z),
-  forall (HW_8: result = (access t2 (k - 1))),
+  forall (HW_9: result = (access t2 (k - 1))),
   forall (result0: Z),
-  forall (HW_9: result0 = (access t2 (k - 2))),
+  forall (HW_10: result0 = (access t2 (k - 2))),
+  forall (HW_13: (forall (t0:(array Z)),
+                  (t0 = (update t2 k (result + result0)) ->
+                   (forall (k0:Z),
+                    (k0 = (k + 1) -> ((2 <= k0 /\ k0 <= (n + 1)) /\
+                     (array_length t0) = (array_length t) /\
+                     (forall (i:Z),
+                      (0 <= i /\ i < k0 -> (access t0 i) = (F i)))) /\
+                     (Zwf 0 (n + 1 - k0) (n + 1 - k))))))),
   0 <= k /\ k < (array_length t2).
 Proof.
 intuition.
@@ -326,14 +362,28 @@ Save.
   forall (HW_4: t0 = (update t 0 1)),
   forall (t1: (array Z)),
   forall (HW_5: t1 = (update t0 1 1)),
+  forall (HW_6: (2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))),
   forall (k: Z),
   forall (t2: (array Z)),
-  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
+  forall (HW_7: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k -> (access t2 i) = (F i)))),
-  forall (HW_7: k <= n),
+  forall (HW_8: k <= n),
   forall (result: Z),
-  forall (HW_8: result = (access t2 (k - 1))),
+  forall (HW_9: result = (access t2 (k - 1))),
+  forall (HW_14: (forall (result0:Z),
+                  (result0 = (access t2 (k - 2)) ->
+                   (forall (t0:(array Z)),
+                    (t0 = (update t2 k (result + result0)) ->
+                     (forall (k0:Z),
+                      (k0 = (k + 1) -> ((2 <= k0 /\ k0 <= (n + 1)) /\
+                       (array_length t0) = (array_length t) /\
+                       (forall (i:Z),
+                        (0 <= i /\ i < k0 -> (access t0 i) = (F i)))) /\
+                       (Zwf 0 (n + 1 - k0) (n + 1 - k)))))) /\
+                   0 <= k /\ k < (array_length t2)))),
   0 <= (k - 2) /\ (k - 2) < (array_length t2).
 Proof.
 intuition.
@@ -349,12 +399,29 @@ Save.
   forall (HW_4: t0 = (update t 0 1)),
   forall (t1: (array Z)),
   forall (HW_5: t1 = (update t0 1 1)),
+  forall (HW_6: (2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))),
   forall (k: Z),
   forall (t2: (array Z)),
-  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
+  forall (HW_7: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k -> (access t2 i) = (F i)))),
-  forall (HW_7: k <= n),
+  forall (HW_8: k <= n),
+  forall (HW_15: (forall (result:Z),
+                  (result = (access t2 (k - 1)) ->
+                   (forall (result0:Z),
+                    (result0 = (access t2 (k - 2)) ->
+                     (forall (t0:(array Z)),
+                      (t0 = (update t2 k (result + result0)) ->
+                       (forall (k0:Z),
+                        (k0 = (k + 1) -> ((2 <= k0 /\ k0 <= (n + 1)) /\
+                         (array_length t0) = (array_length t) /\
+                         (forall (i:Z),
+                          (0 <= i /\ i < k0 -> (access t0 i) = (F i)))) /\
+                         (Zwf 0 (n + 1 - k0) (n + 1 - k)))))) /\
+                     0 <= k /\ k < (array_length t2))) /\
+                   0 <= (k - 2) /\ (k - 2) < (array_length t2)))),
   0 <= (k - 1) /\ (k - 1) < (array_length t2).
 Proof.
 intuition.
@@ -370,14 +437,17 @@ Save.
   forall (HW_4: t0 = (update t 0 1)),
   forall (t1: (array Z)),
   forall (HW_5: t1 = (update t0 1 1)),
+  forall (HW_6: (2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))),
   forall (k: Z),
   forall (t2: (array Z)),
-  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
+  forall (HW_7: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k -> (access t2 i) = (F i)))),
-  forall (HW_12: k > n),
+  forall (HW_16: k > n),
   forall (result: Z),
-  forall (HW_13: result = (access t2 n)),
+  forall (HW_17: result = (access t2 n)),
   result = (F n).
 Proof.
 intuition.
@@ -395,12 +465,17 @@ Save.
   forall (HW_4: t0 = (update t 0 1)),
   forall (t1: (array Z)),
   forall (HW_5: t1 = (update t0 1 1)),
+  forall (HW_6: (2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))),
   forall (k: Z),
   forall (t2: (array Z)),
-  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
+  forall (HW_7: (2 <= k /\ k <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k -> (access t2 i) = (F i)))),
-  forall (HW_12: k > n),
+  forall (HW_16: k > n),
+  forall (HW_18: (forall (result:Z),
+                  (result = (access t2 n) -> result = (F n)))),
   0 <= n /\ n < (array_length t2).
 Proof.
 intuition.
@@ -414,6 +489,38 @@ Save.
   forall (HW_3: n > 1),
   forall (t0: (array Z)),
   forall (HW_4: t0 = (update t 0 1)),
+  forall (HW_19: (forall (t1:(array Z)),
+                  (t1 = (update t0 1 1) -> (well_founded (Zwf Z0)) /\ ((2 <=
+                   2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                   (array_length t) /\
+                   (forall (i:Z), (0 <= i /\ i < 2 -> (access t1 i) = (F i)))) /\
+                   (forall (k:Z),
+                    (forall (t0:(array Z)),
+                     ((2 <= k /\ k <= (n + 1)) /\ (array_length t0) =
+                      (array_length t) /\
+                      (forall (i:Z),
+                       (0 <= i /\ i < k -> (access t0 i) = (F i))) ->
+                      ((k <= n ->
+                        (forall (result:Z),
+                         (result = (access t0 (k - 1)) ->
+                          (forall (result0:Z),
+                           (result0 = (access t0 (k - 2)) ->
+                            (forall (t1:(array Z)),
+                             (t1 = (update t0 k (result + result0)) ->
+                              (forall (k0:Z),
+                               (k0 = (k + 1) -> ((2 <= k0 /\ k0 <=
+                                (n + 1)) /\ (array_length t1) =
+                                (array_length t) /\
+                                (forall (i:Z),
+                                 (0 <= i /\ i < k0 -> (access t1 i) = (F i)))) /\
+                                (Zwf 0 (n + 1 - k0) (n + 1 - k)))))) /\
+                            0 <= k /\ k < (array_length t0))) /\
+                          0 <= (k - 2) /\ (k - 2) < (array_length t0))) /\
+                        0 <= (k - 1) /\ (k - 1) < (array_length t0))) /\
+                      ((k > n ->
+                        (forall (result:Z),
+                         (result = (access t0 n) -> result = (F n))) /\
+                        0 <= n /\ n < (array_length t0))))))))),
   0 <= 1 /\ 1 < (array_length t0).
 Proof.
 intuition.
@@ -426,6 +533,42 @@ Save.
   forall (t: (array Z)),
   forall (HW_1: 0 <= n /\ n < (array_length t)),
   forall (HW_3: n > 1),
+  forall (HW_20: (forall (t0:(array Z)),
+                  (t0 = (update t 0 1) ->
+                   (forall (t1:(array Z)),
+                    (t1 = (update t0 1 1) -> (well_founded (Zwf Z0)) /\
+                     ((2 <= 2 /\ 2 <= (n + 1)) /\ (array_length t1) =
+                     (array_length t) /\
+                     (forall (i:Z),
+                      (0 <= i /\ i < 2 -> (access t1 i) = (F i)))) /\
+                     (forall (k:Z),
+                      (forall (t0:(array Z)),
+                       ((2 <= k /\ k <= (n + 1)) /\ (array_length t0) =
+                        (array_length t) /\
+                        (forall (i:Z),
+                         (0 <= i /\ i < k -> (access t0 i) = (F i))) ->
+                        ((k <= n ->
+                          (forall (result:Z),
+                           (result = (access t0 (k - 1)) ->
+                            (forall (result0:Z),
+                             (result0 = (access t0 (k - 2)) ->
+                              (forall (t1:(array Z)),
+                               (t1 = (update t0 k (result + result0)) ->
+                                (forall (k0:Z),
+                                 (k0 = (k + 1) -> ((2 <= k0 /\ k0 <=
+                                  (n + 1)) /\ (array_length t1) =
+                                  (array_length t) /\
+                                  (forall (i:Z),
+                                   (0 <= i /\ i < k0 -> (access t1 i) = (F i)))) /\
+                                  (Zwf 0 (n + 1 - k0) (n + 1 - k)))))) /\
+                              0 <= k /\ k < (array_length t0))) /\
+                            0 <= (k - 2) /\ (k - 2) < (array_length t0))) /\
+                          0 <= (k - 1) /\ (k - 1) < (array_length t0))) /\
+                        ((k > n ->
+                          (forall (result:Z),
+                           (result = (access t0 n) -> result = (F n))) /\
+                          0 <= n /\ n < (array_length t0)))))))) /\
+                   0 <= 1 /\ 1 < (array_length t0)))),
   0 <= 0 /\ 0 < (array_length t).
 Proof.
 intuition.

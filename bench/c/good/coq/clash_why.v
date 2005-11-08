@@ -22,9 +22,14 @@ Save.
 (*Why goal*) Lemma f1_impl_po_2 : 
   forall (ma_structure: ((pointer) Z4)),
   forall (alloc: alloc_table),
+  forall (toto_Z4: ((memory) Z Z4)),
   forall (HW_1: (valid alloc ma_structure)),
   forall (toto_0: Z),
   forall (HW_3: toto_0 = 0),
+  forall (HW_5: (forall (toto_Z4_0:((memory) Z Z4)),
+                 (toto_Z4_0 = (upd toto_Z4 ma_structure toto_0) ->
+                  (not_assigns alloc toto_Z4 toto_Z4_0
+                   (pset_singleton ma_structure))))),
   (valid alloc ma_structure).
 Proof.
 intuition.
@@ -66,6 +71,7 @@ Save.
 (*Why goal*) Lemma f2_impl_po_2 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
+  forall (fst_Z1: ((memory) Z Z1)),
   forall (fst_Z6: ((memory) Z Z6)),
   forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
@@ -83,6 +89,11 @@ Save.
   forall (HW_4: result0 = (acc substruct_Z5 ma_structure)),
   forall (result1: Z),
   forall (HW_5: result1 = (acc fst_Z6_0 result)),
+  forall (HW_7: (forall (fst_Z1_0:((memory) Z Z1)),
+                 (fst_Z1_0 = (upd fst_Z1 result0 result1) ->
+                  (not_assigns alloc fst_Z6 fst_Z6_0 pset_empty) /\
+                  (not_assigns alloc fst_Z1 fst_Z1_0
+                   (pset_singleton (acc substruct_Z5 ma_structure)))))),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -94,6 +105,7 @@ Save.
 (*Why goal*) Lemma f2_impl_po_3 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
+  forall (fst_Z1: ((memory) Z Z1)),
   forall (fst_Z6: ((memory) Z Z6)),
   forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
@@ -109,6 +121,14 @@ Save.
   forall (HW_3: fst_Z6_0 = (upd fst_Z6 result 0)),
   forall (result0: ((pointer) Z1)),
   forall (HW_4: result0 = (acc substruct_Z5 ma_structure)),
+  forall (HW_8: (forall (result1:Z),
+                 (result1 = (acc fst_Z6_0 result) ->
+                  (forall (fst_Z1_0:((memory) Z Z1)),
+                   (fst_Z1_0 = (upd fst_Z1 result0 result1) ->
+                    (not_assigns alloc fst_Z6 fst_Z6_0 pset_empty) /\
+                    (not_assigns alloc fst_Z1 fst_Z1_0
+                     (pset_singleton (acc substruct_Z5 ma_structure))))) /\
+                  (valid alloc0 result0)))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -119,6 +139,7 @@ Save.
 (*Why goal*) Lemma f2_impl_po_4 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
+  forall (fst_Z1: ((memory) Z Z1)),
   forall (fst_Z6: ((memory) Z Z6)),
   forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
@@ -132,6 +153,17 @@ Save.
                 (alloc_stack result alloc alloc0)),
   forall (fst_Z6_0: ((memory) Z Z6)),
   forall (HW_3: fst_Z6_0 = (upd fst_Z6 result 0)),
+  forall (HW_9: (forall (result0:((pointer) Z1)),
+                 (result0 = (acc substruct_Z5 ma_structure) ->
+                  (forall (result1:Z),
+                   (result1 = (acc fst_Z6_0 result) ->
+                    (forall (fst_Z1_0:((memory) Z Z1)),
+                     (fst_Z1_0 = (upd fst_Z1 result0 result1) ->
+                      (not_assigns alloc fst_Z6 fst_Z6_0 pset_empty) /\
+                      (not_assigns alloc fst_Z1 fst_Z1_0
+                       (pset_singleton (acc substruct_Z5 ma_structure))))) /\
+                    (valid alloc0 result0))) /\
+                  (valid alloc0 result)))),
   (valid alloc0 ma_structure).
 Proof.
 intros.
@@ -161,6 +193,8 @@ Save.
 (*Why goal*) Lemma f2_impl_po_5 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
+  forall (fst_Z1: ((memory) Z Z1)),
+  forall (fst_Z6: ((memory) Z Z6)),
   forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
                 (valid alloc (acc substruct_Z5 ma_structure))),
@@ -171,6 +205,20 @@ Save.
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
+  forall (HW_10: (forall (fst_Z6_0:((memory) Z Z6)),
+                  (fst_Z6_0 = (upd fst_Z6 result 0) ->
+                   (forall (result0:((pointer) Z1)),
+                    (result0 = (acc substruct_Z5 ma_structure) ->
+                     (forall (result1:Z),
+                      (result1 = (acc fst_Z6_0 result) ->
+                       (forall (fst_Z1_0:((memory) Z Z1)),
+                        (fst_Z1_0 = (upd fst_Z1 result0 result1) ->
+                         (not_assigns alloc fst_Z6 fst_Z6_0 pset_empty) /\
+                         (not_assigns alloc fst_Z1 fst_Z1_0
+                          (pset_singleton (acc substruct_Z5 ma_structure))))) /\
+                       (valid alloc0 result0))) /\
+                     (valid alloc0 result))) /\
+                   (valid alloc0 ma_structure)))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -181,9 +229,33 @@ Save.
 (*Why goal*) Lemma f2_impl_po_6 : 
   forall (ma_structure: ((pointer) Z5)),
   forall (alloc: alloc_table),
+  forall (fst_Z1: ((memory) Z Z1)),
+  forall (fst_Z6: ((memory) Z Z6)),
   forall (substruct_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
                 (valid alloc (acc substruct_Z5 ma_structure))),
+  forall (HW_11: (forall (result:((pointer) Z6)),
+                  (forall (alloc0:alloc_table),
+                   ((valid alloc0 result) /\ (offset result) = 0 /\
+                    (block_length alloc0 result) = 1 /\
+                    (valid_range alloc0 result 0 (1 - 1)) /\
+                    (fresh alloc result) /\ (on_stack alloc0 result) /\
+                    (alloc_stack result alloc alloc0) ->
+                    (forall (fst_Z6_0:((memory) Z Z6)),
+                     (fst_Z6_0 = (upd fst_Z6 result 0) ->
+                      (forall (result0:((pointer) Z1)),
+                       (result0 = (acc substruct_Z5 ma_structure) ->
+                        (forall (result1:Z),
+                         (result1 = (acc fst_Z6_0 result) ->
+                          (forall (fst_Z1_0:((memory) Z Z1)),
+                           (fst_Z1_0 = (upd fst_Z1 result0 result1) ->
+                            (not_assigns alloc fst_Z6 fst_Z6_0 pset_empty) /\
+                            (not_assigns alloc fst_Z1 fst_Z1_0
+                             (pset_singleton (acc substruct_Z5 ma_structure))))) /\
+                          (valid alloc0 result0))) /\
+                        (valid alloc0 result))) /\
+                      (valid alloc0 ma_structure))) /\
+                    (valid alloc0 result))))),
   1 >= 1.
 Proof.
 intuition.

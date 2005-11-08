@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.6 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.7 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -48,7 +48,7 @@ module IterIT = struct
     | _ -> ()
 
   let rec predicate f g = function
-    | Pand (_, a, b)
+    | Pand (_, _, a, b)
     | Por (a, b)
     | Piff (a, b)
     | Forallb (_, a, b)
@@ -154,7 +154,7 @@ module GenSubst(S : Substitution) = struct
 	Papp (x, List.map (term s) tl, List.map (pure_type s) i)
     | Pimplies (w, a, b) -> Pimplies (w, predicate s a, predicate s b)
     | Pif (a, b, c) -> Pif (a, predicate s b, predicate s c)
-    | Pand (w, a, b) -> Pand (w, predicate s a, predicate s b)
+    | Pand (w, sym, a, b) -> Pand (w, sym, predicate s a, predicate s b)
     | Por (a, b) -> Por (predicate s a, predicate s b)
     | Piff (a, b) -> Piff (predicate s a, predicate s b)
     | Pnot a -> Pnot (predicate s a)
@@ -232,7 +232,7 @@ module OpenInstances = struct
   let rec predicate s = function
     | Pvar _ | Ptrue | Pfalse -> s
     | Papp (id, l, i) -> List.fold_left term (add (id,i) s) l
-    | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) | Piff (a, b)
+    | Pimplies (_, a, b) | Pand (_, _, a, b) | Por (a, b) | Piff (a, b)
     | Forallb (_, a, b) -> predicate (predicate s a) b
     | Pif (a, b, c) -> predicate (predicate (term s a) b) c
     | Pnot a -> predicate s a

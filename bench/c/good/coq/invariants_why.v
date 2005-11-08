@@ -59,6 +59,11 @@ Save.
   forall (HW_4: (result + n) <= (result0 - 20)),
   forall (result1: Z),
   forall (HW_5: result1 = (acc int_Z5 c)),
+  forall (HW_7: (forall (x_Z3_0:((memory) Z Z3)),
+                 (x_Z3_0 = (upd x_Z3 s (result + n + result1)) ->
+                  (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                  ((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <= (acc y_Z3 s)) /\
+                  (acc y_Z3 s) <= 100)))),
   (valid alloc s).
 Proof.
 intuition.
@@ -86,6 +91,14 @@ Save.
   forall (result0: Z),
   forall (HW_3: result0 = (acc y_Z3 s)),
   forall (HW_4: (result + n) <= (result0 - 20)),
+  forall (HW_8: (forall (result0:Z),
+                 (result0 = (acc int_Z5 c) ->
+                  (forall (x_Z3_0:((memory) Z Z3)),
+                   (x_Z3_0 = (upd x_Z3 s (result + n + result0)) ->
+                    (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                    ((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                    (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100))) /\
+                  (valid alloc s)))),
   (valid alloc c).
 Proof.
 intuition.
@@ -113,7 +126,7 @@ Save.
   forall (HW_2: result = (acc x_Z3 s)),
   forall (result0: Z),
   forall (HW_3: result0 = (acc y_Z3 s)),
-  forall (HW_7: (result + n) > (result0 - 20)),
+  forall (HW_9: (result + n) > (result0 - 20)),
   (* File \"invariants.c\", line 6, characters 18-54:\n *) ((0 <=
   (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100).
 Proof.
@@ -139,6 +152,22 @@ Save.
                 (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
   forall (HW_2: result = (acc x_Z3 s)),
+  forall (HW_10: (forall (result0:Z),
+                  (result0 = (acc y_Z3 s) ->
+                   (((result + n) <= (result0 - 20) ->
+                     (forall (result0:Z),
+                      (result0 = (acc int_Z5 c) ->
+                       (forall (x_Z3_0:((memory) Z Z3)),
+                        (x_Z3_0 = (upd x_Z3 s (result + n + result0)) ->
+                         (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                         ((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                         (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100))) /\
+                       (valid alloc s))) /\
+                     (valid alloc c))) /\
+                   (((result + n) > (result0 - 20) ->
+                     (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                     ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
+                     (acc y_Z3 s) <= 100)))))),
   (valid alloc s).
 Proof.
 intuition.
@@ -161,6 +190,25 @@ Save.
                 ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <= (acc y_Z3 s)) /\
                 (acc y_Z3 s) <= 100)) /\ (valid_range alloc s 0 0) /\
                 (constant_c int_Z5 c alloc) /\ (valid_range alloc c 0 1)),
+  forall (HW_11: (forall (result:Z),
+                  (result = (acc x_Z3 s) ->
+                   (forall (result0:Z),
+                    (result0 = (acc y_Z3 s) ->
+                     (((result + n) <= (result0 - 20) ->
+                       (forall (result0:Z),
+                        (result0 = (acc int_Z5 c) ->
+                         (forall (x_Z3_0:((memory) Z Z3)),
+                          (x_Z3_0 = (upd x_Z3 s (result + n + result0)) ->
+                           (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                           ((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                           (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100))) /\
+                         (valid alloc s))) /\
+                       (valid alloc c))) /\
+                     (((result + n) > (result0 - 20) ->
+                       (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                       ((0 <= (acc x_Z3 s) /\ (acc x_Z3 s) <=
+                       (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100))))) /\
+                   (valid alloc s)))),
   (valid alloc s).
 Proof.
 intuition.
@@ -215,6 +263,12 @@ Save.
   forall (HW_4: int_Z5_0 = (upd int_Z5 c 12)),
   forall (result: ((pointer) Z5)),
   forall (HW_5: result = (shift c 1)),
+  forall (HW_7: (forall (int_Z5:((memory) Z Z5)),
+                 (int_Z5 = (upd int_Z5_0 result 14) ->
+                  (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                  (((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                  (acc y_Z3_0 s)) /\ (acc y_Z3_0 s) <= 100) /\
+                  (acc int_Z5 c) = 12)))),
   (valid alloc result).
 Proof.
 intuition;subst;auto;caduceus.
@@ -242,6 +296,17 @@ Qed.
   forall (HW_2: x_Z3_0 = (upd x_Z3 s 0)),
   forall (y_Z3_0: ((memory) Z Z3)),
   forall (HW_3: y_Z3_0 = (upd y_Z3 s 0)),
+  forall (HW_8: (forall (int_Z5_0:((memory) Z Z5)),
+                 (int_Z5_0 = (upd int_Z5 c 12) ->
+                  (forall (result:((pointer) Z5)),
+                   (result = (shift c 1) ->
+                    (forall (int_Z5:((memory) Z Z5)),
+                     (int_Z5 = (upd int_Z5_0 result 14) ->
+                      (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                      (((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                      (acc y_Z3_0 s)) /\ (acc y_Z3_0 s) <= 100) /\
+                      (acc int_Z5 c) = 12))) /\
+                    (valid alloc result)))))),
   (valid alloc c).
 Proof.
 intuition.
@@ -255,10 +320,25 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z3)),
   forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
   forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
                 (valid_range alloc c 0 1)),
   forall (x_Z3_0: ((memory) Z Z3)),
   forall (HW_2: x_Z3_0 = (upd x_Z3 s 0)),
+  forall (HW_9: (forall (y_Z3_0:((memory) Z Z3)),
+                 (y_Z3_0 = (upd y_Z3 s 0) ->
+                  (forall (int_Z5_0:((memory) Z Z5)),
+                   (int_Z5_0 = (upd int_Z5 c 12) ->
+                    (forall (result:((pointer) Z5)),
+                     (result = (shift c 1) ->
+                      (forall (int_Z5:((memory) Z Z5)),
+                       (int_Z5 = (upd int_Z5_0 result 14) ->
+                        (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                        (((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                        (acc y_Z3_0 s)) /\ (acc y_Z3_0 s) <= 100) /\
+                        (acc int_Z5 c) = 12))) /\
+                      (valid alloc result))))) /\
+                  (valid alloc c)))),
   (valid alloc s).
 Proof.
 intuition.
@@ -271,8 +351,27 @@ Save.
   forall (c: ((pointer) Z5)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z3)),
+  forall (x_Z3: ((memory) Z Z3)),
+  forall (y_Z3: ((memory) Z Z3)),
   forall (HW_1: (valid_range alloc s 0 0) /\ (constant_c int_Z5 c alloc) /\
                 (valid_range alloc c 0 1)),
+  forall (HW_10: (forall (x_Z3_0:((memory) Z Z3)),
+                  (x_Z3_0 = (upd x_Z3 s 0) ->
+                   (forall (y_Z3_0:((memory) Z Z3)),
+                    (y_Z3_0 = (upd y_Z3 s 0) ->
+                     (forall (int_Z5_0:((memory) Z Z5)),
+                      (int_Z5_0 = (upd int_Z5 c 12) ->
+                       (forall (result:((pointer) Z5)),
+                        (result = (shift c 1) ->
+                         (forall (int_Z5:((memory) Z Z5)),
+                          (int_Z5 = (upd int_Z5_0 result 14) ->
+                           (* File \"invariants.c\", line 6, characters 18-54:\n *)
+                           (((0 <= (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <=
+                           (acc y_Z3_0 s)) /\ (acc y_Z3_0 s) <= 100) /\
+                           (acc int_Z5 c) = 12))) /\
+                         (valid alloc result))))) /\
+                     (valid alloc c))) /\
+                   (valid alloc s)))),
   (valid alloc s).
 Proof.
 intuition.

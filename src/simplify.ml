@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.36 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.37 2005-11-08 15:44:45 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -171,7 +171,7 @@ let rec print_predicate pos fmt p =
       fprintf fmt 
      "@[(AND@ (IMPLIES (EQ %a |@@true|) %a)@ (IMPLIES (NEQ %a |@@true|) %a))@]"
       print_term a pp b print_term a pp c
-  | Pand (_, a, b) | Forallb (_, a, b) ->
+  | Pand (_, _, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(AND@ %a@ %a)@]" pp a pp b
   | Por (a, b) ->
       fprintf fmt "@[(OR@ %a@ %a)@]" pp a pp b

@@ -17,6 +17,8 @@ Require Export coord_spec_why.
   forall (HW_3: result0 = (acc x_Z2 result)),
   forall (result1: ((pointer) Z2)),
   forall (HW_5: result1 = (shift tab index)),
+  forall (HW_8: (forall (result:Z),
+                 (result = (acc x_Z2 result1) -> (True -> True)))),
   (valid alloc result1).
 Proof.
 intros.
@@ -27,10 +29,19 @@ Save.
   forall (index: Z),
   forall (alloc: alloc_table),
   forall (tab: ((pointer) Z2)),
+  forall (x_Z2: ((memory) Z Z2)),
   forall (HW_1: (* File \"coord.c\", line 11, characters 14-28:\n *) (0 <=
                 index /\ index < 3) /\ (valid_range alloc tab 0 2)),
   forall (result: ((pointer) Z2)),
   forall (HW_2: result = (shift tab index)),
+  forall (HW_9: (forall (result0:Z),
+                 (result0 = (acc x_Z2 result) ->
+                  (True ->
+                   (forall (result:((pointer) Z2)),
+                    (result = (shift tab index) ->
+                     (forall (result0:Z),
+                      (result0 = (acc x_Z2 result) -> (True -> True))) /\
+                     (valid alloc result))))))),
   (valid alloc result).
 Proof.
 intuition.
