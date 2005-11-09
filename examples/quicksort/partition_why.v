@@ -290,3 +290,1153 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_po_1 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  0 <= i /\ i < (array_length t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_po_2 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  0 <= j /\ j < (array_length t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_po_3 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  0 <= i /\ i < (array_length t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_po_4 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  forall (HW_6: 0 <= i /\ i < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_7: t0 = (update t i result0)),
+  0 <= j /\ j < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma swap_po_5 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  forall (HW_6: 0 <= i /\ i < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_7: t0 = (update t i result0)),
+  forall (HW_8: 0 <= j /\ j < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_9: t1 = (update t0 j result)),
+  (exchange t1 t i j).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_1 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  0 <= l /\ l < (array_length t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_2 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+  (array_le t (l + 1) (l + 1 - 1) result) /\ (array_ge t (r + 1) r result) /\
+  (sub_permut l r t t) /\ (access t l) = (access t l).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_3 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_4 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  0 <= i0 /\ i0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_5 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_12: i0 < j),
+  forall (i1: Z),
+  forall (HW_13: i1 = (i0 + 1)),
+  ((i <= i1 /\ i1 <= r) /\ (array_le t0 (l + 1) (i1 - 1) result)) /\
+  (Zwf 0 (r - i1) (r - i0)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_6 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_7 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  0 <= j0 /\ j0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_8 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_19: result1 >= result),
+  forall (HW_20: i0 < j0),
+  forall (j1: Z),
+  forall (HW_21: j1 = (j0 - 1)),
+  ((l <= j1 /\ j1 <= j) /\ (array_ge t0 (j1 + 1) r result)) /\ (Zwf 0 j1 j0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_9 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_19: result1 >= result),
+  forall (HW_22: i0 >= j0),
+  forall (HW_23: i0 < j0),
+  (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_10 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_19: result1 >= result),
+  forall (HW_22: i0 >= j0),
+  forall (HW_23: i0 < j0),
+  forall (HW_24: (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_25: (exchange t1 t0 i0 j0)),
+  forall (i1: Z),
+  forall (HW_26: i1 = (i0 + 1)),
+  forall (j1: Z),
+  forall (HW_27: j1 = (j0 - 1)),
+  (((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
+  (array_le t1 (l + 1) (i1 - 1) result) /\ (array_ge t1 (j1 + 1) r result) /\
+  (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
+  (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_11 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_19: result1 >= result),
+  forall (HW_28: i0 >= j0),
+  (((l + 1) <= i0 /\ i0 <= r) /\ j0 <= r /\
+  (array_le t0 (l + 1) (i0 - 1) result) /\ (array_ge t0 (j0 + 1) r result) /\
+  (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
+  (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_12 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_29: result1 < result),
+  forall (HW_30: i0 < j0),
+  (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_13 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_29: result1 < result),
+  forall (HW_30: i0 < j0),
+  forall (HW_31: (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_32: (exchange t1 t0 i0 j0)),
+  forall (i1: Z),
+  forall (HW_33: i1 = (i0 + 1)),
+  forall (j1: Z),
+  forall (HW_34: j1 = (j0 - 1)),
+  (((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
+  (array_le t1 (l + 1) (i1 - 1) result) /\ (array_ge t1 (j1 + 1) r result) /\
+  (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
+  (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_14 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_11: result0 <= result),
+  forall (HW_14: i0 >= j),
+  forall (HW_15: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_17: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_18: result1 = (access t0 j0)),
+  forall (HW_29: result1 < result),
+  forall (HW_35: i0 >= j0),
+  (((l + 1) <= i0 /\ i0 <= r) /\ j0 <= r /\
+  (array_le t0 (l + 1) (i0 - 1) result) /\ (array_ge t0 (j0 + 1) r result) /\
+  (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
+  (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_15 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_16 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  0 <= j0 /\ j0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_17 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_41: result1 >= result),
+  forall (HW_42: i0 < j0),
+  forall (j1: Z),
+  forall (HW_43: j1 = (j0 - 1)),
+  ((l <= j1 /\ j1 <= j) /\ (array_ge t0 (j1 + 1) r result)) /\ (Zwf 0 j1 j0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_18 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_41: result1 >= result),
+  forall (HW_44: i0 >= j0),
+  forall (HW_45: i0 < j0),
+  (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_19 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_41: result1 >= result),
+  forall (HW_44: i0 >= j0),
+  forall (HW_45: i0 < j0),
+  forall (HW_46: (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_47: (exchange t1 t0 i0 j0)),
+  forall (i1: Z),
+  forall (HW_48: i1 = (i0 + 1)),
+  forall (j1: Z),
+  forall (HW_49: j1 = (j0 - 1)),
+  (((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
+  (array_le t1 (l + 1) (i1 - 1) result) /\ (array_ge t1 (j1 + 1) r result) /\
+  (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
+  (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_20 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_41: result1 >= result),
+  forall (HW_50: i0 >= j0),
+  (((l + 1) <= i0 /\ i0 <= r) /\ j0 <= r /\
+  (array_le t0 (l + 1) (i0 - 1) result) /\ (array_ge t0 (j0 + 1) r result) /\
+  (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
+  (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_21 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_51: result1 < result),
+  forall (HW_52: i0 < j0),
+  (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_22 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_51: result1 < result),
+  forall (HW_52: i0 < j0),
+  forall (HW_53: (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_54: (exchange t1 t0 i0 j0)),
+  forall (i1: Z),
+  forall (HW_55: i1 = (i0 + 1)),
+  forall (j1: Z),
+  forall (HW_56: j1 = (j0 - 1)),
+  (((l + 1) <= i1 /\ i1 <= r) /\ j1 <= r /\
+  (array_le t1 (l + 1) (i1 - 1) result) /\ (array_ge t1 (j1 + 1) r result) /\
+  (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
+  (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_23 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_6: i < j),
+  forall (HW_7: (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result)),
+  forall (i0: Z),
+  forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
+  forall (HW_9: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_10: result0 = (access t0 i0)),
+  forall (HW_36: result0 > result),
+  forall (HW_37: (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result)),
+  forall (j0: Z),
+  forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
+  forall (HW_39: 0 <= j0 /\ j0 < (array_length t0)),
+  forall (result1: Z),
+  forall (HW_40: result1 = (access t0 j0)),
+  forall (HW_51: result1 < result),
+  forall (HW_57: i0 >= j0),
+  (((l + 1) <= i0 /\ i0 <= r) /\ j0 <= r /\
+  (array_le t0 (l + 1) (i0 - 1) result) /\ (array_ge t0 (j0 + 1) r result) /\
+  (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
+  (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_24 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_58: i >= j),
+  0 <= i /\ i < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_25 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_58: i >= j),
+  forall (HW_59: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_60: result0 = (access t0 i)),
+  forall (HW_61: result0 < result),
+  (0 <= l /\ l < (array_length t0)) /\ 0 <= i /\ i < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_26 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_58: i >= j),
+  forall (HW_59: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_60: result0 = (access t0 i)),
+  forall (HW_61: result0 < result),
+  forall (HW_62: (0 <= l /\ l < (array_length t0)) /\ 0 <= i /\ i <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_63: (exchange t1 t0 l i)),
+  (l <= i /\ i <= r) /\ (partition_p t1 l r i) /\ (sub_permut l r t1 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_27 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_58: i >= j),
+  forall (HW_59: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_60: result0 = (access t0 i)),
+  forall (HW_64: result0 >= result),
+  (0 <= l /\ l < (array_length t0)) /\ 0 <= (i - 1) /\ (i - 1) <
+  (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma partition_po_28 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (HW_2: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t l)),
+  forall (HW_4: ((l + 1) <= (l + 1) /\ (l + 1) <= r) /\ r <= r /\
+                (array_le t (l + 1) (l + 1 - 1) result) /\
+                (array_ge t (r + 1) r result) /\ (sub_permut l r t t) /\
+                (access t l) = (access t l)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (t0: (array Z)),
+  forall (HW_5: ((l + 1) <= i /\ i <= r) /\ j <= r /\
+                (array_le t0 (l + 1) (i - 1) result) /\
+                (array_ge t0 (j + 1) r result) /\ (sub_permut l r t0 t) /\
+                (access t0 l) = (access t l)),
+  forall (HW_58: i >= j),
+  forall (HW_59: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_60: result0 = (access t0 i)),
+  forall (HW_64: result0 >= result),
+  forall (HW_65: (0 <= l /\ l < (array_length t0)) /\ 0 <= (i - 1) /\
+                 (i - 1) < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_66: (exchange t1 t0 l (i - 1))),
+  (l <= (i - 1) /\ (i - 1) <= r) /\ (partition_p t1 l r (i - 1)) /\
+  (sub_permut l r t1 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+

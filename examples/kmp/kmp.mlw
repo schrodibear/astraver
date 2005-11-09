@@ -7,7 +7,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-type A
+external type A
 
 external parameter A_eq_bool : x:A -> y:A -> {} bool { if result then x=y else not x=y }
 
@@ -21,6 +21,8 @@ parameter p : A array
  * That table only depends on p. *)
 
 parameter next : int array
+
+external type prodZZ
 
 external logic match_ : A farray, int, A farray, int, int -> prop
 external logic Next : A farray, int, int -> prop
@@ -61,7 +63,7 @@ parameter a : A array
 
 external logic first_occur : A farray, A farray, int -> prop
 
-let kmp =
+let kmp () =
   { array_length(p) = M and array_length(next) = M and 
     array_length(a) = N }
  (let i = ref 0 in

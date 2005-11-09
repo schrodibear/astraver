@@ -213,6 +213,436 @@ absurd (0 < j)%Z; Omega'.
 Qed.
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_1 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  0 <= 1 /\ 1 < (array_length next).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_2 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  (well_founded lexZ).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_3 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\ (match_ p (1 - 0) p 0 0) /\
+  (forall (z:Z),
+   ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+  (array_length next0) = M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_4 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  0 <= i /\ i < (array_length p).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_5 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  0 <= j /\ j < (array_length p).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_6 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_12: result = result0),
+  forall (i0: Z),
+  forall (HW_13: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_14: j0 = (j + 1)),
+  0 <= i0 /\ i0 < (array_length next1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_7 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_12: result = result0),
+  forall (i0: Z),
+  forall (HW_13: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_14: j0 = (j + 1)),
+  forall (HW_15: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_16: next2 = (update next1 i0 j0)),
+  ((0 <= j0 /\ j0 <= M) /\ (j0 < i0 /\ i0 <= M) /\
+  (match_ p (i0 - j0) p 0 j0) /\
+  (forall (z:Z),
+   ((j0 + 1) < z /\ z < (i0 + 1) -> ~(match_ p (i0 + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i0 -> (Next p k (access next2 k)))) /\
+  (array_length next2) = M) /\ (lexZ (pairZ (M - i0) j0) (pairZ (M - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_8 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_17: ~result = result0),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  0 <= i0 /\ i0 < (array_length next1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_9 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_17: ~result = result0),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  forall (HW_20: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_21: next2 = (update next1 i0 0)),
+  ((0 <= j /\ j <= M) /\ (j < i0 /\ i0 <= M) /\ (match_ p (i0 - j) p 0 j) /\
+  (forall (z:Z),
+   ((j + 1) < z /\ z < (i0 + 1) -> ~(match_ p (i0 + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i0 -> (Next p k (access next2 k)))) /\
+  (array_length next2) = M) /\ (lexZ (pairZ (M - i0) j) (pairZ (M - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_10 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_17: ~result = result0),
+  forall (HW_22: j <> 0),
+  0 <= j /\ j < (array_length next1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_11 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_7: i < (M - 1)),
+  forall (HW_8: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_9: result = (access p i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_17: ~result = result0),
+  forall (HW_22: j <> 0),
+  forall (HW_23: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_24: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_25: j0 = result1),
+  ((0 <= j0 /\ j0 <= M) /\ (j0 < i /\ i <= M) /\
+  (match_ p (i - j0) p 0 j0) /\
+  (forall (z:Z),
+   ((j0 + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+  (array_length next1) = M) /\ (lexZ (pairZ (M - i) j0) (pairZ (M - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_12 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                (match_ p (1 - 0) p 0 0) /\
+                (forall (z:Z),
+                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                (array_length next0) = M),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_26: i >= (M - 1)),
+  (array_length next1) = M /\
+  (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next1 j)))).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma initnext_po_13 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_27: 1 >= M),
+  (array_length next) = M /\
+  (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next j)))).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
 (*Why*) Parameter N : Z.
 Axiom N_positive : (0 <= N)%Z.
 
@@ -383,4 +813,376 @@ red; intro.
 absurd (k <= N - M)%Z; Omega'.
 Qed.
 
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_1 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  (array_length p) = M /\ (array_length next) = M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_2 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  (well_founded lexZ).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_3 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\ (match_ a (0 - 0) p 0 0) /\
+  (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M))).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_4 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_7: i < N),
+  0 <= i /\ i < (array_length a).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_5 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_7: i < N),
+  forall (HW_8: 0 <= i /\ i < (array_length a)),
+  forall (result: A),
+  forall (HW_9: result = (access a i)),
+  0 <= j /\ j < (array_length p).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_6 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_7: i < N),
+  forall (HW_8: 0 <= i /\ i < (array_length a)),
+  forall (result: A),
+  forall (HW_9: result = (access a i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_12: result = result0),
+  forall (i0: Z),
+  forall (HW_13: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_14: j0 = (j + 1)),
+  ((0 <= j0 /\ j0 <= M) /\ (j0 <= i0 /\ i0 <= N) /\
+  (match_ a (i0 - j0) p 0 j0) /\
+  (forall (k:Z), (0 <= k /\ k < (i0 - j0) -> ~(match_ a k p 0 M)))) /\
+  (lexZ (pairZ (N - i0) j0) (pairZ (N - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_7 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_7: i < N),
+  forall (HW_8: 0 <= i /\ i < (array_length a)),
+  forall (result: A),
+  forall (HW_9: result = (access a i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_15: ~result = result0),
+  forall (HW_16: j = 0),
+  forall (i0: Z),
+  forall (HW_17: i0 = (i + 1)),
+  ((0 <= j /\ j <= M) /\ (j <= i0 /\ i0 <= N) /\ (match_ a (i0 - j) p 0 j) /\
+  (forall (k:Z), (0 <= k /\ k < (i0 - j) -> ~(match_ a k p 0 M)))) /\
+  (lexZ (pairZ (N - i0) j) (pairZ (N - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_8 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_7: i < N),
+  forall (HW_8: 0 <= i /\ i < (array_length a)),
+  forall (result: A),
+  forall (HW_9: result = (access a i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_15: ~result = result0),
+  forall (HW_18: j <> 0),
+  0 <= j /\ j < (array_length next0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_9 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_7: i < N),
+  forall (HW_8: 0 <= i /\ i < (array_length a)),
+  forall (result: A),
+  forall (HW_9: result = (access a i)),
+  forall (HW_10: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_11: result0 = (access p j)),
+  forall (HW_15: ~result = result0),
+  forall (HW_18: j <> 0),
+  forall (HW_19: 0 <= j /\ j < (array_length next0)),
+  forall (result1: Z),
+  forall (HW_20: result1 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_21: j0 = result1),
+  ((0 <= j0 /\ j0 <= M) /\ (j0 <= i /\ i <= N) /\
+  (match_ a (i - j0) p 0 j0) /\
+  (forall (k:Z), (0 <= k /\ k < (i - j0) -> ~(match_ a k p 0 M)))) /\
+  (lexZ (pairZ (N - i) j0) (pairZ (N - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_10 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_22: i >= N),
+  forall (HW_23: j = M),
+  (first_occur p a (i - M)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_11 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_6: j < M),
+  forall (HW_22: i >= N),
+  forall (HW_24: j <> M),
+  (first_occur p a i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_12 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_25: j >= M),
+  forall (HW_26: j = M),
+  (first_occur p a (i - M)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma kmp_po_13 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                (match_ a (0 - 0) p 0 0) /\
+                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (HW_25: j >= M),
+  forall (HW_27: j <> M),
+  (first_occur p a i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
 

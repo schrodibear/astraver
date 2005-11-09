@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.52 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.53 2005-11-09 15:39:31 filliatr Exp $ i*)
 
 open Format
 
@@ -277,9 +277,10 @@ let files =
     | ("-black" | "--black") :: args ->
 	black_ := true; white_ := false; parse args
     | ("-wbb" | "--wbb") :: args ->
-	wbb_ := true; parse args
+        wbb_ := true; parse args
     | ("-split" | "--split") :: n :: args ->
-	lvlmax_ := int_of_string n; parse args
+	begin try lvlmax_ := int_of_string n with _ -> usage (); exit 1 end; 
+	parse args
     | ("-split" | "--split") :: [] ->
 	usage (); exit 1
     | ("-all-vc" | "--all-vc" | "--allvc") :: args ->

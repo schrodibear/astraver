@@ -28,7 +28,7 @@ external logic termination : int,int,int,int,int,int farray -> prop
 
 parameter A : int array (* the array *)
 
-let find =
+let find () =
   { array_length(A) = N+1 }
   init:
   let m = ref 1 in let n = ref N in
@@ -45,7 +45,7 @@ let find =
 		 and termination(i,j,m,n,r,A)
       	       	 and permut(A,A@init) as Inv_ij
           variant N+2+j-i }
-        label L;
+        L:
 
         while A[!i] < r do
           { invariant i_invariant(m, n, i, r, A) 

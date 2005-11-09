@@ -48,3 +48,158 @@ SameLength t0 t; rewrite H3; trivial.
 Qed.
 
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_1 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_2: l < r),
+  (0 <= l /\ l < r) /\ r < (array_length t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_2 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_2: l < r),
+  forall (HW_3: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (result: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (l <= result /\ result <= r) /\
+                (partition_p t0 l r result) /\ (sub_permut l r t0 t)),
+  (Zwf 0 (1 + (result - 1) - l) (1 + r - l)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_3 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_2: l < r),
+  forall (HW_3: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (result: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (l <= result /\ result <= r) /\
+                (partition_p t0 l r result) /\ (sub_permut l r t0 t)),
+  forall (HW_5: (Zwf 0 (1 + (result - 1) - l) (1 + r - l))),
+  0 <= l /\ (result - 1) < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_4 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_2: l < r),
+  forall (HW_3: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (result: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (l <= result /\ result <= r) /\
+                (partition_p t0 l r result) /\ (sub_permut l r t0 t)),
+  forall (HW_5: (Zwf 0 (1 + (result - 1) - l) (1 + r - l))),
+  forall (HW_6: 0 <= l /\ (result - 1) < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_7: (sorted_array t1 l (result - 1)) /\
+                (sub_permut l (result - 1) t1 t0)),
+  (Zwf 0 (1 + r - (result + 1)) (1 + r - l)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_5 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_2: l < r),
+  forall (HW_3: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (result: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (l <= result /\ result <= r) /\
+                (partition_p t0 l r result) /\ (sub_permut l r t0 t)),
+  forall (HW_5: (Zwf 0 (1 + (result - 1) - l) (1 + r - l))),
+  forall (HW_6: 0 <= l /\ (result - 1) < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_7: (sorted_array t1 l (result - 1)) /\
+                (sub_permut l (result - 1) t1 t0)),
+  forall (HW_8: (Zwf 0 (1 + r - (result + 1)) (1 + r - l))),
+  0 <= (result + 1) /\ r < (array_length t1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_6 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_2: l < r),
+  forall (HW_3: (0 <= l /\ l < r) /\ r < (array_length t)),
+  forall (result: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (l <= result /\ result <= r) /\
+                (partition_p t0 l r result) /\ (sub_permut l r t0 t)),
+  forall (HW_5: (Zwf 0 (1 + (result - 1) - l) (1 + r - l))),
+  forall (HW_6: 0 <= l /\ (result - 1) < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_7: (sorted_array t1 l (result - 1)) /\
+                (sub_permut l (result - 1) t1 t0)),
+  forall (HW_8: (Zwf 0 (1 + r - (result + 1)) (1 + r - l))),
+  forall (HW_9: 0 <= (result + 1) /\ r < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_10: (sorted_array t2 (result + 1) r) /\
+                 (sub_permut (result + 1) r t2 t1)),
+  (sorted_array t2 l r) /\ (sub_permut l r t2 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quick_rec_po_7 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= l /\ r < (array_length t)),
+  forall (HW_11: l >= r),
+  (sorted_array t l r) /\ (sub_permut l r t t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quicksort_po_1 : 
+  forall (t: (array Z)),
+  forall (result: Z),
+  forall (HW_1: result = (array_length t)),
+  0 <= 0 /\ (result - 1) < (array_length t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma quicksort_po_2 : 
+  forall (t: (array Z)),
+  forall (result: Z),
+  forall (HW_1: result = (array_length t)),
+  forall (HW_2: 0 <= 0 /\ (result - 1) < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_3: (sorted_array t0 0 (result - 1)) /\
+                (sub_permut 0 (result - 1) t0 t)),
+  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
