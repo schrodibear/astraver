@@ -12,7 +12,7 @@ Axiom n1_non_negative : (0 <= n1)%Z.
 (*Why*) Parameter n2 : Z.
 Axiom n2_non_negative : (0 <= n2)%Z.
 
-Ltac Omega' :=
+Ltac omega' :=
   generalize n1_non_negative; generalize n2_non_negative;
    abstract omega.
 
@@ -21,141 +21,1264 @@ Definition min_suffix (w1 w2:array A) (i j n:Z) :=
 
 Definition test_char (a b:A) := bool_of_sumbool (A_eq_dec a b).
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_1 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+  (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j))).
 Proof.
-simpl; intuition.
-Qed.
+intuition.
+omega'.
+Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_2 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_5: i0 <= n2),
+  0 <= i0 /\ i0 < (array_length t0).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_3 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_5: i0 <= n2),
+  forall (HW_6: 0 <= i0 /\ i0 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_7: t1 = (update t0 i0 (n2 - i0))),
+  forall (i1: Z),
+  forall (HW_8: i1 = (i0 + 1)),
+  ((0 <= i1 /\ i1 <= (n2 + 1)) /\ (array_length t1) = (n2 + 1) /\
+  (forall (j:Z), (0 <= j /\ j < i1 -> (access t1 j) = (n2 - j)))) /\
+  (Zwf 0 (n2 + 1 - i1) (n2 + 1 - i0)).
 Proof.
 intuition.
 ArraySubst t1.
 subst t1.
- AccessStore i1 j Hij; try Omega'.
-apply H8; Omega'.
-Qed.
+assert (j < i0 \/ j=i0). omega. intuition.
+AccessOther; intuition.
+subst; AccessSame; intuition.
+Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_4 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) = (n2 + 1) /\
+  (forall (j:Z),
+   (0 <= j /\ j <= n2 -> (min_suffix w1 w2 (i1 + 1) j (access t0 j)))).
 Proof.
 intuition.
-Omega'.
-Qed.
-
-Proof.
-intuition.
-Omega'.
-Qed.
-
-Proof.
-intuition.
-ArraySubst t4.
-unfold min_suffix.
-subst t4.
-AccessStore j2 k Hj2k.
-  (* j2=k *)
-  rewrite (suffix_is_cons n1 w1 i3); [ idtac | Omega' ].
-  rewrite (suffix_is_cons n2 w2 k); [ idtac | Omega' ].
-  rewrite Test6.
- rewrite <- Hj2k.
-  apply min_dist_equal.
-  subst temp; assumption.
-  Omega'.
-  (* j2<>k *)
-  unfold min_suffix in H16.
-  apply H18; Omega'.
-  Omega'.
-  Omega'.
-unfold min_suffix.
-subst t4.
-AccessOther.
-unfold min_suffix in H21; apply H21; Omega'.
-replace (j + 1)%Z with j2; [ idtac | Omega' ].
-subst old3.
-unfold min_suffix; unfold min_suffix in H21; apply H21; Omega'.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-intuition.
-ArraySubst t4.
-unfold min_suffix.
-rewrite Post11; clear Post11.
-AccessStore j2 k Hj2k.
-  (* j2=k *)
-  rewrite <- Hj2k.
-    rewrite (suffix_is_cons n1 w1 i3); [ idtac | Omega' ].
-  rewrite (suffix_is_cons n2 w2 j2); [ idtac | Omega' ].
-  apply min_dist_diff.
-   assumption.
-  rewrite <- (suffix_is_cons n1 w1 i3); [ idtac | Omega' ].
-  apply H18; Omega'.
-  rewrite <- (suffix_is_cons n2 w2 j2); [ idtac | Omega' ].
-  apply H21; Omega'.
-  Omega'.
-  (* j2<> k *)
-  apply H18; Omega'.
-  Omega'.
-  Omega'.
-rewrite Post11; clear Post11.
-unfold min_suffix.
-AccessOther.
-apply H21; Omega'.
-replace (j + 1)%Z with j2; [ idtac | Omega' ].
-subst old3; apply H21; Omega'.
-Qed.
-
-Proof.
-intuition.
-ArraySubst t2.
-rewrite Post7; clear Post7.
-replace k with n2; [ idtac | Omega' ].
-unfold min_suffix.
-rewrite (suffix_is_cons n1 w1 i3).
-rewrite suffix_n_is_eps.
-AccessSame.
-apply min_dist_eps.
-rewrite <- suffix_n_is_eps with (n := n2) (t := w2).
-apply H13; Omega'.
-Omega'.
-rewrite Post7.
-AccessOther.
-apply H13; Omega'.
-rewrite Post6.
-replace n2 with (j1 + 1)%Z; [ idtac | Omega' ].
-apply H13; Omega'.
-Qed.
-
-Proof.
-intuition.
-replace (i4 + 1)%Z with i3; [ idtac | Omega' ].
-apply H20; Omega'.
-Qed.
-
-Proof.
-intuition.
-Omega'.
-replace (i2 + 1)%Z with n1; [ idtac | Omega' ].
+omega'.
+replace (i1 + 1)%Z with n1; [ idtac | omega' ].
 unfold min_suffix.
 rewrite suffix_n_is_eps.
 replace (access t0 j) with (Zlength (suffix n2 w2 j)).
 exact (min_dist_eps_length (suffix n2 w2 j)).
-rewrite H7.
-apply suffix_length; Omega'.
-Omega'.
-Qed.
+replace (access t0 j) with (n2-j).
+apply suffix_length; omega'.
+symmetry; auto with *.
+Save.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_5 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  0 <= n2 /\ n2 < (array_length t1).
 Proof.
 intuition.
-Omega'.
-Qed.
+omega'.
+Save.
 
-
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_6 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  0 <= n2 /\ n2 < (array_length t1).
 Proof.
 intuition.
-cut ((i3 + 1)%Z = 0%Z); [ intro Hi3 | Omega' ].
-rewrite Hi3 in H14.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_7 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  0 <= n2 /\ n2 < (array_length t1).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_8 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) = (n2 + 1) /\
+  (forall (k:Z), (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+  (forall (k:Z),
+   (0 <= k /\ k <= j -> (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+  (min_suffix w1 w2 (i2 + 1) (j + 1) old).
+Proof.
+intuition.
+ArraySubst t2.
+subst t2.
+subst result0.
+replace k with n2; [ idtac | omega' ].
+unfold min_suffix.
+rewrite (suffix_is_cons n1 w1 i2).
+rewrite suffix_n_is_eps.
+AccessSame.
+apply min_dist_eps.
+rewrite <- suffix_n_is_eps with (n := n2) (t := w2).
+apply H20; omega'.
+omega'.
+subst t2.
+AccessOther.
+apply H20; omega'.
+subst old result.
+replace n2 with (j + 1)%Z; [ idtac | omega' ].
+apply H20; omega'.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_9 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  0 <= j0 /\ j0 < (array_length t3).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_10 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  0 <= i2 /\ i2 < (array_length w1).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_11 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  0 <= j0 /\ j0 < (array_length w2).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_12 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  forall (HW_30: 0 <= j0 /\ j0 < (array_length w2)),
+  forall (result3: A),
+  forall (HW_31: result3 = (access w2 j0)),
+  forall (HW_32: result2 = result3),
+  0 <= j0 /\ j0 < (array_length t3).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_13 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  forall (HW_30: 0 <= j0 /\ j0 < (array_length w2)),
+  forall (result3: A),
+  forall (HW_31: result3 = (access w2 j0)),
+  forall (HW_32: result2 = result3),
+  forall (HW_33: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (t4: (array Z)),
+  forall (HW_34: t4 = (update t3 j0 old0)),
+  forall (j1: Z),
+  forall (HW_35: j1 = (j0 - 1)),
+  (((Zopp 1) <= j1 /\ j1 <= (n2 - 1)) /\ (array_length t4) = (n2 + 1) /\
+  (forall (k:Z), (j1 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t4 k)))) /\
+  (forall (k:Z),
+   (0 <= k /\ k <= j1 -> (min_suffix w1 w2 (i2 + 1) k (access t4 k)))) /\
+  (min_suffix w1 w2 (i2 + 1) (j1 + 1) old1)) /\ (Zwf 0 (j1 + 1) (j0 + 1)).
+Proof.
+intuition.
+ArraySubst t4.
+subst t4.
+unfold min_suffix.
+assert (j0=k \/ j0 < k). omega. intuition.
+  (* j0=k *)
+  subst j0.
+  rewrite (suffix_is_cons n1 w1 i2); [ idtac | omega' ].
+  rewrite (suffix_is_cons n2 w2 k); [ idtac | omega' ].
+  subst.
+  replace (access w1 i2) with (access w2 k).
+  apply min_dist_equal.
+  AccessSame.
+  assumption.
+  (* j0<k *)
+  subst.
+  AccessOther.
+  assert (min_suffix w1 w2 i2 k (access t3 k)); auto with *.
+unfold min_suffix.
+subst t4.
+AccessOther.
+assert (min_suffix w1 w2 (i2 + 1) k (access t3 k)); auto with *.
+subst; unfold min_suffix. 
+assert (min_suffix w1 w2 (i2 + 1) j0 (access t3 j0)); auto with *.
+ring (j0-1+1); auto.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_14 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  forall (HW_30: 0 <= j0 /\ j0 < (array_length w2)),
+  forall (result3: A),
+  forall (HW_31: result3 = (access w2 j0)),
+  forall (HW_36: ~result2 = result3),
+  0 <= j0 /\ j0 < (array_length t3).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_15 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  forall (HW_30: 0 <= j0 /\ j0 < (array_length w2)),
+  forall (result3: A),
+  forall (HW_31: result3 = (access w2 j0)),
+  forall (HW_36: ~result2 = result3),
+  forall (HW_37: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result4: Z),
+  forall (HW_38: result4 = (access t3 j0)),
+  0 <= (j0 + 1) /\ (j0 + 1) < (array_length t3).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_16 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  forall (HW_30: 0 <= j0 /\ j0 < (array_length w2)),
+  forall (result3: A),
+  forall (HW_31: result3 = (access w2 j0)),
+  forall (HW_36: ~result2 = result3),
+  forall (HW_37: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result4: Z),
+  forall (HW_38: result4 = (access t3 j0)),
+  forall (HW_39: 0 <= (j0 + 1) /\ (j0 + 1) < (array_length t3)),
+  forall (result5: Z),
+  forall (HW_40: result5 = (access t3 (j0 + 1))),
+  0 <= j0 /\ j0 < (array_length t3).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_17 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_24: j0 >= 0),
+  forall (HW_25: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result1: Z),
+  forall (HW_26: result1 = (access t3 j0)),
+  forall (old1: Z),
+  forall (HW_27: old1 = result1),
+  forall (HW_28: 0 <= i2 /\ i2 < (array_length w1)),
+  forall (result2: A),
+  forall (HW_29: result2 = (access w1 i2)),
+  forall (HW_30: 0 <= j0 /\ j0 < (array_length w2)),
+  forall (result3: A),
+  forall (HW_31: result3 = (access w2 j0)),
+  forall (HW_36: ~result2 = result3),
+  forall (HW_37: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (result4: Z),
+  forall (HW_38: result4 = (access t3 j0)),
+  forall (HW_39: 0 <= (j0 + 1) /\ (j0 + 1) < (array_length t3)),
+  forall (result5: Z),
+  forall (HW_40: result5 = (access t3 (j0 + 1))),
+  forall (HW_41: 0 <= j0 /\ j0 < (array_length t3)),
+  forall (t4: (array Z)),
+  forall (HW_42: t4 = (update t3 j0 ((Zmin result4 result5) + 1))),
+  forall (j1: Z),
+  forall (HW_43: j1 = (j0 - 1)),
+  (((Zopp 1) <= j1 /\ j1 <= (n2 - 1)) /\ (array_length t4) = (n2 + 1) /\
+  (forall (k:Z), (j1 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t4 k)))) /\
+  (forall (k:Z),
+   (0 <= k /\ k <= j1 -> (min_suffix w1 w2 (i2 + 1) k (access t4 k)))) /\
+  (min_suffix w1 w2 (i2 + 1) (j1 + 1) old1)) /\ (Zwf 0 (j1 + 1) (j0 + 1)).
+Proof.
+intuition.
+ArraySubst t4.
+unfold min_suffix.
+subst t4.
+assert (k=j0 \/ j0<k). omega. intuition.
+  (* j0=k *)
+  subst j0.
+  rewrite (suffix_is_cons n1 w1 i2); [ idtac | omega' ].
+  rewrite (suffix_is_cons n2 w2 k); [ idtac | omega' ].
+  AccessSame.
+  apply min_dist_diff.
+  subst; auto.
+  rewrite <- (suffix_is_cons n1 w1 i2); [ idtac | omega' ].
+  subst.
+  assert (min_suffix w1 w2 i2 (k+1) (access t3 (k+1))); auto with *.
+  rewrite <- (suffix_is_cons n2 w2 k); [ idtac | omega' ].
+  subst.
+  assert (min_suffix w1 w2 (i2 + 1) k (access t3 k)); auto with *.
+  (* j0<k *)
+  subst.
+  AccessOther.
+  assert (min_suffix w1 w2 i2 k (access t3 k)); auto with *.
+subst; unfold min_suffix.
+AccessOther.
+assert (min_suffix w1 w2 (i2 + 1) k (access t3 k)); auto with *.
+replace (j1 + 1)%Z with j0; [ idtac | omega' ].
+subst; intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_18 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_13: i2 >= 0),
+  forall (HW_14: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_15: result = (access t1 n2)),
+  forall (old: Z),
+  forall (HW_16: old = result),
+  forall (HW_17: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (result0: Z),
+  forall (HW_18: result0 = (access t1 n2)),
+  forall (HW_19: 0 <= n2 /\ n2 < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: t2 = (update t1 n2 (result0 + 1))),
+  forall (j: Z),
+  forall (HW_21: j = (n2 - 1)),
+  forall (HW_22: ((Zopp 1) <= j /\ j <= (n2 - 1)) /\ (array_length t2) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t2 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t2 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j + 1) old)),
+  forall (j0: Z),
+  forall (old0: Z),
+  forall (t3: (array Z)),
+  forall (HW_23: ((Zopp 1) <= j0 /\ j0 <= (n2 - 1)) /\ (array_length t3) =
+                 (n2 + 1) /\
+                 (forall (k:Z),
+                  (j0 < k /\ k <= n2 -> (min_suffix w1 w2 i2 k (access t3 k)))) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k <= j0 ->
+                   (min_suffix w1 w2 (i2 + 1) k (access t3 k)))) /\
+                 (min_suffix w1 w2 (i2 + 1) (j0 + 1) old0)),
+  forall (HW_44: j0 < 0),
+  forall (i3: Z),
+  forall (HW_45: i3 = (i2 - 1)),
+  (((Zopp 1) <= i3 /\ i3 <= (n1 - 1)) /\ (array_length t3) = (n2 + 1) /\
+  (forall (j:Z),
+   (0 <= j /\ j <= n2 -> (min_suffix w1 w2 (i3 + 1) j (access t3 j))))) /\
+  (Zwf 0 (i3 + 1) (i2 + 1)).
+Proof.
+intuition.
+replace (i3+1) with i2; [ idtac | omega' ].
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_19 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_46: i2 < 0),
+  0 <= 0 /\ 0 < (array_length t1).
+Proof.
+intuition.
+omega'.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma distance_po_20 : 
+  forall (t: (array Z)),
+  forall (w1: (array A)),
+  forall (w2: (array A)),
+  forall (HW_1: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+                (array_length t) = (n2 + 1)),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (0 <= i /\ i <= (n2 + 1)) /\ (array_length t) = (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i -> (access t j) = (n2 - j)))),
+  forall (i0: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: (0 <= i0 /\ i0 <= (n2 + 1)) /\ (array_length t0) =
+                (n2 + 1) /\
+                (forall (j:Z), (0 <= j /\ j < i0 -> (access t0 j) = (n2 - j)))),
+  forall (HW_9: i0 > n2),
+  forall (i1: Z),
+  forall (HW_10: i1 = (n1 - 1)),
+  forall (HW_11: ((Zopp 1) <= i1 /\ i1 <= (n1 - 1)) /\ (array_length t0) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i1 + 1) j (access t0 j))))),
+  forall (i2: Z),
+  forall (t1: (array Z)),
+  forall (HW_12: ((Zopp 1) <= i2 /\ i2 <= (n1 - 1)) /\ (array_length t1) =
+                 (n2 + 1) /\
+                 (forall (j:Z),
+                  (0 <= j /\ j <= n2 ->
+                   (min_suffix w1 w2 (i2 + 1) j (access t1 j))))),
+  forall (HW_46: i2 < 0),
+  forall (HW_47: 0 <= 0 /\ 0 < (array_length t1)),
+  forall (result: Z),
+  forall (HW_48: result = (access t1 0)),
+  (min_dist (word_of_array n1 w1) (word_of_array n2 w2) result).
+Proof.
+intuition.
+assert (hi2: i2+1=0). omega'.
 unfold word_of_array.
-unfold min_suffix in H14.
-apply (H14 0%Z); Omega'.
-Qed.
-
+subst.
+assert (h: min_suffix w1 w2 (i2+1) 0 (access t1 0)); auto with *.
+rewrite hi2 in h; auto.
+Save.
