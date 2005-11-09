@@ -8,7 +8,7 @@ Require Export see_spec_why.
   forall (b: Z),
   forall (b0: Z),
   forall (HW_1: b0 = (1 - b)),
-  (* File \"see.c\", line 9, characters 13-45:\n *) (b0 = b0 /\ b0 = (1 - b)).
+  (* File "see.c", line 9, characters 13-45 *) (b0 = b0 /\ b0 = (1 - b)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -20,15 +20,15 @@ Save.
   forall (HW_1: b = 1),
   forall (result: Z),
   forall (b0: Z),
-  forall (HW_2: (* File \"see.c\", line 9, characters 13-45:\n *) (result =
-                b0 /\ b0 = (1 - b))),
+  forall (HW_2: (* File "see.c", line 9, characters 13-45 *) (result = b0 /\
+                b0 = (1 - b))),
   forall (result0: Z),
   forall (b1: Z),
-  forall (HW_3: (* File \"see.c\", line 9, characters 13-45:\n *) (result0 =
-                b1 /\ b1 = (1 - b0))),
+  forall (HW_3: (* File "see.c", line 9, characters 13-45 *) (result0 = b1 /\
+                b1 = (1 - b0))),
   forall (b1_0: Z),
   forall (HW_4: b1_0 = (result + result0)),
-  (* File \"see.c\", line 15, characters 13-20:\n *) b1_0 = 1.
+  (* File "see.c", line 15, characters 13-20 *) b1_0 = 1.
 Proof.
 intuition.
 Save.

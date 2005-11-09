@@ -8,7 +8,7 @@ Require Export clash_alloc_spec_why.
   forall (p: ((pointer) Z2)),
   forall (T_alloc_Z2: ((memory) Z Z2)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"clash_alloc.c\", line 6, characters 14-23:\n *)
+  forall (HW_1: (* File "clash_alloc.c", line 6, characters 14-23 *)
                 (valid alloc p)),
   forall (HW_3: (forall (result:Z), (result = (acc T_alloc_Z2 p) -> True))),
   (valid alloc p).

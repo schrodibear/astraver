@@ -28,7 +28,7 @@ Require Export separation3_spec_why.
   forall (HW_8: result3 = (shift result2 2)),
   forall (result4: Z),
   forall (HW_9: result4 = (acc int_Z0_0 result3)),
-  (* File \"separation3.c\", line 17, characters 13-25:\n *) result4 = 1.
+  (* File "separation3.c", line 17, characters 13-25 *) result4 = 1.
 Proof.
 intuition.
 subst;auto.
@@ -61,7 +61,7 @@ Save.
   forall (HW_8: result3 = (shift result2 2)),
   forall (HW_10: (forall (result:Z),
                   (result = (acc int_Z0_0 result3) ->
-                   (* File \"separation3.c\", line 17, characters 13-25:\n *)
+                   (* File "separation3.c", line 17, characters 13-25 *)
                    result = 1))),
   (valid alloc result3).
 Proof.
@@ -95,7 +95,7 @@ Save.
                     (result0 = (shift result 2) ->
                      (forall (result:Z),
                       (result = (acc int_Z0_0 result0) ->
-                       (* File \"separation3.c\", line 17, characters 13-25:\n *)
+                       (* File "separation3.c", line 17, characters 13-25 *)
                        result = 1)) /\
                      (valid alloc result0)))))),
   (valid alloc result1).
@@ -129,7 +129,7 @@ Save.
                       (result = (shift result0 2) ->
                        (forall (result0:Z),
                         (result0 = (acc int_Z0_0 result) ->
-                         (* File \"separation3.c\", line 17, characters 13-25:\n *)
+                         (* File "separation3.c", line 17, characters 13-25 *)
                          result0 = 1)) /\
                        (valid alloc result))))) /\
                    (valid alloc result)))),
@@ -164,7 +164,7 @@ Save.
                         (result = (shift result0 2) ->
                          (forall (result0:Z),
                           (result0 = (acc int_Z0_0 result) ->
-                           (* File \"separation3.c\", line 17, characters 13-25:\n *)
+                           (* File "separation3.c", line 17, characters 13-25 *)
                            result0 = 1)) /\
                          (valid alloc result))))) /\
                      (valid alloc result))) /\
@@ -200,7 +200,7 @@ Save.
                           (result = (shift result0 2) ->
                            (forall (result0:Z),
                             (result0 = (acc int_Z0_0 result) ->
-                             (* File \"separation3.c\", line 17, characters 13-25:\n *)
+                             (* File "separation3.c", line 17, characters 13-25 *)
                              result0 = 1)) /\
                            (valid alloc result))))) /\
                        (valid alloc result))) /\
@@ -237,7 +237,7 @@ Save.
                               (result = (shift result0 2) ->
                                (forall (result0:Z),
                                 (result0 = (acc int_Z0_0 result) ->
-                                 (* File \"separation3.c\", line 17, characters 13-25:\n *)
+                                 (* File "separation3.c", line 17, characters 13-25 *)
                                  result0 = 1)) /\
                                (valid alloc result))))) /\
                            (valid alloc result))) /\
@@ -277,7 +277,7 @@ Save.
   forall (HW_9: result4 = (shift result3 2)),
   forall (result5: Z),
   forall (HW_10: result5 = (acc int_Z0_0 result4)),
-  (* File \"separation3.c\", line 25, characters 13-25:\n *) result5 = 1.
+  (* File "separation3.c", line 25, characters 13-25 *) result5 = 1.
 Proof.
 intuition.
 Save.
@@ -309,7 +309,7 @@ Save.
   forall (HW_9: result4 = (shift result3 2)),
   forall (HW_11: (forall (result:Z),
                   (result = (acc int_Z0_0 result4) ->
-                   (* File \"separation3.c\", line 25, characters 13-25:\n *)
+                   (* File "separation3.c", line 25, characters 13-25 *)
                    result = 1))),
   (valid alloc result4).
 Proof.
@@ -345,7 +345,7 @@ Save.
                     (result0 = (shift result 2) ->
                      (forall (result:Z),
                       (result = (acc int_Z0_0 result0) ->
-                       (* File \"separation3.c\", line 25, characters 13-25:\n *)
+                       (* File "separation3.c", line 25, characters 13-25 *)
                        result = 1)) /\
                      (valid alloc result0)))))),
   (valid alloc s0).
@@ -387,7 +387,7 @@ Save.
                       (result0 = (shift result 2) ->
                        (forall (result:Z),
                         (result = (acc int_Z0_0 result0) ->
-                         (* File \"separation3.c\", line 25, characters 13-25:\n *)
+                         (* File "separation3.c", line 25, characters 13-25 *)
                          result = 1)) /\
                        (valid alloc result0))))) /\
                    (valid alloc s0)))),
@@ -424,7 +424,7 @@ Save.
                           (result0 = (shift result 2) ->
                            (forall (result:Z),
                             (result = (acc int_Z0_0 result0) ->
-                             (* File \"separation3.c\", line 25, characters 13-25:\n *)
+                             (* File "separation3.c", line 25, characters 13-25 *)
                              result = 1)) /\
                            (valid alloc result0))))) /\
                        (valid alloc s0))) /\
@@ -462,7 +462,7 @@ Save.
                             (result0 = (shift result 2) ->
                              (forall (result:Z),
                               (result = (acc int_Z0_0 result0) ->
-                               (* File \"separation3.c\", line 25, characters 13-25:\n *)
+                               (* File "separation3.c", line 25, characters 13-25 *)
                                result = 1)) /\
                              (valid alloc result0))))) /\
                          (valid alloc s0))) /\
@@ -501,7 +501,7 @@ Save.
                                 (result0 = (shift result 2) ->
                                  (forall (result:Z),
                                   (result = (acc int_Z0_0 result0) ->
-                                   (* File \"separation3.c\", line 25, characters 13-25:\n *)
+                                   (* File "separation3.c", line 25, characters 13-25 *)
                                    result = 1)) /\
                                  (valid alloc result0))))) /\
                              (valid alloc s0))) /\
@@ -531,7 +531,7 @@ Save.
   forall (HW_4: a_Z2_0 = (upd a_Z2 result 2)),
   forall (result0: Z),
   forall (HW_5: result0 = (acc a_Z9_0 s0)),
-  (* File \"separation3.c\", line 9, characters 13-25:\n *) result0 = 1.
+  (* File "separation3.c", line 9, characters 13-25 *) result0 = 1.
 Proof.
 intuition; subst; valid.
 Save.
@@ -553,7 +553,7 @@ Save.
   forall (HW_4: a_Z2_0 = (upd a_Z2 result 2)),
   forall (HW_6: (forall (result:Z),
                  (result = (acc a_Z9_0 s0) ->
-                  (* File \"separation3.c\", line 9, characters 13-25:\n *)
+                  (* File "separation3.c", line 9, characters 13-25 *)
                   result = 1))),
   (valid alloc s0).
 Proof.
@@ -585,7 +585,7 @@ Save.
                  (a_Z2_0 = (upd a_Z2 result 2) ->
                   (forall (result:Z),
                    (result = (acc a_Z9_0 s0) ->
-                    (* File \"separation3.c\", line 9, characters 13-25:\n *)
+                    (* File "separation3.c", line 9, characters 13-25 *)
                     result = 1)) /\
                   (valid alloc s0)))),
   (valid alloc result).
@@ -611,7 +611,7 @@ Save.
                    (a_Z2_0 = (upd a_Z2 result 2) ->
                     (forall (result:Z),
                      (result = (acc a_Z9_0 s0) ->
-                      (* File \"separation3.c\", line 9, characters 13-25:\n *)
+                      (* File "separation3.c", line 9, characters 13-25 *)
                       result = 1)) /\
                     (valid alloc s0))) /\
                   (valid alloc result)))),
@@ -638,7 +638,7 @@ Save.
                      (a_Z2_0 = (upd a_Z2 result 2) ->
                       (forall (result:Z),
                        (result = (acc a_Z9_0 s0) ->
-                        (* File \"separation3.c\", line 9, characters 13-25:\n *)
+                        (* File "separation3.c", line 9, characters 13-25 *)
                         result = 1)) /\
                       (valid alloc s0))) /\
                     (valid alloc result))) /\

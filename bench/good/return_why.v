@@ -24,10 +24,7 @@ Save.
   forall (i0: Z),
   forall (HW_4: 0 <= i0),
   forall (HW_5: i0 < N),
-  forall (result: Z),
-  forall (HW_6: result = (access t i0)),
-  forall (HW_7: result = 0),
-  (0 <= i0 /\ i0 < N -> (access t i0) = 0).
+  0 <= i0 /\ i0 < (array_length t).
 Proof.
 intuition.
 Save.
@@ -42,12 +39,11 @@ Save.
   forall (i0: Z),
   forall (HW_4: 0 <= i0),
   forall (HW_5: i0 < N),
+  forall (HW_6: 0 <= i0 /\ i0 < (array_length t)),
   forall (result: Z),
-  forall (HW_6: result = (access t i0)),
-  forall (HW_8: result <> 0),
-  forall (i1: Z),
-  forall (HW_9: i1 = (i0 + 1)),
-  0 <= i1 /\ (Zwf 0 (N - i1) (N - i0)).
+  forall (HW_7: result = (access t i0)),
+  forall (HW_8: result = 0),
+  (0 <= i0 /\ i0 < N -> (access t i0) = 0).
 Proof.
 intuition.
 Save.
@@ -62,13 +58,13 @@ Save.
   forall (i0: Z),
   forall (HW_4: 0 <= i0),
   forall (HW_5: i0 < N),
-  forall (HW_10: (forall (result:Z),
-                  (result = (access t i0) ->
-                   ((result = 0 -> (0 <= i0 /\ i0 < N -> (access t i0) = 0))) /\
-                   ((result <> 0 ->
-                     (forall (i:Z),
-                      (i = (i0 + 1) -> 0 <= i /\ (Zwf 0 (N - i) (N - i0))))))))),
-  0 <= i0 /\ i0 < (array_length t).
+  forall (HW_6: 0 <= i0 /\ i0 < (array_length t)),
+  forall (result: Z),
+  forall (HW_7: result = (access t i0)),
+  forall (HW_9: result <> 0),
+  forall (i1: Z),
+  forall (HW_10: i1 = (i0 + 1)),
+  0 <= i1 /\ (Zwf 0 (N - i1) (N - i0)).
 Proof.
 intuition.
 Save.

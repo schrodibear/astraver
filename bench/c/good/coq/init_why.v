@@ -11,9 +11,9 @@ Require Export init_spec_why.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+  forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z5 (shift t 1)) = 2 /\
-                (* File \"init.c\", line 13, characters 25-51:\n *)
+                (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
@@ -31,7 +31,7 @@ Require Export init_spec_why.
   forall (HW_7: result4 = (shift result3 2)),
   forall (result5: Z),
   forall (HW_8: result5 = (acc int_Z1 result4)),
-  (* File \"init.c\", line 15, characters 13-25:\n *)
+  (* File "init.c", line 15, characters 13-25 *)
   (result0 + result2 + result5) = 7.
 Proof.
 intuition.
@@ -46,9 +46,9 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+  forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z5 (shift t 1)) = 2 /\
-                (* File \"init.c\", line 13, characters 25-51:\n *)
+                (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
@@ -66,7 +66,7 @@ Save.
   forall (HW_7: result4 = (shift result3 2)),
   forall (HW_9: (forall (result:Z),
                  (result = (acc int_Z1 result4) ->
-                  (* File \"init.c\", line 15, characters 13-25:\n *)
+                  (* File "init.c", line 15, characters 13-25 *)
                   (result0 + result2 + result) = 7))),
   (valid alloc result4).
 Proof.
@@ -82,9 +82,9 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+  forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z5 (shift t 1)) = 2 /\
-                (* File \"init.c\", line 13, characters 25-51:\n *)
+                (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
@@ -102,7 +102,7 @@ Save.
                     (result1 = (shift result 2) ->
                      (forall (result:Z),
                       (result = (acc int_Z1 result1) ->
-                       (* File \"init.c\", line 15, characters 13-25:\n *)
+                       (* File "init.c", line 15, characters 13-25 *)
                        (result0 + result2 + result) = 7)) /\
                      (valid alloc result1)))))),
   (valid alloc s).
@@ -119,9 +119,9 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+  forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z5 (shift t 1)) = 2 /\
-                (* File \"init.c\", line 13, characters 25-51:\n *)
+                (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
@@ -139,7 +139,7 @@ Save.
                       (result2 = (shift result1 2) ->
                        (forall (result1:Z),
                         (result1 = (acc int_Z1 result2) ->
-                         (* File \"init.c\", line 15, characters 13-25:\n *)
+                         (* File "init.c", line 15, characters 13-25 *)
                          (result0 + result + result1) = 7)) /\
                        (valid alloc result2))))) /\
                    (valid alloc s)))),
@@ -157,9 +157,9 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+  forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z5 (shift t 1)) = 2 /\
-                (* File \"init.c\", line 13, characters 25-51:\n *)
+                (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
@@ -177,7 +177,7 @@ Save.
                         (result2 = (shift result 2) ->
                          (forall (result:Z),
                           (result = (acc int_Z1 result2) ->
-                           (* File \"init.c\", line 15, characters 13-25:\n *)
+                           (* File "init.c", line 15, characters 13-25 *)
                            (result0 + result1 + result) = 7)) /\
                          (valid alloc result2))))) /\
                      (valid alloc s))) /\
@@ -195,9 +195,9 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: ((* File \"init.c\", line 5, characters 25-34:\n *)
+  forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z5 (shift t 1)) = 2 /\
-                (* File \"init.c\", line 13, characters 25-51:\n *)
+                (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
@@ -215,7 +215,7 @@ Save.
                           (result2 = (shift result 2) ->
                            (forall (result:Z),
                             (result = (acc int_Z1 result2) ->
-                             (* File \"init.c\", line 15, characters 13-25:\n *)
+                             (* File "init.c", line 15, characters 13-25 *)
                              (result0 + result1 + result) = 7)) /\
                            (valid alloc result2))))) /\
                        (valid alloc s))) /\
@@ -246,7 +246,7 @@ Save.
   forall (HW_4: int_Z3_1 = (upd int_Z3_0 result0 5)),
   forall (result1: Z),
   forall (HW_5: result1 = (acc int_Z3_1 result)),
-  (* File \"init.c\", line 22, characters 13-25:\n *) result1 = 4.
+  (* File "init.c", line 22, characters 13-25 *) result1 = 4.
 Proof.
 intuition.
 Save.
@@ -270,8 +270,7 @@ Save.
   forall (HW_4: int_Z3_1 = (upd int_Z3_0 result0 5)),
   forall (HW_6: (forall (result0:Z),
                  (result0 = (acc int_Z3_1 result) ->
-                  (* File \"init.c\", line 22, characters 13-25:\n *)
-                  result0 = 4))),
+                  (* File "init.c", line 22, characters 13-25 *) result0 = 4))),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -297,8 +296,8 @@ Save.
                  (int_Z3 = (upd int_Z3_0 result0 5) ->
                   (forall (result0:Z),
                    (result0 = (acc int_Z3 result) ->
-                    (* File \"init.c\", line 22, characters 13-25:\n *)
-                    result0 = 4)) /\
+                    (* File "init.c", line 22, characters 13-25 *) result0 =
+                    4)) /\
                   (valid alloc0 result)))),
   (valid alloc0 result0).
 Proof.
@@ -381,7 +380,7 @@ Save.
                      (int_Z3 = (upd int_Z3_0 result0 5) ->
                       (forall (result0:Z),
                        (result0 = (acc int_Z3 result) ->
-                        (* File \"init.c\", line 22, characters 13-25:\n *)
+                        (* File "init.c", line 22, characters 13-25 *)
                         result0 = 4)) /\
                       (valid alloc0 result))) /\
                     (valid alloc0 result0)))))),
@@ -410,7 +409,7 @@ Save.
                         (int_Z3 = (upd int_Z3_0 result0 5) ->
                          (forall (result0:Z),
                           (result0 = (acc int_Z3 result) ->
-                           (* File \"init.c\", line 22, characters 13-25:\n *)
+                           (* File "init.c", line 22, characters 13-25 *)
                            result0 = 4)) /\
                          (valid alloc0 result))) /\
                        (valid alloc0 result0))))) /\
@@ -452,7 +451,7 @@ Save.
   forall (HW_10: result5 = (shift result 2)),
   forall (result6: Z),
   forall (HW_11: result6 = (acc int_Z4_2 result5)),
-  (* File \"init.c\", line 30, characters 13-26:\n *)
+  (* File "init.c", line 30, characters 13-26 *)
   (result2 + result4 + result6) = 12.
 Proof.
 intuition.
@@ -490,7 +489,7 @@ Save.
   forall (HW_10: result5 = (shift result 2)),
   forall (HW_12: (forall (result:Z),
                   (result = (acc int_Z4_2 result5) ->
-                   (* File \"init.c\", line 30, characters 13-26:\n *)
+                   (* File "init.c", line 30, characters 13-26 *)
                    (result2 + result4 + result) = 12))),
   (valid alloc0 result5).
 Proof.
@@ -528,7 +527,7 @@ Save.
                     (result1 = (shift result 2) ->
                      (forall (result:Z),
                       (result = (acc int_Z4_2 result1) ->
-                       (* File \"init.c\", line 30, characters 13-26:\n *)
+                       (* File "init.c", line 30, characters 13-26 *)
                        (result2 + result0 + result) = 12)) /\
                      (valid alloc0 result1)))))),
   (valid alloc0 result3).
@@ -657,7 +656,7 @@ Save.
                         (result1 = (shift result 2) ->
                          (forall (result:Z),
                           (result = (acc int_Z4_2 result1) ->
-                           (* File \"init.c\", line 30, characters 13-26:\n *)
+                           (* File "init.c", line 30, characters 13-26 *)
                            (result0 + result2 + result) = 12)) /\
                          (valid alloc0 result1))))) /\
                      (valid alloc0 result1)))))),
@@ -698,7 +697,7 @@ Save.
                           (result1 = (shift result 2) ->
                            (forall (result:Z),
                             (result = (acc int_Z4 result1) ->
-                             (* File \"init.c\", line 30, characters 13-26:\n *)
+                             (* File "init.c", line 30, characters 13-26 *)
                              (result0 + result2 + result) = 12)) /\
                            (valid alloc0 result1))))) /\
                        (valid alloc0 result1))))) /\
@@ -740,7 +739,7 @@ Save.
                               (result1 = (shift result 2) ->
                                (forall (result:Z),
                                 (result = (acc int_Z4_0 result1) ->
-                                 (* File \"init.c\", line 30, characters 13-26:\n *)
+                                 (* File "init.c", line 30, characters 13-26 *)
                                  (result0 + result2 + result) = 12)) /\
                                (valid alloc0 result1))))) /\
                            (valid alloc0 result1))))) /\
@@ -783,7 +782,7 @@ Save.
                                   (result1 = (shift result 2) ->
                                    (forall (result:Z),
                                     (result = (acc int_Z4_0 result1) ->
-                                     (* File \"init.c\", line 30, characters 13-26:\n *)
+                                     (* File "init.c", line 30, characters 13-26 *)
                                      (result0 + result2 + result) = 12)) /\
                                    (valid alloc0 result1))))) /\
                                (valid alloc0 result1))))) /\
@@ -827,7 +826,7 @@ Save.
                                      (result1 = (shift result 2) ->
                                       (forall (result:Z),
                                        (result = (acc int_Z4_0 result1) ->
-                                        (* File \"init.c\", line 30, characters 13-26:\n *)
+                                        (* File "init.c", line 30, characters 13-26 *)
                                         (result0 + result2 + result) = 12)) /\
                                       (valid alloc0 result1))))) /\
                                   (valid alloc0 result1))))) /\
@@ -881,8 +880,8 @@ Save.
   forall (HW_15: result5 = (shift result4 2)),
   forall (int_Z1_2: ((memory) Z Z1)),
   forall (HW_16: int_Z1_2 = (upd int_Z1_1 result5 4)),
-  (* File \"init.c\", line 5, characters 25-34:\n *)
-  ((acc int_Z5_2 (shift t 1)) = 2 /\ (acc int_Z1_2 (acc b_Z7 s)) = 1 /\
+  (* File "init.c", line 5, characters 25-34 *) ((acc int_Z5_2 (shift t 1)) =
+  2 /\ (acc int_Z1_2 (acc b_Z7 s)) = 1 /\
   (acc int_Z1_2 (shift (acc b_Z7 s) 2)) = 4).
 Proof.
 intuition;subst;auto.
@@ -928,7 +927,7 @@ Save.
   forall (HW_15: result5 = (shift result4 2)),
   forall (HW_17: (forall (int_Z1:((memory) Z Z1)),
                   (int_Z1 = (upd int_Z1_1 result5 4) ->
-                   (* File \"init.c\", line 5, characters 25-34:\n *)
+                   (* File "init.c", line 5, characters 25-34 *)
                    ((acc int_Z5_2 (shift t 1)) = 2 /\
                    (acc int_Z1 (acc b_Z7 s)) = 1 /\
                    (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)))),
@@ -1003,7 +1002,7 @@ Save.
                     (result0 = (shift result 2) ->
                      (forall (int_Z1:((memory) Z Z1)),
                       (int_Z1 = (upd int_Z1_1 result0 4) ->
-                       (* File \"init.c\", line 5, characters 25-34:\n *)
+                       (* File "init.c", line 5, characters 25-34 *)
                        ((acc int_Z5_2 (shift t 1)) = 2 /\
                        (acc int_Z1 (acc b_Z7 s)) = 1 /\
                        (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4))) /\
@@ -1054,7 +1053,7 @@ Save.
                       (result0 = (shift result 2) ->
                        (forall (int_Z1_0:((memory) Z Z1)),
                         (int_Z1_0 = (upd int_Z1 result0 4) ->
-                         (* File \"init.c\", line 5, characters 25-34:\n *)
+                         (* File "init.c", line 5, characters 25-34 *)
                          ((acc int_Z5_2 (shift t 1)) = 2 /\
                          (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                          (acc int_Z1_0 (shift (acc b_Z7 s) 2)) = 4))) /\
@@ -1106,7 +1105,7 @@ Save.
                           (result0 = (shift result 2) ->
                            (forall (int_Z1_0:((memory) Z Z1)),
                             (int_Z1_0 = (upd int_Z1 result0 4) ->
-                             (* File \"init.c\", line 5, characters 25-34:\n *)
+                             (* File "init.c", line 5, characters 25-34 *)
                              ((acc int_Z5_2 (shift t 1)) = 2 /\
                              (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                              (acc int_Z1_0 (shift (acc b_Z7 s) 2)) = 4))) /\
@@ -1159,7 +1158,7 @@ Save.
                             (result0 = (shift result 2) ->
                              (forall (int_Z1_0:((memory) Z Z1)),
                               (int_Z1_0 = (upd int_Z1 result0 4) ->
-                               (* File \"init.c\", line 5, characters 25-34:\n *)
+                               (* File "init.c", line 5, characters 25-34 *)
                                ((acc int_Z5_2 (shift t 1)) = 2 /\
                                (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                                (acc int_Z1_0 (shift (acc b_Z7 s) 2)) = 4))) /\
@@ -1213,7 +1212,7 @@ Save.
                               (result0 = (shift result 2) ->
                                (forall (int_Z1_0:((memory) Z Z1)),
                                 (int_Z1_0 = (upd int_Z1 result0 4) ->
-                                 (* File \"init.c\", line 5, characters 25-34:\n *)
+                                 (* File "init.c", line 5, characters 25-34 *)
                                  ((acc int_Z5_2 (shift t 1)) = 2 /\
                                  (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                                  (acc int_Z1_0 (shift (acc b_Z7 s) 2)) = 4))) /\
@@ -1268,7 +1267,7 @@ Save.
                                 (result0 = (shift result 2) ->
                                  (forall (int_Z1_0:((memory) Z Z1)),
                                   (int_Z1_0 = (upd int_Z1 result0 4) ->
-                                   (* File \"init.c\", line 5, characters 25-34:\n *)
+                                   (* File "init.c", line 5, characters 25-34 *)
                                    ((acc int_Z5_2 (shift t 1)) = 2 /\
                                    (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                                    (acc int_Z1_0 (shift (acc b_Z7 s) 2)) = 4))) /\
@@ -1324,7 +1323,7 @@ Save.
                                   (result0 = (shift result 2) ->
                                    (forall (int_Z1_0:((memory) Z Z1)),
                                     (int_Z1_0 = (upd int_Z1 result0 4) ->
-                                     (* File \"init.c\", line 5, characters 25-34:\n *)
+                                     (* File "init.c", line 5, characters 25-34 *)
                                      ((acc int_Z5 (shift t 1)) = 2 /\
                                      (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                                      (acc int_Z1_0 (shift (acc b_Z7 s) 2)) =
@@ -1382,7 +1381,7 @@ Save.
                                       (result0 = (shift result 2) ->
                                        (forall (int_Z1_0:((memory) Z Z1)),
                                         (int_Z1_0 = (upd int_Z1 result0 4) ->
-                                         (* File \"init.c\", line 5, characters 25-34:\n *)
+                                         (* File "init.c", line 5, characters 25-34 *)
                                          ((acc int_Z5_0 (shift t 1)) = 2 /\
                                          (acc int_Z1_0 (acc b_Z7 s)) = 1 /\
                                          (acc int_Z1_0 (shift (acc b_Z7 s) 2)) =
@@ -1442,7 +1441,7 @@ Save.
                                            (forall (int_Z1_0:((memory) Z
                                             Z1)),
                                             (int_Z1_0 = (upd int_Z1 result0 4) ->
-                                             (* File \"init.c\", line 5, characters 25-34:\n *)
+                                             (* File "init.c", line 5, characters 25-34 *)
                                              ((acc int_Z5_0 (shift t 1)) =
                                              2 /\
                                              (acc int_Z1_0 (acc b_Z7 s)) =

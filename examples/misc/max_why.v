@@ -39,21 +39,73 @@ Save.
   forall (HW_2: x = 0),
   forall (y: Z),
   forall (HW_3: y = 1),
+  forall (HW_4: (0 <= y /\ y <= l) /\ (0 <= x /\ x < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y -> (access a k) <= (access a x)))),
   forall (x0: Z),
   forall (y0: Z),
-  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+  forall (HW_5: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
                 (forall (k:Z),
                  (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
-  forall (HW_5: y0 < l),
+  forall (HW_6: y0 < l),
+  0 <= y0 /\ y0 < (array_length a).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_3 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: (0 <= y /\ y <= l) /\ (0 <= x /\ x < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y -> (access a k) <= (access a x)))),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_5: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_6: y0 < l),
+  forall (HW_7: 0 <= y0 /\ y0 < (array_length a)),
   forall (result: Z),
-  forall (HW_6: result = (access a y0)),
+  forall (HW_8: result = (access a y0)),
+  0 <= x0 /\ x0 < (array_length a).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma pgm_max_end_po_4 : 
+  forall (a: (array Z)),
+  forall (HW_1: (array_length a) = l),
+  forall (x: Z),
+  forall (HW_2: x = 0),
+  forall (y: Z),
+  forall (HW_3: y = 1),
+  forall (HW_4: (0 <= y /\ y <= l) /\ (0 <= x /\ x < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y -> (access a k) <= (access a x)))),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (HW_5: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
+  forall (HW_6: y0 < l),
+  forall (HW_7: 0 <= y0 /\ y0 < (array_length a)),
+  forall (result: Z),
+  forall (HW_8: result = (access a y0)),
+  forall (HW_9: 0 <= x0 /\ x0 < (array_length a)),
   forall (result0: Z),
-  forall (HW_7: result0 = (access a x0)),
-  forall (HW_8: result > result0),
+  forall (HW_10: result0 = (access a x0)),
+  forall (HW_11: result > result0),
   forall (x1: Z),
-  forall (HW_9: x1 = y0),
+  forall (HW_12: x1 = y0),
   forall (y1: Z),
-  forall (HW_10: y1 = (y0 + 1)),
+  forall (HW_13: y1 = (y0 + 1)),
   ((0 <= y1 /\ y1 <= l) /\ (0 <= x1 /\ x1 < l) /\
   (forall (k:Z), (0 <= k /\ k < y1 -> (access a k) <= (access a x1)))) /\
   (Zwf 0 (l - y1) (l - y0)).
@@ -67,26 +119,31 @@ intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma pgm_max_end_po_3 : 
+(*Why goal*) Lemma pgm_max_end_po_5 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
   forall (x: Z),
   forall (HW_2: x = 0),
   forall (y: Z),
   forall (HW_3: y = 1),
+  forall (HW_4: (0 <= y /\ y <= l) /\ (0 <= x /\ x < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y -> (access a k) <= (access a x)))),
   forall (x0: Z),
   forall (y0: Z),
-  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+  forall (HW_5: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
                 (forall (k:Z),
                  (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
-  forall (HW_5: y0 < l),
+  forall (HW_6: y0 < l),
+  forall (HW_7: 0 <= y0 /\ y0 < (array_length a)),
   forall (result: Z),
-  forall (HW_6: result = (access a y0)),
+  forall (HW_8: result = (access a y0)),
+  forall (HW_9: 0 <= x0 /\ x0 < (array_length a)),
   forall (result0: Z),
-  forall (HW_7: result0 = (access a x0)),
-  forall (HW_11: result <= result0),
+  forall (HW_10: result0 = (access a x0)),
+  forall (HW_14: result <= result0),
   forall (y1: Z),
-  forall (HW_12: y1 = (y0 + 1)),
+  forall (HW_15: y1 = (y0 + 1)),
   ((0 <= y1 /\ y1 <= l) /\ (0 <= x0 /\ x0 < l) /\
   (forall (k:Z), (0 <= k /\ k < y1 -> (access a k) <= (access a x0)))) /\
   (Zwf 0 (l - y1) (l - y0)).
@@ -99,46 +156,6 @@ subst; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma pgm_max_end_po_4 : 
-  forall (a: (array Z)),
-  forall (HW_1: (array_length a) = l),
-  forall (x: Z),
-  forall (HW_2: x = 0),
-  forall (y: Z),
-  forall (HW_3: y = 1),
-  forall (x0: Z),
-  forall (y0: Z),
-  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
-                (forall (k:Z),
-                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
-  forall (HW_5: y0 < l),
-  forall (result: Z),
-  forall (HW_6: result = (access a y0)),
-  0 <= x0 /\ x0 < (array_length a).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma pgm_max_end_po_5 : 
-  forall (a: (array Z)),
-  forall (HW_1: (array_length a) = l),
-  forall (x: Z),
-  forall (HW_2: x = 0),
-  forall (y: Z),
-  forall (HW_3: y = 1),
-  forall (x0: Z),
-  forall (y0: Z),
-  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
-                (forall (k:Z),
-                 (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
-  forall (HW_5: y0 < l),
-  0 <= y0 /\ y0 < (array_length a).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pgm_max_end_po_6 : 
   forall (a: (array Z)),
   forall (HW_1: (array_length a) = l),
@@ -146,14 +163,18 @@ Save.
   forall (HW_2: x = 0),
   forall (y: Z),
   forall (HW_3: y = 1),
+  forall (HW_4: (0 <= y /\ y <= l) /\ (0 <= x /\ x < l) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < y -> (access a k) <= (access a x)))),
   forall (x0: Z),
   forall (y0: Z),
-  forall (HW_4: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
+  forall (HW_5: (0 <= y0 /\ y0 <= l) /\ (0 <= x0 /\ x0 < l) /\
                 (forall (k:Z),
                  (0 <= k /\ k < y0 -> (access a k) <= (access a x0)))),
-  forall (HW_13: y0 >= l),
+  forall (HW_16: y0 >= l),
+  forall (HW_17: (array_length a) = l),
   forall (a0: (array Z)),
-  forall (HW_14: (array_length a0) = l /\ (access a0 x0) =
+  forall (HW_18: (array_length a0) = l /\ (access a0 x0) =
                  (access a (l - 1)) /\ (access a0 (l - 1)) = (access a x0) /\
                  (forall (k:Z),
                   (0 <= k /\ k < l ->

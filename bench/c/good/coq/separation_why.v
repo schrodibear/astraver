@@ -96,7 +96,7 @@ Save.
                       (pset_union (pset_range (pset_singleton (acc p1_Z63 u2))
                                    0 4)
                        (pset_range (pset_singleton (acc p1_Z63 u1)) 0 4))))))))),
-  (* File \"separation.c\", line 46, characters 5-14:\n *) (valid alloc u2).
+  (* File "separation.c", line 46, characters 5-14 *) (valid alloc u2).
 Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
@@ -152,9 +152,9 @@ Save.
                                                                     u2))
                                         0 4)
                             (pset_range (pset_singleton (acc p1_Z63 u1)) 0 4)))))))) /\
-                     (* File \"separation.c\", line 46, characters 5-14:\n *)
+                     (* File "separation.c", line 46, characters 5-14 *)
                      (valid alloc u2))))))),
-  (* File \"separation.c\", line 46, characters 5-14:\n *) (valid alloc u1).
+  (* File "separation.c", line 46, characters 5-14 *) (valid alloc u1).
 Proof.
 intuition.
 apply not_assigns_trans with v2_0.
@@ -929,7 +929,7 @@ Save.
                                 (pset_union (pset_singleton w1)
                                  (pset_union (pset_singleton u4)
                                   (pset_singleton u3))))))))))))))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w10).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w10).
 Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
@@ -1329,9 +1329,9 @@ Save.
                                      (pset_union (pset_singleton w1)
                                       (pset_union (pset_singleton u4)
                                        (pset_singleton u3)))))))))))))))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w10))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w9).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w9).
 Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
@@ -1735,11 +1735,11 @@ Save.
                                           (pset_union (pset_singleton w1)
                                            (pset_union (pset_singleton u4)
                                             (pset_singleton u3)))))))))))))))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w10)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w9))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w8).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w8).
 Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
@@ -2150,13 +2150,13 @@ Save.
                                                (pset_union (pset_singleton w1)
                                                 (pset_union (pset_singleton u4)
                                                  (pset_singleton u3)))))))))))))))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w10)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w9)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w8))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w7).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w7).
 Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
@@ -2583,15 +2583,15 @@ Save.
                                                     (pset_union (pset_singleton w1)
                                                      (pset_union (pset_singleton u4)
                                                       (pset_singleton u3)))))))))))))))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w10)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w9)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w8)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w7))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w6).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w6).
 Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
@@ -3046,17 +3046,17 @@ Save.
                                                           (pset_union (
                                                            pset_singleton u4)
                                                            (pset_singleton u3)))))))))))))))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w10)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w9)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w8)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w7)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w6))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w5).
 Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
@@ -3545,19 +3545,19 @@ Save.
                                                                (pset_union (
                                                                 pset_singleton u4)
                                                                 (pset_singleton u3)))))))))))))))))) /\
-                                               (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                               (* File "separation.c", line 81, characters 5-14 *)
                                                (valid alloc w10)))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w9)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w8)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w7)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w6)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w5))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w4).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w4).
 Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
@@ -4081,21 +4081,21 @@ Save.
                                                                     pset_singleton u4)
                                                                     (
                                                                     pset_singleton u3)))))))))))))))))) /\
-                                                    (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                    (* File "separation.c", line 81, characters 5-14 *)
                                                     (valid alloc w10)))))) /\
-                                               (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                               (* File "separation.c", line 81, characters 5-14 *)
                                                (valid alloc w9)))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w8)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w7)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w6)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w5)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w4))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w3).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w3).
 Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
@@ -4657,23 +4657,23 @@ Save.
                                                                     pset_singleton u4)
                                                                     (
                                                                     pset_singleton u3)))))))))))))))))) /\
-                                                         (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                         (* File "separation.c", line 81, characters 5-14 *)
                                                          (valid alloc w10)))))) /\
-                                                    (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                    (* File "separation.c", line 81, characters 5-14 *)
                                                     (valid alloc w9)))))) /\
-                                               (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                               (* File "separation.c", line 81, characters 5-14 *)
                                                (valid alloc w8)))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w7)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w6)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w5)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w4)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w3))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w2).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w2).
 Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
@@ -5273,26 +5273,26 @@ Save.
                                                                     pset_singleton u4)
                                                                     (
                                                                     pset_singleton u3)))))))))))))))))) /\
-                                                              (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                              (* File "separation.c", line 81, characters 5-14 *)
                                                               (valid alloc
                                                                w10)))))) /\
-                                                         (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                         (* File "separation.c", line 81, characters 5-14 *)
                                                          (valid alloc w9)))))) /\
-                                                    (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                    (* File "separation.c", line 81, characters 5-14 *)
                                                     (valid alloc w8)))))) /\
-                                               (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                               (* File "separation.c", line 81, characters 5-14 *)
                                                (valid alloc w7)))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w6)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w5)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w4)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w3)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w2))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc w1).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w1).
 Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
@@ -5924,28 +5924,28 @@ Save.
                                                                     pset_singleton u4)
                                                                     (
                                                                     pset_singleton u3)))))))))))))))))) /\
-                                                                   (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                                   (* File "separation.c", line 81, characters 5-14 *)
                                                                    (valid alloc
                                                                     w10)))))) /\
-                                                              (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                              (* File "separation.c", line 81, characters 5-14 *)
                                                               (valid alloc w9)))))) /\
-                                                         (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                         (* File "separation.c", line 81, characters 5-14 *)
                                                          (valid alloc w8)))))) /\
-                                                    (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                    (* File "separation.c", line 81, characters 5-14 *)
                                                     (valid alloc w7)))))) /\
-                                               (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                               (* File "separation.c", line 81, characters 5-14 *)
                                                (valid alloc w6)))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w5)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w4)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w3)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w2)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc w1))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc u4).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc u4).
 Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
@@ -6606,32 +6606,32 @@ Save.
                                                                     pset_singleton u4)
                                                                     (
                                                                     pset_singleton u3)))))))))))))))))) /\
-                                                                    (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                                    (* File "separation.c", line 81, characters 5-14 *)
                                                                     (
                                                                     valid alloc
                                                                     w10)))))) /\
-                                                                   (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                                   (* File "separation.c", line 81, characters 5-14 *)
                                                                    (valid alloc
                                                                     w9)))))) /\
-                                                              (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                              (* File "separation.c", line 81, characters 5-14 *)
                                                               (valid alloc w8)))))) /\
-                                                         (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                         (* File "separation.c", line 81, characters 5-14 *)
                                                          (valid alloc w7)))))) /\
-                                                    (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                                    (* File "separation.c", line 81, characters 5-14 *)
                                                     (valid alloc w6)))))) /\
-                                               (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                               (* File "separation.c", line 81, characters 5-14 *)
                                                (valid alloc w5)))))) /\
-                                          (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                          (* File "separation.c", line 81, characters 5-14 *)
                                           (valid alloc w4)))))) /\
-                                     (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                     (* File "separation.c", line 81, characters 5-14 *)
                                      (valid alloc w3)))))) /\
-                                (* File \"separation.c\", line 81, characters 5-14:\n *)
+                                (* File "separation.c", line 81, characters 5-14 *)
                                 (valid alloc w2)))))) /\
-                           (* File \"separation.c\", line 81, characters 5-14:\n *)
+                           (* File "separation.c", line 81, characters 5-14 *)
                            (valid alloc w1)))))) /\
-                      (* File \"separation.c\", line 81, characters 5-14:\n *)
+                      (* File "separation.c", line 81, characters 5-14 *)
                       (valid alloc u4))))))),
-  (* File \"separation.c\", line 81, characters 5-14:\n *) (valid alloc u3).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc u3).
 Proof.
 Admitted.
 
@@ -6667,7 +6667,7 @@ Admitted.
   forall (HW_9: result2 = (acc t_Z49 s)),
   forall (result3: Z),
   forall (HW_10: result3 = (acc int_Z0_1 result2)),
-  (* File \"separation.c\", line 11, characters 13-25:\n *) result3 = 1.
+  (* File "separation.c", line 11, characters 13-25 *) result3 = 1.
 Proof.
 intuition.
 Save.
@@ -6704,7 +6704,7 @@ Save.
   forall (HW_9: result2 = (acc t_Z49 s)),
   forall (HW_11: (forall (result:Z),
                   (result = (acc int_Z0_1 result2) ->
-                   (* File \"separation.c\", line 11, characters 13-25:\n *)
+                   (* File "separation.c", line 11, characters 13-25 *)
                    result = 1))),
   (valid alloc result2).
 Proof.
@@ -6745,7 +6745,7 @@ Save.
                   (result = (acc t_Z49 s) ->
                    (forall (result0:Z),
                     (result0 = (acc int_Z0_1 result) ->
-                     (* File \"separation.c\", line 11, characters 13-25:\n *)
+                     (* File "separation.c", line 11, characters 13-25 *)
                      result0 = 1)) /\
                    (valid alloc result)))),
   (valid alloc s).
@@ -6799,7 +6799,7 @@ Save.
                     (result = (acc t_Z49 s) ->
                      (forall (result0:Z),
                       (result0 = (acc int_Z0_1 result) ->
-                       (* File \"separation.c\", line 11, characters 13-25:\n *)
+                       (* File "separation.c", line 11, characters 13-25 *)
                        result0 = 1)) /\
                      (valid alloc result))) /\
                    (valid alloc s)))),
@@ -6841,7 +6841,7 @@ Save.
                       (result = (acc t_Z49 s) ->
                        (forall (result0:Z),
                         (result0 = (acc int_Z0_1 result) ->
-                         (* File \"separation.c\", line 11, characters 13-25:\n *)
+                         (* File "separation.c", line 11, characters 13-25 *)
                          result0 = 1)) /\
                        (valid alloc result))) /\
                      (valid alloc s))) /\
@@ -6884,7 +6884,7 @@ Save.
                         (result = (acc t_Z49 s) ->
                          (forall (result0:Z),
                           (result0 = (acc int_Z0_1 result) ->
-                           (* File \"separation.c\", line 11, characters 13-25:\n *)
+                           (* File "separation.c", line 11, characters 13-25 *)
                            result0 = 1)) /\
                          (valid alloc result))) /\
                        (valid alloc s))) /\
@@ -6928,7 +6928,7 @@ Save.
                           (result = (acc t_Z49 s) ->
                            (forall (result0:Z),
                             (result0 = (acc int_Z0 result) ->
-                             (* File \"separation.c\", line 11, characters 13-25:\n *)
+                             (* File "separation.c", line 11, characters 13-25 *)
                              result0 = 1)) /\
                            (valid alloc result))) /\
                          (valid alloc s))) /\
@@ -6973,7 +6973,7 @@ Save.
                             (result = (acc t_Z49 s) ->
                              (forall (result0:Z),
                               (result0 = (acc int_Z0 result) ->
-                               (* File \"separation.c\", line 11, characters 13-25:\n *)
+                               (* File "separation.c", line 11, characters 13-25 *)
                                result0 = 1)) /\
                              (valid alloc result))) /\
                            (valid alloc s))) /\
@@ -7019,7 +7019,7 @@ Save.
                               (result = (acc t_Z49 s) ->
                                (forall (result0:Z),
                                 (result0 = (acc int_Z0 result) ->
-                                 (* File \"separation.c\", line 11, characters 13-25:\n *)
+                                 (* File "separation.c", line 11, characters 13-25 *)
                                  result0 = 1)) /\
                                (valid alloc result))) /\
                              (valid alloc s))) /\
@@ -7066,7 +7066,7 @@ Save.
                                 (result = (acc t_Z49 s) ->
                                  (forall (result0:Z),
                                   (result0 = (acc int_Z0 result) ->
-                                   (* File \"separation.c\", line 11, characters 13-25:\n *)
+                                   (* File "separation.c", line 11, characters 13-25 *)
                                    result0 = 1)) /\
                                  (valid alloc result))) /\
                                (valid alloc s))) /\

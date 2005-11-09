@@ -9,7 +9,7 @@ Require Export struct_spec_why.
   forall (alloc: alloc_table),
   forall (x_Z8: ((memory) Z Z8)),
   forall (y_Z8: ((memory) Z Z8)),
-  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+  forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
   forall (HW_2: result = (acc x_Z8 t2)),
@@ -19,7 +19,7 @@ Require Export struct_spec_why.
   forall (HW_4: result0 = (acc x_Z8_0 t2)),
   forall (x_Z8_1: ((memory) Z Z8)),
   forall (HW_5: x_Z8_1 = (upd x_Z8_0 t2 (1 + result0))),
-  (* File \"struct.c\", line 9, characters 13-63:\n *) ((result0 = 1 /\
+  (* File "struct.c", line 9, characters 13-63 *) ((result0 = 1 /\
   (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) = (acc y_Z8 t2)) /\
   (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2)).
 Proof.
@@ -32,7 +32,7 @@ Save.
   forall (alloc: alloc_table),
   forall (x_Z8: ((memory) Z Z8)),
   forall (y_Z8: ((memory) Z Z8)),
-  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+  forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
   forall (HW_2: result = (acc x_Z8 t2)),
@@ -42,9 +42,8 @@ Save.
   forall (HW_4: result0 = (acc x_Z8_0 t2)),
   forall (HW_6: (forall (x_Z8_1:((memory) Z Z8)),
                  (x_Z8_1 = (upd x_Z8_0 t2 (1 + result0)) ->
-                  (* File \"struct.c\", line 9, characters 13-63:\n *)
-                  ((result0 = 1 /\ (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) =
-                  (acc y_Z8 t2)) /\
+                  (* File "struct.c", line 9, characters 13-63 *) ((result0 =
+                  1 /\ (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) = (acc y_Z8 t2)) /\
                   (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2))))),
   (valid alloc t2).
 Proof.
@@ -57,7 +56,7 @@ Save.
   forall (alloc: alloc_table),
   forall (x_Z8: ((memory) Z Z8)),
   forall (y_Z8: ((memory) Z Z8)),
-  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+  forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
   forall (HW_2: result = (acc x_Z8 t2)),
@@ -67,7 +66,7 @@ Save.
                  (result = (acc x_Z8_0 t2) ->
                   (forall (x_Z8_1:((memory) Z Z8)),
                    (x_Z8_1 = (upd x_Z8_0 t2 (1 + result)) ->
-                    (* File \"struct.c\", line 9, characters 13-63:\n *)
+                    (* File "struct.c", line 9, characters 13-63 *)
                     ((result = 1 /\ (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) =
                     (acc y_Z8 t2)) /\
                     (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2)))) /\
@@ -84,7 +83,7 @@ Save.
   forall (alloc: alloc_table),
   forall (x_Z8: ((memory) Z Z8)),
   forall (y_Z8: ((memory) Z Z8)),
-  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+  forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (result: Z),
   forall (HW_2: result = (acc x_Z8 t2)),
@@ -94,7 +93,7 @@ Save.
                    (result = (acc x_Z8_0 t2) ->
                     (forall (x_Z8_1:((memory) Z Z8)),
                      (x_Z8_1 = (upd x_Z8_0 t2 (1 + result)) ->
-                      (* File \"struct.c\", line 9, characters 13-63:\n *)
+                      (* File "struct.c", line 9, characters 13-63 *)
                       ((result = 1 /\ (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) =
                       (acc y_Z8 t2)) /\
                       (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2)))) /\
@@ -112,7 +111,7 @@ Save.
   forall (alloc: alloc_table),
   forall (x_Z8: ((memory) Z Z8)),
   forall (y_Z8: ((memory) Z Z8)),
-  forall (HW_1: (* File \"struct.c\", line 7, characters 14-38:\n *)
+  forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_Z8 t2) = 0)),
   forall (HW_9: (forall (result:Z),
                  (result = (acc x_Z8 t2) ->
@@ -122,7 +121,7 @@ Save.
                      (result = (acc x_Z8_0 t2) ->
                       (forall (x_Z8_1:((memory) Z Z8)),
                        (x_Z8_1 = (upd x_Z8_0 t2 (1 + result)) ->
-                        (* File \"struct.c\", line 9, characters 13-63:\n *)
+                        (* File "struct.c", line 9, characters 13-63 *)
                         ((result = 1 /\ (acc x_Z8_1 t2) = 2) /\
                         (acc y_Z8 t2) = (acc y_Z8 t2)) /\
                         (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2)))) /\
@@ -142,7 +141,7 @@ Save.
   forall (s: ((pointer) Z11)),
   forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid_range alloc s 0 0)),
   forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
@@ -158,7 +157,7 @@ Save.
   forall (HW_8: result1 = (acc t_Z11 s)),
   forall (result2: Z),
   forall (HW_9: result2 = (acc x_Z2_0 result1)),
-  (* File \"struct.c\", line 20, characters 13-25:\n *) result2 = 1.
+  (* File "struct.c", line 20, characters 13-25 *) result2 = 1.
 Proof.
  intuition.
 Save.
@@ -170,7 +169,7 @@ Save.
   forall (s: ((pointer) Z11)),
   forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid_range alloc s 0 0)),
   forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
@@ -186,8 +185,8 @@ Save.
   forall (HW_8: result1 = (acc t_Z11 s)),
   forall (HW_10: (forall (result:Z),
                   (result = (acc x_Z2_0 result1) ->
-                   (* File \"struct.c\", line 20, characters 13-25:\n *)
-                   result = 1))),
+                   (* File "struct.c", line 20, characters 13-25 *) result =
+                   1))),
   (valid alloc result1).
 Proof.
  intuition.
@@ -201,7 +200,7 @@ Save.
   forall (s: ((pointer) Z11)),
   forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid_range alloc s 0 0)),
   forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
@@ -217,7 +216,7 @@ Save.
                   (result = (acc t_Z11 s) ->
                    (forall (result0:Z),
                     (result0 = (acc x_Z2_0 result) ->
-                     (* File \"struct.c\", line 20, characters 13-25:\n *)
+                     (* File "struct.c", line 20, characters 13-25 *)
                      result0 = 1)) /\
                    (valid alloc result)))),
   (valid alloc s).
@@ -234,7 +233,7 @@ Save.
   forall (s: ((pointer) Z11)),
   forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid_range alloc s 0 0)),
   forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
@@ -250,7 +249,7 @@ Save.
                     (result = (acc t_Z11 s) ->
                      (forall (result0:Z),
                       (result0 = (acc x_Z2_0 result) ->
-                       (* File \"struct.c\", line 20, characters 13-25:\n *)
+                       (* File "struct.c", line 20, characters 13-25 *)
                        result0 = 1)) /\
                      (valid alloc result))) /\
                    (valid alloc s)))),
@@ -267,7 +266,7 @@ Save.
   forall (s: ((pointer) Z11)),
   forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid_range alloc s 0 0)),
   forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
@@ -283,7 +282,7 @@ Save.
                       (result = (acc t_Z11 s) ->
                        (forall (result0:Z),
                         (result0 = (acc x_Z2_0 result) ->
-                         (* File \"struct.c\", line 20, characters 13-25:\n *)
+                         (* File "struct.c", line 20, characters 13-25 *)
                          result0 = 1)) /\
                        (valid alloc result))) /\
                      (valid alloc s))) /\
@@ -301,7 +300,7 @@ Save.
   forall (s: ((pointer) Z11)),
   forall (t_Z11: ((memory) ((pointer) Z2) Z11)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"struct.c\", line 19, characters 14-24:\n *)
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid_range alloc s 0 0)),
   forall (ps0: ((pointer) Z11)),
   forall (HW_3: ps0 = s),
@@ -317,7 +316,7 @@ Save.
                           (result = (acc t_Z11 s) ->
                            (forall (result0:Z),
                             (result0 = (acc x_Z2_0 result) ->
-                             (* File \"struct.c\", line 20, characters 13-25:\n *)
+                             (* File "struct.c", line 20, characters 13-25 *)
                              result0 = 1)) /\
                            (valid alloc result))) /\
                          (valid alloc s))) /\

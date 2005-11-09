@@ -212,9 +212,7 @@ Save.
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
                 10),
-  forall (result: Z),
-  forall (HW_2: result = (access t 0)),
-  0 <= result /\ result < (array_length t).
+  0 <= 0 /\ 0 < (array_length t).
 Proof.
 intuition.
 Save.
@@ -224,10 +222,10 @@ Save.
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
                 10),
-  forall (HW_3: (forall (result:Z),
-                 (result = (access t 0) -> 0 <= result /\ result <
-                  (array_length t)))),
-  0 <= 0 /\ 0 < (array_length t).
+  forall (HW_2: 0 <= 0 /\ 0 < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t 0)),
+  0 <= result /\ result < (array_length t).
 Proof.
 intuition.
 Save.
@@ -238,13 +236,9 @@ Save.
   forall (HW_1: (array_length t) = 10),
   forall (x: Z),
   forall (HW_2: x = 0),
-  forall (t0: (array Z)),
-  forall (HW_3: t0 = (update t x x)),
-  (access t0 0) = x.
+  0 <= x /\ x < (array_length t).
 Proof.
 intuition.
-subst; intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -253,11 +247,14 @@ Save.
   forall (HW_1: (array_length t) = 10),
   forall (x: Z),
   forall (HW_2: x = 0),
-  forall (HW_4: (forall (t0:(array Z)),
-                 (t0 = (update t x x) -> (access t0 0) = x))),
-  0 <= x /\ x < (array_length t).
+  forall (HW_3: 0 <= x /\ x < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_4: t0 = (update t x x)),
+  (access t0 0) = x.
 Proof.
 intuition.
+subst; intuition.
+(* FILL PROOF HERE *)
 (* FILL PROOF HERE *)
 Save.
 

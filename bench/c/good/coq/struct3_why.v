@@ -21,7 +21,7 @@ Require Export struct3_spec_why.
   forall (HW_3: y_Z3_0 = (upd y_Z3 result 2)),
   forall (result0: Z),
   forall (HW_4: result0 = (acc y_Z3_0 result)),
-  (* File \"struct3.c\", line 4, characters 13-25:\n *) result0 = 2.
+  (* File "struct3.c", line 4, characters 13-25 *) result0 = 2.
 Proof.
 intuition.
 Save.
@@ -44,8 +44,8 @@ Save.
   forall (HW_3: y_Z3_0 = (upd y_Z3 result 2)),
   forall (HW_5: (forall (result0:Z),
                  (result0 = (acc y_Z3_0 result) ->
-                  (* File \"struct3.c\", line 4, characters 13-25:\n *)
-                  result0 = 2))),
+                  (* File "struct3.c", line 4, characters 13-25 *) result0 =
+                  2))),
   (valid alloc0 result).
 Proof.
 intuition; subst; auto;
@@ -71,7 +71,7 @@ Save.
                  (y_Z3_0 = (upd y_Z3 result 2) ->
                   (forall (result0:Z),
                    (result0 = (acc y_Z3_0 result) ->
-                    (* File \"struct3.c\", line 4, characters 13-25:\n *)
+                    (* File "struct3.c", line 4, characters 13-25 *)
                     result0 = 2)) /\
                   (valid alloc0 result)))),
   (valid alloc0 result).
@@ -98,7 +98,7 @@ Save.
                    (y_Z3_0 = (upd y_Z3 result 2) ->
                     (forall (result0:Z),
                      (result0 = (acc y_Z3_0 result) ->
-                      (* File \"struct3.c\", line 4, characters 13-25:\n *)
+                      (* File "struct3.c", line 4, characters 13-25 *)
                       result0 = 2)) /\
                     (valid alloc0 result))) /\
                   (valid alloc0 result)))),
@@ -126,7 +126,7 @@ Save.
                       (y_Z3_0 = (upd y_Z3 result 2) ->
                        (forall (result0:Z),
                         (result0 = (acc y_Z3_0 result) ->
-                         (* File \"struct3.c\", line 4, characters 13-25:\n *)
+                         (* File "struct3.c", line 4, characters 13-25 *)
                          result0 = 2)) /\
                        (valid alloc0 result))) /\
                      (valid alloc0 result))) /\
@@ -165,7 +165,7 @@ Save.
   forall (HW_7: result2 = (acc s_Z5 result)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc y_Z1_0 result2)),
-  (* File \"struct3.c\", line 13, characters 13-25:\n *) result3 = 3.
+  (* File "struct3.c", line 13, characters 13-25 *) result3 = 3.
 Proof.
 intuition.
 Save.
@@ -198,8 +198,8 @@ Save.
   forall (HW_7: result2 = (acc s_Z5 result)),
   forall (HW_9: (forall (result:Z),
                  (result = (acc y_Z1_0 result2) ->
-                  (* File \"struct3.c\", line 13, characters 13-25:\n *)
-                  result = 3))),
+                  (* File "struct3.c", line 13, characters 13-25 *) result =
+                  3))),
   (valid alloc0 result2).
 Proof.
 intuition; subst; auto.
@@ -233,7 +233,7 @@ Save.
                   (result0 = (acc s_Z5 result) ->
                    (forall (result:Z),
                     (result = (acc y_Z1_0 result0) ->
-                     (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                     (* File "struct3.c", line 13, characters 13-25 *)
                      result = 3)) /\
                    (valid alloc0 result0)))),
   (valid alloc0 result).
@@ -268,7 +268,7 @@ Save.
                     (result0 = (acc s_Z5 result) ->
                      (forall (result:Z),
                       (result = (acc y_Z1_0 result0) ->
-                       (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                       (* File "struct3.c", line 13, characters 13-25 *)
                        result = 3)) /\
                      (valid alloc0 result0))) /\
                    (valid alloc0 result)))),
@@ -306,7 +306,7 @@ Save.
                       (result0 = (acc s_Z5 result) ->
                        (forall (result:Z),
                         (result = (acc y_Z1_0 result0) ->
-                         (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                         (* File "struct3.c", line 13, characters 13-25 *)
                          result = 3)) /\
                        (valid alloc0 result0))) /\
                      (valid alloc0 result))) /\
@@ -345,7 +345,7 @@ Save.
                         (result0 = (acc s_Z5 result) ->
                          (forall (result:Z),
                           (result = (acc y_Z1_0 result0) ->
-                           (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                           (* File "struct3.c", line 13, characters 13-25 *)
                            result = 3)) /\
                          (valid alloc0 result0))) /\
                        (valid alloc0 result))) /\
@@ -385,7 +385,7 @@ Save.
                           (result0 = (acc s_Z5 result) ->
                            (forall (result:Z),
                             (result = (acc y_Z1_0 result0) ->
-                             (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                             (* File "struct3.c", line 13, characters 13-25 *)
                              result = 3)) /\
                            (valid alloc0 result0))) /\
                          (valid alloc0 result))) /\
@@ -426,7 +426,7 @@ Save.
                             (result0 = (acc s_Z5 result) ->
                              (forall (result:Z),
                               (result = (acc y_Z1_0 result0) ->
-                               (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                               (* File "struct3.c", line 13, characters 13-25 *)
                                result = 3)) /\
                              (valid alloc0 result0))) /\
                            (valid alloc0 result))) /\
@@ -468,7 +468,7 @@ Save.
                                (result0 = (acc s_Z5 result) ->
                                 (forall (result:Z),
                                  (result = (acc y_Z1_0 result0) ->
-                                  (* File \"struct3.c\", line 13, characters 13-25:\n *)
+                                  (* File "struct3.c", line 13, characters 13-25 *)
                                   result = 3)) /\
                                 (valid alloc0 result0))) /\
                               (valid alloc0 result))) /\

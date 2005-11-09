@@ -46,7 +46,7 @@ Require Export queue_spec_why.
   forall (HW_15: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_16: full_Z7_0 = (upd full_Z7 q 1)),
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7_0 q) 0 ((acc length_Z7_0 q) - 1)) /\
   0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7_0 q)) /\
   0 <= (acc last_Z7_0 q) /\ (acc last_Z7_0 q) < (acc length_Z7_0 q)).
@@ -99,7 +99,7 @@ Save.
   forall (HW_15: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_17: (forall (full_Z7_0:((memory) Z Z7)),
                   (full_Z7_0 = (upd full_Z7 q 1) ->
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7_0 q) 0
                       ((acc length_Z7_0 q) - 1)) /\
                    0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -155,7 +155,7 @@ Save.
                   (empty_Z7_0 = (upd empty_Z7 q 0) ->
                    (forall (full_Z7_0:((memory) Z Z7)),
                     (full_Z7_0 = (upd full_Z7 q 1) ->
-                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                     (* File "queue.c", line 14, characters 5-105 *)
                      (((valid_range alloc (acc contents_Z7_0 q) 0
                         ((acc length_Z7_0 q) - 1)) /\
                      0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -211,7 +211,7 @@ Save.
                     (empty_Z7_0 = (upd empty_Z7 q 0) ->
                      (forall (full_Z7_0:((memory) Z Z7)),
                       (full_Z7_0 = (upd full_Z7 q 1) ->
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7_0 q) 0
                           ((acc length_Z7_0 q) - 1)) /\
                        0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -268,7 +268,7 @@ Save.
                       (empty_Z7_0 = (upd empty_Z7 q 0) ->
                        (forall (full_Z7_0:((memory) Z Z7)),
                         (full_Z7_0 = (upd full_Z7 q 1) ->
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7_0 q) 0
                             ((acc length_Z7_0 q) - 1)) /\
                          0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -326,7 +326,7 @@ Save.
                         (empty_Z7_0 = (upd empty_Z7 q 0) ->
                          (forall (full_Z7_0:((memory) Z Z7)),
                           (full_Z7_0 = (upd full_Z7 q 1) ->
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7_0 q) 0
                               ((acc length_Z7_0 q) - 1)) /\
                            0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -385,7 +385,7 @@ Save.
                           (empty_Z7_0 = (upd empty_Z7 q 0) ->
                            (forall (full_Z7_0:((memory) Z Z7)),
                             (full_Z7_0 = (upd full_Z7 q 1) ->
-                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (* File "queue.c", line 14, characters 5-105 *)
                              (((valid_range alloc (acc contents_Z7_0 q) 0
                                 ((acc length_Z7_0 q) - 1)) /\
                              0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -446,7 +446,7 @@ Save.
                             (empty_Z7_0 = (upd empty_Z7 q 0) ->
                              (forall (full_Z7_0:((memory) Z Z7)),
                               (full_Z7_0 = (upd full_Z7 q 1) ->
-                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (* File "queue.c", line 14, characters 5-105 *)
                                (((valid_range alloc (acc contents_Z7_0 q) 0
                                   ((acc length_Z7_0 q) - 1)) /\
                                0 <= (acc first_Z7_0 q) /\
@@ -508,7 +508,7 @@ Save.
                                 (empty_Z7_0 = (upd empty_Z7 q 0) ->
                                  (forall (full_Z7_0:((memory) Z Z7)),
                                   (full_Z7_0 = (upd full_Z7 q 1) ->
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7_0 q)
                                       0 ((acc length_Z7_0 q) - 1)) /\
                                    0 <= (acc first_Z7_0 q) /\
@@ -573,7 +573,7 @@ Save.
                                     (empty_Z7_0 = (upd empty_Z7 q 0) ->
                                      (forall (full_Z7_0:((memory) Z Z7)),
                                       (full_Z7_0 = (upd full_Z7 q 1) ->
-                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (* File "queue.c", line 14, characters 5-105 *)
                                        (((valid_range alloc
                                           (acc contents_Z7_0 q) 0
                                           ((acc length_Z7_0 q) - 1)) /\
@@ -641,7 +641,7 @@ Save.
                                         (empty_Z7_0 = (upd empty_Z7 q 0) ->
                                          (forall (full_Z7_0:((memory) Z Z7)),
                                           (full_Z7_0 = (upd full_Z7 q 1) ->
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7_0 q) 0
                                               ((acc length_Z7_0 q) - 1)) /\
@@ -712,7 +712,7 @@ Save.
                                              (forall (full_Z7_0:((memory) Z
                                               Z7)),
                                               (full_Z7_0 = (upd full_Z7 q 1) ->
-                                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                               (* File "queue.c", line 14, characters 5-105 *)
                                                (((valid_range alloc
                                                   (acc contents_Z7_0 q) 0
                                                   ((acc length_Z7_0 q) - 1)) /\
@@ -749,9 +749,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -784,12 +784,12 @@ Save.
   forall (HW_14: result5 = result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (HW_15: empty_Z7_0 = (upd empty_Z7 q 1)),
-  (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
-  0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
   (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7_1 q) /\ (acc first_Z7_1 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
@@ -808,9 +808,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -843,13 +843,13 @@ Save.
   forall (HW_14: result5 = result6),
   forall (HW_16: (forall (empty_Z7_0:((memory) Z Z7)),
                   (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   (* File "queue.c", line 35, characters 13-60 *)
                    ((acc full_Z7_0 q) = 0 /\ result2 =
                    (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                    (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
                    (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -873,9 +873,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -908,12 +908,12 @@ Save.
   forall (HW_17: result5 <> result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (HW_18: empty_Z7_0 = (upd empty_Z7 q 0)),
-  (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
-  0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
   (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7_1 q) /\ (acc first_Z7_1 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
@@ -934,9 +934,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -969,13 +969,13 @@ Save.
   forall (HW_17: result5 <> result6),
   forall (HW_19: (forall (empty_Z7_0:((memory) Z Z7)),
                   (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   (* File "queue.c", line 35, characters 13-60 *)
                    ((acc full_Z7_0 q) = 0 /\ result2 =
                    (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                    (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
                    (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -998,9 +998,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1033,7 +1033,7 @@ Save.
                    ((result5 = result ->
                      (forall (empty_Z7_0:((memory) Z Z7)),
                       (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       (* File "queue.c", line 35, characters 13-60 *)
                        ((acc full_Z7_0 q) = 0 /\ result2 =
                        (acc int_Z5
                         (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1043,7 +1043,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1053,7 +1053,7 @@ Save.
                    ((result5 <> result ->
                      (forall (empty_Z7_0:((memory) Z Z7)),
                       (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       (* File "queue.c", line 35, characters 13-60 *)
                        ((acc full_Z7_0 q) = 0 /\ result2 =
                        (acc int_Z5
                         (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1063,7 +1063,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1087,9 +1087,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1122,7 +1122,7 @@ Save.
                      ((result = result0 ->
                        (forall (empty_Z7_0:((memory) Z Z7)),
                         (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         (* File "queue.c", line 35, characters 13-60 *)
                          ((acc full_Z7_0 q) = 0 /\ result2 =
                          (acc int_Z5
                           (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1132,7 +1132,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1142,7 +1142,7 @@ Save.
                      ((result <> result0 ->
                        (forall (empty_Z7_0:((memory) Z Z7)),
                         (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         (* File "queue.c", line 35, characters 13-60 *)
                          ((acc full_Z7_0 q) = 0 /\ result2 =
                          (acc int_Z5
                           (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1152,7 +1152,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1177,9 +1177,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1212,7 +1212,7 @@ Save.
                        ((result = result0 ->
                          (forall (empty_Z7_0:((memory) Z Z7)),
                           (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           (* File "queue.c", line 35, characters 13-60 *)
                            ((acc full_Z7_0 q) = 0 /\ result2 =
                            (acc int_Z5
                             (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1222,7 +1222,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1232,7 +1232,7 @@ Save.
                        ((result <> result0 ->
                          (forall (empty_Z7_0:((memory) Z Z7)),
                           (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           (* File "queue.c", line 35, characters 13-60 *)
                            ((acc full_Z7_0 q) = 0 /\ result2 =
                            (acc int_Z5
                             (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1242,7 +1242,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1268,9 +1268,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1303,7 +1303,7 @@ Save.
                          ((result = result0 ->
                            (forall (empty_Z7_0:((memory) Z Z7)),
                             (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                             (* File "queue.c", line 35, characters 13-60 *)
                              ((acc full_Z7_0 q) = 0 /\ result2 =
                              (acc int_Z5
                               (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1313,7 +1313,7 @@ Save.
                               (pset_singleton q))) /\
                              (not_assigns alloc empty_Z7 empty_Z7_0
                               (pset_singleton q))) /\
-                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (* File "queue.c", line 14, characters 5-105 *)
                              (((valid_range alloc (acc contents_Z7 q) 0
                                 ((acc length_Z7 q) - 1)) /\
                              0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1323,7 +1323,7 @@ Save.
                          ((result <> result0 ->
                            (forall (empty_Z7_0:((memory) Z Z7)),
                             (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                             (* File "queue.c", line 35, characters 13-60 *)
                              ((acc full_Z7_0 q) = 0 /\ result2 =
                              (acc int_Z5
                               (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1333,7 +1333,7 @@ Save.
                               (pset_singleton q))) /\
                              (not_assigns alloc empty_Z7 empty_Z7_0
                               (pset_singleton q))) /\
-                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (* File "queue.c", line 14, characters 5-105 *)
                              (((valid_range alloc (acc contents_Z7 q) 0
                                 ((acc length_Z7 q) - 1)) /\
                              0 <= (acc first_Z7_1 q) /\ (acc first_Z7_1 q) <
@@ -1360,9 +1360,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1393,12 +1393,12 @@ Save.
   forall (HW_28: result5 = result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (HW_29: empty_Z7_0 = (upd empty_Z7 q 1)),
-  (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
-  0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
   (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
@@ -1418,9 +1418,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1451,13 +1451,13 @@ Save.
   forall (HW_28: result5 = result6),
   forall (HW_30: (forall (empty_Z7_0:((memory) Z Z7)),
                   (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   (* File "queue.c", line 35, characters 13-60 *)
                    ((acc full_Z7_0 q) = 0 /\ result2 =
                    (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                    (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
                    (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1480,9 +1480,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1513,12 +1513,12 @@ Save.
   forall (HW_31: result5 <> result6),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
-  (* File \"queue.c\", line 35, characters 13-60:\n *) ((acc full_Z7_0 q) =
-  0 /\ result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
   (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
   (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
@@ -1538,9 +1538,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1571,13 +1571,13 @@ Save.
   forall (HW_31: result5 <> result6),
   forall (HW_33: (forall (empty_Z7_0:((memory) Z Z7)),
                   (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                   (* File "queue.c", line 35, characters 13-60 *)
                    ((acc full_Z7_0 q) = 0 /\ result2 =
                    (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                    (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
                    (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1600,9 +1600,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1633,7 +1633,7 @@ Save.
                    ((result5 = result ->
                      (forall (empty_Z7_0:((memory) Z Z7)),
                       (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       (* File "queue.c", line 35, characters 13-60 *)
                        ((acc full_Z7_0 q) = 0 /\ result2 =
                        (acc int_Z5
                         (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1643,7 +1643,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1653,7 +1653,7 @@ Save.
                    ((result5 <> result ->
                      (forall (empty_Z7_0:((memory) Z Z7)),
                       (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                       (* File "queue.c", line 35, characters 13-60 *)
                        ((acc full_Z7_0 q) = 0 /\ result2 =
                        (acc int_Z5
                         (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1663,7 +1663,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1687,9 +1687,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1720,7 +1720,7 @@ Save.
                      ((result = result0 ->
                        (forall (empty_Z7_0:((memory) Z Z7)),
                         (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         (* File "queue.c", line 35, characters 13-60 *)
                          ((acc full_Z7_0 q) = 0 /\ result2 =
                          (acc int_Z5
                           (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1730,7 +1730,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1740,7 +1740,7 @@ Save.
                      ((result <> result0 ->
                        (forall (empty_Z7_0:((memory) Z Z7)),
                         (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                         (* File "queue.c", line 35, characters 13-60 *)
                          ((acc full_Z7_0 q) = 0 /\ result2 =
                          (acc int_Z5
                           (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1750,7 +1750,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1775,9 +1775,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1808,7 +1808,7 @@ Save.
                        ((result = result0 ->
                          (forall (empty_Z7_0:((memory) Z Z7)),
                           (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           (* File "queue.c", line 35, characters 13-60 *)
                            ((acc full_Z7_0 q) = 0 /\ result2 =
                            (acc int_Z5
                             (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1818,7 +1818,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1828,7 +1828,7 @@ Save.
                        ((result <> result0 ->
                          (forall (empty_Z7_0:((memory) Z Z7)),
                           (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                           (* File "queue.c", line 35, characters 13-60 *)
                            ((acc full_Z7_0 q) = 0 /\ result2 =
                            (acc int_Z5
                             (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1838,7 +1838,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -1864,9 +1864,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -1899,7 +1899,7 @@ Save.
                              ((result = result0 ->
                                (forall (empty_Z7_0:((memory) Z Z7)),
                                 (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 (* File "queue.c", line 35, characters 13-60 *)
                                  ((acc full_Z7_0 q) = 0 /\ result2 =
                                  (acc int_Z5
                                   (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1909,7 +1909,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7_1 q) /\
@@ -1920,7 +1920,7 @@ Save.
                              ((result <> result0 ->
                                (forall (empty_Z7_0:((memory) Z Z7)),
                                 (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 (* File "queue.c", line 35, characters 13-60 *)
                                  ((acc full_Z7_0 q) = 0 /\ result2 =
                                  (acc int_Z5
                                   (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1930,7 +1930,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7_1 q) /\
@@ -1952,7 +1952,7 @@ Save.
                            ((result = result0 ->
                              (forall (empty_Z7_0:((memory) Z Z7)),
                               (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                               (* File \"queue.c\", line 35, characters 13-60:\n *)
+                               (* File "queue.c", line 35, characters 13-60 *)
                                ((acc full_Z7_0 q) = 0 /\ result2 =
                                (acc int_Z5
                                 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1962,7 +1962,7 @@ Save.
                                 (pset_singleton q))) /\
                                (not_assigns alloc empty_Z7 empty_Z7_0
                                 (pset_singleton q))) /\
-                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (* File "queue.c", line 14, characters 5-105 *)
                                (((valid_range alloc (acc contents_Z7 q) 0
                                   ((acc length_Z7 q) - 1)) /\
                                0 <= (acc first_Z7_0 q) /\
@@ -1973,7 +1973,7 @@ Save.
                            ((result <> result0 ->
                              (forall (empty_Z7_0:((memory) Z Z7)),
                               (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                               (* File \"queue.c\", line 35, characters 13-60:\n *)
+                               (* File "queue.c", line 35, characters 13-60 *)
                                ((acc full_Z7_0 q) = 0 /\ result2 =
                                (acc int_Z5
                                 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -1983,7 +1983,7 @@ Save.
                                 (pset_singleton q))) /\
                                (not_assigns alloc empty_Z7 empty_Z7_0
                                 (pset_singleton q))) /\
-                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (* File "queue.c", line 14, characters 5-105 *)
                                (((valid_range alloc (acc contents_Z7 q) 0
                                   ((acc length_Z7 q) - 1)) /\
                                0 <= (acc first_Z7_0 q) /\
@@ -2011,9 +2011,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2046,7 +2046,7 @@ Save.
                                ((result = result0 ->
                                  (forall (empty_Z7_0:((memory) Z Z7)),
                                   (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   (* File "queue.c", line 35, characters 13-60 *)
                                    ((acc full_Z7_0 q) = 0 /\ result2 =
                                    (acc int_Z5
                                     (shift (acc contents_Z7 q)
@@ -2057,7 +2057,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7_1 q) /\
@@ -2068,7 +2068,7 @@ Save.
                                ((result <> result0 ->
                                  (forall (empty_Z7_0:((memory) Z Z7)),
                                   (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   (* File "queue.c", line 35, characters 13-60 *)
                                    ((acc full_Z7_0 q) = 0 /\ result2 =
                                    (acc int_Z5
                                     (shift (acc contents_Z7 q)
@@ -2079,7 +2079,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7_1 q) /\
@@ -2101,7 +2101,7 @@ Save.
                              ((result = result0 ->
                                (forall (empty_Z7_0:((memory) Z Z7)),
                                 (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 (* File "queue.c", line 35, characters 13-60 *)
                                  ((acc full_Z7_0 q) = 0 /\ result2 =
                                  (acc int_Z5
                                   (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -2111,7 +2111,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7_0 q) /\
@@ -2122,7 +2122,7 @@ Save.
                              ((result <> result0 ->
                                (forall (empty_Z7_0:((memory) Z Z7)),
                                 (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                 (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                 (* File "queue.c", line 35, characters 13-60 *)
                                  ((acc full_Z7_0 q) = 0 /\ result2 =
                                  (acc int_Z5
                                   (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
@@ -2132,7 +2132,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7_0 q) /\
@@ -2161,9 +2161,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2196,7 +2196,7 @@ Save.
                                  ((result0 = result1 ->
                                    (forall (empty_Z7_0:((memory) Z Z7)),
                                     (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                     (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                     (* File "queue.c", line 35, characters 13-60 *)
                                      ((acc full_Z7_0 q) = 0 /\ result =
                                      (acc int_Z5
                                       (shift (acc contents_Z7 q)
@@ -2207,7 +2207,7 @@ Save.
                                       (pset_singleton q))) /\
                                      (not_assigns alloc empty_Z7 empty_Z7_0
                                       (pset_singleton q))) /\
-                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (* File "queue.c", line 14, characters 5-105 *)
                                      (((valid_range alloc (acc contents_Z7 q)
                                         0 ((acc length_Z7 q) - 1)) /\
                                      0 <= (acc first_Z7_1 q) /\
@@ -2219,7 +2219,7 @@ Save.
                                  ((result0 <> result1 ->
                                    (forall (empty_Z7_0:((memory) Z Z7)),
                                     (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                     (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                     (* File "queue.c", line 35, characters 13-60 *)
                                      ((acc full_Z7_0 q) = 0 /\ result =
                                      (acc int_Z5
                                       (shift (acc contents_Z7 q)
@@ -2230,7 +2230,7 @@ Save.
                                       (pset_singleton q))) /\
                                      (not_assigns alloc empty_Z7 empty_Z7_0
                                       (pset_singleton q))) /\
-                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (* File "queue.c", line 14, characters 5-105 *)
                                      (((valid_range alloc (acc contents_Z7 q)
                                         0 ((acc length_Z7 q) - 1)) /\
                                      0 <= (acc first_Z7_1 q) /\
@@ -2253,7 +2253,7 @@ Save.
                                ((result0 = result1 ->
                                  (forall (empty_Z7_0:((memory) Z Z7)),
                                   (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   (* File "queue.c", line 35, characters 13-60 *)
                                    ((acc full_Z7_0 q) = 0 /\ result =
                                    (acc int_Z5
                                     (shift (acc contents_Z7 q)
@@ -2264,7 +2264,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7_0 q) /\
@@ -2275,7 +2275,7 @@ Save.
                                ((result0 <> result1 ->
                                  (forall (empty_Z7_0:((memory) Z Z7)),
                                   (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                   (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                   (* File "queue.c", line 35, characters 13-60 *)
                                    ((acc full_Z7_0 q) = 0 /\ result =
                                    (acc int_Z5
                                     (shift (acc contents_Z7 q)
@@ -2286,7 +2286,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7_0 q) /\
@@ -2316,9 +2316,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2351,7 +2351,7 @@ Save.
                                      ((result0 = result1 ->
                                        (forall (empty_Z7_0:((memory) Z Z7)),
                                         (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         (* File "queue.c", line 35, characters 13-60 *)
                                          ((acc full_Z7_0 q) = 0 /\ result =
                                          (acc int_Z5
                                           (shift (acc contents_Z7 q)
@@ -2362,7 +2362,7 @@ Save.
                                           first_Z7_1 (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -2375,7 +2375,7 @@ Save.
                                      ((result0 <> result1 ->
                                        (forall (empty_Z7_0:((memory) Z Z7)),
                                         (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         (* File "queue.c", line 35, characters 13-60 *)
                                          ((acc full_Z7_0 q) = 0 /\ result =
                                          (acc int_Z5
                                           (shift (acc contents_Z7 q)
@@ -2386,7 +2386,7 @@ Save.
                                           first_Z7_1 (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -2410,7 +2410,7 @@ Save.
                                    ((result0 = result1 ->
                                      (forall (empty_Z7_0:((memory) Z Z7)),
                                       (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                       (* File "queue.c", line 35, characters 13-60 *)
                                        ((acc full_Z7_0 q) = 0 /\ result =
                                        (acc int_Z5
                                         (shift (acc contents_Z7 q)
@@ -2421,7 +2421,7 @@ Save.
                                         (pset_singleton q))) /\
                                        (not_assigns alloc empty_Z7 empty_Z7_0
                                         (pset_singleton q))) /\
-                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (* File "queue.c", line 14, characters 5-105 *)
                                        (((valid_range alloc
                                           (acc contents_Z7 q) 0
                                           ((acc length_Z7 q) - 1)) /\
@@ -2434,7 +2434,7 @@ Save.
                                    ((result0 <> result1 ->
                                      (forall (empty_Z7_0:((memory) Z Z7)),
                                       (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                       (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                       (* File "queue.c", line 35, characters 13-60 *)
                                        ((acc full_Z7_0 q) = 0 /\ result =
                                        (acc int_Z5
                                         (shift (acc contents_Z7 q)
@@ -2445,7 +2445,7 @@ Save.
                                         (pset_singleton q))) /\
                                        (not_assigns alloc empty_Z7 empty_Z7_0
                                         (pset_singleton q))) /\
-                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (* File "queue.c", line 14, characters 5-105 *)
                                        (((valid_range alloc
                                           (acc contents_Z7 q) 0
                                           ((acc length_Z7 q) - 1)) /\
@@ -2478,9 +2478,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2514,7 +2514,7 @@ Save.
                                          (forall (empty_Z7_0:((memory) Z
                                           Z7)),
                                           (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           (* File "queue.c", line 35, characters 13-60 *)
                                            ((acc full_Z7_0 q) = 0 /\ result =
                                            (acc int_Z5
                                             (shift (acc contents_Z7 q)
@@ -2525,7 +2525,7 @@ Save.
                                             first_Z7_1 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -2540,7 +2540,7 @@ Save.
                                          (forall (empty_Z7_0:((memory) Z
                                           Z7)),
                                           (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           (* File "queue.c", line 35, characters 13-60 *)
                                            ((acc full_Z7_0 q) = 0 /\ result =
                                            (acc int_Z5
                                             (shift (acc contents_Z7 q)
@@ -2551,7 +2551,7 @@ Save.
                                             first_Z7_1 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -2576,7 +2576,7 @@ Save.
                                      ((result0 = result1 ->
                                        (forall (empty_Z7_0:((memory) Z Z7)),
                                         (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         (* File "queue.c", line 35, characters 13-60 *)
                                          ((acc full_Z7_0 q) = 0 /\ result =
                                          (acc int_Z5
                                           (shift (acc contents_Z7 q)
@@ -2587,7 +2587,7 @@ Save.
                                           first_Z7_0 (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -2600,7 +2600,7 @@ Save.
                                      ((result0 <> result1 ->
                                        (forall (empty_Z7_0:((memory) Z Z7)),
                                         (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                         (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                         (* File "queue.c", line 35, characters 13-60 *)
                                          ((acc full_Z7_0 q) = 0 /\ result =
                                          (acc int_Z5
                                           (shift (acc contents_Z7 q)
@@ -2611,7 +2611,7 @@ Save.
                                           first_Z7_0 (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -2645,9 +2645,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 33, characters 14-22:\n *)
+  forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2681,7 +2681,7 @@ Save.
                                            (forall (empty_Z7_0:((memory) Z
                                             Z7)),
                                             (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                             (* File "queue.c", line 35, characters 13-60 *)
                                              ((acc full_Z7_0 q) = 0 /\
                                              result =
                                              (acc int_Z5
@@ -2693,7 +2693,7 @@ Save.
                                               first_Z7_1 (pset_singleton q))) /\
                                              (not_assigns alloc empty_Z7
                                               empty_Z7_0 (pset_singleton q))) /\
-                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (* File "queue.c", line 14, characters 5-105 *)
                                              (((valid_range alloc
                                                 (acc contents_Z7 q) 0
                                                 ((acc length_Z7 q) - 1)) /\
@@ -2708,7 +2708,7 @@ Save.
                                            (forall (empty_Z7_0:((memory) Z
                                             Z7)),
                                             (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                             (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                             (* File "queue.c", line 35, characters 13-60 *)
                                              ((acc full_Z7_0 q) = 0 /\
                                              result =
                                              (acc int_Z5
@@ -2720,7 +2720,7 @@ Save.
                                               first_Z7_1 (pset_singleton q))) /\
                                              (not_assigns alloc empty_Z7
                                               empty_Z7_0 (pset_singleton q))) /\
-                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (* File "queue.c", line 14, characters 5-105 *)
                                              (((valid_range alloc
                                                 (acc contents_Z7 q) 0
                                                 ((acc length_Z7 q) - 1)) /\
@@ -2746,7 +2746,7 @@ Save.
                                          (forall (empty_Z7_0:((memory) Z
                                           Z7)),
                                           (empty_Z7_0 = (upd empty_Z7 q 1) ->
-                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           (* File "queue.c", line 35, characters 13-60 *)
                                            ((acc full_Z7_0 q) = 0 /\ result =
                                            (acc int_Z5
                                             (shift (acc contents_Z7 q)
@@ -2757,7 +2757,7 @@ Save.
                                             first_Z7_0 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -2772,7 +2772,7 @@ Save.
                                          (forall (empty_Z7_0:((memory) Z
                                           Z7)),
                                           (empty_Z7_0 = (upd empty_Z7 q 0) ->
-                                           (* File \"queue.c\", line 35, characters 13-60:\n *)
+                                           (* File "queue.c", line 35, characters 13-60 *)
                                            ((acc full_Z7_0 q) = 0 /\ result =
                                            (acc int_Z5
                                             (shift (acc contents_Z7 q)
@@ -2783,7 +2783,7 @@ Save.
                                             first_Z7_0 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -2820,9 +2820,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2855,14 +2855,14 @@ Save.
   forall (HW_14: result4 = result5),
   forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_15: full_Z7_0 = (upd full_Z7 q 1)),
-  (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
-  0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
   (not_assigns alloc int_Z5 int_Z5_0
    (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7_1 q) /\ (acc last_Z7_1 q) < (acc length_Z7 q)).
@@ -2882,9 +2882,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2917,7 +2917,7 @@ Save.
   forall (HW_14: result4 = result5),
   forall (HW_16: (forall (full_Z7_0:((memory) Z Z7)),
                   (full_Z7_0 = (upd full_Z7 q 1) ->
-                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   (* File "queue.c", line 22, characters 13-54 *)
                    ((acc empty_Z7_0 q) = 0 /\
                    (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
                    c) /\
@@ -2927,7 +2927,7 @@ Save.
                                      (acc last_Z7 q))))) /\
                    (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2951,9 +2951,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -2986,14 +2986,14 @@ Save.
   forall (HW_17: result4 <> result5),
   forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_18: full_Z7_0 = (upd full_Z7 q 0)),
-  (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
-  0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
   (not_assigns alloc int_Z5 int_Z5_0
    (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7_1 q) /\ (acc last_Z7_1 q) < (acc length_Z7 q)).
@@ -3015,9 +3015,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3050,7 +3050,7 @@ Save.
   forall (HW_17: result4 <> result5),
   forall (HW_19: (forall (full_Z7_0:((memory) Z Z7)),
                   (full_Z7_0 = (upd full_Z7 q 0) ->
-                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   (* File "queue.c", line 22, characters 13-54 *)
                    ((acc empty_Z7_0 q) = 0 /\
                    (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
                    c) /\
@@ -3060,7 +3060,7 @@ Save.
                                      (acc last_Z7 q))))) /\
                    (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3084,9 +3084,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3119,7 +3119,7 @@ Save.
                    ((result4 = result ->
                      (forall (full_Z7_0:((memory) Z Z7)),
                       (full_Z7_0 = (upd full_Z7 q 1) ->
-                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       (* File "queue.c", line 22, characters 13-54 *)
                        ((acc empty_Z7_0 q) = 0 /\
                        (acc int_Z5_0
                         (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3133,7 +3133,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3143,7 +3143,7 @@ Save.
                    ((result4 <> result ->
                      (forall (full_Z7_0:((memory) Z Z7)),
                       (full_Z7_0 = (upd full_Z7 q 0) ->
-                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       (* File "queue.c", line 22, characters 13-54 *)
                        ((acc empty_Z7_0 q) = 0 /\
                        (acc int_Z5_0
                         (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3157,7 +3157,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3182,9 +3182,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3217,7 +3217,7 @@ Save.
                      ((result = result0 ->
                        (forall (full_Z7_0:((memory) Z Z7)),
                         (full_Z7_0 = (upd full_Z7 q 1) ->
-                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         (* File "queue.c", line 22, characters 13-54 *)
                          ((acc empty_Z7_0 q) = 0 /\
                          (acc int_Z5_0
                           (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3231,7 +3231,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3241,7 +3241,7 @@ Save.
                      ((result <> result0 ->
                        (forall (full_Z7_0:((memory) Z Z7)),
                         (full_Z7_0 = (upd full_Z7 q 0) ->
-                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         (* File "queue.c", line 22, characters 13-54 *)
                          ((acc empty_Z7_0 q) = 0 /\
                          (acc int_Z5_0
                           (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3255,7 +3255,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3281,9 +3281,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3316,7 +3316,7 @@ Save.
                        ((result = result0 ->
                          (forall (full_Z7_0:((memory) Z Z7)),
                           (full_Z7_0 = (upd full_Z7 q 1) ->
-                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           (* File "queue.c", line 22, characters 13-54 *)
                            ((acc empty_Z7_0 q) = 0 /\
                            (acc int_Z5_0
                             (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3330,7 +3330,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3340,7 +3340,7 @@ Save.
                        ((result <> result0 ->
                          (forall (full_Z7_0:((memory) Z Z7)),
                           (full_Z7_0 = (upd full_Z7 q 0) ->
-                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           (* File "queue.c", line 22, characters 13-54 *)
                            ((acc empty_Z7_0 q) = 0 /\
                            (acc int_Z5_0
                             (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3354,7 +3354,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3381,9 +3381,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3416,7 +3416,7 @@ Save.
                          ((result = result0 ->
                            (forall (full_Z7_0:((memory) Z Z7)),
                             (full_Z7_0 = (upd full_Z7 q 1) ->
-                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                             (* File "queue.c", line 22, characters 13-54 *)
                              ((acc empty_Z7_0 q) = 0 /\
                              (acc int_Z5_0
                               (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3430,7 +3430,7 @@ Save.
                               (pset_singleton q))) /\
                              (not_assigns alloc empty_Z7 empty_Z7_0
                               (pset_singleton q))) /\
-                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (* File "queue.c", line 14, characters 5-105 *)
                              (((valid_range alloc (acc contents_Z7 q) 0
                                 ((acc length_Z7 q) - 1)) /\
                              0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3440,7 +3440,7 @@ Save.
                          ((result <> result0 ->
                            (forall (full_Z7_0:((memory) Z Z7)),
                             (full_Z7_0 = (upd full_Z7 q 0) ->
-                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                             (* File "queue.c", line 22, characters 13-54 *)
                              ((acc empty_Z7_0 q) = 0 /\
                              (acc int_Z5_0
                               (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3454,7 +3454,7 @@ Save.
                               (pset_singleton q))) /\
                              (not_assigns alloc empty_Z7 empty_Z7_0
                               (pset_singleton q))) /\
-                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                             (* File "queue.c", line 14, characters 5-105 *)
                              (((valid_range alloc (acc contents_Z7 q) 0
                                 ((acc length_Z7 q) - 1)) /\
                              0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3482,9 +3482,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3515,14 +3515,14 @@ Save.
   forall (HW_28: result4 = result5),
   forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_29: full_Z7_0 = (upd full_Z7 q 1)),
-  (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
-  0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
   (not_assigns alloc int_Z5 int_Z5_0
    (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7_0 q) /\ (acc last_Z7_0 q) < (acc length_Z7 q)).
@@ -3543,9 +3543,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3576,7 +3576,7 @@ Save.
   forall (HW_28: result4 = result5),
   forall (HW_30: (forall (full_Z7_0:((memory) Z Z7)),
                   (full_Z7_0 = (upd full_Z7 q 1) ->
-                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   (* File "queue.c", line 22, characters 13-54 *)
                    ((acc empty_Z7_0 q) = 0 /\
                    (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
                    c) /\
@@ -3586,7 +3586,7 @@ Save.
                                      (acc last_Z7 q))))) /\
                    (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3610,9 +3610,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3643,14 +3643,14 @@ Save.
   forall (HW_31: result4 <> result5),
   forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
-  (* File \"queue.c\", line 22, characters 13-54:\n *) ((acc empty_Z7_0 q) =
-  0 /\ (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
   ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
   (not_assigns alloc int_Z5 int_Z5_0
    (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
   (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
   (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7_0 q) /\ (acc last_Z7_0 q) < (acc length_Z7 q)).
@@ -3671,9 +3671,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3704,7 +3704,7 @@ Save.
   forall (HW_31: result4 <> result5),
   forall (HW_33: (forall (full_Z7_0:((memory) Z Z7)),
                   (full_Z7_0 = (upd full_Z7 q 0) ->
-                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                   (* File "queue.c", line 22, characters 13-54 *)
                    ((acc empty_Z7_0 q) = 0 /\
                    (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
                    c) /\
@@ -3714,7 +3714,7 @@ Save.
                                      (acc last_Z7 q))))) /\
                    (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
                    (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                   (* File "queue.c", line 14, characters 5-105 *)
                    (((valid_range alloc (acc contents_Z7 q) 0
                       ((acc length_Z7 q) - 1)) /\
                    0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3738,9 +3738,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3771,7 +3771,7 @@ Save.
                    ((result4 = result ->
                      (forall (full_Z7_0:((memory) Z Z7)),
                       (full_Z7_0 = (upd full_Z7 q 1) ->
-                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       (* File "queue.c", line 22, characters 13-54 *)
                        ((acc empty_Z7_0 q) = 0 /\
                        (acc int_Z5_0
                         (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3785,7 +3785,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3795,7 +3795,7 @@ Save.
                    ((result4 <> result ->
                      (forall (full_Z7_0:((memory) Z Z7)),
                       (full_Z7_0 = (upd full_Z7 q 0) ->
-                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                       (* File "queue.c", line 22, characters 13-54 *)
                        ((acc empty_Z7_0 q) = 0 /\
                        (acc int_Z5_0
                         (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3809,7 +3809,7 @@ Save.
                         (pset_singleton q))) /\
                        (not_assigns alloc empty_Z7 empty_Z7_0
                         (pset_singleton q))) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3834,9 +3834,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3867,7 +3867,7 @@ Save.
                      ((result = result0 ->
                        (forall (full_Z7_0:((memory) Z Z7)),
                         (full_Z7_0 = (upd full_Z7 q 1) ->
-                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         (* File "queue.c", line 22, characters 13-54 *)
                          ((acc empty_Z7_0 q) = 0 /\
                          (acc int_Z5_0
                           (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3881,7 +3881,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3891,7 +3891,7 @@ Save.
                      ((result <> result0 ->
                        (forall (full_Z7_0:((memory) Z Z7)),
                         (full_Z7_0 = (upd full_Z7 q 0) ->
-                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                         (* File "queue.c", line 22, characters 13-54 *)
                          ((acc empty_Z7_0 q) = 0 /\
                          (acc int_Z5_0
                           (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3905,7 +3905,7 @@ Save.
                           (pset_singleton q))) /\
                          (not_assigns alloc empty_Z7 empty_Z7_0
                           (pset_singleton q))) /\
-                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                         (* File "queue.c", line 14, characters 5-105 *)
                          (((valid_range alloc (acc contents_Z7 q) 0
                             ((acc length_Z7 q) - 1)) /\
                          0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3931,9 +3931,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3964,7 +3964,7 @@ Save.
                        ((result = result0 ->
                          (forall (full_Z7_0:((memory) Z Z7)),
                           (full_Z7_0 = (upd full_Z7 q 1) ->
-                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           (* File "queue.c", line 22, characters 13-54 *)
                            ((acc empty_Z7_0 q) = 0 /\
                            (acc int_Z5_0
                             (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -3978,7 +3978,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -3988,7 +3988,7 @@ Save.
                        ((result <> result0 ->
                          (forall (full_Z7_0:((memory) Z Z7)),
                           (full_Z7_0 = (upd full_Z7 q 0) ->
-                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                           (* File "queue.c", line 22, characters 13-54 *)
                            ((acc empty_Z7_0 q) = 0 /\
                            (acc int_Z5_0
                             (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4002,7 +4002,7 @@ Save.
                             (pset_singleton q))) /\
                            (not_assigns alloc empty_Z7 empty_Z7_0
                             (pset_singleton q))) /\
-                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                           (* File "queue.c", line 14, characters 5-105 *)
                            (((valid_range alloc (acc contents_Z7 q) 0
                               ((acc length_Z7 q) - 1)) /\
                            0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4029,9 +4029,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4064,7 +4064,7 @@ Save.
                              ((result = result0 ->
                                (forall (full_Z7_0:((memory) Z Z7)),
                                 (full_Z7_0 = (upd full_Z7 q 1) ->
-                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 (* File "queue.c", line 22, characters 13-54 *)
                                  ((acc empty_Z7_0 q) = 0 /\
                                  (acc int_Z5_0
                                   (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4078,7 +4078,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4089,7 +4089,7 @@ Save.
                              ((result <> result0 ->
                                (forall (full_Z7_0:((memory) Z Z7)),
                                 (full_Z7_0 = (upd full_Z7 q 0) ->
-                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 (* File "queue.c", line 22, characters 13-54 *)
                                  ((acc empty_Z7_0 q) = 0 /\
                                  (acc int_Z5_0
                                   (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4103,7 +4103,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4125,7 +4125,7 @@ Save.
                            ((result = result0 ->
                              (forall (full_Z7_0:((memory) Z Z7)),
                               (full_Z7_0 = (upd full_Z7 q 1) ->
-                               (* File \"queue.c\", line 22, characters 13-54:\n *)
+                               (* File "queue.c", line 22, characters 13-54 *)
                                ((acc empty_Z7_0 q) = 0 /\
                                (acc int_Z5_0
                                 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4139,7 +4139,7 @@ Save.
                                 (pset_singleton q))) /\
                                (not_assigns alloc empty_Z7 empty_Z7_0
                                 (pset_singleton q))) /\
-                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (* File "queue.c", line 14, characters 5-105 *)
                                (((valid_range alloc (acc contents_Z7 q) 0
                                   ((acc length_Z7 q) - 1)) /\
                                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4150,7 +4150,7 @@ Save.
                            ((result <> result0 ->
                              (forall (full_Z7_0:((memory) Z Z7)),
                               (full_Z7_0 = (upd full_Z7 q 0) ->
-                               (* File \"queue.c\", line 22, characters 13-54:\n *)
+                               (* File "queue.c", line 22, characters 13-54 *)
                                ((acc empty_Z7_0 q) = 0 /\
                                (acc int_Z5_0
                                 (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4164,7 +4164,7 @@ Save.
                                 (pset_singleton q))) /\
                                (not_assigns alloc empty_Z7 empty_Z7_0
                                 (pset_singleton q))) /\
-                               (* File \"queue.c\", line 14, characters 5-105:\n *)
+                               (* File "queue.c", line 14, characters 5-105 *)
                                (((valid_range alloc (acc contents_Z7 q) 0
                                   ((acc length_Z7 q) - 1)) /\
                                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4193,9 +4193,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4228,7 +4228,7 @@ Save.
                                ((result = result0 ->
                                  (forall (full_Z7_0:((memory) Z Z7)),
                                   (full_Z7_0 = (upd full_Z7 q 1) ->
-                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   (* File "queue.c", line 22, characters 13-54 *)
                                    ((acc empty_Z7_0 q) = 0 /\
                                    (acc int_Z5_0
                                     (shift (acc contents_Z7 q)
@@ -4243,7 +4243,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7 q) /\
@@ -4254,7 +4254,7 @@ Save.
                                ((result <> result0 ->
                                  (forall (full_Z7_0:((memory) Z Z7)),
                                   (full_Z7_0 = (upd full_Z7 q 0) ->
-                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   (* File "queue.c", line 22, characters 13-54 *)
                                    ((acc empty_Z7_0 q) = 0 /\
                                    (acc int_Z5_0
                                     (shift (acc contents_Z7 q)
@@ -4269,7 +4269,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7 q) /\
@@ -4291,7 +4291,7 @@ Save.
                              ((result = result0 ->
                                (forall (full_Z7_0:((memory) Z Z7)),
                                 (full_Z7_0 = (upd full_Z7 q 1) ->
-                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 (* File "queue.c", line 22, characters 13-54 *)
                                  ((acc empty_Z7_0 q) = 0 /\
                                  (acc int_Z5_0
                                   (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4305,7 +4305,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4316,7 +4316,7 @@ Save.
                              ((result <> result0 ->
                                (forall (full_Z7_0:((memory) Z Z7)),
                                 (full_Z7_0 = (upd full_Z7 q 0) ->
-                                 (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                 (* File "queue.c", line 22, characters 13-54 *)
                                  ((acc empty_Z7_0 q) = 0 /\
                                  (acc int_Z5_0
                                   (shift (acc contents_Z7 q) (acc last_Z7 q))) =
@@ -4330,7 +4330,7 @@ Save.
                                   (pset_singleton q))) /\
                                  (not_assigns alloc empty_Z7 empty_Z7_0
                                   (pset_singleton q))) /\
-                                 (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                 (* File "queue.c", line 14, characters 5-105 *)
                                  (((valid_range alloc (acc contents_Z7 q) 0
                                     ((acc length_Z7 q) - 1)) /\
                                  0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4360,9 +4360,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4395,7 +4395,7 @@ Save.
                                  ((result = result0 ->
                                    (forall (full_Z7_0:((memory) Z Z7)),
                                     (full_Z7_0 = (upd full_Z7 q 1) ->
-                                     (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                     (* File "queue.c", line 22, characters 13-54 *)
                                      ((acc empty_Z7_0 q) = 0 /\
                                      (acc int_Z5_0
                                       (shift (acc contents_Z7 q)
@@ -4411,7 +4411,7 @@ Save.
                                       (pset_singleton q))) /\
                                      (not_assigns alloc empty_Z7 empty_Z7_0
                                       (pset_singleton q))) /\
-                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (* File "queue.c", line 14, characters 5-105 *)
                                      (((valid_range alloc (acc contents_Z7 q)
                                         0 ((acc length_Z7 q) - 1)) /\
                                      0 <= (acc first_Z7 q) /\
@@ -4422,7 +4422,7 @@ Save.
                                  ((result <> result0 ->
                                    (forall (full_Z7_0:((memory) Z Z7)),
                                     (full_Z7_0 = (upd full_Z7 q 0) ->
-                                     (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                     (* File "queue.c", line 22, characters 13-54 *)
                                      ((acc empty_Z7_0 q) = 0 /\
                                      (acc int_Z5_0
                                       (shift (acc contents_Z7 q)
@@ -4438,7 +4438,7 @@ Save.
                                       (pset_singleton q))) /\
                                      (not_assigns alloc empty_Z7 empty_Z7_0
                                       (pset_singleton q))) /\
-                                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                     (* File "queue.c", line 14, characters 5-105 *)
                                      (((valid_range alloc (acc contents_Z7 q)
                                         0 ((acc length_Z7 q) - 1)) /\
                                      0 <= (acc first_Z7 q) /\
@@ -4460,7 +4460,7 @@ Save.
                                ((result = result0 ->
                                  (forall (full_Z7_0:((memory) Z Z7)),
                                   (full_Z7_0 = (upd full_Z7 q 1) ->
-                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   (* File "queue.c", line 22, characters 13-54 *)
                                    ((acc empty_Z7_0 q) = 0 /\
                                    (acc int_Z5_0
                                     (shift (acc contents_Z7 q)
@@ -4475,7 +4475,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7 q) /\
@@ -4486,7 +4486,7 @@ Save.
                                ((result <> result0 ->
                                  (forall (full_Z7_0:((memory) Z Z7)),
                                   (full_Z7_0 = (upd full_Z7 q 0) ->
-                                   (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                   (* File "queue.c", line 22, characters 13-54 *)
                                    ((acc empty_Z7_0 q) = 0 /\
                                    (acc int_Z5_0
                                     (shift (acc contents_Z7 q)
@@ -4501,7 +4501,7 @@ Save.
                                     (pset_singleton q))) /\
                                    (not_assigns alloc empty_Z7 empty_Z7_0
                                     (pset_singleton q))) /\
-                                   (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                   (* File "queue.c", line 14, characters 5-105 *)
                                    (((valid_range alloc (acc contents_Z7 q) 0
                                       ((acc length_Z7 q) - 1)) /\
                                    0 <= (acc first_Z7 q) /\
@@ -4532,9 +4532,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4567,7 +4567,7 @@ Save.
                                      ((result = result0 ->
                                        (forall (full_Z7_0:((memory) Z Z7)),
                                         (full_Z7_0 = (upd full_Z7 q 1) ->
-                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         (* File "queue.c", line 22, characters 13-54 *)
                                          ((acc empty_Z7_0 q) = 0 /\
                                          (acc int_Z5_0
                                           (shift (acc contents_Z7 q)
@@ -4583,7 +4583,7 @@ Save.
                                           (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -4597,7 +4597,7 @@ Save.
                                      ((result <> result0 ->
                                        (forall (full_Z7_0:((memory) Z Z7)),
                                         (full_Z7_0 = (upd full_Z7 q 0) ->
-                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         (* File "queue.c", line 22, characters 13-54 *)
                                          ((acc empty_Z7_0 q) = 0 /\
                                          (acc int_Z5_0
                                           (shift (acc contents_Z7 q)
@@ -4613,7 +4613,7 @@ Save.
                                           (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -4638,7 +4638,7 @@ Save.
                                    ((result = result0 ->
                                      (forall (full_Z7_0:((memory) Z Z7)),
                                       (full_Z7_0 = (upd full_Z7 q 1) ->
-                                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                       (* File "queue.c", line 22, characters 13-54 *)
                                        ((acc empty_Z7_0 q) = 0 /\
                                        (acc int_Z5_0
                                         (shift (acc contents_Z7 q)
@@ -4654,7 +4654,7 @@ Save.
                                         (pset_singleton q))) /\
                                        (not_assigns alloc empty_Z7 empty_Z7_0
                                         (pset_singleton q))) /\
-                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (* File "queue.c", line 14, characters 5-105 *)
                                        (((valid_range alloc
                                           (acc contents_Z7 q) 0
                                           ((acc length_Z7 q) - 1)) /\
@@ -4667,7 +4667,7 @@ Save.
                                    ((result <> result0 ->
                                      (forall (full_Z7_0:((memory) Z Z7)),
                                       (full_Z7_0 = (upd full_Z7 q 0) ->
-                                       (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                       (* File "queue.c", line 22, characters 13-54 *)
                                        ((acc empty_Z7_0 q) = 0 /\
                                        (acc int_Z5_0
                                         (shift (acc contents_Z7 q)
@@ -4683,7 +4683,7 @@ Save.
                                         (pset_singleton q))) /\
                                        (not_assigns alloc empty_Z7 empty_Z7_0
                                         (pset_singleton q))) /\
-                                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                       (* File "queue.c", line 14, characters 5-105 *)
                                        (((valid_range alloc
                                           (acc contents_Z7 q) 0
                                           ((acc length_Z7 q) - 1)) /\
@@ -4717,9 +4717,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4752,7 +4752,7 @@ Save.
                                        ((result = result0 ->
                                          (forall (full_Z7_0:((memory) Z Z7)),
                                           (full_Z7_0 = (upd full_Z7 q 1) ->
-                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           (* File "queue.c", line 22, characters 13-54 *)
                                            ((acc empty_Z7_0 q) = 0 /\
                                            (acc int_Z5_0
                                             (shift (acc contents_Z7 q)
@@ -4768,7 +4768,7 @@ Save.
                                             full_Z7_0 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -4782,7 +4782,7 @@ Save.
                                        ((result <> result0 ->
                                          (forall (full_Z7_0:((memory) Z Z7)),
                                           (full_Z7_0 = (upd full_Z7 q 0) ->
-                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           (* File "queue.c", line 22, characters 13-54 *)
                                            ((acc empty_Z7_0 q) = 0 /\
                                            (acc int_Z5_0
                                             (shift (acc contents_Z7 q)
@@ -4798,7 +4798,7 @@ Save.
                                             full_Z7_0 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -4823,7 +4823,7 @@ Save.
                                      ((result = result0 ->
                                        (forall (full_Z7_0:((memory) Z Z7)),
                                         (full_Z7_0 = (upd full_Z7 q 1) ->
-                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         (* File "queue.c", line 22, characters 13-54 *)
                                          ((acc empty_Z7_0 q) = 0 /\
                                          (acc int_Z5_0
                                           (shift (acc contents_Z7 q)
@@ -4839,7 +4839,7 @@ Save.
                                           (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -4853,7 +4853,7 @@ Save.
                                      ((result <> result0 ->
                                        (forall (full_Z7_0:((memory) Z Z7)),
                                         (full_Z7_0 = (upd full_Z7 q 0) ->
-                                         (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                         (* File "queue.c", line 22, characters 13-54 *)
                                          ((acc empty_Z7_0 q) = 0 /\
                                          (acc int_Z5_0
                                           (shift (acc contents_Z7 q)
@@ -4869,7 +4869,7 @@ Save.
                                           (pset_singleton q))) /\
                                          (not_assigns alloc empty_Z7
                                           empty_Z7_0 (pset_singleton q))) /\
-                                         (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                         (* File "queue.c", line 14, characters 5-105 *)
                                          (((valid_range alloc
                                             (acc contents_Z7 q) 0
                                             ((acc length_Z7 q) - 1)) /\
@@ -4905,9 +4905,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 20, characters 14-21:\n *)
+  forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_Z7 q) = 0 /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -4941,7 +4941,7 @@ Save.
                                            (forall (full_Z7_0:((memory) Z
                                             Z7)),
                                             (full_Z7_0 = (upd full_Z7 q 1) ->
-                                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                             (* File "queue.c", line 22, characters 13-54 *)
                                              ((acc empty_Z7_0 q) = 0 /\
                                              (acc int_Z5_0
                                               (shift (acc contents_Z7 q)
@@ -4959,7 +4959,7 @@ Save.
                                               full_Z7_0 (pset_singleton q))) /\
                                              (not_assigns alloc empty_Z7
                                               empty_Z7_0 (pset_singleton q))) /\
-                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (* File "queue.c", line 14, characters 5-105 *)
                                              (((valid_range alloc
                                                 (acc contents_Z7 q) 0
                                                 ((acc length_Z7 q) - 1)) /\
@@ -4974,7 +4974,7 @@ Save.
                                            (forall (full_Z7_0:((memory) Z
                                             Z7)),
                                             (full_Z7_0 = (upd full_Z7 q 0) ->
-                                             (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                             (* File "queue.c", line 22, characters 13-54 *)
                                              ((acc empty_Z7_0 q) = 0 /\
                                              (acc int_Z5_0
                                               (shift (acc contents_Z7 q)
@@ -4992,7 +4992,7 @@ Save.
                                               full_Z7_0 (pset_singleton q))) /\
                                              (not_assigns alloc empty_Z7
                                               empty_Z7_0 (pset_singleton q))) /\
-                                             (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                             (* File "queue.c", line 14, characters 5-105 *)
                                              (((valid_range alloc
                                                 (acc contents_Z7 q) 0
                                                 ((acc length_Z7 q) - 1)) /\
@@ -5017,7 +5017,7 @@ Save.
                                        ((result = result0 ->
                                          (forall (full_Z7_0:((memory) Z Z7)),
                                           (full_Z7_0 = (upd full_Z7 q 1) ->
-                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           (* File "queue.c", line 22, characters 13-54 *)
                                            ((acc empty_Z7_0 q) = 0 /\
                                            (acc int_Z5_0
                                             (shift (acc contents_Z7 q)
@@ -5033,7 +5033,7 @@ Save.
                                             full_Z7_0 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -5047,7 +5047,7 @@ Save.
                                        ((result <> result0 ->
                                          (forall (full_Z7_0:((memory) Z Z7)),
                                           (full_Z7_0 = (upd full_Z7 q 0) ->
-                                           (* File \"queue.c\", line 22, characters 13-54:\n *)
+                                           (* File "queue.c", line 22, characters 13-54 *)
                                            ((acc empty_Z7_0 q) = 0 /\
                                            (acc int_Z5_0
                                             (shift (acc contents_Z7 q)
@@ -5063,7 +5063,7 @@ Save.
                                             full_Z7_0 (pset_singleton q))) /\
                                            (not_assigns alloc empty_Z7
                                             empty_Z7_0 (pset_singleton q))) /\
-                                           (* File \"queue.c\", line 14, characters 5-105:\n *)
+                                           (* File "queue.c", line 14, characters 5-105 *)
                                            (((valid_range alloc
                                               (acc contents_Z7 q) 0
                                               ((acc length_Z7 q) - 1)) /\
@@ -5100,9 +5100,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 45, characters 14-48:\n *)
+  forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z7 q) = 0) /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -5113,13 +5113,13 @@ Save.
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (first_Z7_0: ((memory) Z Z7)),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_2: (* File \"queue.c\", line 35, characters 13-60:\n *)
+  forall (HW_2: (* File "queue.c", line 35, characters 13-60 *)
                 ((acc full_Z7_0 q) = 0 /\ result =
                 (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                 (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
                 (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
                 (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -5127,9 +5127,8 @@ Save.
                 (acc last_Z7 q) < (acc length_Z7 q))),
   forall (result0: Z),
   forall (HW_3: result0 = (acc empty_Z7_0 q1)),
-  (* File \"queue.c\", line 46, characters 13-39:\n *) result0 =
-  (acc empty_Z7 q1) /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  (* File "queue.c", line 46, characters 13-39 *) result0 = (acc empty_Z7 q1) /\
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
@@ -5149,9 +5148,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 45, characters 14-48:\n *)
+  forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z7 q) = 0) /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -5162,13 +5161,13 @@ Save.
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (first_Z7_0: ((memory) Z Z7)),
   forall (full_Z7_0: ((memory) Z Z7)),
-  forall (HW_2: (* File \"queue.c\", line 35, characters 13-60:\n *)
+  forall (HW_2: (* File "queue.c", line 35, characters 13-60 *)
                 ((acc full_Z7_0 q) = 0 /\ result =
                 (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                 (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
                 (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
                 (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -5176,9 +5175,9 @@ Save.
                 (acc last_Z7 q) < (acc length_Z7 q))),
   forall (HW_4: (forall (result:Z),
                  (result = (acc empty_Z7_0 q1) ->
-                  (* File \"queue.c\", line 46, characters 13-39:\n *)
-                  result = (acc empty_Z7 q1) /\
-                  (* File \"queue.c\", line 14, characters 5-105:\n *)
+                  (* File "queue.c", line 46, characters 13-39 *) result =
+                  (acc empty_Z7 q1) /\
+                  (* File "queue.c", line 14, characters 5-105 *)
                   (((valid_range alloc (acc contents_Z7 q) 0
                      ((acc length_Z7 q) - 1)) /\
                   0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -5202,9 +5201,9 @@ Save.
   forall (last_Z7: ((memory) Z Z7)),
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
-  forall (HW_1: ((* File \"queue.c\", line 45, characters 14-48:\n *)
+  forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z7 q) = 0) /\
-                (* File \"queue.c\", line 14, characters 5-105:\n *)
+                (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
@@ -5215,7 +5214,7 @@ Save.
                  (forall (empty_Z7_0:((memory) Z Z7)),
                   (forall (first_Z7_0:((memory) Z Z7)),
                    (forall (full_Z7_0:((memory) Z Z7)),
-                    ((* File \"queue.c\", line 35, characters 13-60:\n *)
+                    ((* File "queue.c", line 35, characters 13-60 *)
                      ((acc full_Z7_0 q) = 0 /\ result =
                      (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
                      (((not_assigns alloc full_Z7 full_Z7_0
@@ -5224,7 +5223,7 @@ Save.
                       (pset_singleton q))) /\
                      (not_assigns alloc empty_Z7 empty_Z7_0
                       (pset_singleton q))) /\
-                     (* File \"queue.c\", line 14, characters 5-105:\n *)
+                     (* File "queue.c", line 14, characters 5-105 *)
                      (((valid_range alloc (acc contents_Z7 q) 0
                         ((acc length_Z7 q) - 1)) /\
                      0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
@@ -5232,17 +5231,17 @@ Save.
                      (acc last_Z7 q) < (acc length_Z7 q)) ->
                      (forall (result:Z),
                       (result = (acc empty_Z7_0 q1) ->
-                       (* File \"queue.c\", line 46, characters 13-39:\n *)
+                       (* File "queue.c", line 46, characters 13-39 *)
                        result = (acc empty_Z7 q1) /\
-                       (* File \"queue.c\", line 14, characters 5-105:\n *)
+                       (* File "queue.c", line 14, characters 5-105 *)
                        (((valid_range alloc (acc contents_Z7 q) 0
                           ((acc length_Z7 q) - 1)) /\
                        0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
                        (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                        (acc last_Z7 q) < (acc length_Z7 q)))) /\
                      (valid alloc q1))))))),
-  ((* File \"queue.c\", line 33, characters 14-22:\n *) (acc empty_Z7 q) = 0 /\
-  (* File \"queue.c\", line 14, characters 5-105:\n *)
+  ((* File "queue.c", line 33, characters 14-22 *) (acc empty_Z7 q) = 0 /\
+  (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
   (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q))) /\

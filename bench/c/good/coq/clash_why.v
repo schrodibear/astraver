@@ -268,8 +268,8 @@ Save.
   forall (HW_1: x = 0),
   forall (y_0: Z),
   forall (HW_3: y_0 = 1),
-  (* File \"clash.c\", line 12, characters 13-62:\n *)
-  (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
+  (* File "clash.c", line 12, characters 13-62 *) (((x = 0 -> y_0 = 1)) /\
+  ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
 Save.
@@ -280,8 +280,8 @@ Save.
   forall (HW_4: x <> 0),
   forall (y_0: Z),
   forall (HW_6: y_0 = 2),
-  (* File \"clash.c\", line 12, characters 13-62:\n *)
-  (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
+  (* File "clash.c", line 12, characters 13-62 *) (((x = 0 -> y_0 = 1)) /\
+  ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
 Save.
@@ -291,7 +291,7 @@ Save.
   forall (y: Z),
   forall (y_0: Z),
   forall (HW_2: y_0 = 0),
-  (* File \"clash.c\", line 5, characters 13-41:\n *) (y_0 = 0 /\ y = y).
+  (* File "clash.c", line 5, characters 13-41 *) (y_0 = 0 /\ y = y).
 Proof.
 intuition.
 Save.
@@ -304,8 +304,8 @@ Save.
   forall (HW_3: x = 0),
   forall (y_1: Z),
   forall (HW_5: y_1 = 1),
-  (* File \"clash.c\", line 27, characters 13-65:\n *)
-  (((x = 0 -> y_1 = 1)) /\ ((x <> 0 -> y_1 = 2))).
+  (* File "clash.c", line 27, characters 13-65 *) (((x = 0 -> y_1 = 1)) /\
+  ((x <> 0 -> y_1 = 2))).
 Proof.
 intuition.
 Save.
@@ -316,8 +316,8 @@ Save.
   forall (y_0: Z),
   forall (HW_2: y_0 = 2),
   forall (HW_6: x <> 0),
-  (* File \"clash.c\", line 27, characters 13-65:\n *)
-  (((x = 0 -> y_0 = 1)) /\ ((x <> 0 -> y_0 = 2))).
+  (* File "clash.c", line 27, characters 13-65 *) (((x = 0 -> y_0 = 1)) /\
+  ((x <> 0 -> y_0 = 2))).
 Proof.
 intuition.
 Save.

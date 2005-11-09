@@ -10,9 +10,9 @@ Require Export search_spec_why.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (* File \"search.c\", line 22, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 22, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  (* File \"search.c\", line 27, characters 17-65:\n *) (0 <= 0 /\
+  (* File "search.c", line 27, characters 17-65 *) (0 <= 0 /\
   (forall (k:Z), (0 <= k /\ k < 0 -> (acc int_Z4 (shift t k)) <> v))).
 Proof.
 intuition.
@@ -25,15 +25,13 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (* File \"search.c\", line 22, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 22, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 27, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z4 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 27, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z4 (shift t k)) <> v)))),
   forall (HW_4: i < n),
@@ -42,7 +40,7 @@ Save.
   forall (result0: Z),
   forall (HW_6: result0 = (acc int_Z4 result)),
   forall (HW_7: result0 = v),
-  (* File \"search.c\", line 23, characters 13-48:\n *)
+  (* File "search.c", line 23, characters 13-48 *)
   ((0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = v)).
 Proof.
 intuition.
@@ -56,15 +54,13 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (* File \"search.c\", line 22, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 22, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 27, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z4 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 27, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z4 (shift t k)) <> v)))),
   forall (HW_4: i < n),
@@ -75,7 +71,7 @@ Save.
   forall (HW_8: result0 <> v),
   forall (i0: Z),
   forall (HW_9: i0 = (i + 1)),
-  (* File \"search.c\", line 27, characters 17-65:\n *) (0 <= i0 /\
+  (* File "search.c", line 27, characters 17-65 *) (0 <= i0 /\
   (forall (k:Z), (0 <= k /\ k < i0 -> (acc int_Z4 (shift t k)) <> v))) /\
   (Zwf 0 (n - i0) (n - i)).
 Proof.
@@ -94,15 +90,13 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (* File \"search.c\", line 22, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 22, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 27, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z4 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 27, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z4 (shift t k)) <> v)))),
   forall (HW_4: i < n),
@@ -111,13 +105,13 @@ Save.
   forall (HW_10: (forall (result0:Z),
                   (result0 = (acc int_Z4 result) ->
                    ((result0 = v ->
-                     (* File \"search.c\", line 23, characters 13-48:\n *)
+                     (* File "search.c", line 23, characters 13-48 *)
                      ((0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = v)))) /\
                    ((result0 <> v ->
                      (forall (i0:Z),
                       (i0 = (i + 1) ->
-                       (* File \"search.c\", line 27, characters 17-65:\n *)
-                       (0 <= i0 /\
+                       (* File "search.c", line 27, characters 17-65 *) (0 <=
+                       i0 /\
                        (forall (k:Z),
                         (0 <= k /\ k < i0 -> (acc int_Z4 (shift t k)) <> v))) /\
                        (Zwf 0 (n - i0) (n - i))))))))),
@@ -133,19 +127,17 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (* File \"search.c\", line 22, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 22, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 27, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z4 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 27, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 27, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z4 (shift t k)) <> v)))),
   forall (HW_11: i >= n),
-  (* File \"search.c\", line 23, characters 13-48:\n *)
+  (* File "search.c", line 23, characters 13-48 *)
   ((0 <= n /\ n < n -> (acc int_Z4 (shift t n)) = v)).
 Proof.
 intuition.
@@ -158,9 +150,9 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File \"search.c\", line 4, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 4, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  (* File \"search.c\", line 11, characters 17-65:\n *) (0 <= 0 /\
+  (* File "search.c", line 11, characters 17-65 *) (0 <= 0 /\
   (forall (k:Z), (0 <= k /\ k < 0 -> (acc int_Z5 (shift t k)) <> v))).
 Proof.
 intuition.
@@ -173,15 +165,13 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File \"search.c\", line 4, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 4, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 11, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z5 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 11, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z5 (shift t k)) <> v)))),
   forall (HW_4: i < n),
@@ -190,7 +180,7 @@ Save.
   forall (result0: Z),
   forall (HW_6: result0 = (acc int_Z5 result)),
   forall (HW_7: result0 = v),
-  (* File \"search.c\", line 6, characters 5-106:\n *)
+  (* File "search.c", line 6, characters 5-106 *)
   (((0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = v)) /\
   ((i = n ->
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z5 (shift t i)) <> v))))).
@@ -206,15 +196,13 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File \"search.c\", line 4, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 4, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 11, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z5 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 11, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z5 (shift t k)) <> v)))),
   forall (HW_4: i < n),
@@ -225,7 +213,7 @@ Save.
   forall (HW_8: result0 <> v),
   forall (i0: Z),
   forall (HW_9: i0 = (i + 1)),
-  (* File \"search.c\", line 11, characters 17-65:\n *) (0 <= i0 /\
+  (* File "search.c", line 11, characters 17-65 *) (0 <= i0 /\
   (forall (k:Z), (0 <= k /\ k < i0 -> (acc int_Z5 (shift t k)) <> v))) /\
   (Zwf 0 (n - i0) (n - i)).
 Proof.
@@ -244,15 +232,13 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File \"search.c\", line 4, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 4, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 11, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z5 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 11, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z5 (shift t k)) <> v)))),
   forall (HW_4: i < n),
@@ -261,7 +247,7 @@ Save.
   forall (HW_10: (forall (result0:Z),
                   (result0 = (acc int_Z5 result) ->
                    ((result0 = v ->
-                     (* File \"search.c\", line 6, characters 5-106:\n *)
+                     (* File "search.c", line 6, characters 5-106 *)
                      (((0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = v)) /\
                      ((i = n ->
                        (forall (i:Z),
@@ -269,8 +255,8 @@ Save.
                    ((result0 <> v ->
                      (forall (i0:Z),
                       (i0 = (i + 1) ->
-                       (* File \"search.c\", line 11, characters 17-65:\n *)
-                       (0 <= i0 /\
+                       (* File "search.c", line 11, characters 17-65 *) (0 <=
+                       i0 /\
                        (forall (k:Z),
                         (0 <= k /\ k < i0 -> (acc int_Z5 (shift t k)) <> v))) /\
                        (Zwf 0 (n - i0) (n - i))))))))),
@@ -288,19 +274,17 @@ Save.
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File \"search.c\", line 4, characters 14-35:\n *)
+  forall (HW_1: (* File "search.c", line 4, characters 14-35 *)
                 (valid_range alloc t 0 (n - 1))),
-  forall (HW_2: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                0 /\
+  forall (HW_2: (* File "search.c", line 11, characters 17-65 *) (0 <= 0 /\
                 (forall (k:Z),
                  (0 <= k /\ k < 0 -> (acc int_Z5 (shift t k)) <> v)))),
   forall (i: Z),
-  forall (HW_3: (* File \"search.c\", line 11, characters 17-65:\n *) (0 <=
-                i /\
+  forall (HW_3: (* File "search.c", line 11, characters 17-65 *) (0 <= i /\
                 (forall (k:Z),
                  (0 <= k /\ k < i -> (acc int_Z5 (shift t k)) <> v)))),
   forall (HW_11: i >= n),
-  (* File \"search.c\", line 6, characters 5-106:\n *)
+  (* File "search.c", line 6, characters 5-106 *)
   (((0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = v)) /\
   ((i = n ->
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z5 (shift t i)) <> v))))).
@@ -315,14 +299,14 @@ Save.
   forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (HW_3: (forall (result:Z),
-                 ((* File \"search.c\", line 6, characters 5-106:\n *)
+                 ((* File "search.c", line 6, characters 5-106 *)
                   (((0 <= result /\ result < 4 ->
                      (acc int_Z5 (shift t result)) = 12)) /\
                   ((result = 4 ->
                     (forall (i:Z),
                      (0 <= i /\ i < 4 -> (acc int_Z5 (shift t i)) <> 12))))) ->
                   True))),
-  (* File \"search.c\", line 4, characters 14-35:\n *)
+  (* File "search.c", line 4, characters 14-35 *)
   (valid_range alloc t 0 (4 - 1)).
 Proof.
 intuition.

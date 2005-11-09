@@ -28,7 +28,7 @@ Require Export alloca_spec_why.
   forall (HW_7: result2 = (shift result 2)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc int_Z0_2 result2)),
-  (* File \"alloca.c\", line 3, characters 13-25:\n *) result3 = 3.
+  (* File "alloca.c", line 3, characters 13-25 *) result3 = 3.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -59,8 +59,7 @@ Save.
   forall (HW_7: result2 = (shift result 2)),
   forall (HW_9: (forall (result:Z),
                  (result = (acc int_Z0_2 result2) ->
-                  (* File \"alloca.c\", line 3, characters 13-25:\n *)
-                  result = 3))),
+                  (* File "alloca.c", line 3, characters 13-25 *) result = 3))),
   (valid alloc0 result2).
 Proof.
 intuition.
@@ -92,7 +91,7 @@ Save.
                     (result0 = (shift result 2) ->
                      (forall (result:Z),
                       (result = (acc int_Z0 result0) ->
-                       (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                       (* File "alloca.c", line 3, characters 13-25 *)
                        result = 3)) /\
                      (valid alloc0 result0)))))),
   (valid alloc0 result1).
@@ -127,7 +126,7 @@ Save.
                         (result0 = (shift result 2) ->
                          (forall (result:Z),
                           (result = (acc int_Z0_0 result0) ->
-                           (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                           (* File "alloca.c", line 3, characters 13-25 *)
                            result = 3)) /\
                          (valid alloc0 result0))))) /\
                      (valid alloc0 result0)))))),
@@ -162,7 +161,7 @@ Save.
                             (result0 = (shift result 2) ->
                              (forall (result:Z),
                               (result = (acc int_Z0_0 result0) ->
-                               (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                               (* File "alloca.c", line 3, characters 13-25 *)
                                result = 3)) /\
                              (valid alloc0 result0))))) /\
                          (valid alloc0 result0))))) /\
@@ -198,7 +197,7 @@ Save.
                                (result0 = (shift result 2) ->
                                 (forall (result:Z),
                                  (result = (acc int_Z0_0 result0) ->
-                                  (* File \"alloca.c\", line 3, characters 13-25:\n *)
+                                  (* File "alloca.c", line 3, characters 13-25 *)
                                   result = 3)) /\
                                 (valid alloc0 result0))))) /\
                             (valid alloc0 result0))))) /\
@@ -235,7 +234,7 @@ Save.
   forall (HW_7: result2 = (shift result 2)),
   forall (result3: Z),
   forall (HW_8: result3 = (acc int_Z1_2 result2)),
-  (* File \"alloca.c\", line 9, characters 13-25:\n *) result3 = 3.
+  (* File "alloca.c", line 9, characters 13-25 *) result3 = 3.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -266,8 +265,7 @@ Save.
   forall (HW_7: result2 = (shift result 2)),
   forall (HW_9: (forall (result:Z),
                  (result = (acc int_Z1_2 result2) ->
-                  (* File \"alloca.c\", line 9, characters 13-25:\n *)
-                  result = 3))),
+                  (* File "alloca.c", line 9, characters 13-25 *) result = 3))),
   (valid alloc0 result2).
 Proof.
 intuition.
@@ -299,7 +297,7 @@ Save.
                     (result0 = (shift result 2) ->
                      (forall (result:Z),
                       (result = (acc int_Z1 result0) ->
-                       (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                       (* File "alloca.c", line 9, characters 13-25 *)
                        result = 3)) /\
                      (valid alloc0 result0)))))),
   (valid alloc0 result1).
@@ -332,7 +330,7 @@ Save.
                         (result0 = (shift result 2) ->
                          (forall (result:Z),
                           (result = (acc int_Z1_0 result0) ->
-                           (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                           (* File "alloca.c", line 9, characters 13-25 *)
                            result = 3)) /\
                          (valid alloc0 result0))))) /\
                      (valid alloc0 result0)))))),
@@ -367,7 +365,7 @@ Save.
                             (result0 = (shift result 2) ->
                              (forall (result:Z),
                               (result = (acc int_Z1_0 result0) ->
-                               (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                               (* File "alloca.c", line 9, characters 13-25 *)
                                result = 3)) /\
                              (valid alloc0 result0))))) /\
                          (valid alloc0 result0))))) /\
@@ -403,7 +401,7 @@ Save.
                                (result0 = (shift result 2) ->
                                 (forall (result:Z),
                                  (result = (acc int_Z1_0 result0) ->
-                                  (* File \"alloca.c\", line 9, characters 13-25:\n *)
+                                  (* File "alloca.c", line 9, characters 13-25 *)
                                   result = 3)) /\
                                 (valid alloc0 result0))))) /\
                             (valid alloc0 result0))))) /\
@@ -421,7 +419,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -448,7 +446,7 @@ Save.
   forall (HW_10: result3 = (shift u 2)),
   forall (result4: Z),
   forall (HW_11: result4 = (acc int_Z11 result3)),
-  (* File \"alloca.c\", line 18, characters 13-26:\n *) result4 = 12.
+  (* File "alloca.c", line 18, characters 13-26 *) result4 = 12.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -460,7 +458,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -487,8 +485,8 @@ Save.
   forall (HW_10: result3 = (shift u 2)),
   forall (HW_12: (forall (result:Z),
                   (result = (acc int_Z11 result3) ->
-                   (* File \"alloca.c\", line 18, characters 13-26:\n *)
-                   result = 12))),
+                   (* File "alloca.c", line 18, characters 13-26 *) result =
+                   12))),
   (valid alloc0 result3).
 Proof.
 intuition.
@@ -501,7 +499,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -528,7 +526,7 @@ Save.
                     (result = (shift u 2) ->
                      (forall (result0:Z),
                       (result0 = (acc int_Z11 result) ->
-                       (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                       (* File "alloca.c", line 18, characters 13-26 *)
                        result0 = 12)) /\
                      (valid alloc0 result)))))),
   (valid alloc0 result2).
@@ -596,7 +594,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -623,7 +621,7 @@ Save.
                         (result = (shift u 2) ->
                          (forall (result0:Z),
                           (result0 = (acc int_Z11 result) ->
-                           (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                           (* File "alloca.c", line 18, characters 13-26 *)
                            result0 = 12)) /\
                          (valid alloc0 result))))) /\
                      (valid alloc0 result0)))))),
@@ -639,7 +637,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -666,7 +664,7 @@ Save.
                             (result = (shift u 2) ->
                              (forall (result0:Z),
                               (result0 = (acc int_Z11 result) ->
-                               (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                               (* File "alloca.c", line 18, characters 13-26 *)
                                result0 = 12)) /\
                              (valid alloc0 result))))) /\
                          (valid alloc0 result0))))) /\
@@ -683,7 +681,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -710,7 +708,7 @@ Save.
                                 (result = (shift u 2) ->
                                  (forall (result0:Z),
                                   (result0 = (acc int_Z11 result) ->
-                                   (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                                   (* File "alloca.c", line 18, characters 13-26 *)
                                    result0 = 12)) /\
                                  (valid alloc0 result))))) /\
                              (valid alloc0 result0))))) /\
@@ -728,7 +726,7 @@ Save.
   forall (int_Z11: ((memory) Z Z11)),
   forall (int_Z3: ((memory) Z Z3)),
   forall (u: ((pointer) Z11)),
-  forall (HW_1: (* File \"alloca.c\", line 17, characters 14-24:\n *)
+  forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_17: (forall (result:((pointer) Z3)),
                   (forall (alloc0:alloc_table),
@@ -755,7 +753,7 @@ Save.
                                    (result = (shift u 2) ->
                                     (forall (result0:Z),
                                      (result0 = (acc int_Z11 result) ->
-                                      (* File \"alloca.c\", line 18, characters 13-26:\n *)
+                                      (* File "alloca.c", line 18, characters 13-26 *)
                                       result0 = 12)) /\
                                     (valid alloc0 result))))) /\
                                 (valid alloc0 result0))))) /\
@@ -823,7 +821,7 @@ Save.
   forall (HW_19: result9 = (shift result3 2)),
   forall (result10: Z),
   forall (HW_20: result10 = (acc int_Z5_3 result9)),
-  (* File \"alloca.c\", line 24, characters 13-25:\n *) result10 = 3.
+  (* File "alloca.c", line 24, characters 13-25 *) result10 = 3.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -884,8 +882,8 @@ Save.
   forall (HW_19: result9 = (shift result3 2)),
   forall (HW_21: (forall (result:Z),
                   (result = (acc int_Z5_3 result9) ->
-                   (* File \"alloca.c\", line 24, characters 13-25:\n *)
-                   result = 3))),
+                   (* File "alloca.c", line 24, characters 13-25 *) result =
+                   3))),
   (valid alloc1 result9).
 Proof.
 intuition.
@@ -948,7 +946,7 @@ Save.
                     (result = (shift result3 2) ->
                      (forall (result0:Z),
                       (result0 = (acc int_Z5 result) ->
-                       (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                       (* File "alloca.c", line 24, characters 13-25 *)
                        result0 = 3)) /\
                      (valid alloc1 result)))))),
   (valid alloc1 result8).
@@ -1024,7 +1022,7 @@ Save.
                         (result = (shift result3 2) ->
                          (forall (result0:Z),
                           (result0 = (acc int_Z5_0 result) ->
-                           (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                           (* File "alloca.c", line 24, characters 13-25 *)
                            result0 = 3)) /\
                          (valid alloc1 result))))) /\
                      (valid alloc1 result)))))),
@@ -1089,7 +1087,7 @@ Save.
                           (result = (shift result3 2) ->
                            (forall (result0:Z),
                             (result0 = (acc int_Z5_0 result) ->
-                             (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                             (* File "alloca.c", line 24, characters 13-25 *)
                              result0 = 3)) /\
                            (valid alloc1 result))))) /\
                        (valid alloc1 result))))) /\
@@ -1155,7 +1153,7 @@ Save.
                                 (result = (shift result3 2) ->
                                  (forall (result0:Z),
                                   (result0 = (acc int_Z5 result) ->
-                                   (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                   (* File "alloca.c", line 24, characters 13-25 *)
                                    result0 = 3)) /\
                                  (valid alloc1 result))))) /\
                              (valid alloc1 result))))) /\
@@ -1222,7 +1220,7 @@ Save.
                                     (result = (shift result3 2) ->
                                      (forall (result0:Z),
                                       (result0 = (acc int_Z5 result) ->
-                                       (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                       (* File "alloca.c", line 24, characters 13-25 *)
                                        result0 = 3)) /\
                                      (valid alloc1 result))))) /\
                                  (valid alloc1 result))))) /\
@@ -1290,7 +1288,7 @@ Save.
                                        (result = (shift result0 2) ->
                                         (forall (result0:Z),
                                          (result0 = (acc int_Z5 result) ->
-                                          (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                          (* File "alloca.c", line 24, characters 13-25 *)
                                           result0 = 3)) /\
                                         (valid alloc result))))) /\
                                     (valid alloc result))))) /\
@@ -1359,7 +1357,7 @@ Save.
                                          (result = (shift result0 2) ->
                                           (forall (result0:Z),
                                            (result0 = (acc int_Z5 result) ->
-                                            (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                            (* File "alloca.c", line 24, characters 13-25 *)
                                             result0 = 3)) /\
                                           (valid alloc result))))) /\
                                       (valid alloc result))))) /\
@@ -1430,7 +1428,7 @@ Save.
                                              (result = (shift result0 2) ->
                                               (forall (result0:Z),
                                                (result0 = (acc int_Z5 result) ->
-                                                (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                (* File "alloca.c", line 24, characters 13-25 *)
                                                 result0 = 3)) /\
                                               (valid alloc result))))) /\
                                           (valid alloc result))))) /\
@@ -1506,7 +1504,7 @@ Save.
                                                   (forall (result0:Z),
                                                    (result0 = (acc int_Z5
                                                                result) ->
-                                                    (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                    (* File "alloca.c", line 24, characters 13-25 *)
                                                     result0 = 3)) /\
                                                   (valid alloc result))))) /\
                                               (valid alloc result))))) /\
@@ -1585,7 +1583,7 @@ Save.
                                                       (forall (result0:Z),
                                                        (result0 = (acc int_Z5
                                                                    result) ->
-                                                        (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                        (* File "alloca.c", line 24, characters 13-25 *)
                                                         result0 = 3)) /\
                                                       (valid alloc result))))) /\
                                                   (valid alloc result))))) /\
@@ -1667,7 +1665,7 @@ Save.
                                                          (forall (result0:Z),
                                                           (result0 = (
                                                            acc int_Z5 result) ->
-                                                           (* File \"alloca.c\", line 24, characters 13-25:\n *)
+                                                           (* File "alloca.c", line 24, characters 13-25 *)
                                                            result0 = 3)) /\
                                                          (valid alloc result))))) /\
                                                      (valid alloc result))))) /\
@@ -1717,7 +1715,7 @@ Save.
   forall (HW_7: result3 = (shift result 4)),
   forall (result4: Z),
   forall (HW_8: result4 = (acc int_Z6_0 result3)),
-  (* File \"alloca.c\", line 31, characters 13-25:\n *) result4 = 3.
+  (* File "alloca.c", line 31, characters 13-25 *) result4 = 3.
 Proof.
 intuition.
 Save.
@@ -1753,8 +1751,7 @@ Save.
   forall (HW_7: result3 = (shift result 4)),
   forall (HW_9: (forall (result:Z),
                  (result = (acc int_Z6_0 result3) ->
-                  (* File \"alloca.c\", line 31, characters 13-25:\n *)
-                  result = 3))),
+                  (* File "alloca.c", line 31, characters 13-25 *) result = 3))),
   (valid alloc1 result3).
 Proof.
 intuition.
@@ -1791,7 +1788,7 @@ Save.
                     (result0 = (shift result 4) ->
                      (forall (result:Z),
                       (result = (acc int_Z6_0 result0) ->
-                       (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                       (* File "alloca.c", line 31, characters 13-25 *)
                        result = 3)) /\
                      (valid alloc1 result0)))))),
   (valid alloc1 result2).
@@ -1835,7 +1832,7 @@ Save.
                         (result0 = (shift result 4) ->
                          (forall (result:Z),
                           (result = (acc int_Z6_0 result0) ->
-                           (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                           (* File "alloca.c", line 31, characters 13-25 *)
                            result = 3)) /\
                          (valid alloc1 result0))))) /\
                      (valid alloc1 result1)))))),
@@ -1886,7 +1883,7 @@ Save.
                              (result0 = (shift result 4) ->
                               (forall (result:Z),
                                (result = (acc int_Z6_0 result0) ->
-                                (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                                (* File "alloca.c", line 31, characters 13-25 *)
                                 result = 3)) /\
                               (valid alloc result0))))) /\
                           (valid alloc result1))))) /\
@@ -1928,7 +1925,7 @@ Save.
                                 (result0 = (shift result 4) ->
                                  (forall (result:Z),
                                   (result = (acc int_Z6_0 result0) ->
-                                   (* File \"alloca.c\", line 31, characters 13-25:\n *)
+                                   (* File "alloca.c", line 31, characters 13-25 *)
                                    result = 3)) /\
                                  (valid alloc result0))))) /\
                              (valid alloc result1))))) /\

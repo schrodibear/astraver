@@ -30,12 +30,32 @@ Save.
   forall (HW_5: ((Zmod a 2)) = 1),
   forall (p0: Z),
   forall (HW_6: p0 = (p + b)),
+  2 <> 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma mult_po_3 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: x >= 0 /\ y >= 0),
+  forall (HW_2: x >= 0 /\ (0 + x * y) = (x * y)),
+  forall (a: Z),
+  forall (b: Z),
+  forall (p: Z),
+  forall (HW_3: a >= 0 /\ (p + a * b) = (x * y)),
+  forall (HW_4: a <> 0),
+  forall (HW_5: ((Zmod a 2)) = 1),
+  forall (p0: Z),
+  forall (HW_6: p0 = (p + b)),
+  forall (HW_7: 2 <> 0),
   forall (result: Z),
-  forall (HW_7: result = ((Zdiv a 2))),
+  forall (HW_8: result = ((Zdiv a 2))),
   forall (a0: Z),
-  forall (HW_8: a0 = result),
+  forall (HW_9: a0 = result),
   forall (b0: Z),
-  forall (HW_9: b0 = (2 * b)),
+  forall (HW_10: b0 = (2 * b)),
   (a0 >= 0 /\ (p0 + a0 * b0) = (x * y)) /\ (Zwf 0 a0 a).
 Proof.
 intuition.
@@ -53,32 +73,6 @@ subst; apply Z_div_lt; try omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma mult_po_3 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_1: x >= 0 /\ y >= 0),
-  forall (HW_2: x >= 0 /\ (0 + x * y) = (x * y)),
-  forall (a: Z),
-  forall (b: Z),
-  forall (p: Z),
-  forall (HW_3: a >= 0 /\ (p + a * b) = (x * y)),
-  forall (HW_4: a <> 0),
-  forall (HW_5: ((Zmod a 2)) = 1),
-  forall (p0: Z),
-  forall (HW_6: p0 = (p + b)),
-  forall (HW_10: (forall (result:Z),
-                  (result = ((Zdiv a 2)) ->
-                   (forall (a0:Z),
-                    (a0 = result ->
-                     (forall (b0:Z),
-                      (b0 = (2 * b) -> (a0 >= 0 /\ (p0 + a0 * b0) =
-                       (x * y)) /\ (Zwf 0 a0 a)))))))),
-  2 <> 0.
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult_po_4 : 
   forall (x: Z),
   forall (y: Z),
@@ -90,12 +84,30 @@ Save.
   forall (HW_3: a >= 0 /\ (p + a * b) = (x * y)),
   forall (HW_4: a <> 0),
   forall (HW_11: ((Zmod a 2)) <> 1),
+  2 <> 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma mult_po_5 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: x >= 0 /\ y >= 0),
+  forall (HW_2: x >= 0 /\ (0 + x * y) = (x * y)),
+  forall (a: Z),
+  forall (b: Z),
+  forall (p: Z),
+  forall (HW_3: a >= 0 /\ (p + a * b) = (x * y)),
+  forall (HW_4: a <> 0),
+  forall (HW_11: ((Zmod a 2)) <> 1),
+  forall (HW_12: 2 <> 0),
   forall (result: Z),
-  forall (HW_12: result = ((Zdiv a 2))),
+  forall (HW_13: result = ((Zdiv a 2))),
   forall (a0: Z),
-  forall (HW_13: a0 = result),
+  forall (HW_14: a0 = result),
   forall (b0: Z),
-  forall (HW_14: b0 = (2 * b)),
+  forall (HW_15: b0 = (2 * b)),
   (a0 >= 0 /\ (p + a0 * b0) = (x * y)) /\ (Zwf 0 a0 a).
 Proof.
 intuition.
@@ -113,30 +125,6 @@ omega.
 unfold Zwf.
 repeat split; try omega.
 subst; apply Z_div_lt; try omega.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma mult_po_5 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_1: x >= 0 /\ y >= 0),
-  forall (HW_2: x >= 0 /\ (0 + x * y) = (x * y)),
-  forall (a: Z),
-  forall (b: Z),
-  forall (p: Z),
-  forall (HW_3: a >= 0 /\ (p + a * b) = (x * y)),
-  forall (HW_4: a <> 0),
-  forall (HW_11: ((Zmod a 2)) <> 1),
-  forall (HW_15: (forall (result:Z),
-                  (result = ((Zdiv a 2)) ->
-                   (forall (a0:Z),
-                    (a0 = result ->
-                     (forall (b0:Z),
-                      (b0 = (2 * b) -> (a0 >= 0 /\ (p + a0 * b0) =
-                       (x * y)) /\ (Zwf 0 a0 a)))))))),
-  2 <> 0.
-Proof.
-intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

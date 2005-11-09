@@ -4,193 +4,187 @@
 Require Import Why.
 
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_1 : 
   forall (i: Z),
   forall (j: Z),
   forall (t: (array Z)),
   forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
                 (array_length t)),
-  forall (result: Z),
-  forall (HW_2: result = (access t i)),
-  forall (result0: Z),
-  forall (HW_3: result0 = (access t j)),
-  forall (t0: (array Z)),
-  forall (HW_4: t0 = (update t i result0)),
-  forall (t1: (array Z)),
-  forall (HW_5: t1 = (update t0 j result)),
-  (exchange t1 t i j).
+  0 <= i /\ i < (array_length t).
 Proof.
 tauto.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_2 : 
   forall (i: Z),
   forall (j: Z),
   forall (t: (array Z)),
   forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
                 (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
   forall (result: Z),
-  forall (HW_2: result = (access t i)),
-  forall (result0: Z),
-  forall (HW_3: result0 = (access t j)),
-  forall (t0: (array Z)),
-  forall (HW_4: t0 = (update t i result0)),
-  0 <= j /\ j < (array_length t0).
+  forall (HW_3: result = (access t i)),
+  0 <= j /\ j < (array_length t).
 Proof.
 intros; ArraySubst t0.
 Qed.
 
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_3 : 
   forall (i: Z),
   forall (j: Z),
   forall (t: (array Z)),
   forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
                 (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
   forall (result: Z),
-  forall (HW_2: result = (access t i)),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
   forall (result0: Z),
-  forall (HW_3: result0 = (access t j)),
+  forall (HW_5: result0 = (access t j)),
   0 <= i /\ i < (array_length t).
 Proof.
 intros; subst t1; subst t0; subst v.
 auto with datatypes.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_4 : 
   forall (i: Z),
   forall (j: Z),
   forall (t: (array Z)),
   forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
                 (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
   forall (result: Z),
-  forall (HW_2: result = (access t i)),
-  0 <= j /\ j < (array_length t).
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  forall (HW_6: 0 <= i /\ i < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_7: t0 = (update t i result0)),
+  0 <= j /\ j < (array_length t0).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_5 : 
   forall (i: Z),
   forall (j: Z),
   forall (t: (array Z)),
   forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
                 (array_length t)),
-  0 <= i /\ i < (array_length t).
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  forall (HW_6: 0 <= i /\ i < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_7: t0 = (update t i result0)),
+  forall (HW_8: 0 <= j /\ j < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_9: t1 = (update t0 j result)),
+  (exchange t1 t i j).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_1 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
-  forall (result: Z),
-  forall (HW_3: result = (access t l)),
-  (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
-  (forall (j:Z), (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
-  (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\ l < (l + 1)) /\
-  (l + 1) <= (r + 1).
+  0 <= l /\ l < (array_length t).
 Proof.
 auto with *.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_2 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
-  forall (i: Z),
-  forall (m: Z),
-  forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
-                (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
-                (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
-                m < i) /\ i <= (r + 1)),
-  forall (HW_5: i <= r),
-  forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_7: result0 < result),
-  forall (m0: Z),
-  forall (HW_8: m0 = (m + 1)),
-  forall (t1: (array Z)),
-  forall (HW_9: (exchange t1 t0 i m0)),
-  forall (i0: Z),
-  forall (HW_10: i0 = (i + 1)),
-  ((forall (j:Z), (l < j /\ j <= m0 -> (access t1 j) < result)) /\
-  (forall (j:Z), (m0 < j /\ j < i0 -> (access t1 j) >= result)) /\
-  (sub_permut l r t1 t) /\ (access t1 l) = result /\ (l <= m0 /\ m0 < i0) /\
-  i0 <= (r + 1)) /\ (Zwf 0 (1 + r - i0) (1 + r - i)).
+  forall (HW_4: result = (access t l)),
+  (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+  (forall (j:Z), (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+  (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\ l < (l + 1)) /\
+  (l + 1) <= (r + 1).
 Proof.
 intuition.
 ArrayLength.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_3 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_5: i <= r),
-  forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_7: result0 < result),
-  forall (m0: Z),
-  forall (HW_8: m0 = (m + 1)),
-  (0 <= i /\ i < (array_length t0)) /\ 0 <= m0 /\ m0 < (array_length t0).
+  forall (HW_7: i <= r),
+  0 <= i /\ i < (array_length t0).
 Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_4 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_5: i <= r),
+  forall (HW_7: i <= r),
+  forall (HW_8: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_11: result0 >= result),
-  forall (i0: Z),
-  forall (HW_12: i0 = (i + 1)),
-  ((forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
-  (forall (j:Z), (m < j /\ j < i0 -> (access t0 j) >= result)) /\
-  (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\ m < i0) /\
-  i0 <= (r + 1)) /\ (Zwf 0 (1 + r - i0) (1 + r - i)).
+  forall (HW_9: result0 = (access t0 i)),
+  forall (HW_10: result0 < result),
+  forall (m0: Z),
+  forall (HW_11: m0 = (m + 1)),
+  (0 <= i /\ i < (array_length t0)) /\ 0 <= m0 /\ m0 < (array_length t0).
 Proof.
 intuition.
 assert (hj: (j < m2)%Z \/ j = m2).
@@ -216,24 +210,45 @@ decompose [exchange] Post30.
 rewrite H24; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_5 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_5: i <= r),
-  0 <= i /\ i < (array_length t0).
+  forall (HW_7: i <= r),
+  forall (HW_8: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_9: result0 = (access t0 i)),
+  forall (HW_10: result0 < result),
+  forall (m0: Z),
+  forall (HW_11: m0 = (m + 1)),
+  forall (HW_12: (0 <= i /\ i < (array_length t0)) /\ 0 <= m0 /\ m0 <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_13: (exchange t1 t0 i m0)),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  ((forall (j:Z), (l < j /\ j <= m0 -> (access t1 j) < result)) /\
+  (forall (j:Z), (m0 < j /\ j < i0 -> (access t1 j) >= result)) /\
+  (sub_permut l r t1 t) /\ (access t1 l) = result /\ (l <= m0 /\ m0 < i0) /\
+  i0 <= (r + 1)) /\ (Zwf 0 (1 + r - i0) (1 + r - i)).
 Proof.
 intuition.
 assert (hj: (j < i1)%Z \/ j = i1).
@@ -242,154 +257,207 @@ assert (hj: (j < i1)%Z \/ j = i1).
 rewrite H15; assumption.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_6 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_13: i > r),
-  forall (t1: (array Z)),
-  forall (HW_14: (exchange t1 t0 l m)),
-  forall (t2: (array Z)),
-  forall (HW_15: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
-  forall (t3: (array Z)),
-  forall (HW_16: (sorted_array t3 (m + 1) r) /\ (sub_permut (m + 1) r t3 t2)),
-  (sorted_array t3 l r) /\ (sub_permut l r t3 t).
+  forall (HW_7: i <= r),
+  forall (HW_8: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_9: result0 = (access t0 i)),
+  forall (HW_15: result0 >= result),
+  forall (i0: Z),
+  forall (HW_16: i0 = (i + 1)),
+  ((forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  (forall (j:Z), (m < j /\ j < i0 -> (access t0 j) >= result)) /\
+  (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\ m < i0) /\
+  i0 <= (r + 1)) /\ (Zwf 0 (1 + r - i0) (1 + r - i)).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_7 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_13: i > r),
-  forall (t1: (array Z)),
-  forall (HW_14: (exchange t1 t0 l m)),
-  forall (t2: (array Z)),
-  forall (HW_15: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
-  (Zwf 0 (1 + r - (m + 1)) (1 + r - l)).
+  forall (HW_17: i > r),
+  (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m < (array_length t0).
 Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_8 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_13: i > r),
+  forall (HW_17: i > r),
+  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+                 (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_14: (exchange t1 t0 l m)),
-  forall (t2: (array Z)),
-  forall (HW_15: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
-  0 <= (m + 1) /\ r < (array_length t2).
+  forall (HW_19: (exchange t1 t0 l m)),
+  (Zwf 0 (1 + (m - 1) - l) (1 + r - l)).
 Proof.
 intuition ArrayLength.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_9 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_13: i > r),
+  forall (HW_17: i > r),
+  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+                 (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_14: (exchange t1 t0 l m)),
-  (Zwf 0 (1 + (m - 1) - l) (1 + r - l)).
+  forall (HW_19: (exchange t1 t0 l m)),
+  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  0 <= l /\ (m - 1) < (array_length t1).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_10 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_13: i > r),
+  forall (HW_17: i > r),
+  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+                 (array_length t0)),
   forall (t1: (array Z)),
-  forall (HW_14: (exchange t1 t0 l m)),
-  0 <= l /\ (m - 1) < (array_length t1).
+  forall (HW_19: (exchange t1 t0 l m)),
+  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_21: 0 <= l /\ (m - 1) < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_22: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
+  (Zwf 0 (1 + r - (m + 1)) (1 + r - l)).
 Proof.
 intuition.
 generalize (sub_permut_length H20); generalize (exchange_length Post32);
  generalize (sub_permut_length H10); intros; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_11 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
   forall (result: Z),
-  forall (HW_3: result = (access t l)),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
   forall (i: Z),
   forall (m: Z),
   forall (t0: (array Z)),
-  forall (HW_4: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
                 (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
                 (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
                 m < i) /\ i <= (r + 1)),
-  forall (HW_13: i > r),
-  (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m < (array_length t0).
+  forall (HW_17: i > r),
+  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_19: (exchange t1 t0 l m)),
+  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_21: 0 <= l /\ (m - 1) < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_22: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
+  forall (HW_23: (Zwf 0 (1 + r - (m + 1)) (1 + r - l))),
+  0 <= (m + 1) /\ r < (array_length t2).
 Proof.
 intuition.
 Qed.
@@ -509,49 +577,78 @@ unfold sorted_array; intros; omega.
 Qed.
 
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_12 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
   forall (HW_2: l < r),
-  0 <= l /\ l < (array_length t).
+  forall (HW_3: 0 <= l /\ l < (array_length t)),
+  forall (result: Z),
+  forall (HW_4: result = (access t l)),
+  forall (HW_5: (forall (j:Z), (l < j /\ j <= l -> (access t j) < result)) /\
+                (forall (j:Z),
+                 (l < j /\ j < (l + 1) -> (access t j) >= result)) /\
+                (sub_permut l r t t) /\ (access t l) = result /\ (l <= l /\
+                l < (l + 1)) /\ (l + 1) <= (r + 1)),
+  forall (i: Z),
+  forall (m: Z),
+  forall (t0: (array Z)),
+  forall (HW_6: (forall (j:Z), (l < j /\ j <= m -> (access t0 j) < result)) /\
+                (forall (j:Z), (m < j /\ j < i -> (access t0 j) >= result)) /\
+                (sub_permut l r t0 t) /\ (access t0 l) = result /\ (l <= m /\
+                m < i) /\ i <= (r + 1)),
+  forall (HW_17: i > r),
+  forall (HW_18: (0 <= l /\ l < (array_length t0)) /\ 0 <= m /\ m <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_19: (exchange t1 t0 l m)),
+  forall (HW_20: (Zwf 0 (1 + (m - 1) - l) (1 + r - l))),
+  forall (HW_21: 0 <= l /\ (m - 1) < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_22: (sorted_array t2 l (m - 1)) /\ (sub_permut l (m - 1) t2 t1)),
+  forall (HW_23: (Zwf 0 (1 + r - (m + 1)) (1 + r - l))),
+  forall (HW_24: 0 <= (m + 1) /\ r < (array_length t2)),
+  forall (t3: (array Z)),
+  forall (HW_25: (sorted_array t3 (m + 1) r) /\ (sub_permut (m + 1) r t3 t2)),
+  (sorted_array t3 l r) /\ (sub_permut l r t3 t).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_13 : 
   forall (l: Z),
   forall (r: Z),
   forall (t: (array Z)),
   forall (HW_1: 0 <= l /\ r < (array_length t)),
-  forall (HW_17: l >= r),
+  forall (HW_26: l >= r),
   (sorted_array t l r) /\ (sub_permut l r t t).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quicksort_po_1 : 
   forall (t: (array Z)),
   forall (result: Z),
   forall (HW_1: result = (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_2: (sorted_array t0 0 (result - 1)) /\
-                (sub_permut 0 (result - 1) t0 t)),
-  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
+  0 <= 0 /\ (result - 1) < (array_length t).
 Proof.
 intuition omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quicksort_po_2 : 
   forall (t: (array Z)),
   forall (result: Z),
   forall (HW_1: result = (array_length t)),
-  0 <= 0 /\ (result - 1) < (array_length t).
+  forall (HW_2: 0 <= 0 /\ (result - 1) < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_3: (sorted_array t0 0 (result - 1)) /\
+                (sub_permut 0 (result - 1) t0 t)),
+  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
 Proof.
 intuition.
 ArrayLength; assumption.

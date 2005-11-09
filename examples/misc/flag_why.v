@@ -50,63 +50,9 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
-  forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_6: result = blue),
-  forall (result0: color),
-  forall (HW_7: result0 = (access t0 b)),
-  forall (result1: color),
-  forall (HW_8: result1 = (access t0 i)),
-  forall (t1: (array color)),
-  forall (HW_9: t1 = (update t0 b result1)),
-  forall (t2: (array color)),
-  forall (HW_10: t2 = (update t1 i result0)),
-  forall (b0: Z),
-  forall (HW_11: b0 = (b + 1)),
-  forall (i0: Z),
-  forall (HW_12: i0 = (i + 1)),
-  ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\ r <= N) /\
-  (monochrome t2 0 b0 blue) /\ (monochrome t2 b0 i0 white) /\
-  (monochrome t2 r N red) /\ (array_length t2) = N) /\
-  (Zwf 0 (r - i0) (r - i)).
+  0 <= i /\ i < (array_length t0).
 Proof.
-unfold monochrome, Zwf; intuition try omega.
-assert (h: (k < b)%Z \/ k = b).
- omega.
- intuition.
-subst t2; AccessOther.
-subst t1; AccessOther.
-auto.
-subst; simpl; auto.
-subst; simpl; omega.
-ArraySubst t1.
-assert (h: b = i \/ (b < i)).
- omega.
- intuition.
-subst.
-AccessSame.
-assumption.
-subst t2; AccessOther.
-subst; AccessSame.
-assumption.
-subst t1; simpl; omega.
-subst t1; simpl; omega.
-assert (h: k = i \/ (k < i)).
- omega.
- intuition.
-subst; AccessSame.
-auto with *.
-subst t2; AccessOther.
-subst; AccessOther.
-auto with *.
-subst t1; simpl; omega.
-subst t1; simpl; omega.
-subst t2; AccessOther.
-subst; AccessOther.
-auto with *.
-subst t1; simpl; omega.
-subst t1; simpl; omega.
-subst t2 t1; simpl; auto.
+intuition.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -124,29 +70,13 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_6: result = blue),
-  forall (result0: color),
-  forall (HW_7: result0 = (access t0 b)),
-  forall (result1: color),
-  forall (HW_8: result1 = (access t0 i)),
-  forall (t1: (array color)),
-  forall (HW_9: t1 = (update t0 b result1)),
-  forall (HW_13: (forall (t:(array color)),
-                  (t = (update t1 i result0) ->
-                   (forall (b0:Z),
-                    (b0 = (b + 1) ->
-                     (forall (i0:Z),
-                      (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\
-                       r <= N) /\ (monochrome t 0 b0 blue) /\
-                       (monochrome t b0 i0 white) /\
-                       (monochrome t r N red) /\ (array_length t) = N) /\
-                       (Zwf 0 (r - i0) (r - i))))))))),
-  0 <= i /\ i < (array_length t1).
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_7: result = blue),
+  0 <= b /\ b < (array_length t0).
 Proof.
 intuition.
-ArraySubst t1.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -164,27 +94,14 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_6: result = blue),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_7: result = blue),
+  forall (HW_8: 0 <= b /\ b < (array_length t0)),
   forall (result0: color),
-  forall (HW_7: result0 = (access t0 b)),
-  forall (result1: color),
-  forall (HW_8: result1 = (access t0 i)),
-  forall (HW_14: (forall (t:(array color)),
-                  (t = (update t0 b result1) ->
-                   (forall (t0:(array color)),
-                    (t0 = (update t i result0) ->
-                     (forall (b0:Z),
-                      (b0 = (b + 1) ->
-                       (forall (i0:Z),
-                        (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <=
-                         r /\ r <= N) /\ (monochrome t0 0 b0 blue) /\
-                         (monochrome t0 b0 i0 white) /\
-                         (monochrome t0 r N red) /\ (array_length t0) = N) /\
-                         (Zwf 0 (r - i0) (r - i)))))))) /\
-                   0 <= i /\ i < (array_length t)))),
-  0 <= b /\ b < (array_length t0).
+  forall (HW_9: result0 = (access t0 b)),
+  0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
 Qed.
@@ -204,28 +121,17 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_6: result = blue),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_7: result = blue),
+  forall (HW_8: 0 <= b /\ b < (array_length t0)),
   forall (result0: color),
-  forall (HW_7: result0 = (access t0 b)),
-  forall (HW_15: (forall (result:color),
-                  (result = (access t0 i) ->
-                   (forall (t:(array color)),
-                    (t = (update t0 b result) ->
-                     (forall (t0:(array color)),
-                      (t0 = (update t i result0) ->
-                       (forall (b0:Z),
-                        (b0 = (b + 1) ->
-                         (forall (i0:Z),
-                          (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <=
-                           r /\ r <= N) /\ (monochrome t0 0 b0 blue) /\
-                           (monochrome t0 b0 i0 white) /\
-                           (monochrome t0 r N red) /\ (array_length t0) =
-                           N) /\ (Zwf 0 (r - i0) (r - i)))))))) /\
-                     0 <= i /\ i < (array_length t))) /\
-                   0 <= b /\ b < (array_length t0)))),
-  0 <= i /\ i < (array_length t0).
+  forall (HW_9: result0 = (access t0 b)),
+  forall (HW_10: 0 <= i /\ i < (array_length t0)),
+  forall (result1: color),
+  forall (HW_11: result1 = (access t0 i)),
+  0 <= b /\ b < (array_length t0).
 Proof.
 intuition; subst; auto.
 Qed.
@@ -245,31 +151,23 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_6: result = blue),
-  forall (HW_16: (forall (result:color),
-                  (result = (access t0 b) ->
-                   (forall (result0:color),
-                    (result0 = (access t0 i) ->
-                     (forall (t:(array color)),
-                      (t = (update t0 b result0) ->
-                       (forall (t0:(array color)),
-                        (t0 = (update t i result) ->
-                         (forall (b0:Z),
-                          (b0 = (b + 1) ->
-                           (forall (i0:Z),
-                            (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\ (i0 <=
-                             r /\ r <= N) /\ (monochrome t0 0 b0 blue) /\
-                             (monochrome t0 b0 i0 white) /\
-                             (monochrome t0 r N red) /\ (array_length t0) =
-                             N) /\ (Zwf 0 (r - i0) (r - i)))))))) /\
-                       0 <= i /\ i < (array_length t))) /\
-                     0 <= b /\ b < (array_length t0))) /\
-                   0 <= i /\ i < (array_length t0)))),
-  0 <= b /\ b < (array_length t0).
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_7: result = blue),
+  forall (HW_8: 0 <= b /\ b < (array_length t0)),
+  forall (result0: color),
+  forall (HW_9: result0 = (access t0 b)),
+  forall (HW_10: 0 <= i /\ i < (array_length t0)),
+  forall (result1: color),
+  forall (HW_11: result1 = (access t0 i)),
+  forall (HW_12: 0 <= b /\ b < (array_length t0)),
+  forall (t1: (array color)),
+  forall (HW_13: t1 = (update t0 b result1)),
+  0 <= i /\ i < (array_length t1).
 Proof.
 intuition.
+ArraySubst t1.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -287,23 +185,60 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_7: result = blue),
+  forall (HW_8: 0 <= b /\ b < (array_length t0)),
   forall (result0: color),
-  forall (HW_18: result0 = (access t0 i)),
-  forall (HW_19: result0 = white),
+  forall (HW_9: result0 = (access t0 b)),
+  forall (HW_10: 0 <= i /\ i < (array_length t0)),
+  forall (result1: color),
+  forall (HW_11: result1 = (access t0 i)),
+  forall (HW_12: 0 <= b /\ b < (array_length t0)),
+  forall (t1: (array color)),
+  forall (HW_13: t1 = (update t0 b result1)),
+  forall (HW_14: 0 <= i /\ i < (array_length t1)),
+  forall (t2: (array color)),
+  forall (HW_15: t2 = (update t1 i result0)),
+  forall (b0: Z),
+  forall (HW_16: b0 = (b + 1)),
   forall (i0: Z),
-  forall (HW_20: i0 = (i + 1)),
-  ((0 <= b /\ b <= i0) /\ (i0 <= r /\ r <= N) /\ (monochrome t0 0 b blue) /\
-  (monochrome t0 b i0 white) /\ (monochrome t0 r N red) /\
-  (array_length t0) = N) /\ (Zwf 0 (r - i0) (r - i)).
+  forall (HW_17: i0 = (i + 1)),
+  ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\ r <= N) /\
+  (monochrome t2 0 b0 blue) /\ (monochrome t2 b0 i0 white) /\
+  (monochrome t2 r N red) /\ (array_length t2) = N) /\
+  (Zwf 0 (r - i0) (r - i)).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
-assert (h: (k < i)%Z \/ k = i).
+assert (h: (k < b)%Z \/ k = b).
  omega.
  intuition.
-subst; assumption.
+subst t2; AccessOther.
+subst t1; AccessOther.
+auto.
+subst.
+assert (h: b = i \/ (b < i)).
+ omega.
+ intuition.
+subst.
+AccessSame.
+assumption.
+AccessOther.
+assumption.
+assert (h: k = i \/ (k < i)).
+ omega.
+ intuition.
+subst; AccessSame.
+auto with *.
+subst t2; AccessOther.
+subst; AccessOther.
+auto with *.
+subst t2; AccessOther.
+subst; AccessOther.
+auto with *.
+ArraySubst t1.
+subst t2 t1; simpl; auto.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -321,44 +256,13 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
-  forall (result0: color),
-  forall (HW_18: result0 = (access t0 i)),
-  forall (HW_21: ~(result0 = white)),
-  forall (r0: Z),
-  forall (HW_22: r0 = (r - 1)),
-  forall (result1: color),
-  forall (HW_23: result1 = (access t0 r0)),
-  forall (result2: color),
-  forall (HW_24: result2 = (access t0 i)),
-  forall (t1: (array color)),
-  forall (HW_25: t1 = (update t0 r0 result2)),
-  forall (t2: (array color)),
-  forall (HW_26: t2 = (update t1 i result1)),
-  ((0 <= b /\ b <= i) /\ (i <= r0 /\ r0 <= N) /\ (monochrome t2 0 b blue) /\
-  (monochrome t2 b i white) /\ (monochrome t2 r0 N red) /\
-  (array_length t2) = N) /\ (Zwf 0 (r0 - i) (r - i)).
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  0 <= i /\ i < (array_length t0).
 Proof.
-unfold monochrome, Zwf; intuition try omega.
-subst t2 t1; do 2 AccessOther.
-apply H; omega.
-subst t2 t1; do 2 AccessOther.
- auto with *.
-assert (h: k = r0 \/ (r0 < k)).
- omega.
- intuition.
-assert (h': k = i \/ (i < k)).
- omega.
- intuition.
-subst; subst i; AccessSame.
-destruct (access t0 (r-1)); tauto.
-subst; AccessOther.
-destruct (access t0 i); tauto.
-subst; do 2 AccessOther.
-auto with *.
-subst t2 t1; simpl; trivial.
+intuition.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -376,29 +280,25 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  forall (HW_19: 0 <= i /\ i < (array_length t0)),
   forall (result0: color),
-  forall (HW_18: result0 = (access t0 i)),
-  forall (HW_21: ~(result0 = white)),
-  forall (r0: Z),
-  forall (HW_22: r0 = (r - 1)),
-  forall (result1: color),
-  forall (HW_23: result1 = (access t0 r0)),
-  forall (result2: color),
-  forall (HW_24: result2 = (access t0 i)),
-  forall (t1: (array color)),
-  forall (HW_25: t1 = (update t0 r0 result2)),
-  forall (HW_27: (forall (t:(array color)),
-                  (t = (update t1 i result1) -> ((0 <= b /\ b <= i) /\ (i <=
-                   r0 /\ r0 <= N) /\ (monochrome t 0 b blue) /\
-                   (monochrome t b i white) /\ (monochrome t r0 N red) /\
-                   (array_length t) = N) /\ (Zwf 0 (r0 - i) (r - i))))),
-  0 <= i /\ i < (array_length t1).
+  forall (HW_20: result0 = (access t0 i)),
+  forall (HW_21: result0 = white),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  ((0 <= b /\ b <= i0) /\ (i0 <= r /\ r <= N) /\ (monochrome t0 0 b blue) /\
+  (monochrome t0 b i0 white) /\ (monochrome t0 r N red) /\
+  (array_length t0) = N) /\ (Zwf 0 (r - i0) (r - i)).
 Proof.
-intuition.
-ArraySubst t1.
+unfold monochrome, Zwf; intuition try omega.
+assert (h: (k < i)%Z \/ k = i).
+ omega.
+ intuition.
+subst; assumption.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -416,26 +316,16 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  forall (HW_19: 0 <= i /\ i < (array_length t0)),
   forall (result0: color),
-  forall (HW_18: result0 = (access t0 i)),
-  forall (HW_21: ~(result0 = white)),
+  forall (HW_20: result0 = (access t0 i)),
+  forall (HW_23: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_22: r0 = (r - 1)),
-  forall (result1: color),
-  forall (HW_23: result1 = (access t0 r0)),
-  forall (result2: color),
-  forall (HW_24: result2 = (access t0 i)),
-  forall (HW_28: (forall (t:(array color)),
-                  (t = (update t0 r0 result2) ->
-                   (forall (t0:(array color)),
-                    (t0 = (update t i result1) -> ((0 <= b /\ b <= i) /\
-                     (i <= r0 /\ r0 <= N) /\ (monochrome t0 0 b blue) /\
-                     (monochrome t0 b i white) /\ (monochrome t0 r0 N red) /\
-                     (array_length t0) = N) /\ (Zwf 0 (r0 - i) (r - i)))) /\
-                   0 <= i /\ i < (array_length t)))),
+  forall (HW_24: r0 = (r - 1)),
   0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
@@ -457,28 +347,19 @@ Qed.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  forall (HW_19: 0 <= i /\ i < (array_length t0)),
   forall (result0: color),
-  forall (HW_18: result0 = (access t0 i)),
-  forall (HW_21: ~(result0 = white)),
+  forall (HW_20: result0 = (access t0 i)),
+  forall (HW_23: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_22: r0 = (r - 1)),
+  forall (HW_24: r0 = (r - 1)),
+  forall (HW_25: 0 <= r0 /\ r0 < (array_length t0)),
   forall (result1: color),
-  forall (HW_23: result1 = (access t0 r0)),
-  forall (HW_29: (forall (result:color),
-                  (result = (access t0 i) ->
-                   (forall (t:(array color)),
-                    (t = (update t0 r0 result) ->
-                     (forall (t0:(array color)),
-                      (t0 = (update t i result1) -> ((0 <= b /\ b <= i) /\
-                       (i <= r0 /\ r0 <= N) /\ (monochrome t0 0 b blue) /\
-                       (monochrome t0 b i white) /\
-                       (monochrome t0 r0 N red) /\ (array_length t0) = N) /\
-                       (Zwf 0 (r0 - i) (r - i)))) /\
-                     0 <= i /\ i < (array_length t))) /\
-                   0 <= r0 /\ r0 < (array_length t0)))),
+  forall (HW_26: result1 = (access t0 r0)),
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
@@ -499,29 +380,22 @@ Save.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  forall (HW_19: 0 <= i /\ i < (array_length t0)),
   forall (result0: color),
-  forall (HW_18: result0 = (access t0 i)),
-  forall (HW_21: ~(result0 = white)),
+  forall (HW_20: result0 = (access t0 i)),
+  forall (HW_23: ~(result0 = white)),
   forall (r0: Z),
-  forall (HW_22: r0 = (r - 1)),
-  forall (HW_30: (forall (result:color),
-                  (result = (access t0 r0) ->
-                   (forall (result0:color),
-                    (result0 = (access t0 i) ->
-                     (forall (t:(array color)),
-                      (t = (update t0 r0 result0) ->
-                       (forall (t0:(array color)),
-                        (t0 = (update t i result) -> ((0 <= b /\ b <= i) /\
-                         (i <= r0 /\ r0 <= N) /\ (monochrome t0 0 b blue) /\
-                         (monochrome t0 b i white) /\
-                         (monochrome t0 r0 N red) /\ (array_length t0) =
-                         N) /\ (Zwf 0 (r0 - i) (r - i)))) /\
-                       0 <= i /\ i < (array_length t))) /\
-                     0 <= r0 /\ r0 < (array_length t0))) /\
-                   0 <= i /\ i < (array_length t0)))),
+  forall (HW_24: r0 = (r - 1)),
+  forall (HW_25: 0 <= r0 /\ r0 < (array_length t0)),
+  forall (result1: color),
+  forall (HW_26: result1 = (access t0 r0)),
+  forall (HW_27: 0 <= i /\ i < (array_length t0)),
+  forall (result2: color),
+  forall (HW_28: result2 = (access t0 i)),
   0 <= r0 /\ r0 < (array_length t0).
 Proof.
 intuition.
@@ -542,42 +416,29 @@ Save.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
   forall (result: color),
-  forall (HW_5: result = (access t0 i)),
-  forall (HW_17: ~(result = blue)),
-  forall (HW_31: (forall (result:color),
-                  (result = (access t0 i) ->
-                   ((result = white ->
-                     (forall (i0:Z),
-                      (i0 = (i + 1) -> ((0 <= b /\ b <= i0) /\ (i0 <= r /\
-                       r <= N) /\ (monochrome t0 0 b blue) /\
-                       (monochrome t0 b i0 white) /\
-                       (monochrome t0 r N red) /\ (array_length t0) = N) /\
-                       (Zwf 0 (r - i0) (r - i)))))) /\
-                   ((~(result = white) ->
-                     (forall (r0:Z),
-                      (r0 = (r - 1) ->
-                       (forall (result:color),
-                        (result = (access t0 r0) ->
-                         (forall (result0:color),
-                          (result0 = (access t0 i) ->
-                           (forall (t:(array color)),
-                            (t = (update t0 r0 result0) ->
-                             (forall (t0:(array color)),
-                              (t0 = (update t i result) -> ((0 <= b /\ b <=
-                               i) /\ (i <= r0 /\ r0 <= N) /\
-                               (monochrome t0 0 b blue) /\
-                               (monochrome t0 b i white) /\
-                               (monochrome t0 r0 N red) /\
-                               (array_length t0) = N) /\
-                               (Zwf 0 (r0 - i) (r - i)))) /\
-                             0 <= i /\ i < (array_length t))) /\
-                           0 <= r0 /\ r0 < (array_length t0))) /\
-                         0 <= i /\ i < (array_length t0))) /\
-                       0 <= r0 /\ r0 < (array_length t0)))))))),
-  0 <= i /\ i < (array_length t0).
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  forall (HW_19: 0 <= i /\ i < (array_length t0)),
+  forall (result0: color),
+  forall (HW_20: result0 = (access t0 i)),
+  forall (HW_23: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_24: r0 = (r - 1)),
+  forall (HW_25: 0 <= r0 /\ r0 < (array_length t0)),
+  forall (result1: color),
+  forall (HW_26: result1 = (access t0 r0)),
+  forall (HW_27: 0 <= i /\ i < (array_length t0)),
+  forall (result2: color),
+  forall (HW_28: result2 = (access t0 i)),
+  forall (HW_29: 0 <= r0 /\ r0 < (array_length t0)),
+  forall (t1: (array color)),
+  forall (HW_30: t1 = (update t0 r0 result2)),
+  0 <= i /\ i < (array_length t1).
 Proof.
 intuition.
+ArraySubst t1.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -595,66 +456,50 @@ Save.
                 (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
                 (monochrome t0 r N red) /\ (array_length t0) = N),
   forall (HW_4: i < r),
-  forall (HW_32: (forall (result:color),
-                  (result = (access t0 i) ->
-                   ((result = blue ->
-                     (forall (result:color),
-                      (result = (access t0 b) ->
-                       (forall (result0:color),
-                        (result0 = (access t0 i) ->
-                         (forall (t:(array color)),
-                          (t = (update t0 b result0) ->
-                           (forall (t0:(array color)),
-                            (t0 = (update t i result) ->
-                             (forall (b0:Z),
-                              (b0 = (b + 1) ->
-                               (forall (i0:Z),
-                                (i0 = (i + 1) -> ((0 <= b0 /\ b0 <= i0) /\
-                                 (i0 <= r /\ r <= N) /\
-                                 (monochrome t0 0 b0 blue) /\
-                                 (monochrome t0 b0 i0 white) /\
-                                 (monochrome t0 r N red) /\
-                                 (array_length t0) = N) /\
-                                 (Zwf 0 (r - i0) (r - i)))))))) /\
-                           0 <= i /\ i < (array_length t))) /\
-                         0 <= b /\ b < (array_length t0))) /\
-                       0 <= i /\ i < (array_length t0))) /\
-                     0 <= b /\ b < (array_length t0))) /\
-                   ((~(result = blue) ->
-                     (forall (result:color),
-                      (result = (access t0 i) ->
-                       ((result = white ->
-                         (forall (i0:Z),
-                          (i0 = (i + 1) -> ((0 <= b /\ b <= i0) /\ (i0 <=
-                           r /\ r <= N) /\ (monochrome t0 0 b blue) /\
-                           (monochrome t0 b i0 white) /\
-                           (monochrome t0 r N red) /\ (array_length t0) =
-                           N) /\ (Zwf 0 (r - i0) (r - i)))))) /\
-                       ((~(result = white) ->
-                         (forall (r0:Z),
-                          (r0 = (r - 1) ->
-                           (forall (result:color),
-                            (result = (access t0 r0) ->
-                             (forall (result0:color),
-                              (result0 = (access t0 i) ->
-                               (forall (t:(array color)),
-                                (t = (update t0 r0 result0) ->
-                                 (forall (t0:(array color)),
-                                  (t0 = (update t i result) -> ((0 <= b /\
-                                   b <= i) /\ (i <= r0 /\ r0 <= N) /\
-                                   (monochrome t0 0 b blue) /\
-                                   (monochrome t0 b i white) /\
-                                   (monochrome t0 r0 N red) /\
-                                   (array_length t0) = N) /\
-                                   (Zwf 0 (r0 - i) (r - i)))) /\
-                                 0 <= i /\ i < (array_length t))) /\
-                               0 <= r0 /\ r0 < (array_length t0))) /\
-                             0 <= i /\ i < (array_length t0))) /\
-                           0 <= r0 /\ r0 < (array_length t0))))))) /\
-                     0 <= i /\ i < (array_length t0)))))),
-  0 <= i /\ i < (array_length t0).
+  forall (HW_5: 0 <= i /\ i < (array_length t0)),
+  forall (result: color),
+  forall (HW_6: result = (access t0 i)),
+  forall (HW_18: ~(result = blue)),
+  forall (HW_19: 0 <= i /\ i < (array_length t0)),
+  forall (result0: color),
+  forall (HW_20: result0 = (access t0 i)),
+  forall (HW_23: ~(result0 = white)),
+  forall (r0: Z),
+  forall (HW_24: r0 = (r - 1)),
+  forall (HW_25: 0 <= r0 /\ r0 < (array_length t0)),
+  forall (result1: color),
+  forall (HW_26: result1 = (access t0 r0)),
+  forall (HW_27: 0 <= i /\ i < (array_length t0)),
+  forall (result2: color),
+  forall (HW_28: result2 = (access t0 i)),
+  forall (HW_29: 0 <= r0 /\ r0 < (array_length t0)),
+  forall (t1: (array color)),
+  forall (HW_30: t1 = (update t0 r0 result2)),
+  forall (HW_31: 0 <= i /\ i < (array_length t1)),
+  forall (t2: (array color)),
+  forall (HW_32: t2 = (update t1 i result1)),
+  ((0 <= b /\ b <= i) /\ (i <= r0 /\ r0 <= N) /\ (monochrome t2 0 b blue) /\
+  (monochrome t2 b i white) /\ (monochrome t2 r0 N red) /\
+  (array_length t2) = N) /\ (Zwf 0 (r0 - i) (r - i)).
 Proof.
-intuition.
+unfold monochrome, Zwf; intuition try omega.
+subst t2 t1; do 2 AccessOther.
+auto with *.
+subst t2 t1; do 2 AccessOther.
+ auto with *.
+assert (h: k = r0 \/ (r0 < k)).
+ omega.
+ intuition.
+assert (h': k = i \/ (i < k)).
+ omega.
+ intuition.
+subst; subst i; AccessSame.
+destruct (access t0 (r-1)); tauto.
+subst; AccessOther.
+destruct (access t0 i); tauto.
+subst; do 2 AccessOther.
+auto with *.
+subst t2 t1; simpl; trivial.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

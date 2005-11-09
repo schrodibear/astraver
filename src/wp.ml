@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.89 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.90 2005-11-09 07:27:41 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -178,7 +178,7 @@ let add_to_wp loc al w =
     w
   else match w with
     | Some w -> 
-	Some (asst_app (fun w -> List.fold_left (wpand ~is_sym:false) w al) w) 
+	Some (asst_app (fun w -> List.fold_right (wpand ~is_sym:false) al w) w)
     | None -> 
 	Some (wp_named loc (wpands ~is_sym:false al))
 

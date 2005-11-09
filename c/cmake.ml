@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.17 2005-06-24 15:05:57 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.18 2005-11-09 07:27:40 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -118,7 +118,7 @@ let generic f targets =
        fprintf fmt "include %s.depend@\n@\n" f;
        fprintf fmt "depend %s.depend: coq/%s_spec_why.v %a@\n" f f 
 	 (print_files coq_v) targets;
-       fprintf fmt "\t-$(COQDEP) -I coq coq/*.v > %s.depend@\n@\n" f;
+       fprintf fmt "\t-$(COQDEP) -I coq coq/%s*_why.v > %s.depend@\n@\n" f f;
        fprintf fmt "clean:@\n";
        fprintf fmt "\trm -f coq/*.vo@\n@\n";
     )

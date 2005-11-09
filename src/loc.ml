@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.13 2005-11-07 15:13:30 hubert Exp $ i*)
+(*i $Id: loc.ml,v 1.14 2005-11-09 07:27:41 filliatr Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -52,18 +52,20 @@ type position = Lexing.position * Lexing.position
 
 let dummy_position = Lexing.dummy_pos, Lexing.dummy_pos
 
-let report_position fmt (b,e) = 
+let gen_report_position fmt (b,e) = 
   fprintf fmt "File \"%s\", " b.pos_fname;
   let l = b.pos_lnum in
   let fc = b.pos_cnum - b.pos_bol + 1 in
   let lc = e.pos_cnum - b.pos_bol + 1 in
-  fprintf fmt "line %d, characters %d-%d:@\n" l fc lc
+  fprintf fmt "line %d, characters %d-%d" l fc lc
+
+let report_position fmt pos = fprintf fmt "%a:@\n" gen_report_position pos
 
 let string =
   let buf = Buffer.create 1024 in
   fun loc ->
     let fmt = Format.formatter_of_buffer buf in
-    Format.fprintf fmt "%a@?" report_position loc;
+    Format.fprintf fmt "%a@?" gen_report_position loc;
     let s = Buffer.contents buf in
     Buffer.reset buf;
     s

@@ -15,12 +15,12 @@ Require Export ref_spec_why.
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
   forall (int_Z2_0: ((memory) Z Z2)),
-  forall (HW_2: (* File \"ref.c\", line 6, characters 13-20:\n *)
+  forall (HW_2: (* File "ref.c", line 6, characters 13-20 *)
                 (acc int_Z2_0 result) = 1 /\
                 (not_assigns alloc0 int_Z2 int_Z2_0 (pset_singleton result))),
   forall (result0: Z),
   forall (HW_3: result0 = (acc int_Z2_0 result)),
-  (* File \"ref.c\", line 13, characters 13-25:\n *) result0 = 1 /\
+  (* File "ref.c", line 13, characters 13-25 *) result0 = 1 /\
   (not_assigns alloc int_Z2 int_Z2_0 pset_empty).
 Proof.
 intuition.
@@ -38,13 +38,12 @@ Save.
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
   forall (int_Z2_0: ((memory) Z Z2)),
-  forall (HW_2: (* File \"ref.c\", line 6, characters 13-20:\n *)
+  forall (HW_2: (* File "ref.c", line 6, characters 13-20 *)
                 (acc int_Z2_0 result) = 1 /\
                 (not_assigns alloc0 int_Z2 int_Z2_0 (pset_singleton result))),
   forall (HW_4: (forall (result0:Z),
                  (result0 = (acc int_Z2_0 result) ->
-                  (* File \"ref.c\", line 13, characters 13-25:\n *)
-                  result0 = 1 /\
+                  (* File "ref.c", line 13, characters 13-25 *) result0 = 1 /\
                   (not_assigns alloc int_Z2 int_Z2_0 pset_empty)))),
   (valid alloc0 result).
 Proof.
@@ -63,16 +62,15 @@ Save.
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
   forall (HW_5: (forall (int_Z2_0:((memory) Z Z2)),
-                 ((* File \"ref.c\", line 6, characters 13-20:\n *)
+                 ((* File "ref.c", line 6, characters 13-20 *)
                   (acc int_Z2_0 result) = 1 /\
                   (not_assigns alloc0 int_Z2 int_Z2_0 (pset_singleton result)) ->
                   (forall (result0:Z),
                    (result0 = (acc int_Z2_0 result) ->
-                    (* File \"ref.c\", line 13, characters 13-25:\n *)
-                    result0 = 1 /\
+                    (* File "ref.c", line 13, characters 13-25 *) result0 = 1 /\
                     (not_assigns alloc int_Z2 int_Z2_0 pset_empty))) /\
                   (valid alloc0 result)))),
-  (* File \"ref.c\", line 4, characters 14-23:\n *) (valid alloc0 result).
+  (* File "ref.c", line 4, characters 14-23 *) (valid alloc0 result).
 Proof.
 intuition.
 subst; auto.
@@ -99,17 +97,17 @@ Save.
                    (fresh alloc result) /\ (on_stack alloc0 result) /\
                    (alloc_stack result alloc alloc0) ->
                    (forall (int_Z2_0:((memory) Z Z2)),
-                    ((* File \"ref.c\", line 6, characters 13-20:\n *)
+                    ((* File "ref.c", line 6, characters 13-20 *)
                      (acc int_Z2_0 result) = 1 /\
                      (not_assigns alloc0 int_Z2 int_Z2_0
                       (pset_singleton result)) ->
                      (forall (result0:Z),
                       (result0 = (acc int_Z2_0 result) ->
-                       (* File \"ref.c\", line 13, characters 13-25:\n *)
+                       (* File "ref.c", line 13, characters 13-25 *)
                        result0 = 1 /\
                        (not_assigns alloc int_Z2 int_Z2_0 pset_empty))) /\
                      (valid alloc0 result))) /\
-                   (* File \"ref.c\", line 4, characters 14-23:\n *)
+                   (* File "ref.c", line 4, characters 14-23 *)
                    (valid alloc0 result))))),
   1 >= 1.
 Proof.
@@ -122,11 +120,10 @@ Save.
   forall (p: ((pointer) Z2)),
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"ref.c\", line 4, characters 14-23:\n *)
-                (valid alloc p)),
+  forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
   forall (int_Z2_0: ((memory) Z Z2)),
   forall (HW_2: int_Z2_0 = (upd int_Z2 p 1)),
-  (* File \"ref.c\", line 6, characters 13-20:\n *) (acc int_Z2_0 p) = 1 /\
+  (* File "ref.c", line 6, characters 13-20 *) (acc int_Z2_0 p) = 1 /\
   (not_assigns alloc int_Z2 int_Z2_0 (pset_singleton p)).
 Proof.
 intuition; subst; caduceus.
@@ -137,11 +134,10 @@ Save.
   forall (p: ((pointer) Z2)),
   forall (alloc: alloc_table),
   forall (int_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"ref.c\", line 4, characters 14-23:\n *)
-                (valid alloc p)),
+  forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
   forall (HW_3: (forall (int_Z2_0:((memory) Z Z2)),
                  (int_Z2_0 = (upd int_Z2 p 1) ->
-                  (* File \"ref.c\", line 6, characters 13-20:\n *)
+                  (* File "ref.c", line 6, characters 13-20 *)
                   (acc int_Z2_0 p) = 1 /\
                   (not_assigns alloc int_Z2 int_Z2_0 (pset_singleton p))))),
   (valid alloc p).

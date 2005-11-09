@@ -6,13 +6,13 @@ Require Export dowhile_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"dowhile.c\", line 11, characters 14-20:\n *) x >= 0),
+  forall (HW_1: (* File "dowhile.c", line 11, characters 14-20 *) x >= 0),
   forall (x0: Z),
   forall (HW_2: x0 = 0),
   forall (i: Z),
   forall (HW_3: i = 10),
-  (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x0 = (10 - i) /\
-  10 >= i /\ i > 0).
+  (* File "dowhile.c", line 16, characters 17-43 *) (x0 = (10 - i) /\ 10 >=
+  i /\ i > 0).
 Proof.
 intuition.
 Save.
@@ -20,24 +20,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
   forall (x: Z),
-  forall (HW_1: (* File \"dowhile.c\", line 11, characters 14-20:\n *) x >= 0),
+  forall (HW_1: (* File "dowhile.c", line 11, characters 14-20 *) x >= 0),
   forall (x0: Z),
   forall (HW_2: x0 = 0),
   forall (i: Z),
   forall (HW_3: i = 10),
-  forall (HW_4: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x0 =
+  forall (HW_4: (* File "dowhile.c", line 16, characters 17-43 *) (x0 =
                 (10 - i) /\ 10 >= i /\ i > 0)),
   forall (i0: Z),
   forall (x1: Z),
-  forall (HW_5: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x1 =
+  forall (HW_5: (* File "dowhile.c", line 16, characters 17-43 *) (x1 =
                 (10 - i0) /\ 10 >= i0 /\ i0 > 0)),
   forall (x2: Z),
   forall (HW_6: x2 = (x1 + 1)),
   forall (i1: Z),
   forall (HW_7: i1 = (i0 - 1)),
   forall (HW_8: i1 > 0),
-  (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x2 = (10 - i1) /\
-  10 >= i1 /\ i1 > 0) /\ (Zwf 0 i1 i0).
+  (* File "dowhile.c", line 16, characters 17-43 *) (x2 = (10 - i1) /\ 10 >=
+  i1 /\ i1 > 0) /\ (Zwf 0 i1 i0).
 Proof.
 intuition.
 Save.
@@ -45,23 +45,23 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_3 : 
   forall (x: Z),
-  forall (HW_1: (* File \"dowhile.c\", line 11, characters 14-20:\n *) x >= 0),
+  forall (HW_1: (* File "dowhile.c", line 11, characters 14-20 *) x >= 0),
   forall (x0: Z),
   forall (HW_2: x0 = 0),
   forall (i: Z),
   forall (HW_3: i = 10),
-  forall (HW_4: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x0 =
+  forall (HW_4: (* File "dowhile.c", line 16, characters 17-43 *) (x0 =
                 (10 - i) /\ 10 >= i /\ i > 0)),
   forall (i0: Z),
   forall (x1: Z),
-  forall (HW_5: (* File \"dowhile.c\", line 16, characters 17-43:\n *) (x1 =
+  forall (HW_5: (* File "dowhile.c", line 16, characters 17-43 *) (x1 =
                 (10 - i0) /\ 10 >= i0 /\ i0 > 0)),
   forall (x2: Z),
   forall (HW_6: x2 = (x1 + 1)),
   forall (i1: Z),
   forall (HW_7: i1 = (i0 - 1)),
   forall (HW_9: i1 <= 0),
-  (* File \"dowhile.c\", line 11, characters 29-36:\n *) x2 = 10.
+  (* File "dowhile.c", line 11, characters 29-36 *) x2 = 10.
 Proof.
 intuition.
 discriminate.

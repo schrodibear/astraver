@@ -8,7 +8,6 @@ Require Import Why.
   forall (x: Z),
   forall (HW_1: x >= 0),
   forall (HW_2: x > 0),
-  forall (HW_4: (forall (result:Z), (result = 0 -> result = 0))),
   (Zwf 0 (x - 1) x).
 Proof.
 intuition.
@@ -19,8 +18,7 @@ Save.
   forall (x: Z),
   forall (HW_1: x >= 0),
   forall (HW_2: x > 0),
-  forall (HW_5: (forall (result:Z), (result = 0 -> result = 0)) /\
-                (Zwf 0 (x - 1) x)),
+  forall (HW_3: (Zwf 0 (x - 1) x)),
   (x - 1) >= 0.
 Proof.
 intuition.
@@ -43,7 +41,6 @@ Save.
   forall (HW_2: x > 0),
   forall (x0: Z),
   forall (HW_3: x0 = (x - 1)),
-  forall (HW_5: (forall (x:Z), (x = 0 -> x = 0))),
   (Zwf 0 x0 x).
 Proof.
 intuition.
@@ -56,7 +53,7 @@ Save.
   forall (HW_2: x > 0),
   forall (x0: Z),
   forall (HW_3: x0 = (x - 1)),
-  forall (HW_6: (forall (x:Z), (x = 0 -> x = 0)) /\ (Zwf 0 x0 x)),
+  forall (HW_4: (Zwf 0 x0 x)),
   x0 >= 0.
 Proof.
 intuition.
@@ -80,9 +77,7 @@ Save.
   forall (HW_2: a > 0),
   forall (x0: Z),
   forall (HW_3: x0 = (x + 1)),
-  forall (x1: Z),
-  forall (HW_4: x1 = (x0 + (a - 1))),
-  x1 = (x + a).
+  (Zwf 0 (a - 1) a).
 Proof.
 intuition.
 Save.
@@ -95,8 +90,8 @@ Save.
   forall (HW_2: a > 0),
   forall (x0: Z),
   forall (HW_3: x0 = (x + 1)),
-  forall (HW_5: (forall (x1:Z), (x1 = (x0 + (a - 1)) -> x1 = (x + a)))),
-  (Zwf 0 (a - 1) a).
+  forall (HW_4: (Zwf 0 (a - 1) a)),
+  (a - 1) >= 0.
 Proof.
 intuition.
 Save.
@@ -109,9 +104,11 @@ Save.
   forall (HW_2: a > 0),
   forall (x0: Z),
   forall (HW_3: x0 = (x + 1)),
-  forall (HW_6: (forall (x1:Z), (x1 = (x0 + (a - 1)) -> x1 = (x + a))) /\
-                (Zwf 0 (a - 1) a)),
-  (a - 1) >= 0.
+  forall (HW_4: (Zwf 0 (a - 1) a)),
+  forall (HW_5: (a - 1) >= 0),
+  forall (x1: Z),
+  forall (HW_6: x1 = (x0 + (a - 1))),
+  x1 = (x + a).
 Proof.
 intuition.
 Save.
@@ -137,9 +134,7 @@ Save.
   forall (HW_3: x0 = (x + 1)),
   forall (a0: Z),
   forall (HW_4: a0 = (a - 1)),
-  forall (x1: Z),
-  forall (HW_5: x1 = (x0 + a0)),
-  x1 = (x + a).
+  (Zwf 0 a0 a).
 Proof.
 intuition.
 Save.
@@ -154,8 +149,8 @@ Save.
   forall (HW_3: x0 = (x + 1)),
   forall (a0: Z),
   forall (HW_4: a0 = (a - 1)),
-  forall (HW_6: (forall (x1:Z), (x1 = (x0 + a0) -> x1 = (x + a)))),
-  (Zwf 0 a0 a).
+  forall (HW_5: (Zwf 0 a0 a)),
+  a0 >= 0.
 Proof.
 intuition.
 Save.
@@ -170,9 +165,11 @@ Save.
   forall (HW_3: x0 = (x + 1)),
   forall (a0: Z),
   forall (HW_4: a0 = (a - 1)),
-  forall (HW_7: (forall (x1:Z), (x1 = (x0 + a0) -> x1 = (x + a))) /\
-                (Zwf 0 a0 a)),
-  a0 >= 0.
+  forall (HW_5: (Zwf 0 a0 a)),
+  forall (HW_6: a0 >= 0),
+  forall (x1: Z),
+  forall (HW_7: x1 = (x0 + a0)),
+  x1 = (x + a).
 Proof.
 intuition.
 Save.

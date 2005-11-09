@@ -171,9 +171,7 @@ Save.
 (*Why goal*) Lemma arr4_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  forall (result: Z),
-  forall (HW_2: result = (access v6 0)),
-  0 <= result /\ result < (array_length v6).
+  0 <= 0 /\ 0 < (array_length v6).
 Proof.
 intuition.
 Save.
@@ -182,10 +180,10 @@ Save.
 (*Why goal*) Lemma arr4_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  forall (HW_3: (forall (result:Z),
-                 (result = (access v6 0) -> 0 <= result /\ result <
-                  (array_length v6)))),
-  0 <= 0 /\ 0 < (array_length v6).
+  forall (HW_2: 0 <= 0 /\ 0 < (array_length v6)),
+  forall (result: Z),
+  forall (HW_3: result = (access v6 0)),
+  0 <= result /\ result < (array_length v6).
 Proof.
 intuition.
 Save.
@@ -212,9 +210,7 @@ Save.
 (*Why goal*) Lemma arr7_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  forall (result: Z),
-  forall (HW_2: result = (access v6 0)),
-  0 <= result /\ result < (array_length v6).
+  0 <= 0 /\ 0 < (array_length v6).
 Proof.
 intuition.
 Save.
@@ -223,10 +219,10 @@ Save.
 (*Why goal*) Lemma arr7_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  forall (HW_3: (forall (result:Z),
-                 (result = (access v6 0) -> 0 <= result /\ result <
-                  (array_length v6)))),
-  0 <= 0 /\ 0 < (array_length v6).
+  forall (HW_2: 0 <= 0 /\ 0 < (array_length v6)),
+  forall (result: Z),
+  forall (HW_3: result = (access v6 0)),
+  0 <= result /\ result < (array_length v6).
 Proof.
 intuition.
 Save.

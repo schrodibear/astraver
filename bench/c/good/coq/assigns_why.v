@@ -10,11 +10,11 @@ Require Export assigns_spec_why.
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (HW_1: (* File \"assigns.c\", line 4, characters 14-51:\n *)
-                (size >= 0 /\ (valid_range alloc p 0 (size - 1)))),
+  forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
+                0 /\ (valid_range alloc p 0 (size - 1)))),
   (not_assigns alloc int_Z1 int_Z1
    (pset_range (pset_singleton p) 0 (size - 1))) /\
-  (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <= size /\ size <=
+  (* File "assigns.c", line 8, characters 7-62 *) ((0 <= size /\ size <=
   size) /\ p = (shift (shift p size) (Zopp size))).
 Proof.
 intuition; subst; auto.
@@ -35,11 +35,11 @@ Save.
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (HW_1: (* File \"assigns.c\", line 4, characters 14-51:\n *)
-                (size >= 0 /\ (valid_range alloc p 0 (size - 1)))),
+  forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
+                0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (not_assigns alloc int_Z1 int_Z1
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
                 size /\ size <= size) /\
                 p = (shift (shift p size) (Zopp size)))),
   forall (int_Z1_0: ((memory) Z Z1)),
@@ -47,7 +47,7 @@ Save.
   forall (mutable_size: Z),
   forall (HW_3: (not_assigns alloc int_Z1 int_Z1_0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
                 mutable_p = (shift (shift p size) (Zopp mutable_size)))),
   forall (mutable_size0: Z),
@@ -61,8 +61,8 @@ Save.
   forall (HW_8: mutable_p0 = result),
   ((not_assigns alloc int_Z1 int_Z1_1
     (pset_range (pset_singleton p) 0 (size - 1))) /\
-  (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
-  mutable_size0 /\ mutable_size0 <= size) /\
+  (* File "assigns.c", line 8, characters 7-62 *) ((0 <= mutable_size0 /\
+  mutable_size0 <= size) /\
   mutable_p0 = (shift (shift p size) (Zopp mutable_size0)))) /\
   (Zwf 0 mutable_size0 mutable_size).
 Proof.
@@ -78,11 +78,11 @@ Save.
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (HW_1: (* File \"assigns.c\", line 4, characters 14-51:\n *)
-                (size >= 0 /\ (valid_range alloc p 0 (size - 1)))),
+  forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
+                0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (not_assigns alloc int_Z1 int_Z1
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
                 size /\ size <= size) /\
                 p = (shift (shift p size) (Zopp size)))),
   forall (int_Z1_0: ((memory) Z Z1)),
@@ -90,7 +90,7 @@ Save.
   forall (mutable_size: Z),
   forall (HW_3: (not_assigns alloc int_Z1 int_Z1_0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
                 mutable_p = (shift (shift p size) (Zopp mutable_size)))),
   forall (mutable_size0: Z),
@@ -104,8 +104,8 @@ Save.
                      (mutable_p = result ->
                       ((not_assigns alloc int_Z1 int_Z1_1
                         (pset_range (pset_singleton p) 0 (size - 1))) /\
-                      (* File \"assigns.c\", line 8, characters 7-62:\n *)
-                      ((0 <= mutable_size0 /\ mutable_size0 <= size) /\
+                      (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
+                      mutable_size0 /\ mutable_size0 <= size) /\
                       mutable_p = (shift (shift p size) (Zopp mutable_size0)))) /\
                       (Zwf 0 mutable_size0 mutable_size)))))))),
   (valid alloc mutable_p).
@@ -120,11 +120,11 @@ Save.
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (HW_1: (* File \"assigns.c\", line 4, characters 14-51:\n *)
-                (size >= 0 /\ (valid_range alloc p 0 (size - 1)))),
+  forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
+                0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (not_assigns alloc int_Z1 int_Z1
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
                 size /\ size <= size) /\
                 p = (shift (shift p size) (Zopp size)))),
   forall (int_Z1_0: ((memory) Z Z1)),
@@ -132,7 +132,7 @@ Save.
   forall (mutable_size: Z),
   forall (HW_3: (not_assigns alloc int_Z1 int_Z1_0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File \"assigns.c\", line 8, characters 7-62:\n *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
                 mutable_p = (shift (shift p size) (Zopp mutable_size)))),
   forall (mutable_size0: Z),

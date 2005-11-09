@@ -11,11 +11,11 @@ Require Export clash_redef_spec_why.
   forall (p2_0: ((pointer) Z15)),
   forall (alloc: alloc_table),
   forall (p2_Z13: ((memory) ((pointer) Z15) Z13)),
-  forall (HW_1: (* File \"clash_redef.c\", line 7, characters 14-24:\n *)
+  forall (HW_1: (* File "clash_redef.c", line 7, characters 14-24 *)
                 (valid alloc p1)),
   forall (p2_Z13_0: ((memory) ((pointer) Z15) Z13)),
   forall (HW_2: p2_Z13_0 = (upd p2_Z13 p1 p2_0)),
-  (* File \"clash_redef.c\", line 8, characters 13-25:\n *) 0 = 0.
+  (* File "clash_redef.c", line 8, characters 13-25 *) 0 = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -27,12 +27,11 @@ Save.
   forall (p2_0: ((pointer) Z15)),
   forall (alloc: alloc_table),
   forall (p2_Z13: ((memory) ((pointer) Z15) Z13)),
-  forall (HW_1: (* File \"clash_redef.c\", line 7, characters 14-24:\n *)
+  forall (HW_1: (* File "clash_redef.c", line 7, characters 14-24 *)
                 (valid alloc p1)),
   forall (HW_3: (forall (p2_Z13_0:((memory) ((pointer) Z15) Z13)),
                  (p2_Z13_0 = (upd p2_Z13 p1 p2_0) ->
-                  (* File \"clash_redef.c\", line 8, characters 13-25:\n *)
-                  0 = 0))),
+                  (* File "clash_redef.c", line 8, characters 13-25 *) 0 = 0))),
   (valid alloc p1).
 Proof.
 intuition.

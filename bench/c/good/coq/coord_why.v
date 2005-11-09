@@ -9,7 +9,7 @@ Require Export coord_spec_why.
   forall (alloc: alloc_table),
   forall (tab: ((pointer) Z2)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"coord.c\", line 11, characters 14-28:\n *) (0 <=
+  forall (HW_1: (* File "coord.c", line 11, characters 14-28 *) (0 <=
                 index /\ index < 3) /\ (valid_range alloc tab 0 2)),
   forall (result: ((pointer) Z2)),
   forall (HW_2: result = (shift tab index)),
@@ -30,7 +30,7 @@ Save.
   forall (alloc: alloc_table),
   forall (tab: ((pointer) Z2)),
   forall (x_Z2: ((memory) Z Z2)),
-  forall (HW_1: (* File \"coord.c\", line 11, characters 14-28:\n *) (0 <=
+  forall (HW_1: (* File "coord.c", line 11, characters 14-28 *) (0 <=
                 index /\ index < 3) /\ (valid_range alloc tab 0 2)),
   forall (result: ((pointer) Z2)),
   forall (HW_2: result = (shift tab index)),

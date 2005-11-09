@@ -26,64 +26,70 @@ Admitted.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<<<<<<< caduceus_why.v
 
 
 
 (*Why type*) Definition pointer: Set ->Set.
+=======
+>>>>>>> 1.38
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Admitted.
 
 (*Why type*) Definition addr: Set ->Set.
@@ -291,26 +297,30 @@ Admitted.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<<<<<<< caduceus_why.v
 
 (*Why type*) Definition memory: Set -> Set ->Set.
+=======
+>>>>>>> 1.38
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Admitted.
 
 (*Why logic*) Definition acc :

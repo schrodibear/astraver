@@ -5,7 +5,7 @@ Require Export false_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false0_impl_po_1 : 
-  (* File \"false.c\", line 16, characters 13-19:\n *) False.
+  (* File "false.c", line 16, characters 13-19 *) False.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

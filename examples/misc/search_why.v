@@ -15,16 +15,15 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_2 : 
   forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
   forall (i: Z),
-  forall (HW_1: 0 <= i /\
+  forall (HW_2: 0 <= i /\
                 (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
   forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_3: i < result),
-  forall (result0: Z),
-  forall (HW_4: result0 = (access t i)),
-  forall (HW_5: result0 = 0),
-  (access t i) = 0.
+  forall (HW_3: result = (array_length t)),
+  forall (HW_4: i < result),
+  0 <= i /\ i < (array_length t).
 Proof.
 intuition.
 Save.
@@ -32,17 +31,40 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_3 : 
   forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
   forall (i: Z),
-  forall (HW_1: 0 <= i /\
+  forall (HW_2: 0 <= i /\
                 (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
   forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_3: i < result),
+  forall (HW_3: result = (array_length t)),
+  forall (HW_4: i < result),
+  forall (HW_5: 0 <= i /\ i < (array_length t)),
   forall (result0: Z),
-  forall (HW_4: result0 = (access t i)),
-  forall (HW_6: result0 <> 0),
+  forall (HW_6: result0 = (access t i)),
+  forall (HW_7: result0 = 0),
+  (access t i) = 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search1_po_4 : 
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
+  forall (i: Z),
+  forall (HW_2: 0 <= i /\
+                (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
+  forall (result: Z),
+  forall (HW_3: result = (array_length t)),
+  forall (HW_4: i < result),
+  forall (HW_5: 0 <= i /\ i < (array_length t)),
+  forall (result0: Z),
+  forall (HW_6: result0 = (access t i)),
+  forall (HW_8: result0 <> 0),
   forall (i0: Z),
-  forall (HW_7: i0 = (i + 1)),
+  forall (HW_9: i0 = (i + 1)),
   (0 <= i0 /\ (forall (k:Z), (0 <= k /\ k < i0 -> (access t k) <> 0))) /\
   (Zwf 0 ((array_length t) - i0) ((array_length t) - i)).
 Proof.
@@ -52,33 +74,21 @@ intuition; subst; eauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma search1_po_4 : 
-  forall (t: (array Z)),
-  forall (i: Z),
-  forall (HW_1: 0 <= i /\
-                (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
-  forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_3: i < result),
-  0 <= i /\ i < (array_length t).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search1_po_5 : 
   forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
   forall (i: Z),
-  forall (HW_1: 0 <= i /\
+  forall (HW_2: 0 <= i /\
                 (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
   forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_8: i >= result),
+  forall (HW_3: result = (array_length t)),
+  forall (HW_10: i >= result),
   (forall (k:Z), (0 <= k /\ k < (array_length t) -> (access t k) <> 0)).
 Proof.
 intuition.
 subst.
-apply H0 with k; auto with *.
+apply H2 with k; auto with *.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -92,16 +102,15 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_2 : 
   forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
   forall (i: Z),
-  forall (HW_1: 0 <= i /\
+  forall (HW_2: 0 <= i /\
                 (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
   forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_3: i < result),
-  forall (result0: Z),
-  forall (HW_4: result0 = (access t i)),
-  forall (HW_5: result0 = 0),
-  (access t i) = 0.
+  forall (HW_3: result = (array_length t)),
+  forall (HW_4: i < result),
+  0 <= i /\ i < (array_length t).
 Proof.
 intuition.
 Save.
@@ -109,17 +118,40 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_3 : 
   forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
   forall (i: Z),
-  forall (HW_1: 0 <= i /\
+  forall (HW_2: 0 <= i /\
                 (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
   forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_3: i < result),
+  forall (HW_3: result = (array_length t)),
+  forall (HW_4: i < result),
+  forall (HW_5: 0 <= i /\ i < (array_length t)),
   forall (result0: Z),
-  forall (HW_4: result0 = (access t i)),
-  forall (HW_6: result0 <> 0),
+  forall (HW_6: result0 = (access t i)),
+  forall (HW_7: result0 = 0),
+  (access t i) = 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search2_po_4 : 
+  forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
+  forall (i: Z),
+  forall (HW_2: 0 <= i /\
+                (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
+  forall (result: Z),
+  forall (HW_3: result = (array_length t)),
+  forall (HW_4: i < result),
+  forall (HW_5: 0 <= i /\ i < (array_length t)),
+  forall (result0: Z),
+  forall (HW_6: result0 = (access t i)),
+  forall (HW_8: result0 <> 0),
   forall (i0: Z),
-  forall (HW_7: i0 = (i + 1)),
+  forall (HW_9: i0 = (i + 1)),
   (0 <= i0 /\ (forall (k:Z), (0 <= k /\ k < i0 -> (access t k) <> 0))) /\
   (Zwf 0 ((array_length t) - i0) ((array_length t) - i)).
 Proof.
@@ -129,33 +161,21 @@ intuition; subst; eauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma search2_po_4 : 
-  forall (t: (array Z)),
-  forall (i: Z),
-  forall (HW_1: 0 <= i /\
-                (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
-  forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_3: i < result),
-  0 <= i /\ i < (array_length t).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search2_po_5 : 
   forall (t: (array Z)),
+  forall (HW_1: 0 <= 0 /\
+                (forall (k:Z), (0 <= k /\ k < 0 -> (access t k) <> 0))),
   forall (i: Z),
-  forall (HW_1: 0 <= i /\
+  forall (HW_2: 0 <= i /\
                 (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))),
   forall (result: Z),
-  forall (HW_2: result = (array_length t)),
-  forall (HW_8: i >= result),
+  forall (HW_3: result = (array_length t)),
+  forall (HW_10: i >= result),
   (forall (k:Z), (0 <= k /\ k < (array_length t) -> (access t k) <> 0)).
 Proof.
 intuition.
 subst.
-apply H0 with k; auto with *.
+apply H2 with k; auto with *.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -183,10 +203,7 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
   forall (HW_5: i <> result),
-  forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_7: result0 = 0),
-  (access t0 i) = 0.
+  0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
 Save.
@@ -201,18 +218,13 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
   forall (HW_5: i <> result),
+  forall (HW_6: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_8: result0 <> 0),
-  forall (HW_10: (forall (k:Z),
-                  ((i + 1) <= k /\ k < (array_length t0) -> (access t0 k) <>
-                   0))),
-  (forall (k:Z), (i <= k /\ k < (array_length t0) -> (access t0 k) <> 0)).
+  forall (HW_7: result0 = (access t0 i)),
+  forall (HW_8: result0 = 0),
+  (access t0 i) = 0.
 Proof.
 intuition.
-assert( k=i \/ i+1<=k). omega.
-intuition; subst; auto with *.
-eauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -225,9 +237,10 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
   forall (HW_5: i <> result),
+  forall (HW_6: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_8: result0 <> 0),
+  forall (HW_7: result0 = (access t0 i)),
+  forall (HW_9: result0 <> 0),
   (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i)).
 Proof.
 intuition.
@@ -243,9 +256,11 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
   forall (HW_5: i <> result),
+  forall (HW_6: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_6: result0 = (access t0 i)),
-  forall (HW_8: result0 <> 0),
+  forall (HW_7: result0 = (access t0 i)),
+  forall (HW_9: result0 <> 0),
+  forall (HW_10: (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i))),
   0 <= (i + 1) /\ (i + 1) <= (array_length t0).
 Proof.
 intuition.
@@ -261,7 +276,19 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
   forall (HW_5: i <> result),
-  0 <= i /\ i < (array_length t0).
+  forall (HW_6: 0 <= i /\ i < (array_length t0)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (access t0 i)),
+  forall (HW_9: result0 <> 0),
+  forall (HW_10: (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i))),
+  forall (HW_11: 0 <= (i + 1) /\ (i + 1) <= (array_length t0)),
+  forall (HW_13: (forall (k:Z),
+                  ((i + 1) <= k /\ k < (array_length t0) -> (access t0 k) <>
+                   0))),
+  (forall (k:Z), (i <= k /\ k < (array_length t0) -> (access t0 k) <> 0)).
 Proof.
 intuition.
+assert( k=i \/ i+1<=k). omega.
+intuition; subst; auto with *.
+eauto.
 Save.

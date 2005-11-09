@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: lexer.mll,v 1.2 2005-11-03 14:11:36 filliatr Exp $ *)
+(* $Id: lexer.mll,v 1.3 2005-11-09 07:27:41 filliatr Exp $ *)
 
 {
   open Lexing
@@ -84,6 +84,11 @@
   let string_buf = Buffer.create 1024
 
   exception Lexical_error of string
+
+  let char_for_backslash = function
+    | 'n' -> '\n'
+    | 't' -> '\t'
+    | c -> c
 }
 
 let newline = '\n'
@@ -195,8 +200,8 @@ and comment = parse
 and string = parse
   | "\""
       { STRING (Buffer.contents string_buf) }
-  | ("\\" _) as s
-      { Buffer.add_string string_buf s; string lexbuf }
+  | "\\" (_ as c)
+      { Buffer.add_char string_buf (char_for_backslash c); string lexbuf }
   | newline 
       { newline lexbuf; Buffer.add_char string_buf '\n'; string lexbuf }
   | eof

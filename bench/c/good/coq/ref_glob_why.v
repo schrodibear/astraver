@@ -11,8 +11,8 @@ Require Export ref_glob_spec_why.
   forall (HW_1: (valid_range alloc x 0 0)),
   forall (int_Z6_0: ((memory) Z Z6)),
   forall (HW_2: int_Z6_0 = (upd int_Z6 x 1)),
-  (* File \"ref_glob.c\", line 13, characters 13-19:\n *) (acc int_Z6_0 x) =
-  1 /\ (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x)).
+  (* File "ref_glob.c", line 13, characters 13-19 *) (acc int_Z6_0 x) = 1 /\
+  (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x)).
 Proof.
 intuition.
 subst;auto.
@@ -26,7 +26,7 @@ Qed.
   forall (HW_1: (valid_range alloc x 0 0)),
   forall (HW_3: (forall (int_Z6_0:((memory) Z Z6)),
                  (int_Z6_0 = (upd int_Z6 x 1) ->
-                  (* File \"ref_glob.c\", line 13, characters 13-19:\n *)
+                  (* File "ref_glob.c", line 13, characters 13-19 *)
                   (acc int_Z6_0 x) = 1 /\
                   (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x))))),
   (valid alloc x).
@@ -45,11 +45,11 @@ Qed.
   forall (x: ((pointer) Z6)),
   forall (HW_1: (valid_range alloc x 0 0)),
   forall (int_Z6_0: ((memory) Z Z6)),
-  forall (HW_2: (* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+  forall (HW_2: (* File "ref_glob.c", line 4, characters 13-20 *)
                 (acc int_Z6_0 x) = 1 /\
                 (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x))),
-  (* File \"ref_glob.c\", line 20, characters 13-19:\n *) (acc int_Z6_0 x) =
-  1 /\ (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x)).
+  (* File "ref_glob.c", line 20, characters 13-19 *) (acc int_Z6_0 x) = 1 /\
+  (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -63,13 +63,13 @@ Save.
   forall (x: ((pointer) Z6)),
   forall (HW_1: (valid_range alloc x 0 0)),
   forall (HW_3: (forall (int_Z6_0:((memory) Z Z6)),
-                 ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                 ((* File "ref_glob.c", line 4, characters 13-20 *)
                   (acc int_Z6_0 x) = 1 /\
                   (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x)) ->
-                  (* File \"ref_glob.c\", line 20, characters 13-19:\n *)
+                  (* File "ref_glob.c", line 20, characters 13-19 *)
                   (acc int_Z6_0 x) = 1 /\
                   (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton x))))),
-  (* File \"ref_glob.c\", line 2, characters 14-23:\n *) (valid alloc x).
+  (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc x).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -82,7 +82,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (result: ((pointer) Z6)),
   forall (HW_2: result = (acc c2_Z10 plas)),
@@ -91,16 +91,16 @@ Save.
   forall (result0: ((pointer) Z6)),
   forall (HW_4: result0 = (acc c1_Z10 plas)),
   forall (int_Z6_1: ((memory) Z Z6)),
-  forall (HW_5: (* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+  forall (HW_5: (* File "ref_glob.c", line 4, characters 13-20 *)
                 (acc int_Z6_1 result0) = 1 /\
                 (not_assigns alloc int_Z6_0 int_Z6_1 (pset_singleton result0))),
   forall (result1: ((pointer) Z6)),
   forall (HW_6: result1 = (acc c2_Z10 plas)),
   forall (int_Z6_2: ((memory) Z Z6)),
-  forall (HW_7: (* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+  forall (HW_7: (* File "ref_glob.c", line 4, characters 13-20 *)
                 (acc int_Z6_2 result1) = 1 /\
                 (not_assigns alloc int_Z6_1 int_Z6_2 (pset_singleton result1))),
-  (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+  (* File "ref_glob.c", line 32, characters 13-43 *)
   ((acc int_Z6_2 (acc c1_Z10 plas)) = 1 /\ (acc int_Z6_2 (acc c2_Z10 plas)) =
   1) /\
   (not_assigns alloc int_Z6 int_Z6_2
@@ -117,7 +117,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (result: ((pointer) Z6)),
   forall (HW_2: result = (acc c2_Z10 plas)),
@@ -126,24 +126,23 @@ Save.
   forall (result0: ((pointer) Z6)),
   forall (HW_4: result0 = (acc c1_Z10 plas)),
   forall (int_Z6_1: ((memory) Z Z6)),
-  forall (HW_5: (* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+  forall (HW_5: (* File "ref_glob.c", line 4, characters 13-20 *)
                 (acc int_Z6_1 result0) = 1 /\
                 (not_assigns alloc int_Z6_0 int_Z6_1 (pset_singleton result0))),
   forall (result1: ((pointer) Z6)),
   forall (HW_6: result1 = (acc c2_Z10 plas)),
   forall (HW_8: (forall (int_Z6_0:((memory) Z Z6)),
-                 ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                 ((* File "ref_glob.c", line 4, characters 13-20 *)
                   (acc int_Z6_0 result1) = 1 /\
                   (not_assigns alloc int_Z6_1 int_Z6_0
                    (pset_singleton result1)) ->
-                  (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+                  (* File "ref_glob.c", line 32, characters 13-43 *)
                   ((acc int_Z6_0 (acc c1_Z10 plas)) = 1 /\
                   (acc int_Z6_0 (acc c2_Z10 plas)) = 1) /\
                   (not_assigns alloc int_Z6 int_Z6_0
                    (pset_union (pset_singleton (acc c2_Z10 plas))
                     (pset_singleton (acc c1_Z10 plas))))))),
-  (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
-  (valid alloc result1).
+  (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result1).
 Proof.
 intuition.
 subst;auto.
@@ -156,7 +155,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (result: ((pointer) Z6)),
   forall (HW_2: result = (acc c2_Z10 plas)),
@@ -165,23 +164,23 @@ Save.
   forall (result0: ((pointer) Z6)),
   forall (HW_4: result0 = (acc c1_Z10 plas)),
   forall (int_Z6_1: ((memory) Z Z6)),
-  forall (HW_5: (* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+  forall (HW_5: (* File "ref_glob.c", line 4, characters 13-20 *)
                 (acc int_Z6_1 result0) = 1 /\
                 (not_assigns alloc int_Z6_0 int_Z6_1 (pset_singleton result0))),
   forall (HW_9: (forall (result:((pointer) Z6)),
                  (result = (acc c2_Z10 plas) ->
                   (forall (int_Z6_0:((memory) Z Z6)),
-                   ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                   ((* File "ref_glob.c", line 4, characters 13-20 *)
                     (acc int_Z6_0 result) = 1 /\
                     (not_assigns alloc int_Z6_1 int_Z6_0
                      (pset_singleton result)) ->
-                    (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+                    (* File "ref_glob.c", line 32, characters 13-43 *)
                     ((acc int_Z6_0 (acc c1_Z10 plas)) = 1 /\
                     (acc int_Z6_0 (acc c2_Z10 plas)) = 1) /\
                     (not_assigns alloc int_Z6 int_Z6_0
                      (pset_union (pset_singleton (acc c2_Z10 plas))
                       (pset_singleton (acc c1_Z10 plas)))))) /\
-                  (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                  (* File "ref_glob.c", line 2, characters 14-23 *)
                   (valid alloc result)))),
   (valid alloc plas).
 Proof.
@@ -218,7 +217,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (result: ((pointer) Z6)),
   forall (HW_2: result = (acc c2_Z10 plas)),
@@ -227,28 +226,27 @@ Save.
   forall (result0: ((pointer) Z6)),
   forall (HW_4: result0 = (acc c1_Z10 plas)),
   forall (HW_10: (forall (int_Z6_1:((memory) Z Z6)),
-                  ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                  ((* File "ref_glob.c", line 4, characters 13-20 *)
                    (acc int_Z6_1 result0) = 1 /\
                    (not_assigns alloc int_Z6_0 int_Z6_1
                     (pset_singleton result0)) ->
                    (forall (result:((pointer) Z6)),
                     (result = (acc c2_Z10 plas) ->
                      (forall (int_Z6_0:((memory) Z Z6)),
-                      ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                      ((* File "ref_glob.c", line 4, characters 13-20 *)
                        (acc int_Z6_0 result) = 1 /\
                        (not_assigns alloc int_Z6_1 int_Z6_0
                         (pset_singleton result)) ->
-                       (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+                       (* File "ref_glob.c", line 32, characters 13-43 *)
                        ((acc int_Z6_0 (acc c1_Z10 plas)) = 1 /\
                        (acc int_Z6_0 (acc c2_Z10 plas)) = 1) /\
                        (not_assigns alloc int_Z6 int_Z6_0
                         (pset_union (pset_singleton (acc c2_Z10 plas))
                          (pset_singleton (acc c1_Z10 plas)))))) /\
-                     (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                     (* File "ref_glob.c", line 2, characters 14-23 *)
                      (valid alloc result))) /\
                    (valid alloc plas)))),
-  (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
-  (valid alloc result0).
+  (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -261,7 +259,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (result: ((pointer) Z6)),
   forall (HW_2: result = (acc c2_Z10 plas)),
@@ -270,27 +268,27 @@ Save.
   forall (HW_11: (forall (result:((pointer) Z6)),
                   (result = (acc c1_Z10 plas) ->
                    (forall (int_Z6_1:((memory) Z Z6)),
-                    ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                    ((* File "ref_glob.c", line 4, characters 13-20 *)
                      (acc int_Z6_1 result) = 1 /\
                      (not_assigns alloc int_Z6_0 int_Z6_1
                       (pset_singleton result)) ->
                      (forall (result:((pointer) Z6)),
                       (result = (acc c2_Z10 plas) ->
                        (forall (int_Z6_0:((memory) Z Z6)),
-                        ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                        ((* File "ref_glob.c", line 4, characters 13-20 *)
                          (acc int_Z6_0 result) = 1 /\
                          (not_assigns alloc int_Z6_1 int_Z6_0
                           (pset_singleton result)) ->
-                         (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+                         (* File "ref_glob.c", line 32, characters 13-43 *)
                          ((acc int_Z6_0 (acc c1_Z10 plas)) = 1 /\
                          (acc int_Z6_0 (acc c2_Z10 plas)) = 1) /\
                          (not_assigns alloc int_Z6 int_Z6_0
                           (pset_union (pset_singleton (acc c2_Z10 plas))
                            (pset_singleton (acc c1_Z10 plas)))))) /\
-                       (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                       (* File "ref_glob.c", line 2, characters 14-23 *)
                        (valid alloc result))) /\
                      (valid alloc plas))) /\
-                   (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                   (* File "ref_glob.c", line 2, characters 14-23 *)
                    (valid alloc result)))),
   (valid alloc plas).
 Proof.
@@ -305,7 +303,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (result: ((pointer) Z6)),
   forall (HW_2: result = (acc c2_Z10 plas)),
@@ -314,27 +312,27 @@ Save.
                    (forall (result:((pointer) Z6)),
                     (result = (acc c1_Z10 plas) ->
                      (forall (int_Z6_1:((memory) Z Z6)),
-                      ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                      ((* File "ref_glob.c", line 4, characters 13-20 *)
                        (acc int_Z6_1 result) = 1 /\
                        (not_assigns alloc int_Z6_0 int_Z6_1
                         (pset_singleton result)) ->
                        (forall (result:((pointer) Z6)),
                         (result = (acc c2_Z10 plas) ->
                          (forall (int_Z6_0:((memory) Z Z6)),
-                          ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                          ((* File "ref_glob.c", line 4, characters 13-20 *)
                            (acc int_Z6_0 result) = 1 /\
                            (not_assigns alloc int_Z6_1 int_Z6_0
                             (pset_singleton result)) ->
-                           (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+                           (* File "ref_glob.c", line 32, characters 13-43 *)
                            ((acc int_Z6_0 (acc c1_Z10 plas)) = 1 /\
                            (acc int_Z6_0 (acc c2_Z10 plas)) = 1) /\
                            (not_assigns alloc int_Z6 int_Z6_0
                             (pset_union (pset_singleton (acc c2_Z10 plas))
                              (pset_singleton (acc c1_Z10 plas)))))) /\
-                         (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                         (* File "ref_glob.c", line 2, characters 14-23 *)
                          (valid alloc result))) /\
                        (valid alloc plas))) /\
-                     (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                     (* File "ref_glob.c", line 2, characters 14-23 *)
                      (valid alloc result))) /\
                    (valid alloc plas)))),
   (valid alloc result).
@@ -350,7 +348,7 @@ Save.
   forall (c2_Z10: ((memory) ((pointer) Z6) Z10)),
   forall (int_Z6: ((memory) Z Z6)),
   forall (plas: ((pointer) Z10)),
-  forall (HW_1: (* File \"ref_glob.c\", line 30, characters 14-26:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas)),
   forall (HW_13: (forall (result:((pointer) Z6)),
                   (result = (acc c2_Z10 plas) ->
@@ -359,27 +357,27 @@ Save.
                      (forall (result:((pointer) Z6)),
                       (result = (acc c1_Z10 plas) ->
                        (forall (int_Z6_1:((memory) Z Z6)),
-                        ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                        ((* File "ref_glob.c", line 4, characters 13-20 *)
                          (acc int_Z6_1 result) = 1 /\
                          (not_assigns alloc int_Z6_0 int_Z6_1
                           (pset_singleton result)) ->
                          (forall (result:((pointer) Z6)),
                           (result = (acc c2_Z10 plas) ->
                            (forall (int_Z6_0:((memory) Z Z6)),
-                            ((* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                            ((* File "ref_glob.c", line 4, characters 13-20 *)
                              (acc int_Z6_0 result) = 1 /\
                              (not_assigns alloc int_Z6_1 int_Z6_0
                               (pset_singleton result)) ->
-                             (* File \"ref_glob.c\", line 32, characters 13-43:\n *)
+                             (* File "ref_glob.c", line 32, characters 13-43 *)
                              ((acc int_Z6_0 (acc c1_Z10 plas)) = 1 /\
                              (acc int_Z6_0 (acc c2_Z10 plas)) = 1) /\
                              (not_assigns alloc int_Z6 int_Z6_0
                               (pset_union (pset_singleton (acc c2_Z10 plas))
                                (pset_singleton (acc c1_Z10 plas)))))) /\
-                           (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                           (* File "ref_glob.c", line 2, characters 14-23 *)
                            (valid alloc result))) /\
                          (valid alloc plas))) /\
-                       (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+                       (* File "ref_glob.c", line 2, characters 14-23 *)
                        (valid alloc result))) /\
                      (valid alloc plas))) /\
                    (valid alloc result)))),
@@ -394,11 +392,11 @@ Save.
   forall (p: ((pointer) Z6)),
   forall (alloc: alloc_table),
   forall (int_Z6: ((memory) Z Z6)),
-  forall (HW_1: (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 2, characters 14-23 *)
                 (valid alloc p)),
   forall (int_Z6_0: ((memory) Z Z6)),
   forall (HW_2: int_Z6_0 = (upd int_Z6 p 1)),
-  (* File \"ref_glob.c\", line 4, characters 13-20:\n *) (acc int_Z6_0 p) = 1 /\
+  (* File "ref_glob.c", line 4, characters 13-20 *) (acc int_Z6_0 p) = 1 /\
   (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton p)).
 Proof.
 intuition.
@@ -409,11 +407,11 @@ Save.
   forall (p: ((pointer) Z6)),
   forall (alloc: alloc_table),
   forall (int_Z6: ((memory) Z Z6)),
-  forall (HW_1: (* File \"ref_glob.c\", line 2, characters 14-23:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 2, characters 14-23 *)
                 (valid alloc p)),
   forall (HW_3: (forall (int_Z6_0:((memory) Z Z6)),
                  (int_Z6_0 = (upd int_Z6 p 1) ->
-                  (* File \"ref_glob.c\", line 4, characters 13-20:\n *)
+                  (* File "ref_glob.c", line 4, characters 13-20 *)
                   (acc int_Z6_0 p) = 1 /\
                   (not_assigns alloc int_Z6 int_Z6_0 (pset_singleton p))))),
   (valid alloc p).
@@ -428,13 +426,13 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z14: ((memory) Z Z14)),
   forall (int_Z14_Z13: ((memory) ((pointer) Z14) Z13)),
-  forall (HW_1: (* File \"ref_glob.c\", line 45, characters 14-38:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc int_Z14_Z13 p)))),
   forall (result: ((pointer) Z14)),
   forall (HW_2: result = (acc int_Z14_Z13 p)),
   forall (int_Z14_0: ((memory) Z Z14)),
   forall (HW_3: int_Z14_0 = (upd int_Z14 result 2)),
-  (* File \"ref_glob.c\", line 47, characters 13-21:\n *)
+  (* File "ref_glob.c", line 47, characters 13-21 *)
   (acc int_Z14_0 (acc int_Z14_Z13 p)) = 2 /\
   (not_assigns alloc int_Z14 int_Z14_0 (pset_singleton (acc int_Z14_Z13 p))).
 Proof.
@@ -447,13 +445,13 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z14: ((memory) Z Z14)),
   forall (int_Z14_Z13: ((memory) ((pointer) Z14) Z13)),
-  forall (HW_1: (* File \"ref_glob.c\", line 45, characters 14-38:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc int_Z14_Z13 p)))),
   forall (result: ((pointer) Z14)),
   forall (HW_2: result = (acc int_Z14_Z13 p)),
   forall (HW_4: (forall (int_Z14_0:((memory) Z Z14)),
                  (int_Z14_0 = (upd int_Z14 result 2) ->
-                  (* File \"ref_glob.c\", line 47, characters 13-21:\n *)
+                  (* File "ref_glob.c", line 47, characters 13-21 *)
                   (acc int_Z14_0 (acc int_Z14_Z13 p)) = 2 /\
                   (not_assigns alloc int_Z14 int_Z14_0
                    (pset_singleton (acc int_Z14_Z13 p)))))),
@@ -468,13 +466,13 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z14: ((memory) Z Z14)),
   forall (int_Z14_Z13: ((memory) ((pointer) Z14) Z13)),
-  forall (HW_1: (* File \"ref_glob.c\", line 45, characters 14-38:\n *)
+  forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc int_Z14_Z13 p)))),
   forall (HW_5: (forall (result:((pointer) Z14)),
                  (result = (acc int_Z14_Z13 p) ->
                   (forall (int_Z14_0:((memory) Z Z14)),
                    (int_Z14_0 = (upd int_Z14 result 2) ->
-                    (* File \"ref_glob.c\", line 47, characters 13-21:\n *)
+                    (* File "ref_glob.c", line 47, characters 13-21 *)
                     (acc int_Z14_0 (acc int_Z14_Z13 p)) = 2 /\
                     (not_assigns alloc int_Z14 int_Z14_0
                      (pset_singleton (acc int_Z14_Z13 p))))) /\

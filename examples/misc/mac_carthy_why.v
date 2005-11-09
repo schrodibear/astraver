@@ -13,28 +13,22 @@ Definition max (x y:Z) : Z :=
 (*Why goal*) Lemma f91_po_1 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
-  forall (result: Z),
-  forall (HW_2: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
-                (n + 11 - 10)),
-  forall (result0: Z),
-  forall (HW_3: result <= 100 /\ result0 = 91 \/ result >= 101 /\ result0 =
-                (result - 10)),
-  n <= 100 /\ result0 = 91 \/ n >= 101 /\ result0 = (n - 10).
+  (Zwf 0 (max 0 (101 - (n + 11))) (max 0 (101 - n))).
 Proof.
-intuition.
+unfold Zwf, max; intuition.
+case (Z_le_gt_dec 0 (101 - n)); intuition.
+case (Z_le_gt_dec 0 (101 - n)); intuition.
+case (Z_le_gt_dec 0 (101 - (n+11))); intuition.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f91_po_2 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
+  forall (HW_2: (Zwf 0 (max 0 (101 - (n + 11))) (max 0 (101 - n)))),
   forall (result: Z),
-  forall (HW_2: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
+  forall (HW_3: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
                 (n + 11 - 10)),
-  forall (HW_4: (forall (result0:Z),
-                 (result <= 100 /\ result0 = 91 \/ result >= 101 /\ result0 =
-                  (result - 10) -> n <= 100 /\ result0 = 91 \/ n >= 101 /\
-                  result0 = (n - 10)))),
   (Zwf 0 (max 0 (101 - result)) (max 0 (101 - n))).
 Proof.
 intros n.
@@ -51,20 +45,17 @@ Save.
 (*Why goal*) Lemma f91_po_3 : 
   forall (n: Z),
   forall (HW_1: n <= 100),
-  forall (HW_5: (forall (result:Z),
-                 ((n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\
-                  result = (n + 11 - 10) ->
-                  (forall (result0:Z),
-                   (result <= 100 /\ result0 = 91 \/ result >= 101 /\
-                    result0 = (result - 10) -> n <= 100 /\ result0 = 91 \/
-                    n >= 101 /\ result0 = (n - 10))) /\
-                  (Zwf 0 (max 0 (101 - result)) (max 0 (101 - n)))))),
-  (Zwf 0 (max 0 (101 - (n + 11))) (max 0 (101 - n))).
+  forall (HW_2: (Zwf 0 (max 0 (101 - (n + 11))) (max 0 (101 - n)))),
+  forall (result: Z),
+  forall (HW_3: (n + 11) <= 100 /\ result = 91 \/ (n + 11) >= 101 /\ result =
+                (n + 11 - 10)),
+  forall (HW_4: (Zwf 0 (max 0 (101 - result)) (max 0 (101 - n)))),
+  forall (result0: Z),
+  forall (HW_5: result <= 100 /\ result0 = 91 \/ result >= 101 /\ result0 =
+                (result - 10)),
+  n <= 100 /\ result0 = 91 \/ n >= 101 /\ result0 = (n - 10).
 Proof.
-unfold Zwf, max; intuition.
-case (Z_le_gt_dec 0 (101 - n)); intuition.
-case (Z_le_gt_dec 0 (101 - n)); intuition.
-case (Z_le_gt_dec 0 (101 - (n+11))); intuition.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

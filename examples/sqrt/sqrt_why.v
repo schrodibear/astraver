@@ -292,3 +292,129 @@ intuition.
 apply (iter_sqrt_invar4 x y1 z1); try omega.
 Qed.
 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_1 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_2: x = 0),
+  (0 * 0) <= x /\ x < ((0 + 1) * (0 + 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_2 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_4: x <= 3),
+  (1 * 1) <= x /\ x < ((1 + 1) * (1 + 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_3 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_5: x > 3),
+  2 <> 0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_4 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_5: x > 3),
+  forall (HW_6: 2 <> 0),
+  forall (result: Z),
+  forall (HW_7: result = ((Zdiv (x + 1) 2))),
+  result > 0 /\ x > 0 /\ result = ((Zdiv ((Zdiv x x) + x) 2)) /\ x <
+  ((x + 1) * (x + 1)) /\ x < ((result + 1) * (result + 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_5 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_5: x > 3),
+  forall (HW_6: 2 <> 0),
+  forall (result: Z),
+  forall (HW_7: result = ((Zdiv (x + 1) 2))),
+  forall (HW_8: result > 0 /\ x > 0 /\ result =
+                ((Zdiv ((Zdiv x x) + x) 2)) /\ x < ((x + 1) * (x + 1)) /\ x <
+                ((result + 1) * (result + 1))),
+  forall (y: Z),
+  forall (z: Z),
+  forall (HW_9: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+                ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1))),
+  forall (HW_10: z < y),
+  forall (y0: Z),
+  forall (HW_11: y0 = z),
+  z <> 0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_6 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_5: x > 3),
+  forall (HW_6: 2 <> 0),
+  forall (result: Z),
+  forall (HW_7: result = ((Zdiv (x + 1) 2))),
+  forall (HW_8: result > 0 /\ x > 0 /\ result =
+                ((Zdiv ((Zdiv x x) + x) 2)) /\ x < ((x + 1) * (x + 1)) /\ x <
+                ((result + 1) * (result + 1))),
+  forall (y: Z),
+  forall (z: Z),
+  forall (HW_9: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+                ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1))),
+  forall (HW_10: z < y),
+  forall (y0: Z),
+  forall (HW_11: y0 = z),
+  forall (HW_12: z <> 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = ((Zdiv x z))),
+  forall (HW_14: 2 <> 0),
+  forall (result1: Z),
+  forall (HW_15: result1 = ((Zdiv (result0 + z) 2))),
+  forall (z0: Z),
+  forall (HW_16: z0 = result1),
+  (z0 > 0 /\ y0 > 0 /\ z0 = ((Zdiv ((Zdiv x y0) + y0) 2)) /\ x <
+  ((y0 + 1) * (y0 + 1)) /\ x < ((z0 + 1) * (z0 + 1))) /\ (Zwf 0 y0 y).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma sqrt_po_7 : 
+  forall (x: Z),
+  forall (HW_1: x >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_5: x > 3),
+  forall (HW_6: 2 <> 0),
+  forall (result: Z),
+  forall (HW_7: result = ((Zdiv (x + 1) 2))),
+  forall (HW_8: result > 0 /\ x > 0 /\ result =
+                ((Zdiv ((Zdiv x x) + x) 2)) /\ x < ((x + 1) * (x + 1)) /\ x <
+                ((result + 1) * (result + 1))),
+  forall (y: Z),
+  forall (z: Z),
+  forall (HW_9: z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+                ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1))),
+  forall (HW_17: z >= y),
+  (y * y) <= x /\ x < ((y + 1) * (y + 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
