@@ -21,7 +21,7 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z5_Z4: ((memory) ((pointer) Z5) Z4)),
   forall (t: ((pointer) Z4)),
-  forall (HW_1: (* File \"array.c\", line 4, characters 14-55 *)
+  forall (HW_1: (* File "array.c", line 4, characters 14-55 *)
                 ((valid_index alloc t 1) /\
                 (valid_index alloc (acc int_Z5_Z4 (shift t 1)) 2)) /\
                 (valid_range alloc t 0 2) /\
@@ -30,11 +30,7 @@ Save.
                   (valid_range alloc (shift t counter) 0 2)))),
   forall (result: ((pointer) Z4)),
   forall (HW_2: result = (shift t 1)),
-  forall (result0: ((pointer) Z5)),
-  forall (HW_3: result0 = (acc int_Z5_Z4 result)),
-  forall (result1: ((pointer) Z5)),
-  forall (HW_4: result1 = (shift result0 2)),
-  (valid alloc result1).
+  (valid alloc result).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -45,7 +41,7 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z5_Z4: ((memory) ((pointer) Z5) Z4)),
   forall (t: ((pointer) Z4)),
-  forall (HW_1: (* File \"array.c\", line 4, characters 14-55 *)
+  forall (HW_1: (* File "array.c", line 4, characters 14-55 *)
                 ((valid_index alloc t 1) /\
                 (valid_index alloc (acc int_Z5_Z4 (shift t 1)) 2)) /\
                 (valid_range alloc t 0 2) /\
@@ -54,7 +50,12 @@ Save.
                   (valid_range alloc (shift t counter) 0 2)))),
   forall (result: ((pointer) Z4)),
   forall (HW_2: result = (shift t 1)),
-  (valid alloc result).
+  forall (HW_3: (valid alloc result)),
+  forall (result0: ((pointer) Z5)),
+  forall (HW_4: result0 = (acc int_Z5_Z4 result)),
+  forall (result1: ((pointer) Z5)),
+  forall (HW_5: result1 = (shift result0 2)),
+  (valid alloc result1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

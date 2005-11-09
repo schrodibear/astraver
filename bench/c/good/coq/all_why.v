@@ -7,7 +7,7 @@ Require Export all_spec_why.
 (*Why goal*) Lemma f1_impl_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0),
-  (* File \"all.c\", line 8, characters 13-19:\n *) x = 0.
+  (* File "all.c", line 8, characters 13-19 *) x = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -16,10 +16,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 11, characters 14-20:\n *) x = 0),
+  forall (HW_1: (* File "all.c", line 11, characters 14-20 *) x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
-  (* File \"all.c\", line 12, characters 13-19:\n *) x0 = 1.
+  (* File "all.c", line 12, characters 13-19 *) x0 = 1.
 Proof.
 intuition.
 Save.
@@ -27,10 +27,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 15, characters 14-20:\n *) x = 0),
+  forall (HW_1: (* File "all.c", line 15, characters 14-20 *) x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
-  (* File \"all.c\", line 16, characters 13-19:\n *) x0 = 1.
+  (* File "all.c", line 16, characters 13-19 *) x0 = 1.
 Proof.
 intuition.
 Save.
@@ -38,12 +38,12 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 19, characters 14-20:\n *) x = 0),
+  forall (HW_1: (* File "all.c", line 19, characters 14-20 *) x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
   forall (y: Z),
   forall (HW_3: y = x),
-  (* File \"all.c\", line 20, characters 13-29:\n *) (x0 = 1 /\ y = 0).
+  (* File "all.c", line 20, characters 13-29 *) (x0 = 1 /\ y = 0).
 Proof.
 intuition.
 Save.
@@ -51,12 +51,12 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f5_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 23, characters 14-20:\n *) x = 0),
+  forall (HW_1: (* File "all.c", line 23, characters 14-20 *) x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
   forall (y: Z),
   forall (HW_3: y = x0),
-  (* File \"all.c\", line 24, characters 13-29:\n *) (x0 = 1 /\ y = 1).
+  (* File "all.c", line 24, characters 13-29 *) (x0 = 1 /\ y = 1).
 Proof.
 intuition.
 Save.
@@ -64,10 +64,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f6_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 27, characters 14-20:\n *) x = 1),
+  forall (HW_1: (* File "all.c", line 27, characters 14-20 *) x = 1),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 2)),
-  (* File \"all.c\", line 28, characters 13-19:\n *) x0 = 3.
+  (* File "all.c", line 28, characters 13-19 *) x0 = 3.
 Proof.
 intuition.
 Save.
@@ -75,11 +75,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f7a_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 31, characters 14-20:\n *) x = 0),
+  forall (HW_1: (* File "all.c", line 31, characters 14-20 *) x = 0),
   forall (HW_2: x = 0),
   forall (y: Z),
   forall (HW_3: y = 1),
-  (* File \"all.c\", line 32, characters 13-19:\n *) y = 1.
+  (* File "all.c", line 32, characters 13-19 *) y = 1.
 Proof.
 intuition.
 Save.
@@ -87,11 +87,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f7a_impl_po_2 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 31, characters 14-20:\n *) x = 0),
+  forall (HW_1: (* File "all.c", line 31, characters 14-20 *) x = 0),
   forall (HW_4: x <> 0),
   forall (y: Z),
   forall (HW_5: y = 2),
-  (* File \"all.c\", line 32, characters 13-19:\n *) y = 1.
+  (* File "all.c", line 32, characters 13-19 *) y = 1.
 Proof.
 intuition.
 Save.
@@ -103,11 +103,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f7b_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 35, characters 14-20:\n *) x <> 0),
+  forall (HW_1: (* File "all.c", line 35, characters 14-20 *) x <> 0),
   forall (HW_2: x = 0),
   forall (y: Z),
   forall (HW_3: y = 1),
-  (* File \"all.c\", line 36, characters 13-19:\n *) y = 2.
+  (* File "all.c", line 36, characters 13-19 *) y = 2.
 Proof.
 intuition.
 Save.
@@ -115,11 +115,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f7b_impl_po_2 : 
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 35, characters 14-20:\n *) x <> 0),
+  forall (HW_1: (* File "all.c", line 35, characters 14-20 *) x <> 0),
   forall (HW_4: x <> 0),
   forall (y: Z),
   forall (HW_5: y = 2),
-  (* File \"all.c\", line 36, characters 13-19:\n *) y = 2.
+  (* File "all.c", line 36, characters 13-19 *) y = 2.
 Proof.
 intuition.
 Save.
@@ -133,13 +133,9 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
-  forall (HW_1: (* File \"all.c\", line 41, characters 14-23:\n *)
+  forall (HW_1: (* File "all.c", line 41, characters 14-23 *)
                 (acc int_Z1 t) = 1 /\ (valid_range alloc t 0 2)),
-  forall (result: Z),
-  forall (HW_2: result = (acc int_Z1 t)),
-  forall (y: Z),
-  forall (HW_3: y = result),
-  (* File \"all.c\", line 42, characters 13-19:\n *) y = 1.
+  (valid alloc t).
 Proof.
 intuition; subst; auto.
 Save.
@@ -149,14 +145,14 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
-  forall (HW_1: (* File \"all.c\", line 41, characters 14-23:\n *)
+  forall (HW_1: (* File "all.c", line 41, characters 14-23 *)
                 (acc int_Z1 t) = 1 /\ (valid_range alloc t 0 2)),
-  forall (HW_4: (forall (result:Z),
-                 (result = (acc int_Z1 t) ->
-                  (forall (y:Z),
-                   (y = result ->
-                    (* File \"all.c\", line 42, characters 13-19:\n *) y = 1))))),
-  (valid alloc t).
+  forall (HW_2: (valid alloc t)),
+  forall (result: Z),
+  forall (HW_3: result = (acc int_Z1 t)),
+  forall (y: Z),
+  forall (HW_4: y = result),
+  (* File "all.c", line 42, characters 13-19 *) y = 1.
 Proof.
 intuition.
 Save.
@@ -172,17 +168,13 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 45, characters 14-33:\n *) (x = 0 /\
+  forall (HW_1: (* File "all.c", line 45, characters 14-33 *) (x = 0 /\
                 (acc int_Z1 t) = 1) /\ (valid_range alloc t 0 2)),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
   forall (result: ((pointer) Z1)),
   forall (HW_3: result = (shift t x)),
-  forall (result0: Z),
-  forall (HW_4: result0 = (acc int_Z1 result)),
-  forall (y: Z),
-  forall (HW_5: y = result0),
-  (* File \"all.c\", line 46, characters 13-19:\n *) y = 1.
+  (valid alloc result).
 Proof.
 intuition; subst; auto.
 Save.
@@ -193,18 +185,18 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 45, characters 14-33:\n *) (x = 0 /\
+  forall (HW_1: (* File "all.c", line 45, characters 14-33 *) (x = 0 /\
                 (acc int_Z1 t) = 1) /\ (valid_range alloc t 0 2)),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
   forall (result: ((pointer) Z1)),
   forall (HW_3: result = (shift t x)),
-  forall (HW_6: (forall (result0:Z),
-                 (result0 = (acc int_Z1 result) ->
-                  (forall (y:Z),
-                   (y = result0 ->
-                    (* File \"all.c\", line 46, characters 13-19:\n *) y = 1))))),
-  (valid alloc result).
+  forall (HW_4: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (acc int_Z1 result)),
+  forall (y: Z),
+  forall (HW_6: y = result0),
+  (* File "all.c", line 46, characters 13-19 *) y = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -216,17 +208,13 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 49, characters 14-33:\n *) (x = 0 /\
+  forall (HW_1: (* File "all.c", line 49, characters 14-33 *) (x = 0 /\
                 (acc int_Z1 (shift t 1)) = 1) /\ (valid_range alloc t 0 2)),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
   forall (result: ((pointer) Z1)),
   forall (HW_3: result = (shift t x0)),
-  forall (result0: Z),
-  forall (HW_4: result0 = (acc int_Z1 result)),
-  forall (y: Z),
-  forall (HW_5: y = result0),
-  (* File \"all.c\", line 50, characters 13-19:\n *) y = 1.
+  (valid alloc result).
 Proof.
 intuition; subst; auto.
 Save.
@@ -237,18 +225,18 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 49, characters 14-33:\n *) (x = 0 /\
+  forall (HW_1: (* File "all.c", line 49, characters 14-33 *) (x = 0 /\
                 (acc int_Z1 (shift t 1)) = 1) /\ (valid_range alloc t 0 2)),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
   forall (result: ((pointer) Z1)),
   forall (HW_3: result = (shift t x0)),
-  forall (HW_6: (forall (result0:Z),
-                 (result0 = (acc int_Z1 result) ->
-                  (forall (y:Z),
-                   (y = result0 ->
-                    (* File \"all.c\", line 50, characters 13-19:\n *) y = 1))))),
-  (valid alloc result).
+  forall (HW_4: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (acc int_Z1 result)),
+  forall (y: Z),
+  forall (HW_6: y = result0),
+  (* File "all.c", line 50, characters 13-19 *) y = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -260,18 +248,11 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 53, characters 14-33:\n *) (x = 2 /\
+  forall (HW_1: (* File "all.c", line 53, characters 14-33 *) (x = 2 /\
                 (acc int_Z1 (shift t 2)) = 3) /\ (valid_range alloc t 0 2)),
   forall (result: ((pointer) Z1)),
   forall (HW_2: result = (shift t x)),
-  forall (result0: Z),
-  forall (HW_3: result0 = (acc int_Z1 result)),
-  forall (x0: Z),
-  forall (HW_4: x0 = (x + 1)),
-  forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_5: int_Z1_0 = (upd int_Z1 result (result0 + x))),
-  (* File \"all.c\", line 54, characters 13-32:\n *) (x0 = 3 /\
-  (acc int_Z1_0 (shift t 2)) = 5).
+  (valid alloc result).
 Proof.
 intuition; subst; auto.
 Save.
@@ -282,18 +263,15 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 53, characters 14-33:\n *) (x = 2 /\
+  forall (HW_1: (* File "all.c", line 53, characters 14-33 *) (x = 2 /\
                 (acc int_Z1 (shift t 2)) = 3) /\ (valid_range alloc t 0 2)),
   forall (result: ((pointer) Z1)),
   forall (HW_2: result = (shift t x)),
+  forall (HW_3: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc int_Z1 result)),
+  forall (HW_4: result0 = (acc int_Z1 result)),
   forall (x0: Z),
-  forall (HW_4: x0 = (x + 1)),
-  forall (HW_6: (forall (int_Z1_0:((memory) Z Z1)),
-                 (int_Z1_0 = (upd int_Z1 result (result0 + x)) ->
-                  (* File \"all.c\", line 54, characters 13-32:\n *) (x0 =
-                  3 /\ (acc int_Z1_0 (shift t 2)) = 5)))),
+  forall (HW_5: x0 = (x + 1)),
   (valid alloc result).
 Proof.
 intuition; subst; auto.
@@ -306,20 +284,20 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (t: ((pointer) Z1)),
   forall (x: Z),
-  forall (HW_1: (* File \"all.c\", line 53, characters 14-33:\n *) (x = 2 /\
+  forall (HW_1: (* File "all.c", line 53, characters 14-33 *) (x = 2 /\
                 (acc int_Z1 (shift t 2)) = 3) /\ (valid_range alloc t 0 2)),
   forall (result: ((pointer) Z1)),
   forall (HW_2: result = (shift t x)),
-  forall (HW_7: (forall (result0:Z),
-                 (result0 = (acc int_Z1 result) ->
-                  (forall (x0:Z),
-                   (x0 = (x + 1) ->
-                    (forall (int_Z1_0:((memory) Z Z1)),
-                     (int_Z1_0 = (upd int_Z1 result (result0 + x)) ->
-                      (* File \"all.c\", line 54, characters 13-32:\n *)
-                      (x0 = 3 /\ (acc int_Z1_0 (shift t 2)) = 5))) /\
-                    (valid alloc result)))))),
-  (valid alloc result).
+  forall (HW_3: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_4: result0 = (acc int_Z1 result)),
+  forall (x0: Z),
+  forall (HW_5: x0 = (x + 1)),
+  forall (HW_6: (valid alloc result)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_7: int_Z1_0 = (upd int_Z1 result (result0 + x))),
+  (* File "all.c", line 54, characters 13-32 *) (x0 = 3 /\
+  (acc int_Z1_0 (shift t 2)) = 5).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

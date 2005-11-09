@@ -14,12 +14,15 @@ Require Export assigns_spec_why.
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   (not_assigns alloc int_Z2 int_Z2
    (pset_range (pset_singleton p) 0 (size - 1))) /\
-  (* File "assigns.c", line 8, characters 7-62 *) ((0 <= size /\ size <=
-  size) /\ p = (shift (shift p size) (Zopp size))).
+  (* File "assigns.c", line 8, characters 7-64 *) ((0 <= size /\ size <=
+  size) /\ p = (shift p (size - size))).
 Proof.
 intuition; subst; auto.
-apply not_assigns_trans with intP0; auto.
-rewrite shift_shift; red; intuition.
+replace (size - size) with 0; intuition.
+rewrite shift_zero.
+intuition.
+(*
+apply not_assigns_trans with int_Z2; auto.
 rewrite acc_upd_neq; auto.
 assert (shift p (size + - mutable_size1)<> p0).
 apply pset_range_elim with (pset_singleton p) 0 (size-1); auto with *.
@@ -27,6 +30,7 @@ auto with *.
 
 autorewrite with caduceus.
 replace  (- (mutable_size1 - 1)) with (-mutable_size1+1); auto with *.
+*)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -39,26 +43,30 @@ Save.
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (not_assigns alloc int_Z2 int_Z2
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
-                size /\ size <= size) /\
-                p = (shift (shift p size) (Zopp size)))),
+                (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
+                size /\ size <= size) /\ p = (shift p (size - size)))),
   forall (int_Z2_0: ((memory) Z Z2)),
   forall (mutable_p: ((pointer) Z2)),
   forall (mutable_size: Z),
   forall (HW_3: (not_assigns alloc int_Z2 int_Z2_0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
-                mutable_p = (shift (shift p size) (Zopp mutable_size)))),
+                mutable_p = (shift p (size - mutable_size)))),
   forall (mutable_size0: Z),
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   (valid alloc mutable_p).
 Proof.
 intuition.
+clear H4.
+subst.
+auto.
+(*
 subst; autorewrite with caduceus.
 replace (size + - size) with 0; auto with *.
 autorewrite with caduceus; auto.
+*)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -71,17 +79,16 @@ Save.
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (not_assigns alloc int_Z2 int_Z2
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
-                size /\ size <= size) /\
-                p = (shift (shift p size) (Zopp size)))),
+                (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
+                size /\ size <= size) /\ p = (shift p (size - size)))),
   forall (int_Z2_0: ((memory) Z Z2)),
   forall (mutable_p: ((pointer) Z2)),
   forall (mutable_size: Z),
   forall (HW_3: (not_assigns alloc int_Z2 int_Z2_0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
-                mutable_p = (shift (shift p size) (Zopp mutable_size)))),
+                mutable_p = (shift p (size - mutable_size)))),
   forall (mutable_size0: Z),
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
@@ -94,13 +101,13 @@ Save.
   forall (HW_9: mutable_p0 = result),
   ((not_assigns alloc int_Z2 int_Z2_1
     (pset_range (pset_singleton p) 0 (size - 1))) /\
-  (* File "assigns.c", line 8, characters 7-62 *) ((0 <= mutable_size0 /\
-  mutable_size0 <= size) /\
-  mutable_p0 = (shift (shift p size) (Zopp mutable_size0)))) /\
+  (* File "assigns.c", line 8, characters 7-64 *) ((0 <= mutable_size0 /\
+  mutable_size0 <= size) /\ mutable_p0 = (shift p (size - mutable_size0)))) /\
   (Zwf 0 mutable_size0 mutable_size).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+clear H4.
+subst.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -113,17 +120,16 @@ Save.
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (not_assigns alloc int_Z2 int_Z2
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
-                size /\ size <= size) /\
-                p = (shift (shift p size) (Zopp size)))),
+                (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
+                size /\ size <= size) /\ p = (shift p (size - size)))),
   forall (int_Z2_0: ((memory) Z Z2)),
   forall (mutable_p: ((pointer) Z2)),
   forall (mutable_size: Z),
   forall (HW_3: (not_assigns alloc int_Z2 int_Z2_0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
-                (* File "assigns.c", line 8, characters 7-62 *) ((0 <=
+                (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
-                mutable_p = (shift (shift p size) (Zopp mutable_size)))),
+                mutable_p = (shift p (size - mutable_size)))),
   forall (mutable_size0: Z),
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_10: mutable_size = 0),

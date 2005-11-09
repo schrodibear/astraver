@@ -19,21 +19,18 @@ intuition.
 subst; omega.
 Save.
 
-(* Why obligation from file "why/arith.why", characters 131-680 *)
-Lemma test_impl_po_1 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_impl_po_1 : 
   forall (k: Z),
   forall (j: Z),
+  forall (i: Z),
+  forall (HW_1: i = (j + k)),
   forall (l: Z),
-  forall (Post5: l = 1),
-  forall (m: Z),
-  forall (Post4: m = 12),
-  forall (i0: Z),
-  forall (Post1: i0 = (j + k)),
-  forall (l1: Z),
-  forall (Post2: l1 = (l * j)),
+  forall (HW_2: l = (1 * j)),
   forall (j0: Z),
-  forall (Post3: j0 = (j + (l1 + 10 * k + i0 + m))),
-  i0 = (j + k) /\ j0 = (3 * j + 11 * k + 12).
+  forall (HW_3: j0 = (j + (l + 10 * k + i + 12))),
+  (* File "arith.c", line 11, characters 13-63 *) (i = (j + k) /\ j0 =
+  (3 * j + 11 * k + 12)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
