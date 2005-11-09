@@ -220,77 +220,7 @@ assert ((2 * y * z)%Z = (y * z + y * z)%Z); try ring.
 omega.
 Qed.
 
-
-
-
 (* beginning of proof obligations *)
-
- (* sqrt_po_1 *)
-Proof.
-auto with *.
-Qed.
-
- (* sqrt_po_2 *)
-Proof.
-auto with *.
-Qed.
-
- (* sqrt_po_3 *)
-Proof.
-auto with *.
-Qed.
-
- Proof.
- intuition.
-Qed.
-
-
- Proof.
- unfold Zwf; intuition.
-subst z2.
-apply iter_sqrt_pos; omega.
-subst y2; assumption.
-subst y2; assumption.
-apply (iter_sqrt_invar3 x z1); auto.
-omega.
-Qed.
-
- (* sqrt_po_6 *)
-Proof.
-intuition.
-subst z.
-assert ((x + 1) / 2 >= 1)%Z.
-pattern 1%Z at 2; replace 1%Z with (2 / 2)%Z; trivial.
-apply Z_div_ge; try omega.
-omega.
-subst y.
-assert ((x / x + x)%Z = (x + 1)%Z).
-assert (xPos: (x > 0)); try omega.
-generalize (Z_div_same x xPos).
- intro.
-rewrite H; omega.
-rewrite H; trivial.
-
-subst y.
-assert ((x + 1) * (x + 1) >= (x + 1) * 1)%Z.
-apply Zmult_ge_compat_l; try omega.
-assert (((x + 1) * 1)%Z = (x + 1)%Z); try ring.
-omega.
-
-subst z.
-apply (iter_sqrt_invar3 x x); try omega.
-assert ((x / x + x)%Z = (x + 1)%Z).
-assert (xPos: (x > 0)); try omega.
-generalize (Z_div_same x xPos).
- intro.
-rewrite H; omega.
-rewrite H; trivial.
-Qed.
-
-Proof.
-intuition.
-apply (iter_sqrt_invar4 x y1 z1); try omega.
-Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sqrt_po_1 : 
@@ -299,7 +229,7 @@ Qed.
   forall (HW_2: x = 0),
   (0 * 0) <= x /\ x < ((0 + 1) * (0 + 1)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -310,7 +240,7 @@ Save.
   forall (HW_4: x <= 3),
   (1 * 1) <= x /\ x < ((1 + 1) * (1 + 1)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -321,7 +251,7 @@ Save.
   forall (HW_5: x > 3),
   2 <> 0.
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -336,7 +266,35 @@ Save.
   result > 0 /\ x > 0 /\ result = ((Zdiv ((Zdiv x x) + x) 2)) /\ x <
   ((x + 1) * (x + 1)) /\ x < ((result + 1) * (result + 1)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+subst result.
+assert ((x + 1) / 2 >= 1)%Z.
+pattern 1%Z at 2; replace 1%Z with (2 / 2)%Z; trivial.
+apply Z_div_ge; try omega.
+omega.
+
+subst result.
+assert ((x / x + x)%Z = (x + 1)%Z).
+assert (xPos: (x > 0)); try omega.
+generalize (Z_div_same x xPos).
+ intro.
+rewrite H; omega.
+rewrite H; trivial.
+
+subst result.
+assert ((x + 1) * (x + 1) >= (x + 1) * 1)%Z.
+apply Zmult_ge_compat_l; try omega.
+assert (((x + 1) * 1)%Z = (x + 1)%Z); try ring.
+omega.
+
+subst result.
+apply (iter_sqrt_invar3 x x); try omega.
+assert ((x / x + x)%Z = (x + 1)%Z).
+assert (xPos: (x > 0)); try omega.
+generalize (Z_div_same x xPos).
+ intro.
+rewrite H; omega.
+rewrite H; trivial.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -360,7 +318,7 @@ Save.
   forall (HW_11: y0 = z),
   z <> 0.
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -393,7 +351,13 @@ Save.
   (z0 > 0 /\ y0 > 0 /\ z0 = ((Zdiv ((Zdiv x y0) + y0) 2)) /\ x <
   ((y0 + 1) * (y0 + 1)) /\ x < ((z0 + 1) * (z0 + 1))) /\ (Zwf 0 y0 y).
 Proof.
-(* FILL PROOF HERE *)
+unfold Zwf; intuition.
+subst.
+apply iter_sqrt_pos; omega.
+subst; auto.
+subst; auto.
+apply (iter_sqrt_invar3 x z); auto.
+subst; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -415,6 +379,7 @@ Save.
   forall (HW_17: z >= y),
   (y * y) <= x /\ x < ((y + 1) * (y + 1)).
 Proof.
-(* FILL PROOF HERE *)
-Save.
+intuition.
+apply (iter_sqrt_invar4 x y z); try omega.
+Qed.
 
