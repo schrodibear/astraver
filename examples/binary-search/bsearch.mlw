@@ -9,7 +9,7 @@ parameter t : int array
 
 parameter l,u,p,m : int ref
 
-let binary_search =
+let binary_search () =
   { array_length(t) >= 1 and sorted_array(t,1,array_length(t)-1) }
   begin
     l := 1; u := (array_length_ t)-1; p := 0;

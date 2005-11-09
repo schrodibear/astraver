@@ -25,8 +25,8 @@ cvcl: $(VO:_why.vo=_why.cvc)
 %_valid.vo: %_valid.v %_why.vo
 	coqc -I ../../lib/coq $(OPT) $<
 
-#%.vo: %.v
-#	coqc -I ../../lib/coq $(OPT) $<
+%.vo: %.v
+	coqc -I ../../lib/coq $(OPT) $<
 
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $<

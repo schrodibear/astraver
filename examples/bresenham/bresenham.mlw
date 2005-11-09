@@ -30,7 +30,7 @@ parameter x,y,e : int ref
 external logic best : int, int -> prop
 external logic Invariant : int, int, int -> prop
 
-let bresenham =
+let bresenham () =
   begin
     x := 0;
     y := 0;
