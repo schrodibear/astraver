@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.152 2005-11-08 14:55:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.153 2005-11-09 10:47:24 hubert Exp $ i*)
 
 
 open Format
@@ -959,22 +959,18 @@ let strong_invariant_name id e =
 
 open Pp
 
-let print_effects fmt l =
+let print_hvs fmt l =
   fprintf fmt "@[%a@]"
-    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
+    (print_list space (fun fmt v -> pp_print_string fmt (heap_var_name v))) 
     (HeapVarSet.elements l)
-
+       
 let strong_invariants_for hvs =
-(*
   eprintf "effects for function before invariants: reads %a @." 
-    print_effects hvs;
-*)
+    print_hvs hvs;
   Hashtbl.fold
     (fun id (p,e1,e2) acc -> 
-(*
        eprintf "avant : %s ajout? %b effect %a@\n" id (HeapVarSet.subset e2 hvs)
-       print_effects e2;
-*)
+       print_hvs e2;
        if HeapVarSet.subset e2 hvs then
 	 ((* eprintf "apres : %s@\n" id; *)
 	 make_and 

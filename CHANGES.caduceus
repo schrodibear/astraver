@@ -1,6 +1,6 @@
 Note: These are the changes for Caduceus.
 
-
+ o bug fix for function specifications given later than function body
  o support for the major changes in why
  o addition of zones into memory model.  
  o bug fix in location of errors

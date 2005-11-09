@@ -20,11 +20,6 @@ open Info
 open Clogic
 open Cnorm
 open Cenv
-(*
-open Cconst
-open Cltyping
-open Int64
-*)
 
 let rec type_why_for_term t = 
   match t.nterm_node with
@@ -45,7 +40,11 @@ let rec type_why_for_term t =
     | NTif (_,_,t) -> type_why_for_term t
     | NTold t -> type_why_for_term t
     | NTat (t,_) -> type_why_for_term t
-    | NTbase_addr t ->  Why_Logic "addr"
+    | NTbase_addr t ->
+	begin match type_why_for_term t with
+	  | Pointer z -> Addr z
+	  | _ -> assert false
+	end  
     | NTblock_length t -> Int
     | NTcast (_,t) -> assert false (* type_why_for_term t *)
     | NTrange (t,_,_) -> type_why_for_term t
@@ -408,7 +407,8 @@ let rec heap_var (ty : Info.why_type) =
   match ty with
     | Pointer z -> 
 	let v = heap_var z.type_why_zone in
-	v ^ "_" ^ (found_repr z)
+	v ^ "_" ^ (found_repr z) 
+    | Addr z -> assert false
     | Info.Int -> "int" 
     | Info.Float ->  "real"
     | Unit -> assert false
@@ -419,41 +419,20 @@ let rec heap_field_var (f : string) (ty : Info.why_type) =
   match ty with
     | Pointer z -> 
 	f ^ "_" ^ (found_repr z)
+    | Addr _ 
     | Info.Int -> assert false
     | Info.Float -> assert false
     | Unit -> assert false
     | Why_Logic s ->  assert false
     | Memory(t,z) -> assert false
 
-(*
-let rec pointer_heap_var (ty : Info.why_type) =
-  match ty with
-    | Pointer z -> 
-	let v,_ = pointer_heap_var z.type_why_zone in
-	(v ^ "_" ^ (found_repr z), ("Z" ^ found_repr z) ^ " pointer")
-    | Info.Int -> "int", "int" 
-    | Info.Float ->  "real", "real"
-    | Unit -> "unit", "unit"
-    | Why_Logic s ->  s, s
-    | Memory(t,z) -> assert false
-
-let global_type_for_why ty =
-  fst(pointer_heap_var ty)
-*)
-(*
-  match ty with
-    | Info.Int -> "int"
-    | Info.Float -> "real"
-    | Pointer z -> global_type_for_why z.type_why_zone ^ "_" ^ found_repr z 
-    | Info.Unit -> assert false (* "unit" *)
-    | Why_Logic v -> assert false (* v *)
-*)
-
 let rec unifier_type_why tw1 tw2 =
   match tw1,tw2 with
     | Pointer z1 , Pointer z2 ->
+	unifier_zone z1 z2     
+    | Addr z1 , Addr z2 ->
 	unifier_zone z1 z2 
-    | Pointer _ , t | t, Pointer _ -> 
+    | Pointer _ , t | t, Pointer _ | Addr _ , t | t, Addr _ -> 
 	let (a,t) = output_why_type t in
 	Format.eprintf "anomaly : unify type (";
 	List.iter (fun t -> Format.eprintf ",@ %s" t) a;
@@ -492,10 +471,6 @@ let rec term t =
   | NTat (t,_) 
   | NTbase_addr t
   | NTblock_length t 
-(*
-  | NTresult of Info.env_info
-  | NTnull
-*)
   | NTcast (_,t) 
   | NTrange (t,None,None) -> term t
   | NTrange (t1,Some t2,None) | NTrange (t1,None,Some t2) -> term t1; term t2
@@ -550,7 +525,14 @@ let rec calcul_zones expr =
 	unifier_type_why tw1 tw2
     | NEunary (_,e) -> calcul_zones e
     | NEincr (_,e) -> calcul_zones e
-    | NEbinary (e1,_,e2) -> calcul_zones e1; calcul_zones e2
+    | NEbinary (e1,Bsub_pointer,e2) | NEbinary (e1,Blt_pointer,e2) 
+    | NEbinary (e1,Bgt_pointer,e2) | NEbinary (e1,Ble_pointer,e2) 
+    | NEbinary (e1,Bge_pointer,e2) | NEbinary (e1,Beq_pointer,e2) 
+    | NEbinary (e1,Bneq_pointer,e2)   -> calcul_zones e1; calcul_zones e2
+    | NEbinary (e1,_,e2) -> calcul_zones e1; calcul_zones e2;
+	let tw1 = type_why e1 in
+	let tw2 = type_why e2 in
+	unifier_type_why tw1 tw2
     | NEcall (e,l) -> List.iter calcul_zones l;
 	let f = match e.nexpr_node with 
 	  | NEvar (Fun_info f) -> f

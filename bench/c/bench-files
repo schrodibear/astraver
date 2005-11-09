@@ -1,6 +1,7 @@
 array assigns break call clash clash_alloc clash_redef 
 continue coord dassault_1 dassault_2 
-copy dowhile invariants logic_cast 
+copy dowhile invariants latespec logic_cast 
 param passing purse queue rec ref ref_glob search see 
 sizeof alloca sort all_zeros false pointer init
-struct struct2 struct3 switch enum separation3 separation
+struct struct2 struct3 switch enum separation1 separation2 
+separation3 separation4 separation

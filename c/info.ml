@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.26 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.27 2005-11-09 10:47:25 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -22,6 +22,7 @@ open Creport
 type why_type = 
   | Memory of why_type * zone
   | Pointer of zone
+  | Addr of zone
   | Int
   | Float
   | Unit
@@ -81,7 +82,8 @@ let rec output_why_type ty =
     match ty with
     | Int -> [], "int"
     | Float -> [], "real"
-    | Pointer z -> [] , found_repr z ^ " pointer"
+    | Pointer z -> [] , found_repr z ^ " pointer"    
+    | Addr z -> [] , found_repr z ^ " addr"
     | Memory(t,z) -> (snd (output_why_type t))::[found_repr z], " memory"
     | Unit -> [], "unit"
     | Why_Logic v -> [], v

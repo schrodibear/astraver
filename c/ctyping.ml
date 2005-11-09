@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.100 2005-11-08 14:55:14 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.101 2005-11-09 10:47:25 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -880,24 +880,24 @@ and type_block env et (dl,sl) =
   (dl', sl'), st
 
 let type_parameters loc env pl =
-  let type_one (ty,x) (pl,env) =
+  let type_one (ty,x) pl =
     let info = default_var_info x in
     let ty = type_type loc env ty in 
     set_formal_param info;
-    let env = Env.add x ty (Var_info info) env in
+    set_var_type (Var_info info) ty;
     Coptions.lprintf 
       "Parameter %s added in env with unique name %s@." x info.var_unique_name;
-    (ty,info) :: pl, env 
+    (ty,info) :: pl 
   in
   let is_void (ty,_) = ty.ctype_node = Tvoid in
-  let pl, env = List.fold_right type_one pl ([], env) in
+  let pl = List.fold_right type_one pl [] in
   match pl with
     | [p] when is_void p -> 
-	[], env
+	[]
     | _ -> 
 	if List.exists is_void pl then 
 	  error loc "`void' in parameter list must be the entire list";
-	pl, env
+	pl
   
 let type_logic_parameters env pl = 
   List.fold_right
@@ -1000,7 +1000,7 @@ let type_decl d = match d.node with
   | Cdecl (ty, x, i) -> 
       begin match ty.Cast.ctype_node with
 	| CTfun(pl,ty_res) ->
-	    let pl,env = type_parameters d.loc (Env.empty ()) pl in
+	    let pl = type_parameters d.loc (Env.empty ()) pl in
 	    let ty_res = type_type d.loc (Env.empty ()) ty_res in
 	    let info = default_fun_info x in
 	    let spl = List.map fst pl in
@@ -1030,32 +1030,42 @@ let type_decl d = match d.node with
       end
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc (Env.empty ()) ty in
-      let pl,env = type_parameters d.loc (Env.empty ()) pl in
-      let s = type_spec ~result:ty env s in
-      let s = function_spec d.loc f (Some s) in
+      let pl = type_parameters d.loc (Env.empty ()) pl in
       let info = default_fun_info f in
       info.has_assigns <- (s.assigns <> None);
       let spl = List.map fst pl in
       let info = 
 	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with 
 	  | Var_info _ -> assert false
-	  | Fun_info f -> f.args <- List.map snd pl; f
+	  | Fun_info f -> if f.args = [] then f.args <- List.map snd pl; f
       in
+      let env =
+	List.fold_right 
+	  (fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
+	  info.args (Env.empty ())
+      in
+      let s = type_spec ~result:ty env s in
+      let s = function_spec d.loc f (Some s) in
       Tfunspec (s, ty, info)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc (Env.empty ()) ty in
       let et = if eq_type ty c_void then None else Some ty in
-      let pl,env = type_parameters d.loc (Env.empty ()) pl in
-      let s = option_app (type_spec ~result:ty env) s in
-      let s = function_spec d.loc f s in
+      let pl = type_parameters d.loc (Env.empty ()) pl in
       let info = default_fun_info f in
-      info.has_assigns <- (s.assigns <> None);
       let spl = List.map fst pl in
       let info = 
 	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with
 	  | Var_info v -> assert false
-	  | Fun_info f -> f.args <- List.map snd pl; f
+	  | Fun_info f -> if f.args = [] then f.args <- List.map snd pl; f
       in
+      let env =
+	List.fold_right 
+	  (fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
+	  info.args (Env.empty ())
+      in
+      let s = option_app (type_spec ~result:ty env) s in
+      let s = function_spec d.loc f s in
+      info.has_assigns <- (s.assigns <> None);
       let bl,st = type_statement env et bl in
       if st.term && et <> None then
 	warning d.loc "control reaches end of non-void function";

@@ -3,40 +3,40 @@
 
 Require Export separation1_spec_why.
 
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (p: ((pointer) Z3)),
+  forall (p: ((pointer) Z5)),
   forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (HW_1: (* File \"separation1.c\", line 7, characters 14-23:\n *)
+  forall (HW_1: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc p)),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: int_Z3_0 = (upd int_Z3 p 0)),
-  (* File \"separation1.c\", line 9, characters 13-20:\n *)
-  (acc int_Z3_0 p) = 0 /\
-  (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton p)).
+  (valid alloc p).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (p: ((pointer) Z3)),
+  forall (p: ((pointer) Z5)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"separation1.c\", line 7, characters 14-23:\n *)
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (HW_1: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc p)),
-  (valid alloc p).
+  forall (HW_2: (valid alloc p)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 p 0)),
+  (* File "separation1.c", line 9, characters 13-20 *) (acc int_Z5_0 p) = 0 /\
+  (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton p)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (p: ((pointer) Z4)),
+  forall (p: ((pointer) Z6)),
   forall (alloc: alloc_table),
-  forall (HW_1: (* File \"separation1.c\", line 15, characters 14-23:\n *)
+  forall (HW_1: (* File "separation1.c", line 15, characters 14-23 *)
                 (valid alloc p)),
   (valid alloc p).
 Proof.
@@ -44,106 +44,122 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (x: ((pointer) Z3)),
-  forall (y: ((pointer) Z3)),
-  forall (z: ((pointer) Z4)),
+  forall (x: ((pointer) Z5)),
+  forall (y: ((pointer) Z5)),
+  forall (z: ((pointer) Z6)),
   forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
                 (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"separation1.c\", line 9, characters 13-20:\n *)
-                (acc int_Z3_0 x) = 0 /\
-                (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton x))),
-  forall (int_Z3_1: ((memory) Z Z3)),
-  forall (HW_3: int_Z3_1 = (upd int_Z3_0 x 1)),
-  forall (int_Z3_2: ((memory) Z Z3)),
-  forall (HW_4: (* File \"separation1.c\", line 9, characters 13-20:\n *)
-                (acc int_Z3_2 y) = 0 /\
-                (not_assigns alloc int_Z3_1 int_Z3_2 (pset_singleton y))),
-  (* File \"separation1.c\", line 20, characters 13-19:\n *)
-  (acc int_Z3_2 y) = 0.
+  (* File "separation1.c", line 7, characters 14-23 *) (valid alloc x).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (x: ((pointer) Z3)),
-  forall (y: ((pointer) Z3)),
-  forall (z: ((pointer) Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (x: ((pointer) Z5)),
+  forall (y: ((pointer) Z5)),
+  forall (z: ((pointer) Z6)),
   forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
                 (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"separation1.c\", line 9, characters 13-20:\n *)
-                (acc int_Z3_0 x) = 0 /\
-                (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton x))),
-  forall (int_Z3_1: ((memory) Z Z3)),
-  forall (HW_3: int_Z3_1 = (upd int_Z3_0 x 1)),
-  forall (int_Z3_2: ((memory) Z Z3)),
-  forall (HW_4: (* File \"separation1.c\", line 9, characters 13-20:\n *)
-                (acc int_Z3_2 y) = 0 /\
-                (not_assigns alloc int_Z3_1 int_Z3_2 (pset_singleton y))),
-  (* File \"separation1.c\", line 15, characters 14-23:\n *) (valid alloc z).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
-(*Why goal*) Lemma main_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (x: ((pointer) Z3)),
-  forall (y: ((pointer) Z3)),
-  forall (z: ((pointer) Z4)),
-  forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
-                (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"separation1.c\", line 9, characters 13-20:\n *)
-                (acc int_Z3_0 x) = 0 /\
-                (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton x))),
-  forall (int_Z3_1: ((memory) Z Z3)),
-  forall (HW_3: int_Z3_1 = (upd int_Z3_0 x 1)),
-  (* File \"separation1.c\", line 7, characters 14-23:\n *) (valid alloc y).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
-(*Why goal*) Lemma main_impl_po_4 : 
-  forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (x: ((pointer) Z3)),
-  forall (y: ((pointer) Z3)),
-  forall (z: ((pointer) Z4)),
-  forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
-                (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_2: (* File \"separation1.c\", line 9, characters 13-20:\n *)
-                (acc int_Z3_0 x) = 0 /\
-                (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton x))),
+  forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc x)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc int_Z5_0 x) = 0 /\
+                (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton x))),
   (valid alloc x).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation1.why", line 0, characters 0-0: *)
-(*Why goal*) Lemma main_impl_po_5 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (x: ((pointer) Z3)),
-  forall (y: ((pointer) Z3)),
-  forall (z: ((pointer) Z4)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (x: ((pointer) Z5)),
+  forall (y: ((pointer) Z5)),
+  forall (z: ((pointer) Z6)),
   forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
                 (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
-  (* File \"separation1.c\", line 7, characters 14-23:\n *) (valid alloc x).
+  forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc x)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc int_Z5_0 x) = 0 /\
+                (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton x))),
+  forall (HW_4: (valid alloc x)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 x 1)),
+  (* File "separation1.c", line 7, characters 14-23 *) (valid alloc y).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (x: ((pointer) Z5)),
+  forall (y: ((pointer) Z5)),
+  forall (z: ((pointer) Z6)),
+  forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
+                (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
+  forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc x)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc int_Z5_0 x) = 0 /\
+                (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton x))),
+  forall (HW_4: (valid alloc x)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 x 1)),
+  forall (HW_6: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc y)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc int_Z5_2 y) = 0 /\
+                (not_assigns alloc int_Z5_1 int_Z5_2 (pset_singleton y))),
+  (* File "separation1.c", line 15, characters 14-23 *) (valid alloc z).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (x: ((pointer) Z5)),
+  forall (y: ((pointer) Z5)),
+  forall (z: ((pointer) Z6)),
+  forall (HW_1: (valid_range alloc z 0 0) /\ (valid_range alloc y 0 0) /\
+                (valid_range alloc x 0 0) /\ ~((base_addr y) = (base_addr x))),
+  forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc x)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc int_Z5_0 x) = 0 /\
+                (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton x))),
+  forall (HW_4: (valid alloc x)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_5: int_Z5_1 = (upd int_Z5_0 x 1)),
+  forall (HW_6: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc y)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_7: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc int_Z5_2 y) = 0 /\
+                (not_assigns alloc int_Z5_1 int_Z5_2 (pset_singleton y))),
+  forall (HW_8: (* File "separation1.c", line 15, characters 14-23 *)
+                (valid alloc z)),
+  (* File "separation1.c", line 20, characters 13-19 *) (acc int_Z5_2 y) = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

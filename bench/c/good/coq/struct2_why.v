@@ -6,17 +6,9 @@ Require Export struct2_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc s0 0 0)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc b_Z5 s0)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_3: result0 = (shift result 2)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: int_Z0_0 = (upd int_Z0 result0 1)),
-  (* File "struct2.c", line 6, characters 13-18 *) True.
+  (valid alloc s0).
 Proof.
 intuition.
 Save.
@@ -25,16 +17,13 @@ Save.
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc b_Z5 s0)),
+  forall (HW_3: result = (acc b_Z5 s0)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_3: result0 = (shift result 2)),
-  forall (HW_5: (forall (int_Z0_0:((memory) Z Z0)),
-                 (int_Z0_0 = (upd int_Z0 result0 1) ->
-                  (* File "struct2.c", line 6, characters 13-18 *) True))),
+  forall (HW_4: result0 = (shift result 2)),
   (valid alloc result0).
 Proof.
 intuition.
@@ -52,15 +41,15 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc s0 0 0)),
-  forall (HW_6: (forall (result:((pointer) Z0)),
-                 (result = (acc b_Z5 s0) ->
-                  (forall (result0:((pointer) Z0)),
-                   (result0 = (shift result 2) ->
-                    (forall (int_Z0_0:((memory) Z Z0)),
-                     (int_Z0_0 = (upd int_Z0 result0 1) ->
-                      (* File "struct2.c", line 6, characters 13-18 *) True)) /\
-                    (valid alloc result0)))))),
-  (valid alloc s0).
+  forall (HW_2: (valid alloc s0)),
+  forall (result: ((pointer) Z0)),
+  forall (HW_3: result = (acc b_Z5 s0)),
+  forall (result0: ((pointer) Z0)),
+  forall (HW_4: result0 = (shift result 2)),
+  forall (HW_5: (valid alloc result0)),
+  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (HW_6: int_Z0_0 = (upd int_Z0 result0 1)),
+  (* File "struct2.c", line 6, characters 13-18 *) True.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -69,20 +58,9 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
-  forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
-  forall (result: ((pointer) Z2)),
-  forall (HW_2: result = (acc d_Z8 u)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_3: result0 = (acc b_Z2 result)),
-  forall (result1: ((pointer) Z0)),
-  forall (HW_4: result1 = (shift result0 2)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result1 1)),
-  (* File "struct2.c", line 16, characters 13-18 *) True.
+  (valid alloc u).
 Proof.
 intuition.
 Save.
@@ -90,21 +68,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
+  forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
-  forall (HW_2: result = (acc d_Z8 u)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_3: result0 = (acc b_Z2 result)),
-  forall (result1: ((pointer) Z0)),
-  forall (HW_4: result1 = (shift result0 2)),
-  forall (HW_6: (forall (int_Z0_0:((memory) Z Z0)),
-                 (int_Z0_0 = (upd int_Z0 result1 1) ->
-                  (* File "struct2.c", line 16, characters 13-18 *) True))),
-  (valid alloc result1).
+  forall (HW_3: result = (acc d_Z8 u)),
+  (valid alloc result).
 Proof.
 intuition.
 Save.
@@ -114,20 +84,17 @@ Save.
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
+  forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
-  forall (HW_2: result = (acc d_Z8 u)),
-  forall (HW_7: (forall (result0:((pointer) Z0)),
-                 (result0 = (acc b_Z2 result) ->
-                  (forall (result:((pointer) Z0)),
-                   (result = (shift result0 2) ->
-                    (forall (int_Z0_0:((memory) Z Z0)),
-                     (int_Z0_0 = (upd int_Z0 result 1) ->
-                      (* File "struct2.c", line 16, characters 13-18 *) True)) /\
-                    (valid alloc result)))))),
-  (valid alloc result).
+  forall (HW_3: result = (acc d_Z8 u)),
+  forall (HW_4: (valid alloc result)),
+  forall (result0: ((pointer) Z0)),
+  forall (HW_5: result0 = (acc b_Z2 result)),
+  forall (result1: ((pointer) Z0)),
+  forall (HW_6: result1 = (shift result0 2)),
+  (valid alloc result1).
 Proof.
 intuition.
 subst.
@@ -143,19 +110,18 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (u: ((pointer) Z8)),
   forall (HW_1: (valid_range alloc u 0 0)),
-  forall (HW_8: (forall (result:((pointer) Z2)),
-                 (result = (acc d_Z8 u) ->
-                  (forall (result0:((pointer) Z0)),
-                   (result0 = (acc b_Z2 result) ->
-                    (forall (result:((pointer) Z0)),
-                     (result = (shift result0 2) ->
-                      (forall (int_Z0_0:((memory) Z Z0)),
-                       (int_Z0_0 = (upd int_Z0 result 1) ->
-                        (* File "struct2.c", line 16, characters 13-18 *)
-                        True)) /\
-                      (valid alloc result))))) /\
-                  (valid alloc result)))),
-  (valid alloc u).
+  forall (HW_2: (valid alloc u)),
+  forall (result: ((pointer) Z2)),
+  forall (HW_3: result = (acc d_Z8 u)),
+  forall (HW_4: (valid alloc result)),
+  forall (result0: ((pointer) Z0)),
+  forall (HW_5: result0 = (acc b_Z2 result)),
+  forall (result1: ((pointer) Z0)),
+  forall (HW_6: result1 = (shift result0 2)),
+  forall (HW_7: (valid alloc result1)),
+  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (HW_8: int_Z0_0 = (upd int_Z0 result1 1)),
+  (* File "struct2.c", line 16, characters 13-18 *) True.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
