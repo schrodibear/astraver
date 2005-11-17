@@ -22,8 +22,8 @@ Require Export separation2_spec_why.
                    (((x = u \/ x = v) \/ x = w) \/ x = m ->
                     (((((valid alloc x) /\ (valid alloc (acc p1_Z36 x))) /\
                     (valid alloc (acc p2_Z36 x))) /\
-                    (valid_range alloc (acc p1_Z36 x) 0 5)) /\
-                    (valid_range alloc (acc p2_Z36 x) 0 5)) /\
+                    (valid_range alloc (acc p1_Z36 x) 0 4)) /\
+                    (valid_range alloc (acc p2_Z36 x) 0 4)) /\
                     (valid alloc (acc pp1_Z36 x)))) /\
                 (valid alloc (acc pp2_Z39 u2))) /\
                 (valid alloc (acc pp2_Z42 v2_0))) /\
@@ -43,13 +43,16 @@ Require Export separation2_spec_why.
   (* File "separation2.c", line 28, characters 12-129 *)
   ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
   (valid alloc (acc p2_Z36 u))) /\ (valid alloc (acc pp1_Z36 u))) /\
-  (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 u) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid_range alloc (acc p1_Z36 u) 0 4)) /\
+  (valid_range alloc (acc p2_Z36 u) 0 4)) /\ (separation1 p1_Z36 p2_Z36) /\
   (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
   (valid1 p1_Z36).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (((u = u \/ u = v) \/ u = w) \/ u = m ).
+auto.
+generalize (H0 u H18);intro.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -74,8 +77,8 @@ Save.
                    (((x = u \/ x = v) \/ x = w) \/ x = m ->
                     (((((valid alloc x) /\ (valid alloc (acc p1_Z36 x))) /\
                     (valid alloc (acc p2_Z36 x))) /\
-                    (valid_range alloc (acc p1_Z36 x) 0 5)) /\
-                    (valid_range alloc (acc p2_Z36 x) 0 5)) /\
+                    (valid_range alloc (acc p1_Z36 x) 0 4)) /\
+                    (valid_range alloc (acc p2_Z36 x) 0 4)) /\
                     (valid alloc (acc pp1_Z36 x)))) /\
                 (valid alloc (acc pp2_Z39 u2))) /\
                 (valid alloc (acc pp2_Z42 v2_0))) /\
@@ -96,8 +99,8 @@ Save.
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
-                (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 u) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 u) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
@@ -114,13 +117,16 @@ Save.
   (* File "separation2.c", line 28, characters 12-129 *)
   ((((((valid alloc v) /\ (valid alloc (acc p1_Z36 v))) /\
   (valid alloc (acc p2_Z36 v))) /\ (valid alloc (acc pp1_Z36 v))) /\
-  (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 v) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid_range alloc (acc p1_Z36 v) 0 4)) /\
+  (valid_range alloc (acc p2_Z36 v) 0 4)) /\ (separation1 p1_Z36 p2_Z36) /\
   (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
   (valid1 p1_Z36).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (((v = u \/ v = v) \/ v = w) \/ v = m ).
+auto.
+generalize (H2 v H32);intro.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -145,8 +151,8 @@ Save.
                    (((x = u \/ x = v) \/ x = w) \/ x = m ->
                     (((((valid alloc x) /\ (valid alloc (acc p1_Z36 x))) /\
                     (valid alloc (acc p2_Z36 x))) /\
-                    (valid_range alloc (acc p1_Z36 x) 0 5)) /\
-                    (valid_range alloc (acc p2_Z36 x) 0 5)) /\
+                    (valid_range alloc (acc p1_Z36 x) 0 4)) /\
+                    (valid_range alloc (acc p2_Z36 x) 0 4)) /\
                     (valid alloc (acc pp1_Z36 x)))) /\
                 (valid alloc (acc pp2_Z39 u2))) /\
                 (valid alloc (acc pp2_Z42 v2_0))) /\
@@ -167,8 +173,8 @@ Save.
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
-                (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 u) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 u) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
@@ -186,8 +192,8 @@ Save.
                 ((((((valid alloc v) /\ (valid alloc (acc p1_Z36 v))) /\
                 (valid alloc (acc p2_Z36 v))) /\
                 (valid alloc (acc pp1_Z36 v))) /\
-                (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 v) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 v) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 v) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_1: ((memory) Z Z3)),
@@ -204,13 +210,16 @@ Save.
   (* File "separation2.c", line 28, characters 12-129 *)
   ((((((valid alloc w) /\ (valid alloc (acc p1_Z36 w))) /\
   (valid alloc (acc p2_Z36 w))) /\ (valid alloc (acc pp1_Z36 w))) /\
-  (valid_range alloc (acc p1_Z36 w) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 w) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid_range alloc (acc p1_Z36 w) 0 4)) /\
+  (valid_range alloc (acc p2_Z36 w) 0 4)) /\ (separation1 p1_Z36 p2_Z36) /\
   (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
   (valid1 p1_Z36).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (((w = u \/ w = v) \/ w = w) \/ w = m ).
+auto.
+generalize (H2 w H47);intro.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -235,8 +244,8 @@ Save.
                    (((x = u \/ x = v) \/ x = w) \/ x = m ->
                     (((((valid alloc x) /\ (valid alloc (acc p1_Z36 x))) /\
                     (valid alloc (acc p2_Z36 x))) /\
-                    (valid_range alloc (acc p1_Z36 x) 0 5)) /\
-                    (valid_range alloc (acc p2_Z36 x) 0 5)) /\
+                    (valid_range alloc (acc p1_Z36 x) 0 4)) /\
+                    (valid_range alloc (acc p2_Z36 x) 0 4)) /\
                     (valid alloc (acc pp1_Z36 x)))) /\
                 (valid alloc (acc pp2_Z39 u2))) /\
                 (valid alloc (acc pp2_Z42 v2_0))) /\
@@ -257,8 +266,8 @@ Save.
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
-                (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 u) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 u) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
@@ -276,8 +285,8 @@ Save.
                 ((((((valid alloc v) /\ (valid alloc (acc p1_Z36 v))) /\
                 (valid alloc (acc p2_Z36 v))) /\
                 (valid alloc (acc pp1_Z36 v))) /\
-                (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 v) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 v) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 v) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_1: ((memory) Z Z3)),
@@ -295,8 +304,8 @@ Save.
                 ((((((valid alloc w) /\ (valid alloc (acc p1_Z36 w))) /\
                 (valid alloc (acc p2_Z36 w))) /\
                 (valid alloc (acc pp1_Z36 w))) /\
-                (valid_range alloc (acc p1_Z36 w) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 w) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 w) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 w) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_2: ((memory) Z Z3)),
@@ -313,13 +322,16 @@ Save.
   (* File "separation2.c", line 28, characters 12-129 *)
   ((((((valid alloc m) /\ (valid alloc (acc p1_Z36 m))) /\
   (valid alloc (acc p2_Z36 m))) /\ (valid alloc (acc pp1_Z36 m))) /\
-  (valid_range alloc (acc p1_Z36 m) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 m) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid_range alloc (acc p1_Z36 m) 0 4)) /\
+  (valid_range alloc (acc p2_Z36 m) 0 4)) /\ (separation1 p1_Z36 p2_Z36) /\
   (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
   (valid1 p1_Z36).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (((m = u \/ m = v) \/ m = w) \/ m = m ).
+auto.
+generalize (H2 m H62);intro.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -344,8 +356,8 @@ Save.
                    (((x = u \/ x = v) \/ x = w) \/ x = m ->
                     (((((valid alloc x) /\ (valid alloc (acc p1_Z36 x))) /\
                     (valid alloc (acc p2_Z36 x))) /\
-                    (valid_range alloc (acc p1_Z36 x) 0 5)) /\
-                    (valid_range alloc (acc p2_Z36 x) 0 5)) /\
+                    (valid_range alloc (acc p1_Z36 x) 0 4)) /\
+                    (valid_range alloc (acc p2_Z36 x) 0 4)) /\
                     (valid alloc (acc pp1_Z36 x)))) /\
                 (valid alloc (acc pp2_Z39 u2))) /\
                 (valid alloc (acc pp2_Z42 v2_0))) /\
@@ -366,8 +378,8 @@ Save.
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
-                (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 u) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 u) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
@@ -385,8 +397,8 @@ Save.
                 ((((((valid alloc v) /\ (valid alloc (acc p1_Z36 v))) /\
                 (valid alloc (acc p2_Z36 v))) /\
                 (valid alloc (acc pp1_Z36 v))) /\
-                (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 v) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 v) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 v) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_1: ((memory) Z Z3)),
@@ -404,8 +416,8 @@ Save.
                 ((((((valid alloc w) /\ (valid alloc (acc p1_Z36 w))) /\
                 (valid alloc (acc p2_Z36 w))) /\
                 (valid alloc (acc pp1_Z36 w))) /\
-                (valid_range alloc (acc p1_Z36 w) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 w) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 w) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 w) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_2: ((memory) Z Z3)),
@@ -423,8 +435,8 @@ Save.
                 ((((((valid alloc m) /\ (valid alloc (acc p1_Z36 m))) /\
                 (valid alloc (acc p2_Z36 m))) /\
                 (valid alloc (acc pp1_Z36 m))) /\
-                (valid_range alloc (acc p1_Z36 m) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 m) 0 5)) /\
+                (valid_range alloc (acc p1_Z36 m) 0 4)) /\
+                (valid_range alloc (acc p2_Z36 m) 0 4)) /\
                 (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
                 (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_3: ((memory) Z Z3)),
@@ -468,8 +480,36 @@ Save.
                 (pset_range (pset_singleton (acc p1_Z36 u)) 0 5))))))))))))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+exists 1.
+intuition;subst;auto.
+rewrite H78;auto.
+rewrite H65;auto.
+rewrite H50;auto.
+rewrite H79;auto.
+rewrite H68;auto.
+rewrite H53;auto.
+apply pset_singleton_intro;auto.
+replace (u<> v) with (shift u 0 <> shift v 0).
+apply neq_base_addr_neq_shift;auto.
+rewrite  shift_zero;rewrite shift_zero;auto. 
+apply pset_singleton_intro;auto.
+replace (u<> w) with (shift u 0 <> shift w 0).
+apply neq_base_addr_neq_shift;auto.
+rewrite  shift_zero;rewrite shift_zero;auto. 
+apply pset_singleton_intro;auto.
+replace (u<> m) with (shift u 0 <> shift m 0).
+apply neq_base_addr_neq_shift;auto.
+rewrite  shift_zero;rewrite shift_zero;auto. 
+apply pset_union_intro.
+split.
+apply pset_singleton_intro;auto.
+
+
+replace (shift (u # p1_Z36) 1<> v # pp1_Z36) with (shift (u # p1_Z36) 1 <> shift (v # pp1_Z36) 0).
+apply neq_base_addr_neq_shift;auto.
+
 Save.
+
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 

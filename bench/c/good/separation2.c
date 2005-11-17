@@ -26,7 +26,7 @@ las2 u2, v2;
 
 /*@
   requires \valid(p) && \valid(p->p1) && \valid(p->p2) && \valid(p->pp1)
-  && \valid_range(p->p1,0,5) && \valid_range(p->p2,0,5)
+  && \valid_range(p->p1,0,4) && \valid_range(p->p2,0,4)
   assigns p->p1[0 .. 5],p->p2[0 .. 5], p->v1, p->v2, *p->pp1
   ensures p->p1[1] <= p->v1
 */
@@ -42,7 +42,7 @@ void g2(las2 * p);
 /*@
   requires
   (\forall las x; (&x==&u || &x==&v || &x==&w || &x==&m) =>
-  \valid(x) && \valid(x.p1) && \valid(x.p2) && \valid_range(x.p1,0,5) && \valid_range(x.p2,0,5)
+  \valid(x) && \valid(x.p1) && \valid(x.p2) && \valid_range(x.p1,0,4) && \valid_range(x.p2,0,4)
   && \valid(x.pp1)) && \valid(u2.pp2) && \valid(v2.pp2)
   assigns u.v1,u.v2,u.p1[0 .. 5],u.p2[0 .. 5],*u.pp1
   ,v.v1,v.v2,v.p1[0 .. 5],v.p2[0 .. 5],*v.pp1
