@@ -37,8 +37,10 @@ Save.
   forall (ma_structure: ((pointer) Z7)),
   forall (alloc: alloc_table),
   forall (substruct_Z7: ((memory) ((pointer) Z2) Z7)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z7 ma_structure))) /\
+                (valid1 substruct_Z7) /\
+                (separation2 substruct_Z7 substruct_Z7)),
   1 >= 1.
 Proof.
 intuition.
@@ -49,8 +51,10 @@ Save.
   forall (ma_structure: ((pointer) Z7)),
   forall (alloc: alloc_table),
   forall (substruct_Z7: ((memory) ((pointer) Z2) Z7)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z7 ma_structure))) /\
+                (valid1 substruct_Z7) /\
+                (separation2 substruct_Z7 substruct_Z7)),
   forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z8)),
   forall (alloc0: alloc_table),
@@ -72,8 +76,10 @@ Save.
   forall (alloc: alloc_table),
   forall (fst_Z8: ((memory) Z Z8)),
   forall (substruct_Z7: ((memory) ((pointer) Z2) Z7)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z7 ma_structure))) /\
+                (valid1 substruct_Z7) /\
+                (separation2 substruct_Z7 substruct_Z7)),
   forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z8)),
   forall (alloc0: alloc_table),
@@ -97,8 +103,10 @@ Save.
   forall (alloc: alloc_table),
   forall (fst_Z8: ((memory) Z Z8)),
   forall (substruct_Z7: ((memory) ((pointer) Z2) Z7)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z7 ma_structure))) /\
+                (valid1 substruct_Z7) /\
+                (separation2 substruct_Z7 substruct_Z7)),
   forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z8)),
   forall (alloc0: alloc_table),
@@ -144,8 +152,10 @@ Save.
   forall (alloc: alloc_table),
   forall (fst_Z8: ((memory) Z Z8)),
   forall (substruct_Z7: ((memory) ((pointer) Z2) Z7)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z7 ma_structure))) /\
+                (valid1 substruct_Z7) /\
+                (separation2 substruct_Z7 substruct_Z7)),
   forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z8)),
   forall (alloc0: alloc_table),
@@ -176,8 +186,10 @@ Save.
   forall (fst_Z2: ((memory) Z Z2)),
   forall (fst_Z8: ((memory) Z Z8)),
   forall (substruct_Z7: ((memory) ((pointer) Z2) Z7)),
-  forall (HW_1: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_Z7 ma_structure))) /\
+                (valid1 substruct_Z7) /\
+                (separation2 substruct_Z7 substruct_Z7)),
   forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z8)),
   forall (alloc0: alloc_table),

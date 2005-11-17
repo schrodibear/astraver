@@ -2,8 +2,8 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Export purse_spec_why.
-(* Add LoadPath "../../../../lib/coq". *)
-Load caduceus_tactics.
+(* Add LoadPath "../../../../lib/coq". 
+Load caduceus_tactics.*)
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit_impl_po_1 : 
@@ -32,8 +32,6 @@ Save.
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -56,7 +54,21 @@ Save.
   (not_assigns alloc balance_Z34 balance_Z34_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+rewrite HW_5.
+red.
+red in H.
+intuition.
+rewrite acc_upd_eq;auto.
+omega.
+rewrite HW_5.
+rewrite acc_upd_eq;auto.
+subst;auto.
+red;intros.
+rewrite HW_5.
+rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -115,21 +127,6 @@ Save.
   (valid alloc p1).
 Proof.
 unfold purse_inv; intuition.
-subst.
-rewrite H8;caduceus;auto.
-subst balance0; caduceus.
-unfold not_assigns; intuition.
-assert (p<>p2).
-apply pset_singleton_elim.
-apply pset_union_elim1 with (pset_singleton p1).
-assumption.
-rewrite H8; intuition.
-subst.
-assert (p<>p1).
-apply pset_singleton_elim.
-apply pset_union_elim2 with (pset_singleton p2).
-assumption.
-caduceus.
 Save.
 
 
@@ -160,8 +157,31 @@ Save.
   (not_assigns alloc balance_Z34 balance_Z34_1
    (pset_union (pset_singleton p2) (pset_singleton p1))).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;auto.
+red in H1.
+red in H5.
+assert (p1<>p2).
+auto.
+generalize (pset_singleton_intro H4).
+intro.
+generalize (H5 p1 HW_6 H8). 
+intro.
+rewrite H9.
+rewrite acc_upd_eq;auto.
+red;intros.
+assert (p<>p2).
+generalize (pset_union_elim1 H8);intro.
+apply pset_singleton_elim;auto.
+generalize (pset_singleton_intro H9).
+intro.
+generalize (H5 p H4 H10). 
+intro.
+rewrite H11.
+rewrite acc_upd_neq;auto.
+generalize (pset_union_elim2 H8);intro.
+assert (p<>p1).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -214,9 +234,8 @@ unfold purse_inv; intuition.
 rewrite H11;auto.
 apply pset_singleton_intro.
 intro;subst.
-generalize (fresh_not_valid alloc p1 H7 0).
-intros Q ;apply Q.
-rewrite shift_zero.
+rewrite <- shift_zero in H8.
+generalize (fresh_not_valid H7 H8).
 auto.
 Save.
 
@@ -260,13 +279,14 @@ unfold purse_inv; intuition.
 rewrite H18;intuition.
 apply pset_singleton_intro; auto.
 intro;subst.
-generalize (fresh_not_valid _ _ H1 0);rewrite shift_zero.
-tauto.
+rewrite <- shift_zero in H14.
+generalize (fresh_not_valid H1 H14).
+auto.
 rewrite H18;intuition.
 apply pset_singleton_intro; auto.
 intro;subst.
-generalize (fresh_not_valid _ _ H1 0);rewrite shift_zero.
-tauto.
+rewrite <- shift_zero in H.
+generalize (fresh_not_valid H1 H);tauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -319,13 +339,13 @@ unfold purse_inv; intuition.
 rewrite H26;intuition.
 apply pset_singleton_intro; auto.
 intro;subst.
-generalize (fresh_not_valid _ _ H1 0);rewrite shift_zero.
-tauto.
-assert (not_in_pset p2 (pset_singleton p1)).
+rewrite <- shift_zero in H5.
+generalize (fresh_not_valid H1 H5);tauto.
+assert (not_in_pset result0 (pset_singleton result)).
 apply pset_singleton_intro.
 intro;subst.
-generalize (fresh_not_valid _ _ H1 0);rewrite shift_zero.
-tauto.
+rewrite <- shift_zero in H20. 
+generalize (fresh_not_valid H1 H20);tauto.
 rewrite H26;intuition.
 Save.
 
@@ -384,9 +404,11 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-apply credit_impl_po_1 with 0 balance.
-intuition.
-Save.
+generalize (fresh_not_valid H1 ).
+intro.
+generalize (H21 0).
+rewrite shift_zero.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_6 : 
@@ -511,9 +533,10 @@ Save.
 Proof.
 intuition.
 subst .
-assert (p1<> p2).
+assert (result<> result0).
 intro;subst.
-generalize (fresh_not_valid _ _ H6 0);rewrite shift_zero;tauto.
+rewrite <- shift_zero in HW_11. 
+generalize (fresh_not_valid H6 HW_11);tauto.
 red in H7;intuition.
 rewrite H27.
 rewrite H25;intuition.
@@ -554,8 +577,6 @@ Save.
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -579,6 +600,18 @@ Save.
   (not_assigns alloc balance_Z34 balance_Z34_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red.
+rewrite HW_5.
+rewrite acc_upd_eq;auto.
+intuition.
+rewrite HW_5.
+rewrite acc_upd_eq;auto.
+rewrite HW_3;auto.
+red;intros.
+rewrite HW_5.
+rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 

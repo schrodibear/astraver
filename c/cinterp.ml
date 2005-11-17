@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.153 2005-11-09 10:47:24 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.154 2005-11-17 15:28:49 hubert Exp $ i*)
 
 
 open Format
@@ -26,6 +26,7 @@ open Clogic
 open Creport
 open Ctypes
 open Cseparation
+open Pp
 
 (*
 
@@ -52,7 +53,7 @@ let global_var_for_array_type t =
 let heap_var_name v =
   match v.var_why_type with
     | Info.Memory(_,z) ->
-	v.var_name ^ "_" ^ (found_repr z)
+	v.var_unique_name ^ "_" ^ (found_repr z)
     | _ -> v.var_unique_name
 
 
@@ -275,7 +276,7 @@ let rec interp_predicate label old_label p =
     | NPrel (t1, op, t2) ->
 	let t1,op,t2 = interp_rel t1 t2 op in
 	LPred(op,[ft t1;ft t2])
-    |NPapp (v,tl) when is_internal_pred v.logic_name ->
+    | NPapp (v,tl) when is_internal_pred v.logic_name ->
        let n = v.logic_name in
        let name,num =
 	 if has_prefix "%valid1_range" n then "valid1_range", 1
@@ -287,16 +288,19 @@ let rec interp_predicate label old_label p =
 	 else if has_prefix "%separation2" n then "separation2", 2
 	 else assert false
        in
+(*       eprintf "%s :" n;
        let param = 
 	 HeapVarSet.fold 
-	   (fun x acc -> interp_var label (heap_var_name x) :: acc)
+	   (fun x acc -> eprintf "%s" x.var_unique_name; 
+	      interp_var label (heap_var_name x) :: acc)
 	   v.logic_heap_args []
        in
-       let param = match param, num with
+       eprintf "@\n";*)
+       let tl = match tl, num with
 	 | [x], 2 -> [x; x]
-	 | _ -> param
+	 | _ -> tl
        in
-       LPred(name, param @ List.map ft tl)
+       LPred(name, (*param @ *)List.map ft tl)
     | NPapp (v, tl) ->
 	LPred (v.logic_name,
 	       HeapVarSet.fold 
@@ -928,7 +932,7 @@ let weak_invariants_for hvs =
 
 let strong_invariant = 
   let h = Hashtbl.create 97 in
-  fun id p e -> 
+  fun id p (*e*) -> 
     try 
       Hashtbl.find h id
     with Not_found -> 
@@ -957,30 +961,76 @@ let strong_invariant_name id e =
 	   (fun x acc -> (LVar (heap_var_name x)) :: acc) 
 	   e []))
 
-open Pp
 
-let print_hvs fmt l =
+
+let print_effects fmt l =
   fprintf fmt "@[%a@]"
-    (print_list space (fun fmt v -> pp_print_string fmt (heap_var_name v))) 
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
     (HeapVarSet.elements l)
-       
+
+let extract_var_from_effect var lf =
+  List.fold_left (fun acc v-> 
+		    if (v.var_unique_name = var.var_unique_name) 
+		    then v::acc else acc)[] lf 
+
+let add ef ep =
+  let lp = (HeapVarSet.elements ep) in
+  let lf = (HeapVarSet.elements ef) in
+  let l = List.fold_right 
+    (fun v acc -> (extract_var_from_effect v lf)::acc ) lp [] in
+  match l with 
+    | [] -> []
+    | l::[] -> List.fold_left (fun acc x -> [x]::acc) [] l
+    | l1::l2::[] -> List.fold_left 
+	(fun acc x -> 
+	   List.fold_left 
+	     (fun acc y -> if same_why_type x.var_why_type y.var_why_type 
+	      then ((x::y::[])::acc) else acc) acc l2) [] l1 
+    | _ -> assert false
+
+let subst a p =
+  let q  =
+    match p.npred_node with
+      | NPapp (f,tl) -> 
+	  NPapp (f,
+		 (List.map (fun x -> 
+			      { nterm_node = 
+				  (NTvar (default_var_info (heap_var_name x)));
+				nterm_loc = Loc.dummy_position;
+				nterm_type = x.var_type}) a)@tl)
+      | _ -> assert false 
+  in
+  { p with npred_node = q} 
+
 let strong_invariants_for hvs =
-  eprintf "effects for function before invariants: reads %a @." 
-    print_hvs hvs;
   Hashtbl.fold
     (fun id (p,e1,e2) acc -> 
-       eprintf "avant : %s ajout? %b effect %a@\n" id (HeapVarSet.subset e2 hvs)
-       print_hvs e2;
        if HeapVarSet.subset e2 hvs then
-	 ((* eprintf "apres : %s@\n" id; *)
-	 make_and 
+	 (make_and 
 	   (if (Ceffect.mem_strong_invariant_2 id) || (Cenv.mem_pred id)
 	    then
 	       strong_invariant_name id e1
 	    else
-	      strong_invariant id p e2)  acc)
+	      strong_invariant id p (*e2*))  acc)
        else acc) 
-    Ceffect.strong_invariants LTrue
+  Ceffect.strong_invariants  
+    (Hashtbl.fold
+       (fun id (p,e1,e2) acc ->
+	  eprintf "struct effect %s : %a@\n fonction effect : %a@\n" id print_effects e2 print_effects hvs; 
+	  let l = add hvs e2 in
+	  List.iter (fun x ->eprintf "@[%a@]@\n"
+	    (print_list space (fun fmt v -> pp_print_string fmt (heap_var_name v))) x) l;
+	  let rec add_pred id p l acc = 
+	    match l with 
+	      | [] -> acc
+	      | a::l -> 
+		  eprintf "struct effect2 %s : %a@\n " id (print_list space (fun fmt x -> fprintf fmt "%s" (heap_var_name x))) a;
+		  let p' = subst a p in 
+		  make_and (strong_invariant id p') (add_pred id p l acc)
+	  in
+	  add_pred id p l acc)
+       Ceffect.invariants_for_struct LTrue)
+
 
 let interp_spec add_inv effect_reads effect_assigns s =
   let tpre = 

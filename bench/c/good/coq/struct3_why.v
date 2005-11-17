@@ -104,6 +104,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
+  forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
   1 >= 1.
 Proof.
 intuition.
@@ -112,10 +114,12 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (HW_1: 1 >= 1),
+  forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
@@ -128,18 +132,20 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
+  forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
   (valid alloc0 result).
 Proof.
 intuition; subst; auto; caduceus.
@@ -149,20 +155,21 @@ Save.
   forall (alloc: alloc_table),
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
-  forall (HW_5: (valid alloc0 result)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_6: (valid alloc0 result)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_6: result0 = (acc s_Z5 result)),
+  forall (HW_7: result0 = (acc s_Z5 result)),
   (valid alloc0 result0).
 Proof.
 intuition.
@@ -175,23 +182,24 @@ Save.
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (x_Z1: ((memory) Z Z1)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
-  forall (HW_5: (valid alloc0 result)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_6: (valid alloc0 result)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_6: result0 = (acc s_Z5 result)),
-  forall (HW_7: (valid alloc0 result0)),
+  forall (HW_7: result0 = (acc s_Z5 result)),
+  forall (HW_8: (valid alloc0 result0)),
   forall (x_Z1_0: ((memory) Z Z1)),
-  forall (HW_8: x_Z1_0 = (upd x_Z1 result0 2)),
+  forall (HW_9: x_Z1_0 = (upd x_Z1 result0 2)),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -204,26 +212,27 @@ Save.
   forall (s_Z5: ((memory) ((pointer) Z1) Z5)),
   forall (x_Z1: ((memory) Z Z1)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
-  forall (HW_5: (valid alloc0 result)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_6: (valid alloc0 result)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_6: result0 = (acc s_Z5 result)),
-  forall (HW_7: (valid alloc0 result0)),
+  forall (HW_7: result0 = (acc s_Z5 result)),
+  forall (HW_8: (valid alloc0 result0)),
   forall (x_Z1_0: ((memory) Z Z1)),
-  forall (HW_8: x_Z1_0 = (upd x_Z1 result0 2)),
-  forall (HW_9: (valid alloc0 result)),
+  forall (HW_9: x_Z1_0 = (upd x_Z1 result0 2)),
+  forall (HW_10: (valid alloc0 result)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_10: result1 = (acc s_Z5 result)),
+  forall (HW_11: result1 = (acc s_Z5 result)),
   (valid alloc0 result1).
 Proof.
 intuition.
@@ -237,29 +246,30 @@ Save.
   forall (x_Z1: ((memory) Z Z1)),
   forall (y_Z1: ((memory) Z Z1)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
-  forall (HW_5: (valid alloc0 result)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_6: (valid alloc0 result)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_6: result0 = (acc s_Z5 result)),
-  forall (HW_7: (valid alloc0 result0)),
+  forall (HW_7: result0 = (acc s_Z5 result)),
+  forall (HW_8: (valid alloc0 result0)),
   forall (x_Z1_0: ((memory) Z Z1)),
-  forall (HW_8: x_Z1_0 = (upd x_Z1 result0 2)),
-  forall (HW_9: (valid alloc0 result)),
+  forall (HW_9: x_Z1_0 = (upd x_Z1 result0 2)),
+  forall (HW_10: (valid alloc0 result)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_10: result1 = (acc s_Z5 result)),
-  forall (HW_11: (valid alloc0 result1)),
+  forall (HW_11: result1 = (acc s_Z5 result)),
+  forall (HW_12: (valid alloc0 result1)),
   forall (y_Z1_0: ((memory) Z Z1)),
-  forall (HW_12: y_Z1_0 = (upd y_Z1 result1 3)),
+  forall (HW_13: y_Z1_0 = (upd y_Z1 result1 3)),
   (valid alloc0 result).
 Proof.
 intuition.
@@ -273,32 +283,33 @@ Save.
   forall (x_Z1: ((memory) Z Z1)),
   forall (y_Z1: ((memory) Z Z1)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
-  forall (HW_5: (valid alloc0 result)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_6: (valid alloc0 result)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_6: result0 = (acc s_Z5 result)),
-  forall (HW_7: (valid alloc0 result0)),
+  forall (HW_7: result0 = (acc s_Z5 result)),
+  forall (HW_8: (valid alloc0 result0)),
   forall (x_Z1_0: ((memory) Z Z1)),
-  forall (HW_8: x_Z1_0 = (upd x_Z1 result0 2)),
-  forall (HW_9: (valid alloc0 result)),
+  forall (HW_9: x_Z1_0 = (upd x_Z1 result0 2)),
+  forall (HW_10: (valid alloc0 result)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_10: result1 = (acc s_Z5 result)),
-  forall (HW_11: (valid alloc0 result1)),
+  forall (HW_11: result1 = (acc s_Z5 result)),
+  forall (HW_12: (valid alloc0 result1)),
   forall (y_Z1_0: ((memory) Z Z1)),
-  forall (HW_12: y_Z1_0 = (upd y_Z1 result1 3)),
-  forall (HW_13: (valid alloc0 result)),
+  forall (HW_13: y_Z1_0 = (upd y_Z1 result1 3)),
+  forall (HW_14: (valid alloc0 result)),
   forall (result2: ((pointer) Z1)),
-  forall (HW_14: result2 = (acc s_Z5 result)),
+  forall (HW_15: result2 = (acc s_Z5 result)),
   (valid alloc0 result2).
 Proof.
 intuition.
@@ -312,35 +323,36 @@ Save.
   forall (x_Z1: ((memory) Z Z1)),
   forall (y_Z1: ((memory) Z Z1)),
   forall (z_Z5: ((memory) Z Z5)),
-  forall (HW_1: 1 >= 1),
+  forall (HW_1: (valid1 s_Z5) /\ (separation2 s_Z5 s_Z5)),
+  forall (HW_2: 1 >= 1),
   forall (result: ((pointer) Z5)),
   forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (HW_3: (valid alloc0 result)),
+  forall (HW_4: (valid alloc0 result)),
   forall (z_Z5_0: ((memory) Z Z5)),
-  forall (HW_4: z_Z5_0 = (upd z_Z5 result 1)),
-  forall (HW_5: (valid alloc0 result)),
+  forall (HW_5: z_Z5_0 = (upd z_Z5 result 1)),
+  forall (HW_6: (valid alloc0 result)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_6: result0 = (acc s_Z5 result)),
-  forall (HW_7: (valid alloc0 result0)),
+  forall (HW_7: result0 = (acc s_Z5 result)),
+  forall (HW_8: (valid alloc0 result0)),
   forall (x_Z1_0: ((memory) Z Z1)),
-  forall (HW_8: x_Z1_0 = (upd x_Z1 result0 2)),
-  forall (HW_9: (valid alloc0 result)),
+  forall (HW_9: x_Z1_0 = (upd x_Z1 result0 2)),
+  forall (HW_10: (valid alloc0 result)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_10: result1 = (acc s_Z5 result)),
-  forall (HW_11: (valid alloc0 result1)),
+  forall (HW_11: result1 = (acc s_Z5 result)),
+  forall (HW_12: (valid alloc0 result1)),
   forall (y_Z1_0: ((memory) Z Z1)),
-  forall (HW_12: y_Z1_0 = (upd y_Z1 result1 3)),
-  forall (HW_13: (valid alloc0 result)),
+  forall (HW_13: y_Z1_0 = (upd y_Z1 result1 3)),
+  forall (HW_14: (valid alloc0 result)),
   forall (result2: ((pointer) Z1)),
-  forall (HW_14: result2 = (acc s_Z5 result)),
-  forall (HW_15: (valid alloc0 result2)),
+  forall (HW_15: result2 = (acc s_Z5 result)),
+  forall (HW_16: (valid alloc0 result2)),
   forall (result3: Z),
-  forall (HW_16: result3 = (acc y_Z1_0 result2)),
+  forall (HW_17: result3 = (acc y_Z1_0 result2)),
   (* File "struct3.c", line 13, characters 13-25 *) result3 = 3.
 Proof.
 intuition.

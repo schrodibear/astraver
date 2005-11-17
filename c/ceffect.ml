@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.104 2005-11-08 14:55:13 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.105 2005-11-17 15:28:49 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -316,6 +316,14 @@ let add_strong_invariant_2 id p args =
     if p.npred_node <> NPtrue then
       let ef = predicate p in
       Hashtbl.add strong_invariants_2 id (p,ef,args)      
+
+let invariants_for_struct = Hashtbl.create 97
+
+let add_invariants_for_struct id p vars =
+  if p.npred_node <> NPtrue then
+  let ef = predicate p in
+  Hashtbl.add invariants_for_struct id (p,ef,vars)
+
 
 let intersect_only_alloc e1 e2 =
   HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
@@ -895,7 +903,7 @@ let decl d =
 	lprintf 
 	  "effects of strong invariant %s: @[%a@]@." id
 	  print_effects pre;
-	add_strong_invariant id p pre	  
+	add_invariants_for_struct id p pre	  
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
 	  match ty.Ctypes.ctype_node with

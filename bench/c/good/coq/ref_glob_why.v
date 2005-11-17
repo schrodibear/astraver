@@ -11,7 +11,6 @@ Require Export ref_glob_spec_why.
   (valid alloc x).
 Proof.
 intuition.
-subst;auto.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -30,7 +29,7 @@ intuition;subst; caduceus.
 red.
 intros.
 rewrite acc_upd_neq;auto.
-generalize (pset_singleton_elim _ _ H0);auto.
+generalize (pset_singleton_elim H0);auto.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -41,7 +40,6 @@ Qed.
   (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc x).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 
@@ -61,15 +59,18 @@ Save.
   (not_assigns alloc int_Z9 int_Z9_0 (pset_singleton x)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (c1_Z13: ((memory) ((pointer) Z9) Z13)),
+  forall (c2_Z13: ((memory) ((pointer) Z9) Z13)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   (valid alloc plas).
 Proof.
 intuition.
@@ -78,10 +79,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (c1_Z13: ((memory) ((pointer) Z9) Z13)),
   forall (c2_Z13: ((memory) ((pointer) Z9) Z13)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z9)),
   forall (HW_3: result = (acc c2_Z13 plas)),
@@ -94,11 +98,14 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_3 : 
   forall (alloc: alloc_table),
+  forall (c1_Z13: ((memory) ((pointer) Z9) Z13)),
   forall (c2_Z13: ((memory) ((pointer) Z9) Z13)),
   forall (int_Z9: ((memory) Z Z9)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z9)),
   forall (HW_3: result = (acc c2_Z13 plas)),
@@ -107,29 +114,6 @@ Save.
   forall (HW_5: int_Z9_0 = (upd int_Z9 result 2)),
   (valid alloc plas).
 Proof.
-intuition.
-subst.
-rewrite H11;auto.
-generalize (H2 plas alloc H).
-intro.
-apply pset_singleton_intro.
-generalize (neq_base_addr_neq_shift (plas#c1) (plas#c2) 0 0 H4).
-repeat rewrite shift_zero;auto.
-subst;auto.
-subst.
-red.
-intros.
-rewrite H11;auto.
-rewrite H8;auto.
-rewrite acc_upd_neq;auto.
-intro;subst.
-generalize (pset_union_elim1 _  _ _  H6);auto.
-apply not_not_in_pset_singleton.
-generalize (pset_union_elim2 _  _ _  H6);auto.
-generalize (pset_union_elim1 _ _ _ H6);auto.
-subst;auto.
-subst.
-unfold valid1 in H5.
 intuition.
 Save.
 
@@ -141,7 +125,9 @@ Save.
   forall (int_Z9: ((memory) Z Z9)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z9)),
   forall (HW_3: result = (acc c2_Z13 plas)),
@@ -154,7 +140,7 @@ Save.
   (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result0).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -165,7 +151,9 @@ Save.
   forall (int_Z9: ((memory) Z Z9)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z9)),
   forall (HW_3: result = (acc c2_Z13 plas)),
@@ -184,7 +172,6 @@ Save.
   (valid alloc plas).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -195,7 +182,9 @@ Save.
   forall (int_Z9: ((memory) Z Z9)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z9)),
   forall (HW_3: result = (acc c2_Z13 plas)),
@@ -217,7 +206,7 @@ Save.
   (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -228,7 +217,9 @@ Save.
   forall (int_Z9: ((memory) Z Z9)),
   forall (plas: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas)),
+                (valid alloc plas) /\ (valid1_range c2_Z13 1) /\
+                (valid1_range c1_Z13 1) /\ (separation1 c1_Z13 c2_Z13) /\
+                (valid1 c2_Z13) /\ (valid1 c1_Z13)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z9)),
   forall (HW_3: result = (acc c2_Z13 plas)),
@@ -262,7 +253,28 @@ Save.
     (pset_singleton (acc c1_Z13 plas)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+rewrite H8;auto.
+apply pset_singleton_intro.
+red in H2.
+replace (plas # c1_Z13 <> plas # c2_Z13) with (shift (plas # c1_Z13) 0 <> shift (plas # c2_Z13) 0).
+apply neq_base_addr_neq_shift.
+apply H2 with alloc;auto.
+rewrite shift_zero;rewrite shift_zero;auto.
+subst;auto.
+red;intros.
+rewrite H8;auto.
+rewrite H6;auto.
+subst.
+rewrite acc_upd_neq;auto.
+generalize (pset_union_elim1 H10);intro.
+assert (p<> plas # c2_Z13).
+apply pset_singleton_elim;auto.
+auto.
+subst.
+generalize (pset_union_elim2 H10);auto.
+subst.
+generalize (pset_union_elim1 H10);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -291,6 +303,12 @@ Save.
 Proof.
 intuition.
 subst; caduceus.
+red;intros.
+subst.
+rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -341,6 +359,6 @@ Proof.
 intuition; subst; caduceus.
 red;intros.
 rewrite acc_upd_neq;auto.
-generalize (pset_singleton_elim _ _ H2);auto.
+generalize (pset_singleton_elim H2);auto.
 Save.
 

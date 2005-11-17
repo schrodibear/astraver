@@ -6,9 +6,11 @@ Require Export separation3_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
   forall (l: ((pointer) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   (valid alloc s0).
 Proof.
 intuition.
@@ -23,7 +25,8 @@ Save.
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
   forall (l: ((pointer) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -43,7 +46,8 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -66,7 +70,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (p_Z12: ((memory) ((pointer) Z9) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -92,7 +97,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (p_Z12: ((memory) ((pointer) Z9) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -121,7 +127,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (p_Z12: ((memory) ((pointer) Z9) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -155,7 +162,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (p_Z12: ((memory) ((pointer) Z9) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z9) /\ (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -187,8 +195,12 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
+  forall (c_Z9: ((memory) ((pointer) Z1) Z9)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   (valid alloc s0).
 Proof.
 intuition.
@@ -198,8 +210,11 @@ Save.
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
+  forall (c_Z9: ((memory) ((pointer) Z1) Z9)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -216,9 +231,12 @@ Save.
 (*Why goal*) Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b_Z9: ((memory) ((pointer) Z0) Z9)),
+  forall (c_Z9: ((memory) ((pointer) Z1) Z9)),
   forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -246,7 +264,9 @@ Save.
   forall (c_Z9: ((memory) ((pointer) Z1) Z9)),
   forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -274,7 +294,9 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -305,7 +327,9 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -341,7 +365,9 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 c_Z9) /\
+                (valid1 b_Z9) /\ (valid1_range c_Z9 5) /\
+                (valid1_range b_Z9 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z9 s0)),
@@ -376,8 +402,10 @@ Save.
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (l: ((pointer) Z12)),
+  forall (q_Z12: ((memory) ((pointer) Z2) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (separation2 q_Z12 q_Z12) /\ (valid1 q_Z12)),
   (valid alloc s0).
 Proof.
 intuition; subst; valid.
@@ -388,8 +416,10 @@ Save.
   forall (a_Z9: ((memory) Z Z9)),
   forall (alloc: alloc_table),
   forall (l: ((pointer) Z12)),
+  forall (q_Z12: ((memory) ((pointer) Z2) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (separation2 q_Z12 q_Z12) /\ (valid1 q_Z12)),
   forall (HW_2: (valid alloc s0)),
   forall (a_Z9_0: ((memory) Z Z9)),
   forall (HW_3: a_Z9_0 = (upd a_Z9 s0 1)),
@@ -413,7 +443,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (q_Z12: ((memory) ((pointer) Z2) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (separation2 q_Z12 q_Z12) /\ (valid1 q_Z12)),
   forall (HW_2: (valid alloc s0)),
   forall (a_Z9_0: ((memory) Z Z9)),
   forall (HW_3: a_Z9_0 = (upd a_Z9 s0 1)),
@@ -434,7 +465,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (q_Z12: ((memory) ((pointer) Z2) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (separation2 q_Z12 q_Z12) /\ (valid1 q_Z12)),
   forall (HW_2: (valid alloc s0)),
   forall (a_Z9_0: ((memory) Z Z9)),
   forall (HW_3: a_Z9_0 = (upd a_Z9 s0 1)),
@@ -458,7 +490,8 @@ Save.
   forall (l: ((pointer) Z12)),
   forall (q_Z12: ((memory) ((pointer) Z2) Z12)),
   forall (s0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0)),
+  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+                (separation2 q_Z12 q_Z12) /\ (valid1 q_Z12)),
   forall (HW_2: (valid alloc s0)),
   forall (a_Z9_0: ((memory) Z Z9)),
   forall (HW_3: a_Z9_0 = (upd a_Z9 s0 1)),

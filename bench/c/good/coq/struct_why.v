@@ -104,8 +104,10 @@ Save.
   forall (alloc: alloc_table),
   forall (ps: ((pointer) Z13)),
   forall (s: ((pointer) Z13)),
+  forall (t_Z13: ((memory) ((pointer) Z4) Z13)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
+                (valid1 t_Z13) /\ (separation2 t_Z13 t_Z13)),
   forall (ps0: ((pointer) Z13)),
   forall (HW_3: ps0 = s),
   (valid alloc s).
@@ -120,7 +122,8 @@ Save.
   forall (s: ((pointer) Z13)),
   forall (t_Z13: ((memory) ((pointer) Z4) Z13)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
+                (valid1 t_Z13) /\ (separation2 t_Z13 t_Z13)),
   forall (ps0: ((pointer) Z13)),
   forall (HW_3: ps0 = s),
   forall (HW_4: (valid alloc s)),
@@ -141,7 +144,8 @@ Save.
   forall (s: ((pointer) Z13)),
   forall (t_Z13: ((memory) ((pointer) Z4) Z13)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
+                (valid1 t_Z13) /\ (separation2 t_Z13 t_Z13)),
   forall (ps0: ((pointer) Z13)),
   forall (HW_3: ps0 = s),
   forall (HW_4: (valid alloc s)),
@@ -167,7 +171,8 @@ Save.
   forall (t_Z13: ((memory) ((pointer) Z4) Z13)),
   forall (x_Z4: ((memory) Z Z4)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
+                (valid1 t_Z13) /\ (separation2 t_Z13 t_Z13)),
   forall (ps0: ((pointer) Z13)),
   forall (HW_3: ps0 = s),
   forall (HW_4: (valid alloc s)),
@@ -195,7 +200,8 @@ Save.
   forall (t_Z13: ((memory) ((pointer) Z4) Z13)),
   forall (x_Z4: ((memory) Z Z4)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
+                (valid1 t_Z13) /\ (separation2 t_Z13 t_Z13)),
   forall (ps0: ((pointer) Z13)),
   forall (HW_3: ps0 = s),
   forall (HW_4: (valid alloc s)),
@@ -226,7 +232,8 @@ Save.
   forall (t_Z13: ((memory) ((pointer) Z4) Z13)),
   forall (x_Z4: ((memory) Z Z4)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid_range alloc s 0 0)),
+                (valid alloc ps) /\ (valid_range alloc s 0 0) /\
+                (valid1 t_Z13) /\ (separation2 t_Z13 t_Z13)),
   forall (ps0: ((pointer) Z13)),
   forall (HW_3: ps0 = s),
   forall (HW_4: (valid alloc s)),

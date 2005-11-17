@@ -37,12 +37,16 @@ Require Export separation2_spec_why.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   (* File "separation2.c", line 28, characters 12-129 *)
   ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
   (valid alloc (acc p2_Z36 u))) /\ (valid alloc (acc pp1_Z36 u))) /\
   (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 u) 0 5)).
+  (valid_range alloc (acc p2_Z36 u) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
+  (valid1 p1_Z36).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -85,13 +89,17 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
                 (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5))),
+                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z36_0: ((memory) Z Z36)),
   forall (v2_Z36_0: ((memory) Z Z36)),
@@ -107,7 +115,9 @@ Save.
   ((((((valid alloc v) /\ (valid alloc (acc p1_Z36 v))) /\
   (valid alloc (acc p2_Z36 v))) /\ (valid alloc (acc pp1_Z36 v))) /\
   (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 v) 0 5)).
+  (valid_range alloc (acc p2_Z36 v) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
+  (valid1 p1_Z36).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -150,13 +160,17 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
                 (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5))),
+                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z36_0: ((memory) Z Z36)),
   forall (v2_Z36_0: ((memory) Z Z36)),
@@ -173,7 +187,9 @@ Save.
                 (valid alloc (acc p2_Z36 v))) /\
                 (valid alloc (acc pp1_Z36 v))) /\
                 (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 v) 0 5))),
+                (valid_range alloc (acc p2_Z36 v) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_1: ((memory) Z Z3)),
   forall (v1_Z36_1: ((memory) Z Z36)),
   forall (v2_Z36_1: ((memory) Z Z36)),
@@ -189,7 +205,9 @@ Save.
   ((((((valid alloc w) /\ (valid alloc (acc p1_Z36 w))) /\
   (valid alloc (acc p2_Z36 w))) /\ (valid alloc (acc pp1_Z36 w))) /\
   (valid_range alloc (acc p1_Z36 w) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 w) 0 5)).
+  (valid_range alloc (acc p2_Z36 w) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
+  (valid1 p1_Z36).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -232,13 +250,17 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
                 (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5))),
+                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z36_0: ((memory) Z Z36)),
   forall (v2_Z36_0: ((memory) Z Z36)),
@@ -255,7 +277,9 @@ Save.
                 (valid alloc (acc p2_Z36 v))) /\
                 (valid alloc (acc pp1_Z36 v))) /\
                 (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 v) 0 5))),
+                (valid_range alloc (acc p2_Z36 v) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_1: ((memory) Z Z3)),
   forall (v1_Z36_1: ((memory) Z Z36)),
   forall (v2_Z36_1: ((memory) Z Z36)),
@@ -272,7 +296,9 @@ Save.
                 (valid alloc (acc p2_Z36 w))) /\
                 (valid alloc (acc pp1_Z36 w))) /\
                 (valid_range alloc (acc p1_Z36 w) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 w) 0 5))),
+                (valid_range alloc (acc p2_Z36 w) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_2: ((memory) Z Z3)),
   forall (v1_Z36_2: ((memory) Z Z36)),
   forall (v2_Z36_2: ((memory) Z Z36)),
@@ -288,7 +314,9 @@ Save.
   ((((((valid alloc m) /\ (valid alloc (acc p1_Z36 m))) /\
   (valid alloc (acc p2_Z36 m))) /\ (valid alloc (acc pp1_Z36 m))) /\
   (valid_range alloc (acc p1_Z36 m) 0 5)) /\
-  (valid_range alloc (acc p2_Z36 m) 0 5)).
+  (valid_range alloc (acc p2_Z36 m) 0 5)) /\ (separation1 p1_Z36 p2_Z36) /\
+  (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\
+  (valid1 p1_Z36).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -331,13 +359,17 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
                 ((((((valid alloc u) /\ (valid alloc (acc p1_Z36 u))) /\
                 (valid alloc (acc p2_Z36 u))) /\
                 (valid alloc (acc pp1_Z36 u))) /\
                 (valid_range alloc (acc p1_Z36 u) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 u) 0 5))),
+                (valid_range alloc (acc p2_Z36 u) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z36_0: ((memory) Z Z36)),
   forall (v2_Z36_0: ((memory) Z Z36)),
@@ -354,7 +386,9 @@ Save.
                 (valid alloc (acc p2_Z36 v))) /\
                 (valid alloc (acc pp1_Z36 v))) /\
                 (valid_range alloc (acc p1_Z36 v) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 v) 0 5))),
+                (valid_range alloc (acc p2_Z36 v) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_1: ((memory) Z Z3)),
   forall (v1_Z36_1: ((memory) Z Z36)),
   forall (v2_Z36_1: ((memory) Z Z36)),
@@ -371,7 +405,9 @@ Save.
                 (valid alloc (acc p2_Z36 w))) /\
                 (valid alloc (acc pp1_Z36 w))) /\
                 (valid_range alloc (acc p1_Z36 w) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 w) 0 5))),
+                (valid_range alloc (acc p2_Z36 w) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_2: ((memory) Z Z3)),
   forall (v1_Z36_2: ((memory) Z Z36)),
   forall (v2_Z36_2: ((memory) Z Z36)),
@@ -388,7 +424,9 @@ Save.
                 (valid alloc (acc p2_Z36 m))) /\
                 (valid alloc (acc pp1_Z36 m))) /\
                 (valid_range alloc (acc p1_Z36 m) 0 5)) /\
-                (valid_range alloc (acc p2_Z36 m) 0 5))),
+                (valid_range alloc (acc p2_Z36 m) 0 5)) /\
+                (separation1 p1_Z36 p2_Z36) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1 p2_Z36) /\ (valid1 p1_Z36)),
   forall (int_Z3_3: ((memory) Z Z3)),
   forall (v1_Z36_3: ((memory) Z Z36)),
   forall (v2_Z36_3: ((memory) Z Z36)),
@@ -437,6 +475,8 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (m: ((pointer) Z36)),
+  forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -452,7 +492,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   (valid alloc u).
 Proof.
 intuition.
@@ -464,6 +510,7 @@ Save.
   forall (alloc: alloc_table),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -479,7 +526,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -495,6 +548,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -510,7 +564,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -529,6 +589,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -544,7 +605,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -568,6 +635,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -583,7 +651,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -610,6 +684,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -625,7 +700,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -657,6 +738,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -672,7 +754,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -707,6 +795,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -722,7 +811,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -762,6 +857,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -777,7 +873,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -820,6 +922,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -835,7 +938,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -883,6 +992,7 @@ Save.
   forall (int_Z3: ((memory) Z Z3)),
   forall (m: ((pointer) Z36)),
   forall (p1_Z36: ((memory) ((pointer) Z3) Z36)),
+  forall (p2_Z36: ((memory) ((pointer) Z3) Z36)),
   forall (u: ((pointer) Z36)),
   forall (u2: ((pointer) Z39)),
   forall (v: ((pointer) Z36)),
@@ -898,7 +1008,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -965,7 +1081,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1035,7 +1157,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1108,7 +1236,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1186,7 +1320,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1267,7 +1407,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1353,7 +1499,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1442,7 +1594,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1536,7 +1694,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1633,7 +1797,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1735,7 +1905,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1841,7 +2017,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -1951,7 +2133,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2065,7 +2253,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2182,7 +2376,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2302,7 +2502,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2425,7 +2631,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2553,7 +2765,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2684,7 +2902,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2820,7 +3044,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -2959,7 +3189,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -3103,7 +3339,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -3250,7 +3492,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -3402,7 +3650,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -3557,7 +3811,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -3715,7 +3975,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -3876,7 +4142,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -4042,7 +4314,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -4211,7 +4489,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -4385,7 +4669,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -4562,7 +4852,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -4744,7 +5040,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -4929,7 +5231,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -5119,7 +5427,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -5312,7 +5626,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -5508,7 +5828,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -5707,7 +6033,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -5909,7 +6241,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -6114,7 +6452,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -6322,7 +6666,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -6535,7 +6885,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -6751,7 +7107,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -6972,7 +7334,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -7196,7 +7564,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -7425,7 +7799,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -7657,7 +8037,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -7894,7 +8280,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -8134,7 +8526,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -8377,7 +8775,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -8623,7 +9027,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -8874,7 +9284,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -9128,7 +9544,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -9387,7 +9809,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -9649,7 +10077,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -9916,7 +10350,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -10186,7 +10626,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -10461,7 +10907,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -10739,7 +11191,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -11020,7 +11478,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -11304,7 +11768,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -11591,7 +12061,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -11881,7 +12357,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -12174,7 +12656,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -12472,7 +12960,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -12773,7 +13267,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -13079,7 +13579,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -13388,7 +13894,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -13702,7 +14214,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -14019,7 +14537,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -14341,7 +14865,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -14666,7 +15196,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -14994,7 +15530,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -15325,7 +15867,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -15661,7 +16209,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -16000,7 +16554,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -16344,7 +16904,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -16691,7 +17257,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -17043,7 +17615,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -17398,7 +17976,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -17758,7 +18342,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -18121,7 +18711,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -18487,7 +19083,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -18856,7 +19458,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -19229,7 +19837,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),
@@ -19614,7 +20228,13 @@ Save.
                 ~((base_addr m) = (base_addr u)) /\
                 (valid_range alloc v2_0 0 0) /\
                 ~((base_addr v) = (base_addr u)) /\
-                (valid_range alloc u2 0 0)),
+                (valid_range alloc u2 0 0) /\ (separation1 p1_Z36 p2_Z36) /\
+                (separation1 p1_Z36 p2_Z36) /\ (separation1 p1_Z36 p2_Z36) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p2_Z36 5) /\
+                (valid1_range p2_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1_range p1_Z36 5) /\ (valid1_range p1_Z36 5) /\
+                (valid1 p2_Z36) /\ (valid1 p2_Z36) /\ (valid1 p2_Z36) /\
+                (valid1 p1_Z36) /\ (valid1 p1_Z36) /\ (valid1 p1_Z36)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z3)),
   forall (HW_3: result = (acc p1_Z36 u)),

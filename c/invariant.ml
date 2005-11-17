@@ -410,7 +410,7 @@ let add_predicates l =
 	 begin
 	   match f.var_type.Ctypes.ctype_node with
 	     | Tstruct n ->
-		 let pre = "%valid1" ^ n  in 
+		 let pre = "%valid1_" ^ n  in 
 		 let info = Info.default_logic_info (pre) in
 		 info.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre)  ([], info);

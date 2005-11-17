@@ -16,13 +16,14 @@ Require Export init_spec_why.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -38,7 +39,8 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (HW_3: (valid alloc result)),
@@ -47,7 +49,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -63,7 +64,8 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (HW_3: (valid alloc result)),
@@ -75,7 +77,7 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -91,7 +93,8 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (HW_3: (valid alloc result)),
@@ -106,7 +109,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition.
-generalize (H8 s alloc Pre6);intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -122,7 +124,8 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (HW_3: (valid alloc result)),
@@ -142,6 +145,11 @@ Save.
   (valid alloc result4).
 Proof.
 intuition.
+subst;auto.
+unfold valid1_range in H6.
+apply valid_range_valid_shift with 0 (3-1).
+apply H6;auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -157,7 +165,8 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
   forall (HW_3: (valid alloc result)),
@@ -181,7 +190,11 @@ Save.
   (result0 + result2 + result5) = 7.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+rewrite H0.
+rewrite H4.
+rewrite H1.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -205,7 +218,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -228,63 +240,7 @@ Save.
   (valid alloc0 result0).
 Proof.
 intuition;subst.
-rewrite acc_upd_neq;auto.
-caduceus.
-replace (shift t_0 1 <> t_0)  with (shift t_0 1 <> shift t_0 0).
-apply neq_offset_neq_shift .
-omega.
-rewrite  shift_zero with t_0;auto.
-rewrite acc_upd_neq;auto.
-rewrite acc_upd_neq;auto.
-generalize (fresh_not_valid _ _ H12 0).
-intro.
-intro.
-subst.
-apply H14.
-rewrite shift_zero.
-intuition.
-generalize (fresh_not_valid _ _ H12 1).
-intro.
-intro.
-apply H14.
-rewrite H16 .
-intuition.
-rewrite acc_upd_neq;auto.
-rewrite acc_upd_neq;auto.
-generalize (fresh_not_valid _ _ H12 0).
-intro.
-intro.
-apply H14.
-rewrite shift_zero.
-rewrite H16 .
-intuition.
-generalize (fresh_not_valid _ _ H12 1).
-intro.
-intro.
-apply H14.
-rewrite H16 .
-intuition.
-rewrite acc_upd_neq;auto.
-rewrite acc_upd_neq;auto.
-generalize (fresh_not_valid _ _ H12 0).
-intro.
-intro.
-apply H14.
-rewrite shift_zero.
-rewrite H16 .
-assert (valid alloc s).
-intuition.
-generalize (H8 s alloc H17).
-intuition.
-generalize (fresh_not_valid _ _ H12 1).
-intro.
-intro.
-apply H14.
-rewrite H16 .
-assert (valid alloc s).
-intuition.
-generalize (H8 s alloc H17).
-intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -310,7 +266,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -339,7 +294,14 @@ Save.
   (* File "init.c", line 22, characters 13-25 *) result1 = 4.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_eq;auto.
+replace (shift result 1 <> result) with (shift result 1 <> shift result 0).
+apply neq_offset_neq_shift.
+omega.
+rewrite shift_zero.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -347,7 +309,6 @@ Save.
   3 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -386,96 +347,6 @@ Save.
   (valid alloc0 result0).
 Proof.
 intuition;subst;auto.
-caduceus.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-caduceus.
-replace (shift u 1 <> u) with (shift u 1 <> shift u 0).
-apply neq_offset_neq_shift .
-omega.
-rewrite shift_zero with u;auto.
-replace (shift u 2 <> u) with (shift u 2 <> shift u 0).
-apply neq_offset_neq_shift .
-omega.
-rewrite shift_zero with u;auto.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-auto.
-generalize (fresh_not_valid _ _ H12 0).
-intro.
-intro.
-subst.
-apply H14.
-rewrite shift_zero.
-intuition.
-generalize (fresh_not_valid _ _ H12 1).
-intro.
-intro.
-apply H14.
-rewrite H16.
-intuition.
-generalize (fresh_not_valid _ _ H12 2).
-intro.
-intro.
-apply H14.
-rewrite H16.
-intuition.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-auto.
-generalize (fresh_not_valid _ _ H12 0).
-intro.
-intro.
-subst.
-apply H14.
-rewrite shift_zero.
-intuition.
-generalize (fresh_not_valid _ _ H12 1).
-intro.
-intro.
-apply H14.
-rewrite H16.
-intuition.
-generalize (fresh_not_valid _ _ H12 2).
-intro.
-intro.
-apply H14.
-rewrite H16.
-intuition.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-auto.
-generalize (fresh_not_valid _ _ H12 0).
-intro.
-intro.
-subst.
-apply H14.
-rewrite shift_zero.
-assert (valid alloc s).
-intuition.
-generalize (H8 _ _ H16). 
-intuition.
-generalize (fresh_not_valid _ _ H12 1).
-intro.
-intro.
-apply H14.
-rewrite H16.
-assert (valid alloc s).
-intuition.
-generalize (H8 _ _ H17). 
-intuition.
-generalize (fresh_not_valid _ _ H12 2).
-intro.
-intro.
-apply H14.
-rewrite H16.
-assert (valid alloc s).
-intuition.
-generalize (H8 _ _ H17). 
-intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -503,7 +374,7 @@ Save.
   (valid alloc0 result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -534,7 +405,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -570,7 +440,7 @@ Save.
   (valid alloc0 result3).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -611,7 +481,7 @@ Save.
   (valid alloc0 result5).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -656,15 +526,30 @@ Save.
   (result2 + result4 + result6) = 12.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_eq;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_eq;auto.
+rewrite acc_upd_eq;auto.
+apply neq_offset_neq_shift;omega.
+replace (shift result 1 <> result) with (shift result 1 <> shift result 0).
+apply neq_offset_neq_shift;omega.
+rewrite shift_zero;auto.
+replace (shift result 2 <> result) with (shift result 2 <> shift result 0).
+apply neq_offset_neq_shift;omega.
+rewrite shift_zero;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   (valid alloc t).
@@ -675,10 +560,12 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -689,41 +576,17 @@ Save.
   (valid alloc result).
 Proof.
 intuition;subst;auto.
-caduceus.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-caduceus.
-apply neq_offset_neq_shift .
-omega.
-rewrite <- shift_zero with (s#b).
-apply neq_base_addr_neq_shift;auto.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-caduceus.
-pattern (s#b) at -1; rewrite <- shift_zero with (s#b).
-apply neq_offset_neq_shift .
-omega.
-pattern (s#b) at -1; rewrite <- shift_zero with (s#b).
-apply neq_offset_neq_shift .
-omega.
-caduceus.
-assert (valid alloc s).
-intuition.
-generalize (H5 _ _ H4).
-intuition.
-assert (valid alloc s).
-intuition.
-generalize (H5 _ _ H4).
-intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
   forall (alloc: alloc_table),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -739,16 +602,18 @@ Save.
   (valid alloc result0).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
   forall (alloc: alloc_table),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -767,17 +632,18 @@ Save.
   (valid alloc s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
   forall (a_Z7: ((memory) Z Z7)),
   forall (alloc: alloc_table),
+  forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -799,7 +665,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -810,7 +675,8 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -835,7 +701,7 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -847,7 +713,8 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -875,7 +742,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -887,7 +753,8 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -920,7 +787,10 @@ Save.
   (valid alloc result3).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+apply valid_range_valid_shift with 0 (3-1).
+apply H3;auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -932,7 +802,8 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -968,7 +839,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -980,7 +850,8 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -1021,7 +892,10 @@ Save.
   (valid alloc result5).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+apply valid_range_valid_shift with 0 (3-1).
+apply H3;auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1033,7 +907,8 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (HW_3: (valid alloc t)),
@@ -1078,7 +953,18 @@ Save.
   2 /\ (acc int_Z1_2 (acc b_Z7 s)) = 1 /\
   (acc int_Z1_2 (shift (acc b_Z7 s) 2)) = 4).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;auto.
+rewrite acc_upd_neq.
+rewrite acc_upd_eq;auto.
+apply neq_offset_neq_shift;omega.
+rewrite acc_upd_neq.
+rewrite acc_upd_neq.
+rewrite acc_upd_eq;auto.
+replace (shift (s # b_Z7) 1 <> s # b_Z7) with (shift (s # b_Z7) 1 <> shift (s # b_Z7) 0).
+apply neq_offset_neq_shift;omega.
+rewrite shift_zero;auto.
+replace (shift (s # b_Z7) 2 <> s # b_Z7) with (shift (s # b_Z7) 2 <> shift (s # b_Z7) 0).
+apply neq_offset_neq_shift;omega.
+rewrite shift_zero;auto.
+rewrite acc_upd_eq;auto.
 Save.
-

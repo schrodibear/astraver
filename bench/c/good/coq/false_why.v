@@ -14,7 +14,9 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (y_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (z: ((pointer) Z7)),
+  forall (HW_1: (valid1_range y_Z7 5) /\ (valid1 y_Z7)),
   (valid alloc z).
 Proof.
 intuition.
@@ -26,11 +28,12 @@ Save.
   forall (alloc: alloc_table),
   forall (y_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (z: ((pointer) Z7)),
-  forall (HW_1: (valid alloc z)),
+  forall (HW_1: (valid1_range y_Z7 5) /\ (valid1 y_Z7)),
+  forall (HW_2: (valid alloc z)),
   forall (result: ((pointer) Z1)),
-  forall (HW_2: result = (acc y_Z7 z)),
+  forall (HW_3: result = (acc y_Z7 z)),
   forall (result0: ((pointer) Z1)),
-  forall (HW_3: result0 = (shift result 5)),
+  forall (HW_4: result0 = (shift result 5)),
   (valid alloc result0).
 Proof.
 intuition.
