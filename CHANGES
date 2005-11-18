@@ -1,4 +1,9 @@
 
+  o new construct "e {{ Q }}" (opaque sub-expression)
+  o new construct "assert {P}; e"
+  o any logic term can be used in programs
+  o types must be declared (new declaration "type foo")
+
   o fixed bug with missing exceptional postconditions (false in now
     inserted and a warning is emitted)
   o array types now accepted in logic/predicate arguments

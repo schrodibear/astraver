@@ -3,312 +3,430 @@
 
 Require Export flag_spec_why.
 
-(* Why obligation from file "why/flag.why", characters 1000-1028 *)
-Lemma flag_impl_po_1 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_1 : 
+  forall (t: ((pointer) Z6)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
-  forall (b: Z),
-  forall (Post24: b = 0),
-  forall (i: Z),
-  forall (Post23: i = 0),
-  forall (r: Z),
-  forall (Post22: r = n),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (intP0: ((memory) Z)),
-  forall (r1: Z),
-  forall (Pre10: Variant1 = (r1 - i1)),
-  forall (Pre9: (((((((forall (k:Z),
-                       (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-                0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-                (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-                (isMonochrome alloc intP0 t r1 (n - 1) RED)),
-  forall (Test8: i1 < r1),
-  (valid alloc (shift t i1)).
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  (* File "flag.c", line 34, characters 7-210 *)
+  ((((((((forall (k:Z),
+          (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))) /\
+  0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+  (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+  (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+  (isMonochrome int_Z6 alloc t n (n - 1) RED)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1191-1299 *)
-Lemma flag_impl_po_2 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_2 : 
+  forall (t: ((pointer) Z6)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
   forall (b: Z),
-  forall (Post24: b = 0),
   forall (i: Z),
-  forall (Post23: i = 0),
+  forall (int_Z6_0: ((memory) Z Z6)),
   forall (r: Z),
-  forall (Post22: r = n),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (intP0: ((memory) Z)),
-  forall (r1: Z),
-  forall (Pre10: Variant1 = (r1 - i1)),
-  forall (Pre9: (((((((forall (k:Z),
-                       (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-                0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-                (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-                (isMonochrome alloc intP0 t r1 (n - 1) RED)),
-  forall (Test8: i1 < r1),
-  forall (Pre8: (valid alloc (shift t i1))),
-  forall (caduceus_1: Z),
-  forall (Post21: caduceus_1 = (acc intP0 (shift t i1))),
-  forall (Test7: caduceus_1 = BLUE),
-  forall (caduceus: Z),
-  forall (Post19: caduceus = b1),
-  forall (b2: Z),
-  forall (Post17: b2 = (caduceus + 1)),
-  forall (result2: Z),
-  forall (Post18: result2 = caduceus),
-  (forall (result:Z),
-   (result = i1 ->
-    (forall (i:Z),
-     (i = (result + 1) ->
-      (forall (result0:Z),
-       (result0 = result ->
-        (forall (intP:((memory) Z)),
-         (((acc intP (shift t result2)) = (acc intP0 (shift t result0)) /\
-          (acc intP (shift t result0)) = (acc intP0 (shift t result2))) /\
-          (not_assigns alloc intP0 intP
-           (pset_union (pset_singleton (shift t result0))
-            (pset_singleton (shift t result2)))) ->
-          ((((((((forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k))))) /\
-          0 <= b2) /\ b2 <= i) /\ i <= r1) /\ r1 <= n) /\
-          (isMonochrome alloc intP t 0 (b2 - 1) BLUE)) /\
-          (isMonochrome alloc intP t b2 (i - 1) WHITE)) /\
-          (isMonochrome alloc intP t r1 (n - 1) RED)) /\
-          (Zwf 0 (r1 - i) (r1 - i1)))) /\
-        (valid_index alloc t result2) /\ (valid_index alloc t result0))))))).
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  (valid alloc result).
 Proof.
 unfold isColor; intuition.
 subst.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1706-1736 *)
-Lemma flag_impl_po_3 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_3 : 
+  forall (t: ((pointer) Z6)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
   forall (b: Z),
-  forall (Post24: b = 0),
   forall (i: Z),
-  forall (Post23: i = 0),
+  forall (int_Z6_0: ((memory) Z Z6)),
   forall (r: Z),
-  forall (Post22: r = n),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (intP0: ((memory) Z)),
-  forall (r1: Z),
-  forall (Pre10: Variant1 = (r1 - i1)),
-  forall (Pre9: (((((((forall (k:Z),
-                       (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-                0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-                (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-                (isMonochrome alloc intP0 t r1 (n - 1) RED)),
-  forall (Test8: i1 < r1),
-  forall (Pre8: (valid alloc (shift t i1))),
-  forall (caduceus_1: Z),
-  forall (Post21: caduceus_1 = (acc intP0 (shift t i1))),
-  forall (Test6: caduceus_1 <> BLUE),
-  forall (Test5: caduceus_1 = WHITE),
-  forall (i2: Z),
-  forall (Post9: i2 = (i1 + 1)),
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  forall (HW_6: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (acc int_Z6_0 result)),
+  forall (HW_8: result0 = BLUE),
+  forall (b0: Z),
+  forall (HW_9: b0 = (b + 1)),
+  forall (i0: Z),
+  forall (HW_10: i0 = (i + 1)),
+  (* File "flag.c", line 13, characters 14-52 *) ((valid_index alloc t b) /\
+  (valid_index alloc t i)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_4 : 
+  forall (t: ((pointer) Z6)),
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
+  forall (b: Z),
+  forall (i: Z),
+  forall (int_Z6_0: ((memory) Z Z6)),
+  forall (r: Z),
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  forall (HW_6: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (acc int_Z6_0 result)),
+  forall (HW_8: result0 = BLUE),
+  forall (b0: Z),
+  forall (HW_9: b0 = (b + 1)),
+  forall (i0: Z),
+  forall (HW_10: i0 = (i + 1)),
+  forall (HW_11: (* File "flag.c", line 13, characters 14-52 *)
+                 ((valid_index alloc t b) /\ (valid_index alloc t i))),
+  forall (int_Z6_1: ((memory) Z Z6)),
+  forall (HW_12: (* File "flag.c", line 15, characters 13-53 *)
+                 ((acc int_Z6_1 (shift t b)) = (acc int_Z6_0 (shift t i)) /\
+                 (acc int_Z6_1 (shift t i)) = (acc int_Z6_0 (shift t b))) /\
+                 (not_assigns alloc int_Z6_0 int_Z6_1
+                  (pset_union (pset_singleton (shift t i))
+                   (pset_singleton (shift t b))))),
+  (* File "flag.c", line 34, characters 7-210 *)
   ((((((((forall (k:Z),
-          (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-  0 <= b1) /\ b1 <= i2) /\ i2 <= r1) /\ r1 <= n) /\
-  (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-  (isMonochrome alloc intP0 t b1 (i2 - 1) WHITE)) /\
-  (isMonochrome alloc intP0 t r1 (n - 1) RED)) /\ (Zwf 0 (r1 - i2) (r1 - i1)).
+          (0 <= k /\ k < n -> (isColor (acc int_Z6_1 (shift t k))))) /\
+  0 <= b0) /\ b0 <= i0) /\ i0 <= r) /\ r <= n) /\
+  (isMonochrome int_Z6_1 alloc t 0 (b0 - 1) BLUE)) /\
+  (isMonochrome int_Z6_1 alloc t b0 (i0 - 1) WHITE)) /\
+  (isMonochrome int_Z6_1 alloc t r (n - 1) RED)) /\ (Zwf 0 (r - i0) (r - i)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1870-1904 *)
-Lemma flag_impl_po_4 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_5 : 
+  forall (t: ((pointer) Z6)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
   forall (b: Z),
-  forall (Post24: b = 0),
   forall (i: Z),
-  forall (Post23: i = 0),
+  forall (int_Z6_0: ((memory) Z Z6)),
   forall (r: Z),
-  forall (Post22: r = n),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (intP0: ((memory) Z)),
-  forall (r1: Z),
-  forall (Pre10: Variant1 = (r1 - i1)),
-  forall (Pre9: (((((((forall (k:Z),
-                       (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-                0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-                (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-                (isMonochrome alloc intP0 t r1 (n - 1) RED)),
-  forall (Test8: i1 < r1),
-  forall (Pre8: (valid alloc (shift t i1))),
-  forall (caduceus_1: Z),
-  forall (Post21: caduceus_1 = (acc intP0 (shift t i1))),
-  forall (Test6: caduceus_1 <> BLUE),
-  forall (Test4: caduceus_1 <> WHITE),
-  forall (Test3: caduceus_1 = RED),
-  forall (r2: Z),
-  forall (Post6: r2 = (r1 - 1)),
-  forall (result4: Z),
-  forall (Post7: result4 = r2),
-  (forall (intP:((memory) Z)),
-   (((acc intP (shift t result4)) = (acc intP0 (shift t i1)) /\
-    (acc intP (shift t i1)) = (acc intP0 (shift t result4))) /\
-    (not_assigns alloc intP0 intP
-     (pset_union (pset_singleton (shift t i1))
-      (pset_singleton (shift t result4)))) ->
-    ((((((((forall (k:Z),
-            (0 <= k /\ k < n -> (isColor (acc intP (shift t k))))) /\
-    0 <= b1) /\ b1 <= i1) /\ i1 <= r2) /\ r2 <= n) /\
-    (isMonochrome alloc intP t 0 (b1 - 1) BLUE)) /\
-    (isMonochrome alloc intP t b1 (i1 - 1) WHITE)) /\
-    (isMonochrome alloc intP t r2 (n - 1) RED)) /\
-    (Zwf 0 (r2 - i1) (r1 - i1)))) /\
-  (valid_index alloc t result4) /\ (valid_index alloc t i1).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/flag.why", characters 2000-2000 *)
-Lemma flag_impl_po_5 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
-  forall (b: Z),
-  forall (Post24: b = 0),
-  forall (i: Z),
-  forall (Post23: i = 0),
-  forall (r: Z),
-  forall (Post22: r = n),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (intP0: ((memory) Z)),
-  forall (r1: Z),
-  forall (Pre10: Variant1 = (r1 - i1)),
-  forall (Pre9: (((((((forall (k:Z),
-                       (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-                0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-                (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-                (isMonochrome alloc intP0 t r1 (n - 1) RED)),
-  forall (Test8: i1 < r1),
-  forall (Pre8: (valid alloc (shift t i1))),
-  forall (caduceus_1: Z),
-  forall (Post21: caduceus_1 = (acc intP0 (shift t i1))),
-  forall (Test6: caduceus_1 <> BLUE),
-  forall (Test4: caduceus_1 <> WHITE),
-  forall (Test2: caduceus_1 <> RED),
-  forall (result3: unit),
-  forall (Post2: result3 = tt),
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  forall (HW_6: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (acc int_Z6_0 result)),
+  forall (HW_13: result0 <> BLUE),
+  forall (HW_14: result0 = WHITE),
+  forall (i0: Z),
+  forall (HW_15: i0 = (i + 1)),
+  (* File "flag.c", line 34, characters 7-210 *)
   ((((((((forall (k:Z),
-          (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-  0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-  (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-  (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-  (isMonochrome alloc intP0 t r1 (n - 1) RED)) /\ (Zwf 0 (r1 - i1) (r1 - i1)).
+          (0 <= k /\ k < n -> (isColor (acc int_Z6_0 (shift t k))))) /\
+  0 <= b) /\ b <= i0) /\ i0 <= r) /\ r <= n) /\
+  (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+  (isMonochrome int_Z6_0 alloc t b (i0 - 1) WHITE)) /\
+  (isMonochrome int_Z6_0 alloc t r (n - 1) RED)) /\ (Zwf 0 (r - i0) (r - i)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 372-2015 *)
-Lemma flag_impl_po_6 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_6 : 
+  forall (t: ((pointer) Z6)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
   forall (b: Z),
-  forall (Post24: b = 0),
   forall (i: Z),
-  forall (Post23: i = 0),
+  forall (int_Z6_0: ((memory) Z Z6)),
   forall (r: Z),
-  forall (Post22: r = n),
-  forall (Variant1: Z),
-  forall (b1: Z),
-  forall (i1: Z),
-  forall (intP0: ((memory) Z)),
-  forall (r1: Z),
-  forall (Pre10: Variant1 = (r1 - i1)),
-  forall (Pre9: (((((((forall (k:Z),
-                       (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
-                0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                (isMonochrome alloc intP0 t 0 (b1 - 1) BLUE)) /\
-                (isMonochrome alloc intP0 t b1 (i1 - 1) WHITE)) /\
-                (isMonochrome alloc intP0 t r1 (n - 1) RED)),
-  forall (Test1: i1 >= r1),
-  (exists b:Z,
-   (exists r:Z, ((isMonochrome alloc intP0 t 0 (b - 1) BLUE) /\
-    (isMonochrome alloc intP0 t b (r - 1) WHITE)) /\
-    (isMonochrome alloc intP0 t r (n - 1) RED))) /\
-  (not_assigns alloc intP intP0 (pset_range (pset_singleton t) 0 (n - 1))).
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  forall (HW_6: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (acc int_Z6_0 result)),
+  forall (HW_13: result0 <> BLUE),
+  forall (HW_16: result0 <> WHITE),
+  forall (HW_17: result0 = RED),
+  forall (r0: Z),
+  forall (HW_18: r0 = (r - 1)),
+  (* File "flag.c", line 13, characters 14-52 *) ((valid_index alloc t r0) /\
+  (valid_index alloc t i)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 434-934 *)
-Lemma flag_impl_po_7 : 
-  forall (t: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_7 : 
+  forall (t: ((pointer) Z6)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 (n - 1)) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
   forall (b: Z),
-  forall (Post24: b = 0),
   forall (i: Z),
-  forall (Post23: i = 0),
+  forall (int_Z6_0: ((memory) Z Z6)),
   forall (r: Z),
-  forall (Post22: r = n),
-  (((((((forall (k:Z), (0 <= k /\ k < n -> (isColor (acc intP (shift t k))))) /\
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  forall (HW_6: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (acc int_Z6_0 result)),
+  forall (HW_13: result0 <> BLUE),
+  forall (HW_16: result0 <> WHITE),
+  forall (HW_17: result0 = RED),
+  forall (r0: Z),
+  forall (HW_18: r0 = (r - 1)),
+  forall (HW_19: (* File "flag.c", line 13, characters 14-52 *)
+                 ((valid_index alloc t r0) /\ (valid_index alloc t i))),
+  forall (int_Z6_1: ((memory) Z Z6)),
+  forall (HW_20: (* File "flag.c", line 15, characters 13-53 *)
+                 ((acc int_Z6_1 (shift t r0)) = (acc int_Z6_0 (shift t i)) /\
+                 (acc int_Z6_1 (shift t i)) = (acc int_Z6_0 (shift t r0))) /\
+                 (not_assigns alloc int_Z6_0 int_Z6_1
+                  (pset_union (pset_singleton (shift t i))
+                   (pset_singleton (shift t r0))))),
+  (* File "flag.c", line 34, characters 7-210 *)
+  ((((((((forall (k:Z),
+          (0 <= k /\ k < n -> (isColor (acc int_Z6_1 (shift t k))))) /\
+  0 <= b) /\ b <= i) /\ i <= r0) /\ r0 <= n) /\
+  (isMonochrome int_Z6_1 alloc t 0 (b - 1) BLUE)) /\
+  (isMonochrome int_Z6_1 alloc t b (i - 1) WHITE)) /\
+  (isMonochrome int_Z6_1 alloc t r0 (n - 1) RED)) /\ (Zwf 0 (r0 - i) 
+  (r - i)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_8 : 
+  forall (t: ((pointer) Z6)),
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
+  forall (b: Z),
+  forall (i: Z),
+  forall (int_Z6_0: ((memory) Z Z6)),
+  forall (r: Z),
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_4: i < r),
+  forall (result: ((pointer) Z6)),
+  forall (HW_5: result = (shift t i)),
+  forall (HW_6: (valid alloc result)),
+  forall (result0: Z),
+  forall (HW_7: result0 = (acc int_Z6_0 result)),
+  forall (HW_13: result0 <> BLUE),
+  forall (HW_16: result0 <> WHITE),
+  forall (HW_21: result0 <> RED),
+  (* File "flag.c", line 34, characters 7-210 *)
+  ((((((((forall (k:Z),
+          (0 <= k /\ k < n -> (isColor (acc int_Z6_0 (shift t k))))) /\
   0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
-  (isMonochrome alloc intP t 0 (b - 1) BLUE)) /\
-  (isMonochrome alloc intP t b (i - 1) WHITE)) /\
-  (isMonochrome alloc intP t r (n - 1) RED).
+  (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+  (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+  (isMonochrome int_Z6_0 alloc t r (n - 1) RED)) /\ (Zwf 0 (r - i) (r - i)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma flag_impl_po_9 : 
+  forall (t: ((pointer) Z6)),
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (int_Z6: ((memory) Z Z6)),
+  forall (HW_1: (* File "flag.c", line 20, characters 5-83 *)
+                ((valid_range alloc t 0 (n - 1)) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < n -> (isColor (acc int_Z6 (shift t k))))))),
+  forall (HW_2: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6 (shift t k))))) /\
+                0 <= 0) /\ 0 <= 0) /\ 0 <= n) /\ n <= n) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) BLUE)) /\
+                (isMonochrome int_Z6 alloc t 0 (0 - 1) WHITE)) /\
+                (isMonochrome int_Z6 alloc t n (n - 1) RED))),
+  forall (b: Z),
+  forall (i: Z),
+  forall (int_Z6_0: ((memory) Z Z6)),
+  forall (r: Z),
+  forall (HW_3: (* File "flag.c", line 34, characters 7-210 *)
+                ((((((((forall (k:Z),
+                        (0 <= k /\ k < n ->
+                         (isColor (acc int_Z6_0 (shift t k))))) /\
+                0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
+                (isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE)) /\
+                (isMonochrome int_Z6_0 alloc t b (i - 1) WHITE)) /\
+                (isMonochrome int_Z6_0 alloc t r (n - 1) RED))),
+  forall (HW_22: i >= r),
+  (* File "flag.c", line 24, characters 6-126 *)
+  (exists b:Z,
+   (exists r:Z, ((isMonochrome int_Z6_0 alloc t 0 (b - 1) BLUE) /\
+    (isMonochrome int_Z6_0 alloc t b (r - 1) WHITE)) /\
+    (isMonochrome int_Z6_0 alloc t r (n - 1) RED))) /\
+  (not_assigns alloc int_Z6 int_Z6_0
+   (pset_range (pset_singleton t) 0 (n - 1))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

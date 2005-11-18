@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.18 2005-11-09 07:27:40 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.19 2005-11-18 14:54:06 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -113,7 +113,7 @@ let generic f targets =
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";
        fprintf fmt "%%.stat: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) --split $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "include %s.depend@\n@\n" f;
        fprintf fmt "depend %s.depend: coq/%s_spec_why.v %a@\n" f f 

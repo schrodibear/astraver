@@ -1,7 +1,7 @@
 
-all: maximumsort_valid.vo
+VO = maximumsort_valid.vo
 
-VO = maximumsort_why.vo
+all: maximumsort_valid.vo
 
 include ../Makefile.common
 

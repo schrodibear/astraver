@@ -38,3 +38,6 @@ Ltac SameLength t1 t2 :=
   assert (array_length t1 = array_length t2);
    [ ProveSameLengthSym t1 t2 | idtac ].
 
+Ltac elimh p :=  match goal with
+  | h:p |- _ => elim h
+end.

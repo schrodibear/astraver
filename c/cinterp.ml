@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.154 2005-11-17 15:28:49 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.155 2005-11-18 14:54:06 filliatr Exp $ i*)
 
 
 open Format
@@ -438,9 +438,11 @@ let build_minimal_app e args =
 	else
 	  build_complex_app e args
 
-let bin_op op t1 t2 = match op, t2 with
-  | Badd_pointer_int, Cte (Prim_int n) when n = 0L ->
+let bin_op op t1 t2 = match op, t1, t2 with
+  | Badd_pointer_int, _, Cte (Prim_int n) when n = 0L ->
       t1
+  | Beq_int, Cte (Prim_int n1), Cte (Prim_int n2) ->
+      Cte (Prim_bool (n1 = n2))
   | _ ->
       build_minimal_app (Var (interp_bin_op op)) [t1; t2]
 
@@ -462,8 +464,11 @@ let rec interp_expr e =
 		 |Beq_pointer | Bneq_pointer 
 		 |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
     | NEunary (Unot, _) ->
-	If(interp_boolean_expr e, 
-	   Cte(Prim_int Int64.one), Cte(Prim_int Int64.zero))
+	begin match interp_boolean_expr e with
+	  | Cte (Prim_bool true) -> Cte (Prim_int Int64.one)
+	  | Cte (Prim_bool false) -> Cte(Prim_int Int64.zero)
+	  | e -> If (e, Cte(Prim_int Int64.one), Cte(Prim_int Int64.zero))
+	end
     | NEbinary(e1,op,e2) ->
 	bin_op op (interp_expr e1) (interp_expr e2)
     | NEassign (e1,e2) ->

@@ -6,290 +6,6 @@ Require Export Partition.
 Require Import Omega.
 Require Import ZArithRing.
 
-
- Proof.
- tauto.
-Qed.
-
-Proof.
-intuition.
-intros; ArraySubst t0.
-Qed.
-
-
-Proof.
-intros; subst t1 t0 v.
-auto with datatypes.
-Qed.
-
-Proof.
-intros; omega.
-Qed.
-
-Proof.
-intuition ArrayLength; omega.
-Qed.
-
-Proof.
-intuition.
-destruct result1; intuition.
-Qed.
-
-Proof.
-intuition.
-induction result1; auto.
- discriminate Post2.
-Qed.
-
-Proof.
-intuition try discriminate.
-omega.
-omega.
-replace (i3 - 1)%Z with (i2 - 1 + 1)%Z.
-apply array_le_right_extension.
-assumption.
-ring (i2 - 1 + 1)%Z.
- assumption.
-omega.
-unfold Zwf; omega.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-intuition ArrayLength; omega.
-Qed.
-
- Proof.
- intuition.
-induction result2; auto.
-induction result2; auto.
-Qed.
-
-Proof.
-intuition.
-induction result2; auto || discriminate Post5.
-induction result2; auto || discriminate Post5.
-Qed.
-
-Proof.
-intuition.
-apply array_ge_cons.
- intros j0 Hj0.
- elim (Z_le_gt_dec (j2 + 1) j0); intro.
-elim H16; intros.
- apply H12; omega.
-cut (j0 = j2); [ intro | omega ].
-rewrite H12; omega.
-apply array_ge_cons.
- intros j0 Hj0.
- omega.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-intuition ArrayLength; omega.
-Qed.
-
-Proof.
-intros.
-decompose [and or] Invj; clear Invj.
- intuition unfold Zwf; ArrayLength; try omega.
-replace (i3 - 1)%Z with (i2 - 1 + 1)%Z.
-apply array_le_right_extension.
-apply array_le_exchange with (t := t0) (x := i2) (y := j2).
-omega.
- omega.
- assumption.
-omega.
- apply exchange_sym; assumption.
-ring (i2 - 1 + 1)%Z.
- elim Post25; intros.
- rewrite H26.
-omega.
-omega.
-replace (j3 + 1)%Z with (j2 + 1 - 1)%Z.
-apply array_ge_left_extension.
-apply array_ge_exchange with (t := t0) (x := i2) (y := j2).
-omega.
- generalize (sub_permut_length H20); intro; omega.
-assumption.
- omega.
- apply exchange_sym; assumption.
-ring (j2 + 1 - 1)%Z.
- elim Post25; intros.
- rewrite H27.
-omega.
-omega.
-apply sub_permut_trans with (t' := t0).
-apply exchange_is_sub_permut with (i := i2) (j := j2);
- [ omega | omega | assumption ].
-assumption.
-rewrite <- H23.
-elim Post25; intros.
-apply H28; omega.
-absurd (i2 < j2)%Z; omega.
-replace (j3 + 1)%Z with (j2 + 1 - 1)%Z.
-apply array_ge_left_extension.
-apply array_ge_exchange with (t := t0) (x := i2) (y := j2).
-omega.
- intuition; generalize (sub_permut_length H21); intro; omega.
-assumption.
- omega.
- apply exchange_sym; assumption.
-ring (j2 + 1 - 1)%Z.
- elim Post25; intros.
- rewrite H28.
-omega.
-omega.
-apply sub_permut_trans with (t' := t0).
-apply exchange_is_sub_permut with (i := i2) (j := j2);
- [ omega | omega | assumption ].
-assumption.
-absurd (i2 < j2)%Z; omega.
-Qed.
-
-Proof.
-intuition unfold Zwf; SameLength t t0; omega.
-Qed.
-
-Proof.
-intuition.
-apply array_le_empty; omega.
-apply array_ge_empty; omega.
-Qed.
-
-Proof.
-intuition SameLength t t0; omega.
-Qed.
-
-Proof.
-intuition SameLength t t0; auto with *.
-Qed.
-
-Proof.
-intuition.
-apply piv.
-omega.
-omega.
-apply array_le_cons.
-intros i0 Hi0.
- elim (Z_le_lt_eq_dec l i0); intros.
-(* case l < i *)
-elim Post34; intros.
-elim H11; intros.
-rewrite H22.
- rewrite (H23 i0).
- rewrite H18.
- rewrite <- Post11.
-apply H24; omega.
-omega.
-omega.
-omega.
-(* case l = i *)
-elim Post34; intros.
-rewrite <- b.
- rewrite H21.
- rewrite H22.
-rewrite H18.
-omega.
-omega.
-(* array_ge *)
-apply array_ge_cons.
-intros j0 Hj0.
-elim Post34; intros.
- rewrite H22.
-rewrite H18.
-rewrite (H23 j0).
-elim H15; intros.
- rewrite <- Post11.
- apply H24; omega.
-SameLength t1 t0; SameLength t0 t; omega.
-omega.
-omega.
-(* (sub_permut l r t1 t) *)
-apply sub_permut_trans with (t' := t0).
-apply exchange_is_sub_permut with (i := l) (j := i1).
-omega.
-omega.
-assumption.
-assumption.
-Qed.
-
-Proof.
-intuition SameLength t0 t; omega.
-Qed.
-
-Proof.
-intuition.
-apply piv.
-omega.
-omega.
-(* array_le *)
-apply array_le_cons.
-intros i0 Hi0.
- elim (Z_le_lt_eq_dec l i0); intros.
-(* case l < i *)
-elim Post30; intros.
- rewrite H22.
-rewrite H18.
-rewrite (H23 i0).
- elim H11; intros.
- rewrite <- Post11.
- apply H24; omega.
-omega.
-omega.
-omega.
-(* case l = i *)
-rewrite <- b.
- elim Post30; intros.
-rewrite H22.
- rewrite H18.
-rewrite H21.
-elim H11; intros.
- rewrite <- Post11.
- apply H24; omega.
-omega.
-(* array_ge *)
-apply array_ge_cons.
-intro j0.
- ring (i1 - 1 + 1)%Z.
- intro Hj.
- elim Post30; intros.
-rewrite H22.
- rewrite (H23 j0).
-rewrite H18.
-elim H15; intros.
- elim (Z_le_lt_eq_dec i1 j0); intros.
-(* case i0 < j *)
-rewrite <- Post11.
- apply H24; omega.
-(* case i0 = j *)
-rewrite <- b.
- omega.
-omega.
-SameLength t1 t0; SameLength t0 t; omega.
-omega.
-omega.
-(* (sub_permut t1 t l r) *)
-apply sub_permut_trans with (t' := t0).
-apply exchange_is_sub_permut with (i := l) (j := Zpred i1).
-omega.
-unfold Zpred; omega.
-assumption.
-assumption.
-Qed.
-
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_1 : 
   forall (i: Z),
@@ -299,7 +15,7 @@ Save.
                 (array_length t)),
   0 <= i /\ i < (array_length t).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -314,7 +30,7 @@ Save.
   forall (HW_3: result = (access t i)),
   0 <= j /\ j < (array_length t).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -332,7 +48,7 @@ Save.
   forall (HW_5: result0 = (access t j)),
   0 <= i /\ i < (array_length t).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -353,7 +69,8 @@ Save.
   forall (HW_7: t0 = (update t i result0)),
   0 <= j /\ j < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+ArraySubst t0.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -377,7 +94,8 @@ Save.
   forall (HW_9: t1 = (update t0 j result)),
   (exchange t1 t i j).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+subst; auto with *.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -388,7 +106,7 @@ Save.
   forall (HW_1: (0 <= l /\ l < r) /\ r < (array_length t)),
   0 <= l /\ l < (array_length t).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -404,7 +122,9 @@ Save.
   (array_le t (l + 1) (l + 1 - 1) result) /\ (array_ge t (r + 1) r result) /\
   (sub_permut l r t t) /\ (access t l) = (access t l).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+apply array_le_empty; omega.
+apply array_ge_empty; omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -430,7 +150,7 @@ Save.
   forall (HW_6: i < j),
   (i <= i /\ i <= r) /\ (array_le t0 (l + 1) (i - 1) result).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -459,7 +179,7 @@ Save.
   forall (HW_8: (i <= i0 /\ i0 <= r) /\ (array_le t0 (l + 1) (i0 - 1) result)),
   0 <= i0 /\ i0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition ArrayLength; omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -496,7 +216,11 @@ Save.
   ((i <= i1 /\ i1 <= r) /\ (array_le t0 (l + 1) (i1 - 1) result)) /\
   (Zwf 0 (r - i1) (r - i0)).
 Proof.
-(* FILL PROOF HERE *)
+intuition; subst.
+replace (i0+1-1) with ((i0-1)+1).
+apply array_le_right_extension; intuition.
+ring (i0-1+1); auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -530,7 +254,7 @@ Save.
   forall (HW_14: i0 >= j),
   (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -567,7 +291,7 @@ Save.
   forall (HW_16: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
   0 <= j0 /\ j0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -611,7 +335,16 @@ Save.
   forall (HW_21: j1 = (j0 - 1)),
   ((l <= j1 /\ j1 <= j) /\ (array_ge t0 (j1 + 1) r result)) /\ (Zwf 0 j1 j0).
 Proof.
-(* FILL PROOF HERE *)
+intuition; subst.
+apply array_ge_cons.
+ intros j1 Hj1.
+ elim (Z_le_gt_dec (j0 + 1) j1); intro.
+assert (h: array_ge t0 (j + 1) r (access t l)). assumption.
+elim h; intros.
+auto with *.
+cut (j0 = j1); [ intro | omega ].
+subst.
+ omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -654,8 +387,12 @@ Save.
   forall (HW_23: i0 < j0),
   (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
+
+Ltac elimh p :=  match goal with
+  | h:p |- _ => elim h
+end.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma partition_po_10 : 
@@ -708,7 +445,38 @@ Save.
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
   (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+replace (i1 - 1)%Z with (i0 - 1 + 1)%Z.
+apply array_le_right_extension.
+apply array_le_exchange with (t := t0) (x := i0) (y := j0).
+omega.
+ omega.
+ assumption.
+omega.
+ apply exchange_sym; assumption.
+ring (i0 - 1 + 1)%Z.
+ elimh (exchange t1 t0 i0 j0); intros.
+ replace (access t1 i0) with (access t0 j0); auto.
+omega.
+omega.
+replace (j1 + 1)%Z with (j0 + 1 - 1)%Z.
+apply array_ge_left_extension.
+apply array_ge_exchange with (t := t0) (x := i0) (y := j0).
+omega.
+  SameLength t t0.
+ omega.
+assumption.
+omega.
+ apply exchange_sym; assumption.
+ring (j0 + 1 - 1)%Z.
+ elimh (exchange t1 t0 i0 j0); intros.
+ replace (access t1 j0) with (access t0 i0); auto.
+omega.
+omega.
+apply sub_permut_trans with (t' := t0).
+apply exchange_is_sub_permut with (i := i0) (j := j0);
+ [ omega | omega | assumption ].
+assumption.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -753,7 +521,7 @@ Save.
   (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
   (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -795,7 +563,7 @@ Save.
   forall (HW_30: i0 < j0),
   (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -848,7 +616,38 @@ Save.
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
   (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+replace (i1 - 1)%Z with (i0 - 1 + 1)%Z.
+apply array_le_right_extension.
+apply array_le_exchange with (t := t0) (x := i0) (y := j0).
+omega.
+ omega.
+ assumption.
+omega.
+ apply exchange_sym; assumption.
+ring (i0 - 1 + 1)%Z.
+  elimh (exchange t1 t0 i0 j0); intros.
+  replace (access t1 i0) with (access t0 j0); auto.
+omega.
+omega.
+replace (j1 + 1)%Z with (j0 + 1 - 1)%Z.
+apply array_ge_left_extension.
+apply array_ge_exchange with (t := t0) (x := i0) (y := j0).
+omega.
+ SameLength t t0.
+ omega.
+assumption.
+ omega.
+ apply exchange_sym; assumption.
+ring (j0 + 1 - 1)%Z.
+  elimh (exchange t1 t0 i0 j0); intros.
+  replace (access t1 j0) with (access t0 i0); auto.
+omega.
+omega.
+apply sub_permut_trans with (t' := t0).
+apply exchange_is_sub_permut with (i := i0) (j := j0);
+ [ omega | omega | assumption ].
+assumption.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -893,7 +692,7 @@ Save.
   (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
   (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -926,7 +725,7 @@ Save.
   forall (HW_36: result0 > result),
   (l <= j /\ j <= j) /\ (array_ge t0 (j + 1) r result).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -962,7 +761,9 @@ Save.
   forall (HW_38: (l <= j0 /\ j0 <= j) /\ (array_ge t0 (j0 + 1) r result)),
   0 <= j0 /\ j0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+SameLength t t0.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1005,7 +806,14 @@ Save.
   forall (HW_43: j1 = (j0 - 1)),
   ((l <= j1 /\ j1 <= j) /\ (array_ge t0 (j1 + 1) r result)) /\ (Zwf 0 j1 j0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+apply array_ge_cons.
+ intros j' Hj'.
+ elim (Z_le_gt_dec (j0 + 1) j'); intro.
+ elimh (array_ge t0 (j0 + 1) r result); intros.
+  auto with *.
+cut (j' = j0); [ intro | omega ].
+subst; omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1047,7 +855,7 @@ Save.
   forall (HW_45: i0 < j0),
   (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1100,7 +908,7 @@ Save.
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
   (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intros; absurd (i0 < j0); omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1144,7 +952,7 @@ Save.
   (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
   (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1185,7 +993,7 @@ Save.
   forall (HW_52: i0 < j0),
   (0 <= i0 /\ i0 < (array_length t0)) /\ 0 <= j0 /\ j0 < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1237,7 +1045,39 @@ Save.
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l)) /\
   (Zwf 0 ((array_length t1) + 2 + j1 - i1) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+apply array_le_cons.
+intros i' Hi'.
+ elim (Z_le_lt_eq_dec l i'); intros.
+(* case l < i' *)
+elimh (exchange t1 t0 i0 j0); intros h1 h2 h3 h4 h5 h6.
+assert (i' < i0 \/ i'=i0). omega. intuition.
+rewrite h6; try omega.
+elimh (array_le t0 (l + 1) (i0 - 1) result); auto with *.
+subst i'; rewrite h4; omega.
+(* case l = i' *)
+elimh (exchange t1 t0 i0 j0); intros h1 h2 h3 h4 h5 h6.
+omega.
+omega.
+(* array_ge *)
+apply array_ge_cons.
+intros j' Hj'.
+elimh (exchange t1 t0 i0 j0); intros h1 h2 h3 h4 h5 h6.
+assert (j0 < j' \/ j'=j0). omega. intuition.
+rewrite h6; try omega.
+elimh (array_ge t0 (j0 + 1) r result); auto with *.
+SameLength t0 t; omega.
+subst j'; rewrite h5; omega.
+(* (sub_permut l r t1 t) *)
+apply sub_permut_trans with (t' := t0); auto.
+apply exchange_is_sub_permut with (i := i0) (j := j0).
+omega.
+omega.
+assumption.
+elimh (exchange t1 t0 i0 j0); intros h1 h2 h3 h4 h5 h6.
+rewrite (h6 l); try omega.
+unfold Zwf; intuition.
+SameLength t1 t0; omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1281,7 +1121,7 @@ Save.
   (sub_permut l r t0 t) /\ (access t0 l) = (access t l)) /\
   (Zwf 0 ((array_length t0) + 2 + j0 - i0) ((array_length t0) + 2 + j - i)).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1307,7 +1147,8 @@ Save.
   forall (HW_58: i >= j),
   0 <= i /\ i < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+SameLength t0 t; omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1337,7 +1178,7 @@ Save.
   forall (HW_61: result0 < result),
   (0 <= l /\ l < (array_length t0)) /\ 0 <= i /\ i < (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1371,7 +1212,60 @@ Save.
   forall (HW_63: (exchange t1 t0 l i)),
   (l <= i /\ i <= r) /\ (partition_p t1 l r i) /\ (sub_permut l r t1 t).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+apply piv.
+omega.
+omega.
+(* array_le *)
+apply array_le_cons.
+intros i' Hi'.
+ elim (Z_le_lt_eq_dec l i'); intros.
+(* case l < i *)
+elimh (exchange t1 t0 l i); intros h1 h2 h3 h4 h5 h6.
+rewrite h6.
+rewrite h5.
+subst.
+replace (access t0 l) with (access t l); auto.
+elimh (array_le t0 (l + 1) (i - 1) (access t l)); auto with *.
+omega.
+omega.
+omega.
+(* case l = i *)
+subst.
+elimh (exchange t1 t0 i' i); intros h1 h2 h3 h4 h5 h6.
+rewrite h4.
+rewrite h5.
+omega.
+omega.
+(* array_ge *)
+apply array_ge_cons.
+intros i' Hi'.
+subst.
+ ring (i1 - 1 + 1)%Z.
+ intro Hj.
+ elim Post30; intros.
+rewrite H22.
+ rewrite (H23 j0).
+rewrite H18.
+elim H15; intros.
+ elim (Z_le_lt_eq_dec i1 j0); intros.
+(* case i0 < j *)
+rewrite <- Post11.
+ apply H24; omega.
+(* case i0 = j *)
+rewrite <- b.
+ omega.
+omega.
+SameLength t1 t0; SameLength t0 t; omega.
+omega.
+omega.
+(* (sub_permut t1 t l r) *)
+apply sub_permut_trans with (t' := t0).
+apply exchange_is_sub_permut with (i := l) (j := Zpred i1).
+omega.
+unfold Zpred; omega.
+assumption.
+assumption.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1402,7 +1296,7 @@ Save.
   (0 <= l /\ l < (array_length t0)) /\ 0 <= (i - 1) /\ (i - 1) <
   (array_length t0).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1437,6 +1331,122 @@ Save.
   (l <= (i - 1) /\ (i - 1) <= r) /\ (partition_p t1 l r (i - 1)) /\
   (sub_permut l r t1 t).
 Proof.
-(* FILL PROOF HERE *)
+intuition.
+Save.
+
+Proof.
+intuition ArrayLength; omega.
+Qed.
+
+ Proof.
+ intuition.
+induction result2; auto.
+induction result2; auto.
+Qed.
+
+Proof.
+intuition.
+induction result2; auto || discriminate Post5.
+induction result2; auto || discriminate Post5.
+Qed.
+
+Proof.
+intuition.
+Qed.
+
+Proof.
+intuition.
+rewrite <- H23.
+elim Post25; intros.
+apply H28; omega.
+absurd (i2 < j2)%Z; omega.
+replace (j3 + 1)%Z with (j2 + 1 - 1)%Z.
+apply array_ge_left_extension.
+apply array_ge_exchange with (t := t0) (x := i2) (y := j2).
+omega.
+ intuition; generalize (sub_permut_length H21); intro; omega.
+assumption.
+ omega.
+ apply exchange_sym; assumption.
+ring (j2 + 1 - 1)%Z.
+ elim Post25; intros.
+ rewrite H28.
+omega.
+omega.
+apply sub_permut_trans with (t' := t0).
+apply exchange_is_sub_permut with (i := i2) (j := j2);
+ [ omega | omega | assumption ].
+assumption.
+absurd (i2 < j2)%Z; omega.
+Qed.
+
+Proof.
+intuition ArrayLength; omega.
+Qed.
+
+Proof.
+intros.
+decompose [and or] Invj; clear Invj.
+ intuition unfold Zwf; ArrayLength; try omega.
+Qed.
+
+Proof.
+intuition unfold Zwf; SameLength t t0; omega.
+rewrite <- H23.
+elim Post25; intros.
+apply H28; omega.
+absurd (i2 < j2)%Z; omega.
+replace (j3 + 1)%Z with (j2 + 1 - 1)%Z.
+apply array_ge_left_extension.
+apply array_ge_exchange with (t := t0) (x := i2) (y := j2).
+omega.
+ intuition; generalize (sub_permut_length H21); intro; omega.
+assumption.
+ omega.
+ apply exchange_sym; assumption.
+ring (j2 + 1 - 1)%Z.
+ elim Post25; intros.
+ rewrite H28.
+omega.
+omega.
+apply sub_permut_trans with (t' := t0).
+apply exchange_is_sub_permut with (i := i2) (j := j2);
+ [ omega | omega | assumption ].
+assumption.
+absurd (i2 < j2)%Z; omega.
+Qed.
+
+Proof.
+intuition.
+apply array_le_empty; omega.
+apply array_ge_empty; omega.
+Qed.
+
+Proof.
+intuition SameLength t t0; omega.
+Qed.
+
+Proof.
+intuition SameLength t t0; auto with *.
+Qed.
+
+Proof.
+intuition.
+apply piv.
+omega.
+omega.
+Qed.
+
+Proof.
+intuition SameLength t0 t; omega.
+Qed.
+
+Proof.
+intuition.
+Qed.
+
+
+Proof.
+intuition.
 Save.
 

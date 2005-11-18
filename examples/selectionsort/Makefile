@@ -1,7 +1,7 @@
 
-all: selection_valid.vo
+VO=selection_valid.vo
 
-VO=selection_why.vo
+all: $(VO)
 
 include ../Makefile.common
 

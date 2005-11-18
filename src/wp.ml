@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.90 2005-11-09 07:27:41 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.91 2005-11-18 14:54:08 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -243,10 +243,9 @@ and wp_desc info d q =
 	let e',w = wp_prog (p,e) None in
 	Lam (bl, p, e'), optasst_app (abstract_binders bl) w
     | LetIn (x, _, _) | LetRef (x, _, _) when occur_post x q ->
-        Report.raise_unlocated 
+        Report.raise_located info.t_loc
 	  (AnyMessage ("cannot compute wp due to capture variable;\n" ^
                        "please rename variable " ^ Ident.string x))
-
     | LetIn (x, e1, e2) ->
 	let e'2, w2 = wp e2 (filter_post e2.info q) in
 	let q1 = optasst_app (subst_in_predicate (subst_onev x result)) w2 in

@@ -1,7 +1,8 @@
 Note: These are the changes for Caduceus.
 
+ o partial evaluation (of expressions such as 1 == 1)
  o bug fix for function specifications given later than function body
- o support for the major changes in why
+ o support for the major changes in Why 1.99
  o addition of zones into memory model.  
  o bug fix in location of errors
  o various bug fixes

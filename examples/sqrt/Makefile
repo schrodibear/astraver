@@ -1,5 +1,6 @@
 
-all: sqrt_valid.vo
-VO=sqrt_why.vo
+VO=sqrt_valid.vo
+
+all: $(VO)
 
 include ../Makefile.common

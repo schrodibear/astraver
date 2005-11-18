@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.28 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.29 2005-11-18 14:54:08 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -58,7 +58,8 @@ let rec print_pure_type fmt = function
   | PTexternal ([v], id) when id == farray -> 
       fprintf fmt "list(%a)" print_pure_type v (* TODO *)
   | PTexternal([],id) -> Ident.print fmt id
-  | PTexternal(_,_) 
+  | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t
+  | PTexternal _
   | PTvar _ -> failwith "no polymorphism with HOL-light yet"
   | PTvarid _ -> assert false
 
@@ -68,21 +69,21 @@ let prefix_id id =
   else if id == t_le_int then "int_le"
   else if id == t_gt_int then "int_gt"
   else if id == t_ge_int then "int_ge"
-  else if id == t_eq_int then assert false (* TODO *)
-  else if id == t_neq_int then assert false (* TODO *)
+  else if id == t_eq_int then assert false
+  else if id == t_neq_int then assert false
   (* real cmp *)
   else if id == t_lt_real then "real_lt" 
   else if id == t_le_real then "real_le"
   else if id == t_gt_real then "real_gt"
   else if id == t_ge_real then "real_ge"
-  else if id == t_eq_real then assert false (* TODO *)
-  else if id == t_neq_real then assert false (* TODO *)
+  else if id == t_eq_real then assert false
+  else if id == t_neq_real then assert false
   (* bool cmp *)
-  else if id == t_eq_bool then assert false (* TODO *)
-  else if id == t_neq_bool then assert false (* TODO *)
+  else if id == t_eq_bool then assert false
+  else if id == t_neq_bool then assert false
   (* unit cmp *)
-  else if id == t_eq_unit then assert false (* TODO *)
-  else if id == t_neq_unit then assert false (* TODO *)
+  else if id == t_eq_unit then assert false
+  else if id == t_neq_unit then assert false
   (* int ops *)
   else if id == t_add_int then "int_add"
   else if id == t_sub_int then "int_sub"
@@ -96,7 +97,7 @@ let prefix_id id =
   else if id == t_mul_real then "real_mul"
   else if id == t_div_real then "real_div"
   else if id == t_neg_real then "real_neg"
-  else if id == t_sqrt_real then assert false (* TODO *)
+  else if id == t_sqrt_real then "root(2)"
   else if id == t_real_of_int then assert false (* TODO *)
   else assert false
 
@@ -236,23 +237,28 @@ let print_parameter fmt id v =
 
 (* TODO *)
 let print_logic fmt id t =
-  let (l,t) = Env.specialize_logic_type t in
-  fprintf fmt "(* logic %s *);;" id
+  fprintf fmt "@[(* logic %s *);;@\n@\n@]" id
 
-(* TODO *)
-let print_axiom fmt id v =
-  fprintf fmt "(* axiom %s *);;" id
+let print_axiom fmt id p =
+  let (l,p) = Env.specialize_predicate p in
+  fprintf fmt "@[<hov 2>let %s = new_axiom@ `%a`;;@\n@\n@]" 
+    id print_predicate p
+
+let print_predicate fmt id p =
+  let (l,(bl,p)) = Env.specialize_predicate_def p in
+  fprintf fmt "@[<hov 2>let %s = new_definition@ `%s %a = %a`;;@\n@\n@]" 
+    id id (print_list space Ident.print) (List.map fst bl) print_predicate p
 
 let print_obligation fmt loc id sq =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
-  fprintf fmt "let %s = `%a`;;@\n@\n" id print_sequent sq
+  fprintf fmt "@[<hov 2>let %s =@ `%a`;;@\n@\n@]" id print_sequent sq
 
 let print_elem fmt = function
   | Parameter (id, v) -> print_parameter fmt id v
   | Obligation (loc, s, sq) -> print_obligation fmt loc s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
-  | Predicate _ -> assert false (*TODO*)
+  | Predicate (id, p) -> print_predicate fmt id p
 
 let print_obl_list fmt = 
   let comma = ref false in
@@ -273,6 +279,8 @@ let output_file fwe =
     (fun _ -> ())
     sep 
     (fun fmt ->
-       fprintf fmt "prioritize_int();;\n\n";
+       fprintf fmt "@[";
+       fprintf fmt "prioritize_int();;@\n@\n";
        Queue.iter (print_elem fmt) elem_q;
-       print_obl_list fmt)
+       print_obl_list fmt;
+       fprintf fmt "@]@.")

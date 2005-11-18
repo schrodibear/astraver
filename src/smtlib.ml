@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.4 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.5 2005-11-18 14:54:08 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -213,7 +213,7 @@ let output_sequent fmt (hyps,concl) =
 	fprintf fmt "@[(forall (%a %a)@ %a)@]" 
 	  Ident.print id print_cc_type v print_seq hyps
     | Spred (_,p) :: hyps -> 
-	fprintf fmt "@[(implies@ %a %a)@]" print_predicate p print_seq hyps
+	fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate p print_seq hyps
   in
   print_seq fmt hyps
 

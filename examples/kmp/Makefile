@@ -1,4 +1,6 @@
 
-all: Lex.vo Next.vo Match.vo kmp_valid.vo
+VO=kmp_valid.vo
+
+all: Lex.vo Next.vo Match.vo $(VO)
 
 include ../Makefile.common

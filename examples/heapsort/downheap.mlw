@@ -22,7 +22,7 @@ let downheap =
     and forall i:int. k+1 <= i <= n -> heap(t, n, i) }
   (let j = 2*k+1 in
    if j <= n then
-     let j' = {} (if j+1 <= n then if t[j] < t[j+1] then j+1 else j else j)
+     let j' = (if j+1 <= n then if t[j] < t[j+1] then j+1 else j else j)
               { select_son(t, k, n, result) } 
      in
      if t[k] < t[j'] then begin (swap t k j'); (downheap t j' n) end)

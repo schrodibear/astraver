@@ -1,7 +1,7 @@
 
-all: words.vo distance_valid.vo
+VO=distance_valid.vo
 
-VO=distance_why.vo
+all: words.vo $(VO)
 
 include ../Makefile.common
 
