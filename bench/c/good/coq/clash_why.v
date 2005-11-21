@@ -29,7 +29,12 @@ Save.
   (not_assigns alloc toto_Z6 toto_Z6_0 (pset_singleton ma_structure)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<> ma_structure).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -66,8 +71,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-apply alloc_stack_valid with substruct_0 alloc; auto.
-
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -94,7 +97,8 @@ Save.
   (valid alloc0 ma_structure).
 Proof.
 intuition.
-subst; apply alloc_stack_valid with substruct_0 alloc; auto.
+subst.
+apply alloc_stack_valid with Z8 result alloc; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -124,24 +128,7 @@ Save.
   (valid alloc0 result).
 Proof.
 intros.
-unfold not_assigns.
-intros.
-subst.
-caduceus.
-rewrite acc_upd_neq;generalize (pset_singleton_elim p (ma_structure # substruct) H0);auto.
-intro.
-rewrite acc_upd_neq;auto.
-inversion_clear Post9.
-inversion_clear H3.
-inversion_clear H5.
-inversion_clear H6.
-inversion_clear H7.
-inversion_clear H8.
-generalize (fresh_not_valid _ _ H6 0).
-intros.
-intro.
-rewrite shift_zero in H8.
-apply H8;subst;auto.
+subst;auto.
 Save.
 
 
@@ -176,7 +163,7 @@ Save.
   (valid alloc0 result0).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -214,8 +201,19 @@ Save.
   (not_assigns alloc fst_Z2 fst_Z2_0
    (pset_singleton (acc substruct_Z7 ma_structure))).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+intro;subst.
+rewrite <- shift_zero in H10.
+generalize H10.
+apply fresh_not_valid.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<> ma_structure # substruct_Z7).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

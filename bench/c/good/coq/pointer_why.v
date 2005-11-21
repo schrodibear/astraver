@@ -433,6 +433,7 @@ Save.
   (* File "pointer.c", line 53, characters 33-45 *) result0 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+caduceus.
 Save.
 

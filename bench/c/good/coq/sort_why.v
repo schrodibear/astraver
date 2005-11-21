@@ -1115,18 +1115,6 @@ Save.
   (valid alloc a).
 Proof.
 intuition.
-subst;red;caduceus.
-apply not_assigns_trans with intP0.
-red; subst; intuition.
-generalize (pset_union_elim2 _ _ _ H10).
-intro.
-generalize (pset_singleton_elim _ _ H11).
-intro; caduceus.
-red; subst; intuition.
-generalize (pset_union_elim1 _ _ _ H10).
-intro.
-generalize (pset_singleton_elim _ _ H11).
-intro; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1156,7 +1144,6 @@ Save.
   (valid alloc b).
 Proof.
 intuition.
-red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1268,17 +1255,17 @@ Save.
 Proof.
 intuition.
 subst; red;caduceus.
-apply not_assigns_trans with intP1.
+apply not_assigns_trans with int_Z14_1.
 red; subst; intuition.
-generalize (pset_union_elim2 _ _ _ H12).
+generalize (pset_union_elim2 H10).
 intro.
-generalize (pset_singleton_elim _ _ H13).
-intro; caduceus.
+generalize (pset_singleton_elim H11).
+intro.
+generalize (pset_union_elim1 H10).
+intro.
+generalize (pset_singleton_elim H13).
+intro;caduceus.
 red; subst; intuition.
-generalize (pset_union_elim1 _ _ _ H12).
-intro.
-generalize (pset_singleton_elim _ _ H13).
-intro; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1453,18 +1440,6 @@ Save.
   (valid alloc d).
 Proof.
 intuition.
-subst; red;caduceus.
-apply not_assigns_trans with intP2.
-red; subst; intuition.
-generalize (pset_union_elim2 _ _ _ H14).
-intro.
-generalize (pset_singleton_elim _ _ H15).
-intro; caduceus.
-red; subst; intuition.
-generalize (pset_union_elim1 _ _ _ H14).
-intro.
-generalize (pset_singleton_elim _ _ H15).
-intro; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1637,6 +1612,18 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton c))).
 Proof.
 intuition.
+subst; red;caduceus.
+intuition;generalize HW_21;caduceus.
+red;intros.
+generalize (pset_union_elim2 H10).
+intro.
+generalize (pset_singleton_elim H11).
+intro.
+generalize (pset_union_elim1 H10).
+intro.
+generalize (pset_singleton_elim H13).
+intro.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1696,18 +1683,6 @@ Save.
   (valid alloc a).
 Proof.
 intuition.
-subst;red; caduceus.
-apply not_assigns_trans with intP3.
-red; subst; intuition.
-generalize (pset_union_elim2 _ _ _ H16).
-intro.
-generalize (pset_singleton_elim _ _ H17).
-intro; caduceus.
-red; subst; intuition.
-generalize (pset_union_elim1 _ _ _ H16).
-intro.
-generalize (pset_singleton_elim _ _ H17).
-intro; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1981,18 +1956,6 @@ Save.
   (valid alloc a).
 Proof.
 intuition.
-subst; red;caduceus.
-apply not_assigns_trans with intP4.
-red; subst; intuition.
-generalize (pset_union_elim2 _ _ _ H18).
-intro.
-generalize (pset_singleton_elim _ _ H19).
-intro; caduceus.
-red; subst; intuition.
-generalize (pset_union_elim1 _ _ _ H18).
-intro.
-generalize (pset_singleton_elim _ _ H19).
-intro; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2153,39 +2116,18 @@ Save.
   (not_assigns alloc int_Z14_3 int_Z14_5
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
-unfold swap_ord;intuition.
-rewrite H22;auto.
-rewrite H19;auto.
-assert (b # intP3 > c # intP3 \/ b # intP3 <= c # intP3 ).
-omega.
-inversion_clear H1.
-generalize (H24 H25);clear H24 H25.
-intros (H24,H25).
-rewrite H24.
-rewrite H19;auto.
-assert (a # intP1 > c # intP1 \/ a # intP1 <= c # intP1 ).
-omega.
-inversion_clear H1.
-generalize (H18 H26);clear H18 H26.
-intros (H18,H26).
-rewrite H26.
-rewrite H18.
-assert (c# intP0 > d # intP0 \/ c # intP0 <= d # intP0 ).
-omega.
-inversion_clear H1.
-generalize (H15 H27);clear H15 H27.
-intros (H15,H27).
-rewrite H15.
-rewrite H13;auto.
-rewrite H10;auto.
-assert (a# intP > b # intP \/ a # intP <= b # intP ).
-omega.
-inversion_clear H1.
-generalize (H12 H28);clear H12 H28.
-intros (H12,H28).
-rewrite H12.
-Admitted.
-
+unfold swap_ord;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim2 H10).
+intro.
+generalize (pset_singleton_elim H11).
+intro.
+generalize (pset_union_elim1 H10).
+intro.
+generalize (pset_singleton_elim H13).
+intro.
+caduceus.
+Save.
 
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2832,7 +2774,18 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; red;caduceus.
+intuition;subst;generalize HW_49;caduceus.
+red; intros.
+generalize (pset_union_elim2 H10).
+intro.
+generalize (pset_singleton_elim H11).
+intro.
+generalize (pset_union_elim1 H10).
+intro.
+generalize (pset_singleton_elim H13).
+intro.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -3626,7 +3579,25 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red.
+intuition.
+subst int_Z14_9.
+subst int_Z14_8.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_eq;auto.
+subst int_Z14_9.
+subst int_Z14_8.
+rewrite acc_upd_eq;subst;auto.
+red;intros.
+generalize (pset_union_elim2 H10).
+intro.
+generalize (pset_singleton_elim H11).
+intro.
+generalize (pset_union_elim1 H10).
+intro.
+generalize (pset_singleton_elim H13).
+intro.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -3750,8 +3721,7 @@ Save.
   (acc int_Z14_9 b) /\ (acc int_Z14_9 b) <= (acc int_Z14_9 c)) /\
   (acc int_Z14_9 c) <= (acc int_Z14_9 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_35;generalize HW_63;generalize HW_49;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -3864,7 +3834,8 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -3974,8 +3945,7 @@ Save.
   (acc int_Z14_7 b) /\ (acc int_Z14_7 b) <= (acc int_Z14_7 c)) /\
   (acc int_Z14_7 c) <= (acc int_Z14_7 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_21;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -4067,7 +4037,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -4763,7 +4733,14 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10).
+generalize (pset_union_elim2 H10).
+intros.
+generalize (pset_singleton_elim H11).
+generalize (pset_singleton_elim H12).
+intros;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -4873,8 +4850,7 @@ Save.
   (acc int_Z14_7 b) /\ (acc int_Z14_7 b) <= (acc int_Z14_7 c)) /\
   (acc int_Z14_7 c) <= (acc int_Z14_7 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_35;generalize HW_74;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -4973,7 +4949,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -5069,8 +5045,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_35;generalize HW_74;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -5141,7 +5116,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -5690,7 +5665,11 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -6386,7 +6365,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -6496,8 +6479,7 @@ Save.
   (acc int_Z14_7 b) /\ (acc int_Z14_7 b) <= (acc int_Z14_7 c)) /\
   (acc int_Z14_7 c) <= (acc int_Z14_7 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_90;generalize HW_109;generalize HW_95;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -6596,7 +6578,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -6692,8 +6674,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_119;generalize HW_21;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -6771,7 +6752,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -7369,7 +7350,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -7465,8 +7450,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_90;generalize HW_125;generalize HW_120;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -7551,7 +7535,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -7633,8 +7617,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -7684,7 +7667,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton c))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -8086,7 +8069,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11); generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -8635,7 +8622,11 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -9331,7 +9322,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -9441,8 +9436,9 @@ Save.
   (acc int_Z14_7 b) /\ (acc int_Z14_7 b) <= (acc int_Z14_7 c)) /\
   (acc int_Z14_7 c) <= (acc int_Z14_7 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_141;generalize HW_155;
+generalize HW_169;
+generalize HW_136;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -9541,7 +9537,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -9637,8 +9633,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_141;generalize HW_136;generalize HW_155;generalize HW_179;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -9716,7 +9711,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -10314,7 +10309,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -10410,8 +10409,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_136;generalize HW_141;generalize HW_180;generalize HW_185;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -10496,7 +10494,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -10578,8 +10576,8 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;
+generalize HW_136;generalize HW_141;generalize HW_180;generalize HW_195;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -10636,7 +10634,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -11087,7 +11085,11 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -11685,7 +11687,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -11781,8 +11787,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_136;generalize HW_196;generalize HW_201;generalize HW_215;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -11867,7 +11872,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -11949,8 +11954,8 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;
+generalize HW_136;generalize HW_196;generalize HW_201;generalize HW_225;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -12014,7 +12019,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -12514,7 +12519,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -12596,8 +12605,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_136;generalize HW_196;generalize HW_226;generalize HW_231;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -12668,7 +12676,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -12736,8 +12744,7 @@ Save.
   (acc int_Z14_1 b) /\ (acc int_Z14_1 b) <= (acc int_Z14_1 c)) /\
   (acc int_Z14_1 c) <= (acc int_Z14_1 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -12765,7 +12772,7 @@ Save.
    (pset_union (pset_singleton b) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -13020,7 +13027,11 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton c))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -13422,7 +13433,11 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -13971,7 +13986,12 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -14667,7 +14687,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -14777,8 +14802,7 @@ Save.
   (acc int_Z14_7 b) /\ (acc int_Z14_7 b) <= (acc int_Z14_7 c)) /\
   (acc int_Z14_7 c) <= (acc int_Z14_7 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_261;generalize HW_275;generalize HW_289;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -14877,7 +14901,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -14973,8 +14997,8 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -15052,7 +15076,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -15650,7 +15674,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -15746,8 +15775,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_261;generalize HW_300;generalize HW_305;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -15832,7 +15860,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -15914,8 +15942,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_261;generalize HW_300;generalize HW_315;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -15972,7 +15999,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -16423,7 +16450,12 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17021,7 +17053,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17117,8 +17154,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_316;generalize HW_321;generalize HW_335;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17203,7 +17239,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17285,8 +17321,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_316;generalize HW_321;generalize HW_345;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17350,7 +17385,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17850,7 +17885,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -17932,8 +17972,8 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;
+generalize HW_316;generalize HW_346;generalize HW_351;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -18004,7 +18044,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -18072,8 +18112,8 @@ Save.
   (acc int_Z14_1 b) /\ (acc int_Z14_1 b) <= (acc int_Z14_1 c)) /\
   (acc int_Z14_1 c) <= (acc int_Z14_1 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -18108,7 +18148,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton c))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -18412,7 +18452,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -18863,7 +18908,12 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -19461,7 +19511,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -19557,8 +19612,7 @@ Save.
   (acc int_Z14_5 b) /\ (acc int_Z14_5 b) <= (acc int_Z14_5 c)) /\
   (acc int_Z14_5 c) <= (acc int_Z14_5 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_381;generalize HW_395;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -19643,7 +19697,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -19725,7 +19779,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
+intuition;subst;caduceus.
 (* FILL PROOF HERE *)
 Save.
 
@@ -19790,7 +19844,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -20290,7 +20344,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -20372,8 +20431,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_406;generalize HW_411;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -20444,7 +20502,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -20512,8 +20570,7 @@ Save.
   (acc int_Z14_1 b) /\ (acc int_Z14_1 b) <= (acc int_Z14_1 c)) /\
   (acc int_Z14_1 c) <= (acc int_Z14_1 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;generalize HW_406;generalize HW_421;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -20555,7 +20612,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -20908,7 +20965,12 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -21408,7 +21470,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -21490,8 +21557,7 @@ Save.
   (acc int_Z14_3 b) /\ (acc int_Z14_3 b) <= (acc int_Z14_3 c)) /\
   (acc int_Z14_3 c) <= (acc int_Z14_3 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -21562,7 +21628,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -21630,8 +21696,8 @@ Save.
   (acc int_Z14_1 b) /\ (acc int_Z14_1 b) <= (acc int_Z14_1 c)) /\
   (acc int_Z14_1 c) <= (acc int_Z14_1 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -21680,7 +21746,7 @@ Save.
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22082,7 +22148,12 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+
+red;intuition;subst;caduceus.
+red;intros.
+generalize (pset_union_elim1 H10);generalize (pset_union_elim2 H10);intros.
+generalize (pset_singleton_elim H11);generalize (pset_singleton_elim H12);intros.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22150,8 +22221,7 @@ Save.
   (acc int_Z14_1 b) /\ (acc int_Z14_1 b) <= (acc int_Z14_1 c)) /\
   (acc int_Z14_1 c) <= (acc int_Z14_1 d)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22207,7 +22277,7 @@ Save.
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22291,6 +22361,7 @@ Save.
   (valid alloc result0).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22407,7 +22478,7 @@ Save.
   (valid alloc result5).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22449,7 +22520,7 @@ Save.
   (valid alloc result6).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22496,7 +22567,7 @@ Save.
   (valid alloc result8).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22549,7 +22620,7 @@ Save.
   (valid alloc result10).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22611,7 +22682,7 @@ Save.
   (valid alloc result13).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22676,7 +22747,7 @@ Save.
   (valid alloc result12).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22746,7 +22817,7 @@ Save.
   (valid alloc result15).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -22897,7 +22968,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -23068,7 +23139,7 @@ Save.
   (valid alloc result20).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -23257,6 +23328,7 @@ Save.
   (valid alloc result22).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -23359,6 +23431,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -23466,6 +23539,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -23579,6 +23653,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -23701,6 +23776,7 @@ Save.
   (valid alloc result30).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -23826,6 +23902,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -23956,6 +24033,7 @@ Save.
   (valid alloc result32).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -24091,6 +24169,7 @@ Save.
   (valid alloc result33).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -24231,6 +24310,7 @@ Save.
   (valid alloc result35).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -24377,6 +24457,7 @@ Save.
   (valid alloc result37).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -24532,6 +24613,7 @@ Save.
   (valid alloc result40).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -24690,6 +24772,7 @@ Save.
   (valid alloc result39).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -24853,6 +24936,7 @@ Save.
   (valid alloc result42).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -25022,8 +25106,7 @@ Save.
   (acc int_Z10_9 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_32 : 
@@ -25169,8 +25252,7 @@ Save.
   (acc int_Z10_7 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_33 : 
@@ -25282,7 +25364,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -25400,7 +25482,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -25524,6 +25606,7 @@ Save.
   (valid alloc result31).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -25657,6 +25740,7 @@ Save.
   (valid alloc result34).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -25793,6 +25877,7 @@ Save.
   (valid alloc result33).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -25934,6 +26019,7 @@ Save.
   (valid alloc result36).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26081,8 +26167,7 @@ Save.
   (acc int_Z10_7 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_40 : 
@@ -26206,8 +26291,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_41 : 
@@ -26290,6 +26374,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26379,6 +26464,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26474,6 +26560,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26578,6 +26665,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26685,6 +26773,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26797,6 +26886,7 @@ Save.
   (valid alloc result28).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -26914,6 +27004,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -27036,6 +27127,7 @@ Save.
   (valid alloc result31).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -27164,6 +27256,7 @@ Save.
   (valid alloc result33).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -27301,6 +27394,7 @@ Save.
   (valid alloc result36).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -27441,6 +27535,7 @@ Save.
   (valid alloc result35).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -27586,6 +27681,7 @@ Save.
   (valid alloc result38).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -27738,7 +27834,7 @@ Save.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_54 : 
@@ -27866,8 +27962,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_55 : 
@@ -27961,6 +28056,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28061,6 +28157,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28167,6 +28264,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28282,6 +28380,7 @@ Save.
   (valid alloc result30).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28400,6 +28499,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28523,6 +28623,7 @@ Save.
   (valid alloc result32).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28652,8 +28753,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_62 : 
@@ -28759,8 +28859,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_63 : 
@@ -28866,6 +28965,7 @@ Save.
   (valid alloc result11).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -28993,6 +29093,7 @@ Save.
   (valid alloc result14).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29138,6 +29239,7 @@ Save.
   (valid alloc result16).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29218,6 +29320,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29303,6 +29406,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29394,6 +29498,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29494,6 +29599,7 @@ Save.
   (valid alloc result24).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29597,6 +29703,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29705,6 +29812,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29818,6 +29926,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -29936,6 +30045,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -30060,6 +30170,7 @@ Save.
   (valid alloc result31).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -30193,6 +30304,7 @@ Save.
   (valid alloc result34).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -30329,6 +30441,7 @@ Save.
   (valid alloc result33).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -30470,6 +30583,7 @@ Save.
   (valid alloc result36).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -30617,8 +30731,7 @@ Save.
   (acc int_Z10_7 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_82 : 
@@ -30742,8 +30855,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_83 : 
@@ -30833,6 +30945,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -30929,6 +31042,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31031,6 +31145,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31142,6 +31257,7 @@ Save.
   (valid alloc result28).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31256,6 +31372,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31375,6 +31492,7 @@ Save.
   (valid alloc result30).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31500,8 +31618,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_90 : 
@@ -31603,8 +31720,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_91 : 
@@ -31665,6 +31781,7 @@ Save.
   (valid alloc result13).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31732,6 +31849,7 @@ Save.
   (valid alloc result15).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31805,6 +31923,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31887,6 +32006,7 @@ Save.
   (valid alloc result20).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -31972,6 +32092,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32062,6 +32183,7 @@ Save.
   (valid alloc result22).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32157,6 +32279,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32257,6 +32380,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32363,6 +32487,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32478,6 +32603,7 @@ Save.
   (valid alloc result30).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32596,6 +32722,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32719,6 +32846,7 @@ Save.
   (valid alloc result32).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -32848,8 +32976,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_104 : 
@@ -32955,8 +33082,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_105 : 
@@ -33028,6 +33154,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33106,6 +33233,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33190,6 +33318,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33283,6 +33412,7 @@ Save.
   (valid alloc result24).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33379,6 +33509,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33480,6 +33611,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33587,8 +33719,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_112 : 
@@ -33672,8 +33803,7 @@ Save.
   (acc int_Z10_1 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_113 : 
@@ -33696,6 +33826,7 @@ Save.
   (valid alloc result2).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33725,6 +33856,7 @@ Save.
   (valid alloc result4).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33760,6 +33892,7 @@ Save.
   (valid alloc result6).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33804,6 +33937,7 @@ Save.
   (valid alloc result9).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33851,6 +33985,7 @@ Save.
   (valid alloc result8).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -33903,6 +34038,7 @@ Save.
   (valid alloc result11).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34018,6 +34154,7 @@ Save.
   (valid alloc result13).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34153,6 +34290,7 @@ Save.
   (valid alloc result16).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34306,6 +34444,7 @@ Save.
   (valid alloc result18).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34390,6 +34529,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34479,6 +34619,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34574,6 +34715,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34678,6 +34820,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -34785,7 +34928,8 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -34897,6 +35041,7 @@ Save.
   (valid alloc result28).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35014,6 +35159,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35136,6 +35282,7 @@ Save.
   (valid alloc result31).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35264,6 +35411,7 @@ Save.
   (valid alloc result33).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35401,6 +35549,7 @@ Save.
   (valid alloc result36).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35541,6 +35690,7 @@ Save.
   (valid alloc result35).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35686,6 +35836,7 @@ Save.
   (valid alloc result38).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -35837,8 +35988,7 @@ Save.
   (acc int_Z10_7 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_138 : 
@@ -35966,8 +36116,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_139 : 
@@ -36061,6 +36210,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36161,6 +36311,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36267,6 +36418,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36382,6 +36534,7 @@ Save.
   (valid alloc result30).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36500,6 +36653,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36623,6 +36777,7 @@ Save.
   (valid alloc result32).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36752,8 +36907,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_146 : 
@@ -36859,8 +37013,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_147 : 
@@ -36925,6 +37078,7 @@ Save.
   (valid alloc result15).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -36996,6 +37150,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37073,6 +37228,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37159,6 +37315,7 @@ Save.
   (valid alloc result22).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37248,6 +37405,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37342,6 +37500,7 @@ Save.
   (valid alloc result24).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37441,6 +37600,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37545,6 +37705,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37655,6 +37816,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37774,6 +37936,7 @@ Save.
   (valid alloc result32).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -37896,6 +38059,7 @@ Save.
   (valid alloc result31).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38023,6 +38187,7 @@ Save.
   (valid alloc result34).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38156,8 +38321,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_160 : 
@@ -38267,8 +38431,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_161 : 
@@ -38344,6 +38507,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38426,6 +38590,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38514,6 +38679,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38611,6 +38777,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38711,6 +38878,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38816,6 +38984,7 @@ Save.
   (valid alloc result28).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -38927,8 +39096,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_168 : 
@@ -39016,8 +39184,7 @@ Save.
   (acc int_Z10_1 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_169 : 
@@ -39087,6 +39254,7 @@ Save.
   (valid alloc result7).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39178,6 +39346,7 @@ Save.
   (valid alloc result10).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39287,6 +39456,7 @@ Save.
   (valid alloc result12).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39349,6 +39519,7 @@ Save.
   (valid alloc result13).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39416,6 +39587,7 @@ Save.
   (valid alloc result15).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39489,6 +39661,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39571,6 +39744,7 @@ Save.
   (valid alloc result20).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39656,6 +39830,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39746,6 +39921,7 @@ Save.
   (valid alloc result22).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39841,6 +40017,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -39941,6 +40118,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40047,6 +40225,7 @@ Save.
   (valid alloc result27).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40162,6 +40341,7 @@ Save.
   (valid alloc result30).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40280,6 +40460,7 @@ Save.
   (valid alloc result29).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40403,6 +40584,7 @@ Save.
   (valid alloc result32).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40532,8 +40714,7 @@ Save.
   (acc int_Z10_5 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_188 : 
@@ -40639,8 +40820,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_189 : 
@@ -40712,6 +40892,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40790,6 +40971,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40874,6 +41056,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -40967,6 +41150,7 @@ Save.
   (valid alloc result24).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41063,6 +41247,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41164,6 +41349,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41271,8 +41457,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_196 : 
@@ -41356,8 +41541,7 @@ Save.
   (acc int_Z10_1 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_197 : 
@@ -41400,6 +41584,7 @@ Save.
   (valid alloc result9).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41449,6 +41634,7 @@ Save.
   (valid alloc result11).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41504,6 +41690,7 @@ Save.
   (valid alloc result13).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41568,6 +41755,7 @@ Save.
   (valid alloc result16).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41635,6 +41823,7 @@ Save.
   (valid alloc result15).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41707,6 +41896,7 @@ Save.
   (valid alloc result18).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41784,6 +41974,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41866,6 +42057,7 @@ Save.
   (valid alloc result21).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -41954,6 +42146,7 @@ Save.
   (valid alloc result23).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42051,6 +42244,7 @@ Save.
   (valid alloc result26).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42151,6 +42345,7 @@ Save.
   (valid alloc result25).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42256,6 +42451,7 @@ Save.
   (valid alloc result28).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42367,8 +42563,7 @@ Save.
   (acc int_Z10_3 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_210 : 
@@ -42456,8 +42651,7 @@ Save.
   (acc int_Z10_1 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_211 : 
@@ -42511,6 +42705,7 @@ Save.
   (valid alloc result13).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42571,6 +42766,7 @@ Save.
   (valid alloc result15).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42637,6 +42833,7 @@ Save.
   (valid alloc result17).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42712,6 +42909,7 @@ Save.
   (valid alloc result20).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42790,6 +42988,7 @@ Save.
   (valid alloc result19).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42873,6 +43072,7 @@ Save.
   (valid alloc result22).
 Proof.
 intuition.
+subst;auto.
 (* FILL PROOF HERE *)
 Save.
 
@@ -42963,7 +43163,8 @@ Save.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
-Save.
+Admitted.
+
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma sort4_4_impl_po_218 : 
@@ -43029,6 +43230,4 @@ Save.
   (acc int_Z10 (shift t 3))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
+Admitted.

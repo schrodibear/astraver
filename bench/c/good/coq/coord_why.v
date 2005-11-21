@@ -15,8 +15,9 @@ Require Export coord_spec_why.
   (valid alloc result).
 Proof.
 intros.
-intuition.
+subst;intuition.
 Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (index: Z),
@@ -35,6 +36,6 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 

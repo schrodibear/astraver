@@ -457,18 +457,18 @@ axiom alloc_stack_p :
 
 axiom alloc_stack_valid : 
   forall p:'z pointer. forall a1:alloc_table. forall a2:alloc_table.
-    alloc_stack(p,a1,a2) -> forall q:'z pointer. valid(a1,q) -> valid(a2,q)
+    alloc_stack(p,a1,a2) -> forall q:'y pointer. valid(a1,q) -> valid(a2,q)
 
 axiom alloc_stack_valid_index : 
   forall p:'z pointer. forall a1:alloc_table. forall a2:alloc_table.
     alloc_stack(p,a1,a2) -> 
-    forall q:'z pointer. forall i:int.
+    forall q:'y pointer. forall i:int.
       valid_index(a1,q,i) -> valid_index(a2,q,i)
 
 axiom alloc_stack_valid_range : 
   forall p:'z pointer. forall a1:alloc_table. forall a2:alloc_table.
     alloc_stack(p,a1,a2) -> 
-    forall q:'z pointer. forall i:int. forall j:int.
+    forall q:'y pointer. forall i:int. forall j:int.
       valid_range(a1,q,i,j) -> valid_range(a2,q,i,j)
 
 logic free_heap : 'z pointer, alloc_table, alloc_table -> prop

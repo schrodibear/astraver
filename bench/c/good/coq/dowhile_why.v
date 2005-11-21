@@ -64,10 +64,5 @@ Save.
   (* File "dowhile.c", line 11, characters 29-36 *) x2 = 10.
 Proof.
 intuition.
-discriminate.
-Save.
-
-Proof.
-intuition.
 Save.
 

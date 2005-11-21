@@ -13,7 +13,6 @@ Require Export logic_cast_spec_why.
   (* File "logic_cast.c", line 10, characters 11-25 *) (0 <= I /\ I <= 4).
 Proof.
 intuition.
-subst; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -34,6 +33,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

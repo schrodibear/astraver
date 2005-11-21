@@ -12,8 +12,6 @@ Require Export queue_spec_why.
   (valid alloc t).
 Proof.
 intuition.
-subst.
-auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -55,7 +53,7 @@ Save.
   (valid alloc result0).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -83,7 +81,7 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -116,7 +114,7 @@ Save.
   (valid alloc result2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -152,7 +150,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -192,7 +189,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -236,7 +232,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -284,7 +279,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -336,7 +330,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -392,7 +385,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -454,8 +446,7 @@ Save.
   0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9_0 q)) /\
   0 <= (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9_0 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -505,7 +496,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 
@@ -536,8 +526,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition;subst;auto;caduceus.
-rewrite acc_upd_eq in H8;auto.
-omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -572,7 +560,7 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -611,7 +599,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -653,7 +640,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -699,7 +685,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -748,7 +733,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -987,8 +971,27 @@ Save.
   (acc first_Z9_1 q) /\ (acc first_Z9_1 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1118,8 +1121,27 @@ Save.
   (acc first_Z9_1 q) /\ (acc first_Z9_1 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1392,8 +1414,23 @@ Save.
   (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1517,8 +1554,27 @@ Save.
   (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
 Proof.
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+rewrite acc_upd_eq in HW_30;auto.
+assert (1 + q # first_Z9 < q # length_Z9 \/ 1 + q # first_Z9 = q # length_Z9).
+omega.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1568,7 +1624,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1598,8 +1653,6 @@ Save.
   (valid alloc q).
 Proof.
 intuition;subst;auto;caduceus.
-rewrite acc_upd_eq in H8;auto.
-omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1634,7 +1687,7 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2059,8 +2112,32 @@ Save.
   (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9_1 q) /\ (acc last_Z9_1 q) < (acc length_Z9 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<> shift (q # contents_Z9) (q # last_Z9) ).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2194,8 +2271,32 @@ Save.
   (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9_1 q) /\ (acc last_Z9_1 q) < (acc length_Z9 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<> shift (q # contents_Z9) (q # last_Z9)).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2475,8 +2576,28 @@ Save.
   (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9 q)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<> shift (q # contents_Z9) (q # last_Z9)).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2604,8 +2725,32 @@ Save.
   (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
   (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9 q)).
 Proof.
+intuition;subst;caduceus.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>shift (q # contents_Z9) (q # last_Z9) ).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p<>q).
+apply pset_singleton_elim;auto.
+auto.
+rewrite acc_upd_eq in HW_30;auto.
+assert (1 + q # last_Z9 = q # length_Z9 \/ 1 + q # last_Z9 < q # length_Z9).
+omega.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2686,7 +2831,6 @@ Save.
   (valid alloc q1).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2745,6 +2889,6 @@ Save.
   (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 

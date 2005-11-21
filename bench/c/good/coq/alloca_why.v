@@ -25,7 +25,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -77,7 +76,7 @@ Save.
   (valid alloc0 result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -110,7 +109,7 @@ Save.
   (valid alloc0 result2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -146,7 +145,8 @@ Save.
   (* File "alloca.c", line 3, characters 13-25 *) result3 = 3.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -154,7 +154,6 @@ Save.
   3 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -171,7 +170,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -221,7 +219,7 @@ Save.
   (valid alloc0 result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -254,7 +252,7 @@ Save.
   (valid alloc0 result2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -290,7 +288,7 @@ Save.
   (* File "alloca.c", line 9, characters 13-25 *) result3 = 3.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -303,7 +301,6 @@ Save.
   4 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -324,7 +321,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -350,61 +346,8 @@ Save.
   forall (HW_6: result0 = (shift result 1)),
   (valid alloc0 result0).
 Proof.
-assert (0<=2<=4).
-omega.
 intuition.
-subst.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
 subst;auto.
-generalize (fresh_not_valid _ _ H7 0).
-intro.
-assert (0<=2<=4).
-omega.
-generalize (valid_range_valid_shift _ _ _ _ 2 H2 H11).
-intro.
-intro.
-rewrite <- H13 in H12.
-rewrite shift_zero in H9.
-elim (H9 H12).
-generalize (fresh_not_valid _ _ H7 1).
-intro.
-assert (0<=2<=4).
-omega.
-generalize (valid_range_valid_shift _ _ _ _ 2 H2 H11).
-intro.
-intro.
-rewrite <- H13 in H12.
-elim (H9 H12).
-generalize (fresh_not_valid _ _ H7 2).
-intro.
-assert (0<=2<=4).
-omega.
-generalize (valid_range_valid_shift _ _ _ _ 2 H2 H11).
-intro.
-intro.
-rewrite <- H13 in H12.
-elim (H9 H12).
-generalize (fresh_not_valid _ _ H7 3).
-intro.
-assert (0<=2<=4).
-omega.
-generalize (valid_range_valid_shift _ _ _ _ 2 H2 H11).
-intro.
-intro.
-rewrite <- H13 in H12.
-elim (H9 H12).
-subst.
-apply alloc_stack_valid with t alloc; auto.
-subst.
-apply alloc_stack_valid with t alloc; auto.
-subst.
-apply valid_range_valid_shift with 0 (4-1);auto.
-omega.
-subst.
-apply valid_range_valid_shift with 0 (4-1);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -436,7 +379,7 @@ Save.
   (valid alloc0 result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -473,7 +416,7 @@ Save.
   (valid alloc0 result2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -515,7 +458,10 @@ Save.
   (valid alloc0 result3).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+apply valid_range_valid_shift with 0 3.
+apply alloc_stack_valid_range with Z3 result alloc;auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -560,7 +506,7 @@ Save.
   (* File "alloca.c", line 18, characters 13-26 *) result4 = 12.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -568,7 +514,6 @@ Save.
   4 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -585,7 +530,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 
@@ -609,19 +553,8 @@ Save.
   (valid alloc0 result0).
 Proof.
 intuition;subst;caduceus.
-rewrite acc_upd_neq.
-caduceus.
-generalize (fresh_not_valid _ _ H14 0);rewrite shift_zero.
-intro.
-intro;subst.
-intuition.
-apply valid_range_valid_shift with 0 (5-1);auto with zarith.
-apply valid_range_valid_shift with 0 (5-1);auto with zarith.
-apply alloc_stack_valid with result1 alloc0;auto.
-apply alloc_stack_valid with result1 alloc0;auto.
-apply valid_range_valid_shift with 0 (5-1);auto with zarith.
-apply valid_range_valid_shift with 0 (4-1);auto with zarith.
-apply valid_range_valid_shift with 0 (4-1);auto with zarith.
+apply valid_range_valid_shift with 0 (4-1);auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -649,7 +582,7 @@ Save.
   (valid alloc0 result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -682,7 +615,7 @@ Save.
   (valid alloc0 result2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -718,7 +651,6 @@ Save.
   5 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -762,7 +694,6 @@ Save.
   (valid alloc1 result3).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -812,7 +743,7 @@ Save.
   (valid alloc1 result4).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -869,7 +800,8 @@ Save.
   (valid alloc1 result6).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+apply alloc_stack_valid with Z5 result3 alloc0;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -929,7 +861,7 @@ Save.
   (valid alloc1 result5).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -994,7 +926,7 @@ Save.
   (valid alloc1 result8).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1064,7 +996,7 @@ Save.
   (valid alloc1 result9).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1137,7 +1069,7 @@ Save.
   (* File "alloca.c", line 24, characters 13-25 *) result10 = 3.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1187,11 +1119,9 @@ Save.
   (valid alloc1 result1).
 Proof.
 intuition;subst.
-assert (0<=4<=(5-1)).
+apply valid_range_valid_shift with 0 (5-1);auto.
+apply alloc_stack_valid_range with Z7 result0 alloc0;auto.
 omega.
-generalize (valid_range_valid_shift _ _ _ _ 4 H2 H12).
-intro.
-apply alloc_stack_valid with v alloc0;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1224,17 +1154,6 @@ Save.
   (valid alloc1 result2).
 Proof.
 intuition;subst;auto.
-rewrite acc_upd_neq.
-rewrite acc_upd_eq;auto.
-assert (0<=4<=(5-1)).
-omega.
-generalize (valid_range_valid_shift _ _ _ _ 4 H2 H12).
-intro.
-intro.
-rewrite <- H15 in H14.
-generalize (fresh_not_valid _ _ H10 4).
-intro.
-elim (H16 H14).
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1273,7 +1192,7 @@ Save.
   (valid alloc1 result3).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -1315,6 +1234,6 @@ Save.
   (* File "alloca.c", line 31, characters 13-25 *) result4 = 3.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 

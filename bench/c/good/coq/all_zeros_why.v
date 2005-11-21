@@ -17,6 +17,9 @@ Require Export all_zeros_spec_why.
   (forall (i:Z), (0 <= i /\ i < k -> (acc int_Z5 (shift t i)) = 0))).
 Proof.
 intuition.
+subst.
+red in HW_1.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -44,6 +47,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -77,8 +81,7 @@ Save.
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = 0)))).
 Proof.
 intuition; subst.
-assert (i=k2 \/ i<k2). omega. intuition.
-subst; intuition.
+assert (k0=n \/ k0<n). omega. intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -114,6 +117,12 @@ Save.
   (Zwf 0 (n - k1) (n - k0)).
 Proof.
 intuition.
+subst.
+assert (k0=i \/  i< k0).
+omega.
+intuition.
+subst.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -141,7 +150,6 @@ Save.
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = 0)))).
 Proof.
 intuition.
-unfold valid_range in Pre6; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -156,8 +164,6 @@ Save.
   (forall (i:Z), (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0))).
 Proof.
 intuition; subst.
-assert (i=mutable_n1-1 \/ mutable_n1<=i). omega. intuition.
-subst; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -184,6 +190,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -251,7 +258,10 @@ Save.
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+apply HW_9.
+apply H3.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -284,7 +294,11 @@ Save.
   (Zwf 0 mutable_n0 mutable_n).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+assert (i = mutable_n -1 \/ mutable_n -1 < i).
+omega.
+intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

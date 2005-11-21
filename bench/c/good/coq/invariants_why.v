@@ -74,7 +74,6 @@ Save.
   (valid alloc c).
 Proof.
 intuition.
-subst; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -141,6 +140,8 @@ Save.
   (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <= (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100).
 Proof.
 intuition.
+subst;caduceus.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -170,7 +171,6 @@ Save.
   (acc x_Z3 s) <= (acc y_Z3 s)) /\ (acc y_Z3 s) <= 100).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -184,9 +184,7 @@ Save.
   (valid alloc s).
 Proof.
 intros;subst.
-inversion_clear Pre13.
-inversion_clear H0.
-auto.
+intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -204,14 +202,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition;subst;auto;caduceus.
-rewrite acc_upd_neq;caduceus.
-assert (offset c +1 <> offset c).
-intuition.
-assert (shift c 1 <> shift c 0 -> shift c 1 <> c).
-rewrite shift_zero;auto.
-apply H4.
-apply neq_offset_neq_shift.
-auto with *.
 Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -233,7 +223,6 @@ Qed.
   (valid alloc c).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -260,7 +249,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -291,7 +280,14 @@ Save.
   (acc x_Z3_0 s) /\ (acc x_Z3_0 s) <= (acc y_Z3_0 s)) /\ (acc y_Z3_0 s) <=
   100) /\ (acc int_Z5_1 c) = 12).
 Proof.
+intuition;subst;caduceus.
+rewrite acc_upd_neq;caduceus.
+assert (offset c +1 <> offset c).
 intuition.
-(* FILL PROOF HERE *)
+assert (shift c 1 <> shift c 0 -> shift c 1 <> c).
+rewrite shift_zero;auto.
+apply H3.
+apply neq_offset_neq_shift.
+auto with *.
 Save.
 

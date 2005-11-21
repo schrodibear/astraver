@@ -8,10 +8,10 @@ Require Export call_spec_why.
   forall (y: Z),
   forall (ddd: Z),
   forall (z: Z),
-  forall (HW_1: (* File \"call.c\", line 11, characters 14-22 *) y = ddd),
+  forall (HW_1: (* File "call.c", line 11, characters 14-22 *) y = ddd),
   forall (u: Z),
   forall (HW_2: u = (z + 1)),
-  (* File \"call.c\", line 11, characters 48-60 *) z = z.
+  (* File "call.c", line 11, characters 48-60 *) z = z.
 Proof.
 intuition.
 Save.
@@ -22,11 +22,7 @@ Save.
   forall (HW_1: x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
-  forall (result: Z),
-  forall (HW_3: (* File \"call.c\", line 11, characters 48-60 *) result = 2),
-  forall (x1: Z),
-  forall (HW_4: x1 = result),
-  (* File \"call.c\", line 18, characters 13-19 *) x1 = 2.
+  (* File "call.c", line 11, characters 14-22 *) 1 = x0.
 Proof.
 intuition.
 Save.
@@ -37,7 +33,12 @@ Save.
   forall (HW_1: x = 0),
   forall (x0: Z),
   forall (HW_2: x0 = (x + 1)),
-  (* File \"call.c\", line 11, characters 14-22 *) 1 = x0.
+  forall (HW_3: (* File "call.c", line 11, characters 14-22 *) 1 = x0),
+  forall (result: Z),
+  forall (HW_4: (* File "call.c", line 11, characters 48-60 *) result = 2),
+  forall (x1: Z),
+  forall (HW_5: x1 = result),
+  (* File "call.c", line 18, characters 13-19 *) x1 = 2.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

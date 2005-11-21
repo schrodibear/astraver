@@ -708,8 +708,8 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid :
-  forall (A550:Set),
-  (forall (p:((pointer) A550)),
+  forall (A550:Set), forall (A551:Set),
+  (forall (p:((pointer) A551)),
    (forall (a1:alloc_table),
     (forall (a2:alloc_table),
      ((alloc_stack p a1 a2) ->
@@ -717,28 +717,28 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid_index :
-  forall (A551:Set),
-  (forall (p:((pointer) A551)),
-   (forall (a1:alloc_table),
-    (forall (a2:alloc_table),
-     ((alloc_stack p a1 a2) ->
-      (forall (q:((pointer) A551)),
-       (forall (i:Z), ((valid_index a1 q i) -> (valid_index a2 q i)))))))).
-Admitted.
-
-(*Why axiom*) Lemma alloc_stack_valid_range :
-  forall (A552:Set),
-  (forall (p:((pointer) A552)),
+  forall (A552:Set), forall (A553:Set),
+  (forall (p:((pointer) A553)),
    (forall (a1:alloc_table),
     (forall (a2:alloc_table),
      ((alloc_stack p a1 a2) ->
       (forall (q:((pointer) A552)),
+       (forall (i:Z), ((valid_index a1 q i) -> (valid_index a2 q i)))))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_stack_valid_range :
+  forall (A554:Set), forall (A555:Set),
+  (forall (p:((pointer) A555)),
+   (forall (a1:alloc_table),
+    (forall (a2:alloc_table),
+     ((alloc_stack p a1 a2) ->
+      (forall (q:((pointer) A554)),
        (forall (i:Z),
         (forall (j:Z), ((valid_range a1 q i j) -> (valid_range a2 q i j))))))))).
 Admitted.
 
 (*Why logic*) Definition free_heap :
-  forall (A553:Set), ((pointer) A553) -> alloc_table -> alloc_table -> Prop.
+  forall (A556:Set), ((pointer) A556) -> alloc_table -> alloc_table -> Prop.
 Admitted.
 
 (*Why logic*) Definition free_stack :
@@ -746,22 +746,22 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma free_stack_heap :
-  forall (A554:Set),
+  forall (A557:Set),
   (forall (a1:alloc_table),
    (forall (a2:alloc_table),
     (forall (a3:alloc_table),
      ((free_stack a1 a2 a3) ->
-      (forall (p:((pointer) A554)),
+      (forall (p:((pointer) A557)),
        ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p)))))))).
 Admitted.
 
 (*Why axiom*) Lemma free_stack_stack :
-  forall (A555:Set),
+  forall (A558:Set),
   (forall (a1:alloc_table),
    (forall (a2:alloc_table),
     (forall (a3:alloc_table),
      ((free_stack a1 a2 a3) ->
-      (forall (p:((pointer) A555)),
+      (forall (p:((pointer) A558)),
        ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p)))))))).
 Admitted.
 

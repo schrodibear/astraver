@@ -95,8 +95,12 @@ Save.
   (acc x_Z10_1 t2) = 2) /\ (acc y_Z10 t2) = (acc y_Z10 t2)) /\
   (not_assigns alloc x_Z10 x_Z10_1 (pset_singleton t2)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+red;intros.
+assert (p<> t2).
+apply pset_singleton_elim;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -189,7 +193,6 @@ Save.
   (valid alloc s).
 Proof.
 intuition; subst; auto.
-caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -221,7 +224,7 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -256,6 +259,6 @@ Save.
   (* File "struct.c", line 20, characters 13-25 *) result2 = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 

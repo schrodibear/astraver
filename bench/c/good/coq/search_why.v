@@ -70,11 +70,7 @@ Save.
   ((0 <= i /\ i < n -> (acc int_Z6 (shift t i)) = v)).
 Proof.
 intuition.
-assert (k=i1 \/ k<i1).
-  omega.
-intuition.
-subst; auto.
-apply H0 with k; auto.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -107,6 +103,12 @@ Save.
   (Zwf 0 (n - i0) (n - i)).
 Proof.
 intuition.
+subst.
+assert (k=i \/ k<i).
+  omega.
+intuition.
+subst; auto.
+apply H2 with k; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -201,11 +203,7 @@ Save.
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z7 (shift t i)) <> v))))).
 Proof.
 intuition.
-assert (k=i1\/ k < i1).
-  omega.
-inversion_clear H1.
-subst; auto.
-apply H0 with k;auto.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -238,8 +236,11 @@ Save.
   (Zwf 0 (n - i0) (n - i)).
 Proof.
 intuition.
-subst.
-apply H0 with i0; auto with *.
+assert (k=i\/ k < i).
+  omega.
+intuition.
+subst; auto.
+apply H2 with k;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -265,6 +266,8 @@ Save.
     (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z7 (shift t i)) <> v))))).
 Proof.
 intuition.
+subst.
+apply H2 with i0; auto with *.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

@@ -8,8 +8,7 @@ Require Export false_spec_why.
   (* File "false.c", line 16, characters 13-19 *) False.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_1 : 
@@ -20,8 +19,7 @@ Save.
   (valid alloc z).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_2 : 
@@ -37,23 +35,7 @@ Save.
   (valid alloc result0).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false2_impl_po_1 : 
@@ -65,8 +47,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false3_impl_po_1 : 
@@ -78,6 +59,4 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
+Admitted.

@@ -32,7 +32,7 @@ Proof.
 intuition.
 subst.
 unfold valid1_range in H2.
-generalize (H2 s0 alloc Pre4).
+generalize (H2 s0 alloc HW_2).
 intuition.
 Save.
 

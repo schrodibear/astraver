@@ -18,9 +18,6 @@ Require Export copy_spec_why.
    (n <= k /\ k < n -> (acc int_Z5 (shift t2 k)) = (acc int_Z4 (shift t1 k))))).
 Proof.
 intuition; subst; auto.
-assert (k=i1-1 \/ i1<=k). 
-  omega. 
-intuition; subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -53,6 +50,7 @@ Save.
   (valid alloc result0).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -88,7 +86,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -131,7 +129,10 @@ Save.
   (Zwf 0 i0 i).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+assert (k=i-1 \/ i<=k). 
+  omega. 
+intuition; subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -163,6 +164,5 @@ Save.
     (acc int_Z4 (shift t1 k)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

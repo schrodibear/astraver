@@ -865,8 +865,8 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid :
-  (A550:Set)
-  ((p:((pointer) A550))
+  (A550:Set) (A551:Set)
+  ((p:((pointer) A551))
    ((a1:alloc_table)
     ((a2:alloc_table)
      ((alloc_stack p a1 a2) ->
@@ -874,27 +874,27 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid_index :
-  (A551:Set)
-  ((p:((pointer) A551))
-   ((a1:alloc_table)
-    ((a2:alloc_table)
-     ((alloc_stack p a1 a2) ->
-      ((q:((pointer) A551))
-       ((i:Z) ((valid_index a1 q i) -> (valid_index a2 q i)))))))).
-Admitted.
-
-(*Why axiom*) Lemma alloc_stack_valid_range :
-  (A552:Set)
-  ((p:((pointer) A552))
+  (A552:Set) (A553:Set)
+  ((p:((pointer) A553))
    ((a1:alloc_table)
     ((a2:alloc_table)
      ((alloc_stack p a1 a2) ->
       ((q:((pointer) A552))
+       ((i:Z) ((valid_index a1 q i) -> (valid_index a2 q i)))))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_stack_valid_range :
+  (A554:Set) (A555:Set)
+  ((p:((pointer) A555))
+   ((a1:alloc_table)
+    ((a2:alloc_table)
+     ((alloc_stack p a1 a2) ->
+      ((q:((pointer) A554))
        ((i:Z) ((j:Z) ((valid_range a1 q i j) -> (valid_range a2 q i j))))))))).
 Admitted.
 
 (*Why logic*) Definition free_heap :
-  (A553:Set) ((pointer) A553) -> alloc_table -> alloc_table -> Prop.
+  (A556:Set) ((pointer) A556) -> alloc_table -> alloc_table -> Prop.
 Admitted.
 
 (*Why logic*) Definition free_stack :
@@ -902,22 +902,22 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma free_stack_heap :
-  (A554:Set)
+  (A557:Set)
   ((a1:alloc_table)
    ((a2:alloc_table)
     ((a3:alloc_table)
      ((free_stack a1 a2 a3) ->
-      ((p:((pointer) A554))
+      ((p:((pointer) A557))
        ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p)))))))).
 Admitted.
 
 (*Why axiom*) Lemma free_stack_stack :
-  (A555:Set)
+  (A558:Set)
   ((a1:alloc_table)
    ((a2:alloc_table)
     ((a3:alloc_table)
      ((free_stack a1 a2 a3) ->
-      ((p:((pointer) A555))
+      ((p:((pointer) A558))
        ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p)))))))).
 Admitted.
 

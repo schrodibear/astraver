@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.155 2005-11-18 14:54:06 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.156 2005-11-21 16:01:07 hubert Exp $ i*)
 
 
 open Format
@@ -1021,15 +1021,11 @@ let strong_invariants_for hvs =
   Ceffect.strong_invariants  
     (Hashtbl.fold
        (fun id (p,e1,e2) acc ->
-	  eprintf "struct effect %s : %a@\n fonction effect : %a@\n" id print_effects e2 print_effects hvs; 
 	  let l = add hvs e2 in
-	  List.iter (fun x ->eprintf "@[%a@]@\n"
-	    (print_list space (fun fmt v -> pp_print_string fmt (heap_var_name v))) x) l;
 	  let rec add_pred id p l acc = 
 	    match l with 
 	      | [] -> acc
 	      | a::l -> 
-		  eprintf "struct effect2 %s : %a@\n " id (print_list space (fun fmt x -> fprintf fmt "%s" (heap_var_name x))) a;
 		  let p' = subst a p in 
 		  make_and (strong_invariant id p') (add_pred id p l acc)
 	  in

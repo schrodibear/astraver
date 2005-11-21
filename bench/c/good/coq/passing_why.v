@@ -31,6 +31,12 @@ Save.
 Proof.
 intuition.
 subst; caduceus.
+red;intros.
+subst.
+rewrite acc_upd_neq;auto.
+assert (p<> x).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -58,11 +64,6 @@ Save.
                 (acc int_Z7_0 r) = 0 /\
                 (not_assigns alloc int_Z7 int_Z7_0 (pset_singleton r))),
   (valid alloc r).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -117,6 +118,12 @@ Save.
 Proof.
 intuition.
 subst; caduceus.
+red;intros.
+subst.
+rewrite acc_upd_neq;auto.
+assert (p<>x).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

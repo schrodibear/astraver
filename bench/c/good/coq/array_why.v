@@ -3,19 +3,6 @@
 
 Require Export array_spec_why.
 
-Proof.
-intuition; subst; auto with *.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
@@ -33,7 +20,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -58,6 +45,6 @@ Save.
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 

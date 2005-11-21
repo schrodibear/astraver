@@ -47,16 +47,6 @@ Save.
   (valid alloc0 result).
 Proof.
 intuition.
-subst; auto.
-red.
-intros.
-red in H7.
-apply H7.
-apply alloc_stack_valid with i alloc;auto.
-apply pset_singleton_intro.
-intro;subst.
-generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
-tauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -84,7 +74,15 @@ Save.
   (not_assigns alloc int_Z3 int_Z3_0 pset_empty).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+rewrite H7;auto.
+apply alloc_stack_valid with Z3 result alloc;auto.
+assert (p<> result).
+intro;subst.
+rewrite <- shift_zero in H8.
+generalize H8.
+apply fresh_not_valid;auto.
+apply pset_singleton_intro;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -109,6 +107,11 @@ Save.
   (* File "ref.c", line 6, characters 13-20 *) (acc int_Z3_0 p) = 1 /\
   (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton p)).
 Proof.
-intuition; subst; caduceus.
+intuition;subst;caduceus.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 

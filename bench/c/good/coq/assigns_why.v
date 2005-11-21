@@ -15,7 +15,11 @@ Require Export assigns_spec_why.
   size) /\ p = (shift p (size - size))).
 Proof.
 intuition.
-Admitted.
+replace (size-size) with 0.
+rewrite shift_zero.
+auto.
+omega.
+Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_2 : 
@@ -43,8 +47,9 @@ Admitted.
   (valid alloc mutable_p).
 Proof.
 intuition.
-clear H4; subst.
-auto.
+subst mutable_p.
+apply valid_range_valid_shift with 0 (size-1);auto.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -84,7 +89,18 @@ Save.
   (Zwf 0 mutable_size0 mutable_size).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+rewrite HW_7.
+rewrite acc_upd_neq;auto.
+subst mutable_p.
+apply pset_range_elim with (pset_singleton p) 0 (size-1);auto.
+omega.
+subst result.
+subst mutable_p0.
+subst mutable_p.
+subst mutable_size0.
+rewrite  shift_shift.
+auto with *.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -114,6 +130,5 @@ Save.
    (pset_range (pset_singleton p) 0 (size - 1))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
