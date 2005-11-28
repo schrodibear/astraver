@@ -29,7 +29,12 @@ Save.
   (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
+red;intros.
+subst;rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

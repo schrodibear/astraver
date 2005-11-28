@@ -6,8 +6,8 @@ Require Export queue_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   (valid alloc t).
 Proof.
@@ -17,14 +17,14 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   (valid alloc result).
 Proof.
@@ -36,19 +36,19 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   (valid alloc result0).
 Proof.
@@ -59,24 +59,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   (valid alloc result1).
 Proof.
@@ -87,29 +87,29 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   (valid alloc result2).
 Proof.
@@ -120,33 +120,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -155,37 +155,37 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (HW_16: (valid alloc q)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z7) Z9)),
-  forall (HW_17: contents_Z9_0 = (upd contents_Z9 q t)),
+  forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
+  forall (HW_17: contents_Z7_0 = (upd contents_Z7 q t)),
   (valid alloc q).
 Proof.
 intuition.
@@ -194,41 +194,41 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_8 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (HW_16: (valid alloc q)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z7) Z9)),
-  forall (HW_17: contents_Z9_0 = (upd contents_Z9 q t)),
+  forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
+  forall (HW_17: contents_Z7_0 = (upd contents_Z7 q t)),
   forall (HW_18: (valid alloc q)),
-  forall (length_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: length_Z9_0 = (upd length_Z9 q 5)),
+  forall (length_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: length_Z7_0 = (upd length_Z7 q 5)),
   (valid alloc q).
 Proof.
 intuition.
@@ -237,45 +237,45 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_9 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (HW_16: (valid alloc q)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z7) Z9)),
-  forall (HW_17: contents_Z9_0 = (upd contents_Z9 q t)),
+  forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
+  forall (HW_17: contents_Z7_0 = (upd contents_Z7 q t)),
   forall (HW_18: (valid alloc q)),
-  forall (length_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: length_Z9_0 = (upd length_Z9 q 5)),
+  forall (length_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: length_Z7_0 = (upd length_Z7 q 5)),
   forall (HW_20: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_21: first_Z9_0 = (upd first_Z9 q 0)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_21: first_Z7_0 = (upd first_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -284,49 +284,49 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_10 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (HW_16: (valid alloc q)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z7) Z9)),
-  forall (HW_17: contents_Z9_0 = (upd contents_Z9 q t)),
+  forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
+  forall (HW_17: contents_Z7_0 = (upd contents_Z7 q t)),
   forall (HW_18: (valid alloc q)),
-  forall (length_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: length_Z9_0 = (upd length_Z9 q 5)),
+  forall (length_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: length_Z7_0 = (upd length_Z7 q 5)),
   forall (HW_20: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_21: first_Z9_0 = (upd first_Z9 q 0)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_21: first_Z7_0 = (upd first_Z7 q 0)),
   forall (HW_22: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_23: last_Z9_0 = (upd last_Z9 q 0)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_23: last_Z7_0 = (upd last_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -335,53 +335,53 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_11 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (HW_16: (valid alloc q)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z7) Z9)),
-  forall (HW_17: contents_Z9_0 = (upd contents_Z9 q t)),
+  forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
+  forall (HW_17: contents_Z7_0 = (upd contents_Z7 q t)),
   forall (HW_18: (valid alloc q)),
-  forall (length_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: length_Z9_0 = (upd length_Z9 q 5)),
+  forall (length_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: length_Z7_0 = (upd length_Z7 q 5)),
   forall (HW_20: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_21: first_Z9_0 = (upd first_Z9 q 0)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_21: first_Z7_0 = (upd first_Z7 q 0)),
   forall (HW_22: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_23: last_Z9_0 = (upd last_Z9 q 0)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_23: last_Z7_0 = (upd last_Z7 q 0)),
   forall (HW_24: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_25: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -390,61 +390,61 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_12 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
-  forall (t: ((pointer) Z7)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
+  forall (t: ((pointer) Z5)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc t)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 t 0)),
-  forall (result: ((pointer) Z7)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_3: int_Z5_0 = (upd int_Z5 t 0)),
+  forall (result: ((pointer) Z5)),
   forall (HW_4: result = (shift t 1)),
   forall (HW_5: (valid alloc result)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (HW_6: int_Z7_1 = (upd int_Z7_0 result 0)),
-  forall (result0: ((pointer) Z7)),
+  forall (int_Z5_1: ((memory) Z Z5)),
+  forall (HW_6: int_Z5_1 = (upd int_Z5_0 result 0)),
+  forall (result0: ((pointer) Z5)),
   forall (HW_7: result0 = (shift t 2)),
   forall (HW_8: (valid alloc result0)),
-  forall (int_Z7_2: ((memory) Z Z7)),
-  forall (HW_9: int_Z7_2 = (upd int_Z7_1 result0 0)),
-  forall (result1: ((pointer) Z7)),
+  forall (int_Z5_2: ((memory) Z Z5)),
+  forall (HW_9: int_Z5_2 = (upd int_Z5_1 result0 0)),
+  forall (result1: ((pointer) Z5)),
   forall (HW_10: result1 = (shift t 3)),
   forall (HW_11: (valid alloc result1)),
-  forall (int_Z7_3: ((memory) Z Z7)),
-  forall (HW_12: int_Z7_3 = (upd int_Z7_2 result1 0)),
-  forall (result2: ((pointer) Z7)),
+  forall (int_Z5_3: ((memory) Z Z5)),
+  forall (HW_12: int_Z5_3 = (upd int_Z5_2 result1 0)),
+  forall (result2: ((pointer) Z5)),
   forall (HW_13: result2 = (shift t 4)),
   forall (HW_14: (valid alloc result2)),
-  forall (int_Z7_4: ((memory) Z Z7)),
-  forall (HW_15: int_Z7_4 = (upd int_Z7_3 result2 0)),
+  forall (int_Z5_4: ((memory) Z Z5)),
+  forall (HW_15: int_Z5_4 = (upd int_Z5_3 result2 0)),
   forall (HW_16: (valid alloc q)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z7) Z9)),
-  forall (HW_17: contents_Z9_0 = (upd contents_Z9 q t)),
+  forall (contents_Z7_0: ((memory) ((pointer) Z5) Z7)),
+  forall (HW_17: contents_Z7_0 = (upd contents_Z7 q t)),
   forall (HW_18: (valid alloc q)),
-  forall (length_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: length_Z9_0 = (upd length_Z9 q 5)),
+  forall (length_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: length_Z7_0 = (upd length_Z7 q 5)),
   forall (HW_20: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_21: first_Z9_0 = (upd first_Z9 q 0)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_21: first_Z7_0 = (upd first_Z7 q 0)),
   forall (HW_22: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_23: last_Z9_0 = (upd last_Z9 q 0)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_23: last_Z7_0 = (upd last_Z7 q 0)),
   forall (HW_24: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_25: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_25: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_26: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_27: full_Z9_0 = (upd full_Z9 q 1)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_27: full_Z7_0 = (upd full_Z7 q 1)),
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9_0 q) 0 ((acc length_Z9_0 q) - 1)) /\
-  0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9_0 q)) /\
-  0 <= (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9_0 q)).
+  (((valid_range alloc (acc contents_Z7_0 q) 0 ((acc length_Z7_0 q) - 1)) /\
+  0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7_0 q)) /\
+  0 <= (acc last_Z7_0 q) /\ (acc last_Z7_0 q) < (acc length_Z7_0 q)).
 Proof.
 intuition;subst;caduceus.
 Save.
@@ -452,20 +452,20 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   (valid alloc q).
 Proof.
@@ -475,24 +475,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -502,27 +502,27 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   (valid alloc q).
 Proof.
 intuition;subst;auto;caduceus.
@@ -531,31 +531,31 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   (valid alloc result1).
 Proof.
@@ -566,36 +566,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   (valid alloc q).
 Proof.
 intuition.
@@ -604,39 +604,39 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -645,42 +645,42 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   (valid alloc q).
 Proof.
@@ -690,46 +690,46 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_8 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -738,50 +738,50 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_9 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -791,53 +791,53 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_10 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_1 q)),
+  forall (HW_21: result5 = (acc first_Z7_1 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -847,56 +847,56 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_11 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_1 q)),
+  forall (HW_21: result5 = (acc first_Z7_1 q)),
   forall (HW_22: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_23: result6 = (acc last_Z9 q)),
+  forall (HW_23: result6 = (acc last_Z7 q)),
   forall (HW_24: result5 = result6),
   (valid alloc q).
 Proof.
@@ -907,69 +907,69 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_12 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_1 q)),
+  forall (HW_21: result5 = (acc first_Z7_1 q)),
   forall (HW_22: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_23: result6 = (acc last_Z9 q)),
+  forall (HW_23: result6 = (acc last_Z7 q)),
   forall (HW_24: result5 = result6),
   forall (HW_25: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_26: empty_Z9_0 = (upd empty_Z9 q 1)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z7 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q)) /\
-  (not_assigns alloc first_Z9 first_Z9_1 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_26: empty_Z7_0 = (upd empty_Z7 q 1)),
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+  (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_1 q) /\ (acc first_Z9_1 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7_1 q) /\ (acc first_Z7_1 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -997,56 +997,56 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_13 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_1 q)),
+  forall (HW_21: result5 = (acc first_Z7_1 q)),
   forall (HW_22: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_23: result6 = (acc last_Z9 q)),
+  forall (HW_23: result6 = (acc last_Z7 q)),
   forall (HW_27: result5 <> result6),
   (valid alloc q).
 Proof.
@@ -1057,69 +1057,69 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_14 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_15: result3 = result4),
   forall (HW_16: (valid alloc q)),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: first_Z9_1 = (upd first_Z9_0 q 0)),
+  forall (first_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: first_Z7_1 = (upd first_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_1 q)),
+  forall (HW_21: result5 = (acc first_Z7_1 q)),
   forall (HW_22: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_23: result6 = (acc last_Z9 q)),
+  forall (HW_23: result6 = (acc last_Z7 q)),
   forall (HW_27: result5 <> result6),
   forall (HW_28: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_29: empty_Z9_0 = (upd empty_Z9 q 0)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z7 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q)) /\
-  (not_assigns alloc first_Z9 first_Z9_1 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_29: empty_Z7_0 = (upd empty_Z7 q 0)),
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+  (not_assigns alloc first_Z7 first_Z7_1 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_1 q) /\ (acc first_Z9_1 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7_1 q) /\ (acc first_Z7_1 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -1147,42 +1147,42 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_15 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   (valid alloc q).
 Proof.
@@ -1193,47 +1193,47 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_16 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   forall (HW_31: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1243,50 +1243,50 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_17 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   forall (HW_31: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_34: result5 = (acc first_Z9_0 q)),
+  forall (HW_34: result5 = (acc first_Z7_0 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1296,53 +1296,53 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_18 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   forall (HW_31: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_34: result5 = (acc first_Z9_0 q)),
+  forall (HW_34: result5 = (acc first_Z7_0 q)),
   forall (HW_35: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_36: result6 = (acc last_Z9 q)),
+  forall (HW_36: result6 = (acc last_Z7 q)),
   forall (HW_37: result5 = result6),
   (valid alloc q).
 Proof.
@@ -1353,66 +1353,66 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_19 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   forall (HW_31: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_34: result5 = (acc first_Z9_0 q)),
+  forall (HW_34: result5 = (acc first_Z7_0 q)),
   forall (HW_35: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_36: result6 = (acc last_Z9 q)),
+  forall (HW_36: result6 = (acc last_Z7 q)),
   forall (HW_37: result5 = result6),
   forall (HW_38: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_39: empty_Z9_0 = (upd empty_Z9 q 1)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z7 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q)) /\
-  (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_39: empty_Z7_0 = (upd empty_Z7 q 1)),
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+  (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -1436,53 +1436,53 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_20 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   forall (HW_31: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_34: result5 = (acc first_Z9_0 q)),
+  forall (HW_34: result5 = (acc first_Z7_0 q)),
   forall (HW_35: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_36: result6 = (acc last_Z9 q)),
+  forall (HW_36: result6 = (acc last_Z7 q)),
   forall (HW_40: result5 <> result6),
   (valid alloc q).
 Proof.
@@ -1493,66 +1493,66 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_21 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc first_Z9 q)),
+  forall (HW_5: result0 = (acc first_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: first_Z9_0 = (upd first_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: first_Z7_0 = (upd first_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc int_Z7 result1)),
+  forall (HW_10: result2 = (acc int_Z5 result1)),
   forall (HW_11: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_12: result3 = (acc first_Z9_0 q)),
+  forall (HW_12: result3 = (acc first_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_14: result4 = (acc length_Z9 q)),
+  forall (HW_14: result4 = (acc length_Z7 q)),
   forall (HW_30: result3 <> result4),
   forall (HW_31: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: full_Z7_0 = (upd full_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_34: result5 = (acc first_Z9_0 q)),
+  forall (HW_34: result5 = (acc first_Z7_0 q)),
   forall (HW_35: (valid alloc q)),
   forall (result6: Z),
-  forall (HW_36: result6 = (acc last_Z9 q)),
+  forall (HW_36: result6 = (acc last_Z7 q)),
   forall (HW_40: result5 <> result6),
   forall (HW_41: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_42: empty_Z9_0 = (upd empty_Z9 q 0)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z7 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q)) /\
-  (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_42: empty_Z7_0 = (upd empty_Z7 q 0)),
+  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z7_0 q) = 0 /\
+  result2 = (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+  (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+  (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -1572,7 +1572,7 @@ assert (p<>q).
 apply pset_singleton_elim;auto.
 auto.
 rewrite acc_upd_eq in HW_30;auto.
-assert (1 + q # first_Z9 < q # length_Z9 \/ 1 + q # first_Z9 = q # length_Z9).
+assert (1 + q # first_Z7 < q # length_Z7 \/ 1 + q # first_Z7 = q # length_Z7).
 omega.
 intuition.
 Save.
@@ -1580,20 +1580,20 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   (valid alloc q).
 Proof.
@@ -1603,24 +1603,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1629,27 +1629,27 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   (valid alloc q).
 Proof.
 intuition;subst;auto;caduceus.
@@ -1658,31 +1658,31 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   (valid alloc result1).
 Proof.
@@ -1694,36 +1694,36 @@ Save.
 (*Why goal*) Lemma push_impl_po_5 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1734,39 +1734,39 @@ Save.
 (*Why goal*) Lemma push_impl_po_6 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1777,42 +1777,42 @@ Save.
 (*Why goal*) Lemma push_impl_po_7 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   (valid alloc q).
 Proof.
@@ -1824,46 +1824,46 @@ Save.
 (*Why goal*) Lemma push_impl_po_8 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1874,50 +1874,50 @@ Save.
 (*Why goal*) Lemma push_impl_po_9 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1928,53 +1928,53 @@ Save.
 (*Why goal*) Lemma push_impl_po_10 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_Z7 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -1985,56 +1985,56 @@ Save.
 (*Why goal*) Lemma push_impl_po_11 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_Z7 q)),
   forall (HW_22: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_23: result5 = (acc last_Z9_1 q)),
+  forall (HW_23: result5 = (acc last_Z7_1 q)),
   forall (HW_24: result4 = result5),
   (valid alloc q).
 Proof.
@@ -2046,71 +2046,71 @@ Save.
 (*Why goal*) Lemma push_impl_po_12 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_Z7 q)),
   forall (HW_22: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_23: result5 = (acc last_Z9_1 q)),
+  forall (HW_23: result5 = (acc last_Z7_1 q)),
   forall (HW_24: result4 = result5),
   forall (HW_25: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_26: full_Z9_0 = (upd full_Z9 q 1)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z7_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  ((((not_assigns alloc last_Z9 last_Z9_1 (pset_singleton q)) /\
-  (not_assigns alloc int_Z7 int_Z7_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_26: full_Z7_0 = (upd full_Z7 q 1)),
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
+  (not_assigns alloc int_Z5 int_Z5_0
+   (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
+  (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_1 q) /\ (acc last_Z9_1 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7_1 q) /\ (acc last_Z7_1 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -2125,7 +2125,7 @@ apply pset_singleton_elim;auto.
 auto.
 red;intros.
 rewrite acc_upd_neq;auto.
-assert (p<> shift (q # contents_Z9) (q # last_Z9) ).
+assert (p<> shift (q # contents_Z7) (q # last_Z7) ).
 apply pset_singleton_elim;auto.
 auto.
 red;intros.
@@ -2144,56 +2144,56 @@ Save.
 (*Why goal*) Lemma push_impl_po_13 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_Z7 q)),
   forall (HW_22: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_23: result5 = (acc last_Z9_1 q)),
+  forall (HW_23: result5 = (acc last_Z7_1 q)),
   forall (HW_27: result4 <> result5),
   (valid alloc q).
 Proof.
@@ -2205,71 +2205,71 @@ Save.
 (*Why goal*) Lemma push_impl_po_14 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_15: result2 = result3),
   forall (HW_16: (valid alloc q)),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_17: last_Z9_1 = (upd last_Z9_0 q 0)),
+  forall (last_Z7_1: ((memory) Z Z7)),
+  forall (HW_17: last_Z7_1 = (upd last_Z7_0 q 0)),
   forall (HW_18: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_19: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_19: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_20: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_Z7 q)),
   forall (HW_22: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_23: result5 = (acc last_Z9_1 q)),
+  forall (HW_23: result5 = (acc last_Z7_1 q)),
   forall (HW_27: result4 <> result5),
   forall (HW_28: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_29: full_Z9_0 = (upd full_Z9 q 0)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z7_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  ((((not_assigns alloc last_Z9 last_Z9_1 (pset_singleton q)) /\
-  (not_assigns alloc int_Z7 int_Z7_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_29: full_Z7_0 = (upd full_Z7 q 0)),
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  ((((not_assigns alloc last_Z7 last_Z7_1 (pset_singleton q)) /\
+  (not_assigns alloc int_Z5 int_Z5_0
+   (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
+  (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_1 q) /\ (acc last_Z9_1 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7_1 q) /\ (acc last_Z7_1 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -2284,7 +2284,7 @@ apply pset_singleton_elim;auto.
 auto.
 red;intros.
 rewrite acc_upd_neq;auto.
-assert (p<> shift (q # contents_Z9) (q # last_Z9)).
+assert (p<> shift (q # contents_Z7) (q # last_Z7)).
 apply pset_singleton_elim;auto.
 auto.
 red;intros.
@@ -2303,42 +2303,42 @@ Save.
 (*Why goal*) Lemma push_impl_po_15 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   (valid alloc q).
 Proof.
@@ -2350,47 +2350,47 @@ Save.
 (*Why goal*) Lemma push_impl_po_16 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   forall (HW_31: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   (valid alloc q).
 Proof.
 intuition.
@@ -2401,50 +2401,50 @@ Save.
 (*Why goal*) Lemma push_impl_po_17 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   forall (HW_31: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_34: result4 = (acc first_Z9 q)),
+  forall (HW_34: result4 = (acc first_Z7 q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -2455,53 +2455,53 @@ Save.
 (*Why goal*) Lemma push_impl_po_18 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   forall (HW_31: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_34: result4 = (acc first_Z9 q)),
+  forall (HW_34: result4 = (acc first_Z7 q)),
   forall (HW_35: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_36: result5 = (acc last_Z9_0 q)),
+  forall (HW_36: result5 = (acc last_Z7_0 q)),
   forall (HW_37: result4 = result5),
   (valid alloc q).
 Proof.
@@ -2513,68 +2513,68 @@ Save.
 (*Why goal*) Lemma push_impl_po_19 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   forall (HW_31: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_34: result4 = (acc first_Z9 q)),
+  forall (HW_34: result4 = (acc first_Z7 q)),
   forall (HW_35: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_36: result5 = (acc last_Z9_0 q)),
+  forall (HW_36: result5 = (acc last_Z7_0 q)),
   forall (HW_37: result4 = result5),
   forall (HW_38: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_39: full_Z9_0 = (upd full_Z9 q 1)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z7_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  ((((not_assigns alloc last_Z9 last_Z9_0 (pset_singleton q)) /\
-  (not_assigns alloc int_Z7 int_Z7_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_39: full_Z7_0 = (upd full_Z7 q 1)),
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
+  (not_assigns alloc int_Z5 int_Z5_0
+   (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
+  (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7_0 q) /\ (acc last_Z7_0 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -2585,7 +2585,7 @@ apply pset_singleton_elim;auto.
 auto.
 red;intros.
 rewrite acc_upd_neq;auto.
-assert (p<> shift (q # contents_Z9) (q # last_Z9)).
+assert (p<> shift (q # contents_Z7) (q # last_Z7)).
 apply pset_singleton_elim;auto.
 auto.
 red;intros.
@@ -2604,53 +2604,53 @@ Save.
 (*Why goal*) Lemma push_impl_po_20 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   forall (HW_31: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_34: result4 = (acc first_Z9 q)),
+  forall (HW_34: result4 = (acc first_Z7 q)),
   forall (HW_35: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_36: result5 = (acc last_Z9_0 q)),
+  forall (HW_36: result5 = (acc last_Z7_0 q)),
   forall (HW_40: result4 <> result5),
   (valid alloc q).
 Proof.
@@ -2662,68 +2662,68 @@ Save.
 (*Why goal*) Lemma push_impl_po_21 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: (valid alloc q)),
-  forall (result: ((pointer) Z7)),
-  forall (HW_3: result = (acc contents_Z9 q)),
+  forall (result: ((pointer) Z5)),
+  forall (HW_3: result = (acc contents_Z7 q)),
   forall (HW_4: (valid alloc q)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc last_Z9 q)),
+  forall (HW_5: result0 = (acc last_Z7 q)),
   forall (HW_6: (valid alloc q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_7: last_Z9_0 = (upd last_Z9 q (1 + result0))),
-  forall (result1: ((pointer) Z7)),
+  forall (last_Z7_0: ((memory) Z Z7)),
+  forall (HW_7: last_Z7_0 = (upd last_Z7 q (1 + result0))),
+  forall (result1: ((pointer) Z5)),
   forall (HW_8: result1 = (shift result result0)),
   forall (HW_9: (valid alloc result1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (HW_10: int_Z7_0 = (upd int_Z7 result1 c)),
+  forall (int_Z5_0: ((memory) Z Z5)),
+  forall (HW_10: int_Z5_0 = (upd int_Z5 result1 c)),
   forall (HW_11: (valid alloc q)),
   forall (result2: Z),
-  forall (HW_12: result2 = (acc last_Z9_0 q)),
+  forall (HW_12: result2 = (acc last_Z7_0 q)),
   forall (HW_13: (valid alloc q)),
   forall (result3: Z),
-  forall (HW_14: result3 = (acc length_Z9 q)),
+  forall (HW_14: result3 = (acc length_Z7 q)),
   forall (HW_30: result2 <> result3),
   forall (HW_31: (valid alloc q)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_32: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (HW_32: empty_Z7_0 = (upd empty_Z7 q 0)),
   forall (HW_33: (valid alloc q)),
   forall (result4: Z),
-  forall (HW_34: result4 = (acc first_Z9 q)),
+  forall (HW_34: result4 = (acc first_Z7 q)),
   forall (HW_35: (valid alloc q)),
   forall (result5: Z),
-  forall (HW_36: result5 = (acc last_Z9_0 q)),
+  forall (HW_36: result5 = (acc last_Z7_0 q)),
   forall (HW_40: result4 <> result5),
   forall (HW_41: (valid alloc q)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_42: full_Z9_0 = (upd full_Z9 q 0)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z7_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  ((((not_assigns alloc last_Z9 last_Z9_0 (pset_singleton q)) /\
-  (not_assigns alloc int_Z7 int_Z7_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+  forall (full_Z7_0: ((memory) Z Z7)),
+  forall (HW_42: full_Z7_0 = (upd full_Z7 q 0)),
+  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z7_0 q) = 0 /\
+  (acc int_Z5_0 (shift (acc contents_Z7 q) (acc last_Z7 q))) = c) /\
+  ((((not_assigns alloc last_Z7 last_Z7_0 (pset_singleton q)) /\
+  (not_assigns alloc int_Z5 int_Z5_0
+   (pset_singleton (shift (acc contents_Z7 q) (acc last_Z7 q))))) /\
+  (not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q))) /\
+  (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7_0 q) /\ (acc last_Z7_0 q) < (acc length_Z7 q)).
 Proof.
 intuition;subst;caduceus.
 auto.
@@ -2734,7 +2734,7 @@ apply pset_singleton_elim;auto.
 auto.
 red;intros.
 rewrite acc_upd_neq;auto.
-assert (p<>shift (q # contents_Z9) (q # last_Z9) ).
+assert (p<>shift (q # contents_Z7) (q # last_Z7) ).
 apply pset_singleton_elim;auto.
 auto.
 red;intros.
@@ -2748,35 +2748,35 @@ assert (p<>q).
 apply pset_singleton_elim;auto.
 auto.
 rewrite acc_upd_eq in HW_30;auto.
-assert (1 + q # last_Z9 = q # length_Z9 \/ 1 + q # last_Z9 < q # length_Z9).
+assert (1 + q # last_Z7 = q # length_Z7 \/ 1 + q # last_Z7 < q # length_Z7).
 omega.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_1 : 
-  forall (q1: ((pointer) Z9)),
+  forall (q1: ((pointer) Z7)),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
-                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z9 q) = 0) /\
+                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z7 q) = 0) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
-  ((* File "queue.c", line 33, characters 14-22 *) (acc empty_Z9 q) = 0 /\
+  ((* File "queue.c", line 33, characters 14-22 *) (acc empty_Z7 q) = 0 /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q))) /\
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q))) /\
   (valid_range alloc q 0 0).
 Proof.
 intuition.
@@ -2784,50 +2784,50 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_2 : 
-  forall (q1: ((pointer) Z9)),
+  forall (q1: ((pointer) Z7)),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
-                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z9 q) = 0) /\
+                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z7 q) = 0) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (result: Z),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (full_Z9_0: ((memory) Z Z9)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_3: (* File "queue.c", line 35, characters 13-60 *)
-                ((acc full_Z9_0 q) = 0 /\ result =
-                (acc int_Z7 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-                (((not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q)) /\
-                (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+                ((acc full_Z7_0 q) = 0 /\ result =
+                (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+                (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
+                (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))),
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))),
   (valid alloc q1).
 Proof.
 intuition.
@@ -2835,58 +2835,58 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_3 : 
-  forall (q1: ((pointer) Z9)),
+  forall (q1: ((pointer) Z7)),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z7) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_Z7: ((memory) ((pointer) Z5) Z7)),
+  forall (empty_Z7: ((memory) Z Z7)),
+  forall (first_Z7: ((memory) Z Z7)),
+  forall (full_Z7: ((memory) Z Z7)),
+  forall (int_Z5: ((memory) Z Z5)),
+  forall (last_Z7: ((memory) Z Z7)),
+  forall (length_Z7: ((memory) Z Z7)),
+  forall (q: ((pointer) Z7)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
-                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z9 q) = 0) /\
+                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z7 q) = 0) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (HW_2: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
   forall (result: Z),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (full_Z9_0: ((memory) Z Z9)),
+  forall (empty_Z7_0: ((memory) Z Z7)),
+  forall (first_Z7_0: ((memory) Z Z7)),
+  forall (full_Z7_0: ((memory) Z Z7)),
   forall (HW_3: (* File "queue.c", line 35, characters 13-60 *)
-                ((acc full_Z9_0 q) = 0 /\ result =
-                (acc int_Z7 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-                (((not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q)) /\
-                (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
+                ((acc full_Z7_0 q) = 0 /\ result =
+                (acc int_Z5 (shift (acc contents_Z7 q) (acc first_Z7 q)))) /\
+                (((not_assigns alloc full_Z7 full_Z7_0 (pset_singleton q)) /\
+                (not_assigns alloc first_Z7 first_Z7_0 (pset_singleton q))) /\
+                (not_assigns alloc empty_Z7 empty_Z7_0 (pset_singleton q))) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))),
+                (((valid_range alloc (acc contents_Z7 q) 0
+                   ((acc length_Z7 q) - 1)) /\
+                0 <= (acc first_Z7_0 q) /\ (acc first_Z7_0 q) <
+                (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
+                (acc last_Z7 q) < (acc length_Z7 q))),
   forall (HW_4: (valid alloc q1)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc empty_Z9_0 q1)),
-  (* File "queue.c", line 46, characters 13-39 *) result0 = (acc empty_Z9 q1) /\
+  forall (HW_5: result0 = (acc empty_Z7_0 q1)),
+  (* File "queue.c", line 46, characters 13-39 *) result0 = (acc empty_Z7 q1) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
+  (acc first_Z7_0 q) /\ (acc first_Z7_0 q) < (acc length_Z7 q)) /\ 0 <=
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
 Proof.
 intuition.
 subst;auto.

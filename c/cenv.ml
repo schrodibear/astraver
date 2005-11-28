@@ -197,12 +197,19 @@ let make_zone ty =
 let rec type_type_why ty =
   match ty.ctype_node with
     | Tint _ | Tenum _ -> Int
-    | Tfloat _ -> Float
+    | Tfloat _ -> Float	
     | Tarray (ty,_)  
     | Tpointer ty -> 
-	let z = make_zone ty in
-	z.type_why_zone <- type_type_why ty;
-	Pointer z
+	begin match ty.ctype_node with 
+	  | Tstruct s -> 
+	      let z = make_zone ty in
+	      z.type_why_zone <- Why_Logic s;
+	      Pointer z
+	  | _ ->
+	      let z = make_zone ty in
+	      z.type_why_zone <- type_type_why ty;
+	      Pointer z
+	end
     | Tvoid -> Unit
     | Tfun (_,ty) -> type_type_why ty
     | Tvar v -> 
@@ -216,8 +223,9 @@ let rec type_type_why ty =
     | Tunion _ -> 
 	let z = make_zone ty in
 	Pointer z
-    | Tstruct _ -> 
+    | Tstruct s -> 
 	let z = make_zone ty in
+	z.type_why_zone <- Why_Logic s;
 	Pointer z
 
 

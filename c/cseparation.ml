@@ -23,7 +23,8 @@ open Cenv
 
 let rec type_why_for_term t = 
   match t.nterm_node with
-    | NTconstant c -> Unit
+    | NTconstant (IntConstant _) -> Int     
+    | NTconstant (FloatConstant _) -> Float 
     | NTvar v -> v.var_why_type
     | NTapp (f,l) -> f.logic_why_type
     | NTunop (Uminus,t) | NTunop (Utilde,t)  -> type_why_for_term t
@@ -412,7 +413,7 @@ let rec heap_var (ty : Info.why_type) =
     | Info.Int -> "int" 
     | Info.Float ->  "real"
     | Unit -> assert false
-    | Why_Logic s ->  assert false
+    | Why_Logic s ->  s
     | Memory(t,z) -> assert false
 
 let rec heap_field_var (f : string) (ty : Info.why_type) =

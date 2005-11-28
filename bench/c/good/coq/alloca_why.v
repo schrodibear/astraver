@@ -294,10 +294,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
-  forall (u: ((pointer) Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   4 >= 1.
 Proof.
 intuition.
@@ -306,10 +306,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
-  forall (u: ((pointer) Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -326,11 +326,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z3: ((memory) Z Z3)),
-  forall (u: ((pointer) Z11)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -353,11 +353,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z3: ((memory) Z Z3)),
-  forall (u: ((pointer) Z11)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -385,11 +385,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z3: ((memory) Z Z3)),
-  forall (u: ((pointer) Z11)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -422,11 +422,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z3: ((memory) Z Z3)),
-  forall (u: ((pointer) Z11)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -453,7 +453,7 @@ Save.
   forall (HW_13: (valid alloc0 result2)),
   forall (int_Z3_3: ((memory) Z Z3)),
   forall (HW_14: int_Z3_3 = (upd int_Z3_2 result2 4)),
-  forall (result3: ((pointer) Z11)),
+  forall (result3: ((pointer) Z10)),
   forall (HW_15: result3 = (shift u 2)),
   (valid alloc0 result3).
 Proof.
@@ -467,11 +467,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z3: ((memory) Z Z3)),
-  forall (u: ((pointer) Z11)),
+  forall (u: ((pointer) Z10)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
-                (acc int_Z11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
+                (acc int_Z10 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
   forall (result: ((pointer) Z3)),
   forall (alloc0: alloc_table),
@@ -498,11 +498,11 @@ Save.
   forall (HW_13: (valid alloc0 result2)),
   forall (int_Z3_3: ((memory) Z Z3)),
   forall (HW_14: int_Z3_3 = (upd int_Z3_2 result2 4)),
-  forall (result3: ((pointer) Z11)),
+  forall (result3: ((pointer) Z10)),
   forall (HW_15: result3 = (shift u 2)),
   forall (HW_16: (valid alloc0 result3)),
   forall (result4: Z),
-  forall (HW_17: result4 = (acc int_Z11 result3)),
+  forall (HW_17: result4 = (acc int_Z10 result3)),
   (* File "alloca.c", line 18, characters 13-26 *) result4 = 12.
 Proof.
 intuition.

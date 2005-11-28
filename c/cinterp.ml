@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.156 2005-11-21 16:01:07 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.157 2005-11-28 16:17:07 hubert Exp $ i*)
 
 
 open Format
@@ -1027,7 +1027,8 @@ let strong_invariants_for hvs =
 	      | [] -> acc
 	      | a::l -> 
 		  let p' = subst a p in 
-		  make_and (strong_invariant id p') (add_pred id p l acc)
+		  let p'' = interp_predicate None "" p' in
+		  make_and p'' (add_pred id p l acc)
 	  in
 	  add_pred id p l acc)
        Ceffect.invariants_for_struct LTrue)

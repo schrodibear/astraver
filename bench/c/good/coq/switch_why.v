@@ -2867,7 +2867,6 @@ Save.
   (* File "switch.c", line 94, characters 13-31 *) ((x = 1 -> y = 1)).
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -2879,9 +2878,6 @@ Proof.
 intuition.
 Save.
 
-Proof.
-intuition.
-Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f6_impl_po_1 : 

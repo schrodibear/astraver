@@ -62,11 +62,12 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
-  forall (u: ((pointer) Z8)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z5) /\
-                (valid1 d_Z8) /\ (separation2 d_Z8 d_Z8) /\
-                (valid1_range b_Z5 5)),
+  forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
+  forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
+                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+                (valid1_range b_Z2 5)),
   (valid alloc u).
 Proof.
 intuition.
@@ -75,31 +76,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
-  forall (u: ((pointer) Z8)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z5) /\
-                (valid1 d_Z8) /\ (separation2 d_Z8 d_Z8) /\
-                (valid1_range b_Z5 5)),
+  forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
+  forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
+                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+                (valid1_range b_Z2 5)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
-  forall (HW_3: result = (acc d_Z8 u)),
+  forall (HW_3: result = (acc d_Z7 u)),
   (valid alloc result).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
-  forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
-  forall (u: ((pointer) Z8)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z5) /\
-                (valid1 d_Z8) /\ (separation2 d_Z8 d_Z8) /\
-                (valid1_range b_Z5 5)),
+  forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
+                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+                (valid1_range b_Z2 5)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
-  forall (HW_3: result = (acc d_Z8 u)),
+  forall (HW_3: result = (acc d_Z7 u)),
   forall (HW_4: (valid alloc result)),
   forall (result0: ((pointer) Z0)),
   forall (HW_5: result0 = (acc b_Z2 result)),
@@ -110,22 +113,21 @@ Proof.
 intuition.
 subst.
 unfold valid1_range in H4.
-generalize (H4 (u#d) alloc Pre6);intuition.
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
-  forall (d_Z8: ((memory) ((pointer) Z2) Z8)),
+  forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (u: ((pointer) Z8)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z5) /\
-                (valid1 d_Z8) /\ (separation2 d_Z8 d_Z8) /\
-                (valid1_range b_Z5 5)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
+                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+                (valid1_range b_Z2 5)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
-  forall (HW_3: result = (acc d_Z8 u)),
+  forall (HW_3: result = (acc d_Z7 u)),
   forall (HW_4: (valid alloc result)),
   forall (result0: ((pointer) Z0)),
   forall (HW_5: result0 = (acc b_Z2 result)),

@@ -6,17 +6,17 @@ Require Export separation_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (p1_Z67: ((memory) ((pointer) Z8) Z67)),
-  forall (p2_Z67: ((memory) ((pointer) Z9) Z67)),
-  forall (u1: ((pointer) Z67)),
-  forall (u2: ((pointer) Z67)),
+  forall (p1_Z57: ((memory) ((pointer) Z7) Z57)),
+  forall (p2_Z57: ((memory) ((pointer) Z8) Z57)),
+  forall (u1: ((pointer) Z57)),
+  forall (u2: ((pointer) Z57)),
   forall (HW_1: ~((base_addr u2) = (base_addr u1)) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
-                (valid1_range p2_Z67 5) /\ (valid1_range p1_Z67 5) /\
-                (valid1 p2_Z67) /\ (valid1 p1_Z67)),
+                (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\
+                (valid1 p2_Z57) /\ (valid1 p1_Z57)),
   (* File "separation.c", line 46, characters 5-14 *) (valid alloc u1) /\
-  (valid1_range p2_Z67 5) /\ (valid1_range p1_Z67 5) /\ (valid1 p2_Z67) /\
-  (valid1 p1_Z67).
+  (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\
+  (valid1 p1_Z57).
 Proof.
 intuition.
 Save.
@@ -24,34 +24,34 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (int_Z7: ((memory) Z Z7)),
   forall (int_Z8: ((memory) Z Z8)),
-  forall (int_Z9: ((memory) Z Z9)),
-  forall (p1_Z67: ((memory) ((pointer) Z8) Z67)),
-  forall (p2_Z67: ((memory) ((pointer) Z9) Z67)),
-  forall (u1: ((pointer) Z67)),
-  forall (u2: ((pointer) Z67)),
-  forall (v1_Z67: ((memory) Z Z67)),
-  forall (v2_Z67: ((memory) Z Z67)),
+  forall (p1_Z57: ((memory) ((pointer) Z7) Z57)),
+  forall (p2_Z57: ((memory) ((pointer) Z8) Z57)),
+  forall (u1: ((pointer) Z57)),
+  forall (u2: ((pointer) Z57)),
+  forall (v1_Z57: ((memory) Z Z57)),
+  forall (v2_Z57: ((memory) Z Z57)),
   forall (HW_1: ~((base_addr u2) = (base_addr u1)) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
-                (valid1_range p2_Z67 5) /\ (valid1_range p1_Z67 5) /\
-                (valid1 p2_Z67) /\ (valid1 p1_Z67)),
+                (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\
+                (valid1 p2_Z57) /\ (valid1 p1_Z57)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
-                (valid alloc u1) /\ (valid1_range p2_Z67 5) /\
-                (valid1_range p1_Z67 5) /\ (valid1 p2_Z67) /\ (valid1 p1_Z67)),
+                (valid alloc u1) /\ (valid1_range p2_Z57 5) /\
+                (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\ (valid1 p1_Z57)),
+  forall (int_Z7_0: ((memory) Z Z7)),
   forall (int_Z8_0: ((memory) Z Z8)),
-  forall (int_Z9_0: ((memory) Z Z9)),
-  forall (v1_Z67_0: ((memory) Z Z67)),
-  forall (v2_Z67_0: ((memory) Z Z67)),
-  forall (HW_3: (((not_assigns alloc v2_Z67 v2_Z67_0 (pset_singleton u1)) /\
-                (not_assigns alloc v1_Z67 v1_Z67_0 (pset_singleton u1))) /\
-                (not_assigns alloc int_Z9 int_Z9_0
-                 (pset_range (pset_singleton (acc p2_Z67 u1)) 0 4))) /\
+  forall (v1_Z57_0: ((memory) Z Z57)),
+  forall (v2_Z57_0: ((memory) Z Z57)),
+  forall (HW_3: (((not_assigns alloc v2_Z57 v2_Z57_0 (pset_singleton u1)) /\
+                (not_assigns alloc v1_Z57 v1_Z57_0 (pset_singleton u1))) /\
                 (not_assigns alloc int_Z8 int_Z8_0
-                 (pset_range (pset_singleton (acc p1_Z67 u1)) 0 4))),
+                 (pset_range (pset_singleton (acc p2_Z57 u1)) 0 4))) /\
+                (not_assigns alloc int_Z7 int_Z7_0
+                 (pset_range (pset_singleton (acc p1_Z57 u1)) 0 4))),
   (* File "separation.c", line 46, characters 5-14 *) (valid alloc u2) /\
-  (valid1_range p2_Z67 5) /\ (valid1_range p1_Z67 5) /\ (valid1 p2_Z67) /\
-  (valid1 p1_Z67).
+  (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\
+  (valid1 p1_Z57).
 Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
@@ -59,112 +59,106 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
+  forall (int_Z7: ((memory) Z Z7)),
   forall (int_Z8: ((memory) Z Z8)),
-  forall (int_Z9: ((memory) Z Z9)),
-  forall (p1_Z67: ((memory) ((pointer) Z8) Z67)),
-  forall (p2_Z67: ((memory) ((pointer) Z9) Z67)),
-  forall (u1: ((pointer) Z67)),
-  forall (u2: ((pointer) Z67)),
-  forall (v1_Z67: ((memory) Z Z67)),
-  forall (v2_Z67: ((memory) Z Z67)),
+  forall (p1_Z57: ((memory) ((pointer) Z7) Z57)),
+  forall (p2_Z57: ((memory) ((pointer) Z8) Z57)),
+  forall (u1: ((pointer) Z57)),
+  forall (u2: ((pointer) Z57)),
+  forall (v1_Z57: ((memory) Z Z57)),
+  forall (v2_Z57: ((memory) Z Z57)),
   forall (HW_1: ~((base_addr u2) = (base_addr u1)) /\
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
-                (valid1_range p2_Z67 5) /\ (valid1_range p1_Z67 5) /\
-                (valid1 p2_Z67) /\ (valid1 p1_Z67)),
+                (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\
+                (valid1 p2_Z57) /\ (valid1 p1_Z57)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
-                (valid alloc u1) /\ (valid1_range p2_Z67 5) /\
-                (valid1_range p1_Z67 5) /\ (valid1 p2_Z67) /\ (valid1 p1_Z67)),
+                (valid alloc u1) /\ (valid1_range p2_Z57 5) /\
+                (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\ (valid1 p1_Z57)),
+  forall (int_Z7_0: ((memory) Z Z7)),
   forall (int_Z8_0: ((memory) Z Z8)),
-  forall (int_Z9_0: ((memory) Z Z9)),
-  forall (v1_Z67_0: ((memory) Z Z67)),
-  forall (v2_Z67_0: ((memory) Z Z67)),
-  forall (HW_3: (((not_assigns alloc v2_Z67 v2_Z67_0 (pset_singleton u1)) /\
-                (not_assigns alloc v1_Z67 v1_Z67_0 (pset_singleton u1))) /\
-                (not_assigns alloc int_Z9 int_Z9_0
-                 (pset_range (pset_singleton (acc p2_Z67 u1)) 0 4))) /\
+  forall (v1_Z57_0: ((memory) Z Z57)),
+  forall (v2_Z57_0: ((memory) Z Z57)),
+  forall (HW_3: (((not_assigns alloc v2_Z57 v2_Z57_0 (pset_singleton u1)) /\
+                (not_assigns alloc v1_Z57 v1_Z57_0 (pset_singleton u1))) /\
                 (not_assigns alloc int_Z8 int_Z8_0
-                 (pset_range (pset_singleton (acc p1_Z67 u1)) 0 4))),
+                 (pset_range (pset_singleton (acc p2_Z57 u1)) 0 4))) /\
+                (not_assigns alloc int_Z7 int_Z7_0
+                 (pset_range (pset_singleton (acc p1_Z57 u1)) 0 4))),
   forall (HW_4: (* File "separation.c", line 46, characters 5-14 *)
-                (valid alloc u2) /\ (valid1_range p2_Z67 5) /\
-                (valid1_range p1_Z67 5) /\ (valid1 p2_Z67) /\ (valid1 p1_Z67)),
+                (valid alloc u2) /\ (valid1_range p2_Z57 5) /\
+                (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\ (valid1 p1_Z57)),
+  forall (int_Z7_1: ((memory) Z Z7)),
   forall (int_Z8_1: ((memory) Z Z8)),
-  forall (int_Z9_1: ((memory) Z Z9)),
-  forall (v1_Z67_1: ((memory) Z Z67)),
-  forall (v2_Z67_1: ((memory) Z Z67)),
-  forall (HW_5: (((not_assigns alloc v2_Z67_0 v2_Z67_1 (pset_singleton u2)) /\
-                (not_assigns alloc v1_Z67_0 v1_Z67_1 (pset_singleton u2))) /\
-                (not_assigns alloc int_Z9_0 int_Z9_1
-                 (pset_range (pset_singleton (acc p2_Z67 u2)) 0 4))) /\
+  forall (v1_Z57_1: ((memory) Z Z57)),
+  forall (v2_Z57_1: ((memory) Z Z57)),
+  forall (HW_5: (((not_assigns alloc v2_Z57_0 v2_Z57_1 (pset_singleton u2)) /\
+                (not_assigns alloc v1_Z57_0 v1_Z57_1 (pset_singleton u2))) /\
                 (not_assigns alloc int_Z8_0 int_Z8_1
-                 (pset_range (pset_singleton (acc p1_Z67 u2)) 0 4))),
-  (((not_assigns alloc v2_Z67 v2_Z67_1
+                 (pset_range (pset_singleton (acc p2_Z57 u2)) 0 4))) /\
+                (not_assigns alloc int_Z7_0 int_Z7_1
+                 (pset_range (pset_singleton (acc p1_Z57 u2)) 0 4))),
+  (((not_assigns alloc v2_Z57 v2_Z57_1
      (pset_union (pset_singleton u2) (pset_singleton u1))) /\
-  (not_assigns alloc v1_Z67 v1_Z67_1
+  (not_assigns alloc v1_Z57 v1_Z57_1
    (pset_union (pset_singleton u2) (pset_singleton u1)))) /\
-  (not_assigns alloc int_Z9 int_Z9_1
-   (pset_union (pset_range (pset_singleton (acc p2_Z67 u2)) 0 4)
-    (pset_range (pset_singleton (acc p2_Z67 u1)) 0 4)))) /\
   (not_assigns alloc int_Z8 int_Z8_1
-   (pset_union (pset_range (pset_singleton (acc p1_Z67 u2)) 0 4)
-    (pset_range (pset_singleton (acc p1_Z67 u1)) 0 4))).
+   (pset_union (pset_range (pset_singleton (acc p2_Z57 u2)) 0 4)
+    (pset_range (pset_singleton (acc p2_Z57 u1)) 0 4)))) /\
+  (not_assigns alloc int_Z7 int_Z7_1
+   (pset_union (pset_range (pset_singleton (acc p1_Z57 u2)) 0 4)
+    (pset_range (pset_singleton (acc p1_Z57 u1)) 0 4))).
 Proof.
 intuition.
-apply not_assigns_trans with v2_0.
+apply not_assigns_trans with v2_Z57_0.
 unfold not_assigns;intros.
-apply H21;auto.
+apply H14;auto.
 apply pset_union_elim2 with (pset_singleton u2);auto.
 unfold not_assigns;intros.
-apply H28;auto.
+apply H19;auto.
 apply pset_union_elim1 with (pset_singleton u1);auto.
-apply not_assigns_trans with v1_0.
-unfold not_assigns;intros.
-apply H22;auto.
-apply pset_union_elim2 with (pset_singleton u2);auto.
-unfold not_assigns;intros.
-apply H29;auto.
-apply pset_union_elim1 with (pset_singleton u1);auto.
-apply not_assigns_trans with intP0.
+apply not_assigns_trans with v1_Z57_0.
 unfold not_assigns;intros.
 apply H18;auto.
-generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 4) 
-(pset_union (pset_range (pset_singleton (u2 # p1)) 0 4)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4)))
-p H30);intro.
-apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p1)) 0 4);auto.
+apply pset_union_elim2 with (pset_singleton u2);auto.
 unfold not_assigns;intros.
-apply H27;auto.
-generalize (pset_union_elim1 (pset_range (pset_singleton (u2 # p2)) 0 4) 
-(pset_union (pset_range (pset_singleton (u2 # p1)) 0 4)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4)))
-p H30);intro.
-generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 4) 
-(pset_union (pset_range (pset_singleton (u2 # p1)) 0 4)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4)))
-p H30);intro.
-generalize (pset_union_elim1 
-(pset_range (pset_singleton (u2 # p1)) 0 4)
-(pset_union (pset_range (pset_singleton (u1 # p2)) 0 4) (pset_range (pset_singleton (u1 # p1)) 0 4))
-p H32);intro.
-apply pset_union_intro;intuition.
+apply H24;auto.
+apply pset_union_elim1 with (pset_singleton u1);auto.
+apply not_assigns_trans with int_Z8_0.
+unfold not_assigns;intros.
+apply H16;auto.
+generalize (pset_union_elim2 H25);intro.
+apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p2_Z57)) 0 4);auto.
+unfold not_assigns;intros.
+apply H23;auto.
+generalize (pset_union_elim1 H25);intro.
+generalize (pset_union_elim2 H25);intro.
+auto.
+apply not_assigns_trans with int_Z7_0.
+unfold not_assigns;intros.
+apply H12;auto.
+generalize (pset_union_elim2 H25);auto.
+unfold not_assigns;intros.
+apply H21;auto.
+generalize (pset_union_elim1 H25);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -242,14 +236,12 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc u3) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;
 generalize (H1 u3);intuition.
@@ -258,24 +250,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -353,33 +345,30 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc u4) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
@@ -387,24 +376,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -482,52 +471,48 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w1) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
@@ -535,24 +520,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -630,71 +615,66 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w2) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
@@ -702,24 +682,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -797,90 +777,84 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w3) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
@@ -888,24 +862,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -983,109 +957,103 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w4) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
@@ -1093,24 +1061,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -1188,128 +1156,122 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w5) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
@@ -1317,24 +1279,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -1412,147 +1374,141 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_6: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_6: ((memory) Z Z105)),
-  forall (int_Z16_6: ((memory) Z Z16)),
-  forall (int_Z17_6: ((memory) Z Z17)),
-  forall (HW_15: (((not_assigns alloc int_Z17_5 int_Z17_6
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
+  forall (int_Z13_6: ((memory) Z Z13)),
+  forall (int_Z14_6: ((memory) Z Z14)),
+  forall (HW_15: (((not_assigns alloc int_Z14_5 int_Z14_6
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_5 int_Z16_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5)) 0
+                 (not_assigns alloc int_Z13_5 int_Z13_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_5
-                  anonymous_2_v2_Z105_6 (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_5
-                  anonymous_2_v1_Z105_6 (pset_singleton w5))),
+                 (not_assigns alloc anonymous_2_v2_Z82_5 anonymous_2_v2_Z82_6
+                  (pset_singleton w5))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
+                  (pset_singleton w5))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w6) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
@@ -1560,24 +1516,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -1655,166 +1611,160 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_6: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_6: ((memory) Z Z105)),
-  forall (int_Z16_6: ((memory) Z Z16)),
-  forall (int_Z17_6: ((memory) Z Z17)),
-  forall (HW_15: (((not_assigns alloc int_Z17_5 int_Z17_6
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
+  forall (int_Z13_6: ((memory) Z Z13)),
+  forall (int_Z14_6: ((memory) Z Z14)),
+  forall (HW_15: (((not_assigns alloc int_Z14_5 int_Z14_6
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_5 int_Z16_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5)) 0
+                 (not_assigns alloc int_Z13_5 int_Z13_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_5
-                  anonymous_2_v2_Z105_6 (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_5
-                  anonymous_2_v1_Z105_6 (pset_singleton w5))),
+                 (not_assigns alloc anonymous_2_v2_Z82_5 anonymous_2_v2_Z82_6
+                  (pset_singleton w5))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
+                  (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_7: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_7: ((memory) Z Z105)),
-  forall (int_Z16_7: ((memory) Z Z16)),
-  forall (int_Z17_7: ((memory) Z Z17)),
-  forall (HW_17: (((not_assigns alloc int_Z17_6 int_Z17_7
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w6))
+                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
+  forall (int_Z13_7: ((memory) Z Z13)),
+  forall (int_Z14_7: ((memory) Z Z14)),
+  forall (HW_17: (((not_assigns alloc int_Z14_6 int_Z14_7
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w6))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_6 int_Z16_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w6)) 0
+                 (not_assigns alloc int_Z13_6 int_Z13_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_6
-                  anonymous_2_v2_Z105_7 (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_6
-                  anonymous_2_v1_Z105_7 (pset_singleton w6))),
+                 (not_assigns alloc anonymous_2_v2_Z82_6 anonymous_2_v2_Z82_7
+                  (pset_singleton w6))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
+                  (pset_singleton w6))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w7) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
@@ -1822,24 +1772,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -1917,185 +1867,179 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_6: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_6: ((memory) Z Z105)),
-  forall (int_Z16_6: ((memory) Z Z16)),
-  forall (int_Z17_6: ((memory) Z Z17)),
-  forall (HW_15: (((not_assigns alloc int_Z17_5 int_Z17_6
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
+  forall (int_Z13_6: ((memory) Z Z13)),
+  forall (int_Z14_6: ((memory) Z Z14)),
+  forall (HW_15: (((not_assigns alloc int_Z14_5 int_Z14_6
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_5 int_Z16_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5)) 0
+                 (not_assigns alloc int_Z13_5 int_Z13_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_5
-                  anonymous_2_v2_Z105_6 (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_5
-                  anonymous_2_v1_Z105_6 (pset_singleton w5))),
+                 (not_assigns alloc anonymous_2_v2_Z82_5 anonymous_2_v2_Z82_6
+                  (pset_singleton w5))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
+                  (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_7: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_7: ((memory) Z Z105)),
-  forall (int_Z16_7: ((memory) Z Z16)),
-  forall (int_Z17_7: ((memory) Z Z17)),
-  forall (HW_17: (((not_assigns alloc int_Z17_6 int_Z17_7
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w6))
+                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
+  forall (int_Z13_7: ((memory) Z Z13)),
+  forall (int_Z14_7: ((memory) Z Z14)),
+  forall (HW_17: (((not_assigns alloc int_Z14_6 int_Z14_7
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w6))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_6 int_Z16_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w6)) 0
+                 (not_assigns alloc int_Z13_6 int_Z13_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_6
-                  anonymous_2_v2_Z105_7 (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_6
-                  anonymous_2_v1_Z105_7 (pset_singleton w6))),
+                 (not_assigns alloc anonymous_2_v2_Z82_6 anonymous_2_v2_Z82_7
+                  (pset_singleton w6))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
+                  (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_8: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_8: ((memory) Z Z105)),
-  forall (int_Z16_8: ((memory) Z Z16)),
-  forall (int_Z17_8: ((memory) Z Z17)),
-  forall (HW_19: (((not_assigns alloc int_Z17_7 int_Z17_8
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w7))
+                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
+  forall (int_Z13_8: ((memory) Z Z13)),
+  forall (int_Z14_8: ((memory) Z Z14)),
+  forall (HW_19: (((not_assigns alloc int_Z14_7 int_Z14_8
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w7))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_7 int_Z16_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w7)) 0
+                 (not_assigns alloc int_Z13_7 int_Z13_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_7
-                  anonymous_2_v2_Z105_8 (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_7
-                  anonymous_2_v1_Z105_8 (pset_singleton w7))),
+                 (not_assigns alloc anonymous_2_v2_Z82_7 anonymous_2_v2_Z82_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
+                  (pset_singleton w7))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w8) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
@@ -2103,24 +2047,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -2198,204 +2142,198 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_6: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_6: ((memory) Z Z105)),
-  forall (int_Z16_6: ((memory) Z Z16)),
-  forall (int_Z17_6: ((memory) Z Z17)),
-  forall (HW_15: (((not_assigns alloc int_Z17_5 int_Z17_6
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
+  forall (int_Z13_6: ((memory) Z Z13)),
+  forall (int_Z14_6: ((memory) Z Z14)),
+  forall (HW_15: (((not_assigns alloc int_Z14_5 int_Z14_6
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_5 int_Z16_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5)) 0
+                 (not_assigns alloc int_Z13_5 int_Z13_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_5
-                  anonymous_2_v2_Z105_6 (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_5
-                  anonymous_2_v1_Z105_6 (pset_singleton w5))),
+                 (not_assigns alloc anonymous_2_v2_Z82_5 anonymous_2_v2_Z82_6
+                  (pset_singleton w5))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
+                  (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_7: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_7: ((memory) Z Z105)),
-  forall (int_Z16_7: ((memory) Z Z16)),
-  forall (int_Z17_7: ((memory) Z Z17)),
-  forall (HW_17: (((not_assigns alloc int_Z17_6 int_Z17_7
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w6))
+                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
+  forall (int_Z13_7: ((memory) Z Z13)),
+  forall (int_Z14_7: ((memory) Z Z14)),
+  forall (HW_17: (((not_assigns alloc int_Z14_6 int_Z14_7
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w6))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_6 int_Z16_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w6)) 0
+                 (not_assigns alloc int_Z13_6 int_Z13_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_6
-                  anonymous_2_v2_Z105_7 (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_6
-                  anonymous_2_v1_Z105_7 (pset_singleton w6))),
+                 (not_assigns alloc anonymous_2_v2_Z82_6 anonymous_2_v2_Z82_7
+                  (pset_singleton w6))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
+                  (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_8: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_8: ((memory) Z Z105)),
-  forall (int_Z16_8: ((memory) Z Z16)),
-  forall (int_Z17_8: ((memory) Z Z17)),
-  forall (HW_19: (((not_assigns alloc int_Z17_7 int_Z17_8
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w7))
+                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
+  forall (int_Z13_8: ((memory) Z Z13)),
+  forall (int_Z14_8: ((memory) Z Z14)),
+  forall (HW_19: (((not_assigns alloc int_Z14_7 int_Z14_8
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w7))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_7 int_Z16_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w7)) 0
+                 (not_assigns alloc int_Z13_7 int_Z13_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_7
-                  anonymous_2_v2_Z105_8 (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_7
-                  anonymous_2_v1_Z105_8 (pset_singleton w7))),
+                 (not_assigns alloc anonymous_2_v2_Z82_7 anonymous_2_v2_Z82_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
+                  (pset_singleton w7))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_9: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_9: ((memory) Z Z105)),
-  forall (int_Z16_9: ((memory) Z Z16)),
-  forall (int_Z17_9: ((memory) Z Z17)),
-  forall (HW_21: (((not_assigns alloc int_Z17_8 int_Z17_9
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w8))
+                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_9: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_9: ((memory) Z Z82)),
+  forall (int_Z13_9: ((memory) Z Z13)),
+  forall (int_Z14_9: ((memory) Z Z14)),
+  forall (HW_21: (((not_assigns alloc int_Z14_8 int_Z14_9
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w8))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_8 int_Z16_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w8)) 0
+                 (not_assigns alloc int_Z13_8 int_Z13_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w8)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_8
-                  anonymous_2_v2_Z105_9 (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_8
-                  anonymous_2_v1_Z105_9 (pset_singleton w8))),
+                 (not_assigns alloc anonymous_2_v2_Z82_8 anonymous_2_v2_Z82_9
+                  (pset_singleton w8))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_8 anonymous_2_v1_Z82_9
+                  (pset_singleton w8))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w9) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
@@ -2403,24 +2341,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -2498,223 +2436,217 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_6: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_6: ((memory) Z Z105)),
-  forall (int_Z16_6: ((memory) Z Z16)),
-  forall (int_Z17_6: ((memory) Z Z17)),
-  forall (HW_15: (((not_assigns alloc int_Z17_5 int_Z17_6
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
+  forall (int_Z13_6: ((memory) Z Z13)),
+  forall (int_Z14_6: ((memory) Z Z14)),
+  forall (HW_15: (((not_assigns alloc int_Z14_5 int_Z14_6
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_5 int_Z16_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5)) 0
+                 (not_assigns alloc int_Z13_5 int_Z13_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_5
-                  anonymous_2_v2_Z105_6 (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_5
-                  anonymous_2_v1_Z105_6 (pset_singleton w5))),
+                 (not_assigns alloc anonymous_2_v2_Z82_5 anonymous_2_v2_Z82_6
+                  (pset_singleton w5))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
+                  (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_7: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_7: ((memory) Z Z105)),
-  forall (int_Z16_7: ((memory) Z Z16)),
-  forall (int_Z17_7: ((memory) Z Z17)),
-  forall (HW_17: (((not_assigns alloc int_Z17_6 int_Z17_7
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w6))
+                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
+  forall (int_Z13_7: ((memory) Z Z13)),
+  forall (int_Z14_7: ((memory) Z Z14)),
+  forall (HW_17: (((not_assigns alloc int_Z14_6 int_Z14_7
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w6))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_6 int_Z16_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w6)) 0
+                 (not_assigns alloc int_Z13_6 int_Z13_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_6
-                  anonymous_2_v2_Z105_7 (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_6
-                  anonymous_2_v1_Z105_7 (pset_singleton w6))),
+                 (not_assigns alloc anonymous_2_v2_Z82_6 anonymous_2_v2_Z82_7
+                  (pset_singleton w6))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
+                  (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_8: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_8: ((memory) Z Z105)),
-  forall (int_Z16_8: ((memory) Z Z16)),
-  forall (int_Z17_8: ((memory) Z Z17)),
-  forall (HW_19: (((not_assigns alloc int_Z17_7 int_Z17_8
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w7))
+                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
+  forall (int_Z13_8: ((memory) Z Z13)),
+  forall (int_Z14_8: ((memory) Z Z14)),
+  forall (HW_19: (((not_assigns alloc int_Z14_7 int_Z14_8
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w7))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_7 int_Z16_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w7)) 0
+                 (not_assigns alloc int_Z13_7 int_Z13_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_7
-                  anonymous_2_v2_Z105_8 (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_7
-                  anonymous_2_v1_Z105_8 (pset_singleton w7))),
+                 (not_assigns alloc anonymous_2_v2_Z82_7 anonymous_2_v2_Z82_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
+                  (pset_singleton w7))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_9: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_9: ((memory) Z Z105)),
-  forall (int_Z16_9: ((memory) Z Z16)),
-  forall (int_Z17_9: ((memory) Z Z17)),
-  forall (HW_21: (((not_assigns alloc int_Z17_8 int_Z17_9
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w8))
+                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_9: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_9: ((memory) Z Z82)),
+  forall (int_Z13_9: ((memory) Z Z13)),
+  forall (int_Z14_9: ((memory) Z Z14)),
+  forall (HW_21: (((not_assigns alloc int_Z14_8 int_Z14_9
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w8))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_8 int_Z16_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w8)) 0
+                 (not_assigns alloc int_Z13_8 int_Z13_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w8)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_8
-                  anonymous_2_v2_Z105_9 (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_8
-                  anonymous_2_v1_Z105_9 (pset_singleton w8))),
+                 (not_assigns alloc anonymous_2_v2_Z82_8 anonymous_2_v2_Z82_9
+                  (pset_singleton w8))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_8 anonymous_2_v1_Z82_9
+                  (pset_singleton w8))),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w9) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_10: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_10: ((memory) Z Z105)),
-  forall (int_Z16_10: ((memory) Z Z16)),
-  forall (int_Z17_10: ((memory) Z Z17)),
-  forall (HW_23: (((not_assigns alloc int_Z17_9 int_Z17_10
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w9))
+                 (valid alloc w9) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_10: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_10: ((memory) Z Z82)),
+  forall (int_Z13_10: ((memory) Z Z13)),
+  forall (int_Z14_10: ((memory) Z Z14)),
+  forall (HW_23: (((not_assigns alloc int_Z14_9 int_Z14_10
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w9))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_9 int_Z16_10
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w9)) 0
+                 (not_assigns alloc int_Z13_9 int_Z13_10
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w9)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_9
-                  anonymous_2_v2_Z105_10 (pset_singleton w9))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_9
-                  anonymous_2_v1_Z105_10 (pset_singleton w9))),
+                 (not_assigns alloc anonymous_2_v2_Z82_9
+                  anonymous_2_v2_Z82_10 (pset_singleton w9))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_9
+                  anonymous_2_v1_Z82_10 (pset_singleton w9))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w10) /\
-  (valid1 anonymous_2_p2_Z105) /\ (valid1 anonymous_2_p1_Z105) /\
-  (valid1_range anonymous_2_p2_Z105 5) /\
-  (valid1_range anonymous_2_p1_Z105 5).
+  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
 Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
@@ -2722,24 +2654,24 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z105: ((memory) ((pointer) Z16) Z105)),
-  forall (anonymous_2_p2_Z105: ((memory) ((pointer) Z17) Z105)),
-  forall (anonymous_2_v1_Z105: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105: ((memory) Z Z105)),
-  forall (int_Z16: ((memory) Z Z16)),
-  forall (int_Z17: ((memory) Z Z17)),
-  forall (u3: ((pointer) Z105)),
-  forall (u4: ((pointer) Z105)),
-  forall (w1: ((pointer) Z105)),
-  forall (w10: ((pointer) Z105)),
-  forall (w2: ((pointer) Z105)),
-  forall (w3: ((pointer) Z105)),
-  forall (w4: ((pointer) Z105)),
-  forall (w5: ((pointer) Z105)),
-  forall (w6: ((pointer) Z105)),
-  forall (w7: ((pointer) Z105)),
-  forall (w8: ((pointer) Z105)),
-  forall (w9: ((pointer) Z105)),
+  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
+  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
+  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
+  forall (int_Z13: ((memory) Z Z13)),
+  forall (int_Z14: ((memory) Z Z14)),
+  forall (u3: ((pointer) Z82)),
+  forall (u4: ((pointer) Z82)),
+  forall (w1: ((pointer) Z82)),
+  forall (w10: ((pointer) Z82)),
+  forall (w2: ((pointer) Z82)),
+  forall (w3: ((pointer) Z82)),
+  forall (w4: ((pointer) Z82)),
+  forall (w5: ((pointer) Z82)),
+  forall (w6: ((pointer) Z82)),
+  forall (w7: ((pointer) Z82)),
+  forall (w8: ((pointer) Z82)),
+  forall (w9: ((pointer) Z82)),
   forall (HW_1: ~((base_addr w8) = (base_addr w7)) /\
                 ~((base_addr w8) = (base_addr w6)) /\
                 ~((base_addr w8) = (base_addr w5)) /\
@@ -2817,293 +2749,285 @@ Save.
                 ~((base_addr w4) = (base_addr w1)) /\
                 ~((base_addr w3) = (base_addr u4)) /\
                 ~((base_addr w3) = (base_addr u3)) /\
-                (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
+                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_0: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_0: ((memory) Z Z105)),
-  forall (int_Z16_0: ((memory) Z Z16)),
-  forall (int_Z17_0: ((memory) Z Z17)),
-  forall (HW_3: (((not_assigns alloc int_Z17 int_Z17_0
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3))
-                    0 4)) /\
-                (not_assigns alloc int_Z16 int_Z16_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_0
+                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
+  forall (int_Z13_0: ((memory) Z Z13)),
+  forall (int_Z14_0: ((memory) Z Z14)),
+  forall (HW_3: (((not_assigns alloc int_Z14 int_Z14_0
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13 int_Z13_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_0
+                (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_1: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_1: ((memory) Z Z105)),
-  forall (int_Z16_1: ((memory) Z Z16)),
-  forall (int_Z17_1: ((memory) Z Z17)),
-  forall (HW_5: (((not_assigns alloc int_Z17_0 int_Z17_1
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u4))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_0 int_Z16_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u4)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_0
-                 anonymous_2_v2_Z105_1 (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_0
-                 anonymous_2_v1_Z105_1 (pset_singleton u4))),
+                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
+  forall (int_Z13_1: ((memory) Z Z13)),
+  forall (int_Z14_1: ((memory) Z Z14)),
+  forall (HW_5: (((not_assigns alloc int_Z14_0 int_Z14_1
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u4)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_0 int_Z13_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_0 anonymous_2_v2_Z82_1
+                 (pset_singleton u4))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
+                 (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_2: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_2: ((memory) Z Z105)),
-  forall (int_Z16_2: ((memory) Z Z16)),
-  forall (int_Z17_2: ((memory) Z Z17)),
-  forall (HW_7: (((not_assigns alloc int_Z17_1 int_Z17_2
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w1))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_1 int_Z16_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w1)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_1
-                 anonymous_2_v2_Z105_2 (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_1
-                 anonymous_2_v1_Z105_2 (pset_singleton w1))),
+                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
+  forall (int_Z13_2: ((memory) Z Z13)),
+  forall (int_Z14_2: ((memory) Z Z14)),
+  forall (HW_7: (((not_assigns alloc int_Z14_1 int_Z14_2
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w1)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_1 int_Z13_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_1 anonymous_2_v2_Z82_2
+                 (pset_singleton w1))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
+                 (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z105) /\
-                (valid1 anonymous_2_p1_Z105) /\
-                (valid1_range anonymous_2_p2_Z105 5) /\
-                (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_3: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_3: ((memory) Z Z105)),
-  forall (int_Z16_3: ((memory) Z Z16)),
-  forall (int_Z17_3: ((memory) Z Z17)),
-  forall (HW_9: (((not_assigns alloc int_Z17_2 int_Z17_3
-                   (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w2))
-                    0 4)) /\
-                (not_assigns alloc int_Z16_2 int_Z16_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w2)) 0
-                  4))) /\
-                (not_assigns alloc anonymous_2_v2_Z105_2
-                 anonymous_2_v2_Z105_3 (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z105_2
-                 anonymous_2_v1_Z105_3 (pset_singleton w2))),
+                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
+                (valid1 anonymous_2_p1_Z82) /\
+                (valid1_range anonymous_2_p2_Z82 5) /\
+                (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
+  forall (int_Z13_3: ((memory) Z Z13)),
+  forall (int_Z14_3: ((memory) Z Z14)),
+  forall (HW_9: (((not_assigns alloc int_Z14_2 int_Z14_3
+                   (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w2)) 0
+                    4)) /\
+                (not_assigns alloc int_Z13_2 int_Z13_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z82_2 anonymous_2_v2_Z82_3
+                 (pset_singleton w2))) /\
+                (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
+                 (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_4: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_4: ((memory) Z Z105)),
-  forall (int_Z16_4: ((memory) Z Z16)),
-  forall (int_Z17_4: ((memory) Z Z17)),
-  forall (HW_11: (((not_assigns alloc int_Z17_3 int_Z17_4
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w3))
+                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
+  forall (int_Z13_4: ((memory) Z Z13)),
+  forall (int_Z14_4: ((memory) Z Z14)),
+  forall (HW_11: (((not_assigns alloc int_Z14_3 int_Z14_4
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w3))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_3 int_Z16_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3)) 0
+                 (not_assigns alloc int_Z13_3 int_Z13_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_3
-                  anonymous_2_v2_Z105_4 (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_3
-                  anonymous_2_v1_Z105_4 (pset_singleton w3))),
+                 (not_assigns alloc anonymous_2_v2_Z82_3 anonymous_2_v2_Z82_4
+                  (pset_singleton w3))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
+                  (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_5: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_5: ((memory) Z Z105)),
-  forall (int_Z16_5: ((memory) Z Z16)),
-  forall (int_Z17_5: ((memory) Z Z17)),
-  forall (HW_13: (((not_assigns alloc int_Z17_4 int_Z17_5
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w4))
+                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
+  forall (int_Z13_5: ((memory) Z Z13)),
+  forall (int_Z14_5: ((memory) Z Z14)),
+  forall (HW_13: (((not_assigns alloc int_Z14_4 int_Z14_5
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_4 int_Z16_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4)) 0
+                 (not_assigns alloc int_Z13_4 int_Z13_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_4
-                  anonymous_2_v2_Z105_5 (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_4
-                  anonymous_2_v1_Z105_5 (pset_singleton w4))),
+                 (not_assigns alloc anonymous_2_v2_Z82_4 anonymous_2_v2_Z82_5
+                  (pset_singleton w4))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
+                  (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_6: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_6: ((memory) Z Z105)),
-  forall (int_Z16_6: ((memory) Z Z16)),
-  forall (int_Z17_6: ((memory) Z Z17)),
-  forall (HW_15: (((not_assigns alloc int_Z17_5 int_Z17_6
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
+  forall (int_Z13_6: ((memory) Z Z13)),
+  forall (int_Z14_6: ((memory) Z Z14)),
+  forall (HW_15: (((not_assigns alloc int_Z14_5 int_Z14_6
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_5 int_Z16_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5)) 0
+                 (not_assigns alloc int_Z13_5 int_Z13_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_5
-                  anonymous_2_v2_Z105_6 (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_5
-                  anonymous_2_v1_Z105_6 (pset_singleton w5))),
+                 (not_assigns alloc anonymous_2_v2_Z82_5 anonymous_2_v2_Z82_6
+                  (pset_singleton w5))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
+                  (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_7: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_7: ((memory) Z Z105)),
-  forall (int_Z16_7: ((memory) Z Z16)),
-  forall (int_Z17_7: ((memory) Z Z17)),
-  forall (HW_17: (((not_assigns alloc int_Z17_6 int_Z17_7
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w6))
+                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
+  forall (int_Z13_7: ((memory) Z Z13)),
+  forall (int_Z14_7: ((memory) Z Z14)),
+  forall (HW_17: (((not_assigns alloc int_Z14_6 int_Z14_7
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w6))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_6 int_Z16_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w6)) 0
+                 (not_assigns alloc int_Z13_6 int_Z13_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_6
-                  anonymous_2_v2_Z105_7 (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_6
-                  anonymous_2_v1_Z105_7 (pset_singleton w6))),
+                 (not_assigns alloc anonymous_2_v2_Z82_6 anonymous_2_v2_Z82_7
+                  (pset_singleton w6))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
+                  (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_8: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_8: ((memory) Z Z105)),
-  forall (int_Z16_8: ((memory) Z Z16)),
-  forall (int_Z17_8: ((memory) Z Z17)),
-  forall (HW_19: (((not_assigns alloc int_Z17_7 int_Z17_8
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w7))
+                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
+  forall (int_Z13_8: ((memory) Z Z13)),
+  forall (int_Z14_8: ((memory) Z Z14)),
+  forall (HW_19: (((not_assigns alloc int_Z14_7 int_Z14_8
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w7))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_7 int_Z16_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w7)) 0
+                 (not_assigns alloc int_Z13_7 int_Z13_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_7
-                  anonymous_2_v2_Z105_8 (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_7
-                  anonymous_2_v1_Z105_8 (pset_singleton w7))),
+                 (not_assigns alloc anonymous_2_v2_Z82_7 anonymous_2_v2_Z82_8
+                  (pset_singleton w7))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
+                  (pset_singleton w7))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_9: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_9: ((memory) Z Z105)),
-  forall (int_Z16_9: ((memory) Z Z16)),
-  forall (int_Z17_9: ((memory) Z Z17)),
-  forall (HW_21: (((not_assigns alloc int_Z17_8 int_Z17_9
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w8))
+                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_9: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_9: ((memory) Z Z82)),
+  forall (int_Z13_9: ((memory) Z Z13)),
+  forall (int_Z14_9: ((memory) Z Z14)),
+  forall (HW_21: (((not_assigns alloc int_Z14_8 int_Z14_9
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w8))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_8 int_Z16_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w8)) 0
+                 (not_assigns alloc int_Z13_8 int_Z13_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w8)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_8
-                  anonymous_2_v2_Z105_9 (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_8
-                  anonymous_2_v1_Z105_9 (pset_singleton w8))),
+                 (not_assigns alloc anonymous_2_v2_Z82_8 anonymous_2_v2_Z82_9
+                  (pset_singleton w8))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_8 anonymous_2_v1_Z82_9
+                  (pset_singleton w8))),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w9) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_10: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_10: ((memory) Z Z105)),
-  forall (int_Z16_10: ((memory) Z Z16)),
-  forall (int_Z17_10: ((memory) Z Z17)),
-  forall (HW_23: (((not_assigns alloc int_Z17_9 int_Z17_10
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w9))
+                 (valid alloc w9) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_10: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_10: ((memory) Z Z82)),
+  forall (int_Z13_10: ((memory) Z Z13)),
+  forall (int_Z14_10: ((memory) Z Z14)),
+  forall (HW_23: (((not_assigns alloc int_Z14_9 int_Z14_10
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w9))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_9 int_Z16_10
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w9)) 0
+                 (not_assigns alloc int_Z13_9 int_Z13_10
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w9)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_9
-                  anonymous_2_v2_Z105_10 (pset_singleton w9))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_9
-                  anonymous_2_v1_Z105_10 (pset_singleton w9))),
+                 (not_assigns alloc anonymous_2_v2_Z82_9
+                  anonymous_2_v2_Z82_10 (pset_singleton w9))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_9
+                  anonymous_2_v1_Z82_10 (pset_singleton w9))),
   forall (HW_24: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w10) /\ (valid1 anonymous_2_p2_Z105) /\
-                 (valid1 anonymous_2_p1_Z105) /\
-                 (valid1_range anonymous_2_p2_Z105 5) /\
-                 (valid1_range anonymous_2_p1_Z105 5)),
-  forall (anonymous_2_v1_Z105_11: ((memory) Z Z105)),
-  forall (anonymous_2_v2_Z105_11: ((memory) Z Z105)),
-  forall (int_Z16_11: ((memory) Z Z16)),
-  forall (int_Z17_11: ((memory) Z Z17)),
-  forall (HW_25: (((not_assigns alloc int_Z17_10 int_Z17_11
-                    (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w10))
+                 (valid alloc w10) /\ (valid1 anonymous_2_p2_Z82) /\
+                 (valid1 anonymous_2_p1_Z82) /\
+                 (valid1_range anonymous_2_p2_Z82 5) /\
+                 (valid1_range anonymous_2_p1_Z82 5)),
+  forall (anonymous_2_v1_Z82_11: ((memory) Z Z82)),
+  forall (anonymous_2_v2_Z82_11: ((memory) Z Z82)),
+  forall (int_Z13_11: ((memory) Z Z13)),
+  forall (int_Z14_11: ((memory) Z Z14)),
+  forall (HW_25: (((not_assigns alloc int_Z14_10 int_Z14_11
+                    (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w10))
                      0 4)) /\
-                 (not_assigns alloc int_Z16_10 int_Z16_11
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w10))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z105_10
-                  anonymous_2_v2_Z105_11 (pset_singleton w10))) /\
-                 (not_assigns alloc anonymous_2_v1_Z105_10
-                  anonymous_2_v1_Z105_11 (pset_singleton w10))),
-  (((not_assigns alloc int_Z17 int_Z17_11
-     (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w10)) 0
+                 (not_assigns alloc int_Z13_10 int_Z13_11
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w10)) 0
+                   4))) /\
+                 (not_assigns alloc anonymous_2_v2_Z82_10
+                  anonymous_2_v2_Z82_11 (pset_singleton w10))) /\
+                 (not_assigns alloc anonymous_2_v1_Z82_10
+                  anonymous_2_v1_Z82_11 (pset_singleton w10))),
+  (((not_assigns alloc int_Z14 int_Z14_11
+     (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w10)) 0
                   4)
-      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w9)) 0
+      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w9)) 0
                    4)
-       (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w8))
-                    0 4)
-        (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w7))
+       (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w8)) 0
+                    4)
+        (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w7))
                      0 4)
-         (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w6))
+         (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w6))
                       0 4)
-          (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105 w5))
+          (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w5))
                        0 4)
-           (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105
-                                                    w4))
+           (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w4))
                         0 4)
-            (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105
+            (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82
                                                      w3))
                          0 4)
-             (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105
+             (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82
                                                       w2))
                           0 4)
-              (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105
+              (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82
                                                        w1))
                            0 4)
-               (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z105
+               (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_Z82
                                                         u4))
                             0 4)
-                (pset_range (pset_singleton (acc anonymous_2_p2_Z105 u3)) 0 4))))))))))))) /\
-  (not_assigns alloc int_Z16 int_Z16_11
-   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w10)) 0 4)
-    (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w9)) 0 4)
-     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w8)) 0
-                  4)
-      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w7)) 0
+                (pset_range (pset_singleton (acc anonymous_2_p2_Z82 u3)) 0 4))))))))))))) /\
+  (not_assigns alloc int_Z13 int_Z13_11
+   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w10)) 0 4)
+    (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w9)) 0 4)
+     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w8)) 0 4)
+      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w7)) 0
                    4)
-       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w6))
-                    0 4)
-        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w5))
+       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w6)) 0
+                    4)
+        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w5))
                      0 4)
-         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w4))
+         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w4))
                       0 4)
-          (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105 w3))
+          (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w3))
                        0 4)
-           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105
-                                                    w2))
+           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w2))
                         0 4)
-            (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105
+            (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82
                                                      w1))
                          0 4)
-             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z105
+             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82
                                                       u4))
                           0 4)
-              (pset_range (pset_singleton (acc anonymous_2_p1_Z105 u3)) 0 4)))))))))))))) /\
-  (not_assigns alloc anonymous_2_v2_Z105 anonymous_2_v2_Z105_11
+              (pset_range (pset_singleton (acc anonymous_2_p1_Z82 u3)) 0 4)))))))))))))) /\
+  (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_11
    (pset_union (pset_singleton w10)
     (pset_union (pset_singleton w9)
      (pset_union (pset_singleton w8)
@@ -3115,7 +3039,7 @@ Save.
            (pset_union (pset_singleton w2)
             (pset_union (pset_singleton w1)
              (pset_union (pset_singleton u4) (pset_singleton u3)))))))))))))) /\
-  (not_assigns alloc anonymous_2_v1_Z105 anonymous_2_v1_Z105_11
+  (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_11
    (pset_union (pset_singleton w10)
     (pset_union (pset_singleton w9)
      (pset_union (pset_singleton w8)
@@ -3133,16 +3057,17 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   (valid alloc ss).
 Proof.
 intuition.
@@ -3151,121 +3076,108 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   (valid alloc result).
 Proof.
 intuition.
 subst.
-generalize (H4 ss alloc Pre4 );intuition.
+generalize (H5 ss alloc HW_2);intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   (valid alloc s).
 Proof.
 intuition;subst;auto.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_eq;auto.
-assert (valid alloc s).
-valid.
-unfold separation1 in H.
-generalize (H s alloc H16).
-intro.
-rewrite <- shift_zero with (s#u).
-rewrite <- shift_zero with (s#t).
-apply neq_base_addr_neq_shift;auto.
-rewrite <- shift_zero with v.
-rewrite <- shift_zero with (s#t).
-apply neq_base_addr_neq_shift;tauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   (valid alloc result0).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   forall (HW_8: (valid alloc result0)),
   forall (int_Z0_1: ((memory) Z Z0)),
   forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
@@ -3279,36 +3191,36 @@ Save.
 (*Why goal*) Lemma f_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   forall (HW_8: (valid alloc result0)),
   forall (int_Z0_1: ((memory) Z Z0)),
   forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
   forall (HW_10: (valid alloc s)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z53 s)),
+  forall (HW_11: result1 = (acc u_Z48 s)),
   (valid alloc result1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -3316,32 +3228,32 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   forall (HW_8: (valid alloc result0)),
   forall (int_Z0_1: ((memory) Z Z0)),
   forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
   forall (HW_10: (valid alloc s)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z53 s)),
+  forall (HW_11: result1 = (acc u_Z48 s)),
   forall (HW_12: (valid alloc result1)),
   forall (int_Z1_0: ((memory) Z Z1)),
   forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
@@ -3356,39 +3268,39 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (int_Z58: ((memory) Z Z58)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (int_Z51: ((memory) Z Z51)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   forall (HW_8: (valid alloc result0)),
   forall (int_Z0_1: ((memory) Z Z0)),
   forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
   forall (HW_10: (valid alloc s)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z53 s)),
+  forall (HW_11: result1 = (acc u_Z48 s)),
   forall (HW_12: (valid alloc result1)),
   forall (int_Z1_0: ((memory) Z Z1)),
   forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
   forall (HW_14: (valid alloc v)),
-  forall (int_Z58_0: ((memory) Z Z58)),
-  forall (HW_15: int_Z58_0 = (upd int_Z58 v 3)),
+  forall (int_Z51_0: ((memory) Z Z51)),
+  forall (HW_15: int_Z51_0 = (upd int_Z51 v 3)),
   (valid alloc s).
 Proof.
 intuition.
@@ -3400,46 +3312,46 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (int_Z58: ((memory) Z Z58)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (int_Z51: ((memory) Z Z51)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   forall (HW_8: (valid alloc result0)),
   forall (int_Z0_1: ((memory) Z Z0)),
   forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
   forall (HW_10: (valid alloc s)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z53 s)),
+  forall (HW_11: result1 = (acc u_Z48 s)),
   forall (HW_12: (valid alloc result1)),
   forall (int_Z1_0: ((memory) Z Z1)),
   forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
   forall (HW_14: (valid alloc v)),
-  forall (int_Z58_0: ((memory) Z Z58)),
-  forall (HW_15: int_Z58_0 = (upd int_Z58 v 3)),
+  forall (int_Z51_0: ((memory) Z Z51)),
+  forall (HW_15: int_Z51_0 = (upd int_Z51 v 3)),
   forall (HW_16: (valid alloc s)),
   forall (result2: ((pointer) Z0)),
-  forall (HW_17: result2 = (acc t_Z53 s)),
+  forall (HW_17: result2 = (acc t_Z48 s)),
   (valid alloc result2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -3447,55 +3359,55 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z0: ((memory) Z Z0)),
   forall (int_Z1: ((memory) Z Z1)),
-  forall (int_Z58: ((memory) Z Z58)),
-  forall (s: ((pointer) Z53)),
-  forall (ss: ((pointer) Z56)),
-  forall (t_Z53: ((memory) ((pointer) Z0) Z53)),
-  forall (t_Z56: ((memory) ((pointer) Z0) Z56)),
-  forall (u_Z53: ((memory) ((pointer) Z1) Z53)),
-  forall (v: ((pointer) Z58)),
+  forall (int_Z51: ((memory) Z Z51)),
+  forall (s: ((pointer) Z48)),
+  forall (ss: ((pointer) Z50)),
+  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
+  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
+  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3) /\ (valid_range alloc s 0 0) /\
-                (valid_range alloc ss 0 0) /\ (valid1 t_Z53) /\
-                (valid1 t_Z53) /\ (valid1_range u_Z53 3) /\
-                (valid1_range t_Z53 2) /\ (valid1_range t_Z53 2) /\
-                (valid1 u_Z53)),
+                (valid_range alloc ss 0 0) /\ (valid1 t_Z50) /\
+                (valid1 t_Z48) /\ (valid1_range u_Z48 3) /\
+                (valid1_range t_Z50 2) /\ (valid1_range t_Z48 2) /\
+                (valid1 u_Z48)),
   forall (HW_2: (valid alloc ss)),
   forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z56 ss)),
+  forall (HW_3: result = (acc t_Z50 ss)),
   forall (HW_4: (valid alloc result)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
   forall (HW_6: (valid alloc s)),
   forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z53 s)),
+  forall (HW_7: result0 = (acc t_Z48 s)),
   forall (HW_8: (valid alloc result0)),
   forall (int_Z0_1: ((memory) Z Z0)),
   forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
   forall (HW_10: (valid alloc s)),
   forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z53 s)),
+  forall (HW_11: result1 = (acc u_Z48 s)),
   forall (HW_12: (valid alloc result1)),
   forall (int_Z1_0: ((memory) Z Z1)),
   forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
   forall (HW_14: (valid alloc v)),
-  forall (int_Z58_0: ((memory) Z Z58)),
-  forall (HW_15: int_Z58_0 = (upd int_Z58 v 3)),
+  forall (int_Z51_0: ((memory) Z Z51)),
+  forall (HW_15: int_Z51_0 = (upd int_Z51 v 3)),
   forall (HW_16: (valid alloc s)),
   forall (result2: ((pointer) Z0)),
-  forall (HW_17: result2 = (acc t_Z53 s)),
+  forall (HW_17: result2 = (acc t_Z48 s)),
   forall (HW_18: (valid alloc result2)),
   forall (result3: Z),
   forall (HW_19: result3 = (acc int_Z0_1 result2)),
   (* File "separation.c", line 11, characters 13-25 *) result3 = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (v: ((pointer) Z58)),
+  forall (v: ((pointer) Z51)),
   forall (HW_1: (valid_range alloc v 0 3)),
   (valid alloc v).
 Proof.
@@ -3506,10 +3418,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (tab: ((pointer) Z59)),
-  forall (x_Z59: ((memory) ((pointer) Z5) Z59)),
-  forall (HW_1: (valid_range alloc tab 0 4) /\ (valid1_range x_Z59 1) /\
-                (valid1 x_Z59)),
+  forall (tab: ((pointer) Z52)),
+  forall (x_Z52: ((memory) ((pointer) Z5) Z52)),
+  forall (HW_1: (valid_range alloc tab 0 4) /\ (valid1_range x_Z52 1) /\
+                (valid1 x_Z52)),
   (valid alloc tab).
 Proof.
 intuition.
@@ -3518,15 +3430,16 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (tab: ((pointer) Z59)),
-  forall (x_Z59: ((memory) ((pointer) Z5) Z59)),
-  forall (HW_1: (valid_range alloc tab 0 4) /\ (valid1_range x_Z59 1) /\
-                (valid1 x_Z59)),
+  forall (tab: ((pointer) Z52)),
+  forall (x_Z52: ((memory) ((pointer) Z5) Z52)),
+  forall (HW_1: (valid_range alloc tab 0 4) /\ (valid1_range x_Z52 1) /\
+                (valid1 x_Z52)),
   forall (HW_2: (valid alloc tab)),
   forall (result: ((pointer) Z5)),
-  forall (HW_3: result = (acc x_Z59 tab)),
+  forall (HW_3: result = (acc x_Z52 tab)),
   (valid alloc result).
 Proof.
 intuition.
+subst;auto.
 Save.
 
