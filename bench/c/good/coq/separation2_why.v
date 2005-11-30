@@ -44,9 +44,7 @@ Require Export separation2_spec_why.
   ((((((valid alloc u) /\ (valid alloc (acc p1_Z29 u))) /\
   (valid alloc (acc p2_Z29 u))) /\ (valid alloc (acc pp1_Z29 u))) /\
   (valid_range alloc (acc p1_Z29 u) 0 4)) /\
-  (valid_range alloc (acc p2_Z29 u) 0 4)) /\ (separation1 p1_Z29 p2_Z29) /\
-  (valid1_range p2_Z29 5) /\ (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\
-  (valid1 p1_Z29).
+  (valid_range alloc (acc p2_Z29 u) 0 4)).
 Proof.
 intuition.
 assert (((u = u \/ u = v) \/ u = w) \/ u = m ).
@@ -100,9 +98,7 @@ Save.
                 (valid alloc (acc p2_Z29 u))) /\
                 (valid alloc (acc pp1_Z29 u))) /\
                 (valid_range alloc (acc p1_Z29 u) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 u) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 u) 0 4))),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z29_0: ((memory) Z Z29)),
   forall (v2_Z29_0: ((memory) Z Z29)),
@@ -118,14 +114,12 @@ Save.
   ((((((valid alloc v) /\ (valid alloc (acc p1_Z29 v))) /\
   (valid alloc (acc p2_Z29 v))) /\ (valid alloc (acc pp1_Z29 v))) /\
   (valid_range alloc (acc p1_Z29 v) 0 4)) /\
-  (valid_range alloc (acc p2_Z29 v) 0 4)) /\ (separation1 p1_Z29 p2_Z29) /\
-  (valid1_range p2_Z29 5) /\ (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\
-  (valid1 p1_Z29).
+  (valid_range alloc (acc p2_Z29 v) 0 4)).
 Proof.
 intuition.
 assert (((v = u \/ v = v) \/ v = w) \/ v = m ).
 auto.
-generalize (H2 v H32);intro.
+generalize (H1 v H27);intro.
 intuition.
 Save.
 
@@ -174,9 +168,7 @@ Save.
                 (valid alloc (acc p2_Z29 u))) /\
                 (valid alloc (acc pp1_Z29 u))) /\
                 (valid_range alloc (acc p1_Z29 u) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 u) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 u) 0 4))),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z29_0: ((memory) Z Z29)),
   forall (v2_Z29_0: ((memory) Z Z29)),
@@ -193,9 +185,7 @@ Save.
                 (valid alloc (acc p2_Z29 v))) /\
                 (valid alloc (acc pp1_Z29 v))) /\
                 (valid_range alloc (acc p1_Z29 v) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 v) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 v) 0 4))),
   forall (int_Z3_1: ((memory) Z Z3)),
   forall (v1_Z29_1: ((memory) Z Z29)),
   forall (v2_Z29_1: ((memory) Z Z29)),
@@ -211,14 +201,12 @@ Save.
   ((((((valid alloc w) /\ (valid alloc (acc p1_Z29 w))) /\
   (valid alloc (acc p2_Z29 w))) /\ (valid alloc (acc pp1_Z29 w))) /\
   (valid_range alloc (acc p1_Z29 w) 0 4)) /\
-  (valid_range alloc (acc p2_Z29 w) 0 4)) /\ (separation1 p1_Z29 p2_Z29) /\
-  (valid1_range p2_Z29 5) /\ (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\
-  (valid1 p1_Z29).
+  (valid_range alloc (acc p2_Z29 w) 0 4)).
 Proof.
 intuition.
 assert (((w = u \/ w = v) \/ w = w) \/ w = m ).
 auto.
-generalize (H2 w H47);intro.
+generalize (H1 w H37);intro.
 intuition.
 Save.
 
@@ -267,9 +255,7 @@ Save.
                 (valid alloc (acc p2_Z29 u))) /\
                 (valid alloc (acc pp1_Z29 u))) /\
                 (valid_range alloc (acc p1_Z29 u) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 u) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 u) 0 4))),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z29_0: ((memory) Z Z29)),
   forall (v2_Z29_0: ((memory) Z Z29)),
@@ -286,9 +272,7 @@ Save.
                 (valid alloc (acc p2_Z29 v))) /\
                 (valid alloc (acc pp1_Z29 v))) /\
                 (valid_range alloc (acc p1_Z29 v) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 v) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 v) 0 4))),
   forall (int_Z3_1: ((memory) Z Z3)),
   forall (v1_Z29_1: ((memory) Z Z29)),
   forall (v2_Z29_1: ((memory) Z Z29)),
@@ -305,9 +289,7 @@ Save.
                 (valid alloc (acc p2_Z29 w))) /\
                 (valid alloc (acc pp1_Z29 w))) /\
                 (valid_range alloc (acc p1_Z29 w) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 w) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 w) 0 4))),
   forall (int_Z3_2: ((memory) Z Z3)),
   forall (v1_Z29_2: ((memory) Z Z29)),
   forall (v2_Z29_2: ((memory) Z Z29)),
@@ -323,14 +305,12 @@ Save.
   ((((((valid alloc m) /\ (valid alloc (acc p1_Z29 m))) /\
   (valid alloc (acc p2_Z29 m))) /\ (valid alloc (acc pp1_Z29 m))) /\
   (valid_range alloc (acc p1_Z29 m) 0 4)) /\
-  (valid_range alloc (acc p2_Z29 m) 0 4)) /\ (separation1 p1_Z29 p2_Z29) /\
-  (valid1_range p2_Z29 5) /\ (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\
-  (valid1 p1_Z29).
+  (valid_range alloc (acc p2_Z29 m) 0 4)).
 Proof.
 intuition.
 assert (((m = u \/ m = v) \/ m = w) \/ m = m ).
 auto.
-generalize (H2 m H62);intro.
+generalize (H1 m H47);intro.
 intuition.
 Save.
 
@@ -379,9 +359,7 @@ Save.
                 (valid alloc (acc p2_Z29 u))) /\
                 (valid alloc (acc pp1_Z29 u))) /\
                 (valid_range alloc (acc p1_Z29 u) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 u) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 u) 0 4))),
   forall (int_Z3_0: ((memory) Z Z3)),
   forall (v1_Z29_0: ((memory) Z Z29)),
   forall (v2_Z29_0: ((memory) Z Z29)),
@@ -398,9 +376,7 @@ Save.
                 (valid alloc (acc p2_Z29 v))) /\
                 (valid alloc (acc pp1_Z29 v))) /\
                 (valid_range alloc (acc p1_Z29 v) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 v) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 v) 0 4))),
   forall (int_Z3_1: ((memory) Z Z3)),
   forall (v1_Z29_1: ((memory) Z Z29)),
   forall (v2_Z29_1: ((memory) Z Z29)),
@@ -417,9 +393,7 @@ Save.
                 (valid alloc (acc p2_Z29 w))) /\
                 (valid alloc (acc pp1_Z29 w))) /\
                 (valid_range alloc (acc p1_Z29 w) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 w) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 w) 0 4))),
   forall (int_Z3_2: ((memory) Z Z3)),
   forall (v1_Z29_2: ((memory) Z Z29)),
   forall (v2_Z29_2: ((memory) Z Z29)),
@@ -436,9 +410,7 @@ Save.
                 (valid alloc (acc p2_Z29 m))) /\
                 (valid alloc (acc pp1_Z29 m))) /\
                 (valid_range alloc (acc p1_Z29 m) 0 4)) /\
-                (valid_range alloc (acc p2_Z29 m) 0 4)) /\
-                (separation1 p1_Z29 p2_Z29) /\ (valid1_range p2_Z29 5) /\
-                (valid1_range p1_Z29 5) /\ (valid1 p2_Z29) /\ (valid1 p1_Z29)),
+                (valid_range alloc (acc p2_Z29 m) 0 4))),
   forall (int_Z3_3: ((memory) Z Z3)),
   forall (v1_Z29_3: ((memory) Z Z29)),
   forall (v2_Z29_3: ((memory) Z Z29)),
@@ -482,30 +454,12 @@ Proof.
 intuition.
 exists 1.
 intuition;subst;auto.
-rewrite H78;auto.
-rewrite H65;auto.
+rewrite H59;auto.
+rewrite H52;auto.
+rewrite H42;auto.
+rewrite H58;auto.
 rewrite H50;auto.
-rewrite H79;auto.
-rewrite H68;auto.
-rewrite H53;auto.
-apply pset_singleton_intro;auto.
-replace (u<> v) with (shift u 0 <> shift v 0).
-apply neq_base_addr_neq_shift;auto.
-rewrite  shift_zero;rewrite shift_zero;auto. 
-apply pset_singleton_intro;auto.
-replace (u<> w) with (shift u 0 <> shift w 0).
-apply neq_base_addr_neq_shift;auto.
-rewrite  shift_zero;rewrite shift_zero;auto. 
-apply pset_singleton_intro;auto.
-replace (u<> m) with (shift u 0 <> shift m 0).
-apply neq_base_addr_neq_shift;auto.
-rewrite  shift_zero;rewrite shift_zero;auto. 
-apply pset_union_intro.
-split.
-apply pset_singleton_intro;auto.
-replace (shift (u # p1_Z29) 1<> v # pp1_Z29) with (shift (u # p1_Z29) 1 <> shift (v # pp1_Z29) 0).
-apply neq_base_addr_neq_shift;auto.
-
+rewrite H40;auto.
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

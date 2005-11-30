@@ -2772,12 +2772,11 @@ Save.
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
-  ((* File "queue.c", line 33, characters 14-22 *) (acc empty_Z7 q) = 0 /\
+  (* File "queue.c", line 33, characters 14-22 *) (acc empty_Z7 q) = 0 /\
   (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
   (acc first_Z7 q) /\ (acc first_Z7 q) < (acc length_Z7 q)) /\ 0 <=
-  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q))) /\
-  (valid_range alloc q 0 0).
+  (acc last_Z7 q) /\ (acc last_Z7 q) < (acc length_Z7 q)).
 Proof.
 intuition.
 Save.
@@ -2803,15 +2802,14 @@ Save.
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
-  forall (HW_2: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z7 q) = 0 /\
+  forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
+                (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
-                (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc q 0 0)),
+                (acc last_Z7 q) < (acc length_Z7 q))),
   forall (result: Z),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (first_Z7_0: ((memory) Z Z7)),
@@ -2854,15 +2852,14 @@ Save.
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
                 (valid_range alloc q 0 0)),
-  forall (HW_2: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z7 q) = 0 /\
+  forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
+                (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_Z7 q) 0
                    ((acc length_Z7 q) - 1)) /\
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
-                (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc q 0 0)),
+                (acc last_Z7 q) < (acc length_Z7 q))),
   forall (result: Z),
   forall (empty_Z7_0: ((memory) Z Z7)),
   forall (first_Z7_0: ((memory) Z Z7)),

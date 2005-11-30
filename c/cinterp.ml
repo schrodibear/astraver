@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.158 2005-11-30 10:09:01 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.159 2005-11-30 14:34:56 hubert Exp $ i*)
 
 
 open Format
@@ -1035,21 +1035,22 @@ let strong_invariants_for hvs =
 
 
 let interp_spec add_inv effect_reads effect_assigns s =
-  let tpre = 
+  let tpre_without = 
     make_and
-      (make_and
-	 (interp_predicate_opt None "" s.requires)
-	 (if add_inv then weak_invariants_for effect_reads else LTrue))
+      (interp_predicate_opt None "" s.requires)
+      (if add_inv then weak_invariants_for effect_reads else LTrue) in
+  let tpre_with = 
+    make_and
+      tpre_without
       (strong_invariants_for effect_reads)
   and tpost = 
    make_and
      (interp_predicate_opt None "" s.ensures)
      (make_and 
 	(interp_assigns "" effect_assigns s.assigns)
-	(if add_inv then make_and (weak_invariants_for effect_assigns)
-	   (strong_invariants_for effect_assigns) else LTrue))
+	(if add_inv then weak_invariants_for effect_assigns else LTrue))
   in 
-  (tpre,tpost)
+  (tpre_with,tpre_without,tpost)
 
 let alloc_on_stack loc v t =
   let form = 
@@ -1279,7 +1280,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       Output.Label (l, Void)
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
-      let pre,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns 
+      let pre,_,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns 
 		       spec in
       Triple(pre,interp_statement ab may_break s,post,None)
   | NSdecl(ctype,v,init,rem) -> 
@@ -1507,7 +1508,7 @@ let heap_var_unique_names v =
 
 let interp_function_spec id sp ty pl =
   let tpl = interp_fun_params pl in
-  let pre,post = 
+  let pre_with,pre_without,post = 
     interp_spec 
       (id != Cinit.invariants_initially_established_info)
       id.function_reads id.function_writes sp 
@@ -1516,7 +1517,8 @@ let interp_function_spec id sp ty pl =
   let w = heap_var_unique_names id.function_writes in
   let annot_type = 
     Annot_type
-      (pre, Base_type (Info.output_why_type id.type_why_fun), r, w, post, None)
+      (pre_without, Base_type (Info.output_why_type id.type_why_fun), r, w, 
+       post, None)
   in
   let ty = 
     List.fold_right 
@@ -1524,7 +1526,7 @@ let interp_function_spec id sp ty pl =
       tpl 
       annot_type
   in
-  tpl,pre,post, Param (false, id.fun_unique_name ^ "_parameter", ty)
+  tpl,pre_with,post, Param (false, id.fun_unique_name ^ "_parameter", ty)
 
 let interp_type loc ctype = match ctype.Ctypes.ctype_node with
   | Tenum e ->

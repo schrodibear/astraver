@@ -14,9 +14,7 @@ Require Export separation_spec_why.
                 (valid_range alloc u2 0 0) /\ (valid_range alloc u1 0 0) /\
                 (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\
                 (valid1 p2_Z57) /\ (valid1 p1_Z57)),
-  (* File "separation.c", line 46, characters 5-14 *) (valid alloc u1) /\
-  (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\
-  (valid1 p1_Z57).
+  (* File "separation.c", line 46, characters 5-14 *) (valid alloc u1).
 Proof.
 intuition.
 Save.
@@ -37,8 +35,7 @@ Save.
                 (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\
                 (valid1 p2_Z57) /\ (valid1 p1_Z57)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
-                (valid alloc u1) /\ (valid1_range p2_Z57 5) /\
-                (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\ (valid1 p1_Z57)),
+                (valid alloc u1)),
   forall (int_Z7_0: ((memory) Z Z7)),
   forall (int_Z8_0: ((memory) Z Z8)),
   forall (v1_Z57_0: ((memory) Z Z57)),
@@ -49,9 +46,7 @@ Save.
                  (pset_range (pset_singleton (acc p2_Z57 u1)) 0 4))) /\
                 (not_assigns alloc int_Z7 int_Z7_0
                  (pset_range (pset_singleton (acc p1_Z57 u1)) 0 4))),
-  (* File "separation.c", line 46, characters 5-14 *) (valid alloc u2) /\
-  (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\
-  (valid1 p1_Z57).
+  (* File "separation.c", line 46, characters 5-14 *) (valid alloc u2).
 Proof.
 intuition;generalize (H3 u2);intuition.
 Save.
@@ -72,8 +67,7 @@ Save.
                 (valid1_range p2_Z57 5) /\ (valid1_range p1_Z57 5) /\
                 (valid1 p2_Z57) /\ (valid1 p1_Z57)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
-                (valid alloc u1) /\ (valid1_range p2_Z57 5) /\
-                (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\ (valid1 p1_Z57)),
+                (valid alloc u1)),
   forall (int_Z7_0: ((memory) Z Z7)),
   forall (int_Z8_0: ((memory) Z Z8)),
   forall (v1_Z57_0: ((memory) Z Z57)),
@@ -85,8 +79,7 @@ Save.
                 (not_assigns alloc int_Z7 int_Z7_0
                  (pset_range (pset_singleton (acc p1_Z57 u1)) 0 4))),
   forall (HW_4: (* File "separation.c", line 46, characters 5-14 *)
-                (valid alloc u2) /\ (valid1_range p2_Z57 5) /\
-                (valid1_range p1_Z57 5) /\ (valid1 p2_Z57) /\ (valid1 p1_Z57)),
+                (valid alloc u2)),
   forall (int_Z7_1: ((memory) Z Z7)),
   forall (int_Z8_1: ((memory) Z Z8)),
   forall (v1_Z57_1: ((memory) Z Z57)),
@@ -111,35 +104,35 @@ Proof.
 intuition.
 apply not_assigns_trans with v2_Z57_0.
 unfold not_assigns;intros.
-apply H14;auto.
+apply H5;auto.
 apply pset_union_elim2 with (pset_singleton u2);auto.
 unfold not_assigns;intros.
-apply H19;auto.
+apply H8;auto.
 apply pset_union_elim1 with (pset_singleton u1);auto.
 apply not_assigns_trans with v1_Z57_0.
 unfold not_assigns;intros.
-apply H18;auto.
+apply H10;auto.
 apply pset_union_elim2 with (pset_singleton u2);auto.
 unfold not_assigns;intros.
-apply H24;auto.
+apply H14;auto.
 apply pset_union_elim1 with (pset_singleton u1);auto.
 apply not_assigns_trans with int_Z8_0.
 unfold not_assigns;intros.
-apply H16;auto.
-generalize (pset_union_elim2 H25);intro.
+apply H9;auto.
+generalize (pset_union_elim2 H15);intro.
 apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p2_Z57)) 0 4);auto.
 unfold not_assigns;intros.
-apply H23;auto.
-generalize (pset_union_elim1 H25);intro.
-generalize (pset_union_elim2 H25);intro.
+apply H13;auto.
+generalize (pset_union_elim1 H15);intro.
+generalize (pset_union_elim2 H15);intro.
 auto.
 apply not_assigns_trans with int_Z7_0.
 unfold not_assigns;intros.
-apply H12;auto.
-generalize (pset_union_elim2 H25);auto.
+apply H7;auto.
+generalize (pset_union_elim2 H15);auto.
 unfold not_assigns;intros.
-apply H21;auto.
-generalize (pset_union_elim1 H25);auto.
+apply H11;auto.
+generalize (pset_union_elim1 H15);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -239,9 +232,7 @@ Save.
                 (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc u3) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc u3).
 Proof.
 intuition;
 generalize (H1 u3);intuition.
@@ -349,10 +340,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -366,9 +354,7 @@ Save.
                  (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc u4) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc u4).
 Proof.
 intuition;generalize (H3 u4);intuition.
 Save.
@@ -475,10 +461,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -493,10 +476,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -510,9 +490,7 @@ Save.
                  (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w1) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w1).
 Proof.
 intuition;generalize (H3 w1);intuition.
 Save.
@@ -619,10 +597,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -637,10 +612,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -655,10 +627,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -672,9 +641,7 @@ Save.
                  (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w2) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w2).
 Proof.
 intuition;generalize (H3 w2);intuition.
 Save.
@@ -781,10 +748,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -799,10 +763,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -817,10 +778,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -835,10 +793,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -852,9 +807,7 @@ Save.
                  (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w3) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w3).
 Proof.
 intuition;generalize (H3 w3);intuition.
 Save.
@@ -961,10 +914,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -979,10 +929,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -997,10 +944,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -1015,10 +959,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -1033,10 +974,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -1051,9 +989,7 @@ Save.
                   (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w4) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w4).
 Proof.
 intuition;generalize (H3 w4);intuition.
 Save.
@@ -1160,10 +1096,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -1178,10 +1111,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -1196,10 +1126,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -1214,10 +1141,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -1232,10 +1156,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -1251,10 +1172,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -1269,9 +1187,7 @@ Save.
                   (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w5) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w5).
 Proof.
 intuition;generalize (H3 w5);intuition.
 Save.
@@ -1378,10 +1294,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -1396,10 +1309,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -1414,10 +1324,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -1432,10 +1339,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -1450,10 +1354,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -1469,10 +1370,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -1488,10 +1386,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w5)),
   forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
   forall (int_Z13_6: ((memory) Z Z13)),
@@ -1506,9 +1401,7 @@ Save.
                   (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
                   (pset_singleton w5))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w6) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w6).
 Proof.
 intuition;generalize (H3 w6);intuition.
 Save.
@@ -1615,10 +1508,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -1633,10 +1523,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -1651,10 +1538,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -1669,10 +1553,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -1687,10 +1568,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -1706,10 +1584,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -1725,10 +1600,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w5)),
   forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
   forall (int_Z13_6: ((memory) Z Z13)),
@@ -1744,10 +1616,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
                   (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w6)),
   forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
   forall (int_Z13_7: ((memory) Z Z13)),
@@ -1762,9 +1631,7 @@ Save.
                   (pset_singleton w6))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
                   (pset_singleton w6))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w7) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w7).
 Proof.
 intuition;generalize (H3 w7);intuition.
 Save.
@@ -1871,10 +1738,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -1889,10 +1753,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -1907,10 +1768,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -1925,10 +1783,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -1943,10 +1798,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -1962,10 +1814,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -1981,10 +1830,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w5)),
   forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
   forall (int_Z13_6: ((memory) Z Z13)),
@@ -2000,10 +1846,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
                   (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w6)),
   forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
   forall (int_Z13_7: ((memory) Z Z13)),
@@ -2019,10 +1862,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
                   (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w7)),
   forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
   forall (int_Z13_8: ((memory) Z Z13)),
@@ -2037,9 +1877,7 @@ Save.
                   (pset_singleton w7))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
                   (pset_singleton w7))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w8) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w8).
 Proof.
 intuition;generalize (H3 w8);intuition.
 Save.
@@ -2146,10 +1984,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -2164,10 +1999,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -2182,10 +2014,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -2200,10 +2029,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -2218,10 +2044,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -2237,10 +2060,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -2256,10 +2076,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w5)),
   forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
   forall (int_Z13_6: ((memory) Z Z13)),
@@ -2275,10 +2092,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
                   (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w6)),
   forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
   forall (int_Z13_7: ((memory) Z Z13)),
@@ -2294,10 +2108,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
                   (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w7)),
   forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
   forall (int_Z13_8: ((memory) Z Z13)),
@@ -2313,10 +2124,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
                   (pset_singleton w7))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w8)),
   forall (anonymous_2_v1_Z82_9: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_9: ((memory) Z Z82)),
   forall (int_Z13_9: ((memory) Z Z13)),
@@ -2331,9 +2139,7 @@ Save.
                   (pset_singleton w8))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_8 anonymous_2_v1_Z82_9
                   (pset_singleton w8))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w9) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w9).
 Proof.
 intuition;generalize (H3 w9);intuition.
 Save.
@@ -2440,10 +2246,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -2458,10 +2261,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -2476,10 +2276,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -2494,10 +2291,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -2512,10 +2306,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -2531,10 +2322,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -2550,10 +2338,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w5)),
   forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
   forall (int_Z13_6: ((memory) Z Z13)),
@@ -2569,10 +2354,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
                   (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w6)),
   forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
   forall (int_Z13_7: ((memory) Z Z13)),
@@ -2588,10 +2370,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
                   (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w7)),
   forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
   forall (int_Z13_8: ((memory) Z Z13)),
@@ -2607,10 +2386,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
                   (pset_singleton w7))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w8)),
   forall (anonymous_2_v1_Z82_9: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_9: ((memory) Z Z82)),
   forall (int_Z13_9: ((memory) Z Z13)),
@@ -2626,10 +2402,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_8 anonymous_2_v1_Z82_9
                   (pset_singleton w8))),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w9) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w9)),
   forall (anonymous_2_v1_Z82_10: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_10: ((memory) Z Z82)),
   forall (int_Z13_10: ((memory) Z Z13)),
@@ -2644,9 +2417,7 @@ Save.
                   anonymous_2_v2_Z82_10 (pset_singleton w9))) /\
                  (not_assigns alloc anonymous_2_v1_Z82_9
                   anonymous_2_v1_Z82_10 (pset_singleton w9))),
-  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w10) /\
-  (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z82) /\
-  (valid1_range anonymous_2_p2_Z82 5) /\ (valid1_range anonymous_2_p1_Z82 5).
+  (* File "separation.c", line 81, characters 5-14 *) (valid alloc w10).
 Proof.
 intuition;generalize (H3 w10);intuition.
 Save.
@@ -2753,10 +2524,7 @@ Save.
                 (valid1_range anonymous_2_p2_Z82 5) /\
                 (valid1_range anonymous_2_p1_Z82 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u3) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u3)),
   forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
   forall (int_Z13_0: ((memory) Z Z13)),
@@ -2771,10 +2539,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
                  (pset_singleton u3))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc u4) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u4)),
   forall (anonymous_2_v1_Z82_1: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_1: ((memory) Z Z82)),
   forall (int_Z13_1: ((memory) Z Z13)),
@@ -2789,10 +2554,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_0 anonymous_2_v1_Z82_1
                  (pset_singleton u4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w1) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w1)),
   forall (anonymous_2_v1_Z82_2: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_2: ((memory) Z Z82)),
   forall (int_Z13_2: ((memory) Z Z13)),
@@ -2807,10 +2569,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_1 anonymous_2_v1_Z82_2
                  (pset_singleton w1))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
-                (valid alloc w2) /\ (valid1 anonymous_2_p2_Z82) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc w2)),
   forall (anonymous_2_v1_Z82_3: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_3: ((memory) Z Z82)),
   forall (int_Z13_3: ((memory) Z Z13)),
@@ -2825,10 +2584,7 @@ Save.
                 (not_assigns alloc anonymous_2_v1_Z82_2 anonymous_2_v1_Z82_3
                  (pset_singleton w2))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w3) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w3)),
   forall (anonymous_2_v1_Z82_4: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_4: ((memory) Z Z82)),
   forall (int_Z13_4: ((memory) Z Z13)),
@@ -2844,10 +2600,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_3 anonymous_2_v1_Z82_4
                   (pset_singleton w3))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w4) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w4)),
   forall (anonymous_2_v1_Z82_5: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_5: ((memory) Z Z82)),
   forall (int_Z13_5: ((memory) Z Z13)),
@@ -2863,10 +2616,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_4 anonymous_2_v1_Z82_5
                   (pset_singleton w4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w5) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w5)),
   forall (anonymous_2_v1_Z82_6: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_6: ((memory) Z Z82)),
   forall (int_Z13_6: ((memory) Z Z13)),
@@ -2882,10 +2632,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_5 anonymous_2_v1_Z82_6
                   (pset_singleton w5))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w6) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w6)),
   forall (anonymous_2_v1_Z82_7: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_7: ((memory) Z Z82)),
   forall (int_Z13_7: ((memory) Z Z13)),
@@ -2901,10 +2648,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_6 anonymous_2_v1_Z82_7
                   (pset_singleton w6))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w7) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w7)),
   forall (anonymous_2_v1_Z82_8: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_8: ((memory) Z Z82)),
   forall (int_Z13_8: ((memory) Z Z13)),
@@ -2920,10 +2664,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_7 anonymous_2_v1_Z82_8
                   (pset_singleton w7))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w8) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w8)),
   forall (anonymous_2_v1_Z82_9: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_9: ((memory) Z Z82)),
   forall (int_Z13_9: ((memory) Z Z13)),
@@ -2939,10 +2680,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_8 anonymous_2_v1_Z82_9
                   (pset_singleton w8))),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w9) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w9)),
   forall (anonymous_2_v1_Z82_10: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_10: ((memory) Z Z82)),
   forall (int_Z13_10: ((memory) Z Z13)),
@@ -2958,10 +2696,7 @@ Save.
                  (not_assigns alloc anonymous_2_v1_Z82_9
                   anonymous_2_v1_Z82_10 (pset_singleton w9))),
   forall (HW_24: (* File "separation.c", line 81, characters 5-14 *)
-                 (valid alloc w10) /\ (valid1 anonymous_2_p2_Z82) /\
-                 (valid1 anonymous_2_p1_Z82) /\
-                 (valid1_range anonymous_2_p2_Z82 5) /\
-                 (valid1_range anonymous_2_p1_Z82 5)),
+                 (valid alloc w10)),
   forall (anonymous_2_v1_Z82_11: ((memory) Z Z82)),
   forall (anonymous_2_v2_Z82_11: ((memory) Z Z82)),
   forall (int_Z13_11: ((memory) Z Z13)),
