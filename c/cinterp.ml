@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.157 2005-11-28 16:17:07 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.158 2005-11-30 10:09:01 filliatr Exp $ i*)
 
 
 open Format
@@ -464,7 +464,7 @@ let rec interp_expr e =
 		 |Beq_pointer | Bneq_pointer 
 		 |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
     | NEunary (Unot, _) ->
-	begin match interp_boolean_expr e with
+	begin match interp_boolean_expr e with (* partial evaluation *)
 	  | Cte (Prim_bool true) -> Cte (Prim_int Int64.one)
 	  | Cte (Prim_bool false) -> Cte(Prim_int Int64.zero)
 	  | e -> If (e, Cte(Prim_int Int64.one), Cte(Prim_int Int64.zero))

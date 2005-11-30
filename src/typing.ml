@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.116 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.117 2005-11-30 10:09:01 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -444,6 +444,7 @@ let rec typef lab env expr =
       let t_e = typef lab env' e in
       check_for_not_mutable e.ploc t_e.info.t_result_type;
       let info = k_add_effects t_e.info ep in
+      let t_e = { t_e with info = info } in
       let k = type_c_of_typing_info p' info in
       let v = make_arrow_type t_e.info.t_label bl' k in
       let ef = Effect.bottom in
