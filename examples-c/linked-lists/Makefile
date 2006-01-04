@@ -1,9 +1,14 @@
 
-all: reverse 
+all: swap reverse
 
 rev:
 	caduceus reverse.c
 	make -f reverse.makefile do_simplify
+
+swap:
+	caduceus swap.c
+	make -f swap.makefile simplify
+	make -f swap.makefile coq
 
 %: %.c 
 	caduceus $*.c

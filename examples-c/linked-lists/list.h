@@ -16,6 +16,8 @@ typedef struct struct_list {
 
 /*@ logic plist app(plist l1, plist l2) */
 
+/*@ logic int list_length(plist l) */
+
 /*@ predicate disjoint(plist l1, plist l2) */
 
 /*@ axiom rev_nil_ax : rev(nil()) == nil() */
@@ -44,7 +46,7 @@ typedef struct struct_list {
 /*@ axiom Path_null_inv_ax : 
      \forall list p; \forall plist l; lpath(p,l,p) => l==nil() */
 
-/*@ axiom Path_cons :
+/*@ axiom Path_cons_inv :
      \forall list p1; \forall plist l; \forall list p2;
      (\valid(p1) && lpath(p1->tl,l,p2)) <=> lpath(p1,cons(p1,l),p2) */
 

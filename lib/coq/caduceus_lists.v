@@ -129,21 +129,32 @@ unfold llist; inversion 1; intuition.
 Qed.
 
 (** invariance of a list when updating a cell outside of this list *)
-(*
-Lemma llist_pset_same :
- forall (a: alloc_table) (next : pointer -> pointer) (p:pointer) (l:plist),
-   llist a next p l ->
-   forall p1 p2:pointer,
-     ~ In p1 l -> llist a (upd t p1 p2) p l.
+
+Lemma lpath_pset_same :
+ forall (a: alloc_table) (m : memory (pointer Z) Z) (p p':pointer Z) (l:plist Z),
+   lpath a (acc m) p l p' ->
+   forall p1 p2:pointer Z,
+     ~ In p1 l -> lpath a (acc (upd m p1 p2)) p l p'.
 Proof.
-unfold llist; simple induction 1; intuition.
+simple induction 1; intuition.
 apply Path_cons; auto.
  rewrite acc_upd_neq; auto.
 auto with *.
-red; intro; apply H3; subst p0; auto with *.
+red; intro.
+apply H4; subst p0; auto with *.
+Qed.
+Hint Resolve lpath_pset_same .
+
+Lemma llist_pset_same :
+ forall (a: alloc_table) (m : memory (pointer Z) Z) (p:pointer Z) (l:plist Z),
+   llist a (acc m) p l ->
+   forall p1 p2:pointer Z,
+     ~ In p1 l -> llist a (acc (upd m p1 p2)) p l.
+Proof.
+unfold llist; intros; apply lpath_pset_same; auto.
 Qed.
 Hint Resolve llist_pset_same .
-*)
+
 (** [llist] is a function *)
 
 Lemma llist_function :

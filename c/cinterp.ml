@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.159 2005-11-30 14:34:56 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.160 2006-01-04 13:12:46 marche Exp $ i*)
 
 
 open Format
@@ -27,27 +27,6 @@ open Creport
 open Ctypes
 open Cseparation
 open Pp
-
-(*
-
-let rec global_var_for_type t =
-  match t.ctype_node with
-    | (Tenum _ | Tint _) -> "intP"
-    | Tfloat _ -> "realP"
-    | Tarray (ty,_) | Tpointer ty -> global_var_for_type ty ^ "P"
-    | Tstruct _ -> "pointer"
-    | Tunion _ -> unsupported Loc.dummy "union types"
-    | _ -> assert false (* TODO *)
-
-let global_var_for_array_type t =
-  match t.ctype_node with
-    | Tpointer {ctype_node=Tstruct _} | Tarray({ctype_node=Tstruct _}, _) -> 
-	if t.ctype_ghost then "ghost_pointerP" else "pointerP"
-    | Tpointer ty | Tarray(ty,_) -> 
-	let name = global_var_for_type ty in
-	if t.ctype_ghost then "ghost_" ^ name else name
-    | _ -> assert false
-*)
 
 
 let heap_var_name v =
@@ -1445,6 +1424,7 @@ let cinterp_logic_symbol id ls =
 	let ret_type =
 	  match ret.Ctypes.ctype_node with
 	    | Tvar s -> base_type s
+	    | Tint(_,_) -> base_type "int"
 	    | _ -> assert false
 	in
 	let local_type =
@@ -1464,7 +1444,7 @@ let cinterp_logic_symbol id ls =
 	Logic(false,id.logic_name,final_type)
     | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
-	let ret_type =
+	let ret_type = 
 	  match ret.Ctypes.ctype_node with
 	    | Tvar s -> [],s
 	    | _ -> assert false

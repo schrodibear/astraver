@@ -1,4 +1,5 @@
 
+
 /* in-place list reversal */
 
 #include "list.h"
@@ -14,7 +15,7 @@ list rev(list p0) {
           llist(p, lp) && llist(r, lr) && disjoint(lp, lr) &&
           \forall plist l; 
             \old(llist(p0, l)) => app(rev(lr), lp) == rev(l)
-    @ variant length(r) for length_order */
+    @ (* variant length(r) for length_order *) */
   while (r != NULL) {
     list q = r;
     r = r->tl;
