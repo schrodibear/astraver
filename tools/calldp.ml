@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.2 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.3 2006-01-04 13:25:43 marche Exp $ i*)
 
 open Printf
 
@@ -43,7 +43,7 @@ let cvcl ?(timeout=10) ~filename:f () =
 let simplify ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
   call
-    (sprintf "ulimit -t %d; Simplify %s > %s 2>&1 && grep -q -w Valid %s" 
+    (sprintf "timeout %d Simplify %s > %s 2>&1 && grep -q -w Valid %s" 
        timeout f out out)
     out
 
