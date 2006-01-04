@@ -34,7 +34,7 @@ Admitted.
 (*Why logic*) Definition lpath :
   ((memory) ((pointer) Z21) Z21) -> alloc_table -> ((pointer) Z21) -> plist
   -> ((pointer) Z21) -> Prop.
-exact (fun m a => lpath Z21 a (acc m)).
+exact (fun m a => lpath _ a (acc m)).
 Defined.
 
 (*Why logic*) Definition cons : ((pointer) Z21) -> plist -> plist.
@@ -72,7 +72,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition app : plist -> plist -> plist.
-exact (@app (pointer Z21)) .
+exact (fun p => app p) .
 Defined.
 
 (*Why axiom*) Lemma app_nil_1_ax :

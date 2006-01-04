@@ -242,6 +242,7 @@ Qed.
 
 (** * Finite lists characterization *)
 
+(*
 Inductive is_list (a: alloc_table) (next: pointer Z -> pointer Z) : 
    pointer Z -> Prop :=
   | List_null : is_list a next null
@@ -250,7 +251,6 @@ Inductive is_list (a: alloc_table) (next: pointer Z -> pointer Z) :
         ~(p = null) -> valid a p -> is_list a next (next p) -> is_list a next p.
 
 Hint Constructors is_list.
-
 
 Lemma is_list_llist :
  forall (a: alloc_table) (next: pointer Z -> pointer Z) (p:pointer Z),
@@ -270,21 +270,23 @@ simple induction l; intuition.
 inversion H; auto.
 inversion H0; intuition.
 Qed.
+*)
 
+Definition is_list a next p := exists l : plist Z, llist a next p l.
 
 (** * WF relation over linked lists *)
 
-(*
-Definition Length := ((memory pointer) * pointer)%type.
-Definition length (a: alloc_table)
-   (t: memory pointer) (p:pointer) := (t, p).
 
-Definition length_order (c1 c2: memory pointer * pointer) : Prop :=
+Definition Length := ((memory (pointer Z) Z) * (pointer Z))%type.
+Definition length (a: alloc_table)
+   (t : memory (pointer Z) Z) (p:pointer Z) := (t, p).
+
+Definition length_order (c1 c2: memory (pointer Z) Z * pointer Z) : Prop :=
   let (t1, p1) := c1 in
   let (t2, p2) := c2 in
     exists a : alloc_table,
-    exists l1 : plist,
-    exists l2 : plist,
+    exists l1 : plist Z,
+    exists l2 : plist Z,
     llist a (acc t1) p1 l1 /\ llist a (acc t2) p2 l2 /\ (List.length l1 < List.length l2)%nat.
 
 Lemma length_order_wf : well_founded length_order.
@@ -293,7 +295,7 @@ apply well_founded_inv_lt_rel_compat with
  (F := fun (x:Length) n =>
          let (t, p) := x in
          exists a : alloc_table,
-         exists l : plist, llist a (acc t) p l /\ List.length l = n).
+         exists l : plist Z, llist a (acc t) p l /\ List.length l = n).
 unfold length_order, inv_lt_rel.
 simple destruct x; simple destruct y; intuition.
 elim H; clear H; intros a H; elim H; clear H;
@@ -314,25 +316,19 @@ Lemma length_acc :
   is_list a (acc tl) p -> p <> null ->
   length_order (length a tl (acc tl p)) (length a tl p).
 Proof.
-unfold length,length_order; intros.
+unfold length,length_order,is_list ; intros.
 exists a.
-inversion H; intuition.
-absurd (p = null); auto.
-subst p0.
-generalize (is_list_llist H2).
-intros [l1 Hl1]; exists l1.
-generalize (is_list_llist H).
-intros [l2 Hl2]; exists l2.
+inversion H.
+destruct x.
+inversion H1; subst; auto.
+elim H0; auto.
+exists x.
+exists (p0::x).
 intuition.
-inversion Hl2.
-absurd (p = null); auto.
-assert (l1 = l).
-apply llist_function with a a (acc tl) (acc tl p); auto.
-subst; auto.
+inversion H1; auto.
 Qed.
 
 Hint Resolve length_acc.
-*)
 
 (** * Disjointness *)
 

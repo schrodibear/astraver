@@ -15,9 +15,6 @@ Admitted.
 (*Why type*) Definition Z3: Set.
 Admitted.
 
-(*Why type*) Definition Z4: Set.
-Admitted.
-
 (*Why type*) Definition Z20: Set.
 Admitted.
 
@@ -29,7 +26,8 @@ exact (plist Z23).
 Defined.
 
 (*Why type*) Definition Length: Set.
-Admitted.
+exact (Length Z23).
+Defined.
 
 (*Why logic*) Definition lpath :
   ((memory) ((pointer) Z23) Z23) -> alloc_table -> ((pointer) Z23) -> plist
@@ -38,7 +36,7 @@ exact (fun m a => lpath _ a (acc m)).
 Defined.
 
 (*Why logic*) Definition cons : ((pointer) Z23) -> plist -> plist.
-exact (@cons (pointer Z23)).
+exact (fun p => cons p).
 Defined.
 
 (*Why axiom*) Lemma Path_cons_inv :
@@ -72,7 +70,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition app : plist -> plist -> plist.
-exact (@app (pointer Z23)).
+exact (fun p => app p).
 Defined.
 
 (*Why axiom*) Lemma app_nil_1_ax :
@@ -90,7 +88,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition disjoint : plist -> plist -> Prop.
-exact (@disjoint (pointer Z23)).
+exact (fun p => disjoint p).
 Defined.
 
 (*Why axiom*) Lemma disjoint_nil1 :
@@ -126,7 +124,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition length :
-  ((memory) ((pointer) Z23) Z4) -> alloc_table -> ((pointer) Z4) -> Length.
+  ((memory) ((pointer) Z23) Z23) -> alloc_table -> ((pointer) Z23) -> Length.
 Admitted.
 
 (*Why logic*) Definition list_length : plist -> Z.
