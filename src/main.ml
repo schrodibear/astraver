@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.86 2005-11-08 14:55:14 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.87 2006-01-11 08:56:53 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -238,6 +238,16 @@ let add_external loc v id =
 let add_parameter v tv id =
   push_parameter (Ident.string id) v tv
 
+let rec is_a_var = function
+  | PTvar { type_val = None } -> true
+  | PTvar { type_val = Some t } -> is_a_var t
+  | _ -> false
+
+let cannot_be_generalized = function
+  | Ref _ -> true
+  | PureType pt -> is_a_var pt
+  | Arrow _ -> false
+
 let interp_decl ?(prelude=false) d = 
   let env = Env.empty in
   let lab = Label.empty in
@@ -249,13 +259,15 @@ let interp_decl ?(prelude=false) d =
   | Parameter (loc, ext, ids, v) ->
       let v = Ltyping.type_v loc lab env lenv v in
       if ext && is_mutable v then raise_located loc MutableExternal;
-      let v = Env.generalize_type_v v in
-      List.iter (add_external loc v) ids;
-      let v_spec = snd (specialize_type_scheme v) in
+      let gv = Env.generalize_type_v v in
+      let v_spec = snd (specialize_type_scheme gv) in
+      if gv.scheme_vars <> [] && cannot_be_generalized v_spec then
+	raise_located loc CannotGeneralize;
+      List.iter (add_external loc gv) ids;
       if ext && ocaml_externals || ocaml then Ocaml.push_parameters ids v_spec;
       if not ext && not (is_mutable v_spec) then
-	let tv = Monad.trad_scheme_v (initial_renaming env) env v in
-	List.iter (add_parameter v tv) ids
+	let tv = Monad.trad_scheme_v (initial_renaming env) env gv in
+	List.iter (add_parameter gv tv) ids
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
       let v = option_app Ltyping.pure_type v in

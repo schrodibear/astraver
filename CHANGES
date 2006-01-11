@@ -1,4 +1,5 @@
 
+  o fixed bug with polymorphic parameters that should not be generalized
   o new construct "e {{ Q }}" (opaque sub-expression)
   o new construct "assert {P}; e"
   o any logic term can be used in programs

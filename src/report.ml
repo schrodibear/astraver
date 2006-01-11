@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.10 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.11 2006-01-11 08:56:53 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -140,6 +140,8 @@ let report fmt = function
       fprintf fmt "@[Global %a has effects (@[%a@]).@\n" 
 	Ident.print id Effect.print e;
       fprintf fmt "A global declaration cannot have effects@]"
+  | CannotGeneralize ->
+      fprintf fmt "Cannot generalize"
 
 let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

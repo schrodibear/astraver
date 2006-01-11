@@ -249,8 +249,8 @@ src/util.cmi: src/types.cmi src/rename.cmi src/ptree.cmi src/misc.cmi \
 src/vcg.cmi: src/types.cmi src/logic.cmi src/log.cmi src/loc.cmi \
     src/ident.cmi src/cc.cmi src/ast.cmi 
 src/wp.cmi: src/env.cmi src/ast.cmi 
-c/cast.cmi: src/loc.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cconst.cmi 
 c/cast_misc.cmi: c/cast.cmi 
+c/cast.cmi: src/loc.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cconst.cmi 
 c/cconst.cmi: src/loc.cmi 
 c/ceffect.cmi: c/output.cmi src/loc.cmi c/info.cmi c/clogic.cmi c/cast.cmi 
 c/cenv.cmi: src/loc.cmi src/lib.cmi c/info.cmi c/ctypes.cmi 
@@ -343,16 +343,16 @@ c/cparser.cmx: src/ptree.cmi src/loc.cmx c/ctypes.cmx c/creport.cmx \
     c/cparser.cmi 
 c/cpp.cmo: c/coptions.cmi c/cpp.cmi 
 c/cpp.cmx: c/coptions.cmx c/cpp.cmi 
-c/cprint.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cenv.cmi \
-    c/cast.cmi c/cprint.cmi 
-c/cprint.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi c/cenv.cmx \
-    c/cast.cmi c/cprint.cmi 
 c/cprint_annot.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi \
     c/cenv.cmi c/cast.cmi 
 c/cprint_annot.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi \
     c/cenv.cmx c/cast.cmi 
 c/cprint_graph.cmo: c/info.cmi c/cenv.cmi c/cprint_graph.cmi 
 c/cprint_graph.cmx: c/info.cmx c/cenv.cmx c/cprint_graph.cmi 
+c/cprint.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cenv.cmi \
+    c/cast.cmi c/cprint.cmi 
+c/cprint.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi c/cenv.cmx \
+    c/cast.cmi c/cprint.cmi 
 c/creport.cmo: src/loc.cmi c/ctypes.cmi c/coptions.cmi c/cerror.cmi \
     c/creport.cmi 
 c/creport.cmx: src/loc.cmx c/ctypes.cmx c/coptions.cmx c/cerror.cmi \

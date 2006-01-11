@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: error.mli,v 1.21 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.22 2006-01-11 08:56:53 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -67,3 +67,4 @@ type t =
   | TypeBadArity
   | TypeArity of Ident.t * int * int
   | GlobalWithEffects of Ident.t * Effect.t
+  | CannotGeneralize
