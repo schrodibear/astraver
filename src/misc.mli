@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.76 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.77 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -208,6 +208,12 @@ val wpands : ?is_sym:bool -> predicate list -> predicate
 val wpimplies : predicate -> predicate -> predicate
 
 val simplify : predicate -> predicate
+
+(*s Equalities *)
+
+val eq_pure_type : pure_type -> pure_type -> bool
+val eq_term : term -> term -> bool
+val eq_predicate : predicate -> predicate -> bool (* no alpha-equivalence *)
 
 (*s Debug functions *)
 

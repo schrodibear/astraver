@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.mli,v 1.5 2005-06-21 07:45:04 filliatr Exp $ i*)
+(*i $Id: harvey.mli,v 1.6 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 open Vcg
+open Cc
 
 val reset : unit -> unit
 

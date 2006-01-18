@@ -14,11 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.mli,v 1.5 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: mizar.mli,v 1.6 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
-open Vcg
+open Cc
 
 val reset : unit -> unit
 

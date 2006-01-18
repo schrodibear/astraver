@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.100 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.101 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -489,6 +489,62 @@ let rec simplify = function
   | Pif (Tconst (ConstBool true), a, _) -> simplify a
   | Pif (Tconst (ConstBool false), _, b) -> simplify b
   | p -> map_predicate simplify p
+
+(*s Equalities *)
+
+let rec eq_pure_type t1 t2 = match t1, t2 with
+  | PTvar { type_val = Some t1 }, _ ->
+      eq_pure_type t1 t2
+  | _, PTvar { type_val = Some t2 } ->
+      eq_pure_type t1 t2
+  | PTexternal (l1, id1), PTexternal (l2, id2) ->
+      id1 == id2 && List.for_all2 eq_pure_type l1 l2
+  | _ ->
+      t1 = t2
+
+let rec eq_term t1 t2 = match t1, t2 with
+  | Tapp (id1, tl1, i1), Tapp (id2, tl2, i2) ->
+      id1 == id2 && List.for_all2 eq_term tl1 tl2 
+      (* && List.for_all2 eq_pure_type i1 i2 ??? *)
+  | _ -> 
+      t1 = t2
+
+let rec eq_predicate p1 p2 = match p1, p2 with
+  | Papp (id1, tl1, i1), Papp (id2, tl2, i2) ->
+      id1 == id2 && List.for_all2 eq_term tl1 tl2 
+      (* && List.for_all2 eq_pure_type i1 i2 ??? *)
+  | Pvar id1, Pvar id2 ->
+      id1 == id2
+  | Ptrue, Ptrue 
+  | Pfalse, Pfalse ->
+      true
+  | Pand (_, _, a1, b1), Pand (_, _, a2, b2)
+  | Por (a1, b1), Por (a2, b2)
+  | Piff (a1, b1), Piff (a2, b2)
+  | Forallb (_, a1, b1), Forallb (_, a2, b2)
+  | Pimplies (_, a1, b1), Pimplies (_, a2, b2) ->
+      eq_predicate a1 a2 && eq_predicate b1 b2
+  | Pnot a1, Pnot a2 ->
+      eq_predicate a1 a2
+  | Pif (t1, a1, b1), Pif (t2, a2, b2) ->
+      eq_term t1 t2 && eq_predicate a1 a2 && eq_predicate b1 b2
+  | Pfpi (t1, a1, b1), Pfpi (t2, a2, b2) ->
+      eq_term t1 t2 && a1 = a2 && b1 = b2
+  (* no alpha-equivalence *)
+  | (Forall _ | Exists _), _
+  | _, (Forall _ | Exists _) ->
+      false
+  (* equality up to names *)
+  | Pnamed (_, p1), _ ->
+      eq_predicate p1 p2
+  | _, Pnamed (_, p2) ->
+      eq_predicate p1 p2
+  (* outside of the diagonal -> false *)
+  | (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
+    (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
+      false
 
 (*s Debug functions *)
 

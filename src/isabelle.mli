@@ -16,7 +16,7 @@
 
 (*s Isabelle/HOL output *)
 
-open Vcg
+open Cc
 
 val reset : unit -> unit
 

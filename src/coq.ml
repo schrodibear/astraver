@@ -14,17 +14,18 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.139 2005-11-08 15:44:44 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.140 2006-01-18 15:13:02 filliatr Exp $ i*)
 
 open Options
 open Logic
 open Types
+open Vcg
 open Cc
 open Ident
 open Util
 open Format
 open Misc
-open Vcg
+open Cc
 open Pp
 
 (* common to V7 and V8 *)
@@ -41,7 +42,8 @@ let rec print_pure_type fmt = function
       fprintf fmt "((%a) %a)"
       Ident.print id
       (print_list space print_pure_type) l
-  | PTvarid id -> assert false
+  | PTvarid id -> 
+      assert false
   | PTvar { type_val = Some t} -> 
       fprintf fmt "%a" print_pure_type t      
   | PTvar v ->
@@ -696,6 +698,18 @@ let print_sequent = if v8 then print_sequent_v8 else print_sequent_v7
 let print_cc_type = if v8 then print_cc_type_v8 else print_cc_type_v7
 let print_cc_term = if v8 then print_cc_term_v8 else print_cc_term_v7
 
+let print_scheme fmt l =
+  List.iter
+    (fun x -> 
+       if v8 then fprintf fmt "forall (A%d:Set),@ " x.tag
+       else fprintf fmt "(A%d:Set)@ " x.tag)
+    l
+
+let print_sequent fmt s =
+  let (l,s) = Env.specialize_sequent s in
+  print_scheme fmt l;
+  print_sequent fmt s
+
 let _ = Vcg.log_print_function := print_sequent
       
 let reprint_obligation fmt (loc,id,s) =
@@ -713,13 +727,6 @@ let reprint_parameter fmt id c =
     "@[<hov 2>(*Why*) Parameter %s :@ @[%a@].@]@\n" id print_cc_type c
 
 let print_parameter = reprint_parameter
-
-let print_scheme fmt l =
-  List.iter
-    (fun x -> 
-       if v8 then fprintf fmt "forall (A%d:Set),@ " x.tag
-       else fprintf fmt "(A%d:Set)@ " x.tag)
-    l
 
 let print_logic_type fmt s = 
   let (l,t) = Env.specialize_logic_type s in
@@ -904,7 +911,16 @@ let add_dep f = Queue.add f deps_q
 
 let push_validation id tt v = Queue.add (id,tt,v) valid_q 
 
+let print_lam_scheme fmt l =
+  List.iter
+    (fun x -> 
+       if v8 then fprintf fmt "fun (A%d:Set) =>@ " x.tag
+       else fprintf fmt "[A%d:Set]@ " x.tag)
+    l
 let print_validation fmt (id, tt, v) =
+  let (l,tt,v) = Env.specialize_validation tt v in
+  let print_cc_type fmt t = print_scheme fmt l; print_cc_type fmt t in
+  let print_cc_term fmt c = print_lam_scheme fmt l; print_cc_term fmt c in
   fprintf fmt 
     "@[Definition %s (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
     id print_cc_type tt print_cc_term v

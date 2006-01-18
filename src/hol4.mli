@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.mli,v 1.1 2005-06-03 11:56:17 filliatr Exp $ i*)
+(*i $Id: hol4.mli,v 1.2 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
 open Vcg
+open Cc
 
 val reset : unit -> unit
 

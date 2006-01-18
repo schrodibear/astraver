@@ -22,6 +22,7 @@
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
 \newcommand{\indexnt}[1]{\index{#1@\textsl{#1}, grammar entry}}
 \newcommand{\indextt}[1]{\index{#1@\texttt{#1}}}
+\newcommand{\indexttbs}[1]{\index{#1@\texttt{\bs{}#1}}}
 \newcommand{\etoile}{$^{\star}$}
 \newcommand{\etoilesep}[1]{$^{\star}_#1$}
 \newcommand{\plus}{$^+$}
@@ -56,7 +57,7 @@
 {\Large\sf Tutorial and Reference Manual}\\[0.1cm]
 \rule\textwidth{0.1cm}\\[1cm]
 Version \caduceusversion\\[3cm]
-Jean-Christophe Filli\^atre and Claude March\'e
+Jean-Christophe Filli\^atre, Thierry Hubert and Claude March\'e
 \vfill
 \today\\
 \end{center}
@@ -80,7 +81,7 @@ the complete syntax of annotations, list of features, etc.
 
 \subsection*{License}
 
-The \caduceus\ certification tool is \copyright\ 2003-2004 Laboratoire de
+The \caduceus\ certification tool is \copyright\ 2003--2006 Laboratoire de
 Recherche en Informatique (\url{www.lri.fr}).
 It is open source and freely available under the terms of the GNU
 GENERAL PUBLIC LICENSE Version 2. See the files \texttt{COPYING} and
@@ -94,7 +95,7 @@ March\'e and Thierry Hubert.
 \subsection*{Availability}
 
 The \caduceus\ tool is available from
-\url{http://why.lri.fr/caduceus/}, 
+\url{http://caduceus.lri.fr/}, 
 in source and binary formats, together with this documentation and
 examples.
 
@@ -121,8 +122,10 @@ Bug reports can be sent to
 \section{Basic use of \caduceus}
 
 To introduce how the \caduceus{} tool must be used in practice, let us
-start with a trivial program: function \texttt{max} computing the
-maximum of two integers: \indextt{ensures}
+start with a trivial program: a function \texttt{max} computing the
+maximum of two integers. 
+In a file \texttt{max.c}, let us introduce the C function together
+with its specification:
 \begin{code}
 /*@ ensures 
   @   \result >= x && \result >= y &&
@@ -139,8 +142,10 @@ before the function definition in a comment of the shape \texttt{/*@
 character \texttt{@} is considered as a blank inside annotations.
 
 The specification is here a post-condition, introduced by the keyword
-\texttt{ensures}. This is the predicate to be valid when the function
-returns. The keyword \texttt{\result} denotes the value returned by
+\texttt{ensures}\indextt{ensures}. This is the predicate to be valid
+when the function 
+returns. The keyword \texttt{\result}\indexttbs{result} denotes the
+value returned by 
 the function, thus of type \texttt{int} in this example. The
 post-condition expresses that \texttt{\result} is the smallest integer
 greater than or equal to \texttt{x} and \texttt{y} (there are plenty
@@ -166,15 +171,13 @@ the command is:
 This command will generate the proof obligations, together with some
 Coq \emph{modeling} of the C program (file \verb|caduceus_why.v|):
 \begin{verbatim}
-why [...] why/caduceus_spec.why
+why [...] why/max_spec.why
 why [...] why/max.why
 \end{verbatim}
 and then will try to compile the resulting Coq files:
 \begin{verbatim}
-coqdep -I coq coq/*.v > max.depend
-coqc -I coq coq/caduceus_why.v
-coqc -I coq coq/caduceus_tactics.v
-coqc -I coq coq/caduceus_spec_why.v
+coqdep [...] coq/max*_why.v > max.depend
+coqc -I coq coq/max_spec_why.v
 coqc -I coq coq/max_why.v
 \end{verbatim}
 The last file contains two proof
@@ -191,17 +194,18 @@ The \texttt{make} command becomes:
 \end{verbatim}
 The obligations are also discharged automatically in that case:
 \begin{verbatim}
-time make -f max.makefile clean do_simplify > simplify.log
-
-real    0m0.163s
-user    0m0.110s
-sys     0m0.060s
-valid obligations:       2
-invalid obligations:       0
+Running Simplify on proof obligations
+(. = valid * = invalid # = timeout/failure)
+simplify/max_why.sx.all: .. (2/0/0)
+total           :   2
+valid           :   2 (100%)
+invalid         :   0 (  0%)
+timeout/failure :   0 (  0%)
 \end{verbatim}
 When an obligation fails with \simplify, then no manual proof may be
-attempted, but counter-examples given in file \texttt{simplify.log}
-may be consulted, to discover missing pre-conditions for instance.
+attempted, but counter-examples can be obtained by running \simplify\
+manually on the file \texttt{simplify/max\_why.sx.all}.
+It may help discovering missing pre-conditions for instance.
 
 \subsection*{Other provers}
 \subsubsection*{\textsf{CVC Lite}}
@@ -239,7 +243,6 @@ Running \caduceus{} and then \simplify\ results in:
 generating Why code for function abs1
 > make -f abs.makefile simplify
 [...]
-why [...] why/caduceus_spec.why
 why [...] why/abs.why
 [...]
 time make -f abs.makefile clean do_simplify > simplify.log
@@ -285,7 +288,7 @@ which is not provable.
 
 To fix this problem, one should specify a pre-condition to function
 \verb|abs|, which can be given using the \verb|\valid| predicate of
-\caduceus{} as follows: \index{valid@\texttt{\bs{}valid}}\indextt{requires}
+\caduceus{} as follows: \indexttbs{valid}\indextt{requires}
 \begin{code}
 /*@ requires \valid(p)
   @ ensures *p >= 0

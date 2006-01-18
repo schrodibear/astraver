@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.38 2005-11-09 07:27:41 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.39 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -23,7 +23,7 @@ open Options
 open Misc
 open Error
 open Logic
-open Vcg
+open Cc
 open Format
 open Pp
 

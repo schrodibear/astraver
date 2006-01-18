@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.51 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.52 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -23,6 +23,7 @@ open Ast
 open Logic
 open Error
 open Report
+open Cc
 
 (* generalization *)
 
@@ -61,14 +62,25 @@ let generalize_logic_type t =
   let l = find_logic_type_vars t in
   { scheme_vars = l ; scheme_type = t }
 
+let rec find_term_vars acc = function
+  | Tconst _
+  | Tvar _
+  | Tderef _ ->
+      acc
+  | Tapp (_, tl, i) ->
+      List.fold_left find_term_vars 
+	(List.fold_left find_pure_type_vars acc i) tl
 
 let rec find_predicate_vars acc p =
   match p with
     | Pvar _
-    | Papp _
     | Pfpi _
     | Ptrue
-    | Pfalse -> acc
+    | Pfalse -> 
+	acc
+    | Papp (_, tl, i) ->
+	List.fold_left find_term_vars 
+	  (List.fold_left find_pure_type_vars acc i) tl
     | Pimplies (_,p1,p2) 
     | Pif (_,p1,p2)
     | Pand (_,_,p1,p2)
@@ -184,6 +196,161 @@ let subst_function_def s (bl,t,e) =
   bl, subst_pure_type s t, e
 
 let specialize_function_def = specialize_scheme subst_function_def
+
+let rec find_cc_type_vars acc = function
+  | TTpure pt -> find_pure_type_vars acc pt
+  | TTarray cc -> find_cc_type_vars acc cc
+  | TTlambda (b, cc) -> find_cc_binder_vars (find_cc_type_vars acc cc) b
+  | TTarrow (b, cc) -> find_cc_binder_vars (find_cc_type_vars acc cc) b
+  | TTtuple (bl, cco) -> 
+      List.fold_left find_cc_binder_vars 
+	(match cco with None -> acc | Some cc -> find_cc_type_vars acc cc) bl
+  | TTpred p -> find_predicate_vars acc p
+  | TTapp (cc, l) -> 
+      find_cc_type_vars (List.fold_left find_cc_type_vars acc l) cc
+  | TTterm _ 
+  | TTSet -> acc
+
+and find_cc_bind_type_vars acc = function
+  | CC_var_binder cc -> find_cc_type_vars acc cc
+  | CC_pred_binder p -> find_predicate_vars acc p
+  | CC_untyped_binder -> acc
+
+and find_cc_binder_vars acc (_, bt) = find_cc_bind_type_vars acc bt
+
+let rec subst_cc_type s = function
+  | TTpure pt -> TTpure (subst_pure_type s pt)
+  | TTarray cc -> TTarray (subst_cc_type s cc)
+  | TTlambda (b, cc) -> TTlambda (subst_cc_binder s b, subst_cc_type s cc)
+  | TTarrow (b, cc) -> TTarrow (subst_cc_binder s b, subst_cc_type s cc)
+  | TTtuple (bl, cco) -> 
+      TTtuple (List.map (subst_cc_binder s) bl, 
+	       option_app (subst_cc_type s) cco)
+  | TTpred p -> TTpred (subst_predicate s p)
+  | TTapp (cc, l) -> TTapp (subst_cc_type s cc, List.map (subst_cc_type s) l)
+  | TTterm t -> TTterm (subst_term s t)
+  | TTSet -> TTSet
+
+and subst_cc_bind_type s = function
+  | CC_var_binder cc -> CC_var_binder (subst_cc_type s cc)
+  | CC_pred_binder p -> CC_pred_binder (subst_predicate s p)
+  | CC_untyped_binder -> CC_untyped_binder
+
+and subst_cc_binder s (id, bt) = (id, subst_cc_bind_type s bt)
+
+let subst_sequent s (h, p) = 
+  let subst_hyp = function
+    | Svar (id, t) -> Svar (id, subst_cc_type s t)
+    | Spred (id, p) -> Spred (id, subst_predicate s p)
+  in
+  (List.map subst_hyp h, subst_predicate s p)
+
+let find_sequent_vars (h, p) =
+  let find_hyp_vars acc = function
+    | Svar (_, t) -> find_cc_type_vars acc t
+    | Spred (_, p) -> find_predicate_vars acc p
+  in
+  let l = List.fold_left find_hyp_vars [] h in
+  find_predicate_vars l p
+
+let specialize_sequent s =
+  let l = find_sequent_vars s in
+  let env = List.map (fun x -> (x, new_type_var())) l in 
+  (List.map snd env, subst_sequent env s)
+
+let rec find_cc_term_vars acc = function
+  | CC_var _ ->
+      acc
+  | CC_letin (_, bl, t1, t2) ->
+      List.fold_left find_cc_binder_vars
+	(find_cc_term_vars (find_cc_term_vars acc t1) t2) bl
+  | CC_lam (b, t) ->
+      find_cc_binder_vars (find_cc_term_vars acc t) b
+  | CC_app (t1, t2) ->
+      find_cc_term_vars (find_cc_term_vars acc t1) t2
+  | CC_tuple (tl, top) ->
+      List.fold_left find_cc_term_vars
+	(match top with None -> acc | Some t -> find_cc_type_vars acc t) tl
+  | CC_if (t1, t2, t3) ->
+      find_cc_term_vars (find_cc_term_vars (find_cc_term_vars acc t1) t2) t3
+  | CC_case (t, pl) ->
+      let find_case_vars acc (p, t) =
+	find_cc_pattern_vars (find_cc_term_vars acc t) p
+      in
+      List.fold_left find_case_vars (find_cc_term_vars acc t) pl
+  | CC_term t ->
+      find_term_vars acc t
+  | CC_hole pr ->
+      find_proof_vars acc pr
+  | CC_type cc
+  | CC_any cc ->
+      find_cc_type_vars acc cc
+
+and find_cc_pattern_vars acc = function
+  | PPvariable b -> find_cc_binder_vars acc b
+  | PPcons (_, pl) -> List.fold_left find_cc_pattern_vars acc pl
+
+and find_proof_vars acc = function
+  | Lemma _
+  | True
+  | Proj1 _
+  | Proj2 _
+  | Assumption _
+  | Conjunction _
+  | Loop_variant_1 _
+  | Absurd _
+  | ShouldBeAWp ->
+      acc
+  | Reflexivity t
+  | WfZwf t ->
+      find_term_vars acc t
+  | ProofTerm cc ->
+      find_cc_term_vars acc cc
+
+
+let rec subst_cc_term s = function
+  | CC_var _ as cc -> cc
+  | CC_letin (b, bl, t1, t2) -> 
+      CC_letin (b, List.map (subst_cc_binder s) bl, 
+		subst_cc_term s t1, subst_cc_term s t2)
+  | CC_lam (b, t) -> CC_lam (subst_cc_binder s b, subst_cc_term s t)
+  | CC_app (t1, t2) -> CC_app (subst_cc_term s t1, subst_cc_term s t2)
+  | CC_tuple (tl, top) -> CC_tuple (List.map (subst_cc_term s) tl,
+				    option_app (subst_cc_type s) top)
+  | CC_if (t1, t2, t3) ->
+      CC_if (subst_cc_term s t1, subst_cc_term s t2, subst_cc_term s t3)
+  | CC_case (t, cl) ->
+      let subst_case (p, t) = subst_cc_pattern s p, subst_cc_term s t in
+      CC_case (subst_cc_term s t, List.map subst_case cl)
+  | CC_term t -> CC_term (subst_term s t)
+  | CC_hole pr -> CC_hole (subst_proof s pr)
+  | CC_type t -> CC_type (subst_cc_type s t)
+  | CC_any t -> CC_any (subst_cc_type s t)
+
+and subst_cc_pattern s = function
+  | PPvariable b -> PPvariable (subst_cc_binder s b)
+  | PPcons (id, pl) -> PPcons (id, List.map (subst_cc_pattern s) pl)
+
+and subst_proof s = function
+  | Lemma _
+  | True
+  | Proj1 _
+  | Proj2 _
+  | Assumption _
+  | Conjunction _
+  | Loop_variant_1 _
+  | Absurd _
+  | ShouldBeAWp as pr ->
+      pr
+  | Reflexivity t -> Reflexivity (subst_term s t)
+  | WfZwf t -> WfZwf (subst_term s t)
+  | ProofTerm cc -> ProofTerm (subst_cc_term s cc)
+
+let specialize_validation tt cc =
+  let l = find_cc_term_vars (find_cc_type_vars [] tt) cc in
+  let env = List.map (fun x -> (x, new_type_var())) l in 
+  (List.map snd env, subst_cc_type env tt, subst_cc_term env cc)
+
 
 (* Environments for imperative programs.
  *

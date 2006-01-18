@@ -20,16 +20,6 @@ open Types
 open Logic
 open Cc
 
-type context_element =
-  | Svar of Ident.t * cc_type
-  | Spred of Ident.t * predicate
-
-type sequent = context_element list * predicate
-
-type obligation = Loc.position * string * sequent
-
-type validation = proof cc_term
-
 val vcg : 
   string -> (Loc.position * predicate) cc_term -> obligation list * validation
 

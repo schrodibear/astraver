@@ -398,9 +398,9 @@ tools/cvcl_split.cmo: tools/cvcl_split.cmi
 tools/cvcl_split.cmx: tools/cvcl_split.cmi 
 tools/dp.cmo: tools/simplify_split.cmi tools/cvcl_split.cmi tools/calldp.cmi 
 tools/dp.cmx: tools/simplify_split.cmx tools/cvcl_split.cmx tools/calldp.cmx 
-tools/obfuscator.cmo: src/ptree.cmi src/pp.cmi src/logic.cmi src/loc.cmi \
-    src/lexer.cmi src/ident.cmi 
-tools/obfuscator.cmx: src/ptree.cmi src/pp.cmx src/logic.cmi src/loc.cmx \
-    src/lexer.cmx src/ident.cmx 
+tools/obfuscator.cmo: src/types.cmi src/ptree.cmi src/pp.cmi src/logic.cmi \
+    src/loc.cmi src/lexer.cmi src/ident.cmi 
+tools/obfuscator.cmx: src/types.cmi src/ptree.cmi src/pp.cmx src/logic.cmi \
+    src/loc.cmx src/lexer.cmx src/ident.cmx 
 tools/simplify_split.cmo: tools/simplify_split.cmi 
 tools/simplify_split.cmx: tools/simplify_split.cmi 

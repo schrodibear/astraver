@@ -25,18 +25,6 @@ open Logic
 open Types
 open Cc
 
-(*s Sequents and obligations. *)
-
-type context_element =
-  | Svar of Ident.t * cc_type
-  | Spred of Ident.t * predicate
-
-type sequent = context_element list * predicate
-
-type obligation = Loc.position * string * sequent
-
-type validation = proof cc_term
-
 (*s Log for the why-viewer *)
 
 let logs = ref ([] : Log.t)
@@ -58,6 +46,8 @@ let log l sq lemma_name =
 
 (*s We automatically prove the trivial obligations *)
 
+let (===) = eq_predicate
+
 (* ... |- true *)
 let ptrue = function
   | Ptrue -> True
@@ -71,14 +61,14 @@ let reflexivity = function
 
 (* ..., h:P, ...|- P  and ..., h:P and Q, ...|- P *)
 let assumption concl = function
-  | Spred (id, p) when p = concl -> Assumption id 
-  | Spred (id, Pand (_, _, a, _)) when a = concl -> Proj1 id
-  | Spred (id, Pand (_, _, _, b)) when b = concl -> Proj2 id
+  | Spred (id, p) when p === concl -> Assumption id 
+  | Spred (id, Pand (_, _, a, _)) when a === concl -> Proj1 id
+  | Spred (id, Pand (_, _, _, b)) when b === concl -> Proj2 id
   | _ -> raise Exit
 
 (* alpha-equivalence ? *)
 let lookup_hyp a = 
-  let test = function Spred (id, b) when a = b -> id | _ -> raise Exit in
+  let test = function Spred (id, b) when a === b -> id | _ -> raise Exit in
   list_first test
 
 (* ..., h:False, ... |- C *)
@@ -104,7 +94,7 @@ let boolean_destruct ctx concl =
 		     (_, Papp (eq1, [Tconst (ConstBool b1); t1], _), c1),
 	           Pimplies
 		     (_, Papp (eq2, [Tconst (ConstBool b2); t2], _), c2)))
-      when t1 = t2 && c1 = c2 && c1 = concl && is_eq eq1 
+      when eq_term t1 t2 && c1 === c2 && c1 === concl && is_eq eq1 
         && is_eq eq2 && b1 = not b2 ->
 	id, t1, b1
     | _ ->
@@ -138,7 +128,7 @@ let loop_variant_1 hyps concl =
   in
   let rec lookup_h' phi1 phi0 = function
     | Spred (h', Pand (_, _, _, Papp (id, [t1; t0], _))) 
-      when id == t_zwf_zero && t1 = phi1 && t0 = phi0 -> h'
+      when id == t_zwf_zero && eq_term t1 phi1 && eq_term t0 phi0 -> h'
     | _ -> raise Exit
   in
   match concl with
@@ -169,14 +159,19 @@ and unif_terms u = function
 
 (* unification of predicates *)
 let rec unif_pred u = function
-  | Pvar id, Pvar id' when id == id' -> u
+  | Pvar id, Pvar id' when id == id' -> 
+      u
   | Papp (id, tl, _), Papp (id', tl', _) when id == id' -> 
       unif_terms u (tl, tl')
-  | Ptrue, Ptrue | Pfalse, Pfalse -> u
+  | Ptrue, Ptrue 
+  | Pfalse, Pfalse -> 
+      u
   | Forallb (_, a, b), Forallb (_, a', b')
   | Pimplies (_, a, b), Pimplies (_, a', b') 
   | Pand (_, _, a, b), Pand (_, _, a', b')
-  | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
+  | Piff (a, b), Piff (a', b')
+  | Por (a, b), Por (a', b') -> 
+      unif_pred (unif_pred u (a, a')) (b, b')
   | Pif (a, b, c), Pif (a', b', c') ->
       unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
   | Pif (Tvar x, b, c), p' ->
@@ -189,12 +184,23 @@ let rec unif_pred u = function
 	 | _ -> raise Exit
        with Not_found ->
 	 raise Exit)
-  | Pnot a, Pnot a' -> unif_pred u (a, a')
+  | Pnot a, Pnot a' -> 
+      unif_pred u (a, a')
+  | Pfpi (t, a, b), Pfpi (t', a', b') when a = a' && b = b' ->
+      unif_term u (t, t')
   | Forall (_, _, n, _, p), Forall (_, _, n', _, p') 
   | Exists (_, n, _, p), Exists (_, n', _, p') ->
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
       unif_pred u (p, p'n)
-  | _ -> raise Exit
+  | Pnamed (_, p), p'
+  | p, Pnamed (_, p') ->
+      unif_pred u (p, p')
+  (* outside of the diagonal -> false *)
+  | (Pfpi _ | Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
+    (Pfpi _ | Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
+      raise Exit
 
 (* [lookup_instance]. 
    [id] is a proof of [forall v1...vn . p => q] where [bvars = v1...vn].
@@ -242,7 +248,8 @@ let alpha_eq a b =
 let lookup_boolean_instance a b =
   let rec lookup = function
     | Svar (x, TTpure PTbool) ::
-      Spred (h, Pif (Tvar x1, c, d)) :: _ when x == x1 && a = c && b = d -> 
+      Spred (h, Pif (Tvar x1, c, d)) :: _ 
+      when x == x1 && a === c && b === d -> 
 	x, h
     | _ :: ctx ->
 	lookup ctx
@@ -429,7 +436,7 @@ let rewrite_var ctx concl = match ctx, concl with
     Svar (v', ty) :: _,
     p
     when is_eq ide && v == v' -> 
-      if tsubst_in_predicate (subst_one v t) p1 <> p then raise Exit;
+      if not (tsubst_in_predicate (subst_one v t) p1 === p) then raise Exit;
       ProofTerm 
 	(cc_applist (CC_var rewrite_var_lemma)
 	   [CC_var h2;
@@ -442,7 +449,7 @@ let rewrite_var ctx concl = match ctx, concl with
     Svar (v', ty) :: _,
     p
     when is_eq ide && v == v' -> 
-      if tsubst_in_predicate (subst_one v t) p <> p1 then raise Exit;
+      if not (tsubst_in_predicate (subst_one v t) p === p1) then raise Exit;
       ProofTerm 
 	(cc_applist (CC_var rewrite_var_left_lemma)
 	   [CC_var h2;

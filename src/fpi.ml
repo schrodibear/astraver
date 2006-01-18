@@ -3,7 +3,7 @@ open Format
 open Pp
 open Misc
 open Logic
-open Vcg
+open Cc
 
 let oblig = Queue.create ()
 

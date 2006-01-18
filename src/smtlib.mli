@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.mli,v 1.1 2005-04-14 14:58:15 filliatr Exp $ i*)
+(*i $Id: smtlib.mli,v 1.2 2006-01-18 15:13:03 filliatr Exp $ i*)
 
-open Vcg
+open Cc
 
 val reset : unit -> unit
 

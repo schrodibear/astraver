@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.mli,v 1.5 2005-06-15 07:08:29 filliatr Exp $ i*)
+(*i $Id: simplify.mli,v 1.6 2006-01-18 15:13:03 filliatr Exp $ i*)
 
-open Vcg
+open Cc
 
 val reset : unit -> unit
 

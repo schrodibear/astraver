@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.5 2005-11-18 14:54:08 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.6 2006-01-18 15:13:03 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -23,7 +23,7 @@ open Options
 open Misc
 open Error
 open Logic
-open Vcg
+open Cc
 open Format
 open Pp
 

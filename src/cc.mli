@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.13 2005-11-03 14:11:35 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.14 2006-01-18 15:13:02 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -76,3 +76,17 @@ type proof =
   | ShouldBeAWp
 
 type proof_term = proof cc_term
+
+
+(*s Sequents and obligations. *)
+
+type context_element =
+  | Svar of Ident.t * cc_type
+  | Spred of Ident.t * predicate
+
+type sequent = context_element list * predicate
+
+type obligation = Loc.position * string * sequent
+
+type validation = proof cc_term
+

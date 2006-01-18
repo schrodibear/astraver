@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.3 2005-06-23 14:28:44 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.4 2006-01-18 15:13:02 filliatr Exp $ i*)
 
-open Vcg
+open Cc
 
 val push_obligations : obligation list -> unit
 
