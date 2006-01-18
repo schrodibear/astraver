@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: lexer.mll,v 1.3 2005-11-09 07:27:41 filliatr Exp $ *)
+(* $Id: lexer.mll,v 1.4 2006-01-18 09:40:41 filliatr Exp $ *)
 
 {
   open Lexing
@@ -216,7 +216,7 @@ and string = parse
   let loc lb = (lexeme_start_p lb, lexeme_end_p lb)
 
   let with_location f lb =
-    try f lb with e -> raise (Misc.Located (loc lb, e))
+    try f lb with e -> raise (Loc.Located (loc lb, e))
 
   let parse_lexpr = with_location (lexpr token)
   let parse_file = with_location (file token)

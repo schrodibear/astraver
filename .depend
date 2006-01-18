@@ -60,8 +60,8 @@ src/isabelle.cmo: src/vcg.cmi src/regen.cmi src/pp.cmi src/options.cmi \
 src/isabelle.cmx: src/vcg.cmx src/regen.cmx src/pp.cmx src/options.cmx \
     src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi \
     src/env.cmx src/cc.cmi src/isabelle.cmi 
-src/lexer.cmo: src/parser.cmi src/misc.cmi src/lexer.cmi 
-src/lexer.cmx: src/parser.cmx src/misc.cmx src/lexer.cmi 
+src/lexer.cmo: src/parser.cmi src/loc.cmi src/lexer.cmi 
+src/lexer.cmx: src/parser.cmx src/loc.cmx src/lexer.cmi 
 src/lib.cmo: src/lib.cmi 
 src/lib.cmx: src/lib.cmi 
 src/linenum.cmo: src/linenum.cmi 
@@ -124,12 +124,10 @@ src/ocaml.cmx: src/util.cmx src/types.cmi src/pp.cmx src/options.cmx \
     src/ocaml.cmi 
 src/options.cmo: src/version.cmo src/lib.cmi src/options.cmi 
 src/options.cmx: src/version.cmx src/lib.cmx src/options.cmi 
-src/parser.cmo: src/types.cmi src/ptree.cmi src/options.cmi src/misc.cmi \
-    src/logic.cmi src/ident.cmi src/float_lexer.cmo src/error.cmi \
-    src/effect.cmi src/parser.cmi 
-src/parser.cmx: src/types.cmi src/ptree.cmi src/options.cmx src/misc.cmx \
-    src/logic.cmi src/ident.cmx src/float_lexer.cmx src/error.cmi \
-    src/effect.cmx src/parser.cmi 
+src/parser.cmo: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
+    src/ident.cmi src/float_lexer.cmo src/error.cmi src/parser.cmi 
+src/parser.cmx: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmx \
+    src/ident.cmx src/float_lexer.cmx src/error.cmi src/parser.cmi 
 src/pp.cmo: src/pp.cmi 
 src/pp.cmx: src/pp.cmi 
 src/purify.cmo: src/util.cmi src/types.cmi src/misc.cmi src/logic.cmi \
@@ -230,8 +228,7 @@ src/monad.cmi: src/types.cmi src/rename.cmi src/logic.cmi src/loc.cmi \
 src/monomorph.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/ocaml.cmi: src/types.cmi src/ident.cmi src/env.cmi 
 src/parser.cmi: src/ptree.cmi 
-src/ptree.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
-    src/effect.cmi 
+src/ptree.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi 
 src/purify.cmi: src/env.cmi 
 src/pvs.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/red.cmi: src/logic.cmi src/cc.cmi 
@@ -401,5 +398,9 @@ tools/cvcl_split.cmo: tools/cvcl_split.cmi
 tools/cvcl_split.cmx: tools/cvcl_split.cmi 
 tools/dp.cmo: tools/simplify_split.cmi tools/cvcl_split.cmi tools/calldp.cmi 
 tools/dp.cmx: tools/simplify_split.cmx tools/cvcl_split.cmx tools/calldp.cmx 
+tools/obfuscator.cmo: src/ptree.cmi src/pp.cmi src/logic.cmi src/loc.cmi \
+    src/lexer.cmi src/ident.cmi 
+tools/obfuscator.cmx: src/ptree.cmi src/pp.cmx src/logic.cmi src/loc.cmx \
+    src/lexer.cmx src/ident.cmx 
 tools/simplify_split.cmo: tools/simplify_split.cmi 
 tools/simplify_split.cmx: tools/simplify_split.cmi 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.11 2006-01-11 08:56:53 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.12 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -146,11 +146,11 @@ let report fmt = function
 let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
 
-let raise_located loc e = raise (Located (loc, Error e))
+let raise_located loc e = raise (Loc.Located (loc, Error e))
 let raise_unlocated e = raise (Error e)
 let raise_locop locop e = match locop with
   | None -> raise (Error e)
-  | Some l -> raise (Located (l, Error e))
+  | Some l -> raise (Loc.Located (l, Error e))
 
 
 let rec explain_exception fmt = function
@@ -160,7 +160,7 @@ let rec explain_exception fmt = function
       fprintf fmt "Syntax error"
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
-  | Located (loc, e) ->
+  | Loc.Located (loc, e) ->
       fprintf fmt "%a%a" Loc.report_position loc explain_exception e
   | Error e ->
       report fmt e

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.107 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.108 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -535,7 +535,7 @@ and pp_binder fmt = function
   | id, v when id == Ident.anonymous -> 
       print_type_v2 fmt v
   | id, v ->
-      fprintf fmt "@[%a:%a@]" Ident.print id print_type_v v; 
+      fprintf fmt "@[%a:%a@]" Ident.print id print_type_v v
 
 and print_type_v2 fmt = function
   | Ref v -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.99 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.100 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -23,8 +23,6 @@ open Types
 open Ast
 open Ptree
 open Cc
-
-exception Located of Loc.position * exn
 
 (*s Utility functions. *)
 
@@ -414,11 +412,6 @@ and type_v_rsubst s = function
   | Arrow (bl,c) -> Arrow(List.map (binder_rsubst s) bl, type_c_rsubst s c)
 
 and binder_rsubst s (n,v) = (n, type_v_rsubst s v)
-
-let ptype_c_of_v v =
-  { pc_result_name = Ident.result;
-    pc_result_type = v;
-    pc_effect = Effect.bottom; pc_pre = []; pc_post = None }
 
 let type_c_of_v v =
   { c_result_name = Ident.result;

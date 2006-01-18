@@ -64,6 +64,15 @@
   let un_op (loc_op,op) e =
     locate (app (with_loc loc_op (Svar op)) [e])
 
+  let ptype_c_of_v v =
+    { pc_result_name = Ident.result;
+      pc_result_type = v;
+      pc_effect = { pe_reads = []; pe_writes = []; pe_raises = [] };
+      pc_pre = []; 
+      pc_post = None }
+
+  let list_of_some = function None -> [] | Some x -> [x]
+
 %}
 
 /* Tokens */ 
@@ -214,9 +223,9 @@ type_c:
 | LEFTB opt_assertion RIGHTB result effects LEFTB opt_post_condition RIGHTB
    { let id,v = $4 in
      { pc_result_name = id; pc_result_type = v;
-       pc_effect = $5; pc_pre = Misc.list_of_some $2; pc_post = $7 } }
+       pc_effect = $5; pc_pre = list_of_some $2; pc_post = $7 } }
 | type_v
-   { Misc.ptype_c_of_v $1 }
+   { ptype_c_of_v $1 }
 ;
 
 result:
@@ -226,9 +235,7 @@ result:
 
 effects:
 | opt_reads opt_writes opt_raises
-    { List.fold_right Effect.add_write $2
-	(List.fold_right Effect.add_read $1
-	   (List.fold_right Effect.add_exn $3 Effect.bottom)) }
+    { { pe_reads = $1; pe_writes = $2; pe_raises = $3 } }
 ;
 
 opt_reads:
@@ -269,8 +276,9 @@ post_condition:
 | assertion BAR list1_exn_condition_sep_bar
    { $1, $3 }
 | BAR list1_exn_condition_sep_bar
-   { Misc.wprintf (loc ()) "no postcondition; false inserted@\n";
-     if Options.werror then exit 1;
+   { Format.eprintf "%awarning: no postcondition; false inserted@\n" 
+       Loc.report_position (loc ());
+     (* if Options.werror then exit 1; *)
      ({ pa_name = Anonymous; pa_value = mk_pp PPfalse; pa_loc = loc () }, $2) }
 ;
 

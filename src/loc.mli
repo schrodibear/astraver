@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.12 2005-11-07 15:13:30 hubert Exp $ i*)
+(*i $Id: loc.mli,v 1.13 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 open Format
 
@@ -25,6 +25,8 @@ val report_line : formatter -> Lexing.position -> unit
 (* Lexing positions *)
 
 type position = Lexing.position * Lexing.position
+
+exception Located of position * exn
 
 val string : position -> string
 

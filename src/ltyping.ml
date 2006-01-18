@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.40 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.41 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -412,6 +412,11 @@ let warn_refs loc env p =
 	 ef)
     (predicate_refs env p)
 
+let effect e =
+  List.fold_right Effect.add_write e.pe_writes
+    (List.fold_right Effect.add_read e.pe_reads
+       (List.fold_right Effect.add_exn e.pe_raises Effect.bottom))
+
 let rec type_v loc lab env lenv = function
   | PVpure pt -> 
       PureType (pure_type pt)
@@ -428,7 +433,7 @@ and pure_type_v loc lab env lenv = function
       raise_located loc MutableMutable
 
 and type_c loc lab env lenv c =
-  let ef = c.pc_effect in
+  let ef = effect c.pc_effect in
   check_effect loc env ef;
   let v = type_v loc lab env lenv c.pc_result_type in
   let id = c.pc_result_name in

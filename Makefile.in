@@ -78,8 +78,11 @@ STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
 RVMERGE=bin/rv_merge.$(OCAMLBEST)
 DP=bin/dp.$(OCAMLBEST)
+WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 
-all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(WHY2HTML) $(DP) $(RVMERGE)
+TOOLS=$(WHY2HTML) $(DP) $(RVMERGE) $(WHYOBFUSCATOR)
+
+all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(TOOLS)
 
 opt: bin/why.opt bin/caduceus.opt
 
@@ -188,6 +191,16 @@ bin/rv_merge.byte: tools/rv_merge.ml
 bin/rv_merge.opt: tools/rv_merge.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
+OBFCMO=src/pp.cmo src/loc.cmo src/ident.cmo src/float_lexer.cmo \
+       src/parser.cmo src/lexer.cmo tools/obfuscator.cmo
+OBFCMX=$(OBFCMO:.cmo=.cmx)
+
+bin/why-obfuscator.byte: $(OBFCMO)
+	$(OCAMLC) $(BFLAGS) -o $@ $^
+
+bin/why-obfuscator.opt: $(OBFCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+
 static:: $(STATICBINARY)
 
 coq-no:
@@ -263,6 +276,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
+	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \
 	  cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \
 	fi

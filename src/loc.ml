@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.14 2005-11-09 07:27:41 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.15 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -49,6 +49,8 @@ let report_line fmt l = fprintf fmt "%s:%d:" l.pos_fname l.pos_lnum
 (* Lexing positions *)
 
 type position = Lexing.position * Lexing.position
+
+exception Located of position * exn
 
 let dummy_position = Lexing.dummy_pos, Lexing.dummy_pos
 

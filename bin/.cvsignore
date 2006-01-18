@@ -10,3 +10,6 @@ caduceus.opt
 dp.byte
 dp.opt
 rv_merge.opt
+why-obfuscator.byte
+why-obfuscator.opt
+

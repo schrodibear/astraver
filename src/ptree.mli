@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.28 2005-11-08 14:55:14 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.29 2006-01-18 09:40:41 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -69,6 +69,12 @@ type postcondition = assertion * (Ident.t * assertion) list
 
 (*s Parsed types *)
 
+type peffect = { 
+  pe_reads : Ident.t list;
+  pe_writes : Ident.t list;
+  pe_raises : Ident.t list
+}
+
 type ptype_v =
   | PVpure  of ppure_type
   | PVref   of ppure_type
@@ -77,7 +83,7 @@ type ptype_v =
 and ptype_c =
   { pc_result_name : Ident.t;
     pc_result_type : ptype_v;
-    pc_effect : Effect.t;
+    pc_effect : peffect;
     pc_pre    : assertion list;
     pc_post   : postcondition option }
 
