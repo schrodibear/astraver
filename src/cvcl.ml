@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.31 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.32 2006-01-19 14:17:03 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -92,7 +92,6 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "UNIT"
   | PTexternal ([pt], id) when id == farray -> 
       fprintf fmt "ARRAY INT OF %a" print_pure_type pt
-  | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
   | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i
@@ -318,12 +317,13 @@ let reset () = Queue.clear queue; Output.reset ()
 
 let predicate_of_string s =
   let p = Lexer.lexpr_of_string s in
-  let env = Env.empty in
+  let env = Env.empty () in
   let lenv = Env.logical_env env in
   let p = Ltyping.predicate Label.empty env lenv p in
   generalize_predicate p
 
 (* declaring predefined symbols *)
+(****
 let predefined_symbols fmt = 
   let a = PTvarid (Ident.create "a") in
   let farray_a = PTexternal ([a], farray) in
@@ -417,6 +417,7 @@ let predefined_symbols fmt =
          sorted_array(t,i,j) <->
          forall k:int. i <= k < j -> t[k] <= t[k+1]";
     ]
+***)
 
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
@@ -425,6 +426,6 @@ let output_file fwe =
     prelude
     sep
     (fun fmt -> 
-       if not no_cvcl_prelude then predefined_symbols fmt;
+       (*if not no_cvcl_prelude then predefined_symbols fmt;*)
        Queue.iter (print_elem fmt) queue)
 

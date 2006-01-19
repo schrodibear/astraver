@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.33 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.34 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -32,11 +32,10 @@ open Ast
 
 type local_env
 
-val empty : local_env
+val empty : unit -> local_env
 val add : Ident.t -> type_v -> local_env -> local_env
-val add_set : Ident.t -> local_env -> local_env
 val is_local : local_env -> Ident.t -> bool
-val is_local_set : local_env -> Ident.t -> bool
+val find_type_var : Ident.t -> local_env -> type_var
 
 (*s typed programs *)
 
@@ -52,7 +51,10 @@ type typing_info = {
   
 type typed_expr = typing_info Ast.t
 
-type 'a scheme = private { scheme_vars : string list; scheme_type : 'a }
+module Vset : Set.S with type elt = type_var
+module Vmap : Map.S with type key = type_var
+
+type 'a scheme = private { scheme_vars : Vset.t; scheme_type : 'a }
 
 type type_info = Set | TypeV of type_v
 
@@ -118,19 +120,21 @@ val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme
 val generalize_function_def : function_def -> function_def scheme
 
-val specialize_type_scheme : type_info scheme -> type_var list * type_v
-val specialize_logic_type : logic_type scheme -> type_var list * logic_type
-val specialize_predicate : predicate scheme -> type_var list * predicate
+type var_subst = type_var Vmap.t
+
+val specialize_type_scheme : type_info scheme -> var_subst * type_v
+val specialize_logic_type : logic_type scheme -> var_subst * logic_type
+val specialize_predicate : predicate scheme -> var_subst * predicate
 val specialize_predicate_def : 
-  predicate_def scheme -> type_var list * predicate_def
+  predicate_def scheme -> var_subst * predicate_def
 val specialize_function_def : 
-  function_def scheme -> type_var list * function_def
+  function_def scheme -> var_subst * function_def
 
-val specialize_sequent : Cc.sequent -> type_var list * Cc.sequent
+val specialize_sequent : Cc.sequent -> var_subst * Cc.sequent
 val specialize_validation : 
-  Cc.cc_type -> Cc.validation -> type_var list * Cc.cc_type * Cc.validation
+  Cc.cc_type -> Cc.validation -> var_subst * Cc.cc_type * Cc.validation
 
-val find_logic : Ident.t -> logical_env -> type_var list * logic_type
+val find_logic : Ident.t -> logical_env -> var_subst * logic_type
 
 val logical_env : local_env -> logical_env
 

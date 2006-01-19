@@ -67,7 +67,6 @@ let rec print_pure_type fmt = function
   | PTvar { type_val = Some t} -> 
       fprintf fmt "%a" print_pure_type t      
   | PTvar v -> fprintf fmt "'a%d" v.tag
-  | PTvarid _ -> assert false
 
 let prefix_id id =
   (* int cmp *)

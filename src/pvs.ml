@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.64 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.65 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -56,7 +56,6 @@ let rec print_pure_type fmt = function
       fprintf fmt "warray[%a]" print_pure_type v
   | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
   | PTexternal(i,id) -> fprintf fmt "%a%a" Ident.print id instance i
-  | PTvarid _ -> assert false 
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> assert false
 

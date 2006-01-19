@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.18 2005-11-08 14:55:14 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.19 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -26,7 +26,7 @@ open Env
 
 val unify : Logic.pure_type -> Logic.pure_type -> bool
 
-val pure_type : ppure_type -> pure_type
+val pure_type : local_env -> ppure_type -> pure_type
 
 val type_v : 
   Loc.position -> Label.t -> local_env -> logical_env -> ptype_v -> type_v

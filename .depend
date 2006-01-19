@@ -29,21 +29,21 @@ src/dispatcher.cmx: src/vcg.cmx src/simplify.cmx src/options.cmx \
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/types.cmi src/report.cmi src/misc.cmi src/logic.cmi \
-    src/loc.cmi src/ident.cmi src/error.cmi src/effect.cmi src/ast.cmi \
-    src/env.cmi 
+    src/loc.cmi src/ident.cmi src/error.cmi src/effect.cmi src/cc.cmi \
+    src/ast.cmi src/env.cmi 
 src/env.cmx: src/types.cmi src/report.cmx src/misc.cmx src/logic.cmi \
-    src/loc.cmx src/ident.cmx src/error.cmi src/effect.cmx src/ast.cmi \
-    src/env.cmi 
-src/fpi.cmo: src/vcg.cmi src/pp.cmi src/misc.cmi src/logic.cmi src/loc.cmi \
-    src/ident.cmi src/fpi.cmi 
-src/fpi.cmx: src/vcg.cmx src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx \
-    src/ident.cmx src/fpi.cmi 
-src/harvey.cmo: src/vcg.cmi src/report.cmi src/pp.cmi src/options.cmi \
-    src/misc.cmi src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi \
-    src/env.cmi src/harvey.cmi 
-src/harvey.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
-    src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi \
-    src/env.cmx src/harvey.cmi 
+    src/loc.cmx src/ident.cmx src/error.cmi src/effect.cmx src/cc.cmi \
+    src/ast.cmi src/env.cmi 
+src/fpi.cmo: src/pp.cmi src/misc.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
+    src/cc.cmi src/fpi.cmi 
+src/fpi.cmx: src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx \
+    src/cc.cmi src/fpi.cmi 
+src/harvey.cmo: src/report.cmi src/pp.cmi src/options.cmi src/misc.cmi \
+    src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi \
+    src/cc.cmi src/harvey.cmi 
+src/harvey.cmx: src/report.cmx src/pp.cmx src/options.cmx src/misc.cmx \
+    src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
+    src/cc.cmi src/harvey.cmi 
 src/hol4.cmo: src/vcg.cmi src/pp.cmi src/misc.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/error.cmi src/env.cmi src/cc.cmi src/hol4.cmi 
 src/hol4.cmx: src/vcg.cmx src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx \
@@ -158,18 +158,18 @@ src/report.cmo: src/types.cmi src/misc.cmi src/logic.cmi src/loc.cmi \
 src/report.cmx: src/types.cmi src/misc.cmx src/logic.cmi src/loc.cmx \
     src/lexer.cmx src/ident.cmx src/error.cmi src/effect.cmx src/ast.cmi \
     src/report.cmi 
-src/simplify.cmo: src/vcg.cmi src/pp.cmi src/options.cmi src/misc.cmi \
+src/simplify.cmo: src/pp.cmi src/options.cmi src/misc.cmi src/logic.cmi \
+    src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi src/cc.cmi \
+    src/simplify.cmi 
+src/simplify.cmx: src/pp.cmx src/options.cmx src/misc.cmx src/logic.cmi \
+    src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx src/cc.cmi \
+    src/simplify.cmi 
+src/smtlib.cmo: src/report.cmi src/pp.cmi src/options.cmi src/misc.cmi \
     src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi \
-    src/cc.cmi src/simplify.cmi 
-src/simplify.cmx: src/vcg.cmx src/pp.cmx src/options.cmx src/misc.cmx \
+    src/cc.cmi src/smtlib.cmi 
+src/smtlib.cmx: src/report.cmx src/pp.cmx src/options.cmx src/misc.cmx \
     src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
-    src/cc.cmi src/simplify.cmi 
-src/smtlib.cmo: src/vcg.cmi src/report.cmi src/pp.cmi src/options.cmi \
-    src/misc.cmi src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi \
-    src/env.cmi src/cc.cmi src/smtlib.cmi 
-src/smtlib.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
-    src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi \
-    src/env.cmx src/cc.cmi src/smtlib.cmi 
+    src/cc.cmi src/smtlib.cmi 
 src/typing.cmo: src/util.cmi src/types.cmi src/report.cmi src/rename.cmi \
     src/ptree.cmi src/options.cmi src/misc.cmi src/ltyping.cmi src/logic.cmi \
     src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi src/effect.cmi \
@@ -201,26 +201,26 @@ src/wp.cmx: src/util.cmx src/typing.cmx src/types.cmi src/report.cmx \
 src/annot.cmi: src/types.cmi src/logic.cmi src/env.cmi src/ast.cmi 
 src/ast.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/cc.cmi 
-src/cc.cmi: src/logic.cmi src/ident.cmi 
+src/cc.cmi: src/logic.cmi src/loc.cmi src/ident.cmi 
 src/coq.cmi: src/vcg.cmi src/logic.cmi src/ident.cmi src/env.cmi src/cc.cmi 
-src/cvcl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
-src/dispatcher.cmi: src/vcg.cmi src/logic.cmi src/env.cmi tools/calldp.cmi 
+src/cvcl.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
+src/dispatcher.cmi: src/logic.cmi src/env.cmi src/cc.cmi tools/calldp.cmi 
 src/effect.cmi: src/logic.cmi src/ident.cmi 
 src/env.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
-    src/effect.cmi src/ast.cmi 
+    src/effect.cmi src/cc.cmi src/ast.cmi 
 src/error.cmi: src/ident.cmi src/effect.cmi 
-src/fpi.cmi: src/vcg.cmi 
-src/harvey.cmi: src/vcg.cmi src/logic.cmi src/env.cmi 
+src/fpi.cmi: src/cc.cmi 
+src/harvey.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/hol4.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/holl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
-src/isabelle.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
+src/isabelle.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
 src/lexer.cmi: src/ptree.cmi src/parser.cmi 
 src/logic.cmi: src/ident.cmi 
 src/ltyping.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/env.cmi src/effect.cmi src/ast.cmi 
 src/misc.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/cc.cmi src/ast.cmi 
-src/mizar.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
+src/mizar.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
 src/mlize.cmi: src/rename.cmi src/logic.cmi src/loc.cmi src/env.cmi \
     src/cc.cmi src/ast.cmi 
 src/monad.cmi: src/types.cmi src/rename.cmi src/logic.cmi src/loc.cmi \
@@ -235,8 +235,8 @@ src/red.cmi: src/logic.cmi src/cc.cmi
 src/regen.cmi: src/vcg.cmi src/logic.cmi src/ident.cmi src/env.cmi src/cc.cmi 
 src/rename.cmi: src/ident.cmi 
 src/report.cmi: src/loc.cmi src/error.cmi 
-src/simplify.cmi: src/vcg.cmi src/logic.cmi src/env.cmi 
-src/smtlib.cmi: src/vcg.cmi src/logic.cmi src/env.cmi 
+src/simplify.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
+src/smtlib.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
 src/types.cmi: src/logic.cmi src/ident.cmi src/effect.cmi 
 src/typing.cmi: src/types.cmi src/ptree.cmi src/loc.cmi src/env.cmi \
     src/effect.cmi src/ast.cmi 

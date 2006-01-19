@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.29 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.30 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -39,7 +39,6 @@ type ppure_type =
   | PPTreal
   | PPTunit
   | PPTvarid of Ident.t * Loc.position
-  | PPTvar of type_var
   | PPTexternal of ppure_type list * Ident.t * Loc.position
 
 type lexpr = 

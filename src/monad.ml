@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.69 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.70 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -163,8 +163,8 @@ let a_make_post ren env r k q =
 
 let trad_scheme_v ren env s =
   let (l,v) = specialize_type_scheme s in
-  List.fold_right
-    (fun v cc -> 
+  Vmap.fold
+    (fun _ v cc -> 
        TTarrow((Ident.create ("A"^(string_of_int v.tag)),
 		CC_var_binder TTSet),cc))
     l

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.7 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.8 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -112,7 +112,7 @@ module PureType = struct
   let rec normalize = function
     | PTvar { type_val = Some t } -> normalize t
     | PTexternal (i, id) -> PTexternal (List.map normalize i, id)
-    | PTvar _ | PTvarid _ | PTint | PTbool | PTunit | PTreal as t -> t
+    | PTvar _ | PTint | PTbool | PTunit | PTreal as t -> t
 
   let equal t1 t2 = normalize t1 = normalize t2
 
@@ -180,22 +180,23 @@ end
 (* substitution of type variables ([PTvarid]) by pure types *)
 module SV = struct
 
-  type t = (string * pure_type) list
+  type t = pure_type Vmap.t
 
-  let equal =
-    List.for_all2 (fun (x1,pt1) (x2,pt2) -> x1 = x2 && PureType.equal pt1 pt2)
+  let list_of s = 
+    Vmap.fold (fun x pt acc -> (x, PureType.normalize pt)::acc) s []
+
+  let equal s1 s2 = list_of s1 = list_of s2
       
-  let hash s = 
-    Hashtbl.hash (List.map (fun (x,pt) -> (x, PureType.normalize pt)) s)
+  let hash s = Hashtbl.hash (list_of s)
 
   let rec pure_type s = function
-    | PTvarid id as t ->
-	(try List.assoc (Ident.string id) s with Not_found -> t)
-    | PTvar {type_val=Some pt} ->
+    | PTvar ({type_val = None} as v) as t ->
+	(try Vmap.find v s with Not_found -> assert false (*t?*))
+    | PTvar {type_val = Some pt} ->
 	pure_type s pt
     | PTexternal (l, id) ->
 	PTexternal (List.map (pure_type s) l, id)
-    | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
+    | PTint | PTreal | PTbool | PTunit as t -> t
 
 end
 module SubstV = GenSubst(SV)
@@ -249,24 +250,20 @@ let rec unify s t1 t2 = match (t1,t2) with
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
       if i1 <> i2 || List.length l1 <> List.length l2 then raise Exit;
       List.fold_left2 unify s l1 l2
-  | (_, PTvar {type_val=None})
-  | (_, PTvarid _) ->
-      assert false
+  | (_, PTvar {type_val=None}) ->
+      unify s t2 t1
   | (_, PTvar {type_val=Some v2}) ->
       unify s t1 v2
   | (PTvar {type_val=Some v1}, _) ->
       unify s v1 t2
-  | (PTvar {tag=t;type_val=None}, _) ->
-      assert false
-  | (PTvarid v1, _) ->
-      let v1 = Ident.string v1 in
+  | (PTvar ({type_val=None} as v1), _) ->
       begin
 	try
-	  let t1 = List.assoc v1 s in
+	  let t1 = Vmap.find v1 s in
 	  if t1 <> t2 then raise Exit;
 	  s
 	with Not_found ->
-	  (v1, t2) :: s
+	  Vmap.add v1 t2 s
       end
   | PTint, PTint
   | PTbool, PTbool
@@ -309,7 +306,7 @@ module Make(X : S) = struct
 			
   let print_logic fmt id t = 
     (*eprintf "print_logic %s@." id;*)
-    if t.scheme_vars = [] then
+    if Vset.is_empty t.scheme_vars then
       print_logic_instance fmt id [] t.scheme_type
     else
       (* nothing to do until we encounter closed instances of [id] *)
@@ -326,18 +323,27 @@ module Make(X : S) = struct
       assert (Hashtbl.mem logic_symbols id);
       match Hashtbl.find logic_symbols id with
 	| Uninterp t ->
-	    assert (List.length t.scheme_vars = List.length i);
-	    let s = List.combine t.scheme_vars i in
+	    assert (Vset.cardinal t.scheme_vars = List.length i);
+	    let s = 
+	      List.fold_right2 Vmap.add 
+		(Vset.elements t.scheme_vars) i Vmap.empty
+	    in
 	    let t = SubstV.logic_type s t.scheme_type in
 	    print_logic_instance fmt (Ident.string id) i t
 	| PredicateDef p ->
-	    assert (List.length p.scheme_vars = List.length i);
-	    let s = List.combine p.scheme_vars i in
+	    assert (Vset.cardinal p.scheme_vars = List.length i);
+	    let s = 
+	      List.fold_right2 Vmap.add 
+		(Vset.elements p.scheme_vars) i Vmap.empty
+	    in
 	    let p = SubstV.predicate_def s p.scheme_type in
  	    print_predicate_def_instance fmt (Ident.string id) i p
 	| FunctionDef p ->
-	    assert (List.length p.scheme_vars = List.length i);
-	    let s = List.combine p.scheme_vars i in
+	    assert (Vset.cardinal p.scheme_vars = List.length i);
+	    let s = 
+	      List.fold_right2 Vmap.add 
+		(Vset.elements p.scheme_vars) i Vmap.empty
+	    in
 	    let p = SubstV.function_def s p.scheme_type in
  	    print_function_def_instance fmt (Ident.string id) i p
     end
@@ -355,7 +361,7 @@ module Make(X : S) = struct
   let print_predicate_def fmt id p0 =
     let (bl,_) = p0.scheme_type in
     assert (bl <> []);
-    if p0.scheme_vars = [] then
+    if Vset.is_empty p0.scheme_vars then
       print_predicate_def_instance fmt id [] p0.scheme_type
     else 
       Hashtbl.add logic_symbols (Ident.create id) (PredicateDef p0)
@@ -363,7 +369,7 @@ module Make(X : S) = struct
   let print_function_def fmt id p0 =
     let (bl,_,_) = p0.scheme_type in
     assert (bl <> []);
-    if p0.scheme_vars = [] then
+    if Vset.is_empty p0.scheme_vars then
       print_function_def_instance fmt id [] p0.scheme_type
     else 
       Hashtbl.add logic_symbols (Ident.create id) (FunctionDef p0)
@@ -387,7 +393,7 @@ module Make(X : S) = struct
   let axioms = Hashtbl.create 97
 		 
   let print_axiom fmt id p =
-    if p.scheme_vars = [] then
+    if Vset.is_empty p.scheme_vars then
       print_axiom_instance fmt id [] p.scheme_type
     else
       let oi = OpenInstances.predicate SymbolsI.empty p.scheme_type in
@@ -422,14 +428,16 @@ module Make(X : S) = struct
       let p = a.ax_pred in
       let rec iter s = function
 	| [] ->
-	    if List.for_all 
-	      (fun x -> List.mem_assoc x s 
-		 && is_closed_pure_type (List.assoc x s)) p.scheme_vars 
+	    if Vset.for_all 
+	      (fun x -> 
+		 try is_closed_pure_type (Vmap.find x s) 
+		 with Not_found -> false)
+	      p.scheme_vars 
 	    then
 	      if not (Hsubst.mem a.ax_instances s) then begin
 		Hsubst.add a.ax_instances s ();
 		let ps = SubstV.predicate s p.scheme_type in
-		let i = List.map snd s in
+		let i = Vmap.fold (fun _ t acc -> t :: acc) s [] in
 		print_axiom_instance fmt id i ps
 	      end
 	| (x,oi) :: oil ->
@@ -441,7 +449,7 @@ module Make(X : S) = struct
 	      all_ci;
 	    iter s oil
       in
-      iter [] a.ax_symbols_i
+      iter Vmap.empty a.ax_symbols_i
     end
 
   let instantiate_axioms fmt = 

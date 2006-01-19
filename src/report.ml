@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.12 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.13 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -96,6 +96,9 @@ let report fmt = function
   | ExpectedType v ->
       fprintf fmt "@[This term is expected to have type@ ";
       v fmt; fprintf fmt "@]"
+  | ExpectedType2 (v1, v2) ->
+      fprintf fmt "@[This term has type %a but is expected to have type@ %a@]"
+	(fun fmt () -> v1 fmt) () (fun fmt () -> v2 fmt) () 
   | TermExpectedType (t,v) ->
       fprintf fmt "@[Term "; t fmt; fprintf fmt "@ is expected to have type@ ";
       v fmt; fprintf fmt "@]"

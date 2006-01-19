@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: error.mli,v 1.22 2006-01-11 08:56:53 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.23 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -51,6 +51,7 @@ type t =
   | PartialApp
   | TermExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectedType of (formatter -> unit)
+  | ExpectedType2 of (formatter -> unit) * (formatter -> unit)
   | ExpectsAType of Ident.t
   | ExpectsATerm of Ident.t
   | ShouldBeVariable

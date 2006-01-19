@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.6 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.7 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -106,7 +106,6 @@ let rec print_pure_type fmt = function
   | PTreal -> fprintf fmt "Real"
   | PTunit -> fprintf fmt "Unit"
   | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
-  | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
   | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i

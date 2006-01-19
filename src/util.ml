@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.108 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.109 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -401,7 +401,6 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
   | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
-  | PTvarid(id) -> fprintf fmt "'%a" Ident.print id
   | PTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
   | PTvar {tag=t; type_val=Some pt} -> 
       if debug then

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.5 2005-11-18 14:54:08 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.6 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -60,7 +60,6 @@ let rec print_pure_type fmt = function
   | PTexternal([],id) -> Ident.print fmt id
   | PTexternal(_,_) 
   | PTvar _ -> failwith "no polymorphism with HOL4 yet"
-  | PTvarid _ -> assert false
 
 let prefix_id id =
   (* int cmp *)

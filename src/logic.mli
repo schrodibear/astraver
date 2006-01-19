@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.30 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.31 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -33,7 +33,6 @@ type pure_type =
   | PTbool
   | PTreal
   | PTunit
-  | PTvarid of Ident.t
   | PTvar of type_var
   | PTexternal of pure_type list * Ident.t
 

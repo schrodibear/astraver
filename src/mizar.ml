@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.27 2005-11-08 15:44:45 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.28 2006-01-19 14:17:04 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -65,10 +65,9 @@ let rec print_pure_type fmt = function
 	| PTreal -> fprintf fmt "XFinSequence of REAL"
 	| PTexternal _ as ty ->
 	    fprintf fmt "XFinSequence of %a" print_pure_type ty
-	| PTvar _ | PTvarid _ -> failwith "no polymorphism with Mizar yet"
+	| PTvar _ -> failwith "no polymorphism with Mizar yet"
       end
   | PTexternal _ | PTvar _ ->  failwith "no polymorphism with Mizar yet"
-  | PTvarid _ -> assert false
 
 let prefix_id id =
   (* int cmp *)

@@ -81,7 +81,6 @@ let rec pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
   | PTexternal([],id) -> fprintf fmt "%a" gident id
-  | PTvarid(id) -> fprintf fmt "'%a" Ident.print id
   | PTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
   | PTvar {tag=t; type_val=Some pt} -> pure_type fmt pt
   | PTexternal([t],id) -> 
@@ -97,8 +96,6 @@ let rec ppure_type fmt = function
   | PPTreal -> fprintf fmt "real"
   | PPTexternal ([],id,_) -> fprintf fmt "%a" gident id
   | PPTvarid (id,_) -> fprintf fmt "'%a" Ident.print id
-  | PPTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
-  | PPTvar {tag=t; type_val=Some pt} -> pure_type fmt pt
   | PPTexternal ([t],id,_) -> 
       fprintf fmt "%a %a" ppure_type t gident id
   | PPTexternal (l,id,_) -> fprintf fmt "(%a) %a" 
