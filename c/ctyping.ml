@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.101 2005-11-09 10:47:25 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.102 2006-01-19 09:04:31 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -1011,6 +1011,11 @@ let type_decl d = match d.node with
 		| Fun_info f -> 
 		    if f.args = [] then f.args <- List.map snd pl;
 		    f
+	    in
+	    let _ = (* we build the env. to rename locals *)
+	      List.fold_right 
+		(fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
+		info.args (Env.empty ())
 	    in
 	    Tfunspec (function_spec d.loc x None, ty_res, info)
 	| _ -> 

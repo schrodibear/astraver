@@ -166,18 +166,32 @@ let add_typedef l x ty =
 (* used names (in order to rename heap variables when necessary) *)
 let used_names = Hashtbl.create 97
 let mark_as_used x = Hashtbl.add used_names x ()
+let () = 
+  List.iter mark_as_used 
+    [ "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin";
+      "bool"; "do"; "done"; "else"; "end"; "exception"; "exists";
+      "external"; "false"; "for"; "forall"; "fun"; "function"; "goal";
+      "if"; "in"; "int"; "invariant"; "label"; "let"; "logic"; "not";
+      "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
+      "reads"; "real"; "rec"; "ref"; "returns"; "then"; "true"; "try";
+      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes" ]
+
 let is_used_name n = Hashtbl.mem used_names n
 
 let use_name ?local_names n = 
   if is_used_name n then raise Exit; 
-  begin match local_names with Some h -> if Lib.Sset.mem n h then raise Exit | None -> () end;
+  begin match local_names with 
+    | Some h -> if Lib.Sset.mem n h then raise Exit 
+    | None -> () 
+  end;
   n
 
 let rec next_name ?local_names n i = 
   let n_i = n ^ "_" ^ string_of_int i in
   try use_name ?local_names n_i with Exit -> next_name ?local_names n (succ i)
 
-let unique_name ?local_names n = try use_name ?local_names n with Exit -> next_name ?local_names n 0
+let unique_name ?local_names n = 
+  try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
 (* type why *)
 
@@ -330,6 +344,7 @@ module Env = struct
   let add x t info env = 
     let n = unique_name ~local_names:env.used_names x in
     set_unique_name info n;
+    fprintf Coptions.log "local %s renamed into %s\n" x n;
     set_var_type info t;
     { env with used_names = Lib.Sset.add n env.used_names;
 	vars = M.add x info env.vars }

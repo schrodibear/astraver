@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.52 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.53 2006-01-19 09:04:31 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -255,8 +255,11 @@ let find_sequent_vars (h, p) =
 
 let specialize_sequent s =
   let l = find_sequent_vars s in
-  let env = List.map (fun x -> (x, new_type_var())) l in 
-  (List.map snd env, subst_sequent env s)
+  if l = [] then
+    [], s
+  else
+    let env = List.map (fun x -> (x, new_type_var())) l in 
+    (List.map snd env, subst_sequent env s)
 
 let rec find_cc_term_vars acc = function
   | CC_var _ ->
@@ -348,8 +351,11 @@ and subst_proof s = function
 
 let specialize_validation tt cc =
   let l = find_cc_term_vars (find_cc_type_vars [] tt) cc in
-  let env = List.map (fun x -> (x, new_type_var())) l in 
-  (List.map snd env, subst_cc_type env tt, subst_cc_term env cc)
+  if l = [] then
+    [], tt, cc
+  else
+    let env = List.map (fun x -> (x, new_type_var())) l in 
+    (List.map snd env, subst_cc_type env tt, subst_cc_term env cc)
 
 
 (* Environments for imperative programs.
