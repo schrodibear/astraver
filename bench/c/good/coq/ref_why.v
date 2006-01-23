@@ -12,26 +12,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
+  forall (A745:Set), forall (A746:Set), forall (A747:Set), forall (A748:Set),
+  forall (A749:Set), forall (A750:Set), forall (A751:Set), forall (A752:Set),
   forall (alloc: alloc_table),
+  forall (int_Z3: ((memory) Z A752)),
   forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) Z3)),
-  forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
-                (block_length alloc0 result) = 1 /\
-                (valid_range alloc0 result 0 (1 - 1)) /\
-                (fresh alloc result) /\ (on_stack alloc0 result) /\
-                (alloc_stack result alloc alloc0)),
-  (* File "ref.c", line 4, characters 14-23 *) (valid alloc0 result).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) Z3)),
+  forall (result: ((pointer) A752)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
@@ -40,30 +26,7 @@ Save.
                 (alloc_stack result alloc alloc0)),
   forall (HW_3: (* File "ref.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_4: (* File "ref.c", line 6, characters 13-20 *)
-                (acc int_Z3_0 result) = 1 /\
-                (not_assigns alloc0 int_Z3 int_Z3_0 (pset_singleton result))),
-  (valid alloc0 result).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_4 : 
-  forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) Z3)),
-  forall (alloc0: alloc_table),
-  forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
-                (block_length alloc0 result) = 1 /\
-                (valid_range alloc0 result 0 (1 - 1)) /\
-                (fresh alloc result) /\ (on_stack alloc0 result) /\
-                (alloc_stack result alloc alloc0)),
-  forall (HW_3: (* File "ref.c", line 4, characters 14-23 *)
-                (valid alloc0 result)),
-  forall (int_Z3_0: ((memory) Z Z3)),
+  forall (int_Z3_0: ((memory) Z A752)),
   forall (HW_4: (* File "ref.c", line 6, characters 13-20 *)
                 (acc int_Z3_0 result) = 1 /\
                 (not_assigns alloc0 int_Z3 int_Z3_0 (pset_singleton result))),
@@ -72,6 +35,14 @@ Save.
   forall (HW_6: result0 = (acc int_Z3_0 result)),
   (* File "ref.c", line 13, characters 13-25 *) result0 = 1 /\
   (not_assigns alloc int_Z3 int_Z3_0 pset_empty).
+Proof.
+intuition.
+Save.
+
+Proof.
+intuition.
+Save.
+
 Proof.
 intuition.
 red;intros.
@@ -87,25 +58,20 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (p: ((pointer) Z3)),
+  forall (A753:Set),
+  forall (p: ((pointer) A753)),
   forall (alloc: alloc_table),
+  forall (int_Z2: ((memory) Z A753)),
   forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
-  (valid alloc p).
+  forall (HW_2: (valid alloc p)),
+  forall (int_Z2_0: ((memory) Z A753)),
+  forall (HW_3: int_Z2_0 = (upd int_Z2 p 1)),
+  (* File "ref.c", line 6, characters 13-20 *) (acc int_Z2_0 p) = 1 /\
+  (not_assigns alloc int_Z2 int_Z2_0 (pset_singleton p)).
 Proof.
 intuition; subst; caduceus.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_2 : 
-  forall (p: ((pointer) Z3)),
-  forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z Z3)),
-  forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
-  forall (HW_2: (valid alloc p)),
-  forall (int_Z3_0: ((memory) Z Z3)),
-  forall (HW_3: int_Z3_0 = (upd int_Z3 p 1)),
-  (* File "ref.c", line 6, characters 13-20 *) (acc int_Z3_0 p) = 1 /\
-  (not_assigns alloc int_Z3 int_Z3_0 (pset_singleton p)).
 Proof.
 intuition;subst;caduceus.
 red;intros.

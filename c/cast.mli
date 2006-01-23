@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.62 2005-11-08 14:55:13 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.63 2006-01-23 16:43:27 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -283,6 +283,12 @@ type nexpr = {
   nexpr_loc  : Loc.position;
 }
 
+and ncall = {
+  ncall_fun : nexpr;
+  ncall_args : nexpr list;
+  mutable ncall_zones_assoc : (Info.zone * Info.zone) list;
+}
+
 and nexpr_node =
   | NEnop
   | NEconstant of constant
@@ -296,7 +302,7 @@ and nexpr_node =
   | NEunary of unary_operator * nexpr
   | NEincr of incr_operator * nexpr
   | NEbinary of nexpr * binary_operator * nexpr
-  | NEcall of nexpr * nexpr list
+  | NEcall of ncall
   | NEcond of nexpr * nexpr * nexpr
   | NEcast of nctype * nexpr
 

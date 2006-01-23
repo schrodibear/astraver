@@ -8,8 +8,9 @@ Require Export struct2_spec_why.
   forall (alloc: alloc_table),
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
   forall (s0: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 b_Z5) /\
-                (valid1_range b_Z5 5)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z5) /\ (valid1_range b_Z5 5)),
   (valid alloc s0).
 Proof.
 intuition.
@@ -20,8 +21,9 @@ Save.
   forall (alloc: alloc_table),
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
   forall (s0: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 b_Z5) /\
-                (valid1_range b_Z5 5)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z5) /\ (valid1_range b_Z5 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z5 s0)),
@@ -43,8 +45,9 @@ Save.
   forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
   forall (int_Z0: ((memory) Z Z0)),
   forall (s0: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc s0 0 0) /\ (valid1 b_Z5) /\
-                (valid1_range b_Z5 5)),
+  forall (u: ((pointer) Z7)),
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z5) /\ (valid1_range b_Z5 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z5 s0)),
@@ -64,9 +67,10 @@ Save.
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
+  forall (s0: ((pointer) Z5)),
   forall (u: ((pointer) Z7)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
-                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z2) /\ (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
                 (valid1_range b_Z2 5)),
   (valid alloc u).
 Proof.
@@ -78,9 +82,10 @@ Save.
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
+  forall (s0: ((pointer) Z5)),
   forall (u: ((pointer) Z7)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
-                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z2) /\ (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
                 (valid1_range b_Z2 5)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
@@ -96,9 +101,10 @@ Save.
   forall (alloc: alloc_table),
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
+  forall (s0: ((pointer) Z5)),
   forall (u: ((pointer) Z7)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
-                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z2) /\ (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
                 (valid1_range b_Z2 5)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),
@@ -121,9 +127,10 @@ Admitted.
   forall (b_Z2: ((memory) ((pointer) Z0) Z2)),
   forall (d_Z7: ((memory) ((pointer) Z2) Z7)),
   forall (int_Z0: ((memory) Z Z0)),
+  forall (s0: ((pointer) Z5)),
   forall (u: ((pointer) Z7)),
-  forall (HW_1: (valid_range alloc u 0 0) /\ (valid1 b_Z2) /\
-                (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
+  forall (HW_1: (valid_range alloc u 0 0) /\ (valid_range alloc s0 0 0) /\
+                (valid1 b_Z2) /\ (valid1 d_Z7) /\ (separation2 d_Z7 d_Z7) /\
                 (valid1_range b_Z2 5)),
   forall (HW_2: (valid alloc u)),
   forall (result: ((pointer) Z2)),

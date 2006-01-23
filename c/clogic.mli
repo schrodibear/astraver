@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.49 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.50 2006-01-23 16:43:27 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -179,7 +179,7 @@ type 'ctype nterm = {
 and 'ctype nterm_node =
   | NTconstant of constant
   | NTvar of Info.var_info
-  | NTapp of Info.logic_info * 'ctype nterm list
+  | NTapp of 'ctype napp
   | NTunop of term_unop * 'ctype nterm
   | NTstar of 'ctype nterm
   | NTbinop of 'ctype nterm * term_binop * 'ctype nterm
@@ -196,6 +196,12 @@ and 'ctype nterm_node =
   | NTcast of 'ctype * 'ctype nterm
   | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option
 
+and 'ctype napp = { 
+  napp_pred : Info.logic_info;
+  napp_args : 'ctype nterm list;
+  mutable napp_zones_assoc : (Info.zone * Info.zone) list;
+}
+
 type 'ctype npredicate = {
   npred_node : 'ctype npredicate_node;
   npred_loc : Loc.position
@@ -204,7 +210,7 @@ type 'ctype npredicate = {
 and 'ctype npredicate_node =
   | NPfalse
   | NPtrue
-  | NPapp of Info.logic_info * 'ctype nterm list
+  | NPapp of 'ctype napp
   | NPrel of 'ctype nterm * relation * 'ctype nterm
   | NPand of 'ctype npredicate * 'ctype npredicate
   | NPor of 'ctype npredicate * 'ctype npredicate

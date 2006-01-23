@@ -5,6 +5,12 @@ Require Export false_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false0_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (x_0: ((pointer) Z9)),
+  forall (y_0: ((pointer) Z10)),
+  forall (zz: ((pointer) Z8)),
+  forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
+                (valid_range alloc zz 0 0)),
   (* File "false.c", line 16, characters 13-19 *) False.
 Proof.
 intuition.
@@ -13,9 +19,14 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (x_0: ((pointer) Z9)),
+  forall (y_0: ((pointer) Z10)),
   forall (y_Z6: ((memory) ((pointer) Z1) Z6)),
   forall (z: ((pointer) Z6)),
-  forall (HW_1: (valid1_range y_Z6 5) /\ (valid1 y_Z6)),
+  forall (zz: ((pointer) Z8)),
+  forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
+                (valid_range alloc zz 0 0) /\ (valid1_range y_Z6 5) /\
+                (valid1 y_Z6)),
   (valid alloc z).
 Proof.
 intuition.
@@ -24,9 +35,14 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (x_0: ((pointer) Z9)),
+  forall (y_0: ((pointer) Z10)),
   forall (y_Z6: ((memory) ((pointer) Z1) Z6)),
   forall (z: ((pointer) Z6)),
-  forall (HW_1: (valid1_range y_Z6 5) /\ (valid1 y_Z6)),
+  forall (zz: ((pointer) Z8)),
+  forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
+                (valid_range alloc zz 0 0) /\ (valid1_range y_Z6 5) /\
+                (valid1 y_Z6)),
   forall (HW_2: (valid alloc z)),
   forall (result: ((pointer) Z1)),
   forall (HW_3: result = (acc y_Z6 z)),
@@ -41,7 +57,10 @@ Admitted.
 (*Why goal*) Lemma false2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x_0: ((pointer) Z9)),
-  forall (HW_1: (valid_range alloc x_0 0 3)),
+  forall (y_0: ((pointer) Z10)),
+  forall (zz: ((pointer) Z8)),
+  forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
+                (valid_range alloc zz 0 0)),
   forall (result: ((pointer) Z9)),
   forall (HW_2: result = (shift x_0 (Zopp 1))),
   (valid alloc result).
@@ -52,8 +71,11 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false3_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (x_0: ((pointer) Z9)),
   forall (y_0: ((pointer) Z10)),
-  forall (HW_1: (valid_range alloc y_0 0 4)),
+  forall (zz: ((pointer) Z8)),
+  forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
+                (valid_range alloc zz 0 0)),
   forall (result: ((pointer) Z10)),
   forall (HW_2: result = (shift y_0 5)),
   (valid alloc result).

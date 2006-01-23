@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.160 2006-01-04 13:12:46 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.161 2006-01-23 16:43:27 hubert Exp $ i*)
 
 
 open Format
@@ -123,7 +123,31 @@ let interp_var label v =
   match label with 
     | None -> LVar v 
     | Some l -> LVarAtLabel(v,l)
+
+let zoned_name (f : string) (ty : Info.why_type) =
+  match ty with
+    | Pointer z -> f ^ "_" ^ (found_repr ~quote_var:false z)
+    | Addr _ 
+    | Info.Int -> assert false
+    | Info.Float -> assert false
+    | Unit -> assert false
+    | Why_Logic s ->  assert false
+    | Memory(t,z) -> assert false
   
+
+let heap_var (ty : Info.why_type) =
+  match ty with
+    | Pointer z ->
+	let z = repr z in
+	let v = Ceffect.memorycell_name z.type_why_zone in
+	v ^ "_" ^ (found_repr ~quote_var:false z)
+    | Addr _ 
+    | Info.Int 
+    | Info.Float 
+    | Unit 
+    | Why_Logic _ 
+    | Memory _ -> assert false
+
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
@@ -149,7 +173,7 @@ let rec interp_term label old_label t =
 	unsupported t.nterm_loc "logic if-then-else"
     | NTarrow (t, field) -> 
 	let te = f t in
-	let var = heap_field_var field.var_unique_name (type_why_for_term t) in
+	let var = zoned_name field.var_unique_name (type_why_for_term t) in
 	LApp("acc",[interp_var label var;te])
     | NTstar t1 -> 
 	let te1 = f t1 in
@@ -168,12 +192,23 @@ let rec interp_term label old_label t =
 	LApp("real_of_int", [f t1])
     | NTunop (Uint_of_float, t1) ->
 	LApp("int_of_real", [f t1])
-    | NTapp (g, l) -> 
-	LApp(g.logic_name,
-	     (HeapVarSet.fold 
-		(fun x acc -> (interp_var label (heap_var_name x))::acc) 
-		g.logic_heap_args []) 
-	     @ List.map f l)
+    | NTapp {napp_pred = v; napp_args = tl; napp_zones_assoc = assoc} ->
+	let reads = ZoneSet.fold 
+	  (fun (z,s,ty) acc ->
+	     let z = repr z in
+	     ZoneSet.add 
+	       ((try List.assoc z assoc with Not_found -> z),s,ty) 
+	       acc)
+	  v.logic_heap_zone ZoneSet.empty in
+	let targs = List.map f tl in
+	let targs = HeapVarSet.fold 
+		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
+		 v.logic_heap_args targs in
+	let targs = ZoneSet.fold 
+	  (fun (z,s,_) l -> 
+	     if z.zone_is_var then LVar(zoned_name s (Pointer z))::l else l)
+	  reads targs in
+	LApp (v.logic_name,targs)
     | NTcast({ctype_node = Tpointer _}, 
 	    {nterm_node = NTconstant (IntConstant "0")}) ->
 	LVar "null"
@@ -207,7 +242,7 @@ and interp_term_address  label old_label e = match e.nterm_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_term  label old_label e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
-	    let var = heap_field_var f.var_unique_name (type_why_for_term e1) in
+	    let var = zoned_name f.var_unique_name (type_why_for_term e1) in
 	    LApp("acc",[interp_var label var; interp_term label old_label e1])
 	| _ -> unsupported e.nterm_loc "& operator on a field"
       end
@@ -255,7 +290,8 @@ let rec interp_predicate label old_label p =
     | NPrel (t1, op, t2) ->
 	let t1,op,t2 = interp_rel t1 t2 op in
 	LPred(op,[ft t1;ft t2])
-    | NPapp (v,tl) when is_internal_pred v.logic_name ->
+    | NPapp {napp_pred = v; napp_args = tl} 
+	when is_internal_pred v.logic_name ->
        let n = v.logic_name in
        let name,num =
 	 if has_prefix "%valid1_range" n then "valid1_range", 1
@@ -280,12 +316,23 @@ let rec interp_predicate label old_label p =
 	 | _ -> tl
        in
        LPred(name, (*param @ *)List.map ft tl)
-    | NPapp (v, tl) ->
-	LPred (v.logic_name,
-	       HeapVarSet.fold 
+    | NPapp {napp_pred = v; napp_args = tl; napp_zones_assoc = assoc} ->
+	let reads = ZoneSet.fold 
+	  (fun (z,s,ty) acc ->
+	     let z = repr z in
+	     ZoneSet.add 
+	       ((try List.assoc z assoc with Not_found -> z),s,ty) 
+	       acc)
+	  v.logic_heap_zone ZoneSet.empty in
+	let targs = List.map ft tl in
+	let targs = HeapVarSet.fold 
 		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
-		 v.logic_heap_args []
-	       @ List.map ft tl)
+		 v.logic_heap_args targs in
+	let targs = ZoneSet.fold 
+	  (fun (z,s,_) l -> 
+	     if z.zone_is_var then LVar(zoned_name s (Pointer z))::l else l)
+	  reads targs in
+	LPred (v.logic_name,targs)
     | NPfalse -> 
 	LFalse
     | NPold p -> 
@@ -432,7 +479,7 @@ let rec interp_expr e =
     | NEconstant (FloatConstant c) ->
 	Cte(Prim_float c)
     | NEvar(Var_info v) -> 
-	let n = v.var_unique_name in
+	let n = heap_var_name v in
 	if v.var_is_assigned then Deref n else Var n
     | NEvar(Fun_info v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
@@ -500,7 +547,7 @@ let rec interp_expr e =
 	unsupported e.nexpr_loc "string literal"
     | NEarrow (e,s) ->
 	let te = interp_expr e in
-	let var = heap_field_var s.var_unique_name (type_why e) in
+	let var = zoned_name s.var_unique_name (type_why e) in
 	Output.make_app "acc_" [Var(var);te]
     | NEstar e1 -> 
 	let te1 = interp_expr e1 in
@@ -523,19 +570,8 @@ let rec interp_expr e =
 	make_app "bw_compl" [interp_expr e]
     | NEunary (Uamp, e) ->
 	interp_address e
-    | NEcall(e,args) -> 
-	begin
-	  match e.nexpr_node with
-	    | NEvar (Fun_info v) ->
-		let targs = match args with
-		  | [] -> [Output.Var "void"]
-		  | _ -> List.map interp_expr args
-		in
-		build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
-		  targs
-	    | _ -> 
-		unsupported e.nexpr_loc "call of a non-variable function"
-	end
+    | NEcall{ncall_fun = e; ncall_args = args ; ncall_zones_assoc = assoc } -> 
+	interp_call e args assoc
     | NEcast({Ctypes.ctype_node = Tpointer _}, 
 	     {nexpr_node = NEconstant (IntConstant "0")}) ->
 	Var "null"
@@ -642,7 +678,7 @@ and interp_lvalue e =
 	let var = heap_var (type_why e1) in
 	HeapRef(var,interp_expr e1)
     | NEarrow (e1,f) ->
-	HeapRef(heap_field_var f.var_unique_name (type_why e1), interp_expr e1)
+	HeapRef(zoned_name f.var_unique_name (type_why e1), interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
 
@@ -669,7 +705,7 @@ and interp_address e = match e.nexpr_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_expr e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
-	    let var = heap_field_var f.var_unique_name (type_why e1) in
+	    let var = zoned_name f.var_unique_name (type_why e1) in
             build_complex_app (Var "acc_") 
 	    [Var var; interp_expr e1]
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
@@ -715,25 +751,12 @@ and interp_statement_expr e =
 			  [Var var; Var "caduceus1"; 
 			   make_app top [Var "caduceus2"; one]]))
 	end
-    | NEcall (e1,args) -> 
-	begin
-	  match e1.nexpr_node with
-	    | NEvar (Fun_info v) ->
-		let targs = match args with
-		  | [] -> [Output.Var "void"]
-		  | _ -> List.map interp_expr args
-		in
-		let app = 
-		  build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
-		    targs
-		in
-		if e.nexpr_type.Ctypes.ctype_node = Tvoid then
-		  app
-		else
-		  Let (tmp_var (), app, Void)
-	    | _ -> 
-		unsupported e.nexpr_loc "call of a non-variable function"
-	end
+    | NEcall {ncall_fun = e1;ncall_args =  args;ncall_zones_assoc = assoc} -> 
+	let app = interp_call e1 args assoc in
+	if e.nexpr_type.Ctypes.ctype_node = Tvoid then
+	  app
+	else
+	  Let (tmp_var (), app, Void)
     | NEassign_op (l, op, e) -> 
 	begin
 	  match interp_lvalue l with
@@ -761,6 +784,31 @@ and interp_statement_expr e =
     | NEconstant _ -> 
 	unsupported e.nexpr_loc "statement expression"
 
+and interp_call e1 args assoc = 
+  match e1.nexpr_node with
+    | NEvar (Fun_info v) ->
+	let reads = ZoneSet.fold 
+	  (fun (z,s,ty) acc ->
+	     let z = repr z in
+	     ZoneSet.add 
+	       ((try List.assoc z assoc with Not_found -> z),s,ty) 
+	       acc)
+	  v.function_reads ZoneSet.empty 
+	in
+	let targs = List.map interp_expr args in
+	let targs = ZoneSet.fold 
+	  (fun (z,s,_) l -> 
+	     if z.zone_is_var then
+	       Var(zoned_name s (Pointer z))::l
+	     else l)
+	  reads targs 
+	in
+	build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
+	  targs
+    | _ -> 
+	unsupported e1.nexpr_loc "call of a non-variable function"
+ 
+
 module StringMap = Map.Make(String)
 
 type mem_or_ref = Reference of bool | Memory of Output.term list
@@ -774,7 +822,7 @@ let collect_locations before acc loc =
     | NTarrow (e, f) ->
 	let m = 
 	  interp_var (Some before) 
-	    (heap_field_var f.var_unique_name (type_why_for_term e)) in
+	    (zoned_name f.var_unique_name (type_why_for_term e)) in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
@@ -815,7 +863,7 @@ let collect_locations before acc loc =
   in
   let var,iloc = match loc.nterm_node with
     | NTarrow(e,f) ->
-	heap_field_var f.var_unique_name (type_why_for_term e), Some (pset e)
+	zoned_name f.var_unique_name (type_why_for_term e), Some (pset e)
     | NTstar e1 -> 
 	let var = heap_var (type_why_for_term e1) in
 	var, Some (pset e1)
@@ -866,7 +914,7 @@ let rec make_union_loc = function
 
 let interp_assigns before assigns = function
   | Some locl ->
-      let m = 
+(*      let m = 
 	HeapVarSet.fold
 	  (fun v m -> 
 	     let t = 
@@ -876,6 +924,13 @@ let interp_assigns before assigns = function
 	     StringMap.add (heap_var_name v) t m)
 	  assigns StringMap.empty
       in
+*)
+      let m = HeapVarSet.fold
+	(fun v m -> StringMap.add (heap_var_name v) (Reference false) m)
+	  assigns.Ceffect.reads_var StringMap.empty in
+      let m = ZoneSet.fold
+	(fun (z,s,ty) m -> StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
+	 assigns.Ceffect.reads StringMap.empty in
       let l = 
 	List.fold_left (collect_locations before) m locl
       in
@@ -932,7 +987,7 @@ let interp_strong_invariants () =
 	   (fun x acc -> 
 	      (heap_var_name x, 
 	       Info.output_why_type x.var_why_type) :: acc) 
-	   e args
+	   e.Ceffect.reads_var args
        in
        if args = [] then acc else
        (Predicate(false,id,args,interp_predicate None "" p))::acc)
@@ -946,6 +1001,10 @@ let strong_invariant_name id e =
 	   e []))
 
 
+let print_effects2 fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt (z,s,_) -> fprintf fmt " %s_%s " s z.name)) 
+    (ZoneSet.elements l)
 
 let print_effects fmt l =
   fprintf fmt "@[%a@]"
@@ -953,81 +1012,89 @@ let print_effects fmt l =
     (HeapVarSet.elements l)
 
 let extract_var_from_effect var lf =
-  List.fold_left (fun acc v-> 
-		    if (v.var_unique_name = var.var_unique_name) 
-		    then v::acc else acc)[] lf 
+  List.fold_left (fun acc (zf,nf,tyf) -> 
+		    if (var.var_unique_name = nf) 
+		    then (zf,nf,tyf)::acc else acc)[] lf 
 
 let add ef ep =
   let lp = (HeapVarSet.elements ep) in
-  let lf = (HeapVarSet.elements ef) in
+  let lf = (ZoneSet.elements ef) in
   let l = List.fold_right 
-    (fun v acc -> (extract_var_from_effect v lf)::acc ) lp [] in
+    (fun var acc -> (extract_var_from_effect var lf)::acc ) lp [] in
   match l with 
     | [] -> []
-    | l::[] -> List.fold_left (fun acc x -> [x]::acc) [] l
-    | l1::l2::[] -> List.fold_left 
-	(fun acc x -> 
+    | [l] -> List.fold_left (fun acc (z,n,_) -> [(z,n)]::acc) [] l
+    | [l1;l2] -> List.fold_left 
+	(fun acc (zx,nx,tyx) -> 
 	   List.fold_left 
-	     (fun acc y -> if same_why_type x.var_why_type y.var_why_type 
-	      then ((x::y::[])::acc) else acc) acc l2) [] l1 
+	     (fun acc (zy,ny,tyy) -> if same_why_type tyx tyy 
+	      then ([(zx,nx);(zy,ny)]::acc) else acc) acc l2) [] l1 
     | _ -> assert false
 
 let subst a p =
   let q  =
     match p.npred_node with
-      | NPapp (f,tl) -> 
-	  NPapp (f,
-		 (List.map (fun x -> 
-			      { nterm_node = 
-				  (NTvar (default_var_info (heap_var_name x)));
-				nterm_loc = Loc.dummy_position;
-				nterm_type = x.var_type}) a)@tl)
+      | NPapp {napp_pred = f; napp_args = tl; napp_zones_assoc = assoc} -> 
+	  NPapp {napp_pred = f;
+		 napp_args =
+	      (List.map (fun (z,n) -> 
+			   { nterm_node = 
+			       (NTvar (default_var_info (zoned_name n (Pointer z))));
+			     nterm_loc = Loc.dummy_position;
+			     nterm_type = c_void}) a)@tl;
+		 napp_zones_assoc = assoc}
       | _ -> assert false 
   in
   { p with npred_node = q} 
 
 let strong_invariants_for hvs =
+  let pred =
+    Hashtbl.fold
+      (fun id (p,e1,e2) acc ->
+	 eprintf "effect fonction : %a @\n effet predicate %s: %a @\n"
+	   print_effects2 hvs.Ceffect.reads id print_effects e2.Ceffect.reads_var;
+	 let l = add hvs.Ceffect.reads e2.Ceffect.reads_var in
+	 let rec add_pred id p l acc = 
+	   match l with 
+	     | [] -> acc
+	     | a::l -> 
+		 let p' = subst a p in 
+		 let p'' = interp_predicate None "" p' in
+		 make_and p'' (add_pred id p l acc)
+	 in
+	 add_pred id p l acc)
+      Ceffect.invariants_for_struct 
+      LTrue
+  in
   Hashtbl.fold
     (fun id (p,e1,e2) acc -> 
-       if HeapVarSet.subset e2 hvs then
+       if ZoneSet.subset e2.Ceffect.reads hvs.Ceffect.reads then
 	 (make_and 
 	   (if (Ceffect.mem_strong_invariant_2 id) || (Cenv.mem_pred id)
 	    then
-	       strong_invariant_name id e1
+	       strong_invariant_name id e1.Ceffect.reads_var
 	    else
 	      strong_invariant id p (*e2*))  acc)
        else acc) 
-  Ceffect.strong_invariants  
-    (Hashtbl.fold
-       (fun id (p,e1,e2) acc ->
-	  let l = add hvs e2 in
-	  let rec add_pred id p l acc = 
-	    match l with 
-	      | [] -> acc
-	      | a::l -> 
-		  let p' = subst a p in 
-		  let p'' = interp_predicate None "" p' in
-		  make_and p'' (add_pred id p l acc)
-	  in
-	  add_pred id p l acc)
-       Ceffect.invariants_for_struct LTrue)
+    Ceffect.strong_invariants  
+    pred
 
 
-let interp_spec add_inv effect_reads effect_assigns s =
+let interp_spec add_inv effect s =
   let tpre_without = 
     make_and
       (interp_predicate_opt None "" s.requires)
-      (if add_inv then weak_invariants_for effect_reads else LTrue) in
+      (if add_inv then weak_invariants_for effect else LTrue) in
   let tpre_with = 
     make_and
       tpre_without
-      (strong_invariants_for effect_reads)
+      (strong_invariants_for effect)
   and tpost = 
    make_and
      (interp_predicate_opt None "" s.ensures)
      (make_and 
-	(interp_assigns "" effect_assigns s.assigns)
-	(if add_inv then weak_invariants_for effect_assigns else LTrue))
+	(interp_assigns "" effect s.assigns)
+	(if add_inv then weak_invariants_for effect else LTrue))
   in 
   (tpre_with,tpre_without,tpost)
 
@@ -1178,11 +1245,11 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSfor(annot,e1,e2,e3,body) ->
       let label = new_label () in
       let ef = 
-	HeapVarSet.union 
-	  (HeapVarSet.union (Ceffect.expr e1).Ceffect.assigns
-	     (Ceffect.expr e2).Ceffect.assigns)
-	  (HeapVarSet.union (Ceffect.expr e3).Ceffect.assigns 
-	     (Ceffect.statement body).Ceffect.assigns)
+	Ceffect.ef_union 
+	  (Ceffect.ef_union (Ceffect.expr e1)
+	     (Ceffect.expr e2))
+	  (Ceffect.ef_union (Ceffect.expr e3) 
+	     (Ceffect.statement body))
       in
       let (inv,dec) = interp_invariant label ef annot in
       Output.Label 
@@ -1198,8 +1265,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSwhile(annot,e,s) -> 
       let label = new_label () in
       let ef = 
-	HeapVarSet.union (Ceffect.expr e).Ceffect.assigns
-	  (Ceffect.statement s).Ceffect.assigns 
+	Ceffect.ef_union (Ceffect.expr e) (Ceffect.statement s) 
       in
       let (inv,dec) = interp_invariant label ef annot in
       Output.Label 
@@ -1210,9 +1276,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 		  (interp_statement true (ref false) s))))
   | NSdowhile(annot,s,e) -> 
       let label = new_label () in
-      let ef = 
-	HeapVarSet.union (Ceffect.expr e).Ceffect.assigns
-	  (Ceffect.statement s).Ceffect.assigns 
+      let ef = 	Ceffect.ef_union (Ceffect.expr e) (Ceffect.statement s) 
       in
       let (inv,dec) = interp_invariant label ef annot in
       Output.Label 
@@ -1259,8 +1323,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       Output.Label (l, Void)
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
-      let pre,_,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns 
-		       spec in
+      let pre,_,post = interp_spec false eff spec in
       Triple(pre,interp_statement ab may_break s,post,None)
   | NSdecl(ctype,v,init,rem) -> 
       lprintf 
@@ -1394,12 +1457,21 @@ let interp_predicate_args id args =
   let args =
     List.fold_right
       (fun (id,t) args -> 
-	 (id.var_unique_name,id.var_why_type)::args)
+	 (id.var_unique_name,Info.output_why_type id.var_why_type)::args)
       args []
   in
-  (HeapVarSet.fold
-    (fun arg t -> (heap_var_name arg,arg.var_why_type) :: t)
-    id.logic_heap_args [])@args
+  let args = 
+    HeapVarSet.fold
+      (fun arg t -> (heap_var_name arg,Info.output_why_type arg.var_why_type) 
+	 :: t)
+      id.logic_heap_args args in
+  ZoneSet.fold 
+    (fun (z,s,ty) l -> 
+       if z.zone_is_var then
+	 (zoned_name s (Pointer z), 
+	  (Info.output_why_type (Info.Memory(ty,z))))::l
+       else l)
+    id.logic_heap_zone args
 
 let type_to_base_type l = 
   List.map (fun (x,y) -> (x,Info.output_why_type y)) l
@@ -1412,14 +1484,14 @@ let cinterp_logic_symbol id ls =
 	  List.fold_right 
 	    (fun (x,t) ty -> 
 	       Prod_type (x, Base_type t, ty)) 
-	     (type_to_base_type args) 
-	      (Base_type ([],"prop"))
+	    args 
+	    (Base_type ([],"prop"))
 	in
 	Logic(false, id.logic_name, ty)
     | NPredicate_def(args,p) -> 
 	let a = interp_predicate None "" p in
 	let args = interp_predicate_args id args in
-	Predicate(false,id.logic_name,(type_to_base_type args),a)
+	Predicate(false,id.logic_name, args,a)
     | NFunction(args,ret,_) ->
 	let ret_type =
 	  match ret.Ctypes.ctype_node with
@@ -1450,7 +1522,7 @@ let cinterp_logic_symbol id ls =
 	    | _ -> assert false
 	in
 	let args = interp_predicate_args id args in
-	Output.Function(false,id.logic_name,type_to_base_type args,ret_type,e)
+	Output.Function(false,id.logic_name,args,ret_type,e)
 	  
 let interp_axiom p =
   let a = interp_predicate None "" p
@@ -1458,7 +1530,7 @@ let interp_axiom p =
   HeapVarSet.fold
     (fun arg t -> LForall
        (heap_var_name arg,Info.output_why_type arg.var_why_type,t))
-    e a
+    e.Ceffect.reads_var a
 
 let interp_effects e =
   HeapVarSet.fold (fun var acc -> var::acc) e []
@@ -1472,29 +1544,44 @@ let interp_param pre (t,id) =
   (id,base_type tt)
 *)
 
-let interp_fun_params params =
-  if params=[]
-  then ["tt",unit_type]
-  else List.fold_right 
-    (fun (id) tpl ->
-       let tt = Base_type (Info.output_why_type id.var_why_type) in
-       (id.var_unique_name,tt)::tpl)
- params []
-
-
+let interp_fun_params reads params =
+  let l = List.map 
+    (fun id ->
+       (id.var_unique_name,Base_type(Info.output_why_type id.var_why_type)))
+    params  in
+  let l = ZoneSet.fold
+    (fun (z,s,ty) l ->
+       if z.zone_is_var then
+	 (zoned_name s (Pointer z), 
+	  Ref_type 
+	    (Base_type 
+	       (Info.output_why_type (Info.Memory(ty,z)))))::l
+       else l )
+    reads l in
+  if l=[]
+  then 
+      ["tt",unit_type]
+  else 
+    l
 let heap_var_unique_names v =
   HeapVarSet.fold (fun v l -> heap_var_name v::l) v []
-  
 
+let heap_var_unique v =
+  ZoneSet.fold (fun (z,s,_) l -> zoned_name s (Pointer z)::l) v []
+  
 let interp_function_spec id sp ty pl =
-  let tpl = interp_fun_params pl in
   let pre_with,pre_without,post = 
     interp_spec 
       (id != Cinit.invariants_initially_established_info)
-      id.function_reads id.function_writes sp 
+      {Ceffect.ef_empty with Ceffect.reads = id.function_reads; 
+	 Ceffect.assigns = id.function_writes} sp 
   in
-  let r = heap_var_unique_names id.function_reads in
-  let w = heap_var_unique_names id.function_writes in
+  let i = ref 0 in
+  let tpl = interp_fun_params id.function_reads pl in   
+  let r = heap_var_unique_names id.function_reads_var in
+  let w = heap_var_unique_names id.function_writes_var in
+  let r = (heap_var_unique id.function_reads)@r in
+  let w = (heap_var_unique id.function_writes)@w in
   let annot_type = 
     Annot_type
       (pre_without, Base_type (Info.output_why_type id.type_why_fun), r, w, 
@@ -1555,7 +1642,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       (* global initialisations already handled in cinit.ml *)
       why
   | Nfunspec(spec,ctype,id) -> 
-      let _,_,_,spec = interp_function_spec id spec ctype id.args in
+      let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
       (why_code, spec :: why_spec,
        prover_decl)
   | Nfundef(spec,ctype,id,block) ->      

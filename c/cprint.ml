@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.18 2005-11-08 14:55:13 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.19 2006-01-23 16:43:27 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -55,7 +55,7 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "%s" s
   | NTvar x ->
       fprintf fmt "%s" x.var_unique_name
-  | NTapp (li, tl) ->
+  | NTapp {napp_pred = li; napp_args = tl;} ->
       fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
   | NTunop (op, t) ->
       fprintf fmt "%s%a" (term_unop op) nterm_p t
@@ -108,7 +108,7 @@ let rec npredicate fmt p = match p.npred_node with
       fprintf fmt "false"
   | NPtrue ->
       fprintf fmt "true"
-  | NPapp (li, tl) ->
+  | NPapp {napp_pred = li; napp_args = tl;} ->
       fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
   | NPrel (t1, rel, t2) ->
       fprintf fmt "%a %s %a" nterm t1 (relation rel) nterm t2
@@ -268,7 +268,7 @@ let rec nexpr fmt e = match e.nexpr_node with
   | NEincr (Upostfix_dec, e) -> fprintf fmt "%a--" nexpr_p e
   | NEbinary (e1, op, e2) ->
       fprintf fmt "%a %a %a" nexpr_p e1 binop op nexpr_p e2
-  | NEcall (e, l) ->
+  | NEcall { ncall_fun = e ; ncall_args = l } ->
       fprintf fmt "%a(%a)" nexpr e (print_list comma nexpr) l
   | NEcond (e1, e2, e3) ->
       fprintf fmt "%a ? %a : %a" nexpr e1 nexpr e2 nexpr e3

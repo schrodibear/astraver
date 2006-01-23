@@ -236,8 +236,7 @@ let separation_first mark diag v1 v2 =
 	[noattr_located (
 	   Cast.Ninvariant_strong (
 	     "separation" ^ n1 ^ "_" ^ n2 , 
-	     npapp(find_pred (pre), 
-		   (*(create_term n1)::[(create_term n2)]*) [])))]
+	     npapp(find_pred (pre),[])))]
     | Tarray (ty,Some s) , Tstruct _ -> 
 	if compatible_type ty v2.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 

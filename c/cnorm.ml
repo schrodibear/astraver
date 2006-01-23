@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.44 2005-11-08 14:55:13 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.45 2006-01-23 16:43:27 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -138,8 +138,10 @@ and expr_node loc ty t =
       | TEincr (incr_operator,texpr) -> NEincr(incr_operator, expr texpr)
       | TEbinary (texpr1 , binary_operator , texpr2) ->
 	  NEbinary ((expr texpr1), binary_operator , (expr texpr2))
-      | TEcall (texpr ,list) -> NEcall ((expr texpr),
-				       (List.map (fun x -> (expr x)) list))
+      | TEcall (texpr ,list) -> 
+	  NEcall { ncall_fun = expr texpr ;
+		   ncall_args = List.map expr list;
+		   ncall_zones_assoc = [] }
       | TEcond (texpr1, texpr2, texpr3) -> NEcond ((expr texpr1),
 						   (expr texpr2),
 						   (expr texpr3))
@@ -166,9 +168,9 @@ let rec term_node loc t =
 	nt_star loc var_info.var_type t'
       else
 	t'
-  | Tapp (logic_info ,l) -> NTapp (
-      logic_info, 
-      List.map (fun x -> (term x)) l)
+  | Tapp (logic_info ,l) -> NTapp  {napp_pred = logic_info; 
+				    napp_args = List.map term l;
+				    napp_zones_assoc = []}
   | Tunop (Clogic.Uamp,t) -> 
       begin match t.term_node with
 	| Tvar v-> NTvar v
@@ -240,7 +242,8 @@ let rec predicate p =
 and predicate_node = function
     | Pfalse -> NPfalse
     | Ptrue -> NPtrue 
-    | Papp (info,l) -> NPapp (info, List.map term l)
+    | Papp (info,l) -> NPapp {napp_pred = info; napp_args = List.map term l;
+			      napp_zones_assoc = []}
     | Prel (t1 , relation , t2) -> NPrel (term t1,relation,term t2)
     | Pand (p1, p2) -> NPand (predicate p1, predicate p2)
     | Por (p1, p2) -> NPor (predicate p1, predicate p2)
@@ -362,7 +365,8 @@ let npvalid t = dummy_pred (NPvalid t)
 let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
 let npfresh t = dummy_pred (NPfresh t)
 let nptrue = dummy_pred NPtrue
-let npapp (f, l) = dummy_pred (NPapp (f, l))
+let npapp (f, l) = dummy_pred (NPapp {napp_pred = f;napp_args =  l; 
+				      napp_zones_assoc = []})
 
 let spec ?(add=nptrue) s = 
   let pred = match s.requires with 
@@ -413,15 +417,18 @@ let noattr3 tyn = { Ctypes.ctype_node = tyn;
 		  Ctypes.ctype_ghost = false}
 
 let alloca loc n =
-  {nexpr_node = NEcall ((noattr2  loc 
-			   (noattr3(
-			      Tfun ([noattr3
-					(Tint(Signed,Ctypes.Int))], 
-				    noattr3 (Tpointer (noattr3 Tvoid))))) 
-			   (NEvar  (Fun_info (default_fun_info "alloca")))), 
-			[{ nexpr_node = NEconstant  (IntConstant n);
-			   nexpr_type =  noattr3 (Tint (Signed,Ctypes.Int));
-			   nexpr_loc  = loc }]);
+  {nexpr_node = NEcall 
+      {ncall_fun = 
+	  (noattr2  loc 
+	     (noattr3(
+		Tfun ([noattr3
+			 (Tint(Signed,Ctypes.Int))], 
+		      noattr3 (Tpointer (noattr3 Tvoid))))) 
+	     (NEvar  (Fun_info (default_fun_info "alloca"))));
+       ncall_args = [{ nexpr_node = NEconstant  (IntConstant n);
+		       nexpr_type =  noattr3 (Tint (Signed,Ctypes.Int));
+		       nexpr_loc  = loc }];
+       ncall_zones_assoc = []};
    nexpr_type = noattr3 (Tpointer (noattr3 Tvoid));
    nexpr_loc  = loc
   }	  
@@ -508,7 +515,7 @@ let rec expr_of_term (t : nterm) : nexpr =
       match t.nterm_node with 
 	| NTconstant c ->  NEconstant c
 	| NTvar v -> NEvar (Var_info v)
-	| NTapp (i,l) -> error t.nterm_loc 
+	| NTapp _ -> error t.nterm_loc 
 	      "logic function can't be used with ghost variables"
 	| NTunop (t , term) -> NEunary(
 	    begin  match t with 
@@ -692,7 +699,7 @@ and local_decl s l l2 =
     | [] -> NSblock (List.map statement l2)
     | {node = Tdecl (t,v,init); loc = l}::decl -> 
 	if var_is_referenced_or_struct_or_union v then
-	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one) true;
 	begin match init with
 	  | None ->
 	      let declar = local_decl s decl l2 in
@@ -742,18 +749,18 @@ let global_decl e1 =
 	  { t with Ctypes.ctype_const = true }
 	else t 
       in
-      set_var_type (Var_info v) t;
+      set_var_type (Var_info v) t false;
       if var_is_referenced_or_struct_or_union v
       then
 	begin
-	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one) false;
 	  Ndecl(v.var_type,v,ilist (c_initializer_option c))
 	end
       else Ndecl(t,v,c_initializer_option c)
   | Tfunspec (s, t, f) -> 
-      set_var_type (Fun_info f) (f.fun_type);
+      set_var_type (Fun_info f) (f.fun_type) true;
       List.iter (fun arg -> 
-		   set_var_type (Var_info arg) (arg.var_type)) f.args;
+		   set_var_type (Var_info arg) (arg.var_type) true) f.args;
       Nfunspec (spec s,t,f)
 
   | Tfundef (s, t, f, st) ->
@@ -769,9 +776,9 @@ let global_decl e1 =
 			     nterm_loc = Loc.dummy_position},acc)
 	       | _ -> acc) 
 	  nptrue f.args in
-      set_var_type (Fun_info f) (f.fun_type);
+      set_var_type (Fun_info f) (f.fun_type) true;
       List.iter (fun arg -> 
-		   set_var_type (Var_info arg) (arg.var_type)) f.args;
+		   set_var_type (Var_info arg) (arg.var_type) true) f.args;
       Nfundef (spec ~add:validity_for_struct s,t,f,statement st)
   | Tghost(x,cinit) ->
       let cinit = 

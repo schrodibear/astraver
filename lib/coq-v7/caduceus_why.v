@@ -98,90 +98,90 @@ Admitted.
 (*Why type*) Definition alloc_table: Set.
 Admitted.
 
-(*Why*) Parameter null : (A43: Set)((pointer) A43).
+(*Why*) Parameter null : (A52: Set)((pointer) A52).
 
 
 
 
 
 (*Why logic*) Definition block_length :
-  (A433:Set) alloc_table -> ((pointer) A433) -> Z.
+  (A584:Set) alloc_table -> ((pointer) A584) -> Z.
 Admitted.
 
 (*Why logic*) Definition base_addr :
-  (A434:Set) ((pointer) A434) -> ((addr) A434).
+  (A585:Set) ((pointer) A585) -> ((addr) A585).
 Admitted.
 
-(*Why logic*) Definition offset : (A435:Set) ((pointer) A435) -> Z.
+(*Why logic*) Definition offset : (A586:Set) ((pointer) A586) -> Z.
 Admitted.
 
 (*Why logic*) Definition shift :
-  (A436:Set) ((pointer) A436) -> Z -> ((pointer) A436).
+  (A587:Set) ((pointer) A587) -> Z -> ((pointer) A587).
 Admitted.
 
 Admitted.
 
 (*Why logic*) Definition sub_pointer :
-  (A437:Set) ((pointer) A437) -> ((pointer) A437) -> Z.
+  (A588:Set) ((pointer) A588) -> ((pointer) A588) -> Z.
 Admitted.
 
-(*Why predicate*) Definition lt_pointer [A438:Set] [p1:((pointer) A438)]
-  [p2:((pointer) A438)]
+(*Why predicate*) Definition lt_pointer [A589:Set] [p1:((pointer) A589)]
+  [p2:((pointer) A589)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) < (offset p2)`.
 
-(*Why predicate*) Definition le_pointer [A439:Set] [p1:((pointer) A439)]
-  [p2:((pointer) A439)]
+(*Why predicate*) Definition le_pointer [A590:Set] [p1:((pointer) A590)]
+  [p2:((pointer) A590)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) <= (offset p2)`.
 
-(*Why predicate*) Definition gt_pointer [A440:Set] [p1:((pointer) A440)]
-  [p2:((pointer) A440)]
+(*Why predicate*) Definition gt_pointer [A591:Set] [p1:((pointer) A591)]
+  [p2:((pointer) A591)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) > (offset p2)`.
 
-(*Why predicate*) Definition ge_pointer [A441:Set] [p1:((pointer) A441)]
-  [p2:((pointer) A441)]
+(*Why predicate*) Definition ge_pointer [A592:Set] [p1:((pointer) A592)]
+  [p2:((pointer) A592)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) >= (offset p2)`.
 
 
 
-(*Why predicate*) Definition valid [A442:Set] [a:alloc_table]
-  [p:((pointer) A442)]
+(*Why predicate*) Definition valid [A593:Set] [a:alloc_table]
+  [p:((pointer) A593)]
   := `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
 
-(*Why predicate*) Definition valid_index [A443:Set] [a:alloc_table]
-  [p:((pointer) A443)] [i:Z]
+(*Why predicate*) Definition valid_index [A594:Set] [a:alloc_table]
+  [p:((pointer) A594)] [i:Z]
   := `0 <= (offset p) + i` /\ `(offset p) + i < (block_length a p)`.
 
-(*Why predicate*) Definition valid_range [A444:Set] [a:alloc_table]
-  [p:((pointer) A444)] [i:Z] [j:Z]
+(*Why predicate*) Definition valid_range [A595:Set] [a:alloc_table]
+  [p:((pointer) A595)] [i:Z] [j:Z]
   := `0 <= (offset p) + i` /\ `i <= j` /\
      `(offset p) + j < (block_length a p)`.
 
 Admitted.
 
 (*Why axiom*) Lemma offset_shift :
-  (A445:Set)
-  ((p:((pointer) A445)) ((i:Z) `(offset (shift p i)) = (offset p) + i`)).
+  (A596:Set)
+  ((p:((pointer) A596)) ((i:Z) `(offset (shift p i)) = (offset p) + i`)).
 Admitted.
 
 (*Why axiom*) Lemma shift_zero :
-  (A446:Set) ((p:((pointer) A446)) (shift p `0`) = p).
+  (A597:Set) ((p:((pointer) A597)) (shift p `0`) = p).
 Admitted.
 
 (*Why axiom*) Lemma shift_shift :
-  (A447:Set)
-  ((p:((pointer) A447))
+  (A598:Set)
+  ((p:((pointer) A598))
    ((i:Z) ((j:Z) (shift (shift p i) j) = (shift p `i + j`)))).
 Admitted.
 
 (*Why axiom*) Lemma base_addr_shift :
-  (A448:Set)
-  ((p:((pointer) A448)) ((i:Z) (base_addr (shift p i)) = (base_addr p))).
+  (A599:Set)
+  ((p:((pointer) A599)) ((i:Z) (base_addr (shift p i)) = (base_addr p))).
 Admitted.
 
 (*Why axiom*) Lemma block_length_shift :
-  (A449:Set)
+  (A600:Set)
   ((a:alloc_table)
-   ((p:((pointer) A449))
+   ((p:((pointer) A600))
     ((i:Z) `(block_length a (shift p i)) = (block_length a p)`))).
 Admitted.
 
@@ -190,52 +190,52 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma base_addr_block_length :
-  (A450:Set)
+  (A601:Set)
   ((a:alloc_table)
-   ((p1:((pointer) A450))
-    ((p2:((pointer) A450))
+   ((p1:((pointer) A601))
+    ((p2:((pointer) A601))
      ((base_addr p1) = (base_addr p2) ->
       `(block_length a p1) = (block_length a p2)`)))).
 Admitted.
 
 (*Why axiom*) Lemma pointer_pair_1 :
-  (A451:Set)
-  ((p1:((pointer) A451))
-   ((p2:((pointer) A451))
+  (A602:Set)
+  ((p1:((pointer) A602))
+   ((p2:((pointer) A602))
     ((base_addr p1) = (base_addr p2) /\ `(offset p1) = (offset p2)` ->
      p1 = p2))).
 Admitted.
 
 (*Why axiom*) Lemma pointer_pair_2 :
-  (A452:Set)
-  ((p1:((pointer) A452))
-   ((p2:((pointer) A452))
+  (A603:Set)
+  ((p1:((pointer) A603))
+   ((p2:((pointer) A603))
     (p1 = p2 -> (base_addr p1) = (base_addr p2) /\
      `(offset p1) = (offset p2)`))).
 Admitted.
 
 (*Why axiom*) Lemma neq_base_addr_neq_shift :
-  (A453:Set)
-  ((p1:((pointer) A453))
-   ((p2:((pointer) A453))
+  (A604:Set)
+  ((p1:((pointer) A604))
+   ((p2:((pointer) A604))
     ((i:Z)
      ((j:Z)
       (~((base_addr p1) = (base_addr p2)) -> ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
 (*Why axiom*) Lemma neq_offset_neq_shift :
-  (A454:Set)
-  ((p1:((pointer) A454))
-   ((p2:((pointer) A454))
+  (A605:Set)
+  ((p1:((pointer) A605))
+   ((p2:((pointer) A605))
     ((i:Z)
      ((j:Z)
       (`(offset p1) + i <> (offset p2) + j` -> ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
 (*Why axiom*) Lemma eq_offset_eq_shift :
-  (A455:Set)
-  ((p1:((pointer) A455))
-   ((p2:((pointer) A455))
+  (A606:Set)
+  ((p1:((pointer) A606))
+   ((p2:((pointer) A606))
     ((i:Z)
      ((j:Z)
       ((base_addr p1) = (base_addr p2) ->
@@ -243,9 +243,9 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma valid_index_valid_shift :
-  (A456:Set)
+  (A607:Set)
   ((a:alloc_table)
-   ((p:((pointer) A456))
+   ((p:((pointer) A607))
     ((i:Z) ((valid_index a p i) -> (valid a (shift p i)))))).
 Admitted.
 
@@ -254,9 +254,9 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma valid_range_valid_shift :
-  (A457:Set)
+  (A608:Set)
   ((a:alloc_table)
-   ((p:((pointer) A457))
+   ((p:((pointer) A608))
     ((i:Z)
      ((j:Z)
       ((k:Z)
@@ -265,17 +265,17 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma valid_range_valid :
-  (A458:Set)
+  (A609:Set)
   ((a:alloc_table)
-   ((p:((pointer) A458))
+   ((p:((pointer) A609))
     ((i:Z)
      ((j:Z) ((valid_range a p i j) -> (`i <= 0` /\ `0 <= j` -> (valid a p))))))).
 Admitted.
 
 (*Why axiom*) Lemma valid_range_valid_index :
-  (A459:Set)
+  (A610:Set)
   ((a:alloc_table)
-   ((p:((pointer) A459))
+   ((p:((pointer) A610))
     ((i:Z)
      ((j:Z)
       ((k:Z)
@@ -284,9 +284,9 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma sub_pointer_def :
-  (A460:Set)
-  ((p1:((pointer) A460))
-   ((p2:((pointer) A460))
+  (A611:Set)
+  ((p1:((pointer) A611))
+   ((p2:((pointer) A611))
     ((base_addr p1) = (base_addr p2) ->
      `(sub_pointer p1 p2) = (offset p1) - (offset p2)`))).
 Admitted.
@@ -324,37 +324,37 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition acc :
-  (A461:Set) (A462:Set) ((memory) A462 A461) -> ((pointer) A461) -> A462.
+  (A612:Set) (A613:Set) ((memory) A612 A613) -> ((pointer) A613) -> A612.
 Admitted.
 Implicits acc [1].
 
 
 (*Why logic*) Definition upd :
-  (A463:Set) (A464:Set) ((memory) A464 A463) -> ((pointer) A463)
-  -> A464 -> ((memory) A464 A463).
+  (A614:Set) (A615:Set) ((memory) A614 A615) -> ((pointer) A615)
+  -> A614 -> ((memory) A614 A615).
 Admitted.
 Implicits upd [1].
 
 
 (*Why axiom*) Lemma acc_upd :
-  (A465:Set) (A466:Set)
-  ((m:((memory) A466 A465))
-   ((p:((pointer) A465)) ((a:A466) (acc (upd m p a) p) = a))).
+  (A616:Set) (A617:Set)
+  ((m:((memory) A616 A617))
+   ((p:((pointer) A617)) ((a:A616) (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (A467:Set) (A468:Set)
-  ((m:((memory) A468 A467))
-   ((p1:((pointer) A467))
-    ((p2:((pointer) A467)) ((a:A468) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+  (A618:Set) (A619:Set)
+  ((m:((memory) A618 A619))
+   ((p1:((pointer) A619))
+    ((p2:((pointer) A619)) ((a:A618) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A469:Set) (A470:Set)
-  ((m:((memory) A470 A469))
-   ((p1:((pointer) A469))
-    ((p2:((pointer) A469))
-     ((a:A470) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+  (A620:Set) (A621:Set)
+  ((m:((memory) A620 A621))
+   ((p1:((pointer) A621))
+    ((p2:((pointer) A621))
+     ((a:A620) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -401,356 +401,356 @@ Admitted.
 (*Why type*) Definition pset: Set ->Set.
 Admitted.
 
-(*Why logic*) Definition pset_empty : (A471:Set) ((pset) A471).
+(*Why logic*) Definition pset_empty : (A622:Set) ((pset) A622).
 Admitted.
 
 (*Why logic*) Definition pset_singleton :
-  (A472:Set) ((pointer) A472) -> ((pset) A472).
+  (A623:Set) ((pointer) A623) -> ((pset) A623).
 Admitted.
 
 (*Why logic*) Definition pset_star :
-  (A473:Set) (A474:Set) ((pset) A473) -> ((memory) ((pointer) A474)
-  A473) -> ((pset) A474).
+  (A624:Set) (A625:Set) ((pset) A625) -> ((memory) ((pointer) A624)
+  A625) -> ((pset) A624).
 Admitted.
 
 (*Why logic*) Definition pset_all :
-  (A475:Set) ((pset) A475) -> ((pset) A475).
+  (A626:Set) ((pset) A626) -> ((pset) A626).
 Admitted.
 
 (*Why logic*) Definition pset_range :
-  (A476:Set) ((pset) A476) -> Z -> Z -> ((pset) A476).
+  (A627:Set) ((pset) A627) -> Z -> Z -> ((pset) A627).
 Admitted.
 
 (*Why logic*) Definition pset_range_left :
-  (A477:Set) ((pset) A477) -> Z -> ((pset) A477).
+  (A628:Set) ((pset) A628) -> Z -> ((pset) A628).
 Admitted.
 
 (*Why logic*) Definition pset_range_right :
-  (A478:Set) ((pset) A478) -> Z -> ((pset) A478).
+  (A629:Set) ((pset) A629) -> Z -> ((pset) A629).
 Admitted.
 
 (*Why logic*) Definition pset_acc_all :
-  (A479:Set) (A480:Set) ((pset) A479) -> ((memory) ((pointer) A480)
-  A479) -> ((pset) A480).
+  (A630:Set) (A631:Set) ((pset) A631) -> ((memory) ((pointer) A630)
+  A631) -> ((pset) A630).
 Admitted.
 
 (*Why logic*) Definition pset_acc_range :
-  (A481:Set) (A482:Set) ((pset) A481) -> ((memory) ((pointer) A482) A481)
-  -> Z -> Z -> ((pset) A482).
+  (A632:Set) (A633:Set) ((pset) A633) -> ((memory) ((pointer) A632) A633)
+  -> Z -> Z -> ((pset) A632).
 Admitted.
 
 (*Why logic*) Definition pset_acc_range_left :
-  (A483:Set) (A484:Set) ((pset) A483) -> ((memory) ((pointer) A484) A483)
-  -> Z -> ((pset) A484).
+  (A634:Set) (A635:Set) ((pset) A635) -> ((memory) ((pointer) A634) A635)
+  -> Z -> ((pset) A634).
 Admitted.
 
 (*Why logic*) Definition pset_acc_range_right :
-  (A485:Set) (A486:Set) ((pset) A485) -> ((memory) ((pointer) A486) A485)
-  -> Z -> ((pset) A486).
+  (A636:Set) (A637:Set) ((pset) A637) -> ((memory) ((pointer) A636) A637)
+  -> Z -> ((pset) A636).
 Admitted.
 
 (*Why logic*) Definition pset_union :
-  (A487:Set) ((pset) A487) -> ((pset) A487) -> ((pset) A487).
+  (A638:Set) ((pset) A638) -> ((pset) A638) -> ((pset) A638).
 Admitted.
 
 (*Why logic*) Definition not_in_pset :
-  (A488:Set) ((pointer) A488) -> ((pset) A488) -> Prop.
+  (A639:Set) ((pointer) A639) -> ((pset) A639) -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns [A489:Set]
-  [A490:Set] [a:alloc_table] [m1:((memory) A490 A489)] [m2:((memory) A490
-  A489)] [l:((pset) A489)]
-  := ((p:((pointer) A489))
+(*Why predicate*) Definition not_assigns [A640:Set]
+  [A641:Set] [a:alloc_table] [m1:((memory) A640 A641)] [m2:((memory) A640
+  A641)] [l:((pset) A641)]
+  := ((p:((pointer) A641))
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 
 (*Why axiom*) Lemma pset_empty_intro :
-  (A491:Set) ((p:((pointer) A491)) (not_in_pset p pset_empty)).
+  (A642:Set) ((p:((pointer) A642)) (not_in_pset p pset_empty)).
 Admitted.
 
 (*Why axiom*) Lemma pset_singleton_intro :
-  (A492:Set)
-  ((p1:((pointer) A492))
-   ((p2:((pointer) A492))
+  (A643:Set)
+  ((p1:((pointer) A643))
+   ((p2:((pointer) A643))
     (~(p1 = p2) -> (not_in_pset p1 (pset_singleton p2))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_singleton_elim :
-  (A493:Set)
-  ((p1:((pointer) A493))
-   ((p2:((pointer) A493))
+  (A644:Set)
+  ((p1:((pointer) A644))
+   ((p2:((pointer) A644))
     ((not_in_pset p1 (pset_singleton p2)) -> ~(p1 = p2)))).
 Admitted.
 
 (*Why axiom*) Lemma not_not_in_singleton :
-  (A494:Set) ((p:((pointer) A494)) ~(not_in_pset p (pset_singleton p))).
+  (A645:Set) ((p:((pointer) A645)) ~(not_in_pset p (pset_singleton p))).
 Admitted.
 
 (*Why axiom*) Lemma pset_union_intro :
-  (A495:Set)
-  ((l1:((pset) A495))
-   ((l2:((pset) A495))
-    ((p:((pointer) A495))
+  (A646:Set)
+  ((l1:((pset) A646))
+   ((l2:((pset) A646))
+    ((p:((pointer) A646))
      ((not_in_pset p l1) /\ (not_in_pset p l2) ->
       (not_in_pset p (pset_union l1 l2)))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_union_elim1 :
-  (A496:Set)
-  ((l1:((pset) A496))
-   ((l2:((pset) A496))
-    ((p:((pointer) A496))
+  (A647:Set)
+  ((l1:((pset) A647))
+   ((l2:((pset) A647))
+    ((p:((pointer) A647))
      ((not_in_pset p (pset_union l1 l2)) -> (not_in_pset p l1))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_union_elim2 :
-  (A497:Set)
-  ((l1:((pset) A497))
-   ((l2:((pset) A497))
-    ((p:((pointer) A497))
+  (A648:Set)
+  ((l1:((pset) A648))
+   ((l2:((pset) A648))
+    ((p:((pointer) A648))
      ((not_in_pset p (pset_union l1 l2)) -> (not_in_pset p l2))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_star_intro :
-  (A498:Set) (A499:Set)
-  ((l:((pset) A499))
-   ((m:((memory) ((pointer) A498) A499))
-    ((p:((pointer) A498))
-     (((p1:((pointer) A499)) (p = (acc m p1) -> (not_in_pset p1 l))) ->
+  (A649:Set) (A650:Set)
+  ((l:((pset) A649))
+   ((m:((memory) ((pointer) A650) A649))
+    ((p:((pointer) A650))
+     (((p1:((pointer) A649)) (p = (acc m p1) -> (not_in_pset p1 l))) ->
       (not_in_pset p (pset_star l m)))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_star_elim :
-  (A500:Set) (A501:Set)
-  ((l:((pset) A501))
-   ((m:((memory) ((pointer) A500) A501))
-    ((p:((pointer) A500))
+  (A651:Set) (A652:Set)
+  ((l:((pset) A651))
+   ((m:((memory) ((pointer) A652) A651))
+    ((p:((pointer) A652))
      ((not_in_pset p (pset_star l m)) ->
-      ((p1:((pointer) A501)) (p = (acc m p1) -> (not_in_pset p1 l))))))).
+      ((p1:((pointer) A651)) (p = (acc m p1) -> (not_in_pset p1 l))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_all_intro :
-  (A502:Set)
-  ((p:((pointer) A502))
-   ((l:((pset) A502))
-    (((p1:((pointer) A502))
+  (A653:Set)
+  ((p:((pointer) A653))
+   ((l:((pset) A653))
+    (((p1:((pointer) A653))
       (~(not_in_pset p1 l) -> ~((base_addr p) = (base_addr p1)))) ->
      (not_in_pset p (pset_all l))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_all_elim :
-  (A503:Set)
-  ((p:((pointer) A503))
-   ((l:((pset) A503))
+  (A654:Set)
+  ((p:((pointer) A654))
+   ((l:((pset) A654))
     ((not_in_pset p (pset_all l)) ->
-     ((p1:((pointer) A503))
+     ((p1:((pointer) A654))
       (~(not_in_pset p1 l) -> ~((base_addr p) = (base_addr p1))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_intro :
-  (A504:Set)
-  ((p:((pointer) A504))
-   ((l:((pset) A504))
+  (A655:Set)
+  ((p:((pointer) A655))
+   ((l:((pset) A655))
     ((a:Z)
      ((b:Z)
-      (((p1:((pointer) A504)) (not_in_pset p1 l) \/
+      (((p1:((pointer) A655)) (not_in_pset p1 l) \/
         ((i:Z) (`a <= i` /\ `i <= b` -> ~(p = (shift p1 i))))) ->
        (not_in_pset p (pset_range l a b))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_elim :
-  (A505:Set)
-  ((p:((pointer) A505))
-   ((l:((pset) A505))
+  (A656:Set)
+  ((p:((pointer) A656))
+   ((l:((pset) A656))
     ((a:Z)
      ((b:Z)
       ((not_in_pset p (pset_range l a b)) ->
-       ((p1:((pointer) A505))
+       ((p1:((pointer) A656))
         (~(not_in_pset p1 l) ->
          ((i:Z) (`a <= i` /\ `i <= b` -> ~((shift p1 i) = p)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_left_intro :
-  (A506:Set)
-  ((p:((pointer) A506))
-   ((l:((pset) A506))
+  (A657:Set)
+  ((p:((pointer) A657))
+   ((l:((pset) A657))
     ((a:Z)
-     (((p1:((pointer) A506)) (not_in_pset p1 l) \/
+     (((p1:((pointer) A657)) (not_in_pset p1 l) \/
        ((i:Z) (`i <= a` -> ~(p = (shift p1 i))))) ->
       (not_in_pset p (pset_range_left l a)))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_left_elim :
-  (A507:Set)
-  ((p:((pointer) A507))
-   ((l:((pset) A507))
+  (A658:Set)
+  ((p:((pointer) A658))
+   ((l:((pset) A658))
     ((a:Z)
      ((not_in_pset p (pset_range_left l a)) ->
-      ((p1:((pointer) A507))
+      ((p1:((pointer) A658))
        (~(not_in_pset p1 l) -> ((i:Z) (`i <= a` -> ~((shift p1 i) = p))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_right_intro :
-  (A508:Set)
-  ((p:((pointer) A508))
-   ((l:((pset) A508))
+  (A659:Set)
+  ((p:((pointer) A659))
+   ((l:((pset) A659))
     ((a:Z)
-     (((p1:((pointer) A508)) (not_in_pset p1 l) \/
+     (((p1:((pointer) A659)) (not_in_pset p1 l) \/
        ((i:Z) (`a <= i` -> ~(p = (shift p1 i))))) ->
       (not_in_pset p (pset_range_right l a)))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_right_elim :
-  (A509:Set)
-  ((p:((pointer) A509))
-   ((l:((pset) A509))
+  (A660:Set)
+  ((p:((pointer) A660))
+   ((l:((pset) A660))
     ((a:Z)
      ((not_in_pset p (pset_range_right l a)) ->
-      ((p1:((pointer) A509))
+      ((p1:((pointer) A660))
        (~(not_in_pset p1 l) -> ((i:Z) (`a <= i` -> ~((shift p1 i) = p))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_all_intro :
-  (A510:Set) (A511:Set)
-  ((p:((pointer) A511))
-   ((l:((pset) A510))
-    ((m:((memory) ((pointer) A511) A510))
-     (((p1:((pointer) A510))
+  (A661:Set) (A662:Set)
+  ((p:((pointer) A661))
+   ((l:((pset) A662))
+    ((m:((memory) ((pointer) A661) A662))
+     (((p1:((pointer) A662))
        (~(not_in_pset p1 l) -> ((i:Z) ~(p = (acc m (shift p1 i)))))) ->
       (not_in_pset p (pset_acc_all l m)))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_all_elim :
-  (A512:Set) (A513:Set)
-  ((p:((pointer) A513))
-   ((l:((pset) A512))
-    ((m:((memory) ((pointer) A513) A512))
+  (A663:Set) (A664:Set)
+  ((p:((pointer) A663))
+   ((l:((pset) A664))
+    ((m:((memory) ((pointer) A663) A664))
      ((not_in_pset p (pset_acc_all l m)) ->
-      ((p1:((pointer) A512))
+      ((p1:((pointer) A664))
        (~(not_in_pset p1 l) -> ((i:Z) ~((acc m (shift p1 i)) = p)))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_intro :
-  (A514:Set) (A515:Set)
-  ((p:((pointer) A515))
-   ((l:((pset) A514))
-    ((m:((memory) ((pointer) A515) A514))
+  (A665:Set) (A666:Set)
+  ((p:((pointer) A665))
+   ((l:((pset) A666))
+    ((m:((memory) ((pointer) A665) A666))
      ((a:Z)
       ((b:Z)
-       (((p1:((pointer) A514))
+       (((p1:((pointer) A666))
          (~(not_in_pset p1 l) ->
           ((i:Z) (`a <= i` /\ `i <= b` -> ~(p = (acc m (shift p1 i))))))) ->
         (not_in_pset p (pset_acc_range l m a b)))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_elim :
-  (A516:Set) (A517:Set)
-  ((p:((pointer) A517))
-   ((l:((pset) A516))
-    ((m:((memory) ((pointer) A517) A516))
+  (A667:Set) (A668:Set)
+  ((p:((pointer) A667))
+   ((l:((pset) A668))
+    ((m:((memory) ((pointer) A667) A668))
      ((a:Z)
       ((b:Z)
        ((not_in_pset p (pset_acc_range l m a b)) ->
-        ((p1:((pointer) A516))
+        ((p1:((pointer) A668))
          (~(not_in_pset p1 l) ->
           ((i:Z) (`a <= i` /\ `i <= b` -> ~((acc m (shift p1 i)) = p))))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_left_intro :
-  (A518:Set) (A519:Set)
-  ((p:((pointer) A519))
-   ((l:((pset) A518))
-    ((m:((memory) ((pointer) A519) A518))
+  (A669:Set) (A670:Set)
+  ((p:((pointer) A669))
+   ((l:((pset) A670))
+    ((m:((memory) ((pointer) A669) A670))
      ((a:Z)
-      (((p1:((pointer) A518))
+      (((p1:((pointer) A670))
         (~(not_in_pset p1 l) ->
          ((i:Z) (`i <= a` -> ~(p = (acc m (shift p1 i))))))) ->
        (not_in_pset p (pset_acc_range_left l m a))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_left_elim :
-  (A520:Set) (A521:Set)
-  ((p:((pointer) A521))
-   ((l:((pset) A520))
-    ((m:((memory) ((pointer) A521) A520))
+  (A671:Set) (A672:Set)
+  ((p:((pointer) A671))
+   ((l:((pset) A672))
+    ((m:((memory) ((pointer) A671) A672))
      ((a:Z)
       ((not_in_pset p (pset_acc_range_left l m a)) ->
-       ((p1:((pointer) A520))
+       ((p1:((pointer) A672))
         (~(not_in_pset p1 l) ->
          ((i:Z) (`i <= a` -> ~((acc m (shift p1 i)) = p)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_right_intro :
-  (A522:Set) (A523:Set)
-  ((p:((pointer) A523))
-   ((l:((pset) A522))
-    ((m:((memory) ((pointer) A523) A522))
+  (A673:Set) (A674:Set)
+  ((p:((pointer) A673))
+   ((l:((pset) A674))
+    ((m:((memory) ((pointer) A673) A674))
      ((a:Z)
-      (((p1:((pointer) A522))
+      (((p1:((pointer) A674))
         (~(not_in_pset p1 l) ->
          ((i:Z) (`a <= i` -> ~(p = (acc m (shift p1 i))))))) ->
        (not_in_pset p (pset_acc_range_right l m a))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_right_elim :
-  (A524:Set) (A525:Set)
-  ((p:((pointer) A525))
-   ((l:((pset) A524))
-    ((m:((memory) ((pointer) A525) A524))
+  (A675:Set) (A676:Set)
+  ((p:((pointer) A675))
+   ((l:((pset) A676))
+    ((m:((memory) ((pointer) A675) A676))
      ((a:Z)
       ((not_in_pset p (pset_acc_range_right l m a)) ->
-       ((p1:((pointer) A524))
+       ((p1:((pointer) A676))
         (~(not_in_pset p1 l) ->
          ((i:Z) (`a <= i` -> ~((acc m (shift p1 i)) = p)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_trans :
-  (A526:Set) (A527:Set)
+  (A677:Set) (A678:Set)
   ((a:alloc_table)
-   ((l:((pset) A527))
-    ((m1:((memory) A526 A527))
-     ((m2:((memory) A526 A527))
-      ((m3:((memory) A526 A527))
+   ((l:((pset) A677))
+    ((m1:((memory) A678 A677))
+     ((m2:((memory) A678 A677))
+      ((m3:((memory) A678 A677))
        ((not_assigns a m1 m2 l) ->
         ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_refl :
-  (A528:Set) (A529:Set)
+  (A679:Set) (A680:Set)
   ((a:alloc_table)
-   ((l:((pset) A529)) ((m:((memory) A528 A529)) (not_assigns a m m l)))).
+   ((l:((pset) A679)) ((m:((memory) A680 A679)) (not_assigns a m m l)))).
 Admitted.
 
-(*Why predicate*) Definition valid1 [A530:Set]
-  [A531:Set] [m1:((memory) ((pointer) A531) A530)]
-  := ((p:((pointer) A530))
+(*Why predicate*) Definition valid1 [A681:Set]
+  [A682:Set] [m1:((memory) ((pointer) A681) A682)]
+  := ((p:((pointer) A682))
       ((a:alloc_table) ((valid a p) -> (valid a (acc m1 p))))).
 
-(*Why predicate*) Definition valid1_range [A532:Set]
-  [A533:Set] [m1:((memory) ((pointer) A533) A532)] [size:Z]
-  := ((p:((pointer) A532))
+(*Why predicate*) Definition valid1_range [A683:Set]
+  [A684:Set] [m1:((memory) ((pointer) A683) A684)] [size:Z]
+  := ((p:((pointer) A684))
       ((a:alloc_table)
        ((valid a p) -> (valid_range a (acc m1 p) `0` `size - 1`)))).
 
-(*Why predicate*) Definition separation1 [A534:Set]
-  [A535:Set] [m1:((memory) ((pointer) A535) A534)]
-  [m2:((memory) ((pointer) A535) A534)]
-  := ((p:((pointer) A534))
+(*Why predicate*) Definition separation1 [A685:Set]
+  [A686:Set] [m1:((memory) ((pointer) A685) A686)]
+  [m2:((memory) ((pointer) A685) A686)]
+  := ((p:((pointer) A686))
       ((a:alloc_table)
        ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
 
-(*Why predicate*) Definition separation1_range1 [A536:Set]
-  [A537:Set] [m1:((memory) ((pointer) A537) A536)]
-  [m2:((memory) ((pointer) A537) A536)] [size:Z]
-  := ((p:((pointer) A536))
+(*Why predicate*) Definition separation1_range1 [A687:Set]
+  [A688:Set] [m1:((memory) ((pointer) A687) A688)]
+  [m2:((memory) ((pointer) A687) A688)] [size:Z]
+  := ((p:((pointer) A688))
       ((a:alloc_table)
        ((valid a p) ->
         ((i:Z)
          (`0 <= i` /\ `i < size` ->
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
 
-(*Why predicate*) Definition separation1_range [A538:Set]
-  [A539:Set] [m:((memory) ((pointer) A539) A538)] [size:Z]
-  := ((p:((pointer) A538))
+(*Why predicate*) Definition separation1_range [A689:Set]
+  [A690:Set] [m:((memory) ((pointer) A689) A690)] [size:Z]
+  := ((p:((pointer) A690))
       ((a:alloc_table)
        ((valid a p) ->
         ((i1:Z)
@@ -761,40 +761,40 @@ Admitted.
              ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
                                                               (shift p i2)))))))))))).
 
-(*Why predicate*) Definition separation2 [A540:Set]
-  [A541:Set] [m1:((memory) ((pointer) A541) A540)]
-  [m2:((memory) ((pointer) A541) A540)]
-  := ((p1:((pointer) A540))
-      ((p2:((pointer) A540))
+(*Why predicate*) Definition separation2 [A691:Set]
+  [A692:Set] [m1:((memory) ((pointer) A691) A692)]
+  [m2:((memory) ((pointer) A691) A692)]
+  := ((p1:((pointer) A692))
+      ((p2:((pointer) A692))
        ((a:alloc_table)
         (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2))))))).
 
-(*Why predicate*) Definition separation2_range1 [A542:Set]
-  [A543:Set] [m1:((memory) ((pointer) A543) A542)]
-  [m2:((memory) ((pointer) A543) A542)] [size:Z]
-  := ((p:((pointer) A542))
-      ((q:((pointer) A542))
+(*Why predicate*) Definition separation2_range1 [A693:Set]
+  [A694:Set] [m1:((memory) ((pointer) A693) A694)]
+  [m2:((memory) ((pointer) A693) A694)] [size:Z]
+  := ((p:((pointer) A694))
+      ((q:((pointer) A694))
        ((a:alloc_table)
         ((i:Z)
          (`0 <= i` /\ `i < size` ->
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 q)))))))).
 
 (*Why logic*) Definition on_heap :
-  (A544:Set) alloc_table -> ((pointer) A544) -> Prop.
+  (A695:Set) alloc_table -> ((pointer) A695) -> Prop.
 Admitted.
 
 (*Why logic*) Definition on_stack :
-  (A545:Set) alloc_table -> ((pointer) A545) -> Prop.
+  (A696:Set) alloc_table -> ((pointer) A696) -> Prop.
 Admitted.
 
 (*Why logic*) Definition fresh :
-  (A546:Set) alloc_table -> ((pointer) A546) -> Prop.
+  (A697:Set) alloc_table -> ((pointer) A697) -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma fresh_not_valid :
-  (A547:Set)
+  (A698:Set)
   ((a:alloc_table)
-   ((p:((pointer) A547)) ((fresh a p) -> ((i:Z) ~(valid a (shift p i)))))).
+   ((p:((pointer) A698)) ((fresh a p) -> ((i:Z) ~(valid a (shift p i)))))).
 Admitted.
 
 
@@ -854,47 +854,47 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition alloc_stack :
-  (A548:Set) ((pointer) A548) -> alloc_table -> alloc_table -> Prop.
+  (A699:Set) ((pointer) A699) -> alloc_table -> alloc_table -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_p :
-  (A549:Set)
-  ((p:((pointer) A549))
+  (A700:Set)
+  ((p:((pointer) A700))
    ((a1:alloc_table)
     ((a2:alloc_table) ((alloc_stack p a1 a2) -> (valid a2 p))))).
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid :
-  (A550:Set) (A551:Set)
-  ((p:((pointer) A551))
+  (A701:Set) (A702:Set)
+  ((p:((pointer) A701))
    ((a1:alloc_table)
     ((a2:alloc_table)
      ((alloc_stack p a1 a2) ->
-      ((q:((pointer) A550)) ((valid a1 q) -> (valid a2 q))))))).
+      ((q:((pointer) A702)) ((valid a1 q) -> (valid a2 q))))))).
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid_index :
-  (A552:Set) (A553:Set)
-  ((p:((pointer) A553))
+  (A703:Set) (A704:Set)
+  ((p:((pointer) A703))
    ((a1:alloc_table)
     ((a2:alloc_table)
      ((alloc_stack p a1 a2) ->
-      ((q:((pointer) A552))
+      ((q:((pointer) A704))
        ((i:Z) ((valid_index a1 q i) -> (valid_index a2 q i)))))))).
 Admitted.
 
 (*Why axiom*) Lemma alloc_stack_valid_range :
-  (A554:Set) (A555:Set)
-  ((p:((pointer) A555))
+  (A705:Set) (A706:Set)
+  ((p:((pointer) A705))
    ((a1:alloc_table)
     ((a2:alloc_table)
      ((alloc_stack p a1 a2) ->
-      ((q:((pointer) A554))
+      ((q:((pointer) A706))
        ((i:Z) ((j:Z) ((valid_range a1 q i j) -> (valid_range a2 q i j))))))))).
 Admitted.
 
 (*Why logic*) Definition free_heap :
-  (A556:Set) ((pointer) A556) -> alloc_table -> alloc_table -> Prop.
+  (A707:Set) ((pointer) A707) -> alloc_table -> alloc_table -> Prop.
 Admitted.
 
 (*Why logic*) Definition free_stack :
@@ -902,22 +902,22 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma free_stack_heap :
-  (A557:Set)
+  (A708:Set)
   ((a1:alloc_table)
    ((a2:alloc_table)
     ((a3:alloc_table)
      ((free_stack a1 a2 a3) ->
-      ((p:((pointer) A557))
+      ((p:((pointer) A708))
        ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p)))))))).
 Admitted.
 
 (*Why axiom*) Lemma free_stack_stack :
-  (A558:Set)
+  (A709:Set)
   ((a1:alloc_table)
    ((a2:alloc_table)
     ((a3:alloc_table)
      ((free_stack a1 a2 a3) ->
-      ((p:((pointer) A558))
+      ((p:((pointer) A709))
        ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p)))))))).
 Admitted.
 

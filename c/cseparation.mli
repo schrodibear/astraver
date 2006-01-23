@@ -25,8 +25,13 @@ val type_why_for_term : nterm -> why_type
 val not_alias : Loc.position ->
   Cast.nctype Clogic.nterm -> Cast.nctype Clogic.nterm -> Cast.npredicate 
 
+(*
+val heap_var_name : why_type -> string
+*)
+(*
 val heap_var : why_type -> string 
 val heap_field_var : string -> why_type -> string 
+*)
 (*
 val pointer_heap_var : why_type -> string * string
 

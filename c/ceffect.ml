@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.105 2005-11-17 15:28:49 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.106 2006-01-23 16:43:27 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -33,6 +33,8 @@ let memory_type t1 t2 = ([t1;t2],"memory")
 
 let heap_vars = Hashtbl.create 97
 
+let heap_vars2 = Hashtbl.create 97
+
 let print_heap_vars fmt () =
   let base_type fmt = function
     | [], s -> fprintf fmt "%s" s
@@ -45,6 +47,17 @@ let print_heap_vars fmt () =
        (Info.output_why_type t.var_why_type)) 
     heap_vars;
   fprintf fmt "@]"
+
+let print_effects fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
+    (HeapVarSet.elements l)
+
+let print_effects2 fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt (z,s,_) -> fprintf fmt " %s_%s " s z.name)) 
+    (ZoneSet.elements l)
+
 
 let alloc = 
   let x = "alloc" in
@@ -66,16 +79,16 @@ let is_memory_var v =
       | Memory _ -> true 
       | _ -> false
 
+
 let declare_heap_var info name =
-try
-  let info' = Hashtbl.find heap_vars name in
-    if not (same_why_type2 info.var_why_type info'.var_why_type)
+try  let info' = Hashtbl.find heap_vars name in
+    if not (same_why_type_no_zone info.var_why_type info'.var_why_type)
     then
       let ty' = Info.output_why_type info'.var_why_type in
       let ty =  Info.output_why_type info.var_why_type in
 	eprintf "declare_heap_var : %s ; oldtype = (%a)%s ; newtype = (%a)%s \n" name (print_list comma pp_print_string) (fst ty') (snd ty') (print_list comma pp_print_string) (fst ty) (snd ty) ; flush stderr;
       assert false
-    else 
+    else
       info'
 with
     Not_found ->
@@ -85,9 +98,22 @@ with
       end
 
 
-let empty = HeapVarSet.empty
-let union = HeapVarSet.union
+let empty = ZoneSet.empty
+let union = ZoneSet.union
 
+
+(* static variables *)
+
+
+let memorycell_name (ty : Info.why_type) =
+  match ty with
+    | Pointer z -> "pointer"
+    | Addr z -> assert false
+    | Info.Int -> "int" 
+    | Info.Float ->  "real"
+    | Unit -> assert false
+    | Why_Logic s ->  s
+    | Memory(t,z) -> assert false
 
 
 let add_var v (ty : Info.why_type) s =
@@ -97,30 +123,26 @@ let add_var v (ty : Info.why_type) s =
   
 let add_alloc s = HeapVarSet.add alloc s
 
+
 let add_heap_var n z ty s =
-(*
-  let info = 
-    match Cenv.add_sym Loc.dummy_position n 
-      Ctypes.c_void (Var_info (default_var_info n)) 
-    with
-      | Var_info v -> v
-      | Fun_info f -> assert false
-  in
-*)
   let ty' = Memory(ty,z) in
   let info = default_var_info n in
   let n' = info.var_name ^ "_" ^ (found_repr z) in
   set_var_type_why (Var_info info) ty';
-  let info = declare_heap_var info n' in
-  HeapVarSet.add info s
-	  
+  let _ = declare_heap_var info n' in ()
+(*  let info = declare_heap_var info n' in
+  HeapVarSet.add info s*)
+  
 
 let add_field_var v ty s =
   match ty with
     | Pointer z ->
+	let z = repr z in
 	let ty' = v.var_why_type in
+(*	assert (same_why_type_no_zone ty ty'); *)
 	let n = v.var_unique_name in
-	add_heap_var n z ty' s 
+	if not z.zone_is_var then add_heap_var n z ty' s; 
+	ZoneSet.add (z,n,ty') s
     | Unit -> assert false
     | Info.Int -> assert false
     | _ -> assert false
@@ -129,87 +151,107 @@ let add_field_var v ty s =
 let add_pointer_var (ty : Info.why_type) s =
   match ty with 
     | Pointer z ->
+	let z = repr z in
+	let n = memorycell_name z.type_why_zone in
 	let ty' = z.type_why_zone in
-	let n = heap_var ty' in
-	add_heap_var n z ty' s 
+	if not z.zone_is_var then
+	  add_heap_var n z ty' s;
+	ZoneSet.add (z,n,ty') s
     | _ -> assert false
 	  
 
 type effect =
     {
-      reads : HeapVarSet.t;
-      assigns : HeapVarSet.t;
+      reads : ZoneSet.t;
+      assigns : ZoneSet.t;
+      reads_var : HeapVarSet.t;
+      assigns_var : HeapVarSet.t;
     }
 
-let ef_empty = { reads = empty; assigns = empty }
+let ef_empty = { reads = empty; assigns = empty ; 
+		 reads_var = HeapVarSet.empty ; assigns_var = HeapVarSet.empty }
 let ef_union e1 e2 = 
   { reads = union e1.reads e2.reads;
-    assigns = union e1.assigns e2.assigns }
+    assigns = union e1.assigns e2.assigns ;
+    reads_var = HeapVarSet.union e1.reads_var e2.reads_var;
+    assigns_var = HeapVarSet.union e1.assigns_var e2.assigns_var }
 
-let reads_add_var v ty e = { e with reads = add_var v ty e.reads }
+let reads_add_var v ty e = { e with reads_var = add_var v ty e.reads_var }
 let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
 let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }
-let reads_add_alloc e = { e with reads = add_alloc e.reads }
+let reads_add_alloc e = { e with reads_var = add_alloc e.reads_var }
 
-let assigns_add_var v ty e = { e with assigns = add_var v ty e.assigns }
+let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
+				 assigns_var = add_var v ty e.assigns_var }
 let assigns_add_field_var v ty e = 
-  { e with assigns = add_field_var v ty e.assigns }
+  { e with reads = add_field_var v ty e.reads;
+      assigns = add_field_var v ty e.assigns }
 let assigns_add_pointer_var ty e = 
-  { e with assigns = add_pointer_var ty e.assigns }
+  { e with reads = add_pointer_var ty e.reads; 
+      assigns = add_pointer_var ty e.assigns }
 
 let rec term t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
-      then add_var v v.var_why_type empty
-      else empty
+      then reads_add_var v v.var_why_type ef_empty
+      else ef_empty
   | NTarrow (t1,f) -> 
-      add_alloc (add_field_var f (Cseparation.type_why_for_term t1) (term t1))
+      reads_add_alloc (reads_add_field_var f (Cseparation.type_why_for_term t1) (term t1))
   | NTstar t ->
-      add_alloc (add_pointer_var (Cseparation.type_why_for_term t) (term t))
+      reads_add_alloc (reads_add_pointer_var (Cseparation.type_why_for_term t) (term t))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
   | NTunop (Utilde, t) -> term t
   | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
   | NTbase_addr t -> term t
-  | NTblock_length t -> add_alloc (term t)
+  | NTblock_length t -> reads_add_alloc (term t)
   | NTat (t, _) -> 
       term t
   | NTold t -> 
       term t
   | NTif (t1, t2, t3) -> 
-      union (term t1) (union (term t2) (term t3))
+      ef_union (term t1) (ef_union (term t2) (term t3))
   | NTbinop (t1, _, t2) -> 
-      union (term t1) (term t2) 
-  | NTapp (id, l) -> 
-      List.fold_left (fun acc t -> union acc (term t)) id.logic_heap_args l
-  | NTconstant _ -> empty
+      ef_union (term t1) (term t2) 
+  | NTapp {napp_pred = id; napp_args = tl; napp_zones_assoc = assoc} -> 
+	let reads = ZoneSet.fold 
+	  (fun (z,s,ty) acc ->
+	     let z = repr z in
+	     ZoneSet.add 
+	       ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+	  id.logic_heap_zone empty in
+	List.fold_left 
+	  (fun acc t -> ef_union acc (term t)) 
+	  {ef_empty with reads = reads; reads_var = id.logic_heap_args; }
+	  tl 
+  | NTconstant _ -> ef_empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3) ->
-      add_alloc 
-	(add_pointer_var (Cseparation.type_why_for_term t1)
-	   (union (term t1) (union (term_option t2) (term_option t3))))
+      reads_add_alloc 
+	(reads_add_pointer_var (Cseparation.type_why_for_term t1)
+	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
 
-and term_option = function None -> empty | Some t -> term t
+and term_option = function None -> ef_empty | Some t -> term t
 
 
 (* used to interpret the reads clause *)
 let locations ll =
   List.fold_left
-    (fun acc l -> union acc (term l)) empty ll
+    (fun acc l -> ef_union acc (term l)) ef_empty ll
 
 (* used to interpret the assigns clause *)
 let rec assign_location t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
-      then { reads = empty; assigns = add_var v (Cseparation.type_why_for_term t) empty }
+      then { ef_empty with assigns_var = add_var v (Cseparation.type_why_for_term t) HeapVarSet.empty }
       else ef_empty
   | NTarrow (t1,f) -> 
-      { reads = add_alloc (term t1);
-	assigns = add_field_var f (Cseparation.type_why_for_term t1) empty }
+      reads_add_alloc 
+	(assigns_add_field_var f (Cseparation.type_why_for_term t1) (term t1))
   | NTstar t1 ->
-      { reads = add_alloc (term t1);
-	assigns = add_pointer_var (Cseparation.type_why_for_term t1) empty }
+      reads_add_alloc 
+	(assigns_add_pointer_var (Cseparation.type_why_for_term t1) (term t1))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
@@ -221,14 +263,15 @@ let rec assign_location t = match t.nterm_node with
   | NTold _  
   | NTif (_, _, _)  
   | NTbinop (_, _, _)  
-  | NTapp (_, _)  
+  | NTapp _  
   | NTconstant _  
   | NTcast (_, _) -> 
       error t.nterm_loc "invalid location"
   | NTrange (t1, t2, t3) ->
-      { reads = add_alloc 
-	  (union (term t1) (union (term_option t2) (term_option t3)));
-	assigns = add_pointer_var (Cseparation.type_why_for_term t1) empty }
+      reads_add_alloc 
+	(assigns_add_pointer_var (Cseparation.type_why_for_term t1)
+	  (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
+
 
 (***
 let assign_location loc =
@@ -261,27 +304,33 @@ let assign_location loc =
 
 let rec predicate p =  
   match p.npred_node with
-    | NPtrue -> empty
-    | NPfalse -> empty
-    | NPapp (id, tl) -> 
+    | NPtrue -> ef_empty
+    | NPfalse -> ef_empty
+    | NPapp {napp_pred = id; napp_args = tl; napp_zones_assoc = assoc} -> 
+	let reads = ZoneSet.fold 
+	  (fun (z,s,ty) acc ->
+	     let z = repr z in
+	     ZoneSet.add 
+	       ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+	  id.logic_heap_zone empty in
 	List.fold_left 
-	  (fun acc t -> union acc (term t)) 
-	  id.logic_heap_args
+	  (fun acc t -> ef_union acc (term t)) 
+	  {ef_empty with reads = reads; reads_var = id.logic_heap_args; }
 	  tl 
-    | NPrel (t1, _, t2) -> union (term t1) (term t2)
+    | NPrel (t1, _, t2) -> ef_union (term t1) (term t2)
     | NPand (p1, p2)
     | NPor (p1, p2) 
     | NPiff (p1, p2) 
-    | NPimplies (p1, p2) -> union (predicate p1) (predicate p2)
+    | NPimplies (p1, p2) -> ef_union (predicate p1) (predicate p2)
     | NPnot p -> predicate p
-    | NPif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))
+    | NPif (t, p1, p2) -> ef_union (term t) (ef_union (predicate p1) (predicate p2))
     | NPforall (_, p) -> predicate p	
     | NPexists (_, p) -> predicate p
-    | NPfresh t -> add_alloc (term t)
-    | NPvalid t -> add_alloc (term t)
-    | NPvalid_index (t1,t2) -> add_alloc (union (term t1) (term t2))
+    | NPfresh t -> reads_add_alloc (term t)
+    | NPvalid t -> reads_add_alloc (term t)
+    | NPvalid_index (t1,t2) -> reads_add_alloc (ef_union (term t1) (term t2))
     | NPvalid_range (t1,t2, t3) -> 
-	add_alloc (union (term t1) (union (term t2) (term t3)))
+	reads_add_alloc (ef_union (term t1) (ef_union (term t2) (term t3)))
     | NPold p -> predicate p
     | NPat (p,_) -> predicate p
     | NPnamed (_, p) -> predicate p
@@ -289,10 +338,6 @@ let rec predicate p =
 (* table for weak invariants *)
 let weak_invariants = Hashtbl.create 97
 
-let print_effects fmt l =
-  fprintf fmt "@[%a@]"
-    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
-    (HeapVarSet.elements l)
 
 let add_weak_invariant id p =
   Hashtbl.add weak_invariants id (p, predicate p)
@@ -326,21 +371,30 @@ let add_invariants_for_struct id p vars =
 
 
 let intersect_only_alloc e1 e2 =
-  HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
+  HeapVarSet.is_empty 
+    (HeapVarSet.remove alloc 
+       (HeapVarSet.inter e1.reads_var e2.reads_var))
+(* TODO : useless, because always empty because zones are distincts *)
+  &&
+    ZoneSet.is_empty (ZoneSet.inter e1.reads e2.reads)
+
+
 
 let weak_invariants_for hvs =
   Hashtbl.fold
     (fun name (_,e) acc ->
         if intersect_only_alloc e hvs then acc
-       else union e acc) 
-    weak_invariants empty
+       else ef_union e acc) 
+    weak_invariants ef_empty
 
 let strong_invariants_for hvs =
   Hashtbl.fold
     (fun s (_,_,e) acc -> 
-       if HeapVarSet.subset e hvs then union e acc
+       if HeapVarSet.subset e.reads_var hvs.reads_var &&
+	 ZoneSet.subset e.reads hvs.reads 
+       then ef_union e acc
        else acc) 
-    strong_invariants empty
+    strong_invariants ef_empty
 
 
 let logic_type ls =
@@ -357,17 +411,17 @@ let ef_option f = function None -> ef_empty | Some x -> f x
 let variant (t,_) = term t
 
 let loop_annot a = 
-  let r = union (option predicate a.invariant) (option variant a.variant) in
-  { reads = r; assigns = empty (* TODO *) }
+  ef_union (ef_option predicate a.invariant) 
+    (ef_option variant a.variant) 
+  (* TODO : loop_assigns ? *) 
 
 
 let spec sp = 
   ef_union
-    { reads = 
-	union 
-	  (union (option predicate sp.requires) (option predicate sp.ensures))
-	  (option variant sp.decreases);
-      assigns = empty }
+    ( ef_union 
+	(ef_union (ef_option predicate sp.requires) 
+	   (ef_option predicate sp.ensures))
+	(ef_option variant sp.decreases))
     (ef_option 
        (List.fold_left
 	  (fun acc l -> ef_union acc (assign_location l)) ef_empty)
@@ -401,10 +455,25 @@ let rec expr e = match e.nexpr_node with
       expr e
   | NEincr (_, e) ->
       assign_expr e
-  | NEcall (e, el) ->
+  | NEcall {ncall_fun = e; ncall_args = el; ncall_zones_assoc = assoc} ->
       let ef = match e.nexpr_node with
-	| NEvar (Fun_info f) -> 
-	    { reads = f.function_reads; assigns = f.function_writes } 
+	| NEvar (Fun_info f) ->
+	    let reads = ZoneSet.fold 
+	      (fun (z,s,ty) acc ->
+		 let z = repr z in
+		 ZoneSet.add 
+		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+	      f.function_reads empty in
+	    let writes = ZoneSet.fold 
+	      (fun (z,s,ty) acc ->
+		 let z = repr z in
+		 ZoneSet.add 
+		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+	      f.function_writes empty in
+	    eprintf "function : %s read : %a ; %a writes : %a ; %a @\n" f.fun_name print_effects2 reads print_effects f.function_reads_var print_effects2 writes print_effects f.function_writes_var;
+	    { reads = reads; assigns = writes; 
+	      reads_var = f.function_reads_var; 
+	      assigns_var = f.function_writes_var} 
 	| _ -> expr e
       in
       List.fold_left (fun ef arg -> ef_union (expr arg) ef) ef el
@@ -482,7 +551,7 @@ let rec statement s = match s.nst_node with
 	(expr e)
 	case_list
   | NSassert p ->
-      { reads = predicate p; assigns = empty }
+      predicate p
   | NSspec (sp, s) ->
       ef_union (spec sp) (statement s)
   | NSdecl (_, _, i,rem) -> ef_union (initializer_option i) (statement rem)
@@ -508,11 +577,6 @@ and initializer_ = function
 and initializer_option = function
   | None -> ef_empty
   | Some i -> initializer_ i
-
-let print_effects fmt l =
-  fprintf fmt "@[%a@]"
-    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
-    (HeapVarSet.elements l)
 
 (* first pass: declare invariants and computes effects for logics *)
 
@@ -893,16 +957,17 @@ let decl d =
     | Nlogic(id,ltype) -> 
 	let l = logic_type ltype in
 	lprintf 
-	  "effects of logic declaration of %s: @[%a@]@." id.logic_name
-	  print_effects l;
-	id.logic_heap_args <- l
+	  "effects of logic declaration of %s: @[%a %a@]@." id.logic_name
+	  print_effects l.reads_var print_effects2 l.reads;
+	id.logic_heap_args <- l.reads_var;
+	id.logic_heap_zone <- l.reads
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
     | Ninvariant_strong(id,p) -> 
 	let pre = (predicate p) in 
 	lprintf 
-	  "effects of strong invariant %s: @[%a@]@." id
-	  print_effects pre;
+	  "effects of strong invariant %s: @[reads_var : %a  reads :%a@]@." id
+	  print_effects pre.reads_var print_effects2 pre.reads;
 	add_invariants_for_struct id p pre	  
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
@@ -917,9 +982,12 @@ let decl d =
 			 } in
 	       let name1 = "valid_range_" ^ v.var_name in
 	       let (pre1,pre2) = validity t typ s in
-	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
-	       List.iter (fun (x1,x2,p,y) -> add_strong_invariant x2 p y;
-			    add_strong_invariant_2 x1 p [])
+	       add_strong_invariant name1 pre1 
+		 {ef_empty with reads_var =(HeapVarSet.singleton v)};
+	       List.iter 
+		 (fun (x1,x2,p,y) -> 
+		    add_strong_invariant x2 p {ef_empty with reads_var = y};
+		    add_strong_invariant_2 x1 p [])
 		 (invariant_for_global d.loc v);
 	   | _ -> ()
 	end;
@@ -935,7 +1003,8 @@ let decl d =
 	  let (pre,_) = invariant_for_constant d.loc ty t init in
 	  let info = Info.default_logic_info id in 
 	  add_strong_invariant_2 id pre [] ;
-	  add_strong_invariant id pre (HeapVarSet.singleton v)
+	  add_strong_invariant id pre 
+	    {ef_empty with reads_var =(HeapVarSet.singleton v)}
 	end;
     | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
     | Naxiom(id,p) -> () (* TODO *)
@@ -954,24 +1023,25 @@ let warnings = Queue.create ()
 let functions dl = 
   let fixpoint = ref true in
   let declare id ef =
-    lprintf "effects for function %s before invariants: reads %a writes %a@." 
-      id.fun_name print_effects ef.reads print_effects ef.assigns;
-    let ef  = {
-      reads = union 
-		(union ef.reads 
-		   (weak_invariants_for (union ef.reads ef.assigns)))
-		(strong_invariants_for (union ef.reads ef.assigns)) ;
-      assigns = ef.assigns }
+    lprintf "effects for function %s before invariants: reads %a %a writes %a %a@." 
+      id.fun_name print_effects ef.reads_var print_effects2 ef.reads print_effects ef.assigns_var print_effects2 ef.assigns;
+    let ef  = 
+      ef_union
+	(ef_union
+	   (weak_invariants_for ef)
+	   (strong_invariants_for ef)) ef
     in
-    lprintf "effects for function %s: reads %a writes %a@." id.fun_name 
-      print_effects ef.reads print_effects ef.assigns;
-    if not (HeapVarSet.subset ef.reads id.function_reads) then begin
+    lprintf "effects for function %s: reads %a %a writes %a %a@." id.fun_name 
+      print_effects ef.reads_var print_effects2 ef.reads print_effects ef.assigns_var print_effects2 ef.assigns;
+    if not (ZoneSet.subset ef.reads id.function_reads) then begin
       fixpoint := false;
-      id.function_reads <- ef.reads
+      id.function_reads <- ef.reads;
+      id.function_reads_var <- ef.reads_var
     end;
-    if not (HeapVarSet.subset ef.assigns id.function_writes) then begin
+    if not (ZoneSet.subset ef.assigns id.function_writes) then begin
       fixpoint := false;
-      id.function_writes <- ef.assigns
+      id.function_writes <- ef.assigns;
+      id.function_writes_var <- ef.assigns_var;
     end
   in
   let decl d = match d.node with
@@ -987,7 +1057,8 @@ let functions dl =
 		  (* no assigns given by user:
 		     emit a warning if some side-effects have been detected *)
 		  if id <> Cinit.invariants_initially_established_info &&
-		    not (HeapVarSet.is_empty ef_body.assigns) then
+		    not ((ZoneSet.is_empty ef_body.assigns) && 
+			   (HeapVarSet.is_empty ef_body.assigns_var)) then
 		      Queue.add 
 			(d.loc,
 			 "function " ^ id.fun_name ^ 
@@ -997,7 +1068,9 @@ let functions dl =
 		  (* some assigns given by user:
 		     emit a warning if side-effects of spec differs from 
 		     side-effects of body *) 
-		  if not (HeapVarSet.equal ef_spec.assigns ef_body.assigns) 
+		  if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
+			    (HeapVarSet.equal 
+			       ef_spec.assigns_var ef_body.assigns_var))
 		  then begin 
 		    Queue.add 
 		      (d.loc,

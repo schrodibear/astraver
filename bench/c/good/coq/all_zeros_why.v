@@ -5,10 +5,11 @@ Require Export all_zeros_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_1 : 
-  forall (t: ((pointer) Z5)),
+  forall (A752:Set),
+  forall (t: ((pointer) A752)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
+  forall (int_Z5: ((memory) Z A752)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -24,10 +25,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_2 : 
-  forall (t: ((pointer) Z5)),
+  forall (A753:Set),
+  forall (t: ((pointer) A753)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
+  forall (int_Z5: ((memory) Z A753)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -42,7 +44,7 @@ Save.
                 (forall (i:Z),
                  (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
   forall (HW_6: k0 < n),
-  forall (result: ((pointer) Z5)),
+  forall (result: ((pointer) A753)),
   forall (HW_7: result = (shift t k0)),
   (valid alloc result).
 Proof.
@@ -52,10 +54,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_3 : 
-  forall (t: ((pointer) Z5)),
+  forall (A754:Set),
+  forall (t: ((pointer) A754)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
+  forall (int_Z5: ((memory) Z A754)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -70,7 +73,7 @@ Save.
                 (forall (i:Z),
                  (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
   forall (HW_6: k0 < n),
-  forall (result: ((pointer) Z5)),
+  forall (result: ((pointer) A754)),
   forall (HW_7: result = (shift t k0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
@@ -86,10 +89,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_4 : 
-  forall (t: ((pointer) Z5)),
+  forall (A755:Set),
+  forall (t: ((pointer) A755)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
+  forall (int_Z5: ((memory) Z A755)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -104,7 +108,7 @@ Save.
                 (forall (i:Z),
                  (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
   forall (HW_6: k0 < n),
-  forall (result: ((pointer) Z5)),
+  forall (result: ((pointer) A755)),
   forall (HW_7: result = (shift t k0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
@@ -127,10 +131,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_0_impl_po_5 : 
-  forall (t: ((pointer) Z5)),
+  forall (A756:Set),
+  forall (t: ((pointer) A756)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
+  forall (int_Z5: ((memory) Z A756)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -154,10 +159,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_1 : 
-  forall (t: ((pointer) Z4)),
+  forall (A757:Set),
+  forall (t: ((pointer) A757)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A757)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
@@ -168,10 +174,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_2 : 
-  forall (t: ((pointer) Z4)),
+  forall (A758:Set),
+  forall (t: ((pointer) A758)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A758)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
@@ -185,7 +192,7 @@ Save.
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
-  forall (result: ((pointer) Z4)),
+  forall (result: ((pointer) A758)),
   forall (HW_6: result = (shift t mutable_n0)),
   (valid alloc result).
 Proof.
@@ -195,10 +202,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_3 : 
-  forall (t: ((pointer) Z4)),
+  forall (A759:Set),
+  forall (t: ((pointer) A759)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A759)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
@@ -212,7 +220,7 @@ Save.
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
-  forall (result: ((pointer) Z4)),
+  forall (result: ((pointer) A759)),
   forall (HW_6: result = (shift t mutable_n0)),
   forall (HW_7: (valid alloc result)),
   forall (result0: Z),
@@ -229,10 +237,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_4 : 
-  forall (t: ((pointer) Z4)),
+  forall (A760:Set),
+  forall (t: ((pointer) A760)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A760)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
@@ -246,7 +255,7 @@ Save.
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
-  forall (result: ((pointer) Z4)),
+  forall (result: ((pointer) A760)),
   forall (HW_6: result = (shift t mutable_n0)),
   forall (HW_7: (valid alloc result)),
   forall (result0: Z),
@@ -266,10 +275,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_5 : 
-  forall (t: ((pointer) Z4)),
+  forall (A761:Set),
+  forall (t: ((pointer) A761)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A761)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
@@ -283,7 +293,7 @@ Save.
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
-  forall (result: ((pointer) Z4)),
+  forall (result: ((pointer) A761)),
   forall (HW_6: result = (shift t mutable_n0)),
   forall (HW_7: (valid alloc result)),
   forall (result0: Z),
@@ -303,10 +313,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_6 : 
-  forall (t: ((pointer) Z4)),
+  forall (A762:Set),
+  forall (t: ((pointer) A762)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A762)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
@@ -330,10 +341,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma all_zeros_impl_po_7 : 
-  forall (t: ((pointer) Z4)),
+  forall (A763:Set),
+  forall (t: ((pointer) A763)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
+  forall (int_Z4: ((memory) Z A763)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\

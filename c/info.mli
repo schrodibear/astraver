@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.22 2005-11-09 10:47:25 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.23 2006-01-23 16:43:27 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -27,6 +27,8 @@ type why_type =
 
 and zone = 
     {
+      zone_is_var : bool;
+      number : int;
       mutable repr : zone option;
       name : string;
       mutable type_why_zone : why_type
@@ -34,15 +36,16 @@ and zone =
 
 val same_why_type : why_type -> why_type -> bool
 
-val same_why_type2 : why_type -> why_type -> bool
+val same_why_type_no_zone : why_type -> why_type -> bool
+
 
 val repr : zone -> zone
 
-val found_repr : zone -> string
+val found_repr : ?quote_var:bool -> zone -> string
 
 val output_why_type : why_type -> string list * string
 
-type var_info = private 
+type var_info = private
     {
       var_name : string;
       var_uniq_tag : int;
@@ -76,14 +79,18 @@ val set_const_value : var_info -> int64 -> unit
 
 module HeapVarSet : Set.S with type elt = var_info
 
+module ZoneSet : Set.S with type elt = zone * string * why_type
+
 val print_hvs : Format.formatter -> HeapVarSet.t -> unit
 
 type logic_info =
     {
       logic_name : string;
+      mutable logic_heap_zone : ZoneSet.t;
       mutable logic_heap_args : HeapVarSet.t;
       mutable logic_args : var_info list;
       mutable logic_why_type : why_type;
+      mutable logic_args_zones : zone list;
     }
 
 val default_logic_info : string -> logic_info
@@ -92,11 +99,14 @@ type fun_info =
     {
       fun_name : string;
       mutable fun_unique_name : string;
-      mutable function_reads : HeapVarSet.t;
-      mutable function_writes : HeapVarSet.t;
+      mutable function_reads : ZoneSet.t;
+      mutable function_writes : ZoneSet.t;
+      mutable function_reads_var : HeapVarSet.t;
+      mutable function_writes_var : HeapVarSet.t;
       mutable has_assigns : bool;
       mutable fun_type : Ctypes.ctype;
       mutable args : var_info list;
+      mutable args_zones : zone list;
       mutable graph : fun_info list;
       mutable type_why_fun : why_type;
     }

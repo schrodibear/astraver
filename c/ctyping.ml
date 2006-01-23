@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.102 2006-01-19 09:04:31 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.103 2006-01-23 16:43:27 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -593,7 +593,12 @@ and type_lvalue env e =
   e
 
 and check_lvalue loc e = match e.texpr_node with
-  | TEvar _ 
+  | TEvar v -> 
+      begin 
+	match (var_type v).ctype_node with
+	  | Tarray (_,Some _ ) -> error loc "not a lvalue"
+	  | _ -> ()
+      end
   | TEunary (Ustar, _)
   | TEarrget _ 
   | TEarrow _ 
@@ -727,6 +732,9 @@ let array_size_from_initializer loc ty i = match ty.ctype_node, i with
   | Tarray (ety, None), Some (Ilist l) -> 
       let s = of_int (List.length l) in
       { ty with ctype_node = Tarray (ety, Some s) }
+
+  | Tarray (ety, None), None -> error loc "array size missing"  
+      	
   | _ -> 
       ty
 
@@ -884,7 +892,7 @@ let type_parameters loc env pl =
     let info = default_var_info x in
     let ty = type_type loc env ty in 
     set_formal_param info;
-    set_var_type (Var_info info) ty;
+    set_var_type (Var_info info) ty true;
     Coptions.lprintf 
       "Parameter %s added in env with unique name %s@." x info.var_unique_name;
     (ty,info) :: pl 
@@ -943,7 +951,7 @@ let type_spec_decl loc = function
       let ty = type_type loc (Env.empty ()) ty in
       let info = add_ghost loc x ty (default_var_info x) in 
       set_static info;
-      set_var_type (Var_info info) {ty with Ctypes.ctype_ghost = true};
+      set_var_type (Var_info info) {ty with Ctypes.ctype_ghost = true} false;
       let cinit = 
 	match cinit with
 	  | None -> None

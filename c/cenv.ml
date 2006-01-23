@@ -195,20 +195,22 @@ let unique_name ?local_names n =
 
 (* type why *)
 
-let count = ref Int64.zero
+let count = ref 0
 
 let zone_table = Hashtbl.create 97
 
-let make_zone ty =
-  let z = { repr = None;
-	    name =  "Z" ^ Int64.to_string !count;
-	    type_why_zone = Unit;
+let make_zone is_var =
+  let z = { zone_is_var = is_var;
+            number = !count;
+	    repr = None;
+	    name =  "Z" ^ sprintf "%i" !count;
+	    type_why_zone = Why_Logic "undefined";
 	  } in
   Hashtbl.add zone_table z.name z;
-  count := Int64.succ !count;
+  count := !count +1;
   z
 
-let rec type_type_why ty =
+let rec type_type_why ty zone_is_var =
   match ty.ctype_node with
     | Tint _ | Tenum _ -> Int
     | Tfloat _ -> Float	
@@ -216,35 +218,35 @@ let rec type_type_why ty =
     | Tpointer ty -> 
 	begin match ty.ctype_node with 
 	  | Tstruct s -> 
-	      let z = make_zone ty in
+	      let z = make_zone zone_is_var in
 	      z.type_why_zone <- Why_Logic s;
 	      Pointer z
 	  | _ ->
-	      let z = make_zone ty in
-	      z.type_why_zone <- type_type_why ty;
+	      let z = make_zone zone_is_var in
+	      z.type_why_zone <- type_type_why ty zone_is_var;
 	      Pointer z
 	end
     | Tvoid -> Unit
-    | Tfun (_,ty) -> type_type_why ty
+    | Tfun (_,ty) -> type_type_why ty zone_is_var
     | Tvar v -> 
 	begin
 	  try
-	    type_type_why (find_typedef v)
+	    type_type_why (find_typedef v) zone_is_var
 	  with Not_found -> 
 	    (* v is a logic type *)
 	    Why_Logic v
 	end
     | Tunion _ -> 
-	let z = make_zone ty in
+	let z = make_zone zone_is_var in
 	Pointer z
     | Tstruct s -> 
-	let z = make_zone ty in
+	let z = make_zone zone_is_var in
 	z.type_why_zone <- Why_Logic s;
 	Pointer z
 
 
-let set_var_type info ty =
-  Info.set_var_type info ty (type_type_why ty)
+let set_var_type info ty zone_is_var =
+  Info.set_var_type info ty (type_type_why ty zone_is_var) 
 
 (* global variables and functions *)
 
@@ -273,7 +275,7 @@ let add_sym l x ty info =
       end;
     d
   with Not_found ->
-    set_var_type info ty;
+    set_var_type info ty false;
     Hashtbl.add sym_t x info;
     info
 
@@ -310,7 +312,7 @@ let add_ghost l x ty info =
     error l ("ghost variable " ^ x ^ " already declared");
   end
   else begin
-    set_var_type (Var_info info) ty;
+    set_var_type (Var_info info) ty false;
     Hashtbl.add ghost x info;
     info
   end
@@ -345,7 +347,7 @@ module Env = struct
     let n = unique_name ~local_names:env.used_names x in
     set_unique_name info n;
     fprintf Coptions.log "local %s renamed into %s\n" x n;
-    set_var_type info t;
+    set_var_type info t true;
     { env with used_names = Lib.Sset.add n env.used_names;
 	vars = M.add x info env.vars }
 
@@ -457,7 +459,7 @@ let find_field ~tag:n ~field:x =
 let declare_fields tyn fl = match tyn with
   | Tstruct n | Tunion n ->
       List.iter 
-	(fun (t,v) -> set_var_type (Var_info v) t)
+	(fun (t,v) -> set_var_type (Var_info v) t false)
 	fl
   | _ -> 
       assert false
@@ -473,7 +475,7 @@ let update_fields_type () =
 	 begin
 	   Coptions.lprintf "field %s is now a pointer@." x.var_name;
 	   set_var_type (Var_info x) 
-	     (noattr (Tarray(x.var_type,Some Int64.one)))
+	     (noattr (Tarray(x.var_type,Some Int64.one))) false
 	 end)
     fields_t
 

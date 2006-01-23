@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.27 2005-11-09 10:47:25 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.28 2006-01-23 16:43:27 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -30,6 +30,8 @@ type why_type =
 
 and zone = 
     {
+      zone_is_var : bool;
+      number : int;
       mutable repr : zone option;
       name : string;
       mutable type_why_zone : why_type;
@@ -49,7 +51,6 @@ let repr z =
 	let z'' = repr_aux z' in
 	z.repr <- Some z''; z''
 
-
 let same_zone z1 z2 =
    (repr z1) = (repr z2)
   
@@ -65,18 +66,21 @@ let rec same_why_type wt1 wt2 =
     | Why_Logic s1,Why_Logic s2 -> s1=s2
     | _, _ -> false
 
-let rec same_why_type2 wt1 wt2 =
+let rec same_why_type_no_zone wt1 wt2 =
   match wt1, wt2 with
     | Pointer z1 , Pointer z2 -> true
     | Memory(a1,z1),Memory(a2,z2) ->
-	same_why_type2 a1 a2
+	same_why_type_no_zone a1 a2
     | Int,Int -> true
     | Float,Float -> true
     | Unit,Unit -> true
     | Why_Logic s1,Why_Logic s2 -> s1=s2
     | _, _ -> false
 
-let found_repr z = (repr z).name
+
+let found_repr ?(quote_var=true) z = 
+  let z = repr z in
+  if quote_var && z.zone_is_var then "'"^z.name else z.name
 
 let rec output_why_type ty =
     match ty with
@@ -154,30 +158,46 @@ module HeapVarSet =
 let print_hvs fmt s =
   HeapVarSet.iter (fun v -> Format.fprintf fmt "%s," v.var_unique_name) s
 
+module ZoneSet = 
+  Set.Make(struct type t = zone * string * why_type
+		  let compare (i1,s1,_) (i2,s2,_) = 
+		    match Pervasives.compare (repr i1).number 
+		      (repr i2).number with
+		      | 0 -> Pervasives.compare s1 s2
+		      | x -> x
+	   end)
+
 type logic_info =
     {
       logic_name : string;
+      mutable logic_heap_zone : ZoneSet.t;
       mutable logic_heap_args : HeapVarSet.t;
       mutable logic_args : var_info list;
       mutable logic_why_type : why_type;
+      mutable logic_args_zones : zone list;
     }
 
 let default_logic_info x =
   { logic_name = x;
+    logic_heap_zone = ZoneSet.empty;
     logic_heap_args = HeapVarSet.empty;
     logic_args = [];
     logic_why_type = Unit;
+    logic_args_zones = [];
   }
 
 type fun_info =
     {
       fun_name : string;
       mutable fun_unique_name : string;
-      mutable function_reads : HeapVarSet.t;
-      mutable function_writes : HeapVarSet.t;
+      mutable function_reads : ZoneSet.t;
+      mutable function_writes : ZoneSet.t;
+      mutable function_reads_var : HeapVarSet.t;
+      mutable function_writes_var : HeapVarSet.t;
       mutable has_assigns : bool;
       mutable fun_type : Ctypes.ctype;
       mutable args : var_info list;
+      mutable args_zones : zone list;
       mutable graph : fun_info list;
       mutable type_why_fun : why_type;
     }
@@ -185,11 +205,14 @@ type fun_info =
 let default_fun_info x =
   { fun_name = x; 
     fun_unique_name = x;
-    function_reads = HeapVarSet.empty;
-    function_writes = HeapVarSet.empty; 
+    function_reads = ZoneSet.empty;
+    function_writes = ZoneSet.empty;
+    function_reads_var = HeapVarSet.empty;
+    function_writes_var = HeapVarSet.empty; 
     has_assigns = false;
     fun_type = c_void;
     args = [];
+    args_zones = [];
     graph = [];
     type_why_fun = Int;
   }

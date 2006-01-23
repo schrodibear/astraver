@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.23 2005-11-17 15:28:49 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.24 2006-01-23 16:43:27 hubert Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -24,13 +24,19 @@ open Info
 
 type effect =
     {
-      reads : HeapVarSet.t;
-      assigns : HeapVarSet.t;
+      reads : ZoneSet.t;
+      assigns : ZoneSet.t;
+      reads_var : HeapVarSet.t;
+      assigns_var : HeapVarSet.t;
     }
+
+val ef_union : effect -> effect -> effect
+
+val ef_empty : effect
 
 val global_var :  Info.var_info list ref
 
-val intersect_only_alloc : HeapVarSet.t -> HeapVarSet.t -> bool
+val intersect_only_alloc : effect -> effect -> bool
 
 (* all heap vars and their associated types *)
 val heap_vars : (string, Info.var_info) Hashtbl.t
@@ -45,13 +51,15 @@ val print_heap_vars : Format.formatter -> unit -> unit
 (*
 val heap_var_type : var_info -> Info.why_type
 *)
+val memorycell_name : Info.why_type -> string
+
 val is_memory_var : var_info -> bool
 
 (*val location : Cast.nterm Clogic.location -> HeapVarSet.t*)
 
-val locations : Cast.nterm Clogic.location list -> HeapVarSet.t
+val locations : Cast.nterm Clogic.location list -> effect
 
-val predicate : Cast.npredicate -> HeapVarSet.t
+val predicate : Cast.npredicate -> effect
 
 val expr : Cast.nexpr -> effect
 
@@ -65,18 +73,18 @@ val file : Cast.nfile -> unit
 val functions : Cast.nfile -> bool
 
 (* table for weak invariants *)
-val weak_invariants : (string, Cast.npredicate * HeapVarSet.t) Hashtbl.t
+val weak_invariants : (string, Cast.npredicate * effect) Hashtbl.t
 
 (* table for strong invariants *)
 val strong_invariants : 
-  (string, (Cast.npredicate * HeapVarSet.t * HeapVarSet.t)) Hashtbl.t
+  (string, (Cast.npredicate * effect * effect)) Hashtbl.t
 
 val strong_invariants_2 : 
-  (string, Cast.npredicate * HeapVarSet.t * (string * Output.base_type) list ) 
+  (string, Cast.npredicate * effect * (string * Output.base_type) list ) 
   Hashtbl.t
 
 val invariants_for_struct : 
-  (string, (Cast.npredicate * HeapVarSet.t * HeapVarSet.t)) Hashtbl.t
+  (string, (Cast.npredicate * effect * effect)) Hashtbl.t
 
 val mem_strong_invariant_2 : string -> bool
     

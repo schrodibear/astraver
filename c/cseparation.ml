@@ -26,7 +26,7 @@ let rec type_why_for_term t =
     | NTconstant (IntConstant _) -> Int     
     | NTconstant (FloatConstant _) -> Float 
     | NTvar v -> v.var_why_type
-    | NTapp (f,l) -> f.logic_why_type
+    | NTapp {napp_pred = f} -> f.logic_why_type
     | NTunop (Uminus,t) | NTunop (Utilde,t)  -> type_why_for_term t
     | NTunop (Ustar,_) | NTunop (Uamp,_) -> assert false
     | NTunop (Ufloat_of_int,_) -> Float
@@ -74,7 +74,7 @@ let rec type_why e =
     | NEassign (l,e) -> type_why e
     | NEassign_op (l,op,e) -> type_why e
     | NEcast (_,e) | NEunary (_,e) | NEincr (_,e) 
-    | NEbinary (e,_,_) | NEcond (_,_,e) | NEcall (e,_) -> type_why e
+    | NEbinary (e,_,_) | NEcond (_,_,e) | NEcall {ncall_fun = e} -> type_why e
 
 
 
@@ -404,28 +404,7 @@ let fullseparation loc v1 v2 =
     v2.var_name (var_to_term loc v2)
 
 
-let rec heap_var (ty : Info.why_type) =
-  match ty with
-    | Pointer z -> 
-	let v = heap_var z.type_why_zone in
-	v ^ "_" ^ (found_repr z) 
-    | Addr z -> assert false
-    | Info.Int -> "int" 
-    | Info.Float ->  "real"
-    | Unit -> assert false
-    | Why_Logic s ->  s
-    | Memory(t,z) -> assert false
 
-let rec heap_field_var (f : string) (ty : Info.why_type) =
-  match ty with
-    | Pointer z -> 
-	f ^ "_" ^ (found_repr z)
-    | Addr _ 
-    | Info.Int -> assert false
-    | Info.Float -> assert false
-    | Unit -> assert false
-    | Why_Logic s ->  assert false
-    | Memory(t,z) -> assert false
 
 let rec unifier_type_why tw1 tw2 =
   match tw1,tw2 with
@@ -449,7 +428,11 @@ and unifier_zone z1 z2 =
     begin
       unifier_type_why z1'.type_why_zone z2'.type_why_zone;
       match z1'.repr, z2'.repr with
-	| None, None -> z1'.repr <- Some z2' 
+	| None, None -> 
+	    if z1'.zone_is_var then z1'.repr <- Some z2' else 
+	      if z2'.zone_is_var then z2'.repr <- Some z1' else
+	      if z1'.number < z2'.number then z2'.repr <- Some z1'
+	  else z1'.repr <- Some z2' 
 	| _ -> assert false
     end
 
@@ -458,11 +441,29 @@ let rec term t =
   match t.nterm_node with
     | NTconstant _ 
     | NTvar _ -> ()
-    | NTapp (f,l) -> List.iter term l;
-	let li =  f.logic_args in
-	List.iter2 
-	  (fun v e -> unifier_type_why v.var_why_type (type_why_for_term e))
-	  li l 
+    | NTapp ({napp_pred = f;napp_args = l} as call) -> 
+      List.iter term l;
+      let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
+      call.napp_zones_assoc <- assoc;
+      let li =  
+	List.map 
+	  (fun v ->
+	     match v.var_why_type with
+	       | Pointer z as ty -> 
+		   begin
+		     try
+		       Pointer (List.assoc z assoc)
+		     with
+			 Not_found -> ty
+		   end
+	       | ty -> ty)
+	    f.logic_args in
+
+      assert (List.length li = List.length l || 
+	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
+	     f.logic_name (List.length li) (List.length l); false));
+      List.iter2 
+	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) 
   | NTstar t -> term t
   | NTbinop (t1,_,t2) -> term t1; term t2 
@@ -481,13 +482,29 @@ let rec predicate p =
   match p.npred_node with
   | NPfalse
   | NPtrue -> ()
-  | NPapp (f,l) -> 
+  | NPapp ({napp_pred = f;napp_args = l} as call) -> 
       List.iter term l;
-      let li = f.logic_args in
+      let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
+      call.napp_zones_assoc <- assoc;
+      let li =  
+	List.map 
+	  (fun v ->
+	     match v.var_why_type with
+	       | Pointer z as ty -> 
+		   begin
+		     try
+		       Pointer (List.assoc z assoc)
+		     with
+			 Not_found -> ty
+		   end
+	       | ty -> ty)
+	    f.logic_args in
+
       assert (List.length li = List.length l || 
-	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" f.logic_name (List.length li) (List.length l); false));
+	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
+	     f.logic_name (List.length li) (List.length l); false));
       List.iter2 
-	(fun v e -> unifier_type_why v.var_why_type (type_why_for_term e)) li l
+	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NPrel (t1,_,t2) ->
       term t1; term t2;
       unifier_type_why (type_why_for_term t1) (type_why_for_term t2)
@@ -534,13 +551,30 @@ let rec calcul_zones expr =
 	let tw1 = type_why e1 in
 	let tw2 = type_why e2 in
 	unifier_type_why tw1 tw2
-    | NEcall (e,l) -> List.iter calcul_zones l;
+    | NEcall ({ncall_fun = e;ncall_args = l} as call) -> 
+	List.iter calcul_zones l;
 	let f = match e.nexpr_node with 
 	  | NEvar (Fun_info f) -> f
 	  | _  -> assert false 
 	in
-	List.iter2 (fun v e -> unifier_type_why v.var_why_type (type_why e))
-	  f.args l
+	let assoc = List.map (fun z -> (z,make_zone true)) f.args_zones in
+	call.ncall_zones_assoc <- assoc;
+	let arg_types =
+	  List.map 
+	    (fun v ->
+	       match v.var_why_type with
+		 | Pointer z as ty -> 
+		     begin
+		       try
+			 Pointer (List.assoc z assoc)
+		       with
+			   Not_found -> ty
+		     end
+		 | ty -> ty)
+	    f.args 
+	in
+	List.iter2 (fun ty e -> unifier_type_why ty (type_why e))
+	  arg_types l
     | NEcond (e1,e2,e3)->  calcul_zones e1; calcul_zones e2; calcul_zones e3
     | NEcast (_,e) -> calcul_zones e
  
@@ -637,12 +671,42 @@ let global_decl e =
   match e with 
     | Naxiom (_,sp) | Ninvariant (_,sp) | Ninvariant_strong (_,sp) ->
 	predicate sp
-    | Nlogic (_, NPredicate_def (_,p)) -> predicate p
-    | Nlogic (_, NFunction_def (_,_,t)) -> term t
+    | Nlogic (f, NPredicate_def (_,p)) -> predicate p;
+	f.logic_args_zones <- 
+	  List.fold_left  
+	  (fun l v ->
+	     match v.var_why_type with 
+	     | Pointer z -> 
+		 begin match z.repr with 
+		   | None -> z::l
+		   | Some _ -> l
+		 end
+	     | _ -> l) [] f.logic_args
+    | Nlogic (f, NFunction_def (_,_,t)) -> term t;
+	f.logic_args_zones <- 
+	  List.fold_left  
+	  (fun l v ->
+	     match v.var_why_type with 
+	     | Pointer z -> 
+		 begin match z.repr with 
+		   | None -> z::l
+		   | Some _ -> l
+		 end
+	     | _ -> l) [] f.logic_args
     | Nlogic _ -> ()
     | Nfunspec (sp,_,_) -> spec sp
     | Ntypedef _ | Ntypedecl _ | Ndecl (_,_,None) | Ntype _ -> ()
     | Ndecl (_, v, Some i) -> c_initializer v.var_type v.var_why_type i
-    | Nfundef (sp, _, f, st) -> spec sp; statement f.type_why_fun st
+    | Nfundef (sp, _, f, st) -> spec sp; statement f.type_why_fun st; 
+	f.args_zones <- 
+	  List.fold_left  
+	  (fun l v ->
+	     match v.var_why_type with 
+	     | Pointer z -> 
+		 begin match z.repr with 
+		   | None -> z::l
+		   | Some _ -> l
+		 end
+	     | _ -> l) [] f.args
 
 let file =  List.iter (fun d -> global_decl d.node)
