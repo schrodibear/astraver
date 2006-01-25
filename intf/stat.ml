@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.7 2005-06-24 15:05:57 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.8 2006-01-25 10:53:15 filliatr Exp $ i*)
 
 open Printf
 open Options
 open Ast
 open Env
+open Pprinter
 
 let _ = gui := true
 
@@ -33,8 +34,8 @@ let _ =
 
 (* GTK *)
 
-let window_width = 800
-let window_height = 900
+let window_width = 1024
+let window_height = 768
 
 let monospace_font = ref (Pango.Font.from_string "Monospace 15")
 let general_font = ref (Pango.Font.from_string "Monospace 15")
@@ -139,7 +140,7 @@ module View = struct
     let renderer = GTree.cell_renderer_text [`XALIGN 0.] in
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
     let _ = view#append_column
-      (GTree.view_column ~title:"Proof obligation" 
+      (GTree.view_column ~title:"Proof obligations " 
 	 ~renderer:(renderer, ["text", Model.name])
 	 ())
     in
@@ -184,53 +185,6 @@ let run_prover p column_p (model : GTree.tree_store) () =
 	    | Calldp.Timeout -> `CUT
 	    | _ -> `STOP))
 
-module Printer = struct
-  
-  open Pp
-  open Misc
-  open Util
-  open Vcg
-  open Format
-  open Logic
-  open Cc
-
-  let rec intros ctx = function
-    | Forall (true, id, n, t, p) ->
-	let id' = Ident.next_away id (predicate_vars p) in
-	let p' = subst_in_predicate (subst_onev n id') p in
-	let ctx', concl' = intros (Svar (id', TTpure t) :: ctx) p' in
-	ctx', concl'
-    | Pimplies (true, a, b) -> 
-	let h = fresh_hyp () in 
-	let ctx', concl' = intros (Spred (h, a) :: ctx) b in
-	ctx', concl'
-    | c -> 
-	ctx, c
-
-  let print_predicate = Coq.print_predicate_v8
-  let print_cc_type = Coq.print_cc_type_v8
-
-  let print_oblig fmt (ctx,concl) =
-    let ctx, concl = intros ctx concl in
-    let print_hyp fmt = function
-      | Svar (id, t) -> 
-	  fprintf fmt "@[%a: %a@]" Ident.print id print_cc_type t
-      | Spred (id, p) -> 
-	  fprintf fmt "@[<hov 2>%a:@ %a@]" Ident.print id print_predicate p
-    in
-    fprintf fmt "@[@\n%a@\n----@\n%a@\n@]" (print_list newline print_hyp) ctx
-      print_predicate concl
-      
-  let text_of_obligation =
-    let buf = Buffer.create 4096 in
-    fun (_,s,p) ->
-      let fmt = Format.formatter_of_buffer buf in
-      Format.fprintf fmt "@[%s@\n@\n@[%a@]@]@." s print_oblig p;
-      let text = Buffer.contents buf in
-      Buffer.reset buf;
-      text
-
-end
 
 let main () = 
   let w = GWindow.window 
@@ -268,7 +222,9 @@ let main () =
 
   (* left tree of proof obligations *)
   let model = Model.create_model () in
-  let view = GTree.view ~model ~packing:hp#add1 () in
+  let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
+    ~width:250 ~packing:hp#add1 () in
+  let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_simplify,vc_harvey,vc_cvcl = View.add_columns ~view ~model in
@@ -353,7 +309,15 @@ let main () =
   let _ = tv1#misc#modify_font !upper_view_general_font in
   let _ = tv1#set_editable false in
 
+
+  let update_buffer tv = 
+    let buf = GText.buffer () in
+    tv#set_buffer buf;
+    buf
+  in
+
   (* obligation selection *)
+  let selected_fct = ref None in 
   let _ = 
     view#selection#connect#after#changed ~callback:
       begin fun () ->
@@ -361,13 +325,20 @@ let main () =
           (fun p -> 
 	     let row = model#get_iter p in
 	     let s = model#get ~row ~column:Model.fullname in
-	     let text =
-	       try let o = Model.find_oblig s in Printer.text_of_obligation o
-	       with Not_found -> ""
-	     in
-	     buf1#set_text text)
+	     try 
+	       let o = Model.find_oblig s in 
+	       let buf = update_buffer tv1 in
+	       selected_fct := Some(s);
+	       buf#set_text "";
+	       Pprinter.text_of_obligation buf o
+	     with Not_found -> ())
 	  view#selection#get_selected_rows;
       end
+  in
+
+  (* inserting source code *) 
+  let _ = 
+    tb2#set_text "Source code should be there ... gwhy's command line must be modified."
   in
 
   (* Remove default pango menu for textviews *)
@@ -375,6 +346,48 @@ let main () =
 	    (fun ev -> GdkEvent.Button.button ev = 3));
   ignore (tv2#event#connect#button_press ~callback:
 	    (fun ev -> GdkEvent.Button.button ev = 3));
+
+  (* source code selection *)
+  let _ = 
+    tv1#event#connect#button_press ~callback:
+      begin fun ev ->
+	(* *** Method of GText.iter ***
+	   method forward_to_tag_toggle : tag option -> iter
+	   method forward_cursor_position : iter
+
+	   *** Method of GText.buffer ***
+	   method place_cursor : where:iter -> unit
+	   method get_iter : position -> iter
+
+	   *** Method of GText.view ***
+	   method scroll_to_iter : ?within_margin:float ->
+	   ?use_align:bool -> ?xalign:float -> ?yalign:float -> iter -> bool
+	*)
+	let buf = tv1#buffer in 
+	let it = buf#start_iter#forward_cursor_position in
+	let tags = it#tags in
+	(
+	  match tags with
+	    | [] -> ()
+	    | [t] -> 
+		(* let property = t#get_property ([`NAME], []) in *)
+		(* Method of GText.tag
+		   method get_property : 'b. ([ `texttag ], 'b) Gobject.property -> 'b
+		   
+		   et en francais, ca donne quoi ???????
+		*)
+		print_endline " __ good tag in tv1 !"; flush stdout;
+		let name = Pprinter.tag_to_name t in
+		(match name with
+		   | None -> print_endline " __ no tag found !"; flush stdout
+		   | Some s -> print_endline (" __ obligation "^s^" !"); flush stdout)
+	    | p::r -> 
+		print_endline "ERROR : bad tags in tv1 !"; flush stdout
+	);
+	(*tv2#scroll_to_iter it *)
+	true
+      end
+  in 
 
   (* startup configuration *)
   buf1#place_cursor ~where:buf1#start_iter;
