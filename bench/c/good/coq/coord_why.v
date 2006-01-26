@@ -7,10 +7,10 @@ Require Export coord_spec_why.
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (index: Z),
   forall (alloc: alloc_table),
-  forall (tab: ((pointer) Z1)),
+  forall (tab: ((pointer) Z2)),
   forall (HW_1: (* File "coord.c", line 11, characters 14-28 *) (0 <=
                 index /\ index < 3) /\ (valid_range alloc tab 0 2)),
-  forall (result: ((pointer) Z1)),
+  forall (result: ((pointer) Z2)),
   forall (HW_2: result = (shift tab index)),
   (valid alloc result).
 Proof.
@@ -18,22 +18,6 @@ intros.
 subst;intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_2 : 
-  forall (index: Z),
-  forall (alloc: alloc_table),
-  forall (tab: ((pointer) Z1)),
-  forall (x_Z1: ((memory) Z Z1)),
-  forall (HW_1: (* File "coord.c", line 11, characters 14-28 *) (0 <=
-                index /\ index < 3) /\ (valid_range alloc tab 0 2)),
-  forall (result: ((pointer) Z1)),
-  forall (HW_2: result = (shift tab index)),
-  forall (HW_3: (valid alloc result)),
-  forall (result0: Z),
-  forall (HW_4: result0 = (acc x_Z1 result)),
-  forall (result1: ((pointer) Z1)),
-  forall (HW_6: result1 = (shift tab index)),
-  (valid alloc result1).
 Proof.
 intuition.
 subst;auto.

@@ -22,11 +22,11 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       true
   | Tvar x1, Tvar x2 ->
       x1 = x2
-  | Tarray (ty1,_), Tarray (ty2,_) ->
+  | Tarray (_,ty1,_), Tarray (_,ty2,_) ->
       eq_type ty1 ty2 
-  | Tpointer ty1, Tpointer ty2 ->
+  | Tpointer (_,ty1), Tpointer (_,ty2) ->
       eq_type ty1 ty2
-  | Tarray (ty1,_), Tpointer ty2 | Tpointer ty1, Tarray (ty2,_) ->
+  | Tarray (_,ty1,_), Tpointer (_,ty2) | Tpointer (_,ty1), Tarray (_,ty2,_) ->
       eq_type ty1 ty2
   | Tstruct s1, Tstruct s2 ->
       s1 = s2
@@ -34,8 +34,8 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       u1 = u2
   | Tenum e1, Tenum e2 ->
       e1 = e2
-  | Tpointer {ctype_node = Tfun _ as tn1}, (Tfun _ as tn2)
-  | (Tfun _ as tn1), Tpointer {ctype_node = Tfun _ as tn2} ->
+  | Tpointer(_,{ctype_node = Tfun _ as tn1}), (Tfun _ as tn2)
+  | (Tfun _ as tn1), Tpointer(_, {ctype_node = Tfun _ as tn2}) ->
       eq_type_node tn1 tn2
   | Tfun ([], ty1), Tfun (_, ty2) | Tfun (_, ty1), Tfun ([], ty2) ->
       eq_type ty1 ty2
@@ -49,7 +49,7 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
 
 let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
   | Tint _, Tfloat _ -> true
-  | Tpointer { ctype_node = Tvoid }, Tpointer _ -> true
+  | Tpointer(_,{ ctype_node = Tvoid }), Tpointer _ -> true
   | _ -> eq_type ty1 ty2
 
 let compatible_type ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
@@ -214,8 +214,8 @@ let rec type_type_why ty zone_is_var =
   match ty.ctype_node with
     | Tint _ | Tenum _ -> Int
     | Tfloat _ -> Float	
-    | Tarray (ty,_)  
-    | Tpointer ty -> 
+    | Tarray (_,ty,_)  
+    | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 
 	  | Tstruct s -> 
 	      let z = make_zone zone_is_var in
@@ -475,7 +475,7 @@ let update_fields_type () =
 	 begin
 	   Coptions.lprintf "field %s is now a pointer@." x.var_name;
 	   set_var_type (Var_info x) 
-	     (noattr (Tarray(x.var_type,Some Int64.one))) false
+	     (noattr (Tarray(true,x.var_type,Some Int64.one))) false
 	 end)
     fields_t
 

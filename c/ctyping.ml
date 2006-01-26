@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.103 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.104 2006-01-26 17:01:55 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -65,9 +65,9 @@ let rec sizeof loc =
     | Tfloat Double -> of_int 8
     | Tfloat LongDouble -> of_int 12
     | Tvar x -> assert false (* should be expansed *)
-    | Tarray (ty, Some e) -> 
+    | Tarray (_,ty, Some e) -> 
 	mul e (sizeof ty)
-    | Tarray (ty, None) -> if field then of_int 0 else of_int 1
+    | Tarray (_,ty, None) -> if field then of_int 0 else of_int 1
     | Tpointer _ -> of_int 4
     | Tstruct n ->
 	(match tag_type_definition n with
@@ -94,7 +94,7 @@ let rec sizeof loc =
   in
   sizeof
 
-and eval_const_expr (e : texpr) = match e.texpr_node with
+and eval_const_expr_noerror (e : texpr) = match e.texpr_node with
   | TEconstant (IntConstant c) -> Cconst.int e.texpr_loc c
   | TEunary (Uplus, t) -> eval_const_expr t
   | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr t)
@@ -111,8 +111,14 @@ and eval_const_expr (e : texpr) = match e.texpr_node with
   | TEvar (Var_info v) ->
       if e.texpr_type.Ctypes.ctype_const 
       then v.enum_constant_value
-      else error e.texpr_loc "not a const variable"
-  | _ -> error e.texpr_loc "not a constant expression"
+      else invalid_arg "not a const variable"
+  | _ -> invalid_arg "not a constant expression"
+
+and eval_const_expr (e : texpr) = 
+  try
+    eval_const_expr_noerror e
+  with
+      Invalid_argument msg -> error e.texpr_loc msg
 
 (* Typing C programs *)
 
@@ -183,7 +189,7 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
-  | Tpointer { ctype_node = Tvoid }, Tpointer _ ->
+  | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
       e
   | _ ->
       if verbose || debug then eprintf 
@@ -225,7 +231,7 @@ let type_assignment loc ty1 e2 =
 
 let warn_for_read_only loc e = 
   let pointer_on_read_only ty = match ty.ctype_node with
-    | Tpointer ty -> ty.ctype_const 
+    | Tpointer (_,ty) -> ty.ctype_const 
     | _ -> false
   in
   match e.texpr_node with
@@ -253,6 +259,23 @@ let set_referenced e = match e.texpr_node with
   | TEdot (_,f) | TEarrow(_,f) -> set_is_referenced f
   | _ -> ()
 
+let make_shift e1 e2 valid ty n =
+  let is_valid =
+    valid && 
+      match n with
+	| Some n ->
+	    begin
+	      try
+		let i = eval_const_expr_noerror e2 in
+		Int64.zero <= i && i < n
+	      with Invalid_argument _ -> false
+	    end
+	| _ -> false
+  in
+  let ty1 = e1.texpr_type in
+  TEbinary (e1, Badd_pointer_int, e2), 
+  { ty1 with ctype_node = Tpointer(is_valid,ty) }
+
 (*s Types *)
 
 let rec type_type loc env ty = 
@@ -272,12 +295,12 @@ and type_type_node loc env = function
       (* TODO: les attributs sont perdus *)
       (try (find_typedef x).ctype_node with Not_found -> assert false)
   | CTarray (tyn, None) ->
-      Tarray (type_type loc env tyn, None)
+      Tarray (false,type_type loc env tyn, None)
   | CTarray (tyn, Some e) -> 
-      Tarray (type_type loc env tyn , 
+      Tarray (true,type_type loc env tyn , 
 	      Some (eval_const_expr  (type_int_expr env e)))
   | CTpointer tyn -> 
-      Tpointer (type_type loc env tyn)
+      Tpointer (false,type_type loc env tyn)
   | CTstruct (x,Tag) -> Env.find_tag_type loc env (Tstruct x)  
   | CTunion (x,Tag)  -> Env.find_tag_type loc env (Tunion x)
   | CTenum (x,Tag)  -> Env.find_tag_type loc env (Tenum x)
@@ -346,7 +369,7 @@ and type_expr_node loc env = function
   | CEconstant (FloatConstant _ as c) ->
       TEconstant c, c_float
   | CEstring_literal s ->
-      TEstring_literal s, c_string
+      TEstring_literal s, c_string true
   | CEvar x ->
       let var =
 	try Env.find x env with Not_found -> 
@@ -372,7 +395,7 @@ and type_expr_node loc env = function
   | CEarrow (e, x) ->
       let te = type_expr env e in
       begin match te.texpr_type.ctype_node with
-	| Tarray (ty,_) | Tpointer ty ->
+	| Tarray (_,ty,_) | Tpointer (_,ty) ->
 	    let x = type_of_field loc x ty in
 	    TEarrow (te, x), x.var_type
 	| _ -> 
@@ -381,7 +404,7 @@ and type_expr_node loc env = function
   | CEarrget (e1, e2) ->
       let te1 = type_expr env e1 in
       (match te1.texpr_type.ctype_node with
-	 | Tarray (ty,_) | Tpointer ty ->
+	 | Tarray (_,ty,_) | Tpointer (_,ty) ->
 	     let te2 = type_int_expr env e2 in
 	     TEarrget (te1, te2), ty
 	 | _ ->
@@ -431,8 +454,11 @@ and type_expr_node loc env = function
       let e = type_lvalue env e in
       warn_for_read_only e_loc e;
       begin match e.texpr_type.ctype_node with
-	| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
+	| Tenum _ | Tint _ | Tfloat _ -> 
             TEincr (op, e), e.texpr_type
+	| Tpointer (_,ty) -> 
+            TEincr (op, e), 
+	    { e.texpr_type with ctype_node = Tpointer(false,ty) }
 	| _ -> error loc "wrong type to {de,in}crement"
       end
   | CEunary (Unot, e) ->
@@ -452,11 +478,11 @@ and type_expr_node loc env = function
       if ty.ctype_storage = Register then 
 	warning loc "address of register requested";
       set_referenced e;
-      TEunary (Uamp, e), noattr (Tpointer ty)
+      TEunary (Uamp, e), noattr (Tpointer (true,ty))
   | CEunary (Ustar, e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
-	| Tpointer ty | Tarray (ty,_) -> TEunary (Ustar, e), ty
+	| Tpointer (_,ty) | Tarray (_,ty,_) -> TEunary (Ustar, e), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
   | CEunary (Utilde, e) ->
@@ -484,10 +510,14 @@ and type_expr_node loc env = function
 	| (Tenum _ | Tint _ | Tfloat _), (Tint _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Badd ty, e2), ty
-	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
-	    TEbinary (e1, Badd_pointer_int, e2), ty1
-	| (Tenum _ | Tint _), (Tpointer _ | Tarray _) ->
-	    TEbinary (e2, Badd_pointer_int, e1), ty2
+	| (Tpointer (valid,ty)), (Tint _ | Tenum _) ->
+	    make_shift e1 e2 valid ty None
+	| (Tarray (valid,ty,n)), (Tint _ | Tenum _) ->
+	    make_shift e1 e2 valid ty n
+	| (Tint _ | Tenum _), (Tpointer(valid,ty)) -> 
+	    make_shift e2 e1 valid ty None
+	| (Tint _ | Tenum _), (Tarray(valid,ty,n)) -> 
+	    make_shift e2 e1 valid ty n
 	| _ -> error loc "invalid operands to binary +"
       end
   | CEbinary (e1, Bsub, e2) ->
@@ -499,10 +529,14 @@ and type_expr_node loc env = function
 	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Bsub ty, e2), ty
-	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
+	| Tpointer(valid,ty), (Tint _ | Tenum _) -> 
 	    let me2 = { e2 with texpr_node = TEunary (Uminus, e2);
 			  texpr_type = ty2 } in
-	    TEbinary (e1, Badd_pointer_int, me2), ty1
+	    make_shift e1 me2 valid ty None
+	| Tarray(valid,ty,n), (Tint _ | Tenum _) -> 
+	    let me2 = { e2 with texpr_node = TEunary (Uminus, e2);
+			  texpr_type = ty2 } in
+	    make_shift e1 me2 valid ty n
 	| (Tpointer _ | Tarray _), (Tpointer _ | Tarray _) ->
 	    TEbinary (e1, Bsub_pointer, e2), c_int (* TODO check types *)
 	| _ -> error loc "invalid operands to binary -"
@@ -516,8 +550,8 @@ and type_expr_node loc env = function
 	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op op ty, e2), c_int
-	| (Tpointer ty1  | Tarray (ty1,_)), 
-	  (Tpointer ty2 | Tarray (ty2,_)) ->
+	| (Tpointer (_,ty1)  | Tarray (_,ty1,_)), 
+	  (Tpointer (_,ty2) | Tarray (_,ty2,_)) ->
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    TEbinary (e1, pointer_op op, e2), c_int
@@ -596,7 +630,7 @@ and check_lvalue loc e = match e.texpr_node with
   | TEvar v -> 
       begin 
 	match (var_type v).ctype_node with
-	  | Tarray (_,Some _ ) -> error loc "not a lvalue"
+	  | Tarray (_,_,Some _ ) -> error loc "not a lvalue"
 	  | _ -> ()
       end
   | TEunary (Ustar, _)
@@ -677,7 +711,7 @@ let rec type_initializer loc env ty = function
 	  | CEstring_literal s ->
 	      let ty = 
 		match ty.ctype_node with
-		  | Tpointer ty | Tarray (ty,_) -> ty
+		  | Tpointer (_,ty) | Tarray (_,ty,_) -> ty
 		  | _ ->  ty
 	      in
 	      let l = ref [int_to_init e.loc env ty 0] in 
@@ -693,7 +727,7 @@ let rec type_initializer loc env ty = function
       end
   | Ilist el -> 
       (match ty.ctype_node with
-	 | Tarray (ty,_) ->   
+	 | Tarray (_,ty,_) ->   
 	     Ilist (List.map (type_initializer loc env ty) el)
 	 | Tstruct (n) ->
 	     (match tag_type_definition n with
@@ -729,11 +763,11 @@ let type_initializer_option loc env ty = function
   | Some i -> Some (type_initializer loc env ty i)
 
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
-  | Tarray (ety, None), Some (Ilist l) -> 
+  | Tarray (_,ety, None), Some (Ilist l) -> 
       let s = of_int (List.length l) in
-      { ty with ctype_node = Tarray (ety, Some s) }
+      { ty with ctype_node = Tarray (true,ety, Some s) }
 
-  | Tarray (ety, None), None -> error loc "array size missing"  
+  | Tarray (_,ety, None), None -> error loc "array size missing"  
       	
   | _ -> 
       ty
@@ -1039,6 +1073,7 @@ let type_decl d = match d.node with
 	    set_assigned info; (* ????? *)
 	    let i = type_initializer_option d.loc (Env.empty ()) ty i in
 	    let ty = array_size_from_initializer d.loc ty i in
+	    set_var_type (Var_info info) ty false;
 	    Tdecl (ty, info,i)(* type_initializer_option d.loc (Env.empty ()) ty i*)
       end
   | Cfunspec (s, ty, f, pl) ->

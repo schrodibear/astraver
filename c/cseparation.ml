@@ -172,9 +172,10 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
   and valid_for (t : Cast.nterm) = match t.nterm_type.Ctypes.ctype_node with
     | Tstruct (n) ->
  	valid_fields true n t
-    | Tarray (ty, None) ->
+    | Tarray (_,ty, None) ->
 	error loc ("array size missing in `" ^ name ^ "'")
-    | Tarray (ty, Some s) ->
+    | Tarray (valid,ty, Some s) ->
+	assert valid;
 	let ts = Int64.to_string s in
 	let vrange = make_valid_range_from_0 t s in
 	let valid_form =
@@ -270,15 +271,15 @@ let rec tab_struct mark loc v1 v2 s ty n n1 n2=
 and local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
-    | Tarray (ty, None), _ ->
+    | Tarray (_,ty, None), _ ->
 	error loc ("array size missing in `" ^ n1 ^ "'")
-    | _, Tarray (ty, None) ->
+    | _, Tarray (_,ty, None) ->
 	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n , Tarray (ty,Some s) -> 
+    | Tstruct n , Tarray (_,ty,Some s) -> 
 	tab_struct  mark loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> 
+    | Tarray (_,ty,Some s) , Tstruct n -> 
 	tab_struct mark loc v2 v1 s ty n n1 n2
-    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
+    | Tarray (_,ty1,Some s1), Tarray(_,ty2,Some s2) ->
 	make_and
 	  (if compatible_type v1.nterm_type v2.nterm_type
 	   then
@@ -327,15 +328,15 @@ let rec full_tab_struct mark loc v1 v2 s ty n n1 n2=
 and full_local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
-    | Tarray (ty, None), _ ->
+    | Tarray (_,ty, None), _ ->
 	error loc ("array size missing in `" ^ n1 ^ "'")
-    | _, Tarray (ty, None) ->
+    | _, Tarray (_,ty, None) ->
 	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n , Tarray (ty,Some s) -> 
+    | Tstruct n , Tarray (_,ty,Some s) -> 
 	full_tab_struct  mark loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> 
+    | Tarray (_,ty,Some s) , Tstruct n -> 
 	full_tab_struct mark loc v2 v1 s ty n n1 n2
-    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
+    | Tarray (_,ty1,Some s1), Tarray(_,ty2,Some s2) ->
 	make_and
 	  (if full_compatible_type v1.nterm_type v2.nterm_type
 	   then
@@ -349,14 +350,14 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	     (make_forall_range loc v2 s2  
 		(fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
 		     (indirection loc ty2 t))))
-    | Tpointer ty1 , Tpointer ty2 ->
+    | Tpointer (_,ty1) , Tpointer (_,ty2) ->
 	if full_compatible_type v1.nterm_type v2.nterm_type
 	then
 	  (not_alias loc v1 v2)
 	else
 	  nptrue
-    | Tarray (ty2,Some s2) ,  Tpointer ty1
-    | Tpointer ty1, Tarray (ty2,Some s2) ->
+    | Tarray (_,ty2,Some s2) ,  Tpointer (_,ty1)
+    | Tpointer (_,ty1), Tarray (_,ty2,Some s2) ->
 	make_and
 	  (if full_compatible_type v1.nterm_type v2.nterm_type
 	   then
@@ -366,7 +367,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	  (make_forall_range loc v2 s2  
 	     (fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
 		(indirection loc ty2 t)))
-    | Tstruct n, Tpointer ty  ->
+    | Tstruct n, Tpointer (_,ty)  ->
 	 let l = begin
 	   match  tag_type_definition n with
 	     | TTStructUnion ((Tstruct _),fl) ->
@@ -378,7 +379,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	       make_and p (full_local_separation mark loc n2 v2 n1 
 			     (in_struct v1 t)))
 	    nptrue l)
-    |  Tpointer ty, Tstruct n ->
+    |  Tpointer (_,ty), Tstruct n ->
 	 let l = begin
 	   match  tag_type_definition n with
 	     | TTStructUnion ((Tstruct _),fl) ->
@@ -610,7 +611,7 @@ let rec c_initializer ty tw init =
 			fields l
 		  | _ -> assert false
 	      end
-	  | Tarray (ty,_) ->	      
+	  | Tarray (_,ty,_) ->	      
 	      let z = match tw with
 		| Pointer z -> z
 		| _ -> 

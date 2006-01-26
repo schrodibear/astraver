@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.13 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.14 2006-01-26 17:01:55 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -34,8 +34,8 @@ type ctype_node =
   | Tint of sign * cinteger
   | Tfloat of cfloat
   | Tvar of string
-  | Tarray of ctype * int64 option
-  | Tpointer of ctype
+  | Tarray of bool * ctype * int64 option
+  | Tpointer of bool * ctype
   | Tstruct of string 
   | Tunion of string 
   | Tenum of string 
@@ -61,11 +61,11 @@ let c_void = noattr Tvoid
 let c_int = noattr (Tint (Signed, Int))
 let c_char = noattr (Tint (Unsigned, Char))
 let c_float = noattr (Tfloat Float)
-let c_string = noattr (Tpointer c_char)
-let c_array ty = noattr (Tarray (ty,None))
-let c_array_size ty n = noattr (Tarray (ty,Some n))
-let c_pointer ty = noattr (Tpointer ty)
-let c_void_star = c_pointer c_void
+let c_string valid = noattr (Tpointer(valid, c_char))
+let c_array valid ty = noattr (Tarray (valid,ty,None))
+let c_array_size valid ty n = noattr (Tarray (valid,ty,Some n))
+let c_pointer valid ty = noattr (Tpointer(valid, ty))
+let c_void_star valid = c_pointer valid c_void
 let c_addr = noattr (Tvar "addr")
 
 
@@ -106,9 +106,9 @@ and ctype_node fmt = function
   | Tint _ -> fprintf fmt "int"
   | Tfloat _ -> fprintf fmt "float"
   | Tvar s -> fprintf fmt "%s" s
-  | Tarray (ty, None) -> fprintf fmt "%a[]" ctype ty
-  | Tarray (ty, Some n) -> fprintf fmt "%a[%Ld]" ctype ty n
-  | Tpointer ty -> fprintf fmt "%a*" ctype ty
+  | Tarray (_,ty, None) -> fprintf fmt "%a[]" ctype ty
+  | Tarray (_,ty, Some n) -> fprintf fmt "%a[%Ld]" ctype ty n
+  | Tpointer (_,ty) -> fprintf fmt "%a*" ctype ty
   | Tstruct s -> fprintf fmt "struct %s" s
   | Tunion s -> fprintf fmt "union %s" s
   | Tenum s -> fprintf fmt "enum %s" s

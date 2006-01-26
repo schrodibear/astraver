@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.107 2006-01-26 14:25:02 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.108 2006-01-26 17:01:54 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -594,8 +594,8 @@ and ctype_node = function
   | Tint _ -> sprintf "int"
   | Tfloat _ -> sprintf "float"
   | Ctypes.Tvar s -> sprintf "%s" s
-  | Tarray (ty, _) -> sprintf "%s" (ctype ty)
-  | Tpointer ty -> sprintf "%s_Pointer" (ctype ty)
+  | Tarray (_,ty, _) -> sprintf "%s" (ctype ty)
+  | Tpointer (_,ty) -> sprintf "%s_Pointer" (ctype ty)
   | Tstruct s -> sprintf "%s" s;
   | Tunion s -> sprintf "%s" s
   | Tenum s -> sprintf "%s" s
@@ -855,7 +855,7 @@ let rec invariant_for_constant loc t lvalue initializers =
 	  | _ ->
 	      assert false
 	end
-    | Tarray (ty,Some t) ->
+    | Tarray (_,ty,Some t) ->
 	let rec init_cells i (block,init) =
 	  if i >= t then (block,init)
 	  else
@@ -866,13 +866,13 @@ let rec invariant_for_constant loc t lvalue initializers =
 		(noattr loc ty 
 		   (NTstar 
 		      (noattr loc 
-			 {ty with Ctypes.ctype_node = (Tpointer ty) }
+			 {ty with Ctypes.ctype_node = (Tpointer (false,ty)) }
 			 (NTbinop (lvalue,Clogic.Badd, ts))))) init 
 	    in
 	    init_cells (Int64.add i Int64.one) (npand (block,b),init')
 	in
 	init_cells Int64.zero (nptrue,initializers)
-    | Tarray (ty,None) -> assert false
+    | Tarray (_,ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
     | Tvoid -> assert false  
@@ -886,7 +886,7 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
 	 | TTStructUnion (Tstruct _, fl) -> 
 	     List.exists (fun f -> has_constant_values f.var_type) fl
 	 | _ -> assert false)
-  | Tarray (ty', _) -> has_constant_values ty'
+  | Tarray (_,ty', _) -> has_constant_values ty'
   | Tunion _ | Tfun _ | Tvar _ -> false
 
 let diff loc x y = 
@@ -894,7 +894,7 @@ let diff loc x y =
 	  
 let rec validity x ty size =
   match ty.Ctypes.ctype_node with
-    | Tarray (ty', Some size') ->
+    | Tarray (_,ty', Some size') ->
 	let i = default_var_info "counter" in
 	let vari = { nterm_node = NTvar i; 
 		     nterm_loc = x.nterm_loc;
@@ -977,8 +977,8 @@ let decl d =
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
 	  match ty.Ctypes.ctype_node with
-	   | Tstruct _ | Tarray (_,None) -> assert false
-	   | Tarray (typ, Some s) ->
+	   | Tstruct _ | Tarray (_,_,None) -> assert false
+	   | Tarray (_,typ, Some s) ->
 	       lprintf "adding implicit invariant for validity of %s@." 
 		 v.var_name;
 	       let t = { nterm_node = NTvar v; 

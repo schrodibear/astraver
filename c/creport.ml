@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.16 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: creport.ml,v 1.17 2006-01-26 17:01:55 hubert Exp $ i*)
 
 open Format
 open Cerror
@@ -32,8 +32,8 @@ and print_type_node fmt = function
   | Tint (s, i) -> fprintf fmt "%a %a" print_sign s print_integer i
   | Tfloat f -> print_float fmt f
   | Tvar x -> fprintf fmt "%s" x
-  | Tarray (ty,_) -> fprintf fmt "%a[]" print_type ty
-  | Tpointer ty -> fprintf fmt "%a*" print_type ty
+  | Tarray (_,ty,_) -> fprintf fmt "%a[]" print_type ty
+  | Tpointer (_,ty) -> fprintf fmt "%a*" print_type ty
   | Tstruct (x) -> fprintf fmt "struct %s" x
   | Tunion (x) -> fprintf fmt "union %s" x
   | Tenum (x) -> fprintf fmt "enum %s" x

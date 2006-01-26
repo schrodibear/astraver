@@ -3,91 +3,21 @@
 
 Require Export separation4_spec_why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
-  forall (b_Z7: ((memory) ((pointer) Z0) Z7)),
-  forall (x: ((pointer) Z5)),
-  forall (y: ((pointer) Z7)),
-  forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
-                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
-                (valid1_range b_Z7 5)),
-  (valid alloc x).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
-  forall (b_Z7: ((memory) ((pointer) Z0) Z7)),
-  forall (x: ((pointer) Z5)),
-  forall (y: ((pointer) Z7)),
-  forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
-                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
-                (valid1_range b_Z7 5)),
-  forall (HW_2: (valid alloc x)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc b_Z5 x)),
-  (valid alloc result).
 Proof.
 intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
-  forall (b_Z7: ((memory) ((pointer) Z0) Z7)),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (x: ((pointer) Z5)),
-  forall (y: ((pointer) Z7)),
-  forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
-                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
-                (valid1_range b_Z7 5)),
-  forall (HW_2: (valid alloc x)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc b_Z5 x)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  (valid alloc y).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_4 : 
-  forall (alloc: alloc_table),
-  forall (b_Z5: ((memory) ((pointer) Z0) Z5)),
-  forall (b_Z7: ((memory) ((pointer) Z0) Z7)),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (x: ((pointer) Z5)),
-  forall (y: ((pointer) Z7)),
-  forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
-                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
-                (valid1_range b_Z7 5)),
-  forall (HW_2: (valid alloc x)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc b_Z5 x)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  forall (HW_6: (valid alloc y)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc b_Z7 y)),
-  forall (result1: ((pointer) Z0)),
-  forall (HW_8: result1 = (shift result0 1)),
-  (valid alloc result1).
 Proof.
 intuition.
 subst;auto.

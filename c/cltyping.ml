@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.84 2006-01-26 14:25:02 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.85 2006-01-26 17:01:55 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -119,14 +119,14 @@ and type_term_node loc env = function
   | PLunop (Ustar, t) -> 
       let t = type_term env t in
       begin match t.term_type.ctype_node with
-	| Tpointer ty | Tarray (ty,_) -> 
+	| Tpointer (_,ty) | Tarray (_,ty,_) -> 
 	    Tunop (Ustar, t), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
       set_referenced t;
-      Tunop (Uamp, t), noattr (Tpointer t.term_type) 
+      Tunop (Uamp, t), noattr (Tpointer(true, t.term_type)) 
   | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
@@ -189,7 +189,7 @@ and type_term_node loc env = function
   | PLarrow (t, x) ->
       let t = type_term env t in
       begin match t.term_type.ctype_node with
-	| Tpointer ty -> 
+	| Tpointer(_, ty) -> 
 	    let x = type_of_field loc x ty in
 	    Tarrow (t, x), x.var_type
 	| _ -> 
@@ -198,7 +198,7 @@ and type_term_node loc env = function
   | PLarrget (t1, t2) ->
       let t1 = type_term env t1 in
       (match t1.term_type.ctype_node with
-	 | Tarray (ty,_) | Tpointer ty ->
+	 | Tarray (_,ty,_) | Tpointer(_, ty) ->
 	     let t2 = type_int_term env t2 in
 	     Tarrget (t1, t2), ty
 	 | _ ->
@@ -206,7 +206,7 @@ and type_term_node loc env = function
   | PLrange (t1, t2, t3) ->
       let t1 = type_term env t1 in
       (match t1.term_type.ctype_node with
-	 | Tarray (ty,_) | Tpointer ty ->
+	 | Tarray (_,ty,_) | Tpointer (_,ty) ->
 	     let t2 = type_int_term_option env t2 in
 	     let t3 = type_int_term_option env t3 in
 	     Trange (t1, t2, t3), ty
@@ -243,8 +243,8 @@ and type_term_node loc env = function
        with Not_found -> error loc "\\result meaningless")
   | PLnull ->
       let info = default_var_info "null" in 
-      Cenv.set_var_type (Var_info info) c_void_star true;
-      Clogic.Tvar info, c_void_star
+      Cenv.set_var_type (Var_info info) (c_void_star false) true;
+      Clogic.Tvar info, (c_void_star false)
   | PLcast (ty, t) ->
       let t = type_term env t in
       let tt = t.term_type in
@@ -314,7 +314,7 @@ and type_ghost_lvalue_node loc env t =
     | PLarrget (t1, t2) ->
 	let t1 = type_ghost_lvalue env t1 in
 	(match t1.term_type.ctype_node with
-	   | Tarray (ty,_) | Tpointer ty ->
+	   | Tarray (_,ty,_) | Tpointer (_,ty) ->
 	       let t2 = type_int_term env t2 in
 	       Tarrget (t1, t2), ty
 	   | _ ->
@@ -332,15 +332,15 @@ let rec type_type env t =
 
 and type_type_node env = function
   | Tint _ | Tfloat _ as t -> t
-  | Tarray (ty,t) -> Tarray (type_type env ty,t)
+  | Tarray (valid,ty,t) -> Tarray (valid,type_type env ty,t)
   | _ -> assert false
 
 let rec type_logic_type env = function
   | LTvoid -> c_void
   | LTint -> c_int
   | LTfloat -> c_float
-  | LTarray ty -> c_array (type_logic_type env ty)
-  | LTpointer ty -> c_pointer (type_logic_type env ty)
+  | LTarray ty -> c_array false (type_logic_type env ty)
+  | LTpointer ty -> c_pointer false (type_logic_type env ty)
   | LTvar id ->  
       noattr (try (find_typedef id).ctype_node with Not_found -> Tvar id)
 
@@ -409,8 +409,8 @@ and type_predicate_node env p0 = match p0.lexpr_node with
        begin match t1.term_type.ctype_node, t2.term_type.ctype_node with
 	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
 	    Prel (t1, r, t2)
-	| (Tpointer ty1  | Tarray (ty1,_)), 
-	  (Tpointer ty2 | Tarray (ty2,_)) ->
+	| (Tpointer (_,ty1)  | Tarray (_,ty1,_)), 
+	  (Tpointer (_,ty2) | Tarray (_,ty2,_)) ->
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    Prel (t1, r, t2)
@@ -428,8 +428,8 @@ and type_predicate_node env p0 = match p0.lexpr_node with
        begin match t1.term_type.ctype_node, t2.term_type.ctype_node with
 	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
 	    Prel (t1, r, t2)
-	| (Tpointer ty1  | Tarray (ty1,_)), 
-	  (Tpointer ty2 | Tarray (ty2,_)) ->
+	| (Tpointer (_,ty1)  | Tarray (_,ty1,_)), 
+	  (Tpointer (_,ty2) | Tarray (_,ty2,_)) ->
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    Prel (t1, r, t2)

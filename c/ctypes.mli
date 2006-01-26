@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.9 2005-06-09 08:31:22 filliatr Exp $ i*)
+(*i $Id: ctypes.mli,v 1.10 2006-01-26 17:01:55 hubert Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -34,8 +34,8 @@ type ctype_node =
   | Tint of sign * cinteger
   | Tfloat of cfloat
   | Tvar of string
-  | Tarray of ctype * int64 option 
-  | Tpointer of ctype
+  | Tarray of bool * ctype * int64 option 
+  | Tpointer of bool * ctype
   | Tstruct of string 
   | Tunion of string 
   | Tenum of string 
@@ -54,11 +54,11 @@ val noattr : ctype_node -> ctype
 val c_void : ctype
 val c_int : ctype
 val c_float : ctype
-val c_string : ctype
-val c_array :  ctype ->  ctype
-val c_array_size :  ctype -> int64 ->  ctype
-val c_pointer :  ctype ->  ctype
-val c_void_star : ctype
+val c_string : bool -> ctype
+val c_array :  bool -> ctype ->  ctype
+val c_array_size : bool ->  ctype -> int64 ->  ctype
+val c_pointer :  bool -> ctype ->  ctype
+val c_void_star : bool -> ctype
 val c_addr : ctype
 
 val add : string -> unit

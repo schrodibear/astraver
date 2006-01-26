@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.162 2006-01-26 14:25:02 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.163 2006-01-26 17:01:55 hubert Exp $ i*)
 
 
 open Format
@@ -99,7 +99,7 @@ let interp_term_bin_op ty1 ty2 op =
   | (Tpointer _ | Tarray _), (Tpointer _ | Tarray _), Bsub -> "sub_pointer"
   | (Tpointer _ | Tarray _), _, Bsub -> assert false
   | Tfloat _, _, Bmod -> assert false
-  | Tarray (_, _), _, (Bmod|Bdiv|Bmul) -> assert false
+  | Tarray _, _, (Bmod|Bdiv|Bmul) -> assert false
   | Tpointer _, _, (Bmod|Bdiv|Bmul) -> assert false
   | Tfun (_, _), _, _-> assert false 
   | Tunion _ , _, _ -> assert false
@@ -427,7 +427,7 @@ let interp_incr_op ty op = match ty.Ctypes.ctype_node, op with
 
 type interp_lvalue =
   | LocalRef of Info.var_info
-  | HeapRef of string * Output.expr
+  | HeapRef of bool * string * Output.expr
 
 let tempvar_count = ref 0;;
 let reset_tmp_var () = tempvar_count := 0
@@ -510,14 +510,14 @@ let rec interp_expr e =
 		(* v := e2; !v *)
 		let n = v.var_unique_name in
 		append (Assign(n,interp_expr e2)) (Deref n)
-	    | HeapRef(var,e1) ->
+	    | HeapRef(valid,var,e1) ->
 		(* let tmp1 = e1 in 
 		   let tmp2 = e2 in upd var tmp1 tmp2; tmp2 *)
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
 		Let(tmp1, e1,
 		    Let(tmp2, interp_expr e2,
-			append (build_complex_app (Var "upd_")
+			append (build_complex_app (Var "safe_upd_")
 				  [Var var; Var tmp1; Var tmp2])
 			  (Var tmp2)))
 	end 
@@ -531,15 +531,16 @@ let rec interp_expr e =
 	      append
 	        (Assign(n, bin_op op (Deref n) (interp_expr e2)))
 	        (Deref n)
-	  | HeapRef(var,e1) -> 
+	  | HeapRef(valid,var,e1) -> 
 	      let tmp1 = tmp_var () in
 	      let tmp2 = tmp_var () in
+	      let acc = if valid then "safe_acc_" else "acc_" in
 	      Let(tmp1, e1,
 		  Let(tmp2, 
 		      bin_op op
-			(make_app "acc_" [Var var; Var tmp1]) (interp_expr e2),
+			(make_app acc [Var var; Var tmp1]) (interp_expr e2),
 		      append
-			(build_complex_app (Var "upd_") 
+			(build_complex_app (Var "safe_upd_") 
 			   [Var var; Var tmp1; Var tmp2])
 			(Var tmp2)))
 	end 
@@ -554,11 +555,27 @@ let rec interp_expr e =
     | NEarrow (e,s) ->
 	let te = interp_expr e in
 	let var = zoned_name s.var_unique_name (type_why e) in
-	Output.make_app "acc_" [Var(var);te]
+	let valid = 
+	  match e.nexpr_type.Ctypes.ctype_node with
+	    | Tpointer (valid,_)  
+	    | Tarray (valid,_,_) -> valid
+	    | Tstruct _ -> true 
+	    | _ -> assert false
+	in
+	let acc = if valid then "safe_acc_" else "acc_" in
+	Output.make_app acc [Var(var);te]
     | NEstar e1 -> 
 	let te1 = interp_expr e1 in
 	let var = heap_var (type_why e1) in
-	make_app "acc_" [Var var;te1]
+	let valid = 
+	  match e1.nexpr_type.Ctypes.ctype_node with
+	    | Tpointer (valid,_)  
+	    | Tarray (valid,_,_) -> valid
+	    | Tstruct _ -> true 
+	    | _ -> assert false
+	in
+	let acc = if valid then "safe_acc_" else "acc_" in
+	make_app acc [Var var;te1]
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
 	interp_expr e
@@ -646,8 +663,9 @@ and interp_incr_expr op e =
 			  App(App(Var top, Deref n), one)))
 		  (Deref n)
 	end
-    | HeapRef(var,e') ->
+    | HeapRef(valid,var,e') ->
 	begin
+	  let acc = if valid then "safe_acc_" else "acc_" in
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
 		(* let tmp1 = e' in
@@ -655,9 +673,9 @@ and interp_incr_expr op e =
 		   upd var tmp1 (tmp2+1); tmp2 *)		
 		Let("caduceus1",e',
 		    Let("caduceus2",
-			(make_app "acc_" [Var var;Var "caduceus1"]),
+			(make_app acc [Var var;Var "caduceus1"]),
 			append
-			  (make_app "upd_" 
+			  (make_app "safe_upd_" 
 			     [Var var;Var "caduceus1";
 			      make_app top [one;Var "caduceus2"]])
 			  (Var "caduceus2")))
@@ -668,9 +686,9 @@ and interp_incr_expr op e =
 		Let("caduceus1",e',
 		    Let("caduceus2",
 			make_app top
-			  [make_app "acc_" [Var var;Var "caduceus1"];one],
+			  [make_app acc [Var var;Var "caduceus1"];one],
 			append
-			  (make_app "upd_" 
+			  (make_app "safe_upd_" 
 			     [Var var;Var "caduceus1";Var "caduceus2"])
 			  (Var "caduceus2")))
 	end		      
@@ -682,9 +700,21 @@ and interp_lvalue e =
     | NEunary(Ustar,e1) -> assert false
     | NEstar(e1) ->
 	let var = heap_var (type_why e1) in
-	HeapRef(var,interp_expr e1)
+	let valid =
+	  match e1.nexpr_type.Ctypes.ctype_node with
+	    | Tpointer(v,_) | Tarray(v,_,_) -> v
+	    | _ -> assert false
+	in 
+	HeapRef(valid,var,interp_expr e1)
     | NEarrow (e1,f) ->
-	HeapRef(zoned_name f.var_unique_name (type_why e1), interp_expr e1)
+	let valid =
+	  match e1.nexpr_type.Ctypes.ctype_node with
+	    | Tpointer(v,_) | Tarray(v,_,_) -> v
+	    | Tstruct _ -> true
+	    | _ -> assert false
+	in 
+	HeapRef(valid,
+		zoned_name f.var_unique_name (type_why e1), interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
 
@@ -712,7 +742,15 @@ and interp_address e = match e.nexpr_node with
   	    interp_expr e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
 	    let var = zoned_name f.var_unique_name (type_why e1) in
-            build_complex_app (Var "acc_") 
+	    let valid = 
+	      match e1.nexpr_type.Ctypes.ctype_node with
+		| Tpointer (valid,_)  
+		| Tarray (valid,_,_) -> valid
+		| Tstruct _ -> true 
+		| _ -> assert false
+	    in
+	    let acc = if valid then "safe_acc_" else "acc_" in
+            build_complex_app (Var acc) 
 	    [Var var; interp_expr e1]
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
       end
@@ -734,9 +772,10 @@ and interp_statement_expr e =
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
 		Assign(v.var_unique_name,interp_expr e)
-	    | HeapRef(var,e1) ->
+	    | HeapRef(valid,var,e1) ->
 		(* upd var e1 e *)
-		(build_complex_app (Var "upd_")
+		let upd = if valid then "safe_upd_" else "upd_" in
+		(build_complex_app (Var upd)
 		   [Var var;e1; interp_expr e])
 	end 
     | NEincr(op,e) ->
@@ -746,14 +785,15 @@ and interp_statement_expr e =
 	    | LocalRef v ->
 		Assign(v.var_unique_name,
 		       make_app top [Deref(v.var_unique_name); one])
-	    | HeapRef(var,e1) -> 
+	    | HeapRef(valid,var,e1) -> 
 		(* let tmp1 = e1 in
 		   let tmp2 = acc var tmp1 in 
 		   upd var tmp1 (op tmp2 1) *)
+		let acc = if valid then "safe_acc_" else "acc_" in
 		Let("caduceus1",e1,
 		    Let("caduceus2",
-			make_app "acc_" [Var var; Var "caduceus1"],
-			make_app "upd_"
+			make_app acc [Var var; Var "caduceus1"],
+			make_app "safe_upd_"
 			  [Var var; Var "caduceus1"; 
 			   make_app top [Var "caduceus2"; one]]))
 	end
@@ -769,13 +809,14 @@ and interp_statement_expr e =
 	    | LocalRef(v) ->
 		let n = v.var_unique_name in
 		Assign(n, bin_op op (Deref n) (interp_expr e))
-	    | HeapRef(var,e1) -> 
+	    | HeapRef(valid,var,e1) -> 
 		(* let tmp1 = e1 in
 		   let tmp2 = acc var e1
 		   upd var tmp1 (op tmp2 e) *)
+		let acc = if valid then "safe_acc_" else "acc_" in
 		Let("caduceus1",e1,
-		    Let("caduceus2",make_app "acc_" [Var var;Var "caduceus1"],
-			make_app "upd_"
+		    Let("caduceus2",make_app acc [Var var;Var "caduceus1"],
+			make_app "safe_upd_"
 			  [Var var; Var "caduceus1"; 
 			   bin_op op (Var "caduceus2") (interp_expr e)]))
 	end 
@@ -1339,9 +1380,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	    begin match ctype.Ctypes.ctype_node with
 	      | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
 	      | Tfloat _ -> App(Var("any_real"),Var("void"))
-	      | Tarray (_, None) | Tpointer _ -> 
+	      | Tarray (_,_, None) | Tpointer _ -> 
 		  App(Var "any_pointer", Var "void")
-	      | Tarray (_, Some n) ->
+	      | Tarray (_,_, Some n) ->
 		  App (Var "alloca_parameter", Cte (Prim_int n))
 	      | Tstruct _ | Tunion _ ->
 		  App (Var "alloca_parameter", Cte (Prim_int Int64.one))

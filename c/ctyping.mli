@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.mli,v 1.7 2004-12-08 10:53:22 hubert Exp $ i*)
+(*i $Id: ctyping.mli,v 1.8 2006-01-26 17:01:55 hubert Exp $ i*)
 
 (* Typing C programs *)
 val tezero : Cast.texpr
@@ -24,6 +24,7 @@ val type_file : Cast.file -> Cast.tfile
 val is_null : Cast.texpr -> bool
 
 val eval_const_expr : Cast.texpr -> int64
+val eval_const_expr_noerror : Cast.texpr -> int64
 
 val int_teconstant : string -> Cast.texpr
 

@@ -6,38 +6,38 @@ Require Export separation_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (p1_Z55: ((memory) ((pointer) Z7) Z55)),
-  forall (p1_Z57: ((memory) ((pointer) Z7) Z57)),
-  forall (p2_Z55: ((memory) ((pointer) Z8) Z55)),
-  forall (p2_Z57: ((memory) ((pointer) Z8) Z57)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (p1_Z83: ((memory) ((pointer) Z11) Z83)),
+  forall (p1_Z85: ((memory) ((pointer) Z11) Z85)),
+  forall (p2_Z83: ((memory) ((pointer) Z12) Z83)),
+  forall (p2_Z85: ((memory) ((pointer) Z12) Z85)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -49,10 +49,10 @@ Require Export separation_spec_why.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1_range p2_Z55 5) /\
-                (valid1_range p2_Z57 5) /\ (valid1_range p1_Z55 5) /\
-                (valid1_range p1_Z57 5) /\ (valid1 p2_Z55) /\
-                (valid1 p2_Z57) /\ (valid1 p1_Z55) /\ (valid1 p1_Z57)),
+                (valid alloc u1) /\ (valid1_range p2_Z83 5) /\
+                (valid1_range p2_Z85 5) /\ (valid1_range p1_Z83 5) /\
+                (valid1_range p1_Z85 5) /\ (valid1 p2_Z83) /\
+                (valid1 p2_Z85) /\ (valid1 p1_Z83) /\ (valid1 p1_Z85)),
   (* File "separation.c", line 46, characters 5-14 *) (valid alloc u1).
 Proof.
 intuition.
@@ -61,42 +61,42 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (int_Z8: ((memory) Z Z8)),
-  forall (p1_Z55: ((memory) ((pointer) Z7) Z55)),
-  forall (p1_Z57: ((memory) ((pointer) Z7) Z57)),
-  forall (p2_Z55: ((memory) ((pointer) Z8) Z55)),
-  forall (p2_Z57: ((memory) ((pointer) Z8) Z57)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (v1_Z55: ((memory) Z Z55)),
-  forall (v2_Z55: ((memory) Z Z55)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z12: ((memory) Z Z12)),
+  forall (p1_Z83: ((memory) ((pointer) Z11) Z83)),
+  forall (p1_Z85: ((memory) ((pointer) Z11) Z85)),
+  forall (p2_Z83: ((memory) ((pointer) Z12) Z83)),
+  forall (p2_Z85: ((memory) ((pointer) Z12) Z85)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (v1_Z83: ((memory) Z Z83)),
+  forall (v2_Z83: ((memory) Z Z83)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -108,24 +108,24 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1_range p2_Z55 5) /\
-                (valid1_range p2_Z57 5) /\ (valid1_range p1_Z55 5) /\
-                (valid1_range p1_Z57 5) /\ (valid1 p2_Z55) /\
-                (valid1 p2_Z57) /\ (valid1 p1_Z55) /\ (valid1 p1_Z57)),
+                (valid alloc u1) /\ (valid1_range p2_Z83 5) /\
+                (valid1_range p2_Z85 5) /\ (valid1_range p1_Z83 5) /\
+                (valid1_range p1_Z85 5) /\ (valid1 p2_Z83) /\
+                (valid1 p2_Z85) /\ (valid1 p1_Z83) /\ (valid1 p1_Z85)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
                 (valid alloc u1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (int_Z8_0: ((memory) Z Z8)),
-  forall (v1_Z55_0: ((memory) Z Z55)),
-  forall (v2_Z55_0: ((memory) Z Z55)),
-  forall (HW_3: (((((not_assigns alloc v2_Z55 v2_Z55_0 (pset_singleton u1)) /\
-                (not_assigns alloc v1_Z55 v1_Z55_0 (pset_singleton u1))) /\
-                (not_assigns alloc p2_Z55 p2_Z55 pset_empty)) /\
-                (not_assigns alloc p1_Z55 p1_Z55 pset_empty)) /\
-                (not_assigns alloc int_Z8 int_Z8_0
-                 (pset_range (pset_singleton (acc p2_Z55 u1)) 0 4))) /\
-                (not_assigns alloc int_Z7 int_Z7_0
-                 (pset_range (pset_singleton (acc p1_Z55 u1)) 0 4))),
+  forall (int_Z11_0: ((memory) Z Z11)),
+  forall (int_Z12_0: ((memory) Z Z12)),
+  forall (v1_Z83_0: ((memory) Z Z83)),
+  forall (v2_Z83_0: ((memory) Z Z83)),
+  forall (HW_3: (((((not_assigns alloc v2_Z83 v2_Z83_0 (pset_singleton u1)) /\
+                (not_assigns alloc v1_Z83 v1_Z83_0 (pset_singleton u1))) /\
+                (not_assigns alloc p2_Z83 p2_Z83 pset_empty)) /\
+                (not_assigns alloc p1_Z83 p1_Z83 pset_empty)) /\
+                (not_assigns alloc int_Z12 int_Z12_0
+                 (pset_range (pset_singleton (acc p2_Z83 u1)) 0 4))) /\
+                (not_assigns alloc int_Z11 int_Z11_0
+                 (pset_range (pset_singleton (acc p1_Z83 u1)) 0 4))),
   (* File "separation.c", line 46, characters 5-14 *) (valid alloc u2).
 Proof.
 intuition;generalize (H3 u2);intuition.
@@ -134,44 +134,44 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z Z7)),
-  forall (int_Z8: ((memory) Z Z8)),
-  forall (p1_Z55: ((memory) ((pointer) Z7) Z55)),
-  forall (p1_Z57: ((memory) ((pointer) Z7) Z57)),
-  forall (p2_Z55: ((memory) ((pointer) Z8) Z55)),
-  forall (p2_Z57: ((memory) ((pointer) Z8) Z57)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (v1_Z55: ((memory) Z Z55)),
-  forall (v1_Z57: ((memory) Z Z57)),
-  forall (v2_Z55: ((memory) Z Z55)),
-  forall (v2_Z57: ((memory) Z Z57)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (int_Z11: ((memory) Z Z11)),
+  forall (int_Z12: ((memory) Z Z12)),
+  forall (p1_Z83: ((memory) ((pointer) Z11) Z83)),
+  forall (p1_Z85: ((memory) ((pointer) Z11) Z85)),
+  forall (p2_Z83: ((memory) ((pointer) Z12) Z83)),
+  forall (p2_Z85: ((memory) ((pointer) Z12) Z85)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (v1_Z83: ((memory) Z Z83)),
+  forall (v1_Z85: ((memory) Z Z85)),
+  forall (v2_Z83: ((memory) Z Z83)),
+  forall (v2_Z85: ((memory) Z Z85)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -183,52 +183,52 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1_range p2_Z55 5) /\
-                (valid1_range p2_Z57 5) /\ (valid1_range p1_Z55 5) /\
-                (valid1_range p1_Z57 5) /\ (valid1 p2_Z55) /\
-                (valid1 p2_Z57) /\ (valid1 p1_Z55) /\ (valid1 p1_Z57)),
+                (valid alloc u1) /\ (valid1_range p2_Z83 5) /\
+                (valid1_range p2_Z85 5) /\ (valid1_range p1_Z83 5) /\
+                (valid1_range p1_Z85 5) /\ (valid1 p2_Z83) /\
+                (valid1 p2_Z85) /\ (valid1 p1_Z83) /\ (valid1 p1_Z85)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
                 (valid alloc u1)),
-  forall (int_Z7_0: ((memory) Z Z7)),
-  forall (int_Z8_0: ((memory) Z Z8)),
-  forall (v1_Z55_0: ((memory) Z Z55)),
-  forall (v2_Z55_0: ((memory) Z Z55)),
-  forall (HW_3: (((((not_assigns alloc v2_Z55 v2_Z55_0 (pset_singleton u1)) /\
-                (not_assigns alloc v1_Z55 v1_Z55_0 (pset_singleton u1))) /\
-                (not_assigns alloc p2_Z55 p2_Z55 pset_empty)) /\
-                (not_assigns alloc p1_Z55 p1_Z55 pset_empty)) /\
-                (not_assigns alloc int_Z8 int_Z8_0
-                 (pset_range (pset_singleton (acc p2_Z55 u1)) 0 4))) /\
-                (not_assigns alloc int_Z7 int_Z7_0
-                 (pset_range (pset_singleton (acc p1_Z55 u1)) 0 4))),
+  forall (int_Z11_0: ((memory) Z Z11)),
+  forall (int_Z12_0: ((memory) Z Z12)),
+  forall (v1_Z83_0: ((memory) Z Z83)),
+  forall (v2_Z83_0: ((memory) Z Z83)),
+  forall (HW_3: (((((not_assigns alloc v2_Z83 v2_Z83_0 (pset_singleton u1)) /\
+                (not_assigns alloc v1_Z83 v1_Z83_0 (pset_singleton u1))) /\
+                (not_assigns alloc p2_Z83 p2_Z83 pset_empty)) /\
+                (not_assigns alloc p1_Z83 p1_Z83 pset_empty)) /\
+                (not_assigns alloc int_Z12 int_Z12_0
+                 (pset_range (pset_singleton (acc p2_Z83 u1)) 0 4))) /\
+                (not_assigns alloc int_Z11 int_Z11_0
+                 (pset_range (pset_singleton (acc p1_Z83 u1)) 0 4))),
   forall (HW_4: (* File "separation.c", line 46, characters 5-14 *)
                 (valid alloc u2)),
-  forall (int_Z7_1: ((memory) Z Z7)),
-  forall (int_Z8_1: ((memory) Z Z8)),
-  forall (v1_Z57_0: ((memory) Z Z57)),
-  forall (v2_Z57_0: ((memory) Z Z57)),
-  forall (HW_5: (((((not_assigns alloc v2_Z57 v2_Z57_0 (pset_singleton u2)) /\
-                (not_assigns alloc v1_Z57 v1_Z57_0 (pset_singleton u2))) /\
-                (not_assigns alloc p2_Z57 p2_Z57 pset_empty)) /\
-                (not_assigns alloc p1_Z57 p1_Z57 pset_empty)) /\
-                (not_assigns alloc int_Z8_0 int_Z8_1
-                 (pset_range (pset_singleton (acc p2_Z57 u2)) 0 4))) /\
-                (not_assigns alloc int_Z7_0 int_Z7_1
-                 (pset_range (pset_singleton (acc p1_Z57 u2)) 0 4))),
-  (((((((((not_assigns alloc v2_Z57 v2_Z57_0 (pset_singleton u2)) /\
-  (not_assigns alloc v2_Z55 v2_Z55_0 (pset_singleton u1))) /\
-  (not_assigns alloc v1_Z57 v1_Z57_0 (pset_singleton u2))) /\
-  (not_assigns alloc v1_Z55 v1_Z55_0 (pset_singleton u1))) /\
-  (not_assigns alloc p2_Z57 p2_Z57 pset_empty)) /\
-  (not_assigns alloc p2_Z55 p2_Z55 pset_empty)) /\
-  (not_assigns alloc p1_Z57 p1_Z57 pset_empty)) /\
-  (not_assigns alloc p1_Z55 p1_Z55 pset_empty)) /\
-  (not_assigns alloc int_Z8 int_Z8_1
-   (pset_union (pset_range (pset_singleton (acc p2_Z57 u2)) 0 4)
-    (pset_range (pset_singleton (acc p2_Z55 u1)) 0 4)))) /\
-  (not_assigns alloc int_Z7 int_Z7_1
-   (pset_union (pset_range (pset_singleton (acc p1_Z57 u2)) 0 4)
-    (pset_range (pset_singleton (acc p1_Z55 u1)) 0 4))).
+  forall (int_Z11_1: ((memory) Z Z11)),
+  forall (int_Z12_1: ((memory) Z Z12)),
+  forall (v1_Z85_0: ((memory) Z Z85)),
+  forall (v2_Z85_0: ((memory) Z Z85)),
+  forall (HW_5: (((((not_assigns alloc v2_Z85 v2_Z85_0 (pset_singleton u2)) /\
+                (not_assigns alloc v1_Z85 v1_Z85_0 (pset_singleton u2))) /\
+                (not_assigns alloc p2_Z85 p2_Z85 pset_empty)) /\
+                (not_assigns alloc p1_Z85 p1_Z85 pset_empty)) /\
+                (not_assigns alloc int_Z12_0 int_Z12_1
+                 (pset_range (pset_singleton (acc p2_Z85 u2)) 0 4))) /\
+                (not_assigns alloc int_Z11_0 int_Z11_1
+                 (pset_range (pset_singleton (acc p1_Z85 u2)) 0 4))),
+  (((((((((not_assigns alloc v2_Z85 v2_Z85_0 (pset_singleton u2)) /\
+  (not_assigns alloc v2_Z83 v2_Z83_0 (pset_singleton u1))) /\
+  (not_assigns alloc v1_Z85 v1_Z85_0 (pset_singleton u2))) /\
+  (not_assigns alloc v1_Z83 v1_Z83_0 (pset_singleton u1))) /\
+  (not_assigns alloc p2_Z85 p2_Z85 pset_empty)) /\
+  (not_assigns alloc p2_Z83 p2_Z83 pset_empty)) /\
+  (not_assigns alloc p1_Z85 p1_Z85 pset_empty)) /\
+  (not_assigns alloc p1_Z83 p1_Z83 pset_empty)) /\
+  (not_assigns alloc int_Z12 int_Z12_1
+   (pset_union (pset_range (pset_singleton (acc p2_Z85 u2)) 0 4)
+    (pset_range (pset_singleton (acc p2_Z83 u1)) 0 4)))) /\
+  (not_assigns alloc int_Z11 int_Z11_1
+   (pset_union (pset_range (pset_singleton (acc p1_Z85 u2)) 0 4)
+    (pset_range (pset_singleton (acc p1_Z83 u1)) 0 4))).
 Proof.
 intuition.
 apply not_assigns_trans with v2_Z57_0.
@@ -267,58 +267,58 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -330,43 +330,49 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc u3).
 Proof.
 intuition;
@@ -376,62 +382,62 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -443,61 +449,67 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc u4).
 Proof.
@@ -507,64 +519,64 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -576,80 +588,86 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w1).
 Proof.
@@ -659,66 +677,66 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -730,99 +748,105 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w2).
 Proof.
@@ -832,68 +856,68 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -905,118 +929,124 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w3).
 Proof.
@@ -1026,70 +1056,70 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -1101,138 +1131,144 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w4).
 Proof.
@@ -1242,72 +1278,72 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -1319,158 +1355,164 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w5).
 Proof.
@@ -1480,74 +1522,74 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v1_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z72: ((memory) Z Z72)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -1559,178 +1601,184 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
-  forall (anonymous_2_v1_Z72_0: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z72_0: ((memory) Z Z72)),
-  forall (int_Z13_6: ((memory) Z Z13)),
-  forall (int_Z14_6: ((memory) Z Z14)),
-  forall (HW_15: (((((not_assigns alloc int_Z14_5 int_Z14_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z72 w5))
+  forall (anonymous_2_v1_Z100_0: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z100_0: ((memory) Z Z100)),
+  forall (int_Z19_6: ((memory) Z Z19)),
+  forall (int_Z20_6: ((memory) Z Z20)),
+  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z100 w5))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_5 int_Z13_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5)) 0
+                 (not_assigns alloc int_Z19_5 int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
+                 (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+                 (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72
+                 (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72
+                 (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w6).
 Proof.
@@ -1740,76 +1788,76 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v1_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v1_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z74: ((memory) Z Z74)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v1_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -1821,198 +1869,204 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
-  forall (anonymous_2_v1_Z72_0: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z72_0: ((memory) Z Z72)),
-  forall (int_Z13_6: ((memory) Z Z13)),
-  forall (int_Z14_6: ((memory) Z Z14)),
-  forall (HW_15: (((((not_assigns alloc int_Z14_5 int_Z14_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z72 w5))
+  forall (anonymous_2_v1_Z100_0: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z100_0: ((memory) Z Z100)),
+  forall (int_Z19_6: ((memory) Z Z19)),
+  forall (int_Z20_6: ((memory) Z Z20)),
+  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z100 w5))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_5 int_Z13_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5)) 0
+                 (not_assigns alloc int_Z19_5 int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
+                 (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+                 (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72
+                 (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72
+                 (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100
                   pset_empty)),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
-  forall (anonymous_2_v1_Z74_0: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z74_0: ((memory) Z Z74)),
-  forall (int_Z13_7: ((memory) Z Z13)),
-  forall (int_Z14_7: ((memory) Z Z14)),
-  forall (HW_17: (((((not_assigns alloc int_Z14_6 int_Z14_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z74 w6))
+  forall (anonymous_2_v1_Z102_0: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z102_0: ((memory) Z Z102)),
+  forall (int_Z19_7: ((memory) Z Z19)),
+  forall (int_Z20_7: ((memory) Z Z20)),
+  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z102 w6))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_6 int_Z13_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z74 w6)) 0
+                 (not_assigns alloc int_Z19_6 int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z102 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z74 anonymous_2_v2_Z74_0
+                 (not_assigns alloc anonymous_2_v2_Z102 anonymous_2_v2_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z74 anonymous_2_v1_Z74_0
+                 (not_assigns alloc anonymous_2_v1_Z102 anonymous_2_v1_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_p2_Z74 anonymous_2_p2_Z74
+                 (not_assigns alloc anonymous_2_p2_Z102 anonymous_2_p2_Z102
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z74 anonymous_2_p1_Z74
+                 (not_assigns alloc anonymous_2_p1_Z102 anonymous_2_p1_Z102
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w7).
 Proof.
@@ -2022,78 +2076,78 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v1_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v1_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v1_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z76: ((memory) Z Z76)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v1_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v1_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -2105,218 +2159,224 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
-  forall (anonymous_2_v1_Z72_0: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z72_0: ((memory) Z Z72)),
-  forall (int_Z13_6: ((memory) Z Z13)),
-  forall (int_Z14_6: ((memory) Z Z14)),
-  forall (HW_15: (((((not_assigns alloc int_Z14_5 int_Z14_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z72 w5))
+  forall (anonymous_2_v1_Z100_0: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z100_0: ((memory) Z Z100)),
+  forall (int_Z19_6: ((memory) Z Z19)),
+  forall (int_Z20_6: ((memory) Z Z20)),
+  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z100 w5))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_5 int_Z13_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5)) 0
+                 (not_assigns alloc int_Z19_5 int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
+                 (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+                 (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72
+                 (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72
+                 (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100
                   pset_empty)),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
-  forall (anonymous_2_v1_Z74_0: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z74_0: ((memory) Z Z74)),
-  forall (int_Z13_7: ((memory) Z Z13)),
-  forall (int_Z14_7: ((memory) Z Z14)),
-  forall (HW_17: (((((not_assigns alloc int_Z14_6 int_Z14_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z74 w6))
+  forall (anonymous_2_v1_Z102_0: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z102_0: ((memory) Z Z102)),
+  forall (int_Z19_7: ((memory) Z Z19)),
+  forall (int_Z20_7: ((memory) Z Z20)),
+  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z102 w6))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_6 int_Z13_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z74 w6)) 0
+                 (not_assigns alloc int_Z19_6 int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z102 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z74 anonymous_2_v2_Z74_0
+                 (not_assigns alloc anonymous_2_v2_Z102 anonymous_2_v2_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z74 anonymous_2_v1_Z74_0
+                 (not_assigns alloc anonymous_2_v1_Z102 anonymous_2_v1_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_p2_Z74 anonymous_2_p2_Z74
+                 (not_assigns alloc anonymous_2_p2_Z102 anonymous_2_p2_Z102
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z74 anonymous_2_p1_Z74
+                 (not_assigns alloc anonymous_2_p1_Z102 anonymous_2_p1_Z102
                   pset_empty)),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
-  forall (anonymous_2_v1_Z76_0: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z76_0: ((memory) Z Z76)),
-  forall (int_Z13_8: ((memory) Z Z13)),
-  forall (int_Z14_8: ((memory) Z Z14)),
-  forall (HW_19: (((((not_assigns alloc int_Z14_7 int_Z14_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z76 w7))
+  forall (anonymous_2_v1_Z104_0: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z104_0: ((memory) Z Z104)),
+  forall (int_Z19_8: ((memory) Z Z19)),
+  forall (int_Z20_8: ((memory) Z Z20)),
+  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z104 w7))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_7 int_Z13_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z76 w7)) 0
+                 (not_assigns alloc int_Z19_7 int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z104 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z76 anonymous_2_v2_Z76_0
+                 (not_assigns alloc anonymous_2_v2_Z104 anonymous_2_v2_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z76 anonymous_2_v1_Z76_0
+                 (not_assigns alloc anonymous_2_v1_Z104 anonymous_2_v1_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_p2_Z76 anonymous_2_p2_Z76
+                 (not_assigns alloc anonymous_2_p2_Z104 anonymous_2_p2_Z104
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z76 anonymous_2_p1_Z76
+                 (not_assigns alloc anonymous_2_p1_Z104 anonymous_2_p1_Z104
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w8).
 Proof.
@@ -2326,80 +2386,80 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v1_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v1_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v1_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v1_Z78: ((memory) Z Z78)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z78: ((memory) Z Z78)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v1_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v1_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v1_Z106: ((memory) Z Z106)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z106: ((memory) Z Z106)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -2411,238 +2471,244 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
-  forall (anonymous_2_v1_Z72_0: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z72_0: ((memory) Z Z72)),
-  forall (int_Z13_6: ((memory) Z Z13)),
-  forall (int_Z14_6: ((memory) Z Z14)),
-  forall (HW_15: (((((not_assigns alloc int_Z14_5 int_Z14_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z72 w5))
+  forall (anonymous_2_v1_Z100_0: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z100_0: ((memory) Z Z100)),
+  forall (int_Z19_6: ((memory) Z Z19)),
+  forall (int_Z20_6: ((memory) Z Z20)),
+  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z100 w5))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_5 int_Z13_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5)) 0
+                 (not_assigns alloc int_Z19_5 int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
+                 (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+                 (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72
+                 (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72
+                 (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100
                   pset_empty)),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
-  forall (anonymous_2_v1_Z74_0: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z74_0: ((memory) Z Z74)),
-  forall (int_Z13_7: ((memory) Z Z13)),
-  forall (int_Z14_7: ((memory) Z Z14)),
-  forall (HW_17: (((((not_assigns alloc int_Z14_6 int_Z14_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z74 w6))
+  forall (anonymous_2_v1_Z102_0: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z102_0: ((memory) Z Z102)),
+  forall (int_Z19_7: ((memory) Z Z19)),
+  forall (int_Z20_7: ((memory) Z Z20)),
+  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z102 w6))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_6 int_Z13_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z74 w6)) 0
+                 (not_assigns alloc int_Z19_6 int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z102 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z74 anonymous_2_v2_Z74_0
+                 (not_assigns alloc anonymous_2_v2_Z102 anonymous_2_v2_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z74 anonymous_2_v1_Z74_0
+                 (not_assigns alloc anonymous_2_v1_Z102 anonymous_2_v1_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_p2_Z74 anonymous_2_p2_Z74
+                 (not_assigns alloc anonymous_2_p2_Z102 anonymous_2_p2_Z102
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z74 anonymous_2_p1_Z74
+                 (not_assigns alloc anonymous_2_p1_Z102 anonymous_2_p1_Z102
                   pset_empty)),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
-  forall (anonymous_2_v1_Z76_0: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z76_0: ((memory) Z Z76)),
-  forall (int_Z13_8: ((memory) Z Z13)),
-  forall (int_Z14_8: ((memory) Z Z14)),
-  forall (HW_19: (((((not_assigns alloc int_Z14_7 int_Z14_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z76 w7))
+  forall (anonymous_2_v1_Z104_0: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z104_0: ((memory) Z Z104)),
+  forall (int_Z19_8: ((memory) Z Z19)),
+  forall (int_Z20_8: ((memory) Z Z20)),
+  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z104 w7))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_7 int_Z13_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z76 w7)) 0
+                 (not_assigns alloc int_Z19_7 int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z104 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z76 anonymous_2_v2_Z76_0
+                 (not_assigns alloc anonymous_2_v2_Z104 anonymous_2_v2_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z76 anonymous_2_v1_Z76_0
+                 (not_assigns alloc anonymous_2_v1_Z104 anonymous_2_v1_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_p2_Z76 anonymous_2_p2_Z76
+                 (not_assigns alloc anonymous_2_p2_Z104 anonymous_2_p2_Z104
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z76 anonymous_2_p1_Z76
+                 (not_assigns alloc anonymous_2_p1_Z104 anonymous_2_p1_Z104
                   pset_empty)),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w8)),
-  forall (anonymous_2_v1_Z78_0: ((memory) Z Z78)),
-  forall (anonymous_2_v2_Z78_0: ((memory) Z Z78)),
-  forall (int_Z13_9: ((memory) Z Z13)),
-  forall (int_Z14_9: ((memory) Z Z14)),
-  forall (HW_21: (((((not_assigns alloc int_Z14_8 int_Z14_9
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z78 w8))
+  forall (anonymous_2_v1_Z106_0: ((memory) Z Z106)),
+  forall (anonymous_2_v2_Z106_0: ((memory) Z Z106)),
+  forall (int_Z19_9: ((memory) Z Z19)),
+  forall (int_Z20_9: ((memory) Z Z20)),
+  forall (HW_21: (((((not_assigns alloc int_Z20_8 int_Z20_9
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z106 w8))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_8 int_Z13_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z78 w8)) 0
+                 (not_assigns alloc int_Z19_8 int_Z19_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z106 w8)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z78 anonymous_2_v2_Z78_0
+                 (not_assigns alloc anonymous_2_v2_Z106 anonymous_2_v2_Z106_0
                   (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_v1_Z78 anonymous_2_v1_Z78_0
+                 (not_assigns alloc anonymous_2_v1_Z106 anonymous_2_v1_Z106_0
                   (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_p2_Z78 anonymous_2_p2_Z78
+                 (not_assigns alloc anonymous_2_p2_Z106 anonymous_2_p2_Z106
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z78 anonymous_2_p1_Z78
+                 (not_assigns alloc anonymous_2_p1_Z106 anonymous_2_p1_Z106
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w9).
 Proof.
@@ -2652,82 +2718,82 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v1_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v1_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v1_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v1_Z78: ((memory) Z Z78)),
-  forall (anonymous_2_v1_Z80: ((memory) Z Z80)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z78: ((memory) Z Z78)),
-  forall (anonymous_2_v2_Z80: ((memory) Z Z80)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v1_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v1_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v1_Z106: ((memory) Z Z106)),
+  forall (anonymous_2_v1_Z108: ((memory) Z Z108)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z106: ((memory) Z Z106)),
+  forall (anonymous_2_v2_Z108: ((memory) Z Z108)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -2739,258 +2805,264 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
-  forall (anonymous_2_v1_Z72_0: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z72_0: ((memory) Z Z72)),
-  forall (int_Z13_6: ((memory) Z Z13)),
-  forall (int_Z14_6: ((memory) Z Z14)),
-  forall (HW_15: (((((not_assigns alloc int_Z14_5 int_Z14_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z72 w5))
+  forall (anonymous_2_v1_Z100_0: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z100_0: ((memory) Z Z100)),
+  forall (int_Z19_6: ((memory) Z Z19)),
+  forall (int_Z20_6: ((memory) Z Z20)),
+  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z100 w5))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_5 int_Z13_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5)) 0
+                 (not_assigns alloc int_Z19_5 int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
+                 (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+                 (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72
+                 (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72
+                 (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100
                   pset_empty)),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
-  forall (anonymous_2_v1_Z74_0: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z74_0: ((memory) Z Z74)),
-  forall (int_Z13_7: ((memory) Z Z13)),
-  forall (int_Z14_7: ((memory) Z Z14)),
-  forall (HW_17: (((((not_assigns alloc int_Z14_6 int_Z14_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z74 w6))
+  forall (anonymous_2_v1_Z102_0: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z102_0: ((memory) Z Z102)),
+  forall (int_Z19_7: ((memory) Z Z19)),
+  forall (int_Z20_7: ((memory) Z Z20)),
+  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z102 w6))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_6 int_Z13_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z74 w6)) 0
+                 (not_assigns alloc int_Z19_6 int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z102 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z74 anonymous_2_v2_Z74_0
+                 (not_assigns alloc anonymous_2_v2_Z102 anonymous_2_v2_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z74 anonymous_2_v1_Z74_0
+                 (not_assigns alloc anonymous_2_v1_Z102 anonymous_2_v1_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_p2_Z74 anonymous_2_p2_Z74
+                 (not_assigns alloc anonymous_2_p2_Z102 anonymous_2_p2_Z102
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z74 anonymous_2_p1_Z74
+                 (not_assigns alloc anonymous_2_p1_Z102 anonymous_2_p1_Z102
                   pset_empty)),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
-  forall (anonymous_2_v1_Z76_0: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z76_0: ((memory) Z Z76)),
-  forall (int_Z13_8: ((memory) Z Z13)),
-  forall (int_Z14_8: ((memory) Z Z14)),
-  forall (HW_19: (((((not_assigns alloc int_Z14_7 int_Z14_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z76 w7))
+  forall (anonymous_2_v1_Z104_0: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z104_0: ((memory) Z Z104)),
+  forall (int_Z19_8: ((memory) Z Z19)),
+  forall (int_Z20_8: ((memory) Z Z20)),
+  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z104 w7))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_7 int_Z13_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z76 w7)) 0
+                 (not_assigns alloc int_Z19_7 int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z104 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z76 anonymous_2_v2_Z76_0
+                 (not_assigns alloc anonymous_2_v2_Z104 anonymous_2_v2_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z76 anonymous_2_v1_Z76_0
+                 (not_assigns alloc anonymous_2_v1_Z104 anonymous_2_v1_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_p2_Z76 anonymous_2_p2_Z76
+                 (not_assigns alloc anonymous_2_p2_Z104 anonymous_2_p2_Z104
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z76 anonymous_2_p1_Z76
+                 (not_assigns alloc anonymous_2_p1_Z104 anonymous_2_p1_Z104
                   pset_empty)),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w8)),
-  forall (anonymous_2_v1_Z78_0: ((memory) Z Z78)),
-  forall (anonymous_2_v2_Z78_0: ((memory) Z Z78)),
-  forall (int_Z13_9: ((memory) Z Z13)),
-  forall (int_Z14_9: ((memory) Z Z14)),
-  forall (HW_21: (((((not_assigns alloc int_Z14_8 int_Z14_9
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z78 w8))
+  forall (anonymous_2_v1_Z106_0: ((memory) Z Z106)),
+  forall (anonymous_2_v2_Z106_0: ((memory) Z Z106)),
+  forall (int_Z19_9: ((memory) Z Z19)),
+  forall (int_Z20_9: ((memory) Z Z20)),
+  forall (HW_21: (((((not_assigns alloc int_Z20_8 int_Z20_9
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z106 w8))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_8 int_Z13_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z78 w8)) 0
+                 (not_assigns alloc int_Z19_8 int_Z19_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z106 w8)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z78 anonymous_2_v2_Z78_0
+                 (not_assigns alloc anonymous_2_v2_Z106 anonymous_2_v2_Z106_0
                   (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_v1_Z78 anonymous_2_v1_Z78_0
+                 (not_assigns alloc anonymous_2_v1_Z106 anonymous_2_v1_Z106_0
                   (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_p2_Z78 anonymous_2_p2_Z78
+                 (not_assigns alloc anonymous_2_p2_Z106 anonymous_2_p2_Z106
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z78 anonymous_2_p1_Z78
+                 (not_assigns alloc anonymous_2_p1_Z106 anonymous_2_p1_Z106
                   pset_empty)),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w9)),
-  forall (anonymous_2_v1_Z80_0: ((memory) Z Z80)),
-  forall (anonymous_2_v2_Z80_0: ((memory) Z Z80)),
-  forall (int_Z13_10: ((memory) Z Z13)),
-  forall (int_Z14_10: ((memory) Z Z14)),
-  forall (HW_23: (((((not_assigns alloc int_Z14_9 int_Z14_10
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z80 w9))
+  forall (anonymous_2_v1_Z108_0: ((memory) Z Z108)),
+  forall (anonymous_2_v2_Z108_0: ((memory) Z Z108)),
+  forall (int_Z19_10: ((memory) Z Z19)),
+  forall (int_Z20_10: ((memory) Z Z20)),
+  forall (HW_23: (((((not_assigns alloc int_Z20_9 int_Z20_10
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z108 w9))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_9 int_Z13_10
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z80 w9)) 0
+                 (not_assigns alloc int_Z19_9 int_Z19_10
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z108 w9)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z80 anonymous_2_v2_Z80_0
+                 (not_assigns alloc anonymous_2_v2_Z108 anonymous_2_v2_Z108_0
                   (pset_singleton w9))) /\
-                 (not_assigns alloc anonymous_2_v1_Z80 anonymous_2_v1_Z80_0
+                 (not_assigns alloc anonymous_2_v1_Z108 anonymous_2_v1_Z108_0
                   (pset_singleton w9))) /\
-                 (not_assigns alloc anonymous_2_p2_Z80 anonymous_2_p2_Z80
+                 (not_assigns alloc anonymous_2_p2_Z108 anonymous_2_p2_Z108
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z80 anonymous_2_p1_Z80
+                 (not_assigns alloc anonymous_2_p1_Z108 anonymous_2_p1_Z108
                   pset_empty)),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w10).
 Proof.
@@ -3000,84 +3072,84 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
-  forall (anonymous_2_p1_Z60: ((memory) ((pointer) Z13) Z60)),
-  forall (anonymous_2_p1_Z62: ((memory) ((pointer) Z13) Z62)),
-  forall (anonymous_2_p1_Z64: ((memory) ((pointer) Z13) Z64)),
-  forall (anonymous_2_p1_Z66: ((memory) ((pointer) Z13) Z66)),
-  forall (anonymous_2_p1_Z68: ((memory) ((pointer) Z13) Z68)),
-  forall (anonymous_2_p1_Z70: ((memory) ((pointer) Z13) Z70)),
-  forall (anonymous_2_p1_Z72: ((memory) ((pointer) Z13) Z72)),
-  forall (anonymous_2_p1_Z74: ((memory) ((pointer) Z13) Z74)),
-  forall (anonymous_2_p1_Z76: ((memory) ((pointer) Z13) Z76)),
-  forall (anonymous_2_p1_Z78: ((memory) ((pointer) Z13) Z78)),
-  forall (anonymous_2_p1_Z80: ((memory) ((pointer) Z13) Z80)),
-  forall (anonymous_2_p1_Z82: ((memory) ((pointer) Z13) Z82)),
-  forall (anonymous_2_p2_Z60: ((memory) ((pointer) Z14) Z60)),
-  forall (anonymous_2_p2_Z62: ((memory) ((pointer) Z14) Z62)),
-  forall (anonymous_2_p2_Z64: ((memory) ((pointer) Z14) Z64)),
-  forall (anonymous_2_p2_Z66: ((memory) ((pointer) Z14) Z66)),
-  forall (anonymous_2_p2_Z68: ((memory) ((pointer) Z14) Z68)),
-  forall (anonymous_2_p2_Z70: ((memory) ((pointer) Z14) Z70)),
-  forall (anonymous_2_p2_Z72: ((memory) ((pointer) Z14) Z72)),
-  forall (anonymous_2_p2_Z74: ((memory) ((pointer) Z14) Z74)),
-  forall (anonymous_2_p2_Z76: ((memory) ((pointer) Z14) Z76)),
-  forall (anonymous_2_p2_Z78: ((memory) ((pointer) Z14) Z78)),
-  forall (anonymous_2_p2_Z80: ((memory) ((pointer) Z14) Z80)),
-  forall (anonymous_2_p2_Z82: ((memory) ((pointer) Z14) Z82)),
-  forall (anonymous_2_v1_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v1_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v1_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v1_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v1_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v1_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v1_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v1_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v1_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v1_Z78: ((memory) Z Z78)),
-  forall (anonymous_2_v1_Z80: ((memory) Z Z80)),
-  forall (anonymous_2_v1_Z82: ((memory) Z Z82)),
-  forall (anonymous_2_v2_Z60: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z62: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z64: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z66: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z68: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z70: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z72: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z74: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z76: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z78: ((memory) Z Z78)),
-  forall (anonymous_2_v2_Z80: ((memory) Z Z80)),
-  forall (anonymous_2_v2_Z82: ((memory) Z Z82)),
-  forall (int_Z13: ((memory) Z Z13)),
-  forall (int_Z14: ((memory) Z Z14)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (anonymous_2_p1_Z100: ((memory) ((pointer) Z19) Z100)),
+  forall (anonymous_2_p1_Z102: ((memory) ((pointer) Z19) Z102)),
+  forall (anonymous_2_p1_Z104: ((memory) ((pointer) Z19) Z104)),
+  forall (anonymous_2_p1_Z106: ((memory) ((pointer) Z19) Z106)),
+  forall (anonymous_2_p1_Z108: ((memory) ((pointer) Z19) Z108)),
+  forall (anonymous_2_p1_Z110: ((memory) ((pointer) Z19) Z110)),
+  forall (anonymous_2_p1_Z88: ((memory) ((pointer) Z19) Z88)),
+  forall (anonymous_2_p1_Z90: ((memory) ((pointer) Z19) Z90)),
+  forall (anonymous_2_p1_Z92: ((memory) ((pointer) Z19) Z92)),
+  forall (anonymous_2_p1_Z94: ((memory) ((pointer) Z19) Z94)),
+  forall (anonymous_2_p1_Z96: ((memory) ((pointer) Z19) Z96)),
+  forall (anonymous_2_p1_Z98: ((memory) ((pointer) Z19) Z98)),
+  forall (anonymous_2_p2_Z100: ((memory) ((pointer) Z20) Z100)),
+  forall (anonymous_2_p2_Z102: ((memory) ((pointer) Z20) Z102)),
+  forall (anonymous_2_p2_Z104: ((memory) ((pointer) Z20) Z104)),
+  forall (anonymous_2_p2_Z106: ((memory) ((pointer) Z20) Z106)),
+  forall (anonymous_2_p2_Z108: ((memory) ((pointer) Z20) Z108)),
+  forall (anonymous_2_p2_Z110: ((memory) ((pointer) Z20) Z110)),
+  forall (anonymous_2_p2_Z88: ((memory) ((pointer) Z20) Z88)),
+  forall (anonymous_2_p2_Z90: ((memory) ((pointer) Z20) Z90)),
+  forall (anonymous_2_p2_Z92: ((memory) ((pointer) Z20) Z92)),
+  forall (anonymous_2_p2_Z94: ((memory) ((pointer) Z20) Z94)),
+  forall (anonymous_2_p2_Z96: ((memory) ((pointer) Z20) Z96)),
+  forall (anonymous_2_p2_Z98: ((memory) ((pointer) Z20) Z98)),
+  forall (anonymous_2_v1_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v1_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v1_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v1_Z106: ((memory) Z Z106)),
+  forall (anonymous_2_v1_Z108: ((memory) Z Z108)),
+  forall (anonymous_2_v1_Z110: ((memory) Z Z110)),
+  forall (anonymous_2_v1_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v1_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v1_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v1_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v1_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v1_Z98: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z100: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z102: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z104: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z106: ((memory) Z Z106)),
+  forall (anonymous_2_v2_Z108: ((memory) Z Z108)),
+  forall (anonymous_2_v2_Z110: ((memory) Z Z110)),
+  forall (anonymous_2_v2_Z88: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z90: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z92: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z94: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z96: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z98: ((memory) Z Z98)),
+  forall (int_Z19: ((memory) Z Z19)),
+  forall (int_Z20: ((memory) Z Z20)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -3089,467 +3161,478 @@ Save.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z60) /\
-                (valid1 anonymous_2_p2_Z62) /\ (valid1 anonymous_2_p2_Z64) /\
-                (valid1 anonymous_2_p2_Z66) /\ (valid1 anonymous_2_p2_Z68) /\
-                (valid1 anonymous_2_p2_Z70) /\ (valid1 anonymous_2_p2_Z72) /\
-                (valid1 anonymous_2_p2_Z74) /\ (valid1 anonymous_2_p2_Z76) /\
-                (valid1 anonymous_2_p2_Z78) /\ (valid1 anonymous_2_p2_Z80) /\
-                (valid1 anonymous_2_p2_Z82) /\ (valid1 anonymous_2_p1_Z60) /\
-                (valid1 anonymous_2_p1_Z62) /\ (valid1 anonymous_2_p1_Z64) /\
-                (valid1 anonymous_2_p1_Z66) /\ (valid1 anonymous_2_p1_Z68) /\
-                (valid1 anonymous_2_p1_Z70) /\ (valid1 anonymous_2_p1_Z72) /\
-                (valid1 anonymous_2_p1_Z74) /\ (valid1 anonymous_2_p1_Z76) /\
-                (valid1 anonymous_2_p1_Z78) /\ (valid1 anonymous_2_p1_Z80) /\
-                (valid1 anonymous_2_p1_Z82) /\
-                (valid1_range anonymous_2_p2_Z60 5) /\
-                (valid1_range anonymous_2_p2_Z62 5) /\
-                (valid1_range anonymous_2_p2_Z64 5) /\
-                (valid1_range anonymous_2_p2_Z66 5) /\
-                (valid1_range anonymous_2_p2_Z68 5) /\
-                (valid1_range anonymous_2_p2_Z70 5) /\
-                (valid1_range anonymous_2_p2_Z72 5) /\
-                (valid1_range anonymous_2_p2_Z74 5) /\
-                (valid1_range anonymous_2_p2_Z76 5) /\
-                (valid1_range anonymous_2_p2_Z78 5) /\
-                (valid1_range anonymous_2_p2_Z80 5) /\
-                (valid1_range anonymous_2_p2_Z82 5) /\
-                (valid1_range anonymous_2_p1_Z60 5) /\
-                (valid1_range anonymous_2_p1_Z62 5) /\
-                (valid1_range anonymous_2_p1_Z64 5) /\
-                (valid1_range anonymous_2_p1_Z66 5) /\
-                (valid1_range anonymous_2_p1_Z68 5) /\
-                (valid1_range anonymous_2_p1_Z70 5) /\
-                (valid1_range anonymous_2_p1_Z72 5) /\
-                (valid1_range anonymous_2_p1_Z74 5) /\
-                (valid1_range anonymous_2_p1_Z76 5) /\
-                (valid1_range anonymous_2_p1_Z78 5) /\
-                (valid1_range anonymous_2_p1_Z80 5) /\
-                (valid1_range anonymous_2_p1_Z82 5)),
+                (valid alloc u1) /\ (valid1 anonymous_2_p2_Z88) /\
+                (valid1 anonymous_2_p2_Z90) /\ (valid1 anonymous_2_p2_Z92) /\
+                (valid1 anonymous_2_p2_Z94) /\ (valid1 anonymous_2_p2_Z96) /\
+                (valid1 anonymous_2_p2_Z98) /\
+                (valid1 anonymous_2_p2_Z100) /\
+                (valid1 anonymous_2_p2_Z102) /\
+                (valid1 anonymous_2_p2_Z104) /\
+                (valid1 anonymous_2_p2_Z106) /\
+                (valid1 anonymous_2_p2_Z108) /\
+                (valid1 anonymous_2_p2_Z110) /\
+                (valid1 anonymous_2_p1_Z88) /\ (valid1 anonymous_2_p1_Z90) /\
+                (valid1 anonymous_2_p1_Z92) /\ (valid1 anonymous_2_p1_Z94) /\
+                (valid1 anonymous_2_p1_Z96) /\ (valid1 anonymous_2_p1_Z98) /\
+                (valid1 anonymous_2_p1_Z100) /\
+                (valid1 anonymous_2_p1_Z102) /\
+                (valid1 anonymous_2_p1_Z104) /\
+                (valid1 anonymous_2_p1_Z106) /\
+                (valid1 anonymous_2_p1_Z108) /\
+                (valid1 anonymous_2_p1_Z110) /\
+                (valid1_range anonymous_2_p2_Z88 5) /\
+                (valid1_range anonymous_2_p2_Z90 5) /\
+                (valid1_range anonymous_2_p2_Z92 5) /\
+                (valid1_range anonymous_2_p2_Z94 5) /\
+                (valid1_range anonymous_2_p2_Z96 5) /\
+                (valid1_range anonymous_2_p2_Z98 5) /\
+                (valid1_range anonymous_2_p2_Z100 5) /\
+                (valid1_range anonymous_2_p2_Z102 5) /\
+                (valid1_range anonymous_2_p2_Z104 5) /\
+                (valid1_range anonymous_2_p2_Z106 5) /\
+                (valid1_range anonymous_2_p2_Z108 5) /\
+                (valid1_range anonymous_2_p2_Z110 5) /\
+                (valid1_range anonymous_2_p1_Z88 5) /\
+                (valid1_range anonymous_2_p1_Z90 5) /\
+                (valid1_range anonymous_2_p1_Z92 5) /\
+                (valid1_range anonymous_2_p1_Z94 5) /\
+                (valid1_range anonymous_2_p1_Z96 5) /\
+                (valid1_range anonymous_2_p1_Z98 5) /\
+                (valid1_range anonymous_2_p1_Z100 5) /\
+                (valid1_range anonymous_2_p1_Z102 5) /\
+                (valid1_range anonymous_2_p1_Z104 5) /\
+                (valid1_range anonymous_2_p1_Z106 5) /\
+                (valid1_range anonymous_2_p1_Z108 5) /\
+                (valid1_range anonymous_2_p1_Z110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
-  forall (anonymous_2_v1_Z60_0: ((memory) Z Z60)),
-  forall (anonymous_2_v2_Z60_0: ((memory) Z Z60)),
-  forall (int_Z13_0: ((memory) Z Z13)),
-  forall (int_Z14_0: ((memory) Z Z14)),
-  forall (HW_3: (((((not_assigns alloc int_Z14 int_Z14_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z60 u3))
+  forall (anonymous_2_v1_Z88_0: ((memory) Z Z88)),
+  forall (anonymous_2_v2_Z88_0: ((memory) Z Z88)),
+  forall (int_Z19_0: ((memory) Z Z19)),
+  forall (int_Z20_0: ((memory) Z Z20)),
+  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z88 u3))
                       0 4)) /\
-                (not_assigns alloc int_Z13 int_Z13_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+                (not_assigns alloc int_Z19 int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+                (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
                  (pset_singleton u3))) /\
-                (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60
+                (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60
+                (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88
                  pset_empty)),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
-  forall (anonymous_2_v1_Z62_0: ((memory) Z Z62)),
-  forall (anonymous_2_v2_Z62_0: ((memory) Z Z62)),
-  forall (int_Z13_1: ((memory) Z Z13)),
-  forall (int_Z14_1: ((memory) Z Z14)),
-  forall (HW_5: (((((not_assigns alloc int_Z14_0 int_Z14_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z62 u4))
+  forall (anonymous_2_v1_Z90_0: ((memory) Z Z90)),
+  forall (anonymous_2_v2_Z90_0: ((memory) Z Z90)),
+  forall (int_Z19_1: ((memory) Z Z19)),
+  forall (int_Z20_1: ((memory) Z Z20)),
+  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z90 u4))
                       0 4)) /\
-                (not_assigns alloc int_Z13_0 int_Z13_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z62 u4)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+                (not_assigns alloc int_Z19_0 int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z90 u4)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+                (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
                  (pset_singleton u4))) /\
-                (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62
+                (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62
+                (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90
                  pset_empty)),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
-  forall (anonymous_2_v1_Z64_0: ((memory) Z Z64)),
-  forall (anonymous_2_v2_Z64_0: ((memory) Z Z64)),
-  forall (int_Z13_2: ((memory) Z Z13)),
-  forall (int_Z14_2: ((memory) Z Z14)),
-  forall (HW_7: (((((not_assigns alloc int_Z14_1 int_Z14_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z64 w1))
+  forall (anonymous_2_v1_Z92_0: ((memory) Z Z92)),
+  forall (anonymous_2_v2_Z92_0: ((memory) Z Z92)),
+  forall (int_Z19_2: ((memory) Z Z19)),
+  forall (int_Z20_2: ((memory) Z Z20)),
+  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z92 w1))
                       0 4)) /\
-                (not_assigns alloc int_Z13_1 int_Z13_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z64 w1)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+                (not_assigns alloc int_Z19_1 int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z92 w1)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+                (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
                  (pset_singleton w1))) /\
-                (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64
+                (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64
+                (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92
                  pset_empty)),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
-  forall (anonymous_2_v1_Z66_0: ((memory) Z Z66)),
-  forall (anonymous_2_v2_Z66_0: ((memory) Z Z66)),
-  forall (int_Z13_3: ((memory) Z Z13)),
-  forall (int_Z14_3: ((memory) Z Z14)),
-  forall (HW_9: (((((not_assigns alloc int_Z14_2 int_Z14_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_Z66 w2))
+  forall (anonymous_2_v1_Z94_0: ((memory) Z Z94)),
+  forall (anonymous_2_v2_Z94_0: ((memory) Z Z94)),
+  forall (int_Z19_3: ((memory) Z Z19)),
+  forall (int_Z20_3: ((memory) Z Z20)),
+  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
+                     (pset_range (pset_singleton (acc anonymous_2_p2_Z94 w2))
                       0 4)) /\
-                (not_assigns alloc int_Z13_2 int_Z13_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2)) 0 4))) /\
-                (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+                (not_assigns alloc int_Z19_2 int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2)) 0 4))) /\
+                (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+                (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
                  (pset_singleton w2))) /\
-                (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66
+                (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94
                  pset_empty)) /\
-                (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66
+                (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94
                  pset_empty)),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
-  forall (anonymous_2_v1_Z68_0: ((memory) Z Z68)),
-  forall (anonymous_2_v2_Z68_0: ((memory) Z Z68)),
-  forall (int_Z13_4: ((memory) Z Z13)),
-  forall (int_Z14_4: ((memory) Z Z14)),
-  forall (HW_11: (((((not_assigns alloc int_Z14_3 int_Z14_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z68 w3))
+  forall (anonymous_2_v1_Z96_0: ((memory) Z Z96)),
+  forall (anonymous_2_v2_Z96_0: ((memory) Z Z96)),
+  forall (int_Z19_4: ((memory) Z Z19)),
+  forall (int_Z20_4: ((memory) Z Z20)),
+  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z96 w3))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_3 int_Z13_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3)) 0
+                 (not_assigns alloc int_Z19_3 int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+                 (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+                 (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
                   (pset_singleton w3))) /\
-                 (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68
+                 (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68
+                 (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96
                   pset_empty)),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
-  forall (anonymous_2_v1_Z70_0: ((memory) Z Z70)),
-  forall (anonymous_2_v2_Z70_0: ((memory) Z Z70)),
-  forall (int_Z13_5: ((memory) Z Z13)),
-  forall (int_Z14_5: ((memory) Z Z14)),
-  forall (HW_13: (((((not_assigns alloc int_Z14_4 int_Z14_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z70 w4))
+  forall (anonymous_2_v1_Z98_0: ((memory) Z Z98)),
+  forall (anonymous_2_v2_Z98_0: ((memory) Z Z98)),
+  forall (int_Z19_5: ((memory) Z Z19)),
+  forall (int_Z20_5: ((memory) Z Z20)),
+  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z98 w4))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_4 int_Z13_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4)) 0
+                 (not_assigns alloc int_Z19_4 int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+                 (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+                 (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
                   (pset_singleton w4))) /\
-                 (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70
+                 (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70
+                 (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98
                   pset_empty)),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
-  forall (anonymous_2_v1_Z72_0: ((memory) Z Z72)),
-  forall (anonymous_2_v2_Z72_0: ((memory) Z Z72)),
-  forall (int_Z13_6: ((memory) Z Z13)),
-  forall (int_Z14_6: ((memory) Z Z14)),
-  forall (HW_15: (((((not_assigns alloc int_Z14_5 int_Z14_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z72 w5))
+  forall (anonymous_2_v1_Z100_0: ((memory) Z Z100)),
+  forall (anonymous_2_v2_Z100_0: ((memory) Z Z100)),
+  forall (int_Z19_6: ((memory) Z Z19)),
+  forall (int_Z20_6: ((memory) Z Z20)),
+  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z100 w5))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_5 int_Z13_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5)) 0
+                 (not_assigns alloc int_Z19_5 int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
+                 (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+                 (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
                   (pset_singleton w5))) /\
-                 (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72
+                 (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72
+                 (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100
                   pset_empty)),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
-  forall (anonymous_2_v1_Z74_0: ((memory) Z Z74)),
-  forall (anonymous_2_v2_Z74_0: ((memory) Z Z74)),
-  forall (int_Z13_7: ((memory) Z Z13)),
-  forall (int_Z14_7: ((memory) Z Z14)),
-  forall (HW_17: (((((not_assigns alloc int_Z14_6 int_Z14_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z74 w6))
+  forall (anonymous_2_v1_Z102_0: ((memory) Z Z102)),
+  forall (anonymous_2_v2_Z102_0: ((memory) Z Z102)),
+  forall (int_Z19_7: ((memory) Z Z19)),
+  forall (int_Z20_7: ((memory) Z Z20)),
+  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z102 w6))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_6 int_Z13_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z74 w6)) 0
+                 (not_assigns alloc int_Z19_6 int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z102 w6)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z74 anonymous_2_v2_Z74_0
+                 (not_assigns alloc anonymous_2_v2_Z102 anonymous_2_v2_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_v1_Z74 anonymous_2_v1_Z74_0
+                 (not_assigns alloc anonymous_2_v1_Z102 anonymous_2_v1_Z102_0
                   (pset_singleton w6))) /\
-                 (not_assigns alloc anonymous_2_p2_Z74 anonymous_2_p2_Z74
+                 (not_assigns alloc anonymous_2_p2_Z102 anonymous_2_p2_Z102
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z74 anonymous_2_p1_Z74
+                 (not_assigns alloc anonymous_2_p1_Z102 anonymous_2_p1_Z102
                   pset_empty)),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
-  forall (anonymous_2_v1_Z76_0: ((memory) Z Z76)),
-  forall (anonymous_2_v2_Z76_0: ((memory) Z Z76)),
-  forall (int_Z13_8: ((memory) Z Z13)),
-  forall (int_Z14_8: ((memory) Z Z14)),
-  forall (HW_19: (((((not_assigns alloc int_Z14_7 int_Z14_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z76 w7))
+  forall (anonymous_2_v1_Z104_0: ((memory) Z Z104)),
+  forall (anonymous_2_v2_Z104_0: ((memory) Z Z104)),
+  forall (int_Z19_8: ((memory) Z Z19)),
+  forall (int_Z20_8: ((memory) Z Z20)),
+  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z104 w7))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_7 int_Z13_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z76 w7)) 0
+                 (not_assigns alloc int_Z19_7 int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z104 w7)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z76 anonymous_2_v2_Z76_0
+                 (not_assigns alloc anonymous_2_v2_Z104 anonymous_2_v2_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_v1_Z76 anonymous_2_v1_Z76_0
+                 (not_assigns alloc anonymous_2_v1_Z104 anonymous_2_v1_Z104_0
                   (pset_singleton w7))) /\
-                 (not_assigns alloc anonymous_2_p2_Z76 anonymous_2_p2_Z76
+                 (not_assigns alloc anonymous_2_p2_Z104 anonymous_2_p2_Z104
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z76 anonymous_2_p1_Z76
+                 (not_assigns alloc anonymous_2_p1_Z104 anonymous_2_p1_Z104
                   pset_empty)),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w8)),
-  forall (anonymous_2_v1_Z78_0: ((memory) Z Z78)),
-  forall (anonymous_2_v2_Z78_0: ((memory) Z Z78)),
-  forall (int_Z13_9: ((memory) Z Z13)),
-  forall (int_Z14_9: ((memory) Z Z14)),
-  forall (HW_21: (((((not_assigns alloc int_Z14_8 int_Z14_9
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z78 w8))
+  forall (anonymous_2_v1_Z106_0: ((memory) Z Z106)),
+  forall (anonymous_2_v2_Z106_0: ((memory) Z Z106)),
+  forall (int_Z19_9: ((memory) Z Z19)),
+  forall (int_Z20_9: ((memory) Z Z20)),
+  forall (HW_21: (((((not_assigns alloc int_Z20_8 int_Z20_9
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z106 w8))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_8 int_Z13_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z78 w8)) 0
+                 (not_assigns alloc int_Z19_8 int_Z19_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z106 w8)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z78 anonymous_2_v2_Z78_0
+                 (not_assigns alloc anonymous_2_v2_Z106 anonymous_2_v2_Z106_0
                   (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_v1_Z78 anonymous_2_v1_Z78_0
+                 (not_assigns alloc anonymous_2_v1_Z106 anonymous_2_v1_Z106_0
                   (pset_singleton w8))) /\
-                 (not_assigns alloc anonymous_2_p2_Z78 anonymous_2_p2_Z78
+                 (not_assigns alloc anonymous_2_p2_Z106 anonymous_2_p2_Z106
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z78 anonymous_2_p1_Z78
+                 (not_assigns alloc anonymous_2_p1_Z106 anonymous_2_p1_Z106
                   pset_empty)),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w9)),
-  forall (anonymous_2_v1_Z80_0: ((memory) Z Z80)),
-  forall (anonymous_2_v2_Z80_0: ((memory) Z Z80)),
-  forall (int_Z13_10: ((memory) Z Z13)),
-  forall (int_Z14_10: ((memory) Z Z14)),
-  forall (HW_23: (((((not_assigns alloc int_Z14_9 int_Z14_10
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z80 w9))
+  forall (anonymous_2_v1_Z108_0: ((memory) Z Z108)),
+  forall (anonymous_2_v2_Z108_0: ((memory) Z Z108)),
+  forall (int_Z19_10: ((memory) Z Z19)),
+  forall (int_Z20_10: ((memory) Z Z20)),
+  forall (HW_23: (((((not_assigns alloc int_Z20_9 int_Z20_10
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z108 w9))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_9 int_Z13_10
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z80 w9)) 0
+                 (not_assigns alloc int_Z19_9 int_Z19_10
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z108 w9)) 0
                    4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z80 anonymous_2_v2_Z80_0
+                 (not_assigns alloc anonymous_2_v2_Z108 anonymous_2_v2_Z108_0
                   (pset_singleton w9))) /\
-                 (not_assigns alloc anonymous_2_v1_Z80 anonymous_2_v1_Z80_0
+                 (not_assigns alloc anonymous_2_v1_Z108 anonymous_2_v1_Z108_0
                   (pset_singleton w9))) /\
-                 (not_assigns alloc anonymous_2_p2_Z80 anonymous_2_p2_Z80
+                 (not_assigns alloc anonymous_2_p2_Z108 anonymous_2_p2_Z108
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z80 anonymous_2_p1_Z80
+                 (not_assigns alloc anonymous_2_p1_Z108 anonymous_2_p1_Z108
                   pset_empty)),
   forall (HW_24: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w10)),
-  forall (anonymous_2_v1_Z82_0: ((memory) Z Z82)),
-  forall (anonymous_2_v2_Z82_0: ((memory) Z Z82)),
-  forall (int_Z13_11: ((memory) Z Z13)),
-  forall (int_Z14_11: ((memory) Z Z14)),
-  forall (HW_25: (((((not_assigns alloc int_Z14_10 int_Z14_11
-                      (pset_range (pset_singleton (acc anonymous_2_p2_Z82 w10))
+  forall (anonymous_2_v1_Z110_0: ((memory) Z Z110)),
+  forall (anonymous_2_v2_Z110_0: ((memory) Z Z110)),
+  forall (int_Z19_11: ((memory) Z Z19)),
+  forall (int_Z20_11: ((memory) Z Z20)),
+  forall (HW_25: (((((not_assigns alloc int_Z20_10 int_Z20_11
+                      (pset_range (pset_singleton (acc anonymous_2_p2_Z110
+                                                   w10))
                        0 4)) /\
-                 (not_assigns alloc int_Z13_10 int_Z13_11
-                  (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w10)) 0
-                   4))) /\
-                 (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
+                 (not_assigns alloc int_Z19_10 int_Z19_11
+                  (pset_range (pset_singleton (acc anonymous_2_p1_Z110 w10))
+                   0 4))) /\
+                 (not_assigns alloc anonymous_2_v2_Z110 anonymous_2_v2_Z110_0
                   (pset_singleton w10))) /\
-                 (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
+                 (not_assigns alloc anonymous_2_v1_Z110 anonymous_2_v1_Z110_0
                   (pset_singleton w10))) /\
-                 (not_assigns alloc anonymous_2_p2_Z82 anonymous_2_p2_Z82
+                 (not_assigns alloc anonymous_2_p2_Z110 anonymous_2_p2_Z110
                   pset_empty)) /\
-                 (not_assigns alloc anonymous_2_p1_Z82 anonymous_2_p1_Z82
+                 (not_assigns alloc anonymous_2_p1_Z110 anonymous_2_p1_Z110
                   pset_empty)),
-  (((((((((((((((((((((((((((((((((((((((((((((((((not_assigns alloc int_Z14
-                                                   int_Z14_11
+  (((((((((((((((((((((((((((((((((((((((((((((((((not_assigns alloc int_Z20
+                                                   int_Z20_11
                                                    (pset_union (pset_range (
                                                                 pset_singleton (
-                                                                acc anonymous_2_p2_Z82
+                                                                acc anonymous_2_p2_Z110
                                                                 w10)) 0 4)
                                                     (pset_union (pset_range (
                                                                  pset_singleton (
-                                                                 acc anonymous_2_p2_Z80
+                                                                 acc anonymous_2_p2_Z108
                                                                  w9)) 0 4)
                                                      (pset_union (pset_range (
                                                                   pset_singleton (
-                                                                  acc anonymous_2_p2_Z78
+                                                                  acc anonymous_2_p2_Z106
                                                                   w8)) 0 4)
                                                       (pset_union (pset_range (
                                                                    pset_singleton (
-                                                                   acc anonymous_2_p2_Z76
+                                                                   acc anonymous_2_p2_Z104
                                                                    w7)) 0 4)
                                                        (pset_union (pset_range (
                                                                     pset_singleton (
-                                                                    acc anonymous_2_p2_Z74
+                                                                    acc anonymous_2_p2_Z102
                                                                     w6)) 0 4)
                                                         (pset_union (
                                                          pset_range (
                                                          pset_singleton (
-                                                         acc anonymous_2_p2_Z72
+                                                         acc anonymous_2_p2_Z100
                                                          w5)) 0 4)
                                                          (pset_union (
                                                           pset_range (
                                                           pset_singleton (
-                                                          acc anonymous_2_p2_Z70
+                                                          acc anonymous_2_p2_Z98
                                                           w4)) 0 4)
                                                           (pset_union (
                                                            pset_range (
                                                            pset_singleton (
-                                                           acc anonymous_2_p2_Z68
+                                                           acc anonymous_2_p2_Z96
                                                            w3)) 0 4)
                                                            (pset_union (
                                                             pset_range (
                                                             pset_singleton (
-                                                            acc anonymous_2_p2_Z66
+                                                            acc anonymous_2_p2_Z94
                                                             w2)) 0 4)
                                                             (pset_union (
                                                              pset_range (
                                                              pset_singleton (
-                                                             acc anonymous_2_p2_Z64
+                                                             acc anonymous_2_p2_Z92
                                                              w1)) 0 4)
                                                              (pset_union (
                                                               pset_range (
                                                               pset_singleton (
-                                                              acc anonymous_2_p2_Z62
+                                                              acc anonymous_2_p2_Z90
                                                               u4)) 0 4)
                                                               (pset_range (
                                                                pset_singleton (
-                                                               acc anonymous_2_p2_Z60
+                                                               acc anonymous_2_p2_Z88
                                                                u3)) 0 4))))))))))))) /\
-  (not_assigns alloc int_Z13 int_Z13_11
-   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z82 w10)) 0 4)
-    (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z80 w9)) 0 4)
-     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z78 w8)) 0 4)
-      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z76 w7)) 0
+  (not_assigns alloc int_Z19 int_Z19_11
+   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z110 w10)) 0 4)
+    (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z108 w9)) 0 4)
+     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z106 w8)) 0
+                  4)
+      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z104 w7)) 0
                    4)
-       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z74 w6)) 0
-                    4)
-        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z72 w5))
+       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z102 w6))
+                    0 4)
+        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z100 w5))
                      0 4)
-         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z70 w4))
+         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z98 w4))
                       0 4)
-          (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z68 w3))
+          (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z96 w3))
                        0 4)
-           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z66 w2))
+           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z94 w2))
                         0 4)
-            (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z64
+            (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z92
                                                      w1))
                          0 4)
-             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z62
+             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_Z90
                                                       u4))
                           0 4)
-              (pset_range (pset_singleton (acc anonymous_2_p1_Z60 u3)) 0 4)))))))))))))) /\
-  (not_assigns alloc anonymous_2_v2_Z82 anonymous_2_v2_Z82_0
-   (pset_singleton w10))) /\
-  (not_assigns alloc anonymous_2_v2_Z80 anonymous_2_v2_Z80_0
-   (pset_singleton w9))) /\
-  (not_assigns alloc anonymous_2_v2_Z78 anonymous_2_v2_Z78_0
-   (pset_singleton w8))) /\
-  (not_assigns alloc anonymous_2_v2_Z76 anonymous_2_v2_Z76_0
-   (pset_singleton w7))) /\
-  (not_assigns alloc anonymous_2_v2_Z74 anonymous_2_v2_Z74_0
-   (pset_singleton w6))) /\
-  (not_assigns alloc anonymous_2_v2_Z72 anonymous_2_v2_Z72_0
-   (pset_singleton w5))) /\
-  (not_assigns alloc anonymous_2_v2_Z70 anonymous_2_v2_Z70_0
+              (pset_range (pset_singleton (acc anonymous_2_p1_Z88 u3)) 0 4)))))))))))))) /\
+  (not_assigns alloc anonymous_2_v2_Z98 anonymous_2_v2_Z98_0
    (pset_singleton w4))) /\
-  (not_assigns alloc anonymous_2_v2_Z68 anonymous_2_v2_Z68_0
+  (not_assigns alloc anonymous_2_v2_Z96 anonymous_2_v2_Z96_0
    (pset_singleton w3))) /\
-  (not_assigns alloc anonymous_2_v2_Z66 anonymous_2_v2_Z66_0
+  (not_assigns alloc anonymous_2_v2_Z94 anonymous_2_v2_Z94_0
    (pset_singleton w2))) /\
-  (not_assigns alloc anonymous_2_v2_Z64 anonymous_2_v2_Z64_0
+  (not_assigns alloc anonymous_2_v2_Z92 anonymous_2_v2_Z92_0
    (pset_singleton w1))) /\
-  (not_assigns alloc anonymous_2_v2_Z62 anonymous_2_v2_Z62_0
+  (not_assigns alloc anonymous_2_v2_Z90 anonymous_2_v2_Z90_0
    (pset_singleton u4))) /\
-  (not_assigns alloc anonymous_2_v2_Z60 anonymous_2_v2_Z60_0
+  (not_assigns alloc anonymous_2_v2_Z88 anonymous_2_v2_Z88_0
    (pset_singleton u3))) /\
-  (not_assigns alloc anonymous_2_v1_Z82 anonymous_2_v1_Z82_0
+  (not_assigns alloc anonymous_2_v2_Z110 anonymous_2_v2_Z110_0
    (pset_singleton w10))) /\
-  (not_assigns alloc anonymous_2_v1_Z80 anonymous_2_v1_Z80_0
+  (not_assigns alloc anonymous_2_v2_Z108 anonymous_2_v2_Z108_0
    (pset_singleton w9))) /\
-  (not_assigns alloc anonymous_2_v1_Z78 anonymous_2_v1_Z78_0
+  (not_assigns alloc anonymous_2_v2_Z106 anonymous_2_v2_Z106_0
    (pset_singleton w8))) /\
-  (not_assigns alloc anonymous_2_v1_Z76 anonymous_2_v1_Z76_0
+  (not_assigns alloc anonymous_2_v2_Z104 anonymous_2_v2_Z104_0
    (pset_singleton w7))) /\
-  (not_assigns alloc anonymous_2_v1_Z74 anonymous_2_v1_Z74_0
+  (not_assigns alloc anonymous_2_v2_Z102 anonymous_2_v2_Z102_0
    (pset_singleton w6))) /\
-  (not_assigns alloc anonymous_2_v1_Z72 anonymous_2_v1_Z72_0
+  (not_assigns alloc anonymous_2_v2_Z100 anonymous_2_v2_Z100_0
    (pset_singleton w5))) /\
-  (not_assigns alloc anonymous_2_v1_Z70 anonymous_2_v1_Z70_0
+  (not_assigns alloc anonymous_2_v1_Z98 anonymous_2_v1_Z98_0
    (pset_singleton w4))) /\
-  (not_assigns alloc anonymous_2_v1_Z68 anonymous_2_v1_Z68_0
+  (not_assigns alloc anonymous_2_v1_Z96 anonymous_2_v1_Z96_0
    (pset_singleton w3))) /\
-  (not_assigns alloc anonymous_2_v1_Z66 anonymous_2_v1_Z66_0
+  (not_assigns alloc anonymous_2_v1_Z94 anonymous_2_v1_Z94_0
    (pset_singleton w2))) /\
-  (not_assigns alloc anonymous_2_v1_Z64 anonymous_2_v1_Z64_0
+  (not_assigns alloc anonymous_2_v1_Z92 anonymous_2_v1_Z92_0
    (pset_singleton w1))) /\
-  (not_assigns alloc anonymous_2_v1_Z62 anonymous_2_v1_Z62_0
+  (not_assigns alloc anonymous_2_v1_Z90 anonymous_2_v1_Z90_0
    (pset_singleton u4))) /\
-  (not_assigns alloc anonymous_2_v1_Z60 anonymous_2_v1_Z60_0
+  (not_assigns alloc anonymous_2_v1_Z88 anonymous_2_v1_Z88_0
    (pset_singleton u3))) /\
-  (not_assigns alloc anonymous_2_p2_Z82 anonymous_2_p2_Z82 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z80 anonymous_2_p2_Z80 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z78 anonymous_2_p2_Z78 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z76 anonymous_2_p2_Z76 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z74 anonymous_2_p2_Z74 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z72 anonymous_2_p2_Z72 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z70 anonymous_2_p2_Z70 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z68 anonymous_2_p2_Z68 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z66 anonymous_2_p2_Z66 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z64 anonymous_2_p2_Z64 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z62 anonymous_2_p2_Z62 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p2_Z60 anonymous_2_p2_Z60 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z82 anonymous_2_p1_Z82 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z80 anonymous_2_p1_Z80 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z78 anonymous_2_p1_Z78 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z76 anonymous_2_p1_Z76 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z74 anonymous_2_p1_Z74 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z72 anonymous_2_p1_Z72 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z70 anonymous_2_p1_Z70 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z68 anonymous_2_p1_Z68 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z66 anonymous_2_p1_Z66 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z64 anonymous_2_p1_Z64 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z62 anonymous_2_p1_Z62 pset_empty)) /\
-  (not_assigns alloc anonymous_2_p1_Z60 anonymous_2_p1_Z60 pset_empty).
+  (not_assigns alloc anonymous_2_v1_Z110 anonymous_2_v1_Z110_0
+   (pset_singleton w10))) /\
+  (not_assigns alloc anonymous_2_v1_Z108 anonymous_2_v1_Z108_0
+   (pset_singleton w9))) /\
+  (not_assigns alloc anonymous_2_v1_Z106 anonymous_2_v1_Z106_0
+   (pset_singleton w8))) /\
+  (not_assigns alloc anonymous_2_v1_Z104 anonymous_2_v1_Z104_0
+   (pset_singleton w7))) /\
+  (not_assigns alloc anonymous_2_v1_Z102 anonymous_2_v1_Z102_0
+   (pset_singleton w6))) /\
+  (not_assigns alloc anonymous_2_v1_Z100 anonymous_2_v1_Z100_0
+   (pset_singleton w5))) /\
+  (not_assigns alloc anonymous_2_p2_Z98 anonymous_2_p2_Z98 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z96 anonymous_2_p2_Z96 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z94 anonymous_2_p2_Z94 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z92 anonymous_2_p2_Z92 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z90 anonymous_2_p2_Z90 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z88 anonymous_2_p2_Z88 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z110 anonymous_2_p2_Z110 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z108 anonymous_2_p2_Z108 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z106 anonymous_2_p2_Z106 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z104 anonymous_2_p2_Z104 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z102 anonymous_2_p2_Z102 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p2_Z100 anonymous_2_p2_Z100 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z98 anonymous_2_p1_Z98 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z96 anonymous_2_p1_Z96 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z94 anonymous_2_p1_Z94 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z92 anonymous_2_p1_Z92 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z90 anonymous_2_p1_Z90 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z88 anonymous_2_p1_Z88 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z110 anonymous_2_p1_Z110 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z108 anonymous_2_p1_Z108 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z106 anonymous_2_p1_Z106 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z104 anonymous_2_p1_Z104 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z102 anonymous_2_p1_Z102 pset_empty)) /\
+  (not_assigns alloc anonymous_2_p1_Z100 anonymous_2_p1_Z100 pset_empty).
 Proof.
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
+  forall (int_Z0: ((memory) Z Z0)),
+  forall (int_Z1: ((memory) Z Z1)),
+  forall (int_Z79: ((memory) Z Z79)),
+  forall (s: ((pointer) Z76)),
+  forall (ss: ((pointer) Z78)),
+  forall (t_Z76: ((memory) ((pointer) Z0) Z76)),
+  forall (t_Z78: ((memory) ((pointer) Z0) Z78)),
+  forall (tab: ((pointer) Z80)),
+  forall (u1: ((pointer) Z83)),
+  forall (u2: ((pointer) Z85)),
+  forall (u3: ((pointer) Z88)),
+  forall (u4: ((pointer) Z90)),
+  forall (u_Z76: ((memory) ((pointer) Z1) Z76)),
+  forall (v: ((pointer) Z79)),
+  forall (var1: ((pointer) Z112)),
+  forall (var10: ((pointer) Z130)),
+  forall (var2: ((pointer) Z114)),
+  forall (var3: ((pointer) Z116)),
+  forall (var4: ((pointer) Z118)),
+  forall (var5: ((pointer) Z120)),
+  forall (var6: ((pointer) Z122)),
+  forall (var7: ((pointer) Z124)),
+  forall (var8: ((pointer) Z126)),
+  forall (var9: ((pointer) Z128)),
+  forall (w1: ((pointer) Z92)),
+  forall (w10: ((pointer) Z110)),
+  forall (w2: ((pointer) Z94)),
+  forall (w3: ((pointer) Z96)),
+  forall (w4: ((pointer) Z98)),
+  forall (w5: ((pointer) Z100)),
+  forall (w6: ((pointer) Z102)),
+  forall (w7: ((pointer) Z104)),
+  forall (w8: ((pointer) Z106)),
+  forall (w9: ((pointer) Z108)),
   forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
                 (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
                 (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
@@ -3561,501 +3644,63 @@ Admitted.
                 (valid alloc var2) /\ (valid alloc ss) /\
                 (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
                 (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  (valid alloc ss).
+                (valid alloc u1) /\ (valid1 t_Z76) /\ (valid1 t_Z78) /\
+                (valid1_range u_Z76 3) /\ (valid1_range t_Z76 2) /\
+                (valid1_range t_Z78 2) /\ (valid1 u_Z76)),
+  forall (result: ((pointer) Z0)),
+  forall (HW_2: result = (acc t_Z78 ss)),
+  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (HW_3: int_Z0_0 = (upd int_Z0 result 0)),
+  forall (result0: ((pointer) Z0)),
+  forall (HW_4: result0 = (acc t_Z76 s)),
+  forall (int_Z0_1: ((memory) Z Z0)),
+  forall (HW_5: int_Z0_1 = (upd int_Z0_0 result0 1)),
+  forall (result1: ((pointer) Z1)),
+  forall (HW_6: result1 = (acc u_Z76 s)),
+  forall (int_Z1_0: ((memory) Z Z1)),
+  forall (HW_7: int_Z1_0 = (upd int_Z1 result1 2)),
+  forall (int_Z79_0: ((memory) Z Z79)),
+  forall (HW_8: int_Z79_0 = (upd int_Z79 v 3)),
+  forall (result2: ((pointer) Z0)),
+  forall (HW_9: result2 = (acc t_Z76 s)),
+  forall (result3: Z),
+  forall (HW_10: result3 = (acc int_Z0_1 result2)),
+  (* File "separation.c", line 11, characters 13-25 *) result3 = 1.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  (valid alloc result).
 Proof.
 intuition.
 subst.
 generalize (H5 ss alloc HW_2);intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  (valid alloc s).
 Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_4 : 
-  forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  forall (HW_6: (valid alloc s)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z48 s)),
-  (valid alloc result0).
 Proof.
 intuition.
 subst.
 auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_5 : 
-  forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  forall (HW_6: (valid alloc s)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z48 s)),
-  forall (HW_8: (valid alloc result0)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
-  forall (HW_10: (valid alloc s)),
-  forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z48 s)),
-  (valid alloc result1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_6 : 
-  forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (int_Z1: ((memory) Z Z1)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  forall (HW_6: (valid alloc s)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z48 s)),
-  forall (HW_8: (valid alloc result0)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
-  forall (HW_10: (valid alloc s)),
-  forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z48 s)),
-  forall (HW_12: (valid alloc result1)),
-  forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
-  (valid alloc v).
 Proof.
 intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_7 : 
-  forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (int_Z1: ((memory) Z Z1)),
-  forall (int_Z51: ((memory) Z Z51)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  forall (HW_6: (valid alloc s)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z48 s)),
-  forall (HW_8: (valid alloc result0)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
-  forall (HW_10: (valid alloc s)),
-  forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z48 s)),
-  forall (HW_12: (valid alloc result1)),
-  forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
-  forall (HW_14: (valid alloc v)),
-  forall (int_Z51_0: ((memory) Z Z51)),
-  forall (HW_15: int_Z51_0 = (upd int_Z51 v 3)),
-  forall (HW_16: (valid alloc s)),
-  forall (result2: ((pointer) Z0)),
-  forall (HW_17: result2 = (acc t_Z48 s)),
-  (valid alloc result2).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_8 : 
-  forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (int_Z1: ((memory) Z Z1)),
-  forall (int_Z51: ((memory) Z Z51)),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (t_Z48: ((memory) ((pointer) Z0) Z48)),
-  forall (t_Z50: ((memory) ((pointer) Z0) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (u_Z48: ((memory) ((pointer) Z1) Z48)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1 t_Z48) /\ (valid1 t_Z50) /\
-                (valid1_range u_Z48 3) /\ (valid1_range t_Z48 2) /\
-                (valid1_range t_Z50 2) /\ (valid1 u_Z48)),
-  forall (HW_2: (valid alloc ss)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc t_Z50 ss)),
-  forall (HW_4: (valid alloc result)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_0 = (upd int_Z0 result 0)),
-  forall (HW_6: (valid alloc s)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (acc t_Z48 s)),
-  forall (HW_8: (valid alloc result0)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_9: int_Z0_1 = (upd int_Z0_0 result0 1)),
-  forall (HW_10: (valid alloc s)),
-  forall (result1: ((pointer) Z1)),
-  forall (HW_11: result1 = (acc u_Z48 s)),
-  forall (HW_12: (valid alloc result1)),
-  forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_13: int_Z1_0 = (upd int_Z1 result1 2)),
-  forall (HW_14: (valid alloc v)),
-  forall (int_Z51_0: ((memory) Z Z51)),
-  forall (HW_15: int_Z51_0 = (upd int_Z51 v 3)),
-  forall (HW_16: (valid alloc s)),
-  forall (result2: ((pointer) Z0)),
-  forall (HW_17: result2 = (acc t_Z48 s)),
-  forall (HW_18: (valid alloc result2)),
-  forall (result3: Z),
-  forall (HW_19: result3 = (acc int_Z0_1 result2)),
-  (* File "separation.c", line 11, characters 13-25 *) result3 = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -4071,152 +3716,15 @@ intuition.
 subst;caduceus.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1)),
-  (valid alloc v).
 Proof.
 intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma h_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (x_Z52: ((memory) ((pointer) Z5) Z52)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1_range x_Z52 1) /\ (valid1 x_Z52)),
-  (valid alloc tab).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma h_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (s: ((pointer) Z48)),
-  forall (ss: ((pointer) Z50)),
-  forall (tab: ((pointer) Z52)),
-  forall (u1: ((pointer) Z55)),
-  forall (u2: ((pointer) Z57)),
-  forall (u3: ((pointer) Z60)),
-  forall (u4: ((pointer) Z62)),
-  forall (v: ((pointer) Z51)),
-  forall (var1: ((pointer) Z84)),
-  forall (var10: ((pointer) Z102)),
-  forall (var2: ((pointer) Z86)),
-  forall (var3: ((pointer) Z88)),
-  forall (var4: ((pointer) Z90)),
-  forall (var5: ((pointer) Z92)),
-  forall (var6: ((pointer) Z94)),
-  forall (var7: ((pointer) Z96)),
-  forall (var8: ((pointer) Z98)),
-  forall (var9: ((pointer) Z100)),
-  forall (w1: ((pointer) Z64)),
-  forall (w10: ((pointer) Z82)),
-  forall (w2: ((pointer) Z66)),
-  forall (w3: ((pointer) Z68)),
-  forall (w4: ((pointer) Z70)),
-  forall (w5: ((pointer) Z72)),
-  forall (w6: ((pointer) Z74)),
-  forall (w7: ((pointer) Z76)),
-  forall (w8: ((pointer) Z78)),
-  forall (w9: ((pointer) Z80)),
-  forall (x_Z52: ((memory) ((pointer) Z5) Z52)),
-  forall (HW_1: (valid alloc var10) /\ (valid_range alloc v 0 3) /\
-                (valid alloc s) /\ (valid alloc w9) /\ (valid alloc w10) /\
-                (valid alloc w8) /\ (valid alloc w7) /\ (valid alloc w6) /\
-                (valid alloc w5) /\ (valid alloc w4) /\ (valid alloc w3) /\
-                (valid alloc w2) /\ (valid alloc w1) /\ (valid alloc var9) /\
-                (valid alloc var8) /\ (valid alloc var7) /\
-                (valid alloc var6) /\ (valid alloc var5) /\
-                (valid alloc var4) /\ (valid alloc var3) /\
-                (valid alloc var2) /\ (valid alloc ss) /\
-                (valid alloc var1) /\ (valid_range alloc tab 0 4) /\
-                (valid alloc u4) /\ (valid alloc u3) /\ (valid alloc u2) /\
-                (valid alloc u1) /\ (valid1_range x_Z52 1) /\ (valid1 x_Z52)),
-  forall (HW_2: (valid alloc tab)),
-  forall (result: ((pointer) Z5)),
-  forall (HW_3: result = (acc x_Z52 tab)),
-  (valid alloc result).
 Proof.
 intuition.
 subst;auto.

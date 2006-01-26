@@ -82,19 +82,7 @@ let rec init_expr loc t lvalue initializers =
 	  | _ ->
 	      assert false
 	end
-(*
-    | Tarray (ty,None) -> 
-	let i = ref 0 in
-	let block = ref [] in
-	while (initializers != []) do
-	  let b,initializers =  
-	    init_expr tyf (TEarrget(lvalue,i)) initializers in
-	  i := !i + 1;
-	  block := block@b
-	done;
-	(block,[])
-*)
-    | Tarray (ty,Some t) ->
+    | Tarray (_,ty,Some t) ->
 	let rec init_cells i (block,init) =
 	  if i >= t then (block,init)
 	  else
@@ -105,7 +93,7 @@ let rec init_expr loc t lvalue initializers =
 	    init_cells (Int64.add i Int64.one) (block@b,init')
 	in
 	init_cells Int64.zero ([],initializers)
-    | Tarray (ty,None) -> assert false
+    | Tarray (_,ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
     | Tvoid -> assert false

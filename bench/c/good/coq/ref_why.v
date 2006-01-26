@@ -12,12 +12,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A745:Set), forall (A746:Set), forall (A747:Set), forall (A748:Set),
-  forall (A749:Set), forall (A750:Set), forall (A751:Set), forall (A752:Set),
+  forall (A762:Set), forall (A763:Set), forall (A764:Set), forall (A765:Set),
+  forall (A766:Set), forall (A767:Set), forall (A768:Set), forall (A769:Set),
   forall (alloc: alloc_table),
-  forall (int_Z3: ((memory) Z A752)),
+  forall (int_Z3: ((memory) Z A769)),
   forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) A752)),
+  forall (result: ((pointer) A769)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
@@ -26,13 +26,12 @@ Save.
                 (alloc_stack result alloc alloc0)),
   forall (HW_3: (* File "ref.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
-  forall (int_Z3_0: ((memory) Z A752)),
+  forall (int_Z3_0: ((memory) Z A769)),
   forall (HW_4: (* File "ref.c", line 6, characters 13-20 *)
                 (acc int_Z3_0 result) = 1 /\
                 (not_assigns alloc0 int_Z3 int_Z3_0 (pset_singleton result))),
-  forall (HW_5: (valid alloc0 result)),
   forall (result0: Z),
-  forall (HW_6: result0 = (acc int_Z3_0 result)),
+  forall (HW_5: result0 = (acc int_Z3_0 result)),
   (* File "ref.c", line 13, characters 13-25 *) result0 = 1 /\
   (not_assigns alloc int_Z3 int_Z3_0 pset_empty).
 Proof.
@@ -58,13 +57,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (A753:Set),
-  forall (p: ((pointer) A753)),
+  forall (A770:Set),
+  forall (p: ((pointer) A770)),
   forall (alloc: alloc_table),
-  forall (int_Z2: ((memory) Z A753)),
+  forall (int_Z2: ((memory) Z A770)),
   forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
-  forall (int_Z2_0: ((memory) Z A753)),
+  forall (int_Z2_0: ((memory) Z A770)),
   forall (HW_3: int_Z2_0 = (upd int_Z2 p 1)),
   (* File "ref.c", line 6, characters 13-20 *) (acc int_Z2_0 p) = 1 /\
   (not_assigns alloc int_Z2 int_Z2_0 (pset_singleton p)).

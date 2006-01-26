@@ -40,9 +40,9 @@ let rec predicate_for name t =
 	npvalid t
 	  (*,
  	    NPapp (find_pred ("valid_" ^ n), [t]))*)
-    | Tarray (ty, None) ->
+    | Tarray (_,ty, None) ->
 	error Loc.dummy_position ("array size missing in `" ^ name ^ "'")
-    | Tarray (ty, Some s) ->
+    | Tarray (_,ty, Some s) ->
 	  let i = default_var_info "counter" in
 	  let vari = noattr_term c_int (NTvar i) in
 	  let ineq = npand
@@ -98,13 +98,13 @@ let rec tab_struct loc v1 v2 s ty n n1 n2=
 and local_separation loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
-    | Tarray (ty, None), _ ->
+    | Tarray (_,ty, None), _ ->
 	error loc ("array size missing in `" ^ n1 ^ "'")
-    | _, Tarray (ty, None) ->
+    | _, Tarray (_,ty, None) ->
 	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n , Tarray (ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
-    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
+    | Tstruct n , Tarray (_,ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
+    | Tarray (_,ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
+    | Tarray (_,ty1,Some s1), Tarray(_,ty2,Some s2) ->
 	make_and
 	  (if compatible_type v1.nterm_type v2.nterm_type
 	   then
@@ -125,12 +125,12 @@ and local_separation loc n1 v1 n2 v2 =
 
 let rec separation_intern2  n1 v1 =
   match v1.nterm_type.Ctypes.ctype_node with
-    | Tarray (_,None) -> 
+    | Tarray (_,_,None) -> 
 	error Loc.dummy_position ("array size missing in `" ^ n1 ^ "'")
-    | Tarray(ty,Some s) ->
+    | Tarray(_,ty,Some s) ->
 	  begin
 	    match ty.Ctypes.ctype_node with
-	      | Tarray (_,None) -> 
+	      | Tarray (_,_,None) -> 
 		error Loc.dummy_position ("array size missing in `" ^ n1 
 				 ^ "[i]'")
 	      | Tstruct _ ->
@@ -142,7 +142,7 @@ let rec separation_intern2  n1 v1 =
 			     else
 			       make_implies (nprel (i1, Neq, i2)) 
 				 (not_alias Loc.dummy_position t1 t2))))
-	      | Tarray (_,_)->  
+	      | Tarray _ ->  
 		  make_and
 		    (make_forall_range Loc.dummy_position v1 s 
 		       (fun t1 i1 ->
@@ -224,9 +224,9 @@ let separation_first mark diag v1 v2 =
   let n1 =  v1.var_unique_name in
   let n2 =  v2.var_unique_name in
   match v1.var_type.Ctypes.ctype_node,v2.var_type.Ctypes.ctype_node with
-    | Tarray (_,None), _  ->
+    | Tarray (_,_,None), _  ->
 	error Loc.dummy_position ("array size missing in `" ^ n1 ^ "[i]'") 
-    | _ , Tarray (_,None) ->
+    | _ , Tarray (_,_,None) ->
 	error Loc.dummy_position ("array size missing in `" ^ n2 ^ "[i]'") 
     | Tstruct _ , Tstruct _ ->
 	let pre = sep ^ n1 ^ "_" ^ n2 in
@@ -237,7 +237,7 @@ let separation_first mark diag v1 v2 =
 	   Cast.Ninvariant_strong (
 	     "separation" ^ n1 ^ "_" ^ n2 , 
 	     npapp(find_pred (pre),[])))]
-    | Tarray (ty,Some s) , Tstruct _ -> 
+    | Tarray (_,ty,Some s) , Tstruct _ -> 
 	if compatible_type ty v2.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 
 	  let info = Info.default_logic_info (pre) in
@@ -253,7 +253,7 @@ let separation_first mark diag v1 v2 =
 		      (NTconstant (IntConstant 
 				     (Int64.to_string s)))])))]
 	else []
-    | Tstruct _ ,Tarray (ty,Some s)  -> 
+    | Tstruct _ ,Tarray (_,ty,Some s)  -> 
 	if compatible_type ty v1.var_type then
 	  let pre = sep ^ "_range1_" ^ n1 ^ "_" ^ n2 in 
 	  let info = Info.default_logic_info (pre) in
@@ -270,14 +270,14 @@ let separation_first mark diag v1 v2 =
 		       (NTconstant (IntConstant 
 				      ((Int64.to_string s))))])))]
 	else []
-    | Tarray (ty1, Some s1),  Tarray(ty2, Some s2) ->
+    | Tarray (_,ty1, Some s1),  Tarray(_,ty2, Some s2) ->
 	let make_sub_term p ty v = noattr_term ty (NTarrow (p,v)) in
 	if mark then
 	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in
 	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
-	  let ty = noattr_type (Tpointer (noattr_type (Tvoid))) in
+	  let ty = noattr_type (Tpointer (false,noattr_type (Tvoid))) in
 	  let var = default_var_info (fresh_index()) in
 	  let term = noattr_term ty (NTvar var) in
 	  noattr_located (
@@ -297,7 +297,7 @@ let separation_first mark diag v1 v2 =
 	  let info = Info.default_logic_info (pre) in
 	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
-	  let ty = noattr_type (Tpointer (noattr_type (Tvoid))) in
+	  let ty = noattr_type (Tpointer (false,noattr_type (Tvoid))) in
 	  let var1 = default_var_info (fresh_index()) in
 	  let var2 = default_var_info (fresh_index()) in
 	  let term1 = noattr_term ty (NTvar var1) in
@@ -339,10 +339,10 @@ let rec separation_intern n =
   let array_intern_separation v1  =
     let n1 = v1.var_unique_name in
     match v1.var_type.Ctypes.ctype_node with
-      | Tarray (_,None) -> 
+      | Tarray (_,_,None) -> 
 	  error Loc.dummy_position ("array size missing in `" 
 			       ^ n1 ^ "[i]'")
-      | Tarray (ty,Some s) ->
+      | Tarray (_,ty,Some s) ->
 	  begin
 	    match ty.Ctypes.ctype_node with
 	      | Tstruct _ -> 
@@ -382,7 +382,7 @@ let rec separation_intern n =
 					(fun t i -> 
 					    separation_intern2 n1 
 					      (noattr_term 
-						 (noattr_type (Tpointer ty)) 
+						 (noattr_type (Tpointer (false,ty))) 
 						 (NTbinop (t,Badd,i)))))))::[]
 	      | _ -> []
 	  end
@@ -416,7 +416,7 @@ let add_predicates l =
 		 [noattr_located (
 		    Cast.Ninvariant_strong (
 		      "valid" ^ n,npapp(find_pred (pre),[])))]
-	     | Tarray(ty, Some s)->
+	     | Tarray(_,ty, Some s)->
 		 let n1 = f.var_unique_name in
 		 let pre = "%valid1_" ^ n1 in 
 		 let info = Info.default_logic_info (pre) in
@@ -438,10 +438,10 @@ let add_predicates l =
 				   (IntConstant (Int64.to_string s)))])))::
 		   begin
 		     match ty.ctype_node with
-		       | Tarray (ty, None)->
+		       | Tarray (_,ty, None)->
 			   error Loc.dummy_position 
 			     ("array size missing in `" ^ f.var_name ^ "'")
-		       | Tarray (ty, Some s1) ->
+		       | Tarray (_,ty, Some s1) ->
 			 [noattr_located (
 			    Cast.Ninvariant_strong 
 			      ("valid_matrice" ^ n1,
@@ -449,7 +449,7 @@ let add_predicates l =
 				 Loc.dummy_position 
 				 (var_to_term Loc.dummy_position f) s 
 				 (fun t i -> predicate_for f.var_name 
-				     (noattr_term (noattr_type (Tpointer ty)) 
+				     (noattr_term (noattr_type (Tpointer (false,ty))) 
 					(NTbinop (t,Badd,i))))))]
 		       | _ -> []
 		   end
