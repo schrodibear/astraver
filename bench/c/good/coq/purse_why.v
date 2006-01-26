@@ -7,13 +7,13 @@ Load caduceus_tactics.*)
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit_impl_po_1 : 
-  forall (A832:Set),
-  forall (p: ((pointer) A832)),
+  forall (A827:Set),
+  forall (p: ((pointer) A827)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_Z13: ((memory) Z A832)),
+  forall (balance_Z14: ((memory) Z A827)),
   forall (HW_1: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z13 alloc p) /\ s >= 0)),
+                ((purse_inv balance_Z14 alloc p) /\ s >= 0)),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
@@ -21,23 +21,23 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit_impl_po_2 : 
-  forall (A833:Set),
-  forall (p: ((pointer) A833)),
+  forall (A828:Set),
+  forall (p: ((pointer) A828)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_Z13: ((memory) Z A833)),
+  forall (balance_Z14: ((memory) Z A828)),
   forall (HW_1: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z13 alloc p) /\ s >= 0)),
+                ((purse_inv balance_Z14 alloc p) /\ s >= 0)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc balance_Z13 p)),
+  forall (HW_3: result = (acc balance_Z14 p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_Z13_0: ((memory) Z A833)),
-  forall (HW_5: balance_Z13_0 = (upd balance_Z13 p (result + s))),
+  forall (balance_Z14_0: ((memory) Z A828)),
+  forall (HW_5: balance_Z14_0 = (upd balance_Z14 p (result + s))),
   (* File "purse.c", line 10, characters 13-63 *)
-  ((purse_inv balance_Z13_0 alloc p) /\ (acc balance_Z13_0 p) =
-  ((acc balance_Z13 p) + s)) /\
-  (not_assigns alloc balance_Z13 balance_Z13_0 (pset_singleton p)).
+  ((purse_inv balance_Z14_0 alloc p) /\ (acc balance_Z14_0 p) =
+  ((acc balance_Z14 p) + s)) /\
+  (not_assigns alloc balance_Z14 balance_Z14_0 (pset_singleton p)).
 Proof.
 unfold purse_inv; intuition.
 Save.
@@ -63,14 +63,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_1 : 
-  forall (A834:Set),
-  forall (p1: ((pointer) A834)),
-  forall (p2: ((pointer) A834)),
+  forall (A829:Set),
+  forall (p1: ((pointer) A829)),
+  forall (p2: ((pointer) A829)),
   forall (alloc: alloc_table),
-  forall (balance_Z16: ((memory) Z A834)),
+  forall (balance_Z17: ((memory) Z A829)),
   forall (HW_1: (* File "purse.c", line 25, characters 14-56 *)
-                (((purse_inv balance_Z16 alloc p1) /\
-                (purse_inv balance_Z16 alloc p2)) /\ ~(p1 = p2))),
+                (((purse_inv balance_Z17 alloc p1) /\
+                (purse_inv balance_Z17 alloc p2)) /\ ~(p1 = p2))),
   (valid alloc p1).
 Proof.
 unfold purse_inv; intuition.
@@ -78,19 +78,19 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_2 : 
-  forall (A835:Set),
-  forall (p1: ((pointer) A835)),
-  forall (p2: ((pointer) A835)),
+  forall (A830:Set),
+  forall (p1: ((pointer) A830)),
+  forall (p2: ((pointer) A830)),
   forall (alloc: alloc_table),
-  forall (balance_Z16: ((memory) Z A835)),
+  forall (balance_Z17: ((memory) Z A830)),
   forall (HW_1: (* File "purse.c", line 25, characters 14-56 *)
-                (((purse_inv balance_Z16 alloc p1) /\
-                (purse_inv balance_Z16 alloc p2)) /\ ~(p1 = p2))),
+                (((purse_inv balance_Z17 alloc p1) /\
+                (purse_inv balance_Z17 alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
-  forall (balance_Z16_0: ((memory) Z A835)),
-  forall (HW_3: balance_Z16_0 = (upd balance_Z16 p1 0)),
+  forall (balance_Z17_0: ((memory) Z A830)),
+  forall (HW_3: balance_Z17_0 = (upd balance_Z17 p1 0)),
   (* File "purse.c", line 8, characters 14-36 *)
-  ((purse_inv balance_Z16_0 alloc p2) /\ 100 >= 0).
+  ((purse_inv balance_Z17_0 alloc p2) /\ 100 >= 0).
 Proof.
 unfold purse_inv; intuition.
 subst;caduceus.
@@ -98,30 +98,30 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_3 : 
-  forall (A836:Set),
-  forall (p1: ((pointer) A836)),
-  forall (p2: ((pointer) A836)),
+  forall (A831:Set),
+  forall (p1: ((pointer) A831)),
+  forall (p2: ((pointer) A831)),
   forall (alloc: alloc_table),
-  forall (balance_Z16: ((memory) Z A836)),
+  forall (balance_Z17: ((memory) Z A831)),
   forall (HW_1: (* File "purse.c", line 25, characters 14-56 *)
-                (((purse_inv balance_Z16 alloc p1) /\
-                (purse_inv balance_Z16 alloc p2)) /\ ~(p1 = p2))),
+                (((purse_inv balance_Z17 alloc p1) /\
+                (purse_inv balance_Z17 alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
-  forall (balance_Z16_0: ((memory) Z A836)),
-  forall (HW_3: balance_Z16_0 = (upd balance_Z16 p1 0)),
+  forall (balance_Z17_0: ((memory) Z A831)),
+  forall (HW_3: balance_Z17_0 = (upd balance_Z17 p1 0)),
   forall (HW_4: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z16_0 alloc p2) /\ 100 >= 0)),
-  forall (balance_Z16_1: ((memory) Z A836)),
+                ((purse_inv balance_Z17_0 alloc p2) /\ 100 >= 0)),
+  forall (balance_Z17_1: ((memory) Z A831)),
   forall (HW_5: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z16_1 alloc p2) /\
-                (acc balance_Z16_1 p2) = ((acc balance_Z16_0 p2) + 100)) /\
-                (not_assigns alloc balance_Z16_0 balance_Z16_1
+                ((purse_inv balance_Z17_1 alloc p2) /\
+                (acc balance_Z17_1 p2) = ((acc balance_Z17_0 p2) + 100)) /\
+                (not_assigns alloc balance_Z17_0 balance_Z17_1
                  (pset_singleton p2))),
   forall (HW_6: (valid alloc p1)),
   forall (result: Z),
-  forall (HW_7: result = (acc balance_Z16_1 p1)),
+  forall (HW_7: result = (acc balance_Z17_1 p1)),
   (* File "purse.c", line 27, characters 13-25 *) result = 0 /\
-  (not_assigns alloc balance_Z16 balance_Z16_1
+  (not_assigns alloc balance_Z17 balance_Z17_1
    (pset_union (pset_singleton p2) (pset_singleton p1))).
 Proof.
 unfold purse_inv; intuition.
@@ -158,57 +158,57 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_1 : 
-  forall (A837:Set), forall (A838:Set), forall (A839:Set),
+  forall (A832:Set), forall (A833:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A838)),
-  forall (balance_Z17: ((memory) Z A839)),
-  forall (result: ((pointer) A839)),
+  forall (balance_Z27: ((memory) Z A832)),
+  forall (balance_Z28: ((memory) Z A833)),
+  forall (result: ((pointer) A832)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A839)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A833)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   (* File "purse.c", line 8, characters 14-36 *)
-  ((purse_inv balance_Z17 alloc result) /\ 100 >= 0).
+  ((purse_inv balance_Z27 alloc result) /\ 100 >= 0).
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_2 : 
-  forall (A840:Set), forall (A841:Set), forall (A842:Set),
+  forall (A834:Set), forall (A835:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A841)),
-  forall (balance_Z17: ((memory) Z A842)),
-  forall (result: ((pointer) A842)),
+  forall (balance_Z27: ((memory) Z A834)),
+  forall (balance_Z28: ((memory) Z A835)),
+  forall (result: ((pointer) A834)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A842)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A835)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   forall (HW_3: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17 alloc result) /\ 100 >= 0)),
-  forall (balance_Z17_0: ((memory) Z A842)),
+                ((purse_inv balance_Z27 alloc result) /\ 100 >= 0)),
+  forall (balance_Z27_0: ((memory) Z A834)),
   forall (HW_4: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_0 alloc result) /\
-                (acc balance_Z17_0 result) =
-                ((acc balance_Z17 result) + 100)) /\
-                (not_assigns alloc balance_Z17 balance_Z17_0
+                ((purse_inv balance_Z27_0 alloc result) /\
+                (acc balance_Z27_0 result) =
+                ((acc balance_Z27 result) + 100)) /\
+                (not_assigns alloc balance_Z27 balance_Z27_0
                  (pset_singleton result))),
   (* File "purse.c", line 8, characters 14-36 *)
-  ((purse_inv balance_Z17_0 alloc result0) /\ 200 >= 0).
+  ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0).
 Proof.
 unfold purse_inv; intuition.
 rewrite H11;auto.
@@ -221,43 +221,43 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_3 : 
-  forall (A843:Set), forall (A844:Set), forall (A845:Set),
+  forall (A836:Set), forall (A837:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A844)),
-  forall (balance_Z17: ((memory) Z A845)),
-  forall (result: ((pointer) A845)),
+  forall (balance_Z27: ((memory) Z A836)),
+  forall (balance_Z28: ((memory) Z A837)),
+  forall (result: ((pointer) A836)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A845)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A837)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   forall (HW_3: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17 alloc result) /\ 100 >= 0)),
-  forall (balance_Z17_0: ((memory) Z A845)),
+                ((purse_inv balance_Z27 alloc result) /\ 100 >= 0)),
+  forall (balance_Z27_0: ((memory) Z A836)),
   forall (HW_4: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_0 alloc result) /\
-                (acc balance_Z17_0 result) =
-                ((acc balance_Z17 result) + 100)) /\
-                (not_assigns alloc balance_Z17 balance_Z17_0
+                ((purse_inv balance_Z27_0 alloc result) /\
+                (acc balance_Z27_0 result) =
+                ((acc balance_Z27 result) + 100)) /\
+                (not_assigns alloc balance_Z27 balance_Z27_0
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17_0 alloc result0) /\ 200 >= 0)),
-  forall (balance_Z17_1: ((memory) Z A845)),
+                ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0)),
+  forall (balance_Z28_0: ((memory) Z A837)),
   forall (HW_6: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_1 alloc result0) /\
-                (acc balance_Z17_1 result0) =
-                ((acc balance_Z17_0 result0) + 200)) /\
-                (not_assigns alloc balance_Z17_0 balance_Z17_1
+                ((purse_inv balance_Z28_0 alloc result0) /\
+                (acc balance_Z28_0 result0) =
+                ((acc balance_Z28 result0) + 200)) /\
+                (not_assigns alloc balance_Z28 balance_Z28_0
                  (pset_singleton result0))),
   (* File "purse.c", line 16, characters 14-50 *)
-  ((purse_inv balance_Z17_1 alloc result) /\ 0 <= 50 /\ 50 <=
-  (acc balance_Z17_1 result)).
+  ((purse_inv balance_Z27_0 alloc result) /\ 0 <= 50 /\ 50 <=
+  (acc balance_Z27_0 result)).
 Proof.
 unfold purse_inv; intuition.
 rewrite H18;intuition.
@@ -275,53 +275,53 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_4 : 
-  forall (A846:Set), forall (A847:Set), forall (A848:Set),
+  forall (A838:Set), forall (A839:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A847)),
-  forall (balance_Z17: ((memory) Z A848)),
-  forall (result: ((pointer) A848)),
+  forall (balance_Z27: ((memory) Z A838)),
+  forall (balance_Z28: ((memory) Z A839)),
+  forall (result: ((pointer) A838)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A848)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A839)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   forall (HW_3: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17 alloc result) /\ 100 >= 0)),
-  forall (balance_Z17_0: ((memory) Z A848)),
+                ((purse_inv balance_Z27 alloc result) /\ 100 >= 0)),
+  forall (balance_Z27_0: ((memory) Z A838)),
   forall (HW_4: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_0 alloc result) /\
-                (acc balance_Z17_0 result) =
-                ((acc balance_Z17 result) + 100)) /\
-                (not_assigns alloc balance_Z17 balance_Z17_0
+                ((purse_inv balance_Z27_0 alloc result) /\
+                (acc balance_Z27_0 result) =
+                ((acc balance_Z27 result) + 100)) /\
+                (not_assigns alloc balance_Z27 balance_Z27_0
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17_0 alloc result0) /\ 200 >= 0)),
-  forall (balance_Z17_1: ((memory) Z A848)),
+                ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0)),
+  forall (balance_Z28_0: ((memory) Z A839)),
   forall (HW_6: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_1 alloc result0) /\
-                (acc balance_Z17_1 result0) =
-                ((acc balance_Z17_0 result0) + 200)) /\
-                (not_assigns alloc balance_Z17_0 balance_Z17_1
+                ((purse_inv balance_Z28_0 alloc result0) /\
+                (acc balance_Z28_0 result0) =
+                ((acc balance_Z28 result0) + 200)) /\
+                (not_assigns alloc balance_Z28 balance_Z28_0
                  (pset_singleton result0))),
   forall (HW_7: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_1 alloc result) /\ 0 <= 50 /\ 50 <=
-                (acc balance_Z17_1 result))),
-  forall (balance_Z17_2: ((memory) Z A848)),
+                ((purse_inv balance_Z27_0 alloc result) /\ 0 <= 50 /\ 50 <=
+                (acc balance_Z27_0 result))),
+  forall (balance_Z27_1: ((memory) Z A838)),
   forall (HW_8: (* File "purse.c", line 18, characters 13-63 *)
-                ((purse_inv balance_Z17_2 alloc result) /\
-                (acc balance_Z17_2 result) =
-                ((acc balance_Z17_1 result) - 50)) /\
-                (not_assigns alloc balance_Z17_1 balance_Z17_2
+                ((purse_inv balance_Z27_1 alloc result) /\
+                (acc balance_Z27_1 result) =
+                ((acc balance_Z27_0 result) - 50)) /\
+                (not_assigns alloc balance_Z27_0 balance_Z27_1
                  (pset_singleton result))),
   (* File "purse.c", line 16, characters 14-50 *)
-  ((purse_inv balance_Z17_2 alloc result0) /\ 0 <= 100 /\ 100 <=
-  (acc balance_Z17_2 result0)).
+  ((purse_inv balance_Z28_0 alloc result0) /\ 0 <= 100 /\ 100 <=
+  (acc balance_Z28_0 result0)).
 Proof.
 unfold purse_inv; intuition.
 rewrite H26;intuition.
@@ -339,59 +339,59 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_5 : 
-  forall (A849:Set), forall (A850:Set), forall (A851:Set),
+  forall (A840:Set), forall (A841:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A850)),
-  forall (balance_Z17: ((memory) Z A851)),
-  forall (result: ((pointer) A851)),
+  forall (balance_Z27: ((memory) Z A840)),
+  forall (balance_Z28: ((memory) Z A841)),
+  forall (result: ((pointer) A840)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A851)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A841)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   forall (HW_3: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17 alloc result) /\ 100 >= 0)),
-  forall (balance_Z17_0: ((memory) Z A851)),
+                ((purse_inv balance_Z27 alloc result) /\ 100 >= 0)),
+  forall (balance_Z27_0: ((memory) Z A840)),
   forall (HW_4: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_0 alloc result) /\
-                (acc balance_Z17_0 result) =
-                ((acc balance_Z17 result) + 100)) /\
-                (not_assigns alloc balance_Z17 balance_Z17_0
+                ((purse_inv balance_Z27_0 alloc result) /\
+                (acc balance_Z27_0 result) =
+                ((acc balance_Z27 result) + 100)) /\
+                (not_assigns alloc balance_Z27 balance_Z27_0
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17_0 alloc result0) /\ 200 >= 0)),
-  forall (balance_Z17_1: ((memory) Z A851)),
+                ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0)),
+  forall (balance_Z28_0: ((memory) Z A841)),
   forall (HW_6: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_1 alloc result0) /\
-                (acc balance_Z17_1 result0) =
-                ((acc balance_Z17_0 result0) + 200)) /\
-                (not_assigns alloc balance_Z17_0 balance_Z17_1
+                ((purse_inv balance_Z28_0 alloc result0) /\
+                (acc balance_Z28_0 result0) =
+                ((acc balance_Z28 result0) + 200)) /\
+                (not_assigns alloc balance_Z28 balance_Z28_0
                  (pset_singleton result0))),
   forall (HW_7: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_1 alloc result) /\ 0 <= 50 /\ 50 <=
-                (acc balance_Z17_1 result))),
-  forall (balance_Z17_2: ((memory) Z A851)),
+                ((purse_inv balance_Z27_0 alloc result) /\ 0 <= 50 /\ 50 <=
+                (acc balance_Z27_0 result))),
+  forall (balance_Z27_1: ((memory) Z A840)),
   forall (HW_8: (* File "purse.c", line 18, characters 13-63 *)
-                ((purse_inv balance_Z17_2 alloc result) /\
-                (acc balance_Z17_2 result) =
-                ((acc balance_Z17_1 result) - 50)) /\
-                (not_assigns alloc balance_Z17_1 balance_Z17_2
+                ((purse_inv balance_Z27_1 alloc result) /\
+                (acc balance_Z27_1 result) =
+                ((acc balance_Z27_0 result) - 50)) /\
+                (not_assigns alloc balance_Z27_0 balance_Z27_1
                  (pset_singleton result))),
   forall (HW_9: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_2 alloc result0) /\ 0 <= 100 /\
-                100 <= (acc balance_Z17_2 result0))),
-  forall (balance_Z17_3: ((memory) Z A851)),
+                ((purse_inv balance_Z28_0 alloc result0) /\ 0 <= 100 /\
+                100 <= (acc balance_Z28_0 result0))),
+  forall (balance_Z28_1: ((memory) Z A841)),
   forall (HW_10: (* File "purse.c", line 18, characters 13-63 *)
-                 ((purse_inv balance_Z17_3 alloc result0) /\
-                 (acc balance_Z17_3 result0) =
-                 ((acc balance_Z17_2 result0) - 100)) /\
-                 (not_assigns alloc balance_Z17_2 balance_Z17_3
+                 ((purse_inv balance_Z28_1 alloc result0) /\
+                 (acc balance_Z28_1 result0) =
+                 ((acc balance_Z28_0 result0) - 100)) /\
+                 (not_assigns alloc balance_Z28_0 balance_Z28_1
                   (pset_singleton result0))),
   (valid alloc result).
 Proof.
@@ -404,63 +404,63 @@ Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_6 : 
-  forall (A852:Set), forall (A853:Set), forall (A854:Set),
+  forall (A842:Set), forall (A843:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A853)),
-  forall (balance_Z17: ((memory) Z A854)),
-  forall (result: ((pointer) A854)),
+  forall (balance_Z27: ((memory) Z A842)),
+  forall (balance_Z28: ((memory) Z A843)),
+  forall (result: ((pointer) A842)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A854)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A843)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   forall (HW_3: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17 alloc result) /\ 100 >= 0)),
-  forall (balance_Z17_0: ((memory) Z A854)),
+                ((purse_inv balance_Z27 alloc result) /\ 100 >= 0)),
+  forall (balance_Z27_0: ((memory) Z A842)),
   forall (HW_4: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_0 alloc result) /\
-                (acc balance_Z17_0 result) =
-                ((acc balance_Z17 result) + 100)) /\
-                (not_assigns alloc balance_Z17 balance_Z17_0
+                ((purse_inv balance_Z27_0 alloc result) /\
+                (acc balance_Z27_0 result) =
+                ((acc balance_Z27 result) + 100)) /\
+                (not_assigns alloc balance_Z27 balance_Z27_0
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17_0 alloc result0) /\ 200 >= 0)),
-  forall (balance_Z17_1: ((memory) Z A854)),
+                ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0)),
+  forall (balance_Z28_0: ((memory) Z A843)),
   forall (HW_6: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_1 alloc result0) /\
-                (acc balance_Z17_1 result0) =
-                ((acc balance_Z17_0 result0) + 200)) /\
-                (not_assigns alloc balance_Z17_0 balance_Z17_1
+                ((purse_inv balance_Z28_0 alloc result0) /\
+                (acc balance_Z28_0 result0) =
+                ((acc balance_Z28 result0) + 200)) /\
+                (not_assigns alloc balance_Z28 balance_Z28_0
                  (pset_singleton result0))),
   forall (HW_7: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_1 alloc result) /\ 0 <= 50 /\ 50 <=
-                (acc balance_Z17_1 result))),
-  forall (balance_Z17_2: ((memory) Z A854)),
+                ((purse_inv balance_Z27_0 alloc result) /\ 0 <= 50 /\ 50 <=
+                (acc balance_Z27_0 result))),
+  forall (balance_Z27_1: ((memory) Z A842)),
   forall (HW_8: (* File "purse.c", line 18, characters 13-63 *)
-                ((purse_inv balance_Z17_2 alloc result) /\
-                (acc balance_Z17_2 result) =
-                ((acc balance_Z17_1 result) - 50)) /\
-                (not_assigns alloc balance_Z17_1 balance_Z17_2
+                ((purse_inv balance_Z27_1 alloc result) /\
+                (acc balance_Z27_1 result) =
+                ((acc balance_Z27_0 result) - 50)) /\
+                (not_assigns alloc balance_Z27_0 balance_Z27_1
                  (pset_singleton result))),
   forall (HW_9: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_2 alloc result0) /\ 0 <= 100 /\
-                100 <= (acc balance_Z17_2 result0))),
-  forall (balance_Z17_3: ((memory) Z A854)),
+                ((purse_inv balance_Z28_0 alloc result0) /\ 0 <= 100 /\
+                100 <= (acc balance_Z28_0 result0))),
+  forall (balance_Z28_1: ((memory) Z A843)),
   forall (HW_10: (* File "purse.c", line 18, characters 13-63 *)
-                 ((purse_inv balance_Z17_3 alloc result0) /\
-                 (acc balance_Z17_3 result0) =
-                 ((acc balance_Z17_2 result0) - 100)) /\
-                 (not_assigns alloc balance_Z17_2 balance_Z17_3
+                 ((purse_inv balance_Z28_1 alloc result0) /\
+                 (acc balance_Z28_1 result0) =
+                 ((acc balance_Z28_0 result0) - 100)) /\
+                 (not_assigns alloc balance_Z28_0 balance_Z28_1
                   (pset_singleton result0))),
   forall (HW_11: (valid alloc result)),
   forall (result1: Z),
-  forall (HW_12: result1 = (acc balance_Z17_3 result)),
+  forall (HW_12: result1 = (acc balance_Z27_1 result)),
   (valid alloc result0).
 Proof.
 intuition.
@@ -469,66 +469,66 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_7 : 
-  forall (A855:Set), forall (A856:Set), forall (A857:Set),
+  forall (A844:Set), forall (A845:Set),
   forall (alloc: alloc_table),
-  forall (balance_Z10: ((memory) Z A856)),
-  forall (balance_Z17: ((memory) Z A857)),
-  forall (result: ((pointer) A857)),
+  forall (balance_Z27: ((memory) Z A844)),
+  forall (balance_Z28: ((memory) Z A845)),
+  forall (result: ((pointer) A844)),
   forall (HW_1: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result) /\
-                (purse_inv balance_Z10 alloc result)) /\
-                (acc balance_Z10 result) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
-  forall (result0: ((pointer) A857)),
+                (purse_inv balance_Z27 alloc result)) /\
+                (acc balance_Z27 result) = 0) /\
+                (not_assigns alloc balance_Z27 balance_Z27 pset_empty)),
+  forall (result0: ((pointer) A845)),
   forall (HW_2: (* File "purse.c", line 36, characters 13-75 *)
                 (((fresh alloc result0) /\
-                (purse_inv balance_Z10 alloc result0)) /\
-                (acc balance_Z10 result0) = 0) /\
-                (not_assigns alloc balance_Z10 balance_Z10 pset_empty)),
+                (purse_inv balance_Z28 alloc result0)) /\
+                (acc balance_Z28 result0) = 0) /\
+                (not_assigns alloc balance_Z28 balance_Z28 pset_empty)),
   forall (HW_3: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17 alloc result) /\ 100 >= 0)),
-  forall (balance_Z17_0: ((memory) Z A857)),
+                ((purse_inv balance_Z27 alloc result) /\ 100 >= 0)),
+  forall (balance_Z27_0: ((memory) Z A844)),
   forall (HW_4: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_0 alloc result) /\
-                (acc balance_Z17_0 result) =
-                ((acc balance_Z17 result) + 100)) /\
-                (not_assigns alloc balance_Z17 balance_Z17_0
+                ((purse_inv balance_Z27_0 alloc result) /\
+                (acc balance_Z27_0 result) =
+                ((acc balance_Z27 result) + 100)) /\
+                (not_assigns alloc balance_Z27 balance_Z27_0
                  (pset_singleton result))),
   forall (HW_5: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_Z17_0 alloc result0) /\ 200 >= 0)),
-  forall (balance_Z17_1: ((memory) Z A857)),
+                ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0)),
+  forall (balance_Z28_0: ((memory) Z A845)),
   forall (HW_6: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_Z17_1 alloc result0) /\
-                (acc balance_Z17_1 result0) =
-                ((acc balance_Z17_0 result0) + 200)) /\
-                (not_assigns alloc balance_Z17_0 balance_Z17_1
+                ((purse_inv balance_Z28_0 alloc result0) /\
+                (acc balance_Z28_0 result0) =
+                ((acc balance_Z28 result0) + 200)) /\
+                (not_assigns alloc balance_Z28 balance_Z28_0
                  (pset_singleton result0))),
   forall (HW_7: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_1 alloc result) /\ 0 <= 50 /\ 50 <=
-                (acc balance_Z17_1 result))),
-  forall (balance_Z17_2: ((memory) Z A857)),
+                ((purse_inv balance_Z27_0 alloc result) /\ 0 <= 50 /\ 50 <=
+                (acc balance_Z27_0 result))),
+  forall (balance_Z27_1: ((memory) Z A844)),
   forall (HW_8: (* File "purse.c", line 18, characters 13-63 *)
-                ((purse_inv balance_Z17_2 alloc result) /\
-                (acc balance_Z17_2 result) =
-                ((acc balance_Z17_1 result) - 50)) /\
-                (not_assigns alloc balance_Z17_1 balance_Z17_2
+                ((purse_inv balance_Z27_1 alloc result) /\
+                (acc balance_Z27_1 result) =
+                ((acc balance_Z27_0 result) - 50)) /\
+                (not_assigns alloc balance_Z27_0 balance_Z27_1
                  (pset_singleton result))),
   forall (HW_9: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z17_2 alloc result0) /\ 0 <= 100 /\
-                100 <= (acc balance_Z17_2 result0))),
-  forall (balance_Z17_3: ((memory) Z A857)),
+                ((purse_inv balance_Z28_0 alloc result0) /\ 0 <= 100 /\
+                100 <= (acc balance_Z28_0 result0))),
+  forall (balance_Z28_1: ((memory) Z A845)),
   forall (HW_10: (* File "purse.c", line 18, characters 13-63 *)
-                 ((purse_inv balance_Z17_3 alloc result0) /\
-                 (acc balance_Z17_3 result0) =
-                 ((acc balance_Z17_2 result0) - 100)) /\
-                 (not_assigns alloc balance_Z17_2 balance_Z17_3
+                 ((purse_inv balance_Z28_1 alloc result0) /\
+                 (acc balance_Z28_1 result0) =
+                 ((acc balance_Z28_0 result0) - 100)) /\
+                 (not_assigns alloc balance_Z28_0 balance_Z28_1
                   (pset_singleton result0))),
   forall (HW_11: (valid alloc result)),
   forall (result1: Z),
-  forall (HW_12: result1 = (acc balance_Z17_3 result)),
+  forall (HW_12: result1 = (acc balance_Z27_1 result)),
   forall (HW_13: (valid alloc result0)),
   forall (result2: Z),
-  forall (HW_14: result2 = (acc balance_Z17_3 result0)),
+  forall (HW_14: result2 = (acc balance_Z28_1 result0)),
   (* File "purse.c", line 41, characters 13-27 *) (result1 + result2) = 150.
 Proof.
 intuition.
@@ -550,14 +550,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma withdraw_impl_po_1 : 
-  forall (A858:Set),
-  forall (p: ((pointer) A858)),
+  forall (A846:Set),
+  forall (p: ((pointer) A846)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_Z14: ((memory) Z A858)),
+  forall (balance_Z15: ((memory) Z A846)),
   forall (HW_1: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z14 alloc p) /\ 0 <= s /\ s <=
-                (acc balance_Z14 p))),
+                ((purse_inv balance_Z15 alloc p) /\ 0 <= s /\ s <=
+                (acc balance_Z15 p))),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
@@ -565,24 +565,24 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma withdraw_impl_po_2 : 
-  forall (A859:Set),
-  forall (p: ((pointer) A859)),
+  forall (A847:Set),
+  forall (p: ((pointer) A847)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_Z14: ((memory) Z A859)),
+  forall (balance_Z15: ((memory) Z A847)),
   forall (HW_1: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_Z14 alloc p) /\ 0 <= s /\ s <=
-                (acc balance_Z14 p))),
+                ((purse_inv balance_Z15 alloc p) /\ 0 <= s /\ s <=
+                (acc balance_Z15 p))),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc balance_Z14 p)),
+  forall (HW_3: result = (acc balance_Z15 p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_Z14_0: ((memory) Z A859)),
-  forall (HW_5: balance_Z14_0 = (upd balance_Z14 p (result - s))),
+  forall (balance_Z15_0: ((memory) Z A847)),
+  forall (HW_5: balance_Z15_0 = (upd balance_Z15 p (result - s))),
   (* File "purse.c", line 18, characters 13-63 *)
-  ((purse_inv balance_Z14_0 alloc p) /\ (acc balance_Z14_0 p) =
-  ((acc balance_Z14 p) - s)) /\
-  (not_assigns alloc balance_Z14 balance_Z14_0 (pset_singleton p)).
+  ((purse_inv balance_Z15_0 alloc p) /\ (acc balance_Z15_0 p) =
+  ((acc balance_Z15 p) - s)) /\
+  (not_assigns alloc balance_Z15 balance_Z15_0 (pset_singleton p)).
 Proof.
 unfold purse_inv; intuition.
 Save.

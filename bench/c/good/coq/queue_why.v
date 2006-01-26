@@ -8,7 +8,7 @@ Require Export queue_spec_why.
   forall (alloc: alloc_table),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   (valid alloc t).
 Proof.
 intuition.
@@ -20,7 +20,7 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc t)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_3: int_Z0_0 = (upd int_Z0 t 0)),
@@ -39,7 +39,7 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc t)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_3: int_Z0_0 = (upd int_Z0 t 0)),
@@ -62,7 +62,7 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc t)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_3: int_Z0_0 = (upd int_Z0 t 0)),
@@ -90,7 +90,7 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc t)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_3: int_Z0_0 = (upd int_Z0 t 0)),
@@ -120,41 +120,6 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (q: ((pointer) Z7)),
-  forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
-  forall (HW_2: (valid alloc t)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_3: int_Z0_0 = (upd int_Z0 t 0)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_4: result = (shift t 1)),
-  forall (HW_5: (valid alloc result)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_6: int_Z0_1 = (upd int_Z0_0 result 0)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_7: result0 = (shift t 2)),
-  forall (HW_8: (valid alloc result0)),
-  forall (int_Z0_2: ((memory) Z Z0)),
-  forall (HW_9: int_Z0_2 = (upd int_Z0_1 result0 0)),
-  forall (result1: ((pointer) Z0)),
-  forall (HW_10: result1 = (shift t 3)),
-  forall (HW_11: (valid alloc result1)),
-  forall (int_Z0_3: ((memory) Z Z0)),
-  forall (HW_12: int_Z0_3 = (upd int_Z0_2 result1 0)),
-  forall (result2: ((pointer) Z0)),
-  forall (HW_13: result2 = (shift t 4)),
-  forall (HW_14: (valid alloc result2)),
-  forall (int_Z0_4: ((memory) Z Z0)),
-  forall (HW_15: int_Z0_4 = (upd int_Z0_3 result2 0)),
-  (valid alloc q).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma invariants_initially_established_impl_po_7 : 
-  forall (alloc: alloc_table),
   forall (contents_Z7: ((memory) ((pointer) Z0) Z7)),
   forall (empty_Z7: ((memory) Z Z7)),
   forall (first_Z7: ((memory) Z Z7)),
@@ -164,7 +129,7 @@ Save.
   forall (length_Z7: ((memory) Z Z7)),
   forall (q: ((pointer) Z7)),
   forall (t: ((pointer) Z0)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc t)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_3: int_Z0_0 = (upd int_Z0 t 0)),
@@ -231,6 +196,10 @@ intuition.
 Save.
 
 Proof.
+intuition.
+Save.
+
+Proof.
 intuition;subst;caduceus.
 Save.
 
@@ -252,7 +221,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -276,7 +245,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -314,7 +283,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -389,7 +358,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -465,7 +434,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -537,7 +506,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -752,7 +721,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -776,7 +745,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -814,7 +783,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -891,7 +860,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -969,7 +938,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -1044,7 +1013,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (valid alloc q)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc contents_Z7 q)),
@@ -1284,7 +1253,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   (* File "queue.c", line 33, characters 14-22 *) (acc empty_Z7 q) = 0 /\
   (* File "queue.c", line 14, characters 5-105 *)
   (((valid_range alloc (acc contents_Z7 q) 0 ((acc length_Z7 q) - 1)) /\ 0 <=
@@ -1315,7 +1284,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -1370,7 +1339,7 @@ Save.
                 0 <= (acc first_Z7 q) /\ (acc first_Z7 q) <
                 (acc length_Z7 q)) /\ 0 <= (acc last_Z7 q) /\
                 (acc last_Z7 q) < (acc length_Z7 q))) /\
-                (valid_range alloc t 0 4) /\ (valid_range alloc q 0 0)),
+                (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_Z7 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)

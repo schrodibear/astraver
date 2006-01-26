@@ -9,8 +9,8 @@ Require Export separation3_spec_why.
   forall (b_Z3: ((memory) ((pointer) Z0) Z3)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 b_Z3) /\ (valid1_range b_Z3 5)),
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 b_Z3) /\
+                (valid1_range b_Z3 5)),
   (valid alloc s0).
 Proof.
 intuition.
@@ -22,8 +22,8 @@ Save.
   forall (b_Z3: ((memory) ((pointer) Z0) Z3)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 b_Z3) /\ (valid1_range b_Z3 5)),
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 b_Z3) /\
+                (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z3 s0)),
@@ -43,32 +43,10 @@ Save.
   forall (b_Z3: ((memory) ((pointer) Z0) Z3)),
   forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) Z10)),
-  forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 b_Z3) /\ (valid1_range b_Z3 5)),
-  forall (HW_2: (valid alloc s0)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_3: result = (acc b_Z3 s0)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_4: result0 = (shift result 2)),
-  forall (HW_5: (valid alloc result0)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_6: int_Z0_0 = (upd int_Z0 result0 1)),
-  (valid alloc l).
-Proof.
-intuition; subst; try caduceus.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f2_impl_po_4 : 
-  forall (alloc: alloc_table),
-  forall (b_Z3: ((memory) ((pointer) Z0) Z3)),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (l: ((pointer) Z10)),
   forall (p_Z10: ((memory) ((pointer) Z3) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 b_Z3) /\ (valid1_range b_Z3 5)),
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 b_Z3) /\
+                (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z3 s0)),
@@ -85,20 +63,19 @@ Save.
   forall (HW_10: result1 = (acc p_Z10_0 l)),
   (valid alloc result1).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; try caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f2_impl_po_5 : 
+(*Why goal*) Lemma f2_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (b_Z3: ((memory) ((pointer) Z0) Z3)),
   forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) Z10)),
   forall (p_Z10: ((memory) ((pointer) Z3) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 b_Z3) /\ (valid1_range b_Z3 5)),
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 b_Z3) /\
+                (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z3 s0)),
@@ -121,20 +98,19 @@ Save.
   (valid alloc result3).
 Proof.
 intuition.
-subst.
-caduceus.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f2_impl_po_6 : 
+(*Why goal*) Lemma f2_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (b_Z3: ((memory) ((pointer) Z0) Z3)),
   forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) Z10)),
   forall (p_Z10: ((memory) ((pointer) Z3) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 b_Z3) /\ (valid1_range b_Z3 5)),
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 b_Z3) /\
+                (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
   forall (HW_3: result = (acc b_Z3 s0)),
@@ -160,6 +136,12 @@ Save.
   (* File "separation3.c", line 17, characters 13-25 *) result4 = 1.
 Proof.
 intuition.
+subst.
+caduceus.
+Save.
+
+Proof.
+intuition.
 subst;caduceus.
 Save.
 
@@ -176,8 +158,8 @@ Save.
   forall (c_Z3: ((memory) ((pointer) Z1) Z3)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 c_Z3) /\ (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 c_Z3) /\
+                (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
                 (valid1_range b_Z3 5)),
   (valid alloc s0).
 Proof.
@@ -191,8 +173,8 @@ Save.
   forall (c_Z3: ((memory) ((pointer) Z1) Z3)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 c_Z3) /\ (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 c_Z3) /\
+                (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
                 (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
@@ -216,8 +198,8 @@ Save.
   forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 c_Z3) /\ (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 c_Z3) /\
+                (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
                 (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
@@ -246,8 +228,8 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 c_Z3) /\ (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 c_Z3) /\
+                (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
                 (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
@@ -290,8 +272,8 @@ Save.
   forall (int_Z1: ((memory) Z Z1)),
   forall (l: ((pointer) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (valid1 c_Z3) /\ (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\ (valid1 c_Z3) /\
+                (valid1 b_Z3) /\ (valid1_range c_Z3 5) /\
                 (valid1_range b_Z3 5)),
   forall (HW_2: (valid alloc s0)),
   forall (result: ((pointer) Z0)),
@@ -340,7 +322,7 @@ Save.
   forall (l: ((pointer) Z10)),
   forall (q_Z10: ((memory) ((pointer) Z2) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
                 (separation2 q_Z10 q_Z10) /\ (valid1 q_Z10)),
   (valid alloc s0).
 Proof.
@@ -354,24 +336,7 @@ Save.
   forall (l: ((pointer) Z10)),
   forall (q_Z10: ((memory) ((pointer) Z2) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
-                (separation2 q_Z10 q_Z10) /\ (valid1 q_Z10)),
-  forall (HW_2: (valid alloc s0)),
-  forall (a_Z3_0: ((memory) Z Z3)),
-  forall (HW_3: a_Z3_0 = (upd a_Z3 s0 1)),
-  (valid alloc l).
-Proof.
-intuition; subst; caduceus.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_3 : 
-  forall (a_Z3: ((memory) Z Z3)),
-  forall (alloc: alloc_table),
-  forall (l: ((pointer) Z10)),
-  forall (q_Z10: ((memory) ((pointer) Z2) Z10)),
-  forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
                 (separation2 q_Z10 q_Z10) /\ (valid1 q_Z10)),
   forall (HW_2: (valid alloc s0)),
   forall (a_Z3_0: ((memory) Z Z3)),
@@ -381,20 +346,18 @@ Save.
   forall (HW_5: result = (acc q_Z10 l)),
   (valid alloc result).
 Proof.
-intuition.
-subst.
-red in H3;auto.
+intuition; subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_4 : 
+(*Why goal*) Lemma f_impl_po_3 : 
   forall (a_Z2: ((memory) Z Z2)),
   forall (a_Z3: ((memory) Z Z3)),
   forall (alloc: alloc_table),
   forall (l: ((pointer) Z10)),
   forall (q_Z10: ((memory) ((pointer) Z2) Z10)),
   forall (s0: ((pointer) Z3)),
-  forall (HW_1: (valid_range alloc l 0 0) /\ (valid_range alloc s0 0 0) /\
+  forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
                 (separation2 q_Z10 q_Z10) /\ (valid1 q_Z10)),
   forall (HW_2: (valid alloc s0)),
   forall (a_Z3_0: ((memory) Z Z3)),
@@ -409,6 +372,12 @@ Save.
   forall (result0: Z),
   forall (HW_9: result0 = (acc a_Z3_0 s0)),
   (* File "separation3.c", line 9, characters 13-25 *) result0 = 1.
+Proof.
+intuition.
+subst.
+red in H3;auto.
+Save.
+
 Proof.
 intuition.
 (* FILL PROOF HERE *)

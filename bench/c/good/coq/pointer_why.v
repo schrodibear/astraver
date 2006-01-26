@@ -10,7 +10,7 @@ Require Export pointer_spec_why.
   forall (t: ((pointer) Z16)),
   forall (HW_1: (* File "pointer.c", line 42, characters 14-31 *)
                 (valid_index alloc t 2) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0)),
+                (valid alloc s)),
   forall (result: ((pointer) Z16)),
   forall (HW_3: result = (shift t 2)),
   forall (p: ((pointer) Z16)),
@@ -32,7 +32,7 @@ Save.
   forall (t: ((pointer) Z16)),
   forall (HW_1: (* File "pointer.c", line 42, characters 14-31 *)
                 (valid_index alloc t 2) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0)),
+                (valid alloc s)),
   forall (result: ((pointer) Z16)),
   forall (HW_3: result = (shift t 2)),
   forall (p: ((pointer) Z16)),
@@ -51,23 +51,23 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
-  forall (A802:Set),
-  forall (x: ((pointer) A802)),
+  forall (A805:Set),
+  forall (x: ((pointer) A805)),
   forall (alloc: alloc_table),
-  forall (int_Z12: ((memory) Z A802)),
+  forall (int_Z12: ((memory) Z A805)),
   forall (s: ((pointer) Z18)),
   forall (t: ((pointer) Z16)),
   forall (HW_1: (* File "pointer.c", line 12, characters 14-23 *)
                 (valid alloc x) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0)),
+                (valid alloc s)),
   forall (HW_2: (valid alloc x)),
-  forall (int_Z12_0: ((memory) Z A802)),
+  forall (int_Z12_0: ((memory) Z A805)),
   forall (HW_3: int_Z12_0 = (upd int_Z12 x 0)),
   forall (HW_4: (valid alloc x)),
   forall (result: Z),
   forall (HW_5: result = (acc int_Z12_0 x)),
   forall (HW_6: (valid alloc x)),
-  forall (int_Z12_1: ((memory) Z A802)),
+  forall (int_Z12_1: ((memory) Z A805)),
   forall (HW_7: int_Z12_1 = (upd int_Z12_0 x (result + 1))),
   (* File "pointer.c", line 13, characters 13-36 *) ((acc int_Z12_1 x) = 1 /\
   (result + 1) = 1).
@@ -92,23 +92,23 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A803:Set),
-  forall (x: ((pointer) A803)),
+  forall (A806:Set),
+  forall (x: ((pointer) A806)),
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z A803)),
+  forall (int_Z11: ((memory) Z A806)),
   forall (s: ((pointer) Z18)),
   forall (t: ((pointer) Z16)),
   forall (HW_1: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc x) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0)),
+                (valid alloc s)),
   forall (HW_2: (valid alloc x)),
-  forall (int_Z11_0: ((memory) Z A803)),
+  forall (int_Z11_0: ((memory) Z A806)),
   forall (HW_3: int_Z11_0 = (upd int_Z11 x 0)),
   forall (HW_4: (valid alloc x)),
   forall (result: Z),
   forall (HW_5: result = (acc int_Z11_0 x)),
   forall (HW_6: (valid alloc x)),
-  forall (int_Z11_1: ((memory) Z A803)),
+  forall (int_Z11_1: ((memory) Z A806)),
   forall (HW_7: int_Z11_1 = (upd int_Z11_0 x (1 + result))),
   (* File "pointer.c", line 6, characters 13-36 *) ((acc int_Z11_1 x) = 1 /\
   result = 0) /\ (not_assigns alloc int_Z11 int_Z11_1 (pset_singleton x)).
@@ -148,7 +148,7 @@ Save.
   forall (t: ((pointer) Z16)),
   forall (HW_1: (* File "pointer.c", line 22, characters 14-23 *)
                 (valid alloc r) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0)),
+                (valid alloc s)),
   forall (HW_2: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc r)),
   forall (result: Z),
@@ -172,7 +172,7 @@ Save.
   forall (alloc: alloc_table),
   forall (s: ((pointer) Z18)),
   forall (t: ((pointer) Z16)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc s)),
   1 >= 1.
 Proof.
 intuition.
@@ -181,15 +181,15 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
-  forall (A804:Set), forall (A805:Set), forall (A806:Set), forall (A807:Set),
-  forall (A808:Set), forall (A809:Set), forall (A810:Set), forall (A811:Set),
+  forall (A807:Set), forall (A808:Set), forall (A809:Set), forall (A810:Set),
+  forall (A811:Set), forall (A812:Set), forall (A813:Set), forall (A814:Set),
   forall (alloc: alloc_table),
-  forall (int_Z15: ((memory) Z A811)),
+  forall (int_Z15: ((memory) Z A814)),
   forall (s: ((pointer) Z18)),
   forall (t: ((pointer) Z16)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc s)),
   forall (HW_2: 1 >= 1),
-  forall (result: ((pointer) A811)),
+  forall (result: ((pointer) A814)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
@@ -197,12 +197,12 @@ Save.
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
   forall (HW_4: (valid alloc0 result)),
-  forall (int_Z15_0: ((memory) Z A811)),
+  forall (int_Z15_0: ((memory) Z A814)),
   forall (HW_5: int_Z15_0 = (upd int_Z15 result 0)),
   forall (HW_6: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
   forall (result0: Z),
-  forall (int_Z15_1: ((memory) Z A811)),
+  forall (int_Z15_1: ((memory) Z A814)),
   forall (HW_7: (* File "pointer.c", line 6, characters 13-36 *)
                 ((acc int_Z15_1 result) = 1 /\ result0 = 0) /\
                 (not_assigns alloc0 int_Z15_0 int_Z15_1
@@ -284,8 +284,7 @@ Save.
   forall (x_Z18: ((memory) ((pointer) Z10) Z18)),
   forall (HW_1: (* File "pointer.c", line 53, characters 14-23 *)
                 (valid alloc s) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0) /\ (valid1_range x_Z18 1) /\
-                (valid1 x_Z18)),
+                (valid alloc s) /\ (valid1_range x_Z18 1) /\ (valid1 x_Z18)),
   forall (HW_2: (valid alloc s)),
   forall (result: ((pointer) Z10)),
   forall (HW_3: result = (acc x_Z18 s)),
@@ -305,8 +304,7 @@ Save.
   forall (y_Z18: ((memory) Z Z18)),
   forall (HW_1: (* File "pointer.c", line 53, characters 14-23 *)
                 (valid alloc s) /\ (valid_range alloc t 0 4) /\
-                (valid_range alloc s 0 0) /\ (valid1_range x_Z18 1) /\
-                (valid1 x_Z18)),
+                (valid alloc s) /\ (valid1_range x_Z18 1) /\ (valid1 x_Z18)),
   forall (HW_2: (valid alloc s)),
   forall (result: ((pointer) Z10)),
   forall (HW_3: result = (acc x_Z18 s)),

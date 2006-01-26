@@ -11,9 +11,8 @@ Require Export separation4_spec_why.
   forall (x: ((pointer) Z5)),
   forall (y: ((pointer) Z7)),
   forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid_range alloc y 0 0) /\
-                (valid_range alloc x 0 0) /\ (valid1 b_Z5) /\
-                (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
+                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
+                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
                 (valid1_range b_Z7 5)),
   (valid alloc x).
 Proof.
@@ -29,9 +28,8 @@ Save.
   forall (x: ((pointer) Z5)),
   forall (y: ((pointer) Z7)),
   forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid_range alloc y 0 0) /\
-                (valid_range alloc x 0 0) /\ (valid1 b_Z5) /\
-                (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
+                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
+                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
                 (valid1_range b_Z7 5)),
   forall (HW_2: (valid alloc x)),
   forall (result: ((pointer) Z0)),
@@ -51,9 +49,8 @@ Save.
   forall (x: ((pointer) Z5)),
   forall (y: ((pointer) Z7)),
   forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid_range alloc y 0 0) /\
-                (valid_range alloc x 0 0) /\ (valid1 b_Z5) /\
-                (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
+                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
+                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
                 (valid1_range b_Z7 5)),
   forall (HW_2: (valid alloc x)),
   forall (result: ((pointer) Z0)),
@@ -76,9 +73,8 @@ Save.
   forall (x: ((pointer) Z5)),
   forall (y: ((pointer) Z7)),
   forall (HW_1: (* File "separation4.c", line 15, characters 14-18 *)
-                (p b_Z5 alloc x) /\ (valid_range alloc y 0 0) /\
-                (valid_range alloc x 0 0) /\ (valid1 b_Z5) /\
-                (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
+                (p b_Z5 alloc x) /\ (valid alloc y) /\ (valid alloc x) /\
+                (valid1 b_Z5) /\ (valid1 b_Z7) /\ (valid1_range b_Z5 5) /\
                 (valid1_range b_Z7 5)),
   forall (HW_2: (valid alloc x)),
   forall (result: ((pointer) Z0)),

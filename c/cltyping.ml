@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.83 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.84 2006-01-26 14:25:02 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -562,7 +562,9 @@ let type_spec result env s =
   let env' = match result with
     | None -> env
     | Some ty ->
-	Env.add "result" ty (Var_info (Info.default_var_info "result")) env
+	let v = Var_info (Info.default_var_info "result") in
+	Cenv.set_var_type v ty true;
+	Env.add "result" ty v env
   in
   let q = option_app (type_predicate env') s.ensures in
   let v = option_app (type_variant env) s.decreases in

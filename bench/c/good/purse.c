@@ -22,7 +22,7 @@ void withdraw(purse *p,int s) {
 }
 
 
-/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
+/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2 
   @ assigns p1->balance, p2->balance
   @ ensures \result == 0
   @*/
@@ -41,7 +41,7 @@ purse *new_purse();
 /*@ ensures \result == 150
   @*/
 int test2() {
-    purse *p1 = new_purse();
+  purse *p1 = new_purse();
     purse *p2 = new_purse();
     credit(p1,100);
     credit(p2,200);
@@ -49,3 +49,11 @@ int test2() {
     withdraw(p2,100);
     return p1->balance + p2->balance;
 }
+
+
+/*
+void main() {
+  purse *p = new_purse();
+  test1(p,p);
+}
+*/

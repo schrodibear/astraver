@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.106 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.107 2006-01-26 14:25:02 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -55,9 +55,15 @@ let print_effects fmt l =
 
 let print_effects2 fmt l =
   fprintf fmt "@[%a@]"
-    (print_list space (fun fmt (z,s,_) -> fprintf fmt " %s_%s " s z.name)) 
+    (print_list space (fun fmt (z,s,_) ->let z = repr z in
+		       fprintf fmt " %s_%s " s z.name)) 
     (ZoneSet.elements l)
 
+let print_effects3 fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt (z,s,_) -> let z = repr z in
+		       fprintf fmt " %s_%s:%b " s z.name z.zone_is_var)) 
+    (ZoneSet.elements l)
 
 let alloc = 
   let x = "alloc" in
@@ -141,7 +147,7 @@ let add_field_var v ty s =
 	let ty' = v.var_why_type in
 (*	assert (same_why_type_no_zone ty ty'); *)
 	let n = v.var_unique_name in
-	if not z.zone_is_var then add_heap_var n z ty' s; 
+	if not z.zone_is_var then add_heap_var n z ty' s;
 	ZoneSet.add (z,n,ty') s
     | Unit -> assert false
     | Info.Int -> assert false
@@ -418,7 +424,7 @@ let loop_annot a =
 
 let spec sp = 
   ef_union
-    ( ef_union 
+    (ef_union 
 	(ef_union (ef_option predicate sp.requires) 
 	   (ef_option predicate sp.ensures))
 	(ef_option variant sp.decreases))
@@ -470,7 +476,6 @@ let rec expr e = match e.nexpr_node with
 		 ZoneSet.add 
 		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
 	      f.function_writes empty in
-	    eprintf "function : %s read : %a ; %a writes : %a ; %a @\n" f.fun_name print_effects2 reads print_effects f.function_reads_var print_effects2 writes print_effects f.function_writes_var;
 	    { reads = reads; assigns = writes; 
 	      reads_var = f.function_reads_var; 
 	      assigns_var = f.function_writes_var} 
@@ -1046,7 +1051,8 @@ let functions dl =
   in
   let decl d = match d.node with
     | Nfunspec (sp, _, id) ->
-	declare id (spec sp)
+	let sp = spec sp in
+	declare id sp
     | Nfundef (sp, _, id, s) ->
 	let ef_spec = spec sp in
 	let ef = 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint_annot.ml,v 1.3 2005-05-13 14:58:49 hubert Exp $ i*)
+(*i $Id: cprint_annot.ml,v 1.4 2006-01-26 14:25:02 hubert Exp $ i*)
 
 (* Pretty-printer for typed AST *)
 
@@ -95,8 +95,6 @@ let rec term fmt t = match t.term_node with
       fprintf fmt "\\base_addr(%a)" term t
   | Tblock_length t ->
       fprintf fmt "\\block_length(%a)" term t
-  | Tresult ->
-      fprintf fmt "\\result"
   | Tnull ->
       fprintf fmt "null"
   | Tcast (ty, t) ->
@@ -105,7 +103,7 @@ let rec term fmt t = match t.term_node with
       fprintf fmt "%a[%a..%a]" term t1 term_option t2 term_option t3
 
 and term_p fmt t = match t.term_node with
-  | Tconstant _ | Tvar _ | Tapp _ | Tresult | Tnull | Told _ | Tat _ ->
+  | Tconstant _ | Tvar _ | Tapp _ | Tnull | Told _ | Tat _ ->
       term fmt t
   | _ ->
       fprintf fmt "(%a)" term t

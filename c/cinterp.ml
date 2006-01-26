@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.161 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.162 2006-01-26 14:25:02 hubert Exp $ i*)
 
 
 open Format
@@ -346,7 +346,13 @@ let rec interp_predicate label old_label p =
     | NPvalid_index (t,a) ->
 	LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
     | NPvalid_range (t,a,b) ->
-	LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
+	begin 
+	  match a.nterm_node , b.nterm_node with
+	    | NTconstant IntConstant "0", NTconstant IntConstant "0" -> 
+		LPred("valid",[interp_var label "alloc"; ft t])
+	    | _ ->
+		LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
+	end
     | NPnamed (n, p) ->
 	LNamed (n, f p)
 
@@ -1024,11 +1030,13 @@ let add ef ep =
   match l with 
     | [] -> []
     | [l] -> List.fold_left (fun acc (z,n,_) -> [(z,n)]::acc) [] l
-    | [l1;l2] -> List.fold_left 
-	(fun acc (zx,nx,tyx) -> 
-	   List.fold_left 
-	     (fun acc (zy,ny,tyy) -> if same_why_type tyx tyy 
-	      then ([(zx,nx);(zy,ny)]::acc) else acc) acc l2) [] l1 
+    | [l1;l2] -> 
+	List.fold_left 
+	  (fun acc (zx,nx,tyx) -> 
+	     List.fold_left 
+	       (fun acc (zy,ny,tyy) -> 
+		  if same_why_type tyx tyy && same_zone zx zy 
+		  then ([(zx,nx);(zy,ny)]::acc) else acc) acc l2) [] l1 
     | _ -> assert false
 
 let subst a p =
@@ -1051,8 +1059,6 @@ let strong_invariants_for hvs =
   let pred =
     Hashtbl.fold
       (fun id (p,e1,e2) acc ->
-	 eprintf "effect fonction : %a @\n effet predicate %s: %a @\n"
-	   print_effects2 hvs.Ceffect.reads id print_effects e2.Ceffect.reads_var;
 	 let l = add hvs.Ceffect.reads e2.Ceffect.reads_var in
 	 let rec add_pred id p l acc = 
 	   match l with 

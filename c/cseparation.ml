@@ -21,12 +21,25 @@ open Clogic
 open Cnorm
 open Cenv
 
+let rename_zone assoc ty =
+  match ty with
+    | Pointer z ->
+	let z = repr z in
+	begin
+	  try
+	    Pointer(List.assoc z assoc)
+	  with
+	      Not_found -> ty
+	end
+    | _ -> ty
+
 let rec type_why_for_term t = 
   match t.nterm_node with
     | NTconstant (IntConstant _) -> Int     
     | NTconstant (FloatConstant _) -> Float 
     | NTvar v -> v.var_why_type
-    | NTapp {napp_pred = f} -> f.logic_why_type
+    | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
+	rename_zone assoc f.logic_why_type
     | NTunop (Uminus,t) | NTunop (Utilde,t)  -> type_why_for_term t
     | NTunop (Ustar,_) | NTunop (Uamp,_) -> assert false
     | NTunop (Ufloat_of_int,_) -> Float
@@ -74,8 +87,10 @@ let rec type_why e =
     | NEassign (l,e) -> type_why e
     | NEassign_op (l,op,e) -> type_why e
     | NEcast (_,e) | NEunary (_,e) | NEincr (_,e) 
-    | NEbinary (e,_,_) | NEcond (_,_,e) | NEcall {ncall_fun = e} -> type_why e
-
+    | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
+    | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
+	rename_zone assoc (type_why e)
+	
 
 
 
@@ -437,12 +452,14 @@ and unifier_zone z1 z2 =
     end
 
 
-let rec term t =
+let rec term tyf t =
   match t.nterm_node with
-    | NTconstant _ 
-    | NTvar _ -> ()
+    | NTconstant _ -> () 
+    | NTvar v -> 
+	if v.var_name = "result" then
+	  unifier_type_why v.var_why_type tyf
     | NTapp ({napp_pred = f;napp_args = l} as call) -> 
-      List.iter term l;
+      List.iter (term tyf) l;
       let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
       call.napp_zones_assoc <- assoc;
       let li =  
@@ -465,25 +482,25 @@ let rec term t =
       List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) 
-  | NTstar t -> term t
-  | NTbinop (t1,_,t2) -> term t1; term t2 
-  | NTarrow (t,_) -> term t
-  | NTif (t1,t2,t3) -> term t1; term t2; term t3
+  | NTstar t -> term tyf t
+  | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
+  | NTarrow (t,v) -> term tyf t
+  | NTif (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NTold t 
   | NTat (t,_) 
   | NTbase_addr t
   | NTblock_length t 
   | NTcast (_,t) 
-  | NTrange (t,None,None) -> term t
-  | NTrange (t1,Some t2,None) | NTrange (t1,None,Some t2) -> term t1; term t2
-  | NTrange (t1,Some t2,Some t3) -> term t1; term t2; term t3
+  | NTrange (t,None,None) -> term tyf t
+  | NTrange (t1,Some t2,None) | NTrange (t1,None,Some t2) -> term tyf t1; term tyf t2
+  | NTrange (t1,Some t2,Some t3) -> term tyf t1; term tyf t2; term tyf t3
 
-let rec predicate p =
+let rec predicate tyf p =
   match p.npred_node with
   | NPfalse
   | NPtrue -> ()
   | NPapp ({napp_pred = f;napp_args = l} as call) -> 
-      List.iter term l;
+      List.iter (term tyf) l;
       let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
       call.napp_zones_assoc <- assoc;
       let li =  
@@ -506,23 +523,23 @@ let rec predicate p =
       List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NPrel (t1,_,t2) ->
-      term t1; term t2;
+      term tyf t1; term tyf t2;
       unifier_type_why (type_why_for_term t1) (type_why_for_term t2)
   | NPand (p1,p2) 
   | NPor (p1,p2) 
   | NPimplies (p1,p2) 
-  | NPiff (p1,p2) -> predicate p1; predicate p2
-  | NPnot p -> predicate p
-  | NPif (t,p1,p2) -> term t; predicate p1; predicate p2
+  | NPiff (p1,p2) -> predicate tyf p1; predicate tyf p2
+  | NPnot p -> predicate tyf p
+  | NPif (t,p1,p2) -> term tyf t; predicate tyf p1; predicate tyf p2
   | NPforall (_,p) 
   | NPexists (_,p) 
   | NPold p 
-  | NPat (p,_) -> predicate p
-  | NPvalid t -> term t
-  | NPvalid_index (t1,t2) -> term t1; term t2
-  | NPvalid_range (t1,t2,t3) -> term t1; term t2; term t3
-  | NPfresh  t -> term t
-  | NPnamed (_,p) -> predicate p
+  | NPat (p,_) -> predicate tyf p
+  | NPvalid t -> term tyf t
+  | NPvalid_index (t1,t2) -> term tyf t1; term tyf t2
+  | NPvalid_range (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
+  | NPfresh  t -> term tyf t
+  | NPnamed (_,p) -> predicate tyf p
 
 
     
@@ -612,31 +629,31 @@ let option_iter f x =
     | None -> ()
     | Some x -> f x
 
-let loop_annot la =
-  option_iter predicate la.invariant;
-  option_iter (List.iter term) la.loop_assigns;
-  option_iter (fun (t,_) -> term t) la.variant
+let loop_annot tyf la =
+  option_iter (predicate tyf) la.invariant;
+  option_iter (List.iter (term tyf)) la.loop_assigns;
+  option_iter (fun (t,_) -> term tyf t) la.variant
 
-let spec sp =
+let spec tyf sp =
   begin
   match sp.requires with
     | None -> ()
-    | Some p -> predicate p
+    | Some p -> predicate tyf p
   end;
   begin
   match sp.assigns with
     | None -> ()
-    | Some l -> List.iter term l
+    | Some l -> List.iter (term tyf) l
   end;
   begin
     match sp.ensures with
       | None -> ()
-      | Some p -> predicate p
+      | Some p -> predicate tyf p
   end;
   begin
     match sp.decreases with
       | None -> ()
-      | Some (t,_) -> term t
+      | Some (t,_) -> term tyf t
   end
 
 let rec statement twf st =
@@ -647,9 +664,9 @@ let rec statement twf st =
     | NSif (e,st1,st2) -> calcul_zones e; statement twf st1; statement twf st2 
     | NSwhile (lannot,e,st) 
     | NSdowhile (lannot,st,e)-> 
-	loop_annot lannot; calcul_zones e;statement twf st
+	loop_annot twf lannot; calcul_zones e;statement twf st
     | NSfor (lannot, e1, e2, e3, st)-> 
-	loop_annot lannot;
+	loop_annot twf lannot;
 	calcul_zones e1; calcul_zones e2; 
 	calcul_zones e3; statement twf st
     | NSblock ls -> List.iter (statement twf) ls
@@ -658,20 +675,36 @@ let rec statement twf st =
     | NSlabel (_,st) -> statement twf st
     | NSswitch (e1, e2, l) -> calcul_zones e1;
 	List.iter (fun (x, y) -> List.iter (statement twf) y) l
-    | NSspec (sp,st) -> spec sp; statement twf st
+    | NSspec (sp,st) -> spec twf sp; statement twf st
     | NSdecl (_, v, None, st) -> statement twf st
     | NSdecl (_, v, Some i, st) -> 
 	c_initializer v.var_type v.var_why_type i;
 	statement twf st 
 	
-	  
+
+let add_zone ty l =
+  match ty with
+    | Pointer z -> 
+	begin match z.repr with 
+	  | None -> z::l
+	  | Some _ -> l
+	end
+    | _ -> l
+      
+let collect_zones args ret_type =	
+  let l =
+    List.fold_left  
+      (fun l v ->
+	 add_zone v.var_why_type l) [] args
+  in
+  add_zone ret_type l
 
 
 let global_decl e =
   match e with 
     | Naxiom (_,sp) | Ninvariant (_,sp) | Ninvariant_strong (_,sp) ->
-	predicate sp
-    | Nlogic (f, NPredicate_def (_,p)) -> predicate p;
+	predicate Unit sp
+    | Nlogic (f, NPredicate_def (_,p)) -> predicate Unit p;
 	f.logic_args_zones <- 
 	  List.fold_left  
 	  (fun l v ->
@@ -682,7 +715,7 @@ let global_decl e =
 		   | Some _ -> l
 		 end
 	     | _ -> l) [] f.logic_args
-    | Nlogic (f, NFunction_def (_,_,t)) -> term t;
+    | Nlogic (f, NFunction_def (_,_,t)) -> term Unit t;
 	f.logic_args_zones <- 
 	  List.fold_left  
 	  (fun l v ->
@@ -694,19 +727,14 @@ let global_decl e =
 		 end
 	     | _ -> l) [] f.logic_args
     | Nlogic _ -> ()
-    | Nfunspec (sp,_,_) -> spec sp
+    | Nfunspec (sp,_,f) -> 
+	spec f.type_why_fun sp;
+	f.args_zones <- collect_zones f.args f.type_why_fun
     | Ntypedef _ | Ntypedecl _ | Ndecl (_,_,None) | Ntype _ -> ()
     | Ndecl (_, v, Some i) -> c_initializer v.var_type v.var_why_type i
-    | Nfundef (sp, _, f, st) -> spec sp; statement f.type_why_fun st; 
-	f.args_zones <- 
-	  List.fold_left  
-	  (fun l v ->
-	     match v.var_why_type with 
-	     | Pointer z -> 
-		 begin match z.repr with 
-		   | None -> z::l
-		   | Some _ -> l
-		 end
-	     | _ -> l) [] f.args
+    | Nfundef (sp, _, f, st) -> 
+	spec f.type_why_fun sp; 
+	statement f.type_why_fun st; 
+	f.args_zones <- collect_zones f.args f.type_why_fun
 
 let file =  List.iter (fun d -> global_decl d.node)

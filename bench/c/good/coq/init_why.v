@@ -16,7 +16,7 @@ Require Export init_spec_why.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
@@ -39,7 +39,7 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
@@ -64,7 +64,7 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
@@ -93,7 +93,7 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
@@ -129,7 +129,7 @@ Save.
                 (* File "init.c", line 13, characters 25-51 *)
                 ((acc int_Z1 (acc b_Z7 s)) = 1 /\
                 (acc int_Z1 (shift (acc b_Z7 s) 2)) = 4)) /\
-                (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+                (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (result: ((pointer) Z5)),
   forall (HW_2: result = (shift t 1)),
@@ -178,7 +178,7 @@ Save.
   forall (alloc: alloc_table),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   2 >= 1.
 Proof.
 intuition.
@@ -192,7 +192,7 @@ Save.
   forall (int_Z3: ((memory) Z A875)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 2 >= 1),
   forall (result: ((pointer) A875)),
   forall (alloc0: alloc_table),
@@ -219,7 +219,7 @@ Save.
   forall (int_Z3: ((memory) Z A883)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 2 >= 1),
   forall (result: ((pointer) A883)),
   forall (alloc0: alloc_table),
@@ -266,7 +266,7 @@ Save.
   forall (alloc: alloc_table),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   3 >= 1.
 Proof.
 intuition.
@@ -280,7 +280,7 @@ Save.
   forall (int_Z4: ((memory) Z A891)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 3 >= 1),
   forall (result: ((pointer) A891)),
   forall (alloc0: alloc_table),
@@ -307,7 +307,7 @@ Save.
   forall (int_Z4: ((memory) Z A899)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 3 >= 1),
   forall (result: ((pointer) A899)),
   forall (alloc0: alloc_table),
@@ -339,7 +339,7 @@ Save.
   forall (int_Z4: ((memory) Z A907)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 3 >= 1),
   forall (result: ((pointer) A907)),
   forall (alloc0: alloc_table),
@@ -380,7 +380,7 @@ Save.
   forall (int_Z4: ((memory) Z A915)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 3 >= 1),
   forall (result: ((pointer) A915)),
   forall (alloc0: alloc_table),
@@ -425,7 +425,7 @@ Save.
   forall (int_Z4: ((memory) Z A923)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0)),
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 3 >= 1),
   forall (result: ((pointer) A923)),
   forall (alloc0: alloc_table),
@@ -496,7 +496,7 @@ Save.
   forall (b_Z7: ((memory) ((pointer) Z1) Z7)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -512,7 +512,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -533,7 +533,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -560,7 +560,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -590,7 +590,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -627,7 +627,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -673,7 +673,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
@@ -726,7 +726,7 @@ Save.
   forall (int_Z5: ((memory) Z Z5)),
   forall (s: ((pointer) Z7)),
   forall (t: ((pointer) Z5)),
-  forall (HW_1: (valid_range alloc t 0 2) /\ (valid_range alloc s 0 0) /\
+  forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
                 (valid1 b_Z7) /\ (valid1_range b_Z7 3)),
   forall (x: Z),
   forall (HW_2: x = 45),

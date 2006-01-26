@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.23 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.24 2006-01-26 14:25:02 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -33,6 +33,8 @@ and zone =
       name : string;
       mutable type_why_zone : why_type
     }
+
+val same_zone : zone -> zone -> bool
 
 val same_why_type : why_type -> why_type -> bool
 

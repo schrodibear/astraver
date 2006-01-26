@@ -6,26 +6,19 @@ Require Export ref_glob_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) Z13)),
-  forall (x: ((pointer) Z11)),
-  forall (HW_1: (valid_range alloc x 0 0) /\ (valid_range alloc t 0 2)),
-  (valid alloc x).
-Proof.
-intuition.
-Qed.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f1_impl_po_2 : 
-  forall (alloc: alloc_table),
   forall (int_Z11: ((memory) Z Z11)),
   forall (t: ((pointer) Z13)),
   forall (x: ((pointer) Z11)),
-  forall (HW_1: (valid_range alloc x 0 0) /\ (valid_range alloc t 0 2)),
+  forall (HW_1: (valid alloc x) /\ (valid_range alloc t 0 2)),
   forall (HW_2: (valid alloc x)),
   forall (int_Z11_0: ((memory) Z Z11)),
   forall (HW_3: int_Z11_0 = (upd int_Z11 x 1)),
   (* File "ref_glob.c", line 13, characters 13-19 *) (acc int_Z11_0 x) = 1 /\
   (not_assigns alloc int_Z11 int_Z11_0 (pset_singleton x)).
+Proof.
+intuition.
+Qed.
+
 Proof.
 intuition;subst; caduceus.
 red.
@@ -34,13 +27,6 @@ rewrite acc_upd_neq;auto.
 generalize (pset_singleton_elim H0);auto.
 Qed.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f2_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (t: ((pointer) Z13)),
-  forall (x: ((pointer) Z11)),
-  forall (HW_1: (valid_range alloc x 0 0) /\ (valid_range alloc t 0 2)),
-  (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc x).
 Proof.
 intuition.
 Save.
@@ -59,7 +45,7 @@ Save.
   forall (t: ((pointer) Z13)),
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas) /\ (valid_range alloc x 0 0) /\
+                (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (valid1_range c2_Z12 1) /\
                 (valid1_range c1_Z12 1) /\ (valid1 c2_Z12) /\ (valid1 c1_Z12)),
   forall (HW_2: (valid alloc plas)),
@@ -80,7 +66,7 @@ Save.
   forall (t: ((pointer) Z13)),
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas) /\ (valid_range alloc x 0 0) /\
+                (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (valid1_range c2_Z12 1) /\
                 (valid1_range c1_Z12 1) /\ (valid1 c2_Z12) /\ (valid1 c1_Z12)),
   forall (HW_2: (valid alloc plas)),
@@ -109,7 +95,7 @@ Save.
   forall (t: ((pointer) Z13)),
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas) /\ (valid_range alloc x 0 0) /\
+                (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (valid1_range c2_Z12 1) /\
                 (valid1_range c1_Z12 1) /\ (valid1 c2_Z12) /\ (valid1 c1_Z12)),
   forall (HW_2: (valid alloc plas)),
@@ -146,7 +132,7 @@ Save.
   forall (t: ((pointer) Z13)),
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
-                (valid alloc plas) /\ (valid_range alloc x 0 0) /\
+                (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (valid1_range c2_Z12 1) /\
                 (valid1_range c1_Z12 1) /\ (valid1 c2_Z12) /\ (valid1 c1_Z12)),
   forall (HW_2: (valid alloc plas)),
@@ -230,7 +216,7 @@ Save.
   forall (t: ((pointer) Z13)),
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 2, characters 14-23 *)
-                (valid alloc p) /\ (valid_range alloc x 0 0) /\
+                (valid alloc p) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2)),
   forall (HW_2: (valid alloc p)),
   forall (int_Z10_0: ((memory) Z A879)),
@@ -262,7 +248,7 @@ Save.
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc pointer_Z14 p))) /\
-                (valid_range alloc x 0 0) /\ (valid_range alloc t 0 2)),
+                (valid alloc x) /\ (valid_range alloc t 0 2)),
   (valid alloc p).
 Proof.
 intuition;subst;auto.
@@ -278,7 +264,7 @@ Save.
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc pointer_Z14 p))) /\
-                (valid_range alloc x 0 0) /\ (valid_range alloc t 0 2)),
+                (valid alloc x) /\ (valid_range alloc t 0 2)),
   forall (HW_2: (valid alloc p)),
   forall (result: ((pointer) A882)),
   forall (HW_3: result = (acc pointer_Z14 p)),
@@ -298,7 +284,7 @@ Save.
   forall (x: ((pointer) Z11)),
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc pointer_Z14 p))) /\
-                (valid_range alloc x 0 0) /\ (valid_range alloc t 0 2)),
+                (valid alloc x) /\ (valid_range alloc t 0 2)),
   forall (HW_2: (valid alloc p)),
   forall (result: ((pointer) A884)),
   forall (HW_3: result = (acc pointer_Z14 p)),
