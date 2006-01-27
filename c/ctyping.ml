@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.104 2006-01-26 17:01:55 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.105 2006-01-27 10:36:41 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -96,17 +96,17 @@ let rec sizeof loc =
 
 and eval_const_expr_noerror (e : texpr) = match e.texpr_node with
   | TEconstant (IntConstant c) -> Cconst.int e.texpr_loc c
-  | TEunary (Uplus, t) -> eval_const_expr t
-  | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr t)
+  | TEunary (Uplus, t) -> eval_const_expr_noerror t
+  | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr_noerror t)
   | TEbinary (t1, Cast.Badd_int, t2) -> 
-      Int64.add (eval_const_expr t1)  (eval_const_expr t2)
+      Int64.add (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEbinary (t1, Cast.Bsub_int, t2) -> 
-      Int64.sub (eval_const_expr t1)  (eval_const_expr t2)
+      Int64.sub (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEbinary (t1, Cast.Bmul_int, t2) -> 
-      Int64.mul (eval_const_expr t1)  (eval_const_expr t2)
+      Int64.mul (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEbinary (t1, Cast.Bdiv_int, t2) -> 
-      Int64.div (eval_const_expr t1)  (eval_const_expr t2)
-  | TEcast (_, e) -> eval_const_expr e
+      Int64.div (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
+  | TEcast (_, e) -> eval_const_expr_noerror e
   | TEsizeof (t,n) -> n
   | TEvar (Var_info v) ->
       if e.texpr_type.Ctypes.ctype_const 
