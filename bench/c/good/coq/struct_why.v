@@ -8,10 +8,11 @@ Require Export struct_spec_why.
   forall (A793:Set),
   forall (t2: ((pointer) A793)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z10)),
-  forall (x_Z8: ((memory) Z A793)),
+  forall (s: ((pointer) struct_S_10)),
+  forall (x_struct_anonymous_0_8: ((memory) Z A793)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
-                ((valid alloc t2) /\ (acc x_Z8 t2) = 0) /\ (valid alloc s)),
+                ((valid alloc t2) /\ (acc x_struct_anonymous_0_8 t2) = 0) /\
+                (valid alloc s)),
   (valid alloc t2).
 Proof.
 intuition; subst; auto.
@@ -22,25 +23,30 @@ Save.
   forall (A794:Set),
   forall (t2: ((pointer) A794)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z10)),
-  forall (x_Z8: ((memory) Z A794)),
-  forall (y_Z8: ((memory) Z A794)),
+  forall (s: ((pointer) struct_S_10)),
+  forall (x_struct_anonymous_0_8: ((memory) Z A794)),
+  forall (y_struct_anonymous_0_8: ((memory) Z A794)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
-                ((valid alloc t2) /\ (acc x_Z8 t2) = 0) /\ (valid alloc s)),
+                ((valid alloc t2) /\ (acc x_struct_anonymous_0_8 t2) = 0) /\
+                (valid alloc s)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
-  forall (HW_3: result = (acc x_Z8 t2)),
-  forall (x_Z8_0: ((memory) Z A794)),
-  forall (HW_4: x_Z8_0 = (upd x_Z8 t2 (result + 1))),
+  forall (HW_3: result = (acc x_struct_anonymous_0_8 t2)),
+  forall (x_struct_anonymous_0_8_0: ((memory) Z A794)),
+  forall (HW_4: x_struct_anonymous_0_8_0 = (upd x_struct_anonymous_0_8 t2
+                                            (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
-  forall (HW_6: result0 = (acc x_Z8_0 t2)),
-  forall (x_Z8_1: ((memory) Z A794)),
-  forall (HW_7: x_Z8_1 = (upd x_Z8_0 t2 (1 + result0))),
+  forall (HW_6: result0 = (acc x_struct_anonymous_0_8_0 t2)),
+  forall (x_struct_anonymous_0_8_1: ((memory) Z A794)),
+  forall (HW_7: x_struct_anonymous_0_8_1 = (upd x_struct_anonymous_0_8_0 t2
+                                            (1 + result0))),
   (* File "struct.c", line 9, characters 13-63 *) ((result0 = 1 /\
-  (acc x_Z8_1 t2) = 2) /\ (acc y_Z8 t2) = (acc y_Z8 t2)) /\
-  (not_assigns alloc y_Z8 y_Z8 pset_empty) /\
-  (not_assigns alloc x_Z8 x_Z8_1 (pset_singleton t2)).
+  (acc x_struct_anonymous_0_8_1 t2) = 2) /\ (acc y_struct_anonymous_0_8 t2) =
+  (acc y_struct_anonymous_0_8 t2)) /\
+  (not_assigns alloc y_struct_anonymous_0_8 y_struct_anonymous_0_8 pset_empty) /\
+  (not_assigns alloc x_struct_anonymous_0_8 x_struct_anonymous_0_8_1
+   (pset_singleton t2)).
 Proof.
 intuition; subst; caduceus; auto.
 Save.
@@ -67,17 +73,19 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (ps: ((pointer) Z10)),
-  forall (s: ((pointer) Z10)),
-  forall (t_Z10: ((memory) ((pointer) Z2) Z10)),
+  forall (ps: ((pointer) struct_S_10)),
+  forall (s: ((pointer) struct_S_10)),
+  forall (t_struct_S_10: ((memory) ((pointer) struct_anonymous_0_2)
+                         struct_S_10)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid alloc s) /\ (valid1 t_Z10) /\
-                (separation2 t_Z10 t_Z10)),
-  forall (ps0: ((pointer) Z10)),
+                (valid alloc ps) /\ (valid alloc s) /\
+                (valid1 t_struct_S_10) /\
+                (separation2 t_struct_S_10 t_struct_S_10)),
+  forall (ps0: ((pointer) struct_S_10)),
   forall (HW_3: ps0 = s),
-  forall (result: ((pointer) Z2)),
-  forall (HW_4: result = (acc t_Z10 s)),
-  forall (p: ((pointer) Z2)),
+  forall (result: ((pointer) struct_anonymous_0_2)),
+  forall (HW_4: result = (acc t_struct_S_10 s)),
+  forall (p: ((pointer) struct_anonymous_0_2)),
   forall (HW_5: p = result),
   (valid alloc ps0).
 Proof.
@@ -87,28 +95,31 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (ps: ((pointer) Z10)),
-  forall (s: ((pointer) Z10)),
-  forall (t_Z10: ((memory) ((pointer) Z2) Z10)),
-  forall (x_Z2: ((memory) Z Z2)),
+  forall (ps: ((pointer) struct_S_10)),
+  forall (s: ((pointer) struct_S_10)),
+  forall (t_struct_S_10: ((memory) ((pointer) struct_anonymous_0_2)
+                         struct_S_10)),
+  forall (x_struct_anonymous_0_2: ((memory) Z struct_anonymous_0_2)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid alloc s) /\ (valid1 t_Z10) /\
-                (separation2 t_Z10 t_Z10)),
-  forall (ps0: ((pointer) Z10)),
+                (valid alloc ps) /\ (valid alloc s) /\
+                (valid1 t_struct_S_10) /\
+                (separation2 t_struct_S_10 t_struct_S_10)),
+  forall (ps0: ((pointer) struct_S_10)),
   forall (HW_3: ps0 = s),
-  forall (result: ((pointer) Z2)),
-  forall (HW_4: result = (acc t_Z10 s)),
-  forall (p: ((pointer) Z2)),
+  forall (result: ((pointer) struct_anonymous_0_2)),
+  forall (HW_4: result = (acc t_struct_S_10 s)),
+  forall (p: ((pointer) struct_anonymous_0_2)),
   forall (HW_5: p = result),
   forall (HW_6: (valid alloc ps0)),
-  forall (result0: ((pointer) Z2)),
-  forall (HW_7: result0 = (acc t_Z10 ps0)),
-  forall (x_Z2_0: ((memory) Z Z2)),
-  forall (HW_8: x_Z2_0 = (upd x_Z2 result0 1)),
-  forall (result1: ((pointer) Z2)),
-  forall (HW_9: result1 = (acc t_Z10 s)),
+  forall (result0: ((pointer) struct_anonymous_0_2)),
+  forall (HW_7: result0 = (acc t_struct_S_10 ps0)),
+  forall (x_struct_anonymous_0_2_0: ((memory) Z struct_anonymous_0_2)),
+  forall (HW_8: x_struct_anonymous_0_2_0 = (upd x_struct_anonymous_0_2
+                                            result0 1)),
+  forall (result1: ((pointer) struct_anonymous_0_2)),
+  forall (HW_9: result1 = (acc t_struct_S_10 s)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc x_Z2_0 result1)),
+  forall (HW_10: result2 = (acc x_struct_anonymous_0_2_0 result1)),
   (* File "struct.c", line 20, characters 13-25 *) result2 = 1.
 Proof.
  intuition.

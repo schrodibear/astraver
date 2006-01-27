@@ -55,6 +55,11 @@ apply fresh_not_valid;auto.
 apply pset_singleton_intro;auto.
 Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (A770:Set),
@@ -78,5 +83,10 @@ rewrite acc_upd_neq;auto.
 assert (p0<>p).
 apply pset_singleton_elim;auto.
 auto.
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

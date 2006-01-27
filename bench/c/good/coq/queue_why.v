@@ -6,14 +6,14 @@ Require Export queue_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (int_Z0_0: ((memory) Z Z0)),
@@ -34,22 +34,24 @@ Require Export queue_spec_why.
   forall (HW_9: result2 = (shift t 4)),
   forall (int_Z0_4: ((memory) Z Z0)),
   forall (HW_10: int_Z0_4 = (upd int_Z0_3 result2 0)),
-  forall (contents_Z9_0: ((memory) ((pointer) Z0) Z9)),
-  forall (HW_11: contents_Z9_0 = (upd contents_Z9 q t)),
-  forall (length_Z9_0: ((memory) Z Z9)),
-  forall (HW_12: length_Z9_0 = (upd length_Z9 q 5)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_13: first_Z9_0 = (upd first_Z9 q 0)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_14: last_Z9_0 = (upd last_Z9 q 0)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_15: empty_Z9_0 = (upd empty_Z9 q 0)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_16: full_Z9_0 = (upd full_Z9 q 1)),
+  forall (contents_struct_queue_9_0: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (HW_11: contents_struct_queue_9_0 = (upd contents_struct_queue_9 q t)),
+  forall (length_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_12: length_struct_queue_9_0 = (upd length_struct_queue_9 q 5)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_13: first_struct_queue_9_0 = (upd first_struct_queue_9 q 0)),
+  forall (last_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_14: last_struct_queue_9_0 = (upd last_struct_queue_9 q 0)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_15: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_16: full_struct_queue_9_0 = (upd full_struct_queue_9 q 1)),
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9_0 q) 0 ((acc length_Z9_0 q) - 1)) /\
-  0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9_0 q)) /\
-  0 <= (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9_0 q)).
+  (((valid_range alloc (acc contents_struct_queue_9_0 q) 0
+     ((acc length_struct_queue_9_0 q) - 1)) /\
+  0 <= (acc first_struct_queue_9_0 q) /\ (acc first_struct_queue_9_0 q) <
+  (acc length_struct_queue_9_0 q)) /\ 0 <= (acc last_struct_queue_9_0 q) /\
+  (acc last_struct_queue_9_0 q) < (acc length_struct_queue_9_0 q)).
 Proof.
 intuition.
 Save.
@@ -106,28 +108,31 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc first_Z9 q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: first_Z9_0 = (upd first_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc first_struct_queue_9 q)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: first_struct_queue_9_0 = (upd first_struct_queue_9 q
+                                          (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   (valid alloc result1).
@@ -138,64 +143,76 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc first_Z9 q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: first_Z9_0 = (upd first_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc first_struct_queue_9 q)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: first_struct_queue_9_0 = (upd first_struct_queue_9 q
+                                          (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (result2: Z),
   forall (HW_7: result2 = (acc int_Z0 result1)),
   forall (result3: Z),
-  forall (HW_8: result3 = (acc first_Z9_0 q)),
+  forall (HW_8: result3 = (acc first_struct_queue_9_0 q)),
   forall (result4: Z),
-  forall (HW_9: result4 = (acc length_Z9 q)),
+  forall (HW_9: result4 = (acc length_struct_queue_9 q)),
   forall (HW_10: result3 = result4),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_11: first_Z9_1 = (upd first_Z9_0 q 0)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_12: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (first_struct_queue_9_1: ((memory) Z struct_queue_9)),
+  forall (HW_11: first_struct_queue_9_1 = (upd first_struct_queue_9_0 q 0)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_12: full_struct_queue_9_0 = (upd full_struct_queue_9 q 0)),
   forall (result5: Z),
-  forall (HW_13: result5 = (acc first_Z9_1 q)),
+  forall (HW_13: result5 = (acc first_struct_queue_9_1 q)),
   forall (result6: Z),
-  forall (HW_14: result6 = (acc last_Z9 q)),
+  forall (HW_14: result6 = (acc last_struct_queue_9 q)),
   forall (HW_15: result5 = result6),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_16: empty_Z9_0 = (upd empty_Z9 q 1)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z0 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9 pset_empty)) /\
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_16: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 1)),
+  (* File "queue.c", line 35, characters 13-60 *)
+  ((acc full_struct_queue_9_0 q) = 0 /\ result2 =
+  (acc int_Z0
+   (shift (acc contents_struct_queue_9 q) (acc first_struct_queue_9 q)))) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9 pset_empty)) /\
   (not_assigns alloc int_Z0 int_Z0 pset_empty)) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9_1 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9_1
+   (pset_singleton q))) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_1 q) /\ (acc first_Z9_1 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9_1 q) /\ (acc first_struct_queue_9_1 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9 q) /\
+  (acc last_struct_queue_9 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 Save.
@@ -204,64 +221,76 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc first_Z9 q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: first_Z9_0 = (upd first_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc first_struct_queue_9 q)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: first_struct_queue_9_0 = (upd first_struct_queue_9 q
+                                          (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (result2: Z),
   forall (HW_7: result2 = (acc int_Z0 result1)),
   forall (result3: Z),
-  forall (HW_8: result3 = (acc first_Z9_0 q)),
+  forall (HW_8: result3 = (acc first_struct_queue_9_0 q)),
   forall (result4: Z),
-  forall (HW_9: result4 = (acc length_Z9 q)),
+  forall (HW_9: result4 = (acc length_struct_queue_9 q)),
   forall (HW_10: result3 = result4),
-  forall (first_Z9_1: ((memory) Z Z9)),
-  forall (HW_11: first_Z9_1 = (upd first_Z9_0 q 0)),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_12: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (first_struct_queue_9_1: ((memory) Z struct_queue_9)),
+  forall (HW_11: first_struct_queue_9_1 = (upd first_struct_queue_9_0 q 0)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_12: full_struct_queue_9_0 = (upd full_struct_queue_9 q 0)),
   forall (result5: Z),
-  forall (HW_13: result5 = (acc first_Z9_1 q)),
+  forall (HW_13: result5 = (acc first_struct_queue_9_1 q)),
   forall (result6: Z),
-  forall (HW_14: result6 = (acc last_Z9 q)),
+  forall (HW_14: result6 = (acc last_struct_queue_9 q)),
   forall (HW_17: result5 <> result6),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_18: empty_Z9_0 = (upd empty_Z9 q 0)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z0 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9 pset_empty)) /\
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_18: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
+  (* File "queue.c", line 35, characters 13-60 *)
+  ((acc full_struct_queue_9_0 q) = 0 /\ result2 =
+  (acc int_Z0
+   (shift (acc contents_struct_queue_9 q) (acc first_struct_queue_9 q)))) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9 pset_empty)) /\
   (not_assigns alloc int_Z0 int_Z0 pset_empty)) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9_1 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9_1
+   (pset_singleton q))) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_1 q) /\ (acc first_Z9_1 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9_1 q) /\ (acc first_struct_queue_9_1 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9 q) /\
+  (acc last_struct_queue_9 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition;subst;auto;caduceus.
 Save.
@@ -269,62 +298,74 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc first_Z9 q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: first_Z9_0 = (upd first_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc first_struct_queue_9 q)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: first_struct_queue_9_0 = (upd first_struct_queue_9 q
+                                          (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (result2: Z),
   forall (HW_7: result2 = (acc int_Z0 result1)),
   forall (result3: Z),
-  forall (HW_8: result3 = (acc first_Z9_0 q)),
+  forall (HW_8: result3 = (acc first_struct_queue_9_0 q)),
   forall (result4: Z),
-  forall (HW_9: result4 = (acc length_Z9 q)),
+  forall (HW_9: result4 = (acc length_struct_queue_9 q)),
   forall (HW_19: result3 <> result4),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_20: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_20: full_struct_queue_9_0 = (upd full_struct_queue_9 q 0)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_0 q)),
+  forall (HW_21: result5 = (acc first_struct_queue_9_0 q)),
   forall (result6: Z),
-  forall (HW_22: result6 = (acc last_Z9 q)),
+  forall (HW_22: result6 = (acc last_struct_queue_9 q)),
   forall (HW_23: result5 = result6),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_24: empty_Z9_0 = (upd empty_Z9 q 1)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z0 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9 pset_empty)) /\
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_24: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 1)),
+  (* File "queue.c", line 35, characters 13-60 *)
+  ((acc full_struct_queue_9_0 q) = 0 /\ result2 =
+  (acc int_Z0
+   (shift (acc contents_struct_queue_9 q) (acc first_struct_queue_9 q)))) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9 pset_empty)) /\
   (not_assigns alloc int_Z0 int_Z0 pset_empty)) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9_0 q) /\ (acc first_struct_queue_9_0 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9 q) /\
+  (acc last_struct_queue_9 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 subst;auto.
@@ -333,62 +374,74 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma pop_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
-                 (acc empty_Z9 q) = 0 /\
+                 (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc first_Z9 q)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: first_Z9_0 = (upd first_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc first_struct_queue_9 q)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: first_struct_queue_9_0 = (upd first_struct_queue_9 q
+                                          (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (result2: Z),
   forall (HW_7: result2 = (acc int_Z0 result1)),
   forall (result3: Z),
-  forall (HW_8: result3 = (acc first_Z9_0 q)),
+  forall (HW_8: result3 = (acc first_struct_queue_9_0 q)),
   forall (result4: Z),
-  forall (HW_9: result4 = (acc length_Z9 q)),
+  forall (HW_9: result4 = (acc length_struct_queue_9 q)),
   forall (HW_19: result3 <> result4),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_20: full_Z9_0 = (upd full_Z9 q 0)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_20: full_struct_queue_9_0 = (upd full_struct_queue_9 q 0)),
   forall (result5: Z),
-  forall (HW_21: result5 = (acc first_Z9_0 q)),
+  forall (HW_21: result5 = (acc first_struct_queue_9_0 q)),
   forall (result6: Z),
-  forall (HW_22: result6 = (acc last_Z9 q)),
+  forall (HW_22: result6 = (acc last_struct_queue_9 q)),
   forall (HW_25: result5 <> result6),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_26: empty_Z9_0 = (upd empty_Z9 q 0)),
-  (* File "queue.c", line 35, characters 13-60 *) ((acc full_Z9_0 q) = 0 /\
-  result2 = (acc int_Z0 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9 pset_empty)) /\
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_26: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
+  (* File "queue.c", line 35, characters 13-60 *)
+  ((acc full_struct_queue_9_0 q) = 0 /\ result2 =
+  (acc int_Z0
+   (shift (acc contents_struct_queue_9 q) (acc first_struct_queue_9 q)))) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9 pset_empty)) /\
   (not_assigns alloc int_Z0 int_Z0 pset_empty)) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9_0 q) /\ (acc first_struct_queue_9_0 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9 q) /\
+  (acc last_struct_queue_9 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 Save.
@@ -545,28 +598,31 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc last_Z9 q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: last_Z9_0 = (upd last_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc last_struct_queue_9 q)),
+  forall (last_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: last_struct_queue_9_0 = (upd last_struct_queue_9 q
+                                         (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   (valid alloc result1).
@@ -578,65 +634,79 @@ Save.
 (*Why goal*) Lemma push_impl_po_2 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc last_Z9 q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: last_Z9_0 = (upd last_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc last_struct_queue_9 q)),
+  forall (last_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: last_struct_queue_9_0 = (upd last_struct_queue_9 q
+                                         (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_7: int_Z0_0 = (upd int_Z0 result1 c)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc last_Z9_0 q)),
+  forall (HW_8: result2 = (acc last_struct_queue_9_0 q)),
   forall (result3: Z),
-  forall (HW_9: result3 = (acc length_Z9 q)),
+  forall (HW_9: result3 = (acc length_struct_queue_9 q)),
   forall (HW_10: result2 = result3),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_11: last_Z9_1 = (upd last_Z9_0 q 0)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_12: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (last_struct_queue_9_1: ((memory) Z struct_queue_9)),
+  forall (HW_11: last_struct_queue_9_1 = (upd last_struct_queue_9_0 q 0)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_12: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
   forall (result4: Z),
-  forall (HW_13: result4 = (acc first_Z9 q)),
+  forall (HW_13: result4 = (acc first_struct_queue_9 q)),
   forall (result5: Z),
-  forall (HW_14: result5 = (acc last_Z9_1 q)),
+  forall (HW_14: result5 = (acc last_struct_queue_9_1 q)),
   forall (HW_15: result4 = result5),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_16: full_Z9_0 = (upd full_Z9 q 1)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z0_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9_1 (pset_singleton q))) /\
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_16: full_struct_queue_9_0 = (upd full_struct_queue_9 q 1)),
+  (* File "queue.c", line 22, characters 13-54 *)
+  ((acc empty_struct_queue_9_0 q) = 0 /\
+  (acc int_Z0_0
+   (shift (acc contents_struct_queue_9 q) (acc last_struct_queue_9 q))) =
+  c) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9_1
+   (pset_singleton q))) /\
   (not_assigns alloc int_Z0 int_Z0_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9 pset_empty)) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+   (pset_singleton (shift (acc contents_struct_queue_9 q)
+                    (acc last_struct_queue_9 q))))) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9 pset_empty)) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_1 q) /\ (acc last_Z9_1 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9 q) /\ (acc first_struct_queue_9 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9_1 q) /\
+  (acc last_struct_queue_9_1 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 Save.
@@ -645,65 +715,79 @@ Save.
 (*Why goal*) Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc last_Z9 q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: last_Z9_0 = (upd last_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc last_struct_queue_9 q)),
+  forall (last_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: last_struct_queue_9_0 = (upd last_struct_queue_9 q
+                                         (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_7: int_Z0_0 = (upd int_Z0 result1 c)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc last_Z9_0 q)),
+  forall (HW_8: result2 = (acc last_struct_queue_9_0 q)),
   forall (result3: Z),
-  forall (HW_9: result3 = (acc length_Z9 q)),
+  forall (HW_9: result3 = (acc length_struct_queue_9 q)),
   forall (HW_10: result2 = result3),
-  forall (last_Z9_1: ((memory) Z Z9)),
-  forall (HW_11: last_Z9_1 = (upd last_Z9_0 q 0)),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_12: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (last_struct_queue_9_1: ((memory) Z struct_queue_9)),
+  forall (HW_11: last_struct_queue_9_1 = (upd last_struct_queue_9_0 q 0)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_12: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
   forall (result4: Z),
-  forall (HW_13: result4 = (acc first_Z9 q)),
+  forall (HW_13: result4 = (acc first_struct_queue_9 q)),
   forall (result5: Z),
-  forall (HW_14: result5 = (acc last_Z9_1 q)),
+  forall (HW_14: result5 = (acc last_struct_queue_9_1 q)),
   forall (HW_17: result4 <> result5),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_18: full_Z9_0 = (upd full_Z9 q 0)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z0_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9_1 (pset_singleton q))) /\
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_18: full_struct_queue_9_0 = (upd full_struct_queue_9 q 0)),
+  (* File "queue.c", line 22, characters 13-54 *)
+  ((acc empty_struct_queue_9_0 q) = 0 /\
+  (acc int_Z0_0
+   (shift (acc contents_struct_queue_9 q) (acc last_struct_queue_9 q))) =
+  c) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9_1
+   (pset_singleton q))) /\
   (not_assigns alloc int_Z0 int_Z0_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9 pset_empty)) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+   (pset_singleton (shift (acc contents_struct_queue_9 q)
+                    (acc last_struct_queue_9 q))))) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9 pset_empty)) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_1 q) /\ (acc last_Z9_1 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9 q) /\ (acc first_struct_queue_9 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9_1 q) /\
+  (acc last_struct_queue_9_1 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition;subst;auto;caduceus.
 Save.
@@ -712,63 +796,77 @@ Save.
 (*Why goal*) Lemma push_impl_po_4 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc last_Z9 q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: last_Z9_0 = (upd last_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc last_struct_queue_9 q)),
+  forall (last_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: last_struct_queue_9_0 = (upd last_struct_queue_9 q
+                                         (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_7: int_Z0_0 = (upd int_Z0 result1 c)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc last_Z9_0 q)),
+  forall (HW_8: result2 = (acc last_struct_queue_9_0 q)),
   forall (result3: Z),
-  forall (HW_9: result3 = (acc length_Z9 q)),
+  forall (HW_9: result3 = (acc length_struct_queue_9 q)),
   forall (HW_19: result2 <> result3),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_20: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_20: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_struct_queue_9 q)),
   forall (result5: Z),
-  forall (HW_22: result5 = (acc last_Z9_0 q)),
+  forall (HW_22: result5 = (acc last_struct_queue_9_0 q)),
   forall (HW_23: result4 = result5),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_24: full_Z9_0 = (upd full_Z9 q 1)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z0_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9_0 (pset_singleton q))) /\
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_24: full_struct_queue_9_0 = (upd full_struct_queue_9 q 1)),
+  (* File "queue.c", line 22, characters 13-54 *)
+  ((acc empty_struct_queue_9_0 q) = 0 /\
+  (acc int_Z0_0
+   (shift (acc contents_struct_queue_9 q) (acc last_struct_queue_9 q))) =
+  c) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9_0
+   (pset_singleton q))) /\
   (not_assigns alloc int_Z0 int_Z0_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9 pset_empty)) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+   (pset_singleton (shift (acc contents_struct_queue_9 q)
+                    (acc last_struct_queue_9 q))))) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9 pset_empty)) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9 q) /\ (acc first_struct_queue_9 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9_0 q) /\
+  (acc last_struct_queue_9_0 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 subst;auto.
@@ -778,63 +876,77 @@ Save.
 (*Why goal*) Lemma push_impl_po_5 : 
   forall (c: Z),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
-                 (acc full_Z9 q) = 0 /\
+                 (acc full_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc contents_Z9 q)),
+  forall (HW_2: result = (acc contents_struct_queue_9 q)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc last_Z9 q)),
-  forall (last_Z9_0: ((memory) Z Z9)),
-  forall (HW_4: last_Z9_0 = (upd last_Z9 q (1 + result0))),
+  forall (HW_3: result0 = (acc last_struct_queue_9 q)),
+  forall (last_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_4: last_struct_queue_9_0 = (upd last_struct_queue_9 q
+                                         (1 + result0))),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result result0)),
   forall (HW_6: (valid alloc result1)),
   forall (int_Z0_0: ((memory) Z Z0)),
   forall (HW_7: int_Z0_0 = (upd int_Z0 result1 c)),
   forall (result2: Z),
-  forall (HW_8: result2 = (acc last_Z9_0 q)),
+  forall (HW_8: result2 = (acc last_struct_queue_9_0 q)),
   forall (result3: Z),
-  forall (HW_9: result3 = (acc length_Z9 q)),
+  forall (HW_9: result3 = (acc length_struct_queue_9 q)),
   forall (HW_19: result2 <> result3),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (HW_20: empty_Z9_0 = (upd empty_Z9 q 0)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_20: empty_struct_queue_9_0 = (upd empty_struct_queue_9 q 0)),
   forall (result4: Z),
-  forall (HW_21: result4 = (acc first_Z9 q)),
+  forall (HW_21: result4 = (acc first_struct_queue_9 q)),
   forall (result5: Z),
-  forall (HW_22: result5 = (acc last_Z9_0 q)),
+  forall (HW_22: result5 = (acc last_struct_queue_9_0 q)),
   forall (HW_25: result4 <> result5),
-  forall (full_Z9_0: ((memory) Z Z9)),
-  forall (HW_26: full_Z9_0 = (upd full_Z9 q 0)),
-  (* File "queue.c", line 22, characters 13-54 *) ((acc empty_Z9_0 q) = 0 /\
-  (acc int_Z0_0 (shift (acc contents_Z9 q) (acc last_Z9 q))) = c) /\
-  (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-  (not_assigns alloc last_Z9 last_Z9_0 (pset_singleton q))) /\
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (HW_26: full_struct_queue_9_0 = (upd full_struct_queue_9 q 0)),
+  (* File "queue.c", line 22, characters 13-54 *)
+  ((acc empty_struct_queue_9_0 q) = 0 /\
+  (acc int_Z0_0
+   (shift (acc contents_struct_queue_9 q) (acc last_struct_queue_9 q))) =
+  c) /\
+  (((((((not_assigns alloc length_struct_queue_9 length_struct_queue_9
+         pset_empty) /\
+  (not_assigns alloc last_struct_queue_9 last_struct_queue_9_0
+   (pset_singleton q))) /\
   (not_assigns alloc int_Z0 int_Z0_0
-   (pset_singleton (shift (acc contents_Z9 q) (acc last_Z9 q))))) /\
-  (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc first_Z9 first_Z9 pset_empty)) /\
-  (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-  (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+   (pset_singleton (shift (acc contents_struct_queue_9 q)
+                    (acc last_struct_queue_9 q))))) /\
+  (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc first_struct_queue_9 first_struct_queue_9 pset_empty)) /\
+  (not_assigns alloc empty_struct_queue_9 empty_struct_queue_9_0
+   (pset_singleton q))) /\
+  (not_assigns alloc contents_struct_queue_9 contents_struct_queue_9
+   pset_empty)) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9_0 q) /\ (acc last_Z9_0 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9 q) /\ (acc first_struct_queue_9 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9_0 q) /\
+  (acc last_struct_queue_9_0 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -1014,83 +1126,104 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_1 : 
-  forall (q1: ((pointer) Z9)),
+  forall (q1: ((pointer) struct_queue_9)),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
-                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z9 q) = 0) /\
+                 (((valid alloc q1) /\ ~(q1 = q)) /\
+                 (acc empty_struct_queue_9 q) = 0) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
-  (* File "queue.c", line 33, characters 14-22 *) (acc empty_Z9 q) = 0 /\
+  (* File "queue.c", line 33, characters 14-22 *)
+  (acc empty_struct_queue_9 q) = 0 /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9 q) /\ (acc first_Z9 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9 q) /\ (acc first_struct_queue_9 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9 q) /\
+  (acc last_struct_queue_9 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_2 : 
-  forall (q1: ((pointer) Z9)),
+  forall (q1: ((pointer) struct_queue_9)),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
-                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z9 q) = 0) /\
+                 (((valid alloc q1) /\ ~(q1 = q)) /\
+                 (acc empty_struct_queue_9 q) = 0) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
-                (acc empty_Z9 q) = 0 /\
+                (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))),
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))),
   forall (result: Z),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (full_Z9_0: ((memory) Z Z9)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
   forall (HW_3: (* File "queue.c", line 35, characters 13-60 *)
-                ((acc full_Z9_0 q) = 0 /\ result =
-                (acc int_Z0 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-                (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-                (not_assigns alloc last_Z9 last_Z9 pset_empty)) /\
+                ((acc full_struct_queue_9_0 q) = 0 /\ result =
+                (acc int_Z0
+                 (shift (acc contents_struct_queue_9 q)
+                  (acc first_struct_queue_9 q)))) /\
+                (((((((not_assigns alloc length_struct_queue_9
+                       length_struct_queue_9 pset_empty) /\
+                (not_assigns alloc last_struct_queue_9 last_struct_queue_9
+                 pset_empty)) /\
                 (not_assigns alloc int_Z0 int_Z0 pset_empty)) /\
-                (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+                (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+                 (pset_singleton q))) /\
+                (not_assigns alloc first_struct_queue_9
+                 first_struct_queue_9_0 (pset_singleton q))) /\
+                (not_assigns alloc empty_struct_queue_9
+                 empty_struct_queue_9_0 (pset_singleton q))) /\
+                (not_assigns alloc contents_struct_queue_9
+                 contents_struct_queue_9 pset_empty)) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))),
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9_0 q) /\
+                (acc first_struct_queue_9_0 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))),
   (valid alloc q1).
 Proof.
 intuition.
@@ -1098,62 +1231,80 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_3 : 
-  forall (q1: ((pointer) Z9)),
+  forall (q1: ((pointer) struct_queue_9)),
   forall (alloc: alloc_table),
-  forall (contents_Z9: ((memory) ((pointer) Z0) Z9)),
-  forall (empty_Z9: ((memory) Z Z9)),
-  forall (first_Z9: ((memory) Z Z9)),
-  forall (full_Z9: ((memory) Z Z9)),
+  forall (contents_struct_queue_9: ((memory) ((pointer) Z0) struct_queue_9)),
+  forall (empty_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9: ((memory) Z struct_queue_9)),
   forall (int_Z0: ((memory) Z Z0)),
-  forall (last_Z9: ((memory) Z Z9)),
-  forall (length_Z9: ((memory) Z Z9)),
-  forall (q: ((pointer) Z9)),
+  forall (last_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (length_struct_queue_9: ((memory) Z struct_queue_9)),
+  forall (q: ((pointer) struct_queue_9)),
   forall (t: ((pointer) Z0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
-                 (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_Z9 q) = 0) /\
+                 (((valid alloc q1) /\ ~(q1 = q)) /\
+                 (acc empty_struct_queue_9 q) = 0) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))) /\
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
-                (acc empty_Z9 q) = 0 /\
+                (acc empty_struct_queue_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9 q) /\ (acc first_Z9 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))),
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9 q) /\
+                (acc first_struct_queue_9 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))),
   forall (result: Z),
-  forall (empty_Z9_0: ((memory) Z Z9)),
-  forall (first_Z9_0: ((memory) Z Z9)),
-  forall (full_Z9_0: ((memory) Z Z9)),
+  forall (empty_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (first_struct_queue_9_0: ((memory) Z struct_queue_9)),
+  forall (full_struct_queue_9_0: ((memory) Z struct_queue_9)),
   forall (HW_3: (* File "queue.c", line 35, characters 13-60 *)
-                ((acc full_Z9_0 q) = 0 /\ result =
-                (acc int_Z0 (shift (acc contents_Z9 q) (acc first_Z9 q)))) /\
-                (((((((not_assigns alloc length_Z9 length_Z9 pset_empty) /\
-                (not_assigns alloc last_Z9 last_Z9 pset_empty)) /\
+                ((acc full_struct_queue_9_0 q) = 0 /\ result =
+                (acc int_Z0
+                 (shift (acc contents_struct_queue_9 q)
+                  (acc first_struct_queue_9 q)))) /\
+                (((((((not_assigns alloc length_struct_queue_9
+                       length_struct_queue_9 pset_empty) /\
+                (not_assigns alloc last_struct_queue_9 last_struct_queue_9
+                 pset_empty)) /\
                 (not_assigns alloc int_Z0 int_Z0 pset_empty)) /\
-                (not_assigns alloc full_Z9 full_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc first_Z9 first_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc empty_Z9 empty_Z9_0 (pset_singleton q))) /\
-                (not_assigns alloc contents_Z9 contents_Z9 pset_empty)) /\
+                (not_assigns alloc full_struct_queue_9 full_struct_queue_9_0
+                 (pset_singleton q))) /\
+                (not_assigns alloc first_struct_queue_9
+                 first_struct_queue_9_0 (pset_singleton q))) /\
+                (not_assigns alloc empty_struct_queue_9
+                 empty_struct_queue_9_0 (pset_singleton q))) /\
+                (not_assigns alloc contents_struct_queue_9
+                 contents_struct_queue_9 pset_empty)) /\
                 (* File "queue.c", line 14, characters 5-105 *)
-                (((valid_range alloc (acc contents_Z9 q) 0
-                   ((acc length_Z9 q) - 1)) /\
-                0 <= (acc first_Z9_0 q) /\ (acc first_Z9_0 q) <
-                (acc length_Z9 q)) /\ 0 <= (acc last_Z9 q) /\
-                (acc last_Z9 q) < (acc length_Z9 q))),
+                (((valid_range alloc (acc contents_struct_queue_9 q) 0
+                   ((acc length_struct_queue_9 q) - 1)) /\
+                0 <= (acc first_struct_queue_9_0 q) /\
+                (acc first_struct_queue_9_0 q) <
+                (acc length_struct_queue_9 q)) /\ 0 <=
+                (acc last_struct_queue_9 q) /\ (acc last_struct_queue_9 q) <
+                (acc length_struct_queue_9 q))),
   forall (HW_4: (valid alloc q1)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc empty_Z9_0 q1)),
-  (* File "queue.c", line 46, characters 13-39 *) result0 = (acc empty_Z9 q1) /\
+  forall (HW_5: result0 = (acc empty_struct_queue_9_0 q1)),
+  (* File "queue.c", line 46, characters 13-39 *) result0 =
+  (acc empty_struct_queue_9 q1) /\
   (* File "queue.c", line 14, characters 5-105 *)
-  (((valid_range alloc (acc contents_Z9 q) 0 ((acc length_Z9 q) - 1)) /\ 0 <=
-  (acc first_Z9_0 q) /\ (acc first_Z9_0 q) < (acc length_Z9 q)) /\ 0 <=
-  (acc last_Z9 q) /\ (acc last_Z9 q) < (acc length_Z9 q)).
+  (((valid_range alloc (acc contents_struct_queue_9 q) 0
+     ((acc length_struct_queue_9 q) - 1)) /\
+  0 <= (acc first_struct_queue_9_0 q) /\ (acc first_struct_queue_9_0 q) <
+  (acc length_struct_queue_9 q)) /\ 0 <= (acc last_struct_queue_9 q) /\
+  (acc last_struct_queue_9 q) < (acc length_struct_queue_9 q)).
 Proof.
 intuition.
 subst;auto.

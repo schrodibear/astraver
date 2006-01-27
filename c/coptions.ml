@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.19 2005-05-26 13:20:15 hubert Exp $ i*)
+(*i $Id: coptions.ml,v 1.20 2006-01-27 14:55:16 marche Exp $ i*)
 
 (*s The log file *)
 
@@ -52,6 +52,7 @@ let whylib =
 
 (*s command-line options *)
 
+let zones = ref true (* should be false in the future ! *)
 let parse_only = ref false
 let type_only = ref false
 let print_norm = ref false
@@ -139,9 +140,13 @@ let _ =
 	  " <f,g,h...>  specifies functions not to be verified (i.e. assumed)";
 	"-closed", Arg.Set closed_program,
 	  "  assumes a closed program";
+	"-separation", 
+	  Arg.Unit(fun () -> zones := true; closed_program := true),
+	  "  separates pointers into several zones (implies -closed)";
       ]
       add_file "caduceus [options] file..."
 
+let zones = !zones
 let parse_only = !parse_only
 let type_only = !type_only
 let print_norm = !print_norm

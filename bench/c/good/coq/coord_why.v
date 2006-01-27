@@ -7,10 +7,10 @@ Require Export coord_spec_why.
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (index: Z),
   forall (alloc: alloc_table),
-  forall (tab: ((pointer) Z2)),
+  forall (tab: ((pointer) struct_anonymous_0_2)),
   forall (HW_1: (* File "coord.c", line 11, characters 14-28 *) (0 <=
                 index /\ index < 3) /\ (valid_range alloc tab 0 2)),
-  forall (result: ((pointer) Z2)),
+  forall (result: ((pointer) struct_anonymous_0_2)),
   forall (HW_2: result = (shift tab index)),
   (valid alloc result).
 Proof.

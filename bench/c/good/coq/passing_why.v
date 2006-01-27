@@ -75,6 +75,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (A779:Set),
@@ -105,6 +115,11 @@ apply pset_singleton_elim;auto.
 auto.
 Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
@@ -113,6 +128,11 @@ Save.
   (* File "passing.c", line 21, characters 14-31 *) (valid_index alloc t 0).
 Proof.
 intuition.
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 Proof.

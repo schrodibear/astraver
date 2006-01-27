@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.14 2005-05-26 13:20:15 hubert Exp $ i*)
+(*i $Id: coptions.mli,v 1.15 2006-01-27 14:55:17 marche Exp $ i*)
 
 (*s environment variables *)
 
@@ -23,6 +23,7 @@ val whylib : string
 
 (*s command-line options *)
 
+val zones : bool
 val parse_only : bool
 val type_only : bool
 val print_norm : bool

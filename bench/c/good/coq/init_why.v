@@ -6,28 +6,28 @@ Require Export init_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (b_Z9: ((memory) ((pointer) Z2) Z9)),
+  forall (b_struct_S_9: ((memory) ((pointer) Z2) struct_S_9)),
   forall (int_Z2: ((memory) Z Z2)),
   forall (int_Z7: ((memory) Z Z7)),
-  forall (s: ((pointer) Z9)),
+  forall (s: ((pointer) struct_S_9)),
   forall (t: ((pointer) Z7)),
   forall (HW_1: ((* File "init.c", line 5, characters 25-34 *)
                  (acc int_Z7 (shift t 1)) = 2 /\
                 (* File "init.c", line 13, characters 25-51 *)
-                ((acc int_Z2 (acc b_Z9 s)) = 1 /\
-                (acc int_Z2 (shift (acc b_Z9 s) 2)) = 4)) /\
+                ((acc int_Z2 (acc b_struct_S_9 s)) = 1 /\
+                (acc int_Z2 (shift (acc b_struct_S_9 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (valid1 b_Z9) /\ (valid1_range b_Z9 3)),
+                (valid1 b_struct_S_9) /\ (valid1_range b_struct_S_9 3)),
   forall (result: ((pointer) Z7)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
   forall (HW_3: result0 = (acc int_Z7 result)),
   forall (result1: ((pointer) Z2)),
-  forall (HW_4: result1 = (acc b_Z9 s)),
+  forall (HW_4: result1 = (acc b_struct_S_9 s)),
   forall (result2: Z),
   forall (HW_5: result2 = (acc int_Z2 result1)),
   forall (result3: ((pointer) Z2)),
-  forall (HW_6: result3 = (acc b_Z9 s)),
+  forall (HW_6: result3 = (acc b_struct_S_9 s)),
   forall (result4: ((pointer) Z2)),
   forall (HW_7: result4 = (shift result3 2)),
   forall (result5: Z),
@@ -35,8 +35,9 @@ Require Export init_spec_why.
   (* File "init.c", line 15, characters 13-25 *)
   (result0 + result2 + result5) = 7 /\
   (* File "init.c", line 5, characters 25-34 *) (acc int_Z7 (shift t 1)) = 2 /\
-  (* File "init.c", line 13, characters 25-51 *) ((acc int_Z2 (acc b_Z9 s)) =
-  1 /\ (acc int_Z2 (shift (acc b_Z9 s) 2)) = 4).
+  (* File "init.c", line 13, characters 25-51 *)
+  ((acc int_Z2 (acc b_struct_S_9 s)) = 1 /\
+  (acc int_Z2 (shift (acc b_struct_S_9 s) 2)) = 4).
 Proof.
 intuition.
 subst;auto.
@@ -76,7 +77,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z9)),
+  forall (s: ((pointer) struct_S_9)),
   forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   2 >= 1.
@@ -90,7 +91,7 @@ Save.
   forall (A889:Set), forall (A890:Set), forall (A891:Set), forall (A892:Set),
   forall (alloc: alloc_table),
   forall (int_Z5: ((memory) Z A892)),
-  forall (s: ((pointer) Z9)),
+  forall (s: ((pointer) struct_S_9)),
   forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 2 >= 1),
@@ -138,7 +139,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z9)),
+  forall (s: ((pointer) struct_S_9)),
   forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   3 >= 1.
@@ -152,7 +153,7 @@ Save.
   forall (A897:Set), forall (A898:Set), forall (A899:Set), forall (A900:Set),
   forall (alloc: alloc_table),
   forall (int_Z6: ((memory) Z A900)),
-  forall (s: ((pointer) Z9)),
+  forall (s: ((pointer) struct_S_9)),
   forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s)),
   forall (HW_2: 3 >= 1),
@@ -232,15 +233,15 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
-  forall (a_Z9: ((memory) Z Z9)),
+  forall (a_struct_S_9: ((memory) Z struct_S_9)),
   forall (alloc: alloc_table),
-  forall (b_Z9: ((memory) ((pointer) Z2) Z9)),
+  forall (b_struct_S_9: ((memory) ((pointer) Z2) struct_S_9)),
   forall (int_Z2: ((memory) Z Z2)),
   forall (int_Z7: ((memory) Z Z7)),
-  forall (s: ((pointer) Z9)),
+  forall (s: ((pointer) struct_S_9)),
   forall (t: ((pointer) Z7)),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (valid1 b_Z9) /\ (valid1_range b_Z9 3)),
+                (valid1 b_struct_S_9) /\ (valid1_range b_struct_S_9 3)),
   forall (x: Z),
   forall (HW_2: x = 45),
   forall (int_Z7_0: ((memory) Z Z7)),
@@ -253,27 +254,27 @@ Save.
   forall (HW_6: result0 = (shift t 2)),
   forall (int_Z7_2: ((memory) Z Z7)),
   forall (HW_7: int_Z7_2 = (upd int_Z7_1 result0 3)),
-  forall (a_Z9_0: ((memory) Z Z9)),
-  forall (HW_8: a_Z9_0 = (upd a_Z9 s 1)),
+  forall (a_struct_S_9_0: ((memory) Z struct_S_9)),
+  forall (HW_8: a_struct_S_9_0 = (upd a_struct_S_9 s 1)),
   forall (result1: ((pointer) Z2)),
-  forall (HW_9: result1 = (acc b_Z9 s)),
+  forall (HW_9: result1 = (acc b_struct_S_9 s)),
   forall (int_Z2_0: ((memory) Z Z2)),
   forall (HW_10: int_Z2_0 = (upd int_Z2 result1 1)),
   forall (result2: ((pointer) Z2)),
-  forall (HW_11: result2 = (acc b_Z9 s)),
+  forall (HW_11: result2 = (acc b_struct_S_9 s)),
   forall (result3: ((pointer) Z2)),
   forall (HW_12: result3 = (shift result2 1)),
   forall (int_Z2_1: ((memory) Z Z2)),
   forall (HW_13: int_Z2_1 = (upd int_Z2_0 result3 3)),
   forall (result4: ((pointer) Z2)),
-  forall (HW_14: result4 = (acc b_Z9 s)),
+  forall (HW_14: result4 = (acc b_struct_S_9 s)),
   forall (result5: ((pointer) Z2)),
   forall (HW_15: result5 = (shift result4 2)),
   forall (int_Z2_2: ((memory) Z Z2)),
   forall (HW_16: int_Z2_2 = (upd int_Z2_1 result5 4)),
   (* File "init.c", line 5, characters 25-34 *) ((acc int_Z7_2 (shift t 1)) =
-  2 /\ (acc int_Z2_2 (acc b_Z9 s)) = 1 /\
-  (acc int_Z2_2 (shift (acc b_Z9 s) 2)) = 4).
+  2 /\ (acc int_Z2_2 (acc b_struct_S_9 s)) = 1 /\
+  (acc int_Z2_2 (shift (acc b_struct_S_9 s) 2)) = 4).
 Proof.
 intuition;subst;auto.
 Save.

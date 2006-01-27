@@ -140,8 +140,11 @@ Save.
   forall (i0: Z),
   forall (HW_3: (* File "break.c", line 43, characters 17-23 *) i0 <= 3),
   forall (HW_4: i0 < 10),
-  forall (HW_5: i0 = 3),
-  (* File "break.c", line 39, characters 13-25 *) i0 = 3.
+  forall (HW_6: i0 <> 3),
+  forall (i1: Z),
+  forall (HW_7: i1 = (i0 + 1)),
+  (* File "break.c", line 43, characters 17-23 *) i1 <= 3 /\
+  (Zwf 0 (10 - i1) (10 - i0)).
 Proof.
 intuition.
 Save.
@@ -153,25 +156,12 @@ Save.
   forall (HW_2: (* File "break.c", line 43, characters 17-23 *) i <= 3),
   forall (i0: Z),
   forall (HW_3: (* File "break.c", line 43, characters 17-23 *) i0 <= 3),
-  forall (HW_4: i0 < 10),
-  forall (HW_6: i0 <> 3),
-  forall (i1: Z),
-  forall (HW_7: i1 = (i0 + 1)),
-  (* File "break.c", line 43, characters 17-23 *) i1 <= 3 /\
-  (Zwf 0 (10 - i1) (10 - i0)).
+  forall (HW_8: i0 >= 10),
+  (* File "break.c", line 39, characters 13-25 *) i0 = 3.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f4_impl_po_4 : 
-  forall (i: Z),
-  forall (HW_1: i = 0),
-  forall (HW_2: (* File "break.c", line 43, characters 17-23 *) i <= 3),
-  forall (i0: Z),
-  forall (HW_3: (* File "break.c", line 43, characters 17-23 *) i0 <= 3),
-  forall (HW_8: i0 >= 10),
-  (* File "break.c", line 39, characters 13-25 *) i0 = 3.
 Proof.
 intuition.
 Save.

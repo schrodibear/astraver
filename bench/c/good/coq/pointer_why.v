@@ -7,7 +7,7 @@ Require Export pointer_spec_why.
 (*Why goal*) Lemma array1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (int_Z19: ((memory) Z Z19)),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
   forall (HW_1: (* File "pointer.c", line 42, characters 14-31 *)
                 (valid_index alloc t 2) /\ (valid_range alloc t 0 4) /\
@@ -37,7 +37,7 @@ Save.
   forall (x: ((pointer) A822)),
   forall (alloc: alloc_table),
   forall (int_Z15: ((memory) Z A822)),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
   forall (HW_1: (* File "pointer.c", line 12, characters 14-23 *)
                 (valid alloc x) /\ (valid_range alloc t 0 4) /\
@@ -77,7 +77,7 @@ Save.
   forall (x: ((pointer) A823)),
   forall (alloc: alloc_table),
   forall (int_Z14: ((memory) Z A823)),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
   forall (HW_1: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc x) /\ (valid_range alloc t 0 4) /\
@@ -124,7 +124,7 @@ Save.
   forall (alloc: alloc_table),
   forall (int_Z16: ((memory) Z Z16)),
   forall (r: ((pointer) Z16)),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
   forall (HW_1: (* File "pointer.c", line 22, characters 14-23 *)
                 (valid alloc r) /\ (valid_range alloc t 0 4) /\
@@ -150,7 +150,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc s)),
   1 >= 1.
@@ -165,7 +165,7 @@ Save.
   forall (A828:Set), forall (A829:Set), forall (A830:Set), forall (A831:Set),
   forall (alloc: alloc_table),
   forall (int_Z18: ((memory) Z A831)),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc s)),
   forall (HW_2: 1 >= 1),
@@ -257,14 +257,15 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma struct1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
-  forall (x_Z21: ((memory) ((pointer) Z13) Z21)),
+  forall (x_struct_S_21: ((memory) ((pointer) Z13) struct_S_21)),
   forall (HW_1: (* File "pointer.c", line 53, characters 14-23 *)
                 (valid alloc s) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s) /\ (valid1_range x_Z21 1) /\ (valid1 x_Z21)),
+                (valid alloc s) /\ (valid1_range x_struct_S_21 1) /\
+                (valid1 x_struct_S_21)),
   forall (result: ((pointer) Z13)),
-  forall (HW_2: result = (acc x_Z21 s)),
+  forall (HW_2: result = (acc x_struct_S_21 s)),
   (valid alloc result).
 Proof.
 intuition.
@@ -275,20 +276,21 @@ Save.
 (*Why goal*) Lemma struct1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (int_Z13: ((memory) Z Z13)),
-  forall (s: ((pointer) Z21)),
+  forall (s: ((pointer) struct_S_21)),
   forall (t: ((pointer) Z19)),
-  forall (x_Z21: ((memory) ((pointer) Z13) Z21)),
-  forall (y_Z21: ((memory) Z Z21)),
+  forall (x_struct_S_21: ((memory) ((pointer) Z13) struct_S_21)),
+  forall (y_struct_S_21: ((memory) Z struct_S_21)),
   forall (HW_1: (* File "pointer.c", line 53, characters 14-23 *)
                 (valid alloc s) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s) /\ (valid1_range x_Z21 1) /\ (valid1 x_Z21)),
+                (valid alloc s) /\ (valid1_range x_struct_S_21 1) /\
+                (valid1 x_struct_S_21)),
   forall (result: ((pointer) Z13)),
-  forall (HW_2: result = (acc x_Z21 s)),
+  forall (HW_2: result = (acc x_struct_S_21 s)),
   forall (HW_3: (valid alloc result)),
   forall (int_Z13_0: ((memory) Z Z13)),
   forall (HW_4: int_Z13_0 = (upd int_Z13 result 1)),
-  forall (y_Z21_0: ((memory) Z Z21)),
-  forall (HW_5: y_Z21_0 = (upd y_Z21 s 2)),
+  forall (y_struct_S_21_0: ((memory) Z struct_S_21)),
+  forall (HW_5: y_struct_S_21_0 = (upd y_struct_S_21 s 2)),
   forall (HW_6: (valid alloc result)),
   forall (result0: Z),
   forall (HW_7: result0 = (acc int_Z13_0 result)),

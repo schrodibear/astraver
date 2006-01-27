@@ -18,7 +18,7 @@ val pointer_or_array_type : ctype -> bool
 val type_type_why : Ctypes.ctype -> bool -> why_type 
 val set_var_type : env_info -> Ctypes.ctype -> bool -> unit
 val zone_table : (string,Info.zone) Hashtbl.t
-val make_zone :  bool -> zone
+val make_zone :  ?name:string -> bool -> zone
 
 (* Global environment *)
 

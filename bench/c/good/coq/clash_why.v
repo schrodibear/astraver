@@ -8,13 +8,15 @@ Require Export clash_spec_why.
   forall (A803:Set),
   forall (ma_structure: ((pointer) A803)),
   forall (alloc: alloc_table),
-  forall (toto_Z6: ((memory) Z A803)),
+  forall (toto_struct_anonymous_0_6: ((memory) Z A803)),
   forall (HW_1: (valid alloc ma_structure)),
   forall (toto_0: Z),
   forall (HW_3: toto_0 = 0),
-  forall (toto_Z6_0: ((memory) Z A803)),
-  forall (HW_4: toto_Z6_0 = (upd toto_Z6 ma_structure toto_0)),
-  (not_assigns alloc toto_Z6 toto_Z6_0 (pset_singleton ma_structure)).
+  forall (toto_struct_anonymous_0_6_0: ((memory) Z A803)),
+  forall (HW_4: toto_struct_anonymous_0_6_0 = (upd toto_struct_anonymous_0_6
+                                               ma_structure toto_0)),
+  (not_assigns alloc toto_struct_anonymous_0_6 toto_struct_anonymous_0_6_0
+   (pset_singleton ma_structure)).
 Proof.
 intuition.
 Save.
@@ -34,11 +36,14 @@ Save.
   forall (A804:Set),
   forall (ma_structure: ((pointer) A804)),
   forall (alloc: alloc_table),
-  forall (substruct_Z7: ((memory) ((pointer) Z2) A804)),
+  forall (substruct_struct_anonymous_2_7: ((memory) ((pointer) struct_anonymous_1_2)
+                                          A804)),
   forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))) /\
-                (valid1 substruct_Z7) /\
-                (separation2 substruct_Z7 substruct_Z7)),
+                (valid alloc
+                 (acc substruct_struct_anonymous_2_7 ma_structure))) /\
+                (valid1 substruct_struct_anonymous_2_7) /\
+                (separation2 substruct_struct_anonymous_2_7
+                 substruct_struct_anonymous_2_7)),
   1 >= 1.
 Proof.
 intuition.
@@ -51,13 +56,16 @@ Save.
   forall (A813:Set),
   forall (ma_structure: ((pointer) A813)),
   forall (alloc: alloc_table),
-  forall (fst_Z2: ((memory) Z Z2)),
-  forall (fst_Z8: ((memory) Z A812)),
-  forall (substruct_Z7: ((memory) ((pointer) Z2) A813)),
+  forall (fst_struct_anonymous_1_2: ((memory) Z struct_anonymous_1_2)),
+  forall (fst_struct_anonymous_1_8: ((memory) Z A812)),
+  forall (substruct_struct_anonymous_2_7: ((memory) ((pointer) struct_anonymous_1_2)
+                                          A813)),
   forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_Z7 ma_structure))) /\
-                (valid1 substruct_Z7) /\
-                (separation2 substruct_Z7 substruct_Z7)),
+                (valid alloc
+                 (acc substruct_struct_anonymous_2_7 ma_structure))) /\
+                (valid1 substruct_struct_anonymous_2_7) /\
+                (separation2 substruct_struct_anonymous_2_7
+                 substruct_struct_anonymous_2_7)),
   forall (HW_2: 1 >= 1),
   forall (result: ((pointer) A812)),
   forall (alloc0: alloc_table),
@@ -66,18 +74,22 @@ Save.
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (fst_Z8_0: ((memory) Z A812)),
-  forall (HW_4: fst_Z8_0 = (upd fst_Z8 result 0)),
-  forall (result0: ((pointer) Z2)),
-  forall (HW_5: result0 = (acc substruct_Z7 ma_structure)),
+  forall (fst_struct_anonymous_1_8_0: ((memory) Z A812)),
+  forall (HW_4: fst_struct_anonymous_1_8_0 = (upd fst_struct_anonymous_1_8
+                                              result 0)),
+  forall (result0: ((pointer) struct_anonymous_1_2)),
+  forall (HW_5: result0 = (acc substruct_struct_anonymous_2_7 ma_structure)),
   forall (result1: Z),
-  forall (HW_6: result1 = (acc fst_Z8_0 result)),
-  forall (fst_Z2_0: ((memory) Z Z2)),
-  forall (HW_7: fst_Z2_0 = (upd fst_Z2 result0 result1)),
-  ((not_assigns alloc substruct_Z7 substruct_Z7 pset_empty) /\
-  (not_assigns alloc fst_Z8 fst_Z8_0 pset_empty)) /\
-  (not_assigns alloc fst_Z2 fst_Z2_0
-   (pset_singleton (acc substruct_Z7 ma_structure))).
+  forall (HW_6: result1 = (acc fst_struct_anonymous_1_8_0 result)),
+  forall (fst_struct_anonymous_1_2_0: ((memory) Z struct_anonymous_1_2)),
+  forall (HW_7: fst_struct_anonymous_1_2_0 = (upd fst_struct_anonymous_1_2
+                                              result0 result1)),
+  ((not_assigns alloc substruct_struct_anonymous_2_7
+    substruct_struct_anonymous_2_7 pset_empty) /\
+  (not_assigns alloc fst_struct_anonymous_1_8 fst_struct_anonymous_1_8_0
+   pset_empty)) /\
+  (not_assigns alloc fst_struct_anonymous_1_2 fst_struct_anonymous_1_2_0
+   (pset_singleton (acc substruct_struct_anonymous_2_7 ma_structure))).
 Proof.
 intuition.
 Save.

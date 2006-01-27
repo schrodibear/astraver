@@ -427,13 +427,20 @@ let rec unifier_type_why tw1 tw2 =
     | Pointer z1 , Pointer z2 ->
 	unifier_zone z1 z2     
     | Addr z1 , Addr z2 ->
-	unifier_zone z1 z2 
-    | Pointer _ , t | t, Pointer _ | Addr _ , t | t, Addr _ -> 
-	let (a,t) = output_why_type t in
-	Format.eprintf "anomaly : unify type (";
-	List.iter (fun t -> Format.eprintf ",@ %s" t) a;
-	Format.eprintf ") %s with a pointer\n" t
-    | _, _ -> ()
+	unifier_zone z1 z2
+    | Info.Int, Info.Int -> ()
+    | Info.Float, Info.Float -> ()
+    | Unit, Unit -> ()
+    | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
+    | Memory _, _ | _, Memory _ -> assert false
+    | _ ->
+	let (a1,t1) = output_why_type tw1 in
+	let (a2,t2) = output_why_type tw2 in
+	Format.eprintf "anomaly : unify Why type (";
+	List.iter (fun t -> Format.eprintf ",@ %s" t) a1;
+	Format.eprintf ") %s with Why type (" t1;
+	List.iter (fun t -> Format.eprintf ",@ %s" t) a2;
+	Format.eprintf ") %s\n" t2
 
 and unifier_zone z1 z2 =
   let z1' = Info.repr z1

@@ -9,28 +9,32 @@ Require Export invariants_spec_why.
   forall (alloc: alloc_table),
   forall (c: ((pointer) Z6)),
   forall (int_Z6: ((memory) Z Z6)),
-  forall (s: ((pointer) Z5)),
-  forall (x_Z5: ((memory) Z Z5)),
-  forall (y_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) struct_anonymous_0_5)),
+  forall (x_struct_anonymous_0_5: ((memory) Z struct_anonymous_0_5)),
+  forall (y_struct_anonymous_0_5: ((memory) Z struct_anonymous_0_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
                 (acc int_Z6 c) = 12 /\
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-                (acc x_Z5 s) /\ (acc x_Z5 s) <= (acc y_Z5 s)) /\
-                (acc y_Z5 s) <= 100)) /\ (valid alloc s) /\
+                (acc x_struct_anonymous_0_5 s) /\
+                (acc x_struct_anonymous_0_5 s) <=
+                (acc y_struct_anonymous_0_5 s)) /\
+                (acc y_struct_anonymous_0_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x_Z5 s)),
+  forall (HW_2: result = (acc x_struct_anonymous_0_5 s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y_Z5 s)),
+  forall (HW_3: result0 = (acc y_struct_anonymous_0_5 s)),
   forall (HW_4: (result + n) <= (result0 - 20)),
   forall (result1: Z),
   forall (HW_5: result1 = (acc int_Z6 c)),
-  forall (x_Z5_0: ((memory) Z Z5)),
-  forall (HW_6: x_Z5_0 = (upd x_Z5 s (result + n + result1))),
+  forall (x_struct_anonymous_0_5_0: ((memory) Z struct_anonymous_0_5)),
+  forall (HW_6: x_struct_anonymous_0_5_0 = (upd x_struct_anonymous_0_5 s
+                                            (result + n + result1))),
   (* File "invariants.c", line 9, characters 25-33 *) (acc int_Z6 c) = 12 /\
   (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-  (acc x_Z5_0 s) /\ (acc x_Z5_0 s) <= (acc y_Z5 s)) /\ (acc y_Z5 s) <= 100).
+  (acc x_struct_anonymous_0_5_0 s) /\ (acc x_struct_anonymous_0_5_0 s) <=
+  (acc y_struct_anonymous_0_5 s)) /\ (acc y_struct_anonymous_0_5 s) <= 100).
 Proof.
 intuition.
 Save.
@@ -41,24 +45,27 @@ Save.
   forall (alloc: alloc_table),
   forall (c: ((pointer) Z6)),
   forall (int_Z6: ((memory) Z Z6)),
-  forall (s: ((pointer) Z5)),
-  forall (x_Z5: ((memory) Z Z5)),
-  forall (y_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) struct_anonymous_0_5)),
+  forall (x_struct_anonymous_0_5: ((memory) Z struct_anonymous_0_5)),
+  forall (y_struct_anonymous_0_5: ((memory) Z struct_anonymous_0_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
                 (acc int_Z6 c) = 12 /\
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-                (acc x_Z5 s) /\ (acc x_Z5 s) <= (acc y_Z5 s)) /\
-                (acc y_Z5 s) <= 100)) /\ (valid alloc s) /\
+                (acc x_struct_anonymous_0_5 s) /\
+                (acc x_struct_anonymous_0_5 s) <=
+                (acc y_struct_anonymous_0_5 s)) /\
+                (acc y_struct_anonymous_0_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c c alloc) /\ (valid_range alloc c 0 1)),
   forall (result: Z),
-  forall (HW_2: result = (acc x_Z5 s)),
+  forall (HW_2: result = (acc x_struct_anonymous_0_5 s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y_Z5 s)),
+  forall (HW_3: result0 = (acc y_struct_anonymous_0_5 s)),
   forall (HW_7: (result + n) > (result0 - 20)),
   (* File "invariants.c", line 9, characters 25-33 *) (acc int_Z6 c) = 12 /\
-  (* File "invariants.c", line 6, characters 18-54 *) ((0 <= (acc x_Z5 s) /\
-  (acc x_Z5 s) <= (acc y_Z5 s)) /\ (acc y_Z5 s) <= 100).
+  (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
+  (acc x_struct_anonymous_0_5 s) /\ (acc x_struct_anonymous_0_5 s) <=
+  (acc y_struct_anonymous_0_5 s)) /\ (acc y_struct_anonymous_0_5 s) <= 100).
 Proof.
 intuition.
 Save.
@@ -86,15 +93,15 @@ Save.
   forall (alloc: alloc_table),
   forall (c: ((pointer) Z6)),
   forall (int_Z6: ((memory) Z Z6)),
-  forall (s: ((pointer) Z5)),
-  forall (x_Z5: ((memory) Z Z5)),
-  forall (y_Z5: ((memory) Z Z5)),
+  forall (s: ((pointer) struct_anonymous_0_5)),
+  forall (x_struct_anonymous_0_5: ((memory) Z struct_anonymous_0_5)),
+  forall (y_struct_anonymous_0_5: ((memory) Z struct_anonymous_0_5)),
   forall (HW_1: (valid alloc s) /\ (constant_c c alloc) /\
                 (valid_range alloc c 0 1)),
-  forall (x_Z5_0: ((memory) Z Z5)),
-  forall (HW_2: x_Z5_0 = (upd x_Z5 s 0)),
-  forall (y_Z5_0: ((memory) Z Z5)),
-  forall (HW_3: y_Z5_0 = (upd y_Z5 s 0)),
+  forall (x_struct_anonymous_0_5_0: ((memory) Z struct_anonymous_0_5)),
+  forall (HW_2: x_struct_anonymous_0_5_0 = (upd x_struct_anonymous_0_5 s 0)),
+  forall (y_struct_anonymous_0_5_0: ((memory) Z struct_anonymous_0_5)),
+  forall (HW_3: y_struct_anonymous_0_5_0 = (upd y_struct_anonymous_0_5 s 0)),
   forall (int_Z6_0: ((memory) Z Z6)),
   forall (HW_4: int_Z6_0 = (upd int_Z6 c 12)),
   forall (result: ((pointer) Z6)),
@@ -102,7 +109,8 @@ Save.
   forall (int_Z6_1: ((memory) Z Z6)),
   forall (HW_6: int_Z6_1 = (upd int_Z6_0 result 14)),
   (* File "invariants.c", line 6, characters 18-54 *) (((0 <=
-  (acc x_Z5_0 s) /\ (acc x_Z5_0 s) <= (acc y_Z5_0 s)) /\ (acc y_Z5_0 s) <=
+  (acc x_struct_anonymous_0_5_0 s) /\ (acc x_struct_anonymous_0_5_0 s) <=
+  (acc y_struct_anonymous_0_5_0 s)) /\ (acc y_struct_anonymous_0_5_0 s) <=
   100) /\ (acc int_Z6_1 c) = 12).
 Proof.
 intros;subst.

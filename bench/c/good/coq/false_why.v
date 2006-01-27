@@ -8,7 +8,7 @@ Require Export false_spec_why.
   forall (alloc: alloc_table),
   forall (x_0: ((pointer) Z13)),
   forall (y_0: ((pointer) Z14)),
-  forall (zz: ((pointer) Z12)),
+  forall (zz: ((pointer) struct_u_12)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
                 (valid alloc zz)),
   (* File "false.c", line 16, characters 13-19 *) False.
@@ -21,11 +21,12 @@ Admitted.
   forall (alloc: alloc_table),
   forall (x_0: ((pointer) Z13)),
   forall (y_0: ((pointer) Z14)),
-  forall (y_Z10: ((memory) ((pointer) Z1) Z10)),
-  forall (z: ((pointer) Z10)),
-  forall (zz: ((pointer) Z12)),
+  forall (y_struct_v_10: ((memory) ((pointer) Z1) struct_v_10)),
+  forall (z: ((pointer) struct_v_10)),
+  forall (zz: ((pointer) struct_u_12)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz) /\ (valid1_range y_Z10 5) /\ (valid1 y_Z10)),
+                (valid alloc zz) /\ (valid1_range y_struct_v_10 5) /\
+                (valid1 y_struct_v_10)),
   (valid alloc z).
 Proof.
 intuition.
@@ -36,14 +37,15 @@ Admitted.
   forall (alloc: alloc_table),
   forall (x_0: ((pointer) Z13)),
   forall (y_0: ((pointer) Z14)),
-  forall (y_Z10: ((memory) ((pointer) Z1) Z10)),
-  forall (z: ((pointer) Z10)),
-  forall (zz: ((pointer) Z12)),
+  forall (y_struct_v_10: ((memory) ((pointer) Z1) struct_v_10)),
+  forall (z: ((pointer) struct_v_10)),
+  forall (zz: ((pointer) struct_u_12)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz) /\ (valid1_range y_Z10 5) /\ (valid1 y_Z10)),
+                (valid alloc zz) /\ (valid1_range y_struct_v_10 5) /\
+                (valid1 y_struct_v_10)),
   forall (HW_2: (valid alloc z)),
   forall (result: ((pointer) Z1)),
-  forall (HW_3: result = (acc y_Z10 z)),
+  forall (HW_3: result = (acc y_struct_v_10 z)),
   forall (result0: ((pointer) Z1)),
   forall (HW_4: result0 = (shift result 5)),
   (valid alloc result0).
@@ -56,7 +58,7 @@ Admitted.
   forall (alloc: alloc_table),
   forall (x_0: ((pointer) Z13)),
   forall (y_0: ((pointer) Z14)),
-  forall (zz: ((pointer) Z12)),
+  forall (zz: ((pointer) struct_u_12)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
                 (valid alloc zz)),
   forall (result: ((pointer) Z13)),
@@ -71,7 +73,7 @@ Admitted.
   forall (alloc: alloc_table),
   forall (x_0: ((pointer) Z13)),
   forall (y_0: ((pointer) Z14)),
-  forall (zz: ((pointer) Z12)),
+  forall (zz: ((pointer) struct_u_12)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
                 (valid alloc zz)),
   forall (result: ((pointer) Z14)),

@@ -199,16 +199,39 @@ let count = ref 0
 
 let zone_table = Hashtbl.create 97
 
-let make_zone is_var =
-  let z = { zone_is_var = is_var;
-            number = !count;
-	    repr = None;
-	    name =  "Z" ^ sprintf "%i" !count;
-	    type_why_zone = Why_Logic "undefined";
-	  } in
-  Hashtbl.add zone_table z.name z;
-  count := !count +1;
-  z
+let global_zone =
+  {
+    zone_is_var = false;
+    number = 0;
+    repr = None;
+    name =  "Z0";
+    type_why_zone = Why_Logic "undefined";
+  }
+
+let () =
+  if not Coptions.zones 
+  then Hashtbl.add zone_table global_zone.name global_zone
+
+let make_zone ?name is_var =
+  if Coptions.zones then 
+    begin
+      let n =
+	match name with
+	  | Some s -> sprintf "%s_%i" s !count
+	  | None -> sprintf "Z%i" !count
+      in
+      let z = { zone_is_var = is_var;
+		number = !count;
+		repr = None;
+		name = n;
+		type_why_zone = Why_Logic "undefined"; 
+	      } in
+      Hashtbl.add zone_table z.name z;
+      count := !count +1;
+      z
+    end
+  else
+    global_zone
 
 let rec type_type_why ty zone_is_var =
   match ty.ctype_node with
@@ -218,12 +241,12 @@ let rec type_type_why ty zone_is_var =
     | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 
 	  | Tstruct s -> 
-	      let z = make_zone zone_is_var in
-	      z.type_why_zone <- Why_Logic s;
+	      let z = make_zone ~name:("struct_"^s) zone_is_var in
+	      z.type_why_zone <- Why_Logic s; 
 	      Pointer z
 	  | _ ->
 	      let z = make_zone zone_is_var in
-	      z.type_why_zone <- type_type_why ty zone_is_var;
+	      z.type_why_zone <- type_type_why ty zone_is_var; 
 	      Pointer z
 	end
     | Tvoid -> Unit
@@ -233,15 +256,17 @@ let rec type_type_why ty zone_is_var =
 	  try
 	    type_type_why (find_typedef v) zone_is_var
 	  with Not_found -> 
+	    assert false;
 	    (* v is a logic type *)
 	    Why_Logic v
 	end
-    | Tunion _ -> 
-	let z = make_zone zone_is_var in
+    | Tunion s -> 
+	let z = make_zone ~name:("union_"^s) zone_is_var in
+	z.type_why_zone <- Why_Logic s; 
 	Pointer z
     | Tstruct s -> 
-	let z = make_zone zone_is_var in
-	z.type_why_zone <- Why_Logic s;
+	let z = make_zone ~name:("struct_"^s) zone_is_var in
+	z.type_why_zone <- Why_Logic s; 
 	Pointer z
 
 

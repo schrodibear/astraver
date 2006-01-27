@@ -35,27 +35,42 @@ Proof.
 intuition.
 Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (c1_Z14: ((memory) ((pointer) Z11) Z14)),
-  forall (c2_Z14: ((memory) ((pointer) Z10) Z14)),
+  forall (c1_struct_anonymous_0_14: ((memory) ((pointer) Z11)
+                                    struct_anonymous_0_14)),
+  forall (c2_struct_anonymous_0_14: ((memory) ((pointer) Z10)
+                                    struct_anonymous_0_14)),
   forall (int_Z10: ((memory) Z Z10)),
-  forall (plas: ((pointer) Z14)),
+  forall (plas: ((pointer) struct_anonymous_0_14)),
   forall (t: ((pointer) Z15)),
   forall (x: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
-                (valid_range alloc t 0 2) /\ (valid1_range c2_Z14 1) /\
-                (valid1_range c1_Z14 1) /\ (valid1 c2_Z14) /\ (valid1 c1_Z14)),
+                (valid_range alloc t 0 2) /\
+                (valid1_range c2_struct_anonymous_0_14 1) /\
+                (valid1_range c1_struct_anonymous_0_14 1) /\
+                (valid1 c2_struct_anonymous_0_14) /\
+                (valid1 c1_struct_anonymous_0_14)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z10)),
-  forall (HW_3: result = (acc c2_Z14 plas)),
+  forall (HW_3: result = (acc c2_struct_anonymous_0_14 plas)),
   forall (int_Z10_0: ((memory) Z Z10)),
   forall (HW_4: int_Z10_0 = (upd int_Z10 result 2)),
   forall (HW_5: (valid alloc plas)),
   forall (result0: ((pointer) Z11)),
-  forall (HW_6: result0 = (acc c1_Z14 plas)),
+  forall (HW_6: result0 = (acc c1_struct_anonymous_0_14 plas)),
   (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result0).
 Proof.
 intuition.
@@ -64,25 +79,30 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (c1_Z14: ((memory) ((pointer) Z11) Z14)),
-  forall (c2_Z14: ((memory) ((pointer) Z10) Z14)),
+  forall (c1_struct_anonymous_0_14: ((memory) ((pointer) Z11)
+                                    struct_anonymous_0_14)),
+  forall (c2_struct_anonymous_0_14: ((memory) ((pointer) Z10)
+                                    struct_anonymous_0_14)),
   forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z11: ((memory) Z Z11)),
-  forall (plas: ((pointer) Z14)),
+  forall (plas: ((pointer) struct_anonymous_0_14)),
   forall (t: ((pointer) Z15)),
   forall (x: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
-                (valid_range alloc t 0 2) /\ (valid1_range c2_Z14 1) /\
-                (valid1_range c1_Z14 1) /\ (valid1 c2_Z14) /\ (valid1 c1_Z14)),
+                (valid_range alloc t 0 2) /\
+                (valid1_range c2_struct_anonymous_0_14 1) /\
+                (valid1_range c1_struct_anonymous_0_14 1) /\
+                (valid1 c2_struct_anonymous_0_14) /\
+                (valid1 c1_struct_anonymous_0_14)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z10)),
-  forall (HW_3: result = (acc c2_Z14 plas)),
+  forall (HW_3: result = (acc c2_struct_anonymous_0_14 plas)),
   forall (int_Z10_0: ((memory) Z Z10)),
   forall (HW_4: int_Z10_0 = (upd int_Z10 result 2)),
   forall (HW_5: (valid alloc plas)),
   forall (result0: ((pointer) Z11)),
-  forall (HW_6: result0 = (acc c1_Z14 plas)),
+  forall (HW_6: result0 = (acc c1_struct_anonymous_0_14 plas)),
   forall (HW_7: (* File "ref_glob.c", line 2, characters 14-23 *)
                 (valid alloc result0)),
   forall (int_Z11_0: ((memory) Z Z11)),
@@ -91,7 +111,7 @@ Save.
                 (not_assigns alloc int_Z11 int_Z11_0 (pset_singleton result0))),
   forall (HW_9: (valid alloc plas)),
   forall (result1: ((pointer) Z10)),
-  forall (HW_10: result1 = (acc c2_Z14 plas)),
+  forall (HW_10: result1 = (acc c2_struct_anonymous_0_14 plas)),
   (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result1).
 Proof.
 intuition.
@@ -101,25 +121,30 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (c1_Z14: ((memory) ((pointer) Z11) Z14)),
-  forall (c2_Z14: ((memory) ((pointer) Z10) Z14)),
+  forall (c1_struct_anonymous_0_14: ((memory) ((pointer) Z11)
+                                    struct_anonymous_0_14)),
+  forall (c2_struct_anonymous_0_14: ((memory) ((pointer) Z10)
+                                    struct_anonymous_0_14)),
   forall (int_Z10: ((memory) Z Z10)),
   forall (int_Z11: ((memory) Z Z11)),
-  forall (plas: ((pointer) Z14)),
+  forall (plas: ((pointer) struct_anonymous_0_14)),
   forall (t: ((pointer) Z15)),
   forall (x: ((pointer) Z13)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
-                (valid_range alloc t 0 2) /\ (valid1_range c2_Z14 1) /\
-                (valid1_range c1_Z14 1) /\ (valid1 c2_Z14) /\ (valid1 c1_Z14)),
+                (valid_range alloc t 0 2) /\
+                (valid1_range c2_struct_anonymous_0_14 1) /\
+                (valid1_range c1_struct_anonymous_0_14 1) /\
+                (valid1 c2_struct_anonymous_0_14) /\
+                (valid1 c1_struct_anonymous_0_14)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) Z10)),
-  forall (HW_3: result = (acc c2_Z14 plas)),
+  forall (HW_3: result = (acc c2_struct_anonymous_0_14 plas)),
   forall (int_Z10_0: ((memory) Z Z10)),
   forall (HW_4: int_Z10_0 = (upd int_Z10 result 2)),
   forall (HW_5: (valid alloc plas)),
   forall (result0: ((pointer) Z11)),
-  forall (HW_6: result0 = (acc c1_Z14 plas)),
+  forall (HW_6: result0 = (acc c1_struct_anonymous_0_14 plas)),
   forall (HW_7: (* File "ref_glob.c", line 2, characters 14-23 *)
                 (valid alloc result0)),
   forall (int_Z11_0: ((memory) Z Z11)),
@@ -128,7 +153,7 @@ Save.
                 (not_assigns alloc int_Z11 int_Z11_0 (pset_singleton result0))),
   forall (HW_9: (valid alloc plas)),
   forall (result1: ((pointer) Z10)),
-  forall (HW_10: result1 = (acc c2_Z14 plas)),
+  forall (HW_10: result1 = (acc c2_struct_anonymous_0_14 plas)),
   forall (HW_11: (* File "ref_glob.c", line 2, characters 14-23 *)
                  (valid alloc result1)),
   forall (int_Z10_1: ((memory) Z Z10)),
@@ -137,12 +162,16 @@ Save.
                  (not_assigns alloc int_Z10_0 int_Z10_1
                   (pset_singleton result1))),
   (* File "ref_glob.c", line 32, characters 13-43 *)
-  ((acc int_Z11_0 (acc c1_Z14 plas)) = 1 /\
-  (acc int_Z10_1 (acc c2_Z14 plas)) = 1) /\
-  (((not_assigns alloc int_Z11 int_Z11_0 (pset_singleton (acc c1_Z14 plas))) /\
-  (not_assigns alloc int_Z10 int_Z10_1 (pset_singleton (acc c2_Z14 plas)))) /\
-  (not_assigns alloc c2_Z14 c2_Z14 pset_empty)) /\
-  (not_assigns alloc c1_Z14 c1_Z14 pset_empty).
+  ((acc int_Z11_0 (acc c1_struct_anonymous_0_14 plas)) = 1 /\
+  (acc int_Z10_1 (acc c2_struct_anonymous_0_14 plas)) = 1) /\
+  (((not_assigns alloc int_Z11 int_Z11_0
+     (pset_singleton (acc c1_struct_anonymous_0_14 plas))) /\
+  (not_assigns alloc int_Z10 int_Z10_1
+   (pset_singleton (acc c2_struct_anonymous_0_14 plas)))) /\
+  (not_assigns alloc c2_struct_anonymous_0_14 c2_struct_anonymous_0_14
+   pset_empty)) /\
+  (not_assigns alloc c1_struct_anonymous_0_14 c1_struct_anonymous_0_14
+   pset_empty).
 Proof.
 intuition.
 Save.
@@ -187,6 +216,21 @@ subst.
 generalize (pset_union_elim1 H10);auto.
 Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (A896:Set),
@@ -205,17 +249,7 @@ Save.
   (not_assigns alloc int_Z12 int_Z12_0 (pset_singleton p)).
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
-subst; caduceus.
-red;intros.
-subst.
-rewrite acc_upd_neq;auto.
-assert (p0<>p).
-apply pset_singleton_elim;auto.
-auto.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -231,7 +265,8 @@ Save.
                 (valid alloc x) /\ (valid_range alloc t 0 2)),
   (valid alloc p).
 Proof.
-intuition;subst;auto.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -250,7 +285,8 @@ Save.
   forall (HW_3: result = (acc pointer_Z16 p)),
   (valid alloc result).
 Proof.
-intuition;subst;auto.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -276,9 +312,7 @@ Save.
   (not_assigns alloc pointer_Z16 pointer_Z16 pset_empty) /\
   (not_assigns alloc int_Z17 int_Z17_0 (pset_singleton (acc pointer_Z16 p))).
 Proof.
-intuition; subst; caduceus.
-red;intros.
-rewrite acc_upd_neq;auto.
-generalize (pset_singleton_elim H2);auto.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
