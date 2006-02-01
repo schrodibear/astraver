@@ -26,3 +26,4 @@ las2 y;
 int f() {
   return x.a.b.b[0].c + y.b[1].c;
 }
+

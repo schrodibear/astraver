@@ -7,14 +7,14 @@ Require Export latespec_spec_why.
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (A741:Set),
   forall (p: ((pointer) A741)),
+  forall (Int_Z5: ((memory) Z A741)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z A741)),
   forall (HW_1: (* File "latespec.c", line 7, characters 14-23 *)
                 (valid alloc p)),
   forall (HW_2: (valid alloc p)),
-  forall (int_Z5_0: ((memory) Z A741)),
-  forall (HW_3: int_Z5_0 = (upd int_Z5 p 0)),
-  (not_assigns alloc int_Z5 int_Z5_0 (pset_singleton p)).
+  forall (Int_Z5_0: ((memory) Z A741)),
+  forall (HW_3: Int_Z5_0 = (upd Int_Z5 p 0)),
+  (not_assigns alloc Int_Z5 Int_Z5_0 (pset_singleton p)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

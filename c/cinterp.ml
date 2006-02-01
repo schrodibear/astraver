@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.164 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.165 2006-02-01 16:25:07 hubert Exp $ i*)
 
 
 open Format
@@ -198,15 +198,13 @@ let rec interp_term label old_label t =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ZoneSet.add 
-	       ((try List.assoc z assoc with Not_found -> z),s,ty) 
-	       acc)
-	  v.logic_heap_zone ZoneSet.empty in
+	     ((try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	  v.logic_heap_zone [] in
 	let targs = List.map f tl in
 	let targs = HeapVarSet.fold 
 		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
 		 v.logic_heap_args targs in
-	let targs = ZoneSet.fold 
+	let targs = List.fold_right 
 	  (fun (z,s,_) l -> 
 	     if z.zone_is_var then LVar(zoned_name s (Pointer z))::l else l)
 	  reads targs in
@@ -323,15 +321,13 @@ let rec interp_predicate label old_label p =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ZoneSet.add 
-	       ((try List.assoc z assoc with Not_found -> z),s,ty) 
-	       acc)
-	  v.logic_heap_zone ZoneSet.empty in
+	     ((try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	  v.logic_heap_zone [] in
 	let targs = List.map ft tl in
 	let targs = HeapVarSet.fold 
 		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
 		 v.logic_heap_args targs in
-	let targs = ZoneSet.fold 
+	let targs = List.fold_right 
 	  (fun (z,s,_) l -> 
 	     if z.zone_is_var then LVar(zoned_name s (Pointer z))::l else l)
 	  reads targs in
@@ -840,13 +836,11 @@ and interp_call e1 args assoc =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ZoneSet.add 
-	       ((try List.assoc z assoc with Not_found -> z),s,ty) 
-	       acc)
-	  v.function_reads ZoneSet.empty 
+	     ((try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	  v.function_reads [] 
 	in
 	let targs = List.map interp_expr args in
-	let targs = ZoneSet.fold 
+	let targs = List.fold_right 
 	  (fun (z,s,_) l -> 
 	     if z.zone_is_var then
 	       Var(zoned_name s (Pointer z))::l
@@ -1602,6 +1596,7 @@ let interp_fun_params reads params =
     params  in
   let l = ZoneSet.fold
     (fun (z,s,ty) l ->
+       let z = repr z in
        if z.zone_is_var then
 	 (zoned_name s (Pointer z), 
 	  Ref_type 

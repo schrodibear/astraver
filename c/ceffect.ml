@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.109 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.110 2006-02-01 16:25:07 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -130,7 +130,7 @@ let add_var v (ty : Info.why_type) s =
 let add_alloc s = HeapVarSet.add alloc s
 
 
-let add_heap_var n z ty s =
+let add_heap_var n z ty =
   let ty' = Memory(ty,z) in
   let info = default_var_info n in
   let n' = info.var_name ^ "_" ^ (found_repr z) in
@@ -145,9 +145,8 @@ let add_field_var v ty s =
     | Pointer z ->
 	let z = repr z in
 	let ty' = v.var_why_type in
-(*	assert (same_why_type_no_zone ty ty'); *)
 	let n = v.var_unique_name in
-	if not z.zone_is_var then add_heap_var n z ty' s;
+	if not z.zone_is_var then add_heap_var n z ty';
 	ZoneSet.add (z,n,ty') s
     | Unit -> assert false
     | Info.Int -> assert false
@@ -229,9 +228,9 @@ let rec term t = match t.nterm_node with
 	       ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
 	  id.logic_heap_zone empty in
 	List.fold_left 
-	  (fun acc t -> ef_union acc (term t)) 
+	  (fun acc t -> ef_union acc (term t))
 	  {ef_empty with reads = reads; reads_var = id.logic_heap_args; }
-	  tl 
+	  tl  
   | NTconstant _ -> ef_empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3,f) ->
@@ -468,8 +467,10 @@ let rec expr e = match e.nexpr_node with
 	    let reads = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
-		 ZoneSet.add 
-		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+		 let z = try List.assoc z assoc with Not_found -> z in
+		 let z = repr z in
+		 if not z.zone_is_var then add_heap_var s z ty else ();
+		 ZoneSet.add (z,s,ty) acc)
 	      f.function_reads empty in
 	    let writes = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
@@ -482,6 +483,7 @@ let rec expr e = match e.nexpr_node with
 	      assigns_var = f.function_writes_var} 
 	| _ -> expr e
       in
+
       List.fold_left (fun ef arg -> ef_union (expr arg) ef) ef el
   | NEcond (e1, e2, e3) ->
       ef_union (ef_union (expr e1) (expr e2)) (expr e3)

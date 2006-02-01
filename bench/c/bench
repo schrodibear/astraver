@@ -56,7 +56,7 @@ cd ../bad-sem
 parsing="../../../bin/caduceus.opt -type-only"
 for f in *.c; do
     echo -n "  "$f"... "
-    if gcc -c $f > /dev/null 2>&1; then
+    if gcc -c -Wall -Werror $f > /dev/null 2>&1; then
 	echo "GCC failed (accepted a bad file)"
 	gcc -c $f
 	exit 1
