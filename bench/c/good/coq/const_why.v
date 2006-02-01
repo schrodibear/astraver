@@ -3,125 +3,133 @@
 
 Require Export const_spec_why.
 
-(* Why obligation from file "why/const.why", characters 420-497 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c: Z),
-  forall (intP: ((memory) Z)),
-  forall (t: pointer),
-  forall (Pre3: (valid_range alloc t 0 4) /\ (constant_c c) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_t alloc t intP)),
-  (valid alloc (shift t 2)).
+  forall (int_Z11: ((memory) Z Z11)),
+  forall (t: ((pointer) Z11)),
+  forall (w: ((pointer) struct_V_17)),
+  forall (x_0: ((pointer) struct_T_13)),
+  forall (y_0: ((pointer) struct_U_15)),
+  forall (HW_1: (valid alloc y_0) /\ (valid alloc x_0) /\ (valid alloc w) /\
+                (valid_range alloc t 0 3) /\ (constant_c c) /\
+                (constant_y y_0 alloc) /\ (constant_x x_0 alloc) /\
+                (constant_t t alloc)),
+  forall (result: ((pointer) Z11)),
+  forall (HW_2: result = (shift t 2)),
+  forall (result0: Z),
+  forall (HW_3: result0 = (acc int_Z11 result)),
+  (* File "const.c", line 5, characters 13-25 *) (c + result0) = 8.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/const.why", characters 35-742 *)
-Lemma f_impl_po_2 : 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c: Z),
-  forall (intP: ((memory) Z)),
-  forall (t: pointer),
-  forall (Pre3: (valid_range alloc t 0 4) /\ (constant_c c) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_t alloc t intP)),
-  forall (Pre2: (valid alloc (shift t 2))),
+  forall (int_Z2: ((memory) Z Z2)),
+  forall (t: ((pointer) Z11)),
+  forall (w: ((pointer) struct_V_17)),
+  forall (x_0: ((pointer) struct_T_13)),
+  forall (y_0: ((pointer) struct_U_15)),
+  forall (z_struct_T_13: ((memory) ((pointer) Z2) struct_T_13)),
+  forall (HW_1: (valid alloc y_0) /\ (valid alloc x_0) /\ (valid alloc w) /\
+                (valid_range alloc t 0 3) /\ (constant_c c) /\
+                (constant_y y_0 alloc) /\ (constant_x x_0 alloc) /\
+                (constant_t t alloc) /\ (valid1_range z_struct_T_13 3) /\
+                (valid1 z_struct_T_13)),
+  forall (result: ((pointer) Z2)),
+  forall (HW_2: result = (acc z_struct_T_13 x_0)),
+  forall (result0: ((pointer) Z2)),
+  forall (HW_3: result0 = (shift result 2)),
+  forall (result1: Z),
+  forall (HW_4: result1 = (acc int_Z2 result0)),
+  (* File "const.c", line 20, characters 13-25 *) result1 = 3.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_1 : 
+  forall (U_y_struct_U_15: ((memory) Z struct_U_15)),
+  forall (alloc: alloc_table),
+  forall (c: Z),
+  forall (t: ((pointer) Z11)),
+  forall (w: ((pointer) struct_V_17)),
+  forall (x_0: ((pointer) struct_T_13)),
+  forall (y_0: ((pointer) struct_U_15)),
+  forall (HW_1: (valid alloc y_0) /\ (valid alloc x_0) /\ (valid alloc w) /\
+                (valid_range alloc t 0 3) /\ (constant_c c) /\
+                (constant_y y_0 alloc) /\ (constant_x x_0 alloc) /\
+                (constant_t t alloc)),
   forall (result: Z),
-  forall (Post1: result = (c + (acc intP (shift t 2)))),
-  result = 8 /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-  (forall (index_12:pointer), (forall (index_13:pointer), True)).
+  forall (HW_2: result = (acc U_y_struct_U_15 y_0)),
+  (* File "const.c", line 34, characters 13-25 *) result = 2.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/const.why", characters 1279-1351 *)
-Lemma g_impl_po_1 : 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma i_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (x: ((memory) Z)),
-  forall (x_0: pointer),
-  forall (y: ((memory) Z)),
-  forall (z: ((memory) pointer)),
-  forall (Pre4: (valid_range alloc x_0 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (separation2 z z) /\ (valid1_range z 3) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_x alloc x y z x_0 intP) /\ (valid1 z)),
-  (valid alloc x_0).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/const.why", characters 1279-1351 *)
-Lemma g_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (x: ((memory) Z)),
-  forall (x_0: pointer),
-  forall (y: ((memory) Z)),
-  forall (z: ((memory) pointer)),
-  forall (Pre4: (valid_range alloc x_0 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (separation2 z z) /\ (valid1_range z 3) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_x alloc x y z x_0 intP) /\ (valid1 z)),
-  forall (Pre1: (valid alloc x_0)),
-  (valid alloc (shift (acc z x_0) 2)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/const.why", characters 780-1596 *)
-Lemma g_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (x: ((memory) Z)),
-  forall (x_0: pointer),
-  forall (y: ((memory) Z)),
-  forall (z: ((memory) pointer)),
-  forall (Pre4: (valid_range alloc x_0 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (separation2 z z) /\ (valid1_range z 3) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_x alloc x y z x_0 intP) /\ (valid1 z)),
-  forall (Pre1: (valid alloc x_0)),
-  forall (Pre3: (valid alloc (shift (acc z x_0) 2))),
-  forall (result: Z),
-  forall (Post1: result = (acc intP (shift (acc z x_0) 2))),
-  result = 3 /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-  (forall (index_12:pointer), (forall (index_13:pointer), True)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/const.why", characters 1955-1971 *)
-Lemma h_impl_po_1 : 
-  forall (U_y: ((memory) Z)),
-  forall (alloc: alloc_table),
-  forall (y_0: pointer),
-  forall (Pre2: (valid_range alloc y_0 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_y alloc U_y y_0)),
-  (valid alloc y_0).
+  forall (c: Z),
+  forall (int_Z7: ((memory) Z Z7)),
+  forall (int_Z8: ((memory) Z Z8)),
+  forall (t: ((pointer) Z11)),
+  forall (t1_struct_V_17: ((memory) ((pointer) Z7) struct_V_17)),
+  forall (t2_struct_V_17: ((memory) ((pointer) Z8) struct_V_17)),
+  forall (w: ((pointer) struct_V_17)),
+  forall (x_0: ((pointer) struct_T_13)),
+  forall (y_0: ((pointer) struct_U_15)),
+  forall (HW_1: (valid alloc y_0) /\ (valid alloc x_0) /\ (valid alloc w) /\
+                (valid_range alloc t 0 3) /\ (constant_c c) /\
+                (constant_y y_0 alloc) /\ (constant_x x_0 alloc) /\
+                (constant_t t alloc) /\ (valid1 t2_struct_V_17) /\
+                (valid1 t1_struct_V_17) /\ (valid1_range t2_struct_V_17 1) /\
+                (valid1_range t1_struct_V_17 2)),
+  forall (result: ((pointer) Z7)),
+  forall (HW_2: result = (acc t1_struct_V_17 w)),
+  forall (int_Z7_0: ((memory) Z Z7)),
+  forall (HW_3: int_Z7_0 = (upd int_Z7 result 1)),
+  forall (result0: ((pointer) Z8)),
+  forall (HW_4: result0 = (acc t2_struct_V_17 w)),
+  forall (int_Z8_0: ((memory) Z Z8)),
+  forall (HW_5: int_Z8_0 = (upd int_Z8 result0 2)),
+  forall (result1: ((pointer) Z7)),
+  forall (HW_6: result1 = (acc t1_struct_V_17 w)),
+  forall (result2: Z),
+  forall (HW_7: result2 = (acc int_Z7_0 result1)),
+  (* File "const.c", line 46, characters 13-25 *) result2 = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -132,108 +140,6 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/const.why", characters 1634-2214 *)
-Lemma h_impl_po_2 : 
-  forall (U_y: ((memory) Z)),
-  forall (alloc: alloc_table),
-  forall (y_0: pointer),
-  forall (Pre2: (valid_range alloc y_0 0 1) /\
-                (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                (forall (index_12:pointer), (forall (index_13:pointer), True)) /\
-                (constant_y alloc U_y y_0)),
-  forall (Pre1: (valid alloc y_0)),
-  forall (result: Z),
-  forall (Post1: result = (acc U_y y_0)),
-  result = 2 /\
-  (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-  (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-  (forall (index_12:pointer), (forall (index_13:pointer), True)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/const.why", characters 3214-3227 *)
-Lemma i_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (t1: ((memory) pointer)),
-  forall (t2: ((memory) pointer)),
-  forall (w: pointer),
-  forall (Pre12: (valid1 t2) /\ (valid1 t1) /\ (separation2 t2 t2) /\
-                 (separation2 t1 t2) /\ (valid_range alloc w 0 1) /\
-                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation1 t1 t2) /\
-                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                 (valid1_range t2 1) /\ (valid1_range t1 2) /\
-                 (separation2 t1 t2) /\ (separation2 t1 t1) /\
-                 (forall (index_12:pointer),
-                  (forall (index_13:pointer), True))),
-  (valid alloc w).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/const.why", characters 3232-3259 *)
-Lemma i_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (t1: ((memory) pointer)),
-  forall (t2: ((memory) pointer)),
-  forall (w: pointer),
-  forall (Pre12: (valid1 t2) /\ (valid1 t1) /\ (separation2 t2 t2) /\
-                 (separation2 t1 t2) /\ (valid_range alloc w 0 1) /\
-                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation1 t1 t2) /\
-                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                 (valid1_range t2 1) /\ (valid1_range t1 2) /\
-                 (separation2 t1 t2) /\ (separation2 t1 t1) /\
-                 (forall (index_12:pointer),
-                  (forall (index_13:pointer), True))),
-  forall (Pre4: (valid alloc w)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (acc t1 w)),
-  (valid alloc caduceus_2).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/const.why", characters 3197-3259 *)
-Lemma i_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (t1: ((memory) pointer)),
-  forall (t2: ((memory) pointer)),
-  forall (w: pointer),
-  forall (Pre12: (valid1 t2) /\ (valid1 t1) /\ (separation2 t2 t2) /\
-                 (separation2 t1 t2) /\ (valid_range alloc w 0 1) /\
-                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-                 (separation1 t1 t2) /\
-                 (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-                 (valid1_range t2 1) /\ (valid1_range t1 2) /\
-                 (separation2 t1 t2) /\ (separation2 t1 t1) /\
-                 (forall (index_12:pointer),
-                  (forall (index_13:pointer), True))),
-  forall (Pre4: (valid alloc w)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (acc t1 w)),
-  forall (Pre3: (valid alloc caduceus_2)),
-  forall (intP0: ((memory) Z)),
-  forall (Post8: intP0 = (upd intP caduceus_2 1)),
-  (forall (result:pointer),
-   (result = (acc t2 w) ->
-    (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 2) ->
-      (((forall (result:Z),
-         (result = (acc intP (acc t1 w)) -> result = 1 /\
-          (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
-          (forall (index_6:pointer), (forall (index_7:pointer), True)) /\
-          (forall (index_12:pointer), (forall (index_13:pointer), True)))) /\
-      (valid alloc w)) /\ (valid alloc (acc t1 w))) /\
-      (valid alloc (acc t1 w)))) /\
-    (valid alloc result))) /\
-  (valid alloc w).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

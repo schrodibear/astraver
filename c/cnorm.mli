@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.9 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.10 2006-02-01 09:54:27 hubert Exp $ i*)
 
 open Cast
 
@@ -30,6 +30,18 @@ val int_nconstant : string -> nterm
 val nzero : nterm
 
 val file : tdecl located list -> ndecl located list
+
+val make_field : Ctypes.ctype -> Info.var_info
+
+val declare_arrow_var : Info.var_info -> Info.var_info
+
+val find_zone : nexpr -> Info.zone
+
+val find_zone_for_term : nterm -> Info.zone
+
+val type_why_for_term : nterm -> Info.why_type
+
+val type_why : nexpr -> Info.why_type
 
 (* smart constructors for predicates *)
 

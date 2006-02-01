@@ -3,13 +3,3 @@
 
 Require Export array_spec_why.
 
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-

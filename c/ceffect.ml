@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.108 2006-01-26 17:01:54 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.109 2006-02-01 09:54:27 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -154,7 +154,7 @@ let add_field_var v ty s =
     | _ -> assert false
 	
 
-let add_pointer_var (ty : Info.why_type) s =
+(*let add_pointer_var (ty : Info.why_type) s =
   match ty with 
     | Pointer z ->
 	let z = repr z in
@@ -164,7 +164,7 @@ let add_pointer_var (ty : Info.why_type) s =
 	  add_heap_var n z ty' s;
 	ZoneSet.add (z,n,ty') s
     | _ -> assert false
-	  
+*)  
 
 type effect =
     {
@@ -184,7 +184,8 @@ let ef_union e1 e2 =
 
 let reads_add_var v ty e = { e with reads_var = add_var v ty e.reads_var }
 let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
-let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }
+(*let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }*)
+
 let reads_add_alloc e = { e with reads_var = add_alloc e.reads_var }
 
 let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
@@ -192,19 +193,19 @@ let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
 let assigns_add_field_var v ty e = 
   { e with reads = add_field_var v ty e.reads;
       assigns = add_field_var v ty e.assigns }
-let assigns_add_pointer_var ty e = 
+(*let assigns_add_pointer_var ty e = 
   { e with reads = add_pointer_var ty e.reads; 
       assigns = add_pointer_var ty e.assigns }
-
+*)
 let rec term t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
       then reads_add_var v v.var_why_type ef_empty
       else ef_empty
-  | NTarrow (t1,f) -> 
-      reads_add_alloc (reads_add_field_var f (Cseparation.type_why_for_term t1) (term t1))
-  | NTstar t ->
-      reads_add_alloc (reads_add_pointer_var (Cseparation.type_why_for_term t) (term t))
+  | NTarrow (t1,tw,z,f) -> 
+      reads_add_alloc (reads_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
+(*  | NTstar t ->
+      reads_add_alloc (reads_add_pointer_var (Cseparation.type_why_for_term t) (term t))*)
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
@@ -233,9 +234,9 @@ let rec term t = match t.nterm_node with
 	  tl 
   | NTconstant _ -> ef_empty
   | NTcast (_, t) -> term t
-  | NTrange (t1, t2, t3) ->
+  | NTrange (t1, t2, t3,f) ->
       reads_add_alloc 
-	(reads_add_pointer_var (Cseparation.type_why_for_term t1)
+	(reads_add_field_var f (Cnorm.type_why_for_term t1)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
 
 and term_option = function None -> ef_empty | Some t -> term t
@@ -250,14 +251,14 @@ let locations ll =
 let rec assign_location t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
-      then { ef_empty with assigns_var = add_var v (Cseparation.type_why_for_term t) HeapVarSet.empty }
+      then { ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty }
       else ef_empty
-  | NTarrow (t1,f) -> 
+  | NTarrow (t1,ty,z,f) -> 
       reads_add_alloc 
-	(assigns_add_field_var f (Cseparation.type_why_for_term t1) (term t1))
-  | NTstar t1 ->
+	(assigns_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
+(*  | NTstar t1 ->
       reads_add_alloc 
-	(assigns_add_pointer_var (Cseparation.type_why_for_term t1) (term t1))
+	(assigns_add_pointer_var (Cseparation.type_why_for_term t1) (term t1))*)
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
@@ -273,9 +274,9 @@ let rec assign_location t = match t.nterm_node with
   | NTconstant _  
   | NTcast (_, _) -> 
       error t.nterm_loc "invalid location"
-  | NTrange (t1, t2, t3) ->
+  | NTrange (t1, t2, t3,f) ->
       reads_add_alloc 
-	(assigns_add_pointer_var (Cseparation.type_why_for_term t1)
+	(assigns_add_field_var f (Cnorm.type_why_for_term t1)
 	  (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
 
 
@@ -445,14 +446,14 @@ let rec expr e = match e.nexpr_node with
       else ef_empty
   | NEvar (Fun_info v) ->
       ef_empty
-  | NEarrow (e1, f) ->	
+  | NEarrow (e1,ty,z, f) ->	
       reads_add_alloc (reads_add_field_var f (type_why e1) (expr e1))
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr e1) (expr e2)
   | NEassign (lv, e) | NEassign_op (lv, _, e) ->
       ef_union (assign_expr lv) (expr e)
-  | NEstar e ->
-      reads_add_alloc (reads_add_pointer_var (type_why e) (expr e))
+(*  | NEstar e ->
+      reads_add_alloc (reads_add_pointer_var (type_why e) (expr e))*)
   | NEunary (Ustar , _ ) -> assert false
   | NEunary (Uamp, e) ->
       address_expr e
@@ -495,10 +496,10 @@ and assign_expr e = match e.nexpr_node with
       else ef_empty
   | NEvar (Fun_info _) ->
       ef_empty
-  | NEstar e ->
-      reads_add_alloc (assigns_add_pointer_var (type_why e) (expr e))
+(*  | NEstar e ->
+      reads_add_alloc (assigns_add_pointer_var (type_why e) (expr e))*)
   | NEunary (Ustar,_) -> assert false
-  | NEarrow (e1, f) ->
+  | NEarrow (e1,tw,z, f) ->
       reads_add_alloc (assigns_add_field_var f (type_why e1) (expr e1))
   | NEcast (_, e1) ->
       assign_expr e1
@@ -512,9 +513,9 @@ and address_expr e = match e.nexpr_node with
 	| Tstruct _ | Tunion _ -> assert false (* ef_empty *)
 	| _ -> ef_empty (* unsupported "& operator" *)
       end
-  | NEstar  e1 ->
-      expr e1
-  | NEarrow (e1, f) ->
+(*  | NEstar  e1 ->
+      expr e1*)
+  | NEarrow (e1,tw,z, f) ->
       begin match e1.nexpr_type.Ctypes.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> expr e1
 	| _ -> reads_add_field_var f (type_why e1) (expr e1)
@@ -692,10 +693,10 @@ let rec term_of_expr e =
   match e.nexpr_node with 
   | NEconstant e -> make (NTconstant e)
   | NEvar (Var_info info) -> make (NTvar info)
-  | NEarrow (nlvalue,var_info) -> 
-      make (NTarrow (term_of_expr nlvalue, var_info))
-  | NEstar (nlvalue) -> 
-      make (NTstar (term_of_expr nlvalue))
+  | NEarrow (nlvalue,tw,z,var_info) -> 
+      make (NTarrow (term_of_expr nlvalue,tw,z, var_info))
+(*  | NEstar (nlvalue) -> 
+      make (NTstar (term_of_expr nlvalue))*)
   | NEunary (Uplus, nexpr) -> 
       term_of_expr nexpr
   | NEunary (Unot, nexpr) -> 
@@ -847,9 +848,11 @@ let rec invariant_for_constant loc t lvalue initializers =
     | Tunion n ->
 	begin match tag_type_definition n with
 	  | TTStructUnion (Tstruct (_), f::_) ->
+	      let zone = Cnorm.find_zone_for_term lvalue in
 	      let block, init' =
 		 invariant_for_constant loc f.var_type 
-		  (noattr loc f.var_type (NTarrow(lvalue, f)))
+		  (noattr loc f.var_type 
+		     (NTarrow(lvalue,f.var_why_type,zone, f)))
 		  initializers
 	      in (block,init')
 	  | _ ->
@@ -861,13 +864,17 @@ let rec invariant_for_constant loc t lvalue initializers =
 	  else
 	    let ts = (noattr loc c_int 
 			(NTconstant (IntConstant (Int64.to_string i)))) in
+	    let info = make_field ty in
+	    let info = declare_arrow_var info in
+	    let zone = find_zone_for_term lvalue in
 	    let (b,init') = 
 	       invariant_for_constant loc ty 
 		(noattr loc ty 
-		   (NTstar 
-		      (noattr loc 
+		   (NTarrow 
+		      ((noattr loc 
 			 {ty with Ctypes.ctype_node = (Tpointer (false,ty)) }
-			 (NTbinop (lvalue,Clogic.Badd, ts))))) init 
+			 (NTbinop (lvalue,Clogic.Badd, ts))),
+		   info.var_why_type,zone,info))) init 
 	    in
 	    init_cells (Int64.add i Int64.one) (npand (block,b),init')
 	in

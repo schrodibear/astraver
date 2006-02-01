@@ -89,8 +89,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (m: ((pointer) struct_anonymous_0_33)),
   forall (p1_struct_anonymous_0_27: ((memory) ((pointer) Z0)
                                     struct_anonymous_0_27)),
@@ -167,11 +167,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_27 u))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_27 u) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_27 u) 0 4))),
-  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (v2_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
+                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
                 (acc v1_struct_anonymous_0_27_0 u) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_27
                      v2_struct_anonymous_0_27_0 (pset_singleton u)) /\
@@ -183,7 +183,7 @@ Save.
                  p2_struct_anonymous_0_27 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_27
                  p1_struct_anonymous_0_27 pset_empty)) /\
-                (not_assigns alloc int_Z0 int_Z0_0
+                (not_assigns alloc Int_Z0 Int_Z0_0
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_27 u))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_27
                                                            u))
@@ -207,8 +207,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (m: ((pointer) struct_anonymous_0_33)),
   forall (p1_struct_anonymous_0_27: ((memory) ((pointer) Z0)
                                     struct_anonymous_0_27)),
@@ -287,11 +287,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_27 u))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_27 u) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_27 u) 0 4))),
-  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (v2_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
+                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
                 (acc v1_struct_anonymous_0_27_0 u) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_27
                      v2_struct_anonymous_0_27_0 (pset_singleton u)) /\
@@ -303,7 +303,7 @@ Save.
                  p2_struct_anonymous_0_27 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_27
                  p1_struct_anonymous_0_27 pset_empty)) /\
-                (not_assigns alloc int_Z0 int_Z0_0
+                (not_assigns alloc Int_Z0 Int_Z0_0
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_27 u))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_27
                                                            u))
@@ -318,11 +318,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_29 v))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_29 v) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_29 v) 0 4))),
-  forall (int_Z0_1: ((memory) Z Z0)),
+  forall (Int_Z0_1: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (v2_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (HW_5: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_1 (shift (acc p1_struct_anonymous_0_29 v) 1)) <=
+                (acc Int_Z0_1 (shift (acc p1_struct_anonymous_0_29 v) 1)) <=
                 (acc v1_struct_anonymous_0_29_0 v) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_29
                      v2_struct_anonymous_0_29_0 (pset_singleton v)) /\
@@ -334,7 +334,7 @@ Save.
                  p2_struct_anonymous_0_29 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_29
                  p1_struct_anonymous_0_29 pset_empty)) /\
-                (not_assigns alloc int_Z0_0 int_Z0_1
+                (not_assigns alloc Int_Z0_0 Int_Z0_1
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_29 v))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_29
                                                            v))
@@ -358,8 +358,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (m: ((pointer) struct_anonymous_0_33)),
   forall (p1_struct_anonymous_0_27: ((memory) ((pointer) Z0)
                                     struct_anonymous_0_27)),
@@ -440,11 +440,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_27 u))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_27 u) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_27 u) 0 4))),
-  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (v2_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
+                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
                 (acc v1_struct_anonymous_0_27_0 u) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_27
                      v2_struct_anonymous_0_27_0 (pset_singleton u)) /\
@@ -456,7 +456,7 @@ Save.
                  p2_struct_anonymous_0_27 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_27
                  p1_struct_anonymous_0_27 pset_empty)) /\
-                (not_assigns alloc int_Z0 int_Z0_0
+                (not_assigns alloc Int_Z0 Int_Z0_0
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_27 u))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_27
                                                            u))
@@ -471,11 +471,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_29 v))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_29 v) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_29 v) 0 4))),
-  forall (int_Z0_1: ((memory) Z Z0)),
+  forall (Int_Z0_1: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (v2_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (HW_5: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_1 (shift (acc p1_struct_anonymous_0_29 v) 1)) <=
+                (acc Int_Z0_1 (shift (acc p1_struct_anonymous_0_29 v) 1)) <=
                 (acc v1_struct_anonymous_0_29_0 v) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_29
                      v2_struct_anonymous_0_29_0 (pset_singleton v)) /\
@@ -487,7 +487,7 @@ Save.
                  p2_struct_anonymous_0_29 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_29
                  p1_struct_anonymous_0_29 pset_empty)) /\
-                (not_assigns alloc int_Z0_0 int_Z0_1
+                (not_assigns alloc Int_Z0_0 Int_Z0_1
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_29 v))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_29
                                                            v))
@@ -502,11 +502,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_31 w))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_31 w) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_31 w) 0 4))),
-  forall (int_Z0_2: ((memory) Z Z0)),
+  forall (Int_Z0_2: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_31_0: ((memory) Z struct_anonymous_0_31)),
   forall (v2_struct_anonymous_0_31_0: ((memory) Z struct_anonymous_0_31)),
   forall (HW_7: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_2 (shift (acc p1_struct_anonymous_0_31 w) 1)) <=
+                (acc Int_Z0_2 (shift (acc p1_struct_anonymous_0_31 w) 1)) <=
                 (acc v1_struct_anonymous_0_31_0 w) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_31
                      v2_struct_anonymous_0_31_0 (pset_singleton w)) /\
@@ -518,7 +518,7 @@ Save.
                  p2_struct_anonymous_0_31 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_31
                  p1_struct_anonymous_0_31 pset_empty)) /\
-                (not_assigns alloc int_Z0_1 int_Z0_2
+                (not_assigns alloc Int_Z0_1 Int_Z0_2
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_31 w))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_31
                                                            w))
@@ -542,8 +542,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (m: ((pointer) struct_anonymous_0_33)),
   forall (p1_struct_anonymous_0_27: ((memory) ((pointer) Z0)
                                     struct_anonymous_0_27)),
@@ -626,11 +626,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_27 u))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_27 u) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_27 u) 0 4))),
-  forall (int_Z0_0: ((memory) Z Z0)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (v2_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
+                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_27 u) 1)) <=
                 (acc v1_struct_anonymous_0_27_0 u) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_27
                      v2_struct_anonymous_0_27_0 (pset_singleton u)) /\
@@ -642,7 +642,7 @@ Save.
                  p2_struct_anonymous_0_27 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_27
                  p1_struct_anonymous_0_27 pset_empty)) /\
-                (not_assigns alloc int_Z0 int_Z0_0
+                (not_assigns alloc Int_Z0 Int_Z0_0
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_27 u))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_27
                                                            u))
@@ -657,11 +657,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_29 v))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_29 v) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_29 v) 0 4))),
-  forall (int_Z0_1: ((memory) Z Z0)),
+  forall (Int_Z0_1: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (v2_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (HW_5: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_1 (shift (acc p1_struct_anonymous_0_29 v) 1)) <=
+                (acc Int_Z0_1 (shift (acc p1_struct_anonymous_0_29 v) 1)) <=
                 (acc v1_struct_anonymous_0_29_0 v) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_29
                      v2_struct_anonymous_0_29_0 (pset_singleton v)) /\
@@ -673,7 +673,7 @@ Save.
                  p2_struct_anonymous_0_29 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_29
                  p1_struct_anonymous_0_29 pset_empty)) /\
-                (not_assigns alloc int_Z0_0 int_Z0_1
+                (not_assigns alloc Int_Z0_0 Int_Z0_1
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_29 v))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_29
                                                            v))
@@ -688,11 +688,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_31 w))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_31 w) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_31 w) 0 4))),
-  forall (int_Z0_2: ((memory) Z Z0)),
+  forall (Int_Z0_2: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_31_0: ((memory) Z struct_anonymous_0_31)),
   forall (v2_struct_anonymous_0_31_0: ((memory) Z struct_anonymous_0_31)),
   forall (HW_7: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_2 (shift (acc p1_struct_anonymous_0_31 w) 1)) <=
+                (acc Int_Z0_2 (shift (acc p1_struct_anonymous_0_31 w) 1)) <=
                 (acc v1_struct_anonymous_0_31_0 w) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_31
                      v2_struct_anonymous_0_31_0 (pset_singleton w)) /\
@@ -704,7 +704,7 @@ Save.
                  p2_struct_anonymous_0_31 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_31
                  p1_struct_anonymous_0_31 pset_empty)) /\
-                (not_assigns alloc int_Z0_1 int_Z0_2
+                (not_assigns alloc Int_Z0_1 Int_Z0_2
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_31 w))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_31
                                                            w))
@@ -719,11 +719,11 @@ Save.
                 (valid alloc (acc pp1_struct_anonymous_0_33 m))) /\
                 (valid_range alloc (acc p1_struct_anonymous_0_33 m) 0 4)) /\
                 (valid_range alloc (acc p2_struct_anonymous_0_33 m) 0 4))),
-  forall (int_Z0_3: ((memory) Z Z0)),
+  forall (Int_Z0_3: ((memory) Z Z0)),
   forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
   forall (v2_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
   forall (HW_9: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc int_Z0_3 (shift (acc p1_struct_anonymous_0_33 m) 1)) <=
+                (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_33 m) 1)) <=
                 (acc v1_struct_anonymous_0_33_0 m) /\
                 (((((not_assigns alloc v2_struct_anonymous_0_33
                      v2_struct_anonymous_0_33_0 (pset_singleton m)) /\
@@ -735,7 +735,7 @@ Save.
                  p2_struct_anonymous_0_33 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_0_33
                  p1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc int_Z0_2 int_Z0_3
+                (not_assigns alloc Int_Z0_2 Int_Z0_3
                  (pset_union (pset_singleton (acc pp1_struct_anonymous_0_33 m))
                   (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_33
                                                            m))
@@ -745,13 +745,13 @@ Save.
                     0 5))))),
   (* File "separation2.c", line 55, characters 4-153 *)
   ((((exists i:Z,
-      (acc int_Z0_3 (shift (acc p1_struct_anonymous_0_27 u) i)) <=
+      (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_27 u) i)) <=
       (acc v1_struct_anonymous_0_27_0 u)) /\
-  (exists i:Z, (acc int_Z0_3 (shift (acc p1_struct_anonymous_0_29 v) i)) <=
+  (exists i:Z, (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_29 v) i)) <=
    (acc v1_struct_anonymous_0_29_0 v))) /\
-  (exists i:Z, (acc int_Z0_3 (shift (acc p1_struct_anonymous_0_31 w) i)) <=
+  (exists i:Z, (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_31 w) i)) <=
    (acc v1_struct_anonymous_0_31_0 w))) /\
-  (exists i:Z, (acc int_Z0_3 (shift (acc p1_struct_anonymous_0_33 m) i)) <=
+  (exists i:Z, (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_33 m) i)) <=
    (acc v1_struct_anonymous_0_33_0 m))).
 Proof.
 intuition.
@@ -769,8 +769,8 @@ Admitted.
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (A1346:Set), forall (A1347:Set), forall (A1348:Set),
   forall (A1349:Set),
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (m: ((pointer) struct_anonymous_0_33)),
   forall (p1_struct_anonymous_0_17: ((memory) ((pointer) Z0) A1349)),
   forall (p1_struct_anonymous_0_18: ((memory) ((pointer) Z0) A1348)),
@@ -861,60 +861,60 @@ Admitted.
                 (valid1 p1_struct_anonymous_0_33)),
   forall (result: ((pointer) Z0)),
   forall (HW_2: result = (acc p1_struct_anonymous_0_27 u)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_3: int_Z0_0 = (upd int_Z0 result 0)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_3: Int_Z0_0 = (upd Int_Z0 result 0)),
   forall (result0: ((pointer) Z0)),
   forall (HW_4: result0 = (acc p1_struct_anonymous_0_27 u)),
   forall (result1: ((pointer) Z0)),
   forall (HW_5: result1 = (shift result0 1)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_6: int_Z0_1 = (upd int_Z0_0 result1 0)),
+  forall (Int_Z0_1: ((memory) Z Z0)),
+  forall (HW_6: Int_Z0_1 = (upd Int_Z0_0 result1 0)),
   forall (result2: ((pointer) Z0)),
   forall (HW_7: result2 = (acc p1_struct_anonymous_0_27 u)),
   forall (result3: ((pointer) Z0)),
   forall (HW_8: result3 = (shift result2 2)),
-  forall (int_Z0_2: ((memory) Z Z0)),
-  forall (HW_9: int_Z0_2 = (upd int_Z0_1 result3 0)),
+  forall (Int_Z0_2: ((memory) Z Z0)),
+  forall (HW_9: Int_Z0_2 = (upd Int_Z0_1 result3 0)),
   forall (result4: ((pointer) Z0)),
   forall (HW_10: result4 = (acc p1_struct_anonymous_0_27 u)),
   forall (result5: ((pointer) Z0)),
   forall (HW_11: result5 = (shift result4 3)),
-  forall (int_Z0_3: ((memory) Z Z0)),
-  forall (HW_12: int_Z0_3 = (upd int_Z0_2 result5 0)),
+  forall (Int_Z0_3: ((memory) Z Z0)),
+  forall (HW_12: Int_Z0_3 = (upd Int_Z0_2 result5 0)),
   forall (result6: ((pointer) Z0)),
   forall (HW_13: result6 = (acc p1_struct_anonymous_0_27 u)),
   forall (result7: ((pointer) Z0)),
   forall (HW_14: result7 = (shift result6 4)),
-  forall (int_Z0_4: ((memory) Z Z0)),
-  forall (HW_15: int_Z0_4 = (upd int_Z0_3 result7 0)),
+  forall (Int_Z0_4: ((memory) Z Z0)),
+  forall (HW_15: Int_Z0_4 = (upd Int_Z0_3 result7 0)),
   forall (result8: ((pointer) Z0)),
   forall (HW_16: result8 = (acc p2_struct_anonymous_0_27 u)),
-  forall (int_Z0_5: ((memory) Z Z0)),
-  forall (HW_17: int_Z0_5 = (upd int_Z0_4 result8 0)),
+  forall (Int_Z0_5: ((memory) Z Z0)),
+  forall (HW_17: Int_Z0_5 = (upd Int_Z0_4 result8 0)),
   forall (result9: ((pointer) Z0)),
   forall (HW_18: result9 = (acc p2_struct_anonymous_0_27 u)),
   forall (result10: ((pointer) Z0)),
   forall (HW_19: result10 = (shift result9 1)),
-  forall (int_Z0_6: ((memory) Z Z0)),
-  forall (HW_20: int_Z0_6 = (upd int_Z0_5 result10 0)),
+  forall (Int_Z0_6: ((memory) Z Z0)),
+  forall (HW_20: Int_Z0_6 = (upd Int_Z0_5 result10 0)),
   forall (result11: ((pointer) Z0)),
   forall (HW_21: result11 = (acc p2_struct_anonymous_0_27 u)),
   forall (result12: ((pointer) Z0)),
   forall (HW_22: result12 = (shift result11 2)),
-  forall (int_Z0_7: ((memory) Z Z0)),
-  forall (HW_23: int_Z0_7 = (upd int_Z0_6 result12 0)),
+  forall (Int_Z0_7: ((memory) Z Z0)),
+  forall (HW_23: Int_Z0_7 = (upd Int_Z0_6 result12 0)),
   forall (result13: ((pointer) Z0)),
   forall (HW_24: result13 = (acc p2_struct_anonymous_0_27 u)),
   forall (result14: ((pointer) Z0)),
   forall (HW_25: result14 = (shift result13 3)),
-  forall (int_Z0_8: ((memory) Z Z0)),
-  forall (HW_26: int_Z0_8 = (upd int_Z0_7 result14 0)),
+  forall (Int_Z0_8: ((memory) Z Z0)),
+  forall (HW_26: Int_Z0_8 = (upd Int_Z0_7 result14 0)),
   forall (result15: ((pointer) Z0)),
   forall (HW_27: result15 = (acc p2_struct_anonymous_0_27 u)),
   forall (result16: ((pointer) Z0)),
   forall (HW_28: result16 = (shift result15 4)),
-  forall (int_Z0_9: ((memory) Z Z0)),
-  forall (HW_29: int_Z0_9 = (upd int_Z0_8 result16 0)),
+  forall (Int_Z0_9: ((memory) Z Z0)),
+  forall (HW_29: Int_Z0_9 = (upd Int_Z0_8 result16 0)),
   forall (v1_struct_anonymous_0_27_0: ((memory) Z struct_anonymous_0_27)),
   forall (HW_30: v1_struct_anonymous_0_27_0 = (upd v1_struct_anonymous_0_27 u
                                                0)),
@@ -927,60 +927,60 @@ Admitted.
                                                 u null)),
   forall (result17: ((pointer) Z0)),
   forall (HW_33: result17 = (acc p1_struct_anonymous_0_29 v)),
-  forall (int_Z0_10: ((memory) Z Z0)),
-  forall (HW_34: int_Z0_10 = (upd int_Z0_9 result17 0)),
+  forall (Int_Z0_10: ((memory) Z Z0)),
+  forall (HW_34: Int_Z0_10 = (upd Int_Z0_9 result17 0)),
   forall (result18: ((pointer) Z0)),
   forall (HW_35: result18 = (acc p1_struct_anonymous_0_29 v)),
   forall (result19: ((pointer) Z0)),
   forall (HW_36: result19 = (shift result18 1)),
-  forall (int_Z0_11: ((memory) Z Z0)),
-  forall (HW_37: int_Z0_11 = (upd int_Z0_10 result19 0)),
+  forall (Int_Z0_11: ((memory) Z Z0)),
+  forall (HW_37: Int_Z0_11 = (upd Int_Z0_10 result19 0)),
   forall (result20: ((pointer) Z0)),
   forall (HW_38: result20 = (acc p1_struct_anonymous_0_29 v)),
   forall (result21: ((pointer) Z0)),
   forall (HW_39: result21 = (shift result20 2)),
-  forall (int_Z0_12: ((memory) Z Z0)),
-  forall (HW_40: int_Z0_12 = (upd int_Z0_11 result21 0)),
+  forall (Int_Z0_12: ((memory) Z Z0)),
+  forall (HW_40: Int_Z0_12 = (upd Int_Z0_11 result21 0)),
   forall (result22: ((pointer) Z0)),
   forall (HW_41: result22 = (acc p1_struct_anonymous_0_29 v)),
   forall (result23: ((pointer) Z0)),
   forall (HW_42: result23 = (shift result22 3)),
-  forall (int_Z0_13: ((memory) Z Z0)),
-  forall (HW_43: int_Z0_13 = (upd int_Z0_12 result23 0)),
+  forall (Int_Z0_13: ((memory) Z Z0)),
+  forall (HW_43: Int_Z0_13 = (upd Int_Z0_12 result23 0)),
   forall (result24: ((pointer) Z0)),
   forall (HW_44: result24 = (acc p1_struct_anonymous_0_29 v)),
   forall (result25: ((pointer) Z0)),
   forall (HW_45: result25 = (shift result24 4)),
-  forall (int_Z0_14: ((memory) Z Z0)),
-  forall (HW_46: int_Z0_14 = (upd int_Z0_13 result25 0)),
+  forall (Int_Z0_14: ((memory) Z Z0)),
+  forall (HW_46: Int_Z0_14 = (upd Int_Z0_13 result25 0)),
   forall (result26: ((pointer) Z0)),
   forall (HW_47: result26 = (acc p2_struct_anonymous_0_29 v)),
-  forall (int_Z0_15: ((memory) Z Z0)),
-  forall (HW_48: int_Z0_15 = (upd int_Z0_14 result26 0)),
+  forall (Int_Z0_15: ((memory) Z Z0)),
+  forall (HW_48: Int_Z0_15 = (upd Int_Z0_14 result26 0)),
   forall (result27: ((pointer) Z0)),
   forall (HW_49: result27 = (acc p2_struct_anonymous_0_29 v)),
   forall (result28: ((pointer) Z0)),
   forall (HW_50: result28 = (shift result27 1)),
-  forall (int_Z0_16: ((memory) Z Z0)),
-  forall (HW_51: int_Z0_16 = (upd int_Z0_15 result28 0)),
+  forall (Int_Z0_16: ((memory) Z Z0)),
+  forall (HW_51: Int_Z0_16 = (upd Int_Z0_15 result28 0)),
   forall (result29: ((pointer) Z0)),
   forall (HW_52: result29 = (acc p2_struct_anonymous_0_29 v)),
   forall (result30: ((pointer) Z0)),
   forall (HW_53: result30 = (shift result29 2)),
-  forall (int_Z0_17: ((memory) Z Z0)),
-  forall (HW_54: int_Z0_17 = (upd int_Z0_16 result30 0)),
+  forall (Int_Z0_17: ((memory) Z Z0)),
+  forall (HW_54: Int_Z0_17 = (upd Int_Z0_16 result30 0)),
   forall (result31: ((pointer) Z0)),
   forall (HW_55: result31 = (acc p2_struct_anonymous_0_29 v)),
   forall (result32: ((pointer) Z0)),
   forall (HW_56: result32 = (shift result31 3)),
-  forall (int_Z0_18: ((memory) Z Z0)),
-  forall (HW_57: int_Z0_18 = (upd int_Z0_17 result32 0)),
+  forall (Int_Z0_18: ((memory) Z Z0)),
+  forall (HW_57: Int_Z0_18 = (upd Int_Z0_17 result32 0)),
   forall (result33: ((pointer) Z0)),
   forall (HW_58: result33 = (acc p2_struct_anonymous_0_29 v)),
   forall (result34: ((pointer) Z0)),
   forall (HW_59: result34 = (shift result33 4)),
-  forall (int_Z0_19: ((memory) Z Z0)),
-  forall (HW_60: int_Z0_19 = (upd int_Z0_18 result34 0)),
+  forall (Int_Z0_19: ((memory) Z Z0)),
+  forall (HW_60: Int_Z0_19 = (upd Int_Z0_18 result34 0)),
   forall (v1_struct_anonymous_0_29_0: ((memory) Z struct_anonymous_0_29)),
   forall (HW_61: v1_struct_anonymous_0_29_0 = (upd v1_struct_anonymous_0_29 v
                                                0)),
@@ -993,60 +993,60 @@ Admitted.
                                                 v null)),
   forall (result35: ((pointer) Z0)),
   forall (HW_64: result35 = (acc p1_struct_anonymous_0_31 w)),
-  forall (int_Z0_20: ((memory) Z Z0)),
-  forall (HW_65: int_Z0_20 = (upd int_Z0_19 result35 0)),
+  forall (Int_Z0_20: ((memory) Z Z0)),
+  forall (HW_65: Int_Z0_20 = (upd Int_Z0_19 result35 0)),
   forall (result36: ((pointer) Z0)),
   forall (HW_66: result36 = (acc p1_struct_anonymous_0_31 w)),
   forall (result37: ((pointer) Z0)),
   forall (HW_67: result37 = (shift result36 1)),
-  forall (int_Z0_21: ((memory) Z Z0)),
-  forall (HW_68: int_Z0_21 = (upd int_Z0_20 result37 0)),
+  forall (Int_Z0_21: ((memory) Z Z0)),
+  forall (HW_68: Int_Z0_21 = (upd Int_Z0_20 result37 0)),
   forall (result38: ((pointer) Z0)),
   forall (HW_69: result38 = (acc p1_struct_anonymous_0_31 w)),
   forall (result39: ((pointer) Z0)),
   forall (HW_70: result39 = (shift result38 2)),
-  forall (int_Z0_22: ((memory) Z Z0)),
-  forall (HW_71: int_Z0_22 = (upd int_Z0_21 result39 0)),
+  forall (Int_Z0_22: ((memory) Z Z0)),
+  forall (HW_71: Int_Z0_22 = (upd Int_Z0_21 result39 0)),
   forall (result40: ((pointer) Z0)),
   forall (HW_72: result40 = (acc p1_struct_anonymous_0_31 w)),
   forall (result41: ((pointer) Z0)),
   forall (HW_73: result41 = (shift result40 3)),
-  forall (int_Z0_23: ((memory) Z Z0)),
-  forall (HW_74: int_Z0_23 = (upd int_Z0_22 result41 0)),
+  forall (Int_Z0_23: ((memory) Z Z0)),
+  forall (HW_74: Int_Z0_23 = (upd Int_Z0_22 result41 0)),
   forall (result42: ((pointer) Z0)),
   forall (HW_75: result42 = (acc p1_struct_anonymous_0_31 w)),
   forall (result43: ((pointer) Z0)),
   forall (HW_76: result43 = (shift result42 4)),
-  forall (int_Z0_24: ((memory) Z Z0)),
-  forall (HW_77: int_Z0_24 = (upd int_Z0_23 result43 0)),
+  forall (Int_Z0_24: ((memory) Z Z0)),
+  forall (HW_77: Int_Z0_24 = (upd Int_Z0_23 result43 0)),
   forall (result44: ((pointer) Z0)),
   forall (HW_78: result44 = (acc p2_struct_anonymous_0_31 w)),
-  forall (int_Z0_25: ((memory) Z Z0)),
-  forall (HW_79: int_Z0_25 = (upd int_Z0_24 result44 0)),
+  forall (Int_Z0_25: ((memory) Z Z0)),
+  forall (HW_79: Int_Z0_25 = (upd Int_Z0_24 result44 0)),
   forall (result45: ((pointer) Z0)),
   forall (HW_80: result45 = (acc p2_struct_anonymous_0_31 w)),
   forall (result46: ((pointer) Z0)),
   forall (HW_81: result46 = (shift result45 1)),
-  forall (int_Z0_26: ((memory) Z Z0)),
-  forall (HW_82: int_Z0_26 = (upd int_Z0_25 result46 0)),
+  forall (Int_Z0_26: ((memory) Z Z0)),
+  forall (HW_82: Int_Z0_26 = (upd Int_Z0_25 result46 0)),
   forall (result47: ((pointer) Z0)),
   forall (HW_83: result47 = (acc p2_struct_anonymous_0_31 w)),
   forall (result48: ((pointer) Z0)),
   forall (HW_84: result48 = (shift result47 2)),
-  forall (int_Z0_27: ((memory) Z Z0)),
-  forall (HW_85: int_Z0_27 = (upd int_Z0_26 result48 0)),
+  forall (Int_Z0_27: ((memory) Z Z0)),
+  forall (HW_85: Int_Z0_27 = (upd Int_Z0_26 result48 0)),
   forall (result49: ((pointer) Z0)),
   forall (HW_86: result49 = (acc p2_struct_anonymous_0_31 w)),
   forall (result50: ((pointer) Z0)),
   forall (HW_87: result50 = (shift result49 3)),
-  forall (int_Z0_28: ((memory) Z Z0)),
-  forall (HW_88: int_Z0_28 = (upd int_Z0_27 result50 0)),
+  forall (Int_Z0_28: ((memory) Z Z0)),
+  forall (HW_88: Int_Z0_28 = (upd Int_Z0_27 result50 0)),
   forall (result51: ((pointer) Z0)),
   forall (HW_89: result51 = (acc p2_struct_anonymous_0_31 w)),
   forall (result52: ((pointer) Z0)),
   forall (HW_90: result52 = (shift result51 4)),
-  forall (int_Z0_29: ((memory) Z Z0)),
-  forall (HW_91: int_Z0_29 = (upd int_Z0_28 result52 0)),
+  forall (Int_Z0_29: ((memory) Z Z0)),
+  forall (HW_91: Int_Z0_29 = (upd Int_Z0_28 result52 0)),
   forall (v1_struct_anonymous_0_31_0: ((memory) Z struct_anonymous_0_31)),
   forall (HW_92: v1_struct_anonymous_0_31_0 = (upd v1_struct_anonymous_0_31 w
                                                0)),
@@ -1059,60 +1059,60 @@ Admitted.
                                                 w null)),
   forall (result53: ((pointer) Z0)),
   forall (HW_95: result53 = (acc p1_struct_anonymous_0_33 m)),
-  forall (int_Z0_30: ((memory) Z Z0)),
-  forall (HW_96: int_Z0_30 = (upd int_Z0_29 result53 0)),
+  forall (Int_Z0_30: ((memory) Z Z0)),
+  forall (HW_96: Int_Z0_30 = (upd Int_Z0_29 result53 0)),
   forall (result54: ((pointer) Z0)),
   forall (HW_97: result54 = (acc p1_struct_anonymous_0_33 m)),
   forall (result55: ((pointer) Z0)),
   forall (HW_98: result55 = (shift result54 1)),
-  forall (int_Z0_31: ((memory) Z Z0)),
-  forall (HW_99: int_Z0_31 = (upd int_Z0_30 result55 0)),
+  forall (Int_Z0_31: ((memory) Z Z0)),
+  forall (HW_99: Int_Z0_31 = (upd Int_Z0_30 result55 0)),
   forall (result56: ((pointer) Z0)),
   forall (HW_100: result56 = (acc p1_struct_anonymous_0_33 m)),
   forall (result57: ((pointer) Z0)),
   forall (HW_101: result57 = (shift result56 2)),
-  forall (int_Z0_32: ((memory) Z Z0)),
-  forall (HW_102: int_Z0_32 = (upd int_Z0_31 result57 0)),
+  forall (Int_Z0_32: ((memory) Z Z0)),
+  forall (HW_102: Int_Z0_32 = (upd Int_Z0_31 result57 0)),
   forall (result58: ((pointer) Z0)),
   forall (HW_103: result58 = (acc p1_struct_anonymous_0_33 m)),
   forall (result59: ((pointer) Z0)),
   forall (HW_104: result59 = (shift result58 3)),
-  forall (int_Z0_33: ((memory) Z Z0)),
-  forall (HW_105: int_Z0_33 = (upd int_Z0_32 result59 0)),
+  forall (Int_Z0_33: ((memory) Z Z0)),
+  forall (HW_105: Int_Z0_33 = (upd Int_Z0_32 result59 0)),
   forall (result60: ((pointer) Z0)),
   forall (HW_106: result60 = (acc p1_struct_anonymous_0_33 m)),
   forall (result61: ((pointer) Z0)),
   forall (HW_107: result61 = (shift result60 4)),
-  forall (int_Z0_34: ((memory) Z Z0)),
-  forall (HW_108: int_Z0_34 = (upd int_Z0_33 result61 0)),
+  forall (Int_Z0_34: ((memory) Z Z0)),
+  forall (HW_108: Int_Z0_34 = (upd Int_Z0_33 result61 0)),
   forall (result62: ((pointer) Z0)),
   forall (HW_109: result62 = (acc p2_struct_anonymous_0_33 m)),
-  forall (int_Z0_35: ((memory) Z Z0)),
-  forall (HW_110: int_Z0_35 = (upd int_Z0_34 result62 0)),
+  forall (Int_Z0_35: ((memory) Z Z0)),
+  forall (HW_110: Int_Z0_35 = (upd Int_Z0_34 result62 0)),
   forall (result63: ((pointer) Z0)),
   forall (HW_111: result63 = (acc p2_struct_anonymous_0_33 m)),
   forall (result64: ((pointer) Z0)),
   forall (HW_112: result64 = (shift result63 1)),
-  forall (int_Z0_36: ((memory) Z Z0)),
-  forall (HW_113: int_Z0_36 = (upd int_Z0_35 result64 0)),
+  forall (Int_Z0_36: ((memory) Z Z0)),
+  forall (HW_113: Int_Z0_36 = (upd Int_Z0_35 result64 0)),
   forall (result65: ((pointer) Z0)),
   forall (HW_114: result65 = (acc p2_struct_anonymous_0_33 m)),
   forall (result66: ((pointer) Z0)),
   forall (HW_115: result66 = (shift result65 2)),
-  forall (int_Z0_37: ((memory) Z Z0)),
-  forall (HW_116: int_Z0_37 = (upd int_Z0_36 result66 0)),
+  forall (Int_Z0_37: ((memory) Z Z0)),
+  forall (HW_116: Int_Z0_37 = (upd Int_Z0_36 result66 0)),
   forall (result67: ((pointer) Z0)),
   forall (HW_117: result67 = (acc p2_struct_anonymous_0_33 m)),
   forall (result68: ((pointer) Z0)),
   forall (HW_118: result68 = (shift result67 3)),
-  forall (int_Z0_38: ((memory) Z Z0)),
-  forall (HW_119: int_Z0_38 = (upd int_Z0_37 result68 0)),
+  forall (Int_Z0_38: ((memory) Z Z0)),
+  forall (HW_119: Int_Z0_38 = (upd Int_Z0_37 result68 0)),
   forall (result69: ((pointer) Z0)),
   forall (HW_120: result69 = (acc p2_struct_anonymous_0_33 m)),
   forall (result70: ((pointer) Z0)),
   forall (HW_121: result70 = (shift result69 4)),
-  forall (int_Z0_39: ((memory) Z Z0)),
-  forall (HW_122: int_Z0_39 = (upd int_Z0_38 result70 0)),
+  forall (Int_Z0_39: ((memory) Z Z0)),
+  forall (HW_122: Int_Z0_39 = (upd Int_Z0_38 result70 0)),
   forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
   forall (HW_123: v1_struct_anonymous_0_33_0 = (upd v1_struct_anonymous_0_33
                                                 m 0)),

@@ -3,12 +3,10 @@
 
 Require Export shift_spec_why.
 
-(* Why obligation from file "why/shift.why", characters 33-161 *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
-  forall (result: Z),
-  forall (Post1: result = (lsr x 1)),
-  (* File \"shift.c\", line 1, characters 13-29 *) result = ((Zdiv x 2)).
+  (* File "shift.c", line 1, characters 13-29 *) (lsr x 1) = ((Zdiv x 2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

@@ -6,7 +6,7 @@
 void erase (int *p, int size){
   /*@ invariant 
     @   0 <= size <= \old(size) && p == \old(p)+(\old(size)-size)
-    @ loop_assigns p[ 0 .. size-1]
+    @ loop_assigns p[ 0 .. size-1] 
     @ variant size
     @ 
     @*/

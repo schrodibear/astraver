@@ -8,14 +8,14 @@ Require Export all_zeros_spec_why.
   forall (A769:Set),
   forall (t: ((pointer) A769)),
   forall (n: Z),
+  forall (Int_Z5: ((memory) Z A769)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z A769)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
   forall (HW_3: k = 0),
   (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <= k /\ k <= n) /\
-  (forall (i:Z), (0 <= i /\ i < k -> (acc int_Z5 (shift t i)) = 0))).
+  (forall (i:Z), (0 <= i /\ i < k -> (acc Int_Z5 (shift t i)) = 0))).
 Proof.
 intuition.
 subst.
@@ -28,8 +28,8 @@ Save.
   forall (A770:Set),
   forall (t: ((pointer) A770)),
   forall (n: Z),
+  forall (Int_Z5: ((memory) Z A770)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z A770)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -37,12 +37,12 @@ Save.
   forall (HW_4: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k /\ k <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (k0: Z),
   forall (HW_5: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k0 /\ k0 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k0 -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (HW_6: k0 < n),
   forall (result: ((pointer) A770)),
   forall (HW_7: result = (shift t k0)),
@@ -57,8 +57,8 @@ Save.
   forall (A771:Set),
   forall (t: ((pointer) A771)),
   forall (n: Z),
+  forall (Int_Z5: ((memory) Z A771)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z A771)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -66,22 +66,22 @@ Save.
   forall (HW_4: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k /\ k <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (k0: Z),
   forall (HW_5: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k0 /\ k0 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k0 -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (HW_6: k0 < n),
   forall (result: ((pointer) A771)),
   forall (HW_7: result = (shift t k0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_9: result0 = (acc int_Z5 result)),
+  forall (HW_9: result0 = (acc Int_Z5 result)),
   forall (HW_10: result0 <> 0),
   (* File "all_zeros.c", line 25, characters 13-57 *)
   ((0 <> 0 <->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = 0)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc Int_Z5 (shift t i)) = 0)))).
 Proof.
 intuition; subst.
 assert (k0=n \/ k0<n). omega. intuition.
@@ -92,8 +92,8 @@ Save.
   forall (A772:Set),
   forall (t: ((pointer) A772)),
   forall (n: Z),
+  forall (Int_Z5: ((memory) Z A772)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z A772)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -101,23 +101,23 @@ Save.
   forall (HW_4: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k /\ k <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (k0: Z),
   forall (HW_5: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k0 /\ k0 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k0 -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (HW_6: k0 < n),
   forall (result: ((pointer) A772)),
   forall (HW_7: result = (shift t k0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_9: result0 = (acc int_Z5 result)),
+  forall (HW_9: result0 = (acc Int_Z5 result)),
   forall (HW_11: result0 = 0),
   forall (k1: Z),
   forall (HW_12: k1 = (k0 + 1)),
   (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <= k1 /\ k1 <=
-  n) /\ (forall (i:Z), (0 <= i /\ i < k1 -> (acc int_Z5 (shift t i)) = 0))) /\
+  n) /\ (forall (i:Z), (0 <= i /\ i < k1 -> (acc Int_Z5 (shift t i)) = 0))) /\
   (Zwf 0 (n - k1) (n - k0)).
 Proof.
 intuition.
@@ -134,8 +134,8 @@ Save.
   forall (A773:Set),
   forall (t: ((pointer) A773)),
   forall (n: Z),
+  forall (Int_Z5: ((memory) Z A773)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z A773)),
   forall (HW_1: (* File "all_zeros.c", line 24, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (k: Z),
@@ -143,16 +143,16 @@ Save.
   forall (HW_4: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k /\ k <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (k0: Z),
   forall (HW_5: (* File "all_zeros.c", line 28, characters 17-64 *) ((0 <=
                 k0 /\ k0 <= n) /\
                 (forall (i:Z),
-                 (0 <= i /\ i < k0 -> (acc int_Z5 (shift t i)) = 0)))),
+                 (0 <= i /\ i < k0 -> (acc Int_Z5 (shift t i)) = 0)))),
   forall (HW_13: k0 >= n),
   (* File "all_zeros.c", line 25, characters 13-57 *)
   ((1 <> 0 <->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z5 (shift t i)) = 0)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc Int_Z5 (shift t i)) = 0)))).
 Proof.
 intuition.
 Save.
@@ -162,12 +162,12 @@ Save.
   forall (A774:Set),
   forall (t: ((pointer) A774)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A774)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A774)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
-  (forall (i:Z), (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0))).
+  (forall (i:Z), (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0))).
 Proof.
 intuition; subst.
 Save.
@@ -177,18 +177,18 @@ Save.
   forall (A775:Set),
   forall (t: ((pointer) A775)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A775)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A775)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
                 (forall (i:Z),
-                 (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n: Z),
   forall (HW_3: (* File "all_zeros.c", line 7, characters 17-71 *)
                 (mutable_n <= n /\
                 (forall (i:Z),
-                 (mutable_n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (mutable_n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
@@ -205,18 +205,18 @@ Save.
   forall (A776:Set),
   forall (t: ((pointer) A776)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A776)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A776)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
                 (forall (i:Z),
-                 (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n: Z),
   forall (HW_3: (* File "all_zeros.c", line 7, characters 17-71 *)
                 (mutable_n <= n /\
                 (forall (i:Z),
-                 (mutable_n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (mutable_n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
@@ -224,12 +224,12 @@ Save.
   forall (HW_6: result = (shift t mutable_n0)),
   forall (HW_7: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_8: result0 = (acc int_Z4 result)),
+  forall (HW_8: result0 = (acc Int_Z4 result)),
   forall (HW_9: result0 <> 0),
   forall (HW_10: mutable_n0 < 0),
   (* File "all_zeros.c", line 5, characters 13-57 *)
   ((1 <> 0 <->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -240,18 +240,18 @@ Save.
   forall (A777:Set),
   forall (t: ((pointer) A777)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A777)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A777)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
                 (forall (i:Z),
-                 (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n: Z),
   forall (HW_3: (* File "all_zeros.c", line 7, characters 17-71 *)
                 (mutable_n <= n /\
                 (forall (i:Z),
-                 (mutable_n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (mutable_n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
@@ -259,12 +259,12 @@ Save.
   forall (HW_6: result = (shift t mutable_n0)),
   forall (HW_7: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_8: result0 = (acc int_Z4 result)),
+  forall (HW_8: result0 = (acc Int_Z4 result)),
   forall (HW_9: result0 <> 0),
   forall (HW_11: mutable_n0 >= 0),
   (* File "all_zeros.c", line 5, characters 13-57 *)
   ((0 <> 0 <->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))).
 Proof.
 intuition.
 subst.
@@ -278,18 +278,18 @@ Save.
   forall (A778:Set),
   forall (t: ((pointer) A778)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A778)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A778)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
                 (forall (i:Z),
-                 (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n: Z),
   forall (HW_3: (* File "all_zeros.c", line 7, characters 17-71 *)
                 (mutable_n <= n /\
                 (forall (i:Z),
-                 (mutable_n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (mutable_n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_5: mutable_n0 >= 0),
@@ -297,10 +297,10 @@ Save.
   forall (HW_6: result = (shift t mutable_n0)),
   forall (HW_7: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_8: result0 = (acc int_Z4 result)),
+  forall (HW_8: result0 = (acc Int_Z4 result)),
   forall (HW_12: result0 = 0),
   (* File "all_zeros.c", line 7, characters 17-71 *) (mutable_n0 <= n /\
-  (forall (i:Z), (mutable_n0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0))) /\
+  (forall (i:Z), (mutable_n0 <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0))) /\
   (Zwf 0 mutable_n0 mutable_n).
 Proof.
 intuition.
@@ -316,24 +316,24 @@ Save.
   forall (A779:Set),
   forall (t: ((pointer) A779)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A779)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A779)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
                 (forall (i:Z),
-                 (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n: Z),
   forall (HW_3: (* File "all_zeros.c", line 7, characters 17-71 *)
                 (mutable_n <= n /\
                 (forall (i:Z),
-                 (mutable_n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (mutable_n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_14: mutable_n0 < 0),
   (* File "all_zeros.c", line 5, characters 13-57 *)
   ((1 <> 0 <->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -344,25 +344,25 @@ Save.
   forall (A780:Set),
   forall (t: ((pointer) A780)),
   forall (n: Z),
+  forall (Int_Z4: ((memory) Z A780)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z A780)),
   forall (HW_1: (* File "all_zeros.c", line 4, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (HW_2: (* File "all_zeros.c", line 7, characters 17-71 *) (n <= n /\
                 (forall (i:Z),
-                 (n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n: Z),
   forall (HW_3: (* File "all_zeros.c", line 7, characters 17-71 *)
                 (mutable_n <= n /\
                 (forall (i:Z),
-                 (mutable_n <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))),
+                 (mutable_n <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))),
   forall (mutable_n0: Z),
   forall (HW_4: mutable_n0 = (mutable_n - 1)),
   forall (HW_13: mutable_n0 < 0),
   forall (HW_15: mutable_n0 >= 0),
   (* File "all_zeros.c", line 5, characters 13-57 *)
   ((0 <> 0 <->
-    (forall (i:Z), (0 <= i /\ i < n -> (acc int_Z4 (shift t i)) = 0)))).
+    (forall (i:Z), (0 <= i /\ i < n -> (acc Int_Z4 (shift t i)) = 0)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

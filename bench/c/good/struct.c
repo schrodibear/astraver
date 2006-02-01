@@ -1,5 +1,5 @@
 
-typedef struct {
+typedef struct T {
   int x;
   int y;
 } T;

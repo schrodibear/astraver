@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.50 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.51 2006-02-01 09:54:27 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -181,9 +181,9 @@ and 'ctype nterm_node =
   | NTvar of Info.var_info
   | NTapp of 'ctype napp
   | NTunop of term_unop * 'ctype nterm
-  | NTstar of 'ctype nterm
+(*  | NTstar of 'ctype nterm*)
   | NTbinop of 'ctype nterm * term_binop * 'ctype nterm
-  | NTarrow of 'ctype nterm * Info.var_info
+  | NTarrow of 'ctype nterm * Info.why_type * Info.zone * Info.var_info
   | NTif of 'ctype nterm * 'ctype nterm * 'ctype nterm
   | NTold of 'ctype nterm
   | NTat of 'ctype nterm * string
@@ -194,7 +194,8 @@ and 'ctype nterm_node =
   | NTnull
 *)
   | NTcast of 'ctype * 'ctype nterm
-  | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option
+  | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option 
+      * Info.var_info
 
 and 'ctype napp = { 
   napp_pred : Info.logic_info;

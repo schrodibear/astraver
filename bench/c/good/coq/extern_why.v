@@ -3,12 +3,10 @@
 
 Require Export extern_spec_why.
 
-(* Why obligation from file "why/extern.why", characters 138-150 *)
-Lemma f_impl_po_1 : 
-  forall (x_1: Z),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (result: Z),
-  forall (Post1: result = x_1),
-  result = 5.
+  (* File "extern.c", line 2, characters 13-25 *) result = 5.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

@@ -3,72 +3,67 @@
 
 Require Export loop_inv_spec_why.
 
-(* Why obligation from file "why/loop_inv.why", characters 334-355 *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (c: Z),
   forall (i: Z),
-  forall (Pre4: (* File \"loop_inv.c\", line 5, characters 14-28 *) (i >=
-                0 /\ c > 0)),
-  forall (Variant1: Z),
-  forall (i0: Z),
-  forall (Pre3: Variant1 = i0),
-  forall (Pre2: (* File \"loop_inv.c\", line 9, characters 17-23 *) i0 >= 0),
-  forall (Test4: i0 > 0),
-  forall (Test3: i0 >= c),
-  forall (i1: Z),
-  forall (Post3: i1 = (i0 - c)),
-  (* File \"loop_inv.c\", line 9, characters 17-23 *) i1 >= 0 /\
-  (Zwf 0 i1 i0).
+  forall (HW_1: (* File "loop_inv.c", line 5, characters 14-28 *) (i >= 0 /\
+                c > 0)),
+  (* File "loop_inv.c", line 9, characters 17-23 *) i >= 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/loop_inv.why", characters 366-386 *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (c: Z),
   forall (i: Z),
-  forall (Pre4: (* File \"loop_inv.c\", line 5, characters 14-28 *) (i >=
-                0 /\ c > 0)),
-  forall (Variant1: Z),
+  forall (HW_1: (* File "loop_inv.c", line 5, characters 14-28 *) (i >= 0 /\
+                c > 0)),
+  forall (HW_2: (* File "loop_inv.c", line 9, characters 17-23 *) i >= 0),
   forall (i0: Z),
-  forall (Pre3: Variant1 = i0),
-  forall (Pre2: (* File \"loop_inv.c\", line 9, characters 17-23 *) i0 >= 0),
-  forall (Test4: i0 > 0),
-  forall (Test2: i0 < c),
+  forall (HW_3: (* File "loop_inv.c", line 9, characters 17-23 *) i0 >= 0),
+  forall (HW_4: i0 > 0),
+  forall (HW_5: i0 >= c),
   forall (i1: Z),
-  forall (Post2: i1 = (i0 - 1)),
-  (* File \"loop_inv.c\", line 9, characters 17-23 *) i1 >= 0 /\
-  (Zwf 0 i1 i0).
+  forall (HW_6: i1 = (i0 - c)),
+  (* File "loop_inv.c", line 9, characters 17-23 *) i1 >= 0 /\ (Zwf 0 i1 i0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/loop_inv.why", characters 172-391 *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (c: Z),
   forall (i: Z),
-  forall (Pre4: (* File \"loop_inv.c\", line 5, characters 14-28 *) (i >=
-                0 /\ c > 0)),
-  forall (Variant1: Z),
+  forall (HW_1: (* File "loop_inv.c", line 5, characters 14-28 *) (i >= 0 /\
+                c > 0)),
+  forall (HW_2: (* File "loop_inv.c", line 9, characters 17-23 *) i >= 0),
   forall (i0: Z),
-  forall (Pre3: Variant1 = i0),
-  forall (Pre2: (* File \"loop_inv.c\", line 9, characters 17-23 *) i0 >= 0),
-  forall (Test1: i0 <= 0),
-  (* File \"loop_inv.c\", line 6, characters 13-17 *) i0 = 0.
+  forall (HW_3: (* File "loop_inv.c", line 9, characters 17-23 *) i0 >= 0),
+  forall (HW_4: i0 > 0),
+  forall (HW_7: i0 < c),
+  forall (i1: Z),
+  forall (HW_8: i1 = (i0 - 1)),
+  (* File "loop_inv.c", line 9, characters 17-23 *) i1 >= 0 /\ (Zwf 0 i1 i0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/loop_inv.why", characters 219-282 *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (c: Z),
   forall (i: Z),
-  forall (Pre4: (* File \"loop_inv.c\", line 5, characters 14-28 *) (i >=
-                0 /\ c > 0)),
-  (* File \"loop_inv.c\", line 9, characters 17-23 *) i >= 0.
+  forall (HW_1: (* File "loop_inv.c", line 5, characters 14-28 *) (i >= 0 /\
+                c > 0)),
+  forall (HW_2: (* File "loop_inv.c", line 9, characters 17-23 *) i >= 0),
+  forall (i0: Z),
+  forall (HW_3: (* File "loop_inv.c", line 9, characters 17-23 *) i0 >= 0),
+  forall (HW_9: i0 <= 0),
+  (* File "loop_inv.c", line 6, characters 13-17 *) i0 = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

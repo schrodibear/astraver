@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.163 2006-01-26 17:01:55 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.164 2006-02-01 09:54:27 hubert Exp $ i*)
 
 
 open Format
@@ -135,7 +135,7 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Memory(t,z) -> assert false
   
 
-let heap_var (ty : Info.why_type) =
+(*let heap_var (ty : Info.why_type) =
   match ty with
     | Pointer z ->
 	let z = repr z in
@@ -147,6 +147,7 @@ let heap_var (ty : Info.why_type) =
     | Unit 
     | Why_Logic _ 
     | Memory _ -> assert false
+*)
 
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
@@ -171,15 +172,16 @@ let rec interp_term label old_label t =
 	interp_term (Some l) old_label t
     | NTif (_, _, _) -> 
 	unsupported t.nterm_loc "logic if-then-else"
-    | NTarrow (t, field) -> 
+    | NTarrow (t,tw,z, field) -> 
 	let te = f t in
-	let var = zoned_name field.var_unique_name (type_why_for_term t) in
+	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t) 
+	in
 	LApp("acc",[interp_var label var;te])
-    | NTstar t1 -> 
+(*    | NTstar t1 -> 
 	let te1 = f t1 in
 (*	let var = global_var_for_array_type t1.nterm_type in*)
 	let var = heap_var (Cseparation.type_why_for_term t1) in
-	LApp("acc",[interp_var label var;te1])
+	LApp("acc",[interp_var label var;te1])*)
     | NTunop (Utilde, t) -> 
 	LApp ("bw_compl", [f t])
     | NTunop (Ustar, _) -> 
@@ -237,12 +239,13 @@ and interp_term_address  label old_label e = match e.nterm_node with
       end
   | NTunop (Ustar, e1) -> 
       interp_term  label old_label e1
-  | NTarrow (e1, f) ->
+  | NTarrow (e1,tw,z, f) ->
       begin match e.nterm_type.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_term  label old_label e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
-	    let var = zoned_name f.var_unique_name (type_why_for_term e1) in
+	    let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e1)
+	    in
 	    LApp("acc",[interp_var label var; interp_term label old_label e1])
 	| _ -> unsupported e.nterm_loc "& operator on a field"
       end
@@ -552,9 +555,9 @@ let rec interp_expr e =
 	If(interp_boolean_expr e1, interp_expr e2, interp_expr e3)
     | NEstring_literal s -> 
 	unsupported e.nexpr_loc "string literal"
-    | NEarrow (e,s) ->
+    | NEarrow (e,tw,z,s) ->
 	let te = interp_expr e in
-	let var = zoned_name s.var_unique_name (type_why e) in
+	let var = zoned_name s.var_unique_name (Cnorm.type_why e) in
 	let valid = 
 	  match e.nexpr_type.Ctypes.ctype_node with
 	    | Tpointer (valid,_)  
@@ -564,7 +567,7 @@ let rec interp_expr e =
 	in
 	let acc = if valid then "safe_acc_" else "acc_" in
 	Output.make_app acc [Var(var);te]
-    | NEstar e1 -> 
+(*    | NEstar e1 -> 
 	let te1 = interp_expr e1 in
 	let var = heap_var (type_why e1) in
 	let valid = 
@@ -575,7 +578,7 @@ let rec interp_expr e =
 	    | _ -> assert false
 	in
 	let acc = if valid then "safe_acc_" else "acc_" in
-	make_app acc [Var var;te1]
+	make_app acc [Var var;te1]*)
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
 	interp_expr e
@@ -698,15 +701,15 @@ and interp_lvalue e =
     | NEvar (Var_info v) -> LocalRef(v)
     | NEvar (Fun_info v) -> assert false
     | NEunary(Ustar,e1) -> assert false
-    | NEstar(e1) ->
+(*    | NEstar(e1) ->
 	let var = heap_var (type_why e1) in
 	let valid =
 	  match e1.nexpr_type.Ctypes.ctype_node with
 	    | Tpointer(v,_) | Tarray(v,_,_) -> v
 	    | _ -> assert false
 	in 
-	HeapRef(valid,var,interp_expr e1)
-    | NEarrow (e1,f) ->
+	HeapRef(valid,var,interp_expr e1)*)
+    | NEarrow (e1,_,_,f) ->
 	let valid =
 	  match e1.nexpr_type.Ctypes.ctype_node with
 	    | Tpointer(v,_) | Tarray(v,_,_) -> v
@@ -714,7 +717,8 @@ and interp_lvalue e =
 	    | _ -> assert false
 	in 
 	HeapRef(valid,
-		zoned_name f.var_unique_name (type_why e1), interp_expr e1)
+		zoned_name f.var_unique_name (Cnorm.type_why e1), 
+		interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
 
@@ -727,21 +731,20 @@ and interp_address e = match e.nexpr_node with
        end
   | NEvar (Fun_info v) -> unsupported e.nexpr_loc "& operator on functions"
   | NEunary (Ustar, _) -> assert false
-  | NEstar(e1) ->
+(*  | NEstar(e1) ->
       interp_expr e1
-(*
   | NEarrget (e1, e2) ->
       build_complex_app (Var "shift_") [interp_expr e1; interp_expr e2]
   | NEdot ({texpr_node = NEunary (Ustar, e1)}, f) ->
       assert false
   | NEdot (e1, f)
 *)
-  | NEarrow (e1, f) ->
+  | NEarrow (e1,_,_, f) ->
       begin match e.nexpr_type.Ctypes.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_expr e1
 	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
-	    let var = zoned_name f.var_unique_name (type_why e1) in
+	    let var = zoned_name f.var_unique_name (Cnorm.type_why e1) in
 	    let valid = 
 	      match e1.nexpr_type.Ctypes.ctype_node with
 		| Tpointer (valid,_)  
@@ -824,8 +827,8 @@ and interp_statement_expr e =
     | NEcond (_, _, _)
     | NEbinary (_, _, _)
     | NEunary (_, _)
-    | NEstar _ 
-    | NEarrow (_, _)
+(*    | NEstar _ *)
+    | NEarrow _
     | NEvar _
     | NEstring_literal _
     | NEconstant _ -> 
@@ -866,36 +869,36 @@ let collect_locations before acc loc =
   (* term_loc t interprets t either as Term t' with t' a Why term of type 
      pointer, or as Pset s with s a Why term of type pset *)
   let rec term_or_pset t = match t.nterm_node with
-    | NTarrow (e, f) ->
+    | NTarrow (e,_,_, f) ->
 	let m = 
 	  interp_var (Some before) 
-	    (zoned_name f.var_unique_name (type_why_for_term e)) in
+	    (zoned_name f.var_unique_name (Cnorm.type_why_for_term e)) in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
-    | NTstar e ->
+(*    | NTstar e ->
 	let var = heap_var (type_why_for_term e) in
 	let m = interp_var (Some before) var in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
-	end
-    | NTrange (e, None, None) ->
-	let var = heap_var (type_why_for_term t) in
+	end*)
+    | NTrange (e, None, None,f) ->
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
 	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
-    | NTrange (e, None, Some a) ->
-	let var = heap_var (type_why_for_term t) in
+    | NTrange (e, None, Some a,f) ->
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
 	Pset (LApp ("pset_acc_range_left", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
-    | NTrange (e, Some a, None) ->
-	let var = heap_var (type_why_for_term t) in
+    | NTrange (e, Some a, None,f) ->
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
 	Pset (LApp ("pset_acc_range_right", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
-    | NTrange (e, Some a, Some b) ->
-	let var = heap_var (type_why_for_term t) in
+    | NTrange (e, Some a, Some b,f) ->
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
 	Pset (LApp ("pset_acc_range", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a;
@@ -909,29 +912,29 @@ let collect_locations before acc loc =
     | Term t -> LApp ("pset_singleton", [t])
   in
   let var,iloc = match loc.nterm_node with
-    | NTarrow(e,f) ->
-	zoned_name f.var_unique_name (type_why_for_term e), Some (pset e)
-    | NTstar e1 -> 
+    | NTarrow(e,_,_,f) ->
+	zoned_name f.var_unique_name (Cnorm.type_why_for_term e), Some (pset e)
+(*    | NTstar e1 -> 
 	let var = heap_var (type_why_for_term e1) in
-	var, Some (pset e1)
+	var, Some (pset e1)*)
     | NTvar v ->
 	v.var_unique_name, None
-    | NTrange (t, None, None) -> 
-	let var = heap_var (type_why_for_term t) in
+    | NTrange (t, None, None,f) -> 
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t) in
 	let loc = LApp ("pset_all", [pset t]) in
 	var, Some loc
-    | NTrange (t, None, Some a) -> 
-	let var = heap_var (type_why_for_term t) in
+    | NTrange (t, None, Some a,f) -> 
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t) in
 	let loc = LApp ("pset_range_left", 
 			[pset t; interp_term (Some before) before a]) in
 	var, Some loc
-    | NTrange (t, Some a, None) -> 
-	let var = heap_var (type_why_for_term t) in
+    | NTrange (t, Some a, None,f) -> 
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t) in
 	let loc = LApp ("pset_range_right", 
 			[pset t; interp_term (Some before) before a]) in
 	var, Some loc
-    | NTrange(t1, Some t2, Some t3) -> 
-	let var = heap_var (type_why_for_term t1) in
+    | NTrange(t1, Some t2, Some t3,f) -> 
+	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t1) in
 	let loc = 
 	  LApp("pset_range",
 	       [pset t1;
@@ -1255,9 +1258,10 @@ let make_switch_condition_default tmp l used_cases=
   cond,fl
 
 let in_struct v1 v = 
- 	{ nexpr_node = NEarrow (v1, v); 
-	  nexpr_loc = v1.nexpr_loc;
-	  nexpr_type = v.var_type }
+  let zone = Cnorm.find_zone v1 in
+  { nexpr_node = NEarrow (v1,v.var_why_type,zone,  v); 
+    nexpr_loc = v1.nexpr_loc;
+    nexpr_type = v.var_type }
 
 let noattr loc ty e =
   { nexpr_node = e;

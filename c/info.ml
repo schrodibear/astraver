@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.28 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.29 2006-02-01 09:54:27 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -34,7 +34,7 @@ and zone =
       number : int;
       mutable repr : zone option;
       name : string;
-      mutable type_why_zone : why_type;
+(*      mutable type_why_zone : why_type;*)
     }
 
 

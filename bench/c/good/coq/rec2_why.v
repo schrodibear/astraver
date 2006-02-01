@@ -12,24 +12,23 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "why/rec2.why", characters 74-132 *)
-Lemma f_impl_po_1 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
-  forall (Pre3: x >= 0),
-  (x <> 0 -> (x - 1) >= 0).
+  forall (HW_1: (* File "rec2.c", line 4, characters 14-20 *) x >= 0),
+  forall (HW_2: x = 0),
+  (* File "rec2.c", line 4, characters 62-74 *) 0 = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/rec2.why", characters 33-162 *)
-Lemma f_impl_po_2 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (x: Z),
-  forall (Pre3: x >= 0),
-  forall (Pre2: (x <> 0 -> (x - 1) >= 0)),
-  forall (result: Z),
-  forall (Post1: x = 0 /\ result = 0 \/ x <> 0 /\ result = 0),
-  result = 0.
+  forall (HW_1: (* File "rec2.c", line 4, characters 14-20 *) x >= 0),
+  forall (HW_3: x <> 0),
+  (* File "rec2.c", line 4, characters 14-20 *) (x - 1) >= 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

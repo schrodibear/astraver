@@ -9,9 +9,9 @@ Require Export struct_spec_why.
   forall (t2: ((pointer) A793)),
   forall (alloc: alloc_table),
   forall (s: ((pointer) struct_S_10)),
-  forall (x_struct_anonymous_0_8: ((memory) Z A793)),
+  forall (x_struct_T_8: ((memory) Z A793)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
-                ((valid alloc t2) /\ (acc x_struct_anonymous_0_8 t2) = 0) /\
+                ((valid alloc t2) /\ (acc x_struct_T_8 t2) = 0) /\
                 (valid alloc s)),
   (valid alloc t2).
 Proof.
@@ -24,29 +24,26 @@ Save.
   forall (t2: ((pointer) A794)),
   forall (alloc: alloc_table),
   forall (s: ((pointer) struct_S_10)),
-  forall (x_struct_anonymous_0_8: ((memory) Z A794)),
-  forall (y_struct_anonymous_0_8: ((memory) Z A794)),
+  forall (x_struct_T_8: ((memory) Z A794)),
+  forall (y_struct_T_8: ((memory) Z A794)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
-                ((valid alloc t2) /\ (acc x_struct_anonymous_0_8 t2) = 0) /\
+                ((valid alloc t2) /\ (acc x_struct_T_8 t2) = 0) /\
                 (valid alloc s)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
-  forall (HW_3: result = (acc x_struct_anonymous_0_8 t2)),
-  forall (x_struct_anonymous_0_8_0: ((memory) Z A794)),
-  forall (HW_4: x_struct_anonymous_0_8_0 = (upd x_struct_anonymous_0_8 t2
-                                            (result + 1))),
+  forall (HW_3: result = (acc x_struct_T_8 t2)),
+  forall (x_struct_T_8_0: ((memory) Z A794)),
+  forall (HW_4: x_struct_T_8_0 = (upd x_struct_T_8 t2 (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
-  forall (HW_6: result0 = (acc x_struct_anonymous_0_8_0 t2)),
-  forall (x_struct_anonymous_0_8_1: ((memory) Z A794)),
-  forall (HW_7: x_struct_anonymous_0_8_1 = (upd x_struct_anonymous_0_8_0 t2
-                                            (1 + result0))),
+  forall (HW_6: result0 = (acc x_struct_T_8_0 t2)),
+  forall (x_struct_T_8_1: ((memory) Z A794)),
+  forall (HW_7: x_struct_T_8_1 = (upd x_struct_T_8_0 t2 (1 + result0))),
   (* File "struct.c", line 9, characters 13-63 *) ((result0 = 1 /\
-  (acc x_struct_anonymous_0_8_1 t2) = 2) /\ (acc y_struct_anonymous_0_8 t2) =
-  (acc y_struct_anonymous_0_8 t2)) /\
-  (not_assigns alloc y_struct_anonymous_0_8 y_struct_anonymous_0_8 pset_empty) /\
-  (not_assigns alloc x_struct_anonymous_0_8 x_struct_anonymous_0_8_1
-   (pset_singleton t2)).
+  (acc x_struct_T_8_1 t2) = 2) /\ (acc y_struct_T_8 t2) =
+  (acc y_struct_T_8 t2)) /\
+  (not_assigns alloc y_struct_T_8 y_struct_T_8 pset_empty) /\
+  (not_assigns alloc x_struct_T_8 x_struct_T_8_1 (pset_singleton t2)).
 Proof.
 intuition; subst; caduceus; auto.
 Save.
@@ -75,52 +72,22 @@ Save.
   forall (alloc: alloc_table),
   forall (ps: ((pointer) struct_S_10)),
   forall (s: ((pointer) struct_S_10)),
-  forall (t_struct_S_10: ((memory) ((pointer) struct_anonymous_0_2)
-                         struct_S_10)),
+  forall (t_struct_S_10: ((memory) ((pointer) struct_T_2) struct_S_10)),
   forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
                 (valid alloc ps) /\ (valid alloc s) /\
                 (valid1 t_struct_S_10) /\
                 (separation2 t_struct_S_10 t_struct_S_10)),
   forall (ps0: ((pointer) struct_S_10)),
   forall (HW_3: ps0 = s),
-  forall (result: ((pointer) struct_anonymous_0_2)),
+  forall (result: ((pointer) struct_T_2)),
   forall (HW_4: result = (acc t_struct_S_10 s)),
-  forall (p: ((pointer) struct_anonymous_0_2)),
+  forall (p: ((pointer) struct_T_2)),
   forall (HW_5: p = result),
   (valid alloc ps0).
 Proof.
  intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (ps: ((pointer) struct_S_10)),
-  forall (s: ((pointer) struct_S_10)),
-  forall (t_struct_S_10: ((memory) ((pointer) struct_anonymous_0_2)
-                         struct_S_10)),
-  forall (x_struct_anonymous_0_2: ((memory) Z struct_anonymous_0_2)),
-  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
-                (valid alloc ps) /\ (valid alloc s) /\
-                (valid1 t_struct_S_10) /\
-                (separation2 t_struct_S_10 t_struct_S_10)),
-  forall (ps0: ((pointer) struct_S_10)),
-  forall (HW_3: ps0 = s),
-  forall (result: ((pointer) struct_anonymous_0_2)),
-  forall (HW_4: result = (acc t_struct_S_10 s)),
-  forall (p: ((pointer) struct_anonymous_0_2)),
-  forall (HW_5: p = result),
-  forall (HW_6: (valid alloc ps0)),
-  forall (result0: ((pointer) struct_anonymous_0_2)),
-  forall (HW_7: result0 = (acc t_struct_S_10 ps0)),
-  forall (x_struct_anonymous_0_2_0: ((memory) Z struct_anonymous_0_2)),
-  forall (HW_8: x_struct_anonymous_0_2_0 = (upd x_struct_anonymous_0_2
-                                            result0 1)),
-  forall (result1: ((pointer) struct_anonymous_0_2)),
-  forall (HW_9: result1 = (acc t_struct_S_10 s)),
-  forall (result2: Z),
-  forall (HW_10: result2 = (acc x_struct_anonymous_0_2_0 result1)),
-  (* File "struct.c", line 20, characters 13-25 *) result2 = 1.
 Proof.
  intuition.
 subst; auto.
@@ -144,5 +111,42 @@ Save.
 Proof.
 intuition.
 subst;caduceus.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (ps: ((pointer) struct_S_10)),
+  forall (s: ((pointer) struct_S_10)),
+  forall (t_struct_S_10: ((memory) ((pointer) struct_T_2) struct_S_10)),
+  forall (x_struct_T_2: ((memory) Z struct_T_2)),
+  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
+                (valid alloc ps) /\ (valid alloc s) /\
+                (valid1 t_struct_S_10) /\
+                (separation2 t_struct_S_10 t_struct_S_10)),
+  forall (ps0: ((pointer) struct_S_10)),
+  forall (HW_3: ps0 = s),
+  forall (result: ((pointer) struct_T_2)),
+  forall (HW_4: result = (acc t_struct_S_10 s)),
+  forall (p: ((pointer) struct_T_2)),
+  forall (HW_5: p = result),
+  forall (HW_6: (valid alloc ps0)),
+  forall (result0: ((pointer) struct_T_2)),
+  forall (HW_7: result0 = (acc t_struct_S_10 ps0)),
+  forall (x_struct_T_2_0: ((memory) Z struct_T_2)),
+  forall (HW_8: x_struct_T_2_0 = (upd x_struct_T_2 result0 1)),
+  forall (result1: ((pointer) struct_T_2)),
+  forall (HW_9: result1 = (acc t_struct_S_10 s)),
+  forall (result2: Z),
+  forall (HW_10: result2 = (acc x_struct_T_2_0 result1)),
+  (* File "struct.c", line 20, characters 13-25 *) result2 = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

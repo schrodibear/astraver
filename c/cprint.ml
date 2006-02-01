@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.19 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.20 2006-02-01 09:54:27 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -59,11 +59,11 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
   | NTunop (op, t) ->
       fprintf fmt "%s%a" (term_unop op) nterm_p t
-  | NTstar t ->
-      fprintf fmt "*%a" nterm_p t
+(*  | NTstar t ->
+      fprintf fmt "*%a" nterm_p t*)
   | NTbinop (t1, op, t2) ->
       fprintf fmt "%a %s %a" nterm_p t1 (term_binop op) nterm_p t2
-  | NTarrow (t, vi) ->
+  | NTarrow (t,_,_, vi) ->
       fprintf fmt "%a->%s" nterm_p t vi.var_unique_name
   | NTif (t1, t2, t3) ->
       fprintf fmt "%a ? %a : %a" nterm_p t1 nterm_p t2 nterm_p t3
@@ -77,7 +77,7 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\block_length(%a)" nterm t
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
-  | NTrange (t1, t2, t3) ->
+  | NTrange (t1, t2, t3, _) ->
       fprintf fmt "%a[%a..%a]" nterm t1 nterm_option t2 nterm_option t3
 
 and nterm_p fmt t = match t.nterm_node with
@@ -250,10 +250,10 @@ let rec nexpr fmt e = match e.nexpr_node with
       fprintf fmt "%s" x.var_unique_name
   | NEvar (Fun_info x) ->
       fprintf fmt "%s" x.fun_name
-  | NEarrow (e, x) ->
+  | NEarrow (e,_,_,x) ->
       fprintf fmt "%a->%s" nexpr_p e x.var_unique_name
-  | NEstar e ->
-      fprintf fmt "*%a" nexpr_p e
+(*  | NEstar e ->
+      fprintf fmt "*%a" nexpr_p e*)
   | NEseq (e1, e2) ->
       fprintf fmt "%a, %a" nexpr e1 nexpr e2
   | NEassign (e1, e2) ->

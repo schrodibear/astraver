@@ -18,10 +18,6 @@ open Cast
 open Info
 
 
-val type_why : nexpr -> why_type
-
-val type_why_for_term : nterm -> why_type
-
 val not_alias : Loc.position ->
   Cast.nctype Clogic.nterm -> Cast.nctype Clogic.nterm -> Cast.npredicate 
 

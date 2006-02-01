@@ -21,77 +21,6 @@ open Clogic
 open Cnorm
 open Cenv
 
-let rename_zone assoc ty =
-  match ty with
-    | Pointer z ->
-	let z = repr z in
-	begin
-	  try
-	    Pointer(List.assoc z assoc)
-	  with
-	      Not_found -> ty
-	end
-    | _ -> ty
-
-let rec type_why_for_term t = 
-  match t.nterm_node with
-    | NTconstant (IntConstant _) -> Int     
-    | NTconstant (FloatConstant _) -> Float 
-    | NTvar v -> v.var_why_type
-    | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
-	rename_zone assoc f.logic_why_type
-    | NTunop (Uminus,t) | NTunop (Utilde,t)  -> type_why_for_term t
-    | NTunop (Ustar,_) | NTunop (Uamp,_) -> assert false
-    | NTunop (Ufloat_of_int,_) -> Float
-    | NTunop (Uint_of_float,_) -> Int
-    | NTstar t ->
-	begin match type_why_for_term t with
-	  | Pointer z -> z.type_why_zone
-	  | _ -> assert false
-	end 
-    | NTbinop (t1,_,_) -> type_why_for_term t1
-    | NTarrow (t,v) -> v.var_why_type
-    | NTif (_,_,t) -> type_why_for_term t
-    | NTold t -> type_why_for_term t
-    | NTat (t,_) -> type_why_for_term t
-    | NTbase_addr t ->
-	begin match type_why_for_term t with
-	  | Pointer z -> Addr z
-	  | _ -> assert false
-	end  
-    | NTblock_length t -> Int
-    | NTcast (_,t) -> assert false (* type_why_for_term t *)
-    | NTrange (t,_,_) -> type_why_for_term t
-
-
-      
-
-let rec type_why e =
-  match e.nexpr_node with
-    | NEvar e -> 
-	begin match e with
-	  | Var_info v -> v.var_why_type
-	  | Fun_info f -> f.type_why_fun
-	end
-    | NEarrow (_,v) -> v.var_why_type
-    | NEstar e -> 
-	begin match (type_why e) with
-	  | Pointer z -> z.type_why_zone
-	  | _ -> assert false
-	end
-    | NEnop -> Unit
-    | NEconstant (IntConstant _) -> Int    
-    | NEconstant (FloatConstant _) -> Float
-    | NEstring_literal _ -> assert false
-    | NEseq (e1,e2) -> type_why e2 
-    | NEassign (l,e) -> type_why e
-    | NEassign_op (l,op,e) -> type_why e
-    | NEcast (_,e) | NEunary (_,e) | NEincr (_,e) 
-    | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
-    | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
-	rename_zone assoc (type_why e)
-	
-
 
 
 (* Automatic invariants expressing validity of local/global variables *)
@@ -119,10 +48,13 @@ let fresh_index =
 
 
 let indirection loc ty t =
-  { nterm_node = NTstar t; 
+  let info = make_field ty in
+  let info = declare_arrow_var info in
+  let zone = find_zone_for_term t in
+  { nterm_node =   NTarrow (t, info.var_why_type, zone, info);
     nterm_loc = loc; 	   
     nterm_type = ty;}
-
+    
 (*
   [make_forall_range loc t b f] builds the formula
 
@@ -154,8 +86,9 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
       | TTStructUnion (Tstruct (_), fl) ->
 	  List.fold_right 
 	    (fun f acc -> 
+	       let zone = find_zone_for_term t in
 	       let tf = 
-		 { nterm_node = NTarrow (t, f); 
+		 { nterm_node = NTarrow (t, f.var_why_type, zone, f); 
 		   nterm_loc = loc;
 		   nterm_type = f.var_type} 
 	       in
@@ -215,15 +148,16 @@ let var_to_term loc v =
     nterm_type = v.var_type}
 
 let in_struct v1 v = 
-  match v1.nterm_node with
+(*  match v1.nterm_node with
     | NTstar(x) ->
 	{ nterm_node = NTarrow (x, v); 
 	  nterm_loc = v1.nterm_loc;
 	  nterm_type = v.var_type}
-    | _ -> 
-	{ nterm_node = NTarrow (v1, v); 
-	  nterm_loc = v1.nterm_loc;
-	  nterm_type = v.var_type}
+    | _ -> *)
+  let zone = find_zone_for_term v1 in
+  { nterm_node = NTarrow (v1,v.var_why_type, zone, v); 
+    nterm_loc = v1.nterm_loc;
+    nterm_type = v.var_type}
 
 	
 let compatible_type ty1 ty2 = 
@@ -449,7 +383,7 @@ and unifier_zone z1 z2 =
   if z1' == z2' then ()
   else
     begin
-      unifier_type_why z1'.type_why_zone z2'.type_why_zone;
+(*      unifier_type_why z1'.type_why_zone z2'.type_why_zone;*)
       match z1'.repr, z2'.repr with
 	| None, None -> 
 	    if z1'.zone_is_var then z1'.repr <- Some z2' else 
@@ -490,18 +424,19 @@ let rec term tyf t =
       List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) 
-  | NTstar t -> term tyf t
+(*  | NTstar t *)-> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
-  | NTarrow (t,v) -> term tyf t
+  | NTarrow (t,_,_,v) -> term tyf t
   | NTif (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NTold t 
   | NTat (t,_) 
   | NTbase_addr t
   | NTblock_length t 
   | NTcast (_,t) 
-  | NTrange (t,None,None) -> term tyf t
-  | NTrange (t1,Some t2,None) | NTrange (t1,None,Some t2) -> term tyf t1; term tyf t2
-  | NTrange (t1,Some t2,Some t3) -> term tyf t1; term tyf t2; term tyf t3
+  | NTrange (t,None,None,_) -> term tyf t
+  | NTrange (t1,Some t2,None,_) | NTrange (t1,None,Some t2,_) -> 
+      term tyf t1; term tyf t2
+  | NTrange (t1,Some t2,Some t3,_) -> term tyf t1; term tyf t2; term tyf t3
 
 let rec predicate tyf p =
   match p.npred_node with
@@ -558,8 +493,8 @@ let rec calcul_zones expr =
     | NEconstant _ 
     | NEstring_literal _ 
     | NEvar _ -> ()
-    | NEarrow (e,_) 
-    | NEstar e -> calcul_zones e
+    | NEarrow (e,_,_,_) 
+(*    | NEstar e*) -> calcul_zones e
     | NEseq (e1,e2) -> calcul_zones e1; calcul_zones e2
     | NEassign_op (lv,_,e) 
     | NEassign (lv,e) -> calcul_zones lv; calcul_zones e;
@@ -619,7 +554,7 @@ let rec c_initializer ty tw init =
 		  | _ -> assert false
 	      end
 	  | Tarray (_,ty,_) ->	      
-	      let z = match tw with
+	      (*let z = match tw with
 		| Pointer z -> z
 		| _ -> 
 		    let (a,t) = output_why_type tw in
@@ -627,8 +562,9 @@ let rec c_initializer ty tw init =
 		    List.iter (fun t -> Format.eprintf ",@ %s" t) a;
 		    Format.eprintf ") %s not a pointer\n" t;
 		    assert false (*mal typé*)
-	      in
-	      List.iter (fun init -> c_initializer ty z.type_why_zone init) l 
+	      in*)
+	      let tw = type_type_why ty false in
+	      List.iter (fun init -> c_initializer ty tw init) l 
 	  | _ -> assert false
 
 

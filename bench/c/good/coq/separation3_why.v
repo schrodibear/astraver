@@ -5,9 +5,9 @@ Require Export separation3_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
   forall (b_struct_S_3: ((memory) ((pointer) Z0) struct_S_3)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) struct_L_12)),
   forall (p_struct_L_12: ((memory) ((pointer) struct_S_3) struct_L_12)),
   forall (s0: ((pointer) struct_S_3)),
@@ -17,8 +17,8 @@ Require Export separation3_spec_why.
   forall (HW_2: result = (acc b_struct_S_3 s0)),
   forall (result0: ((pointer) Z0)),
   forall (HW_3: result0 = (shift result 2)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: int_Z0_0 = (upd int_Z0 result0 1)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_4: Int_Z0_0 = (upd Int_Z0 result0 1)),
   forall (p_struct_L_12_0: ((memory) ((pointer) struct_S_3) struct_L_12)),
   forall (HW_5: p_struct_L_12_0 = (upd p_struct_L_12 l s0)),
   forall (result1: ((pointer) struct_S_3)),
@@ -30,9 +30,9 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
   forall (b_struct_S_3: ((memory) ((pointer) Z0) struct_S_3)),
-  forall (int_Z0: ((memory) Z Z0)),
   forall (l: ((pointer) struct_L_12)),
   forall (p_struct_L_12: ((memory) ((pointer) struct_S_3) struct_L_12)),
   forall (s0: ((pointer) struct_S_3)),
@@ -42,8 +42,8 @@ Save.
   forall (HW_2: result = (acc b_struct_S_3 s0)),
   forall (result0: ((pointer) Z0)),
   forall (HW_3: result0 = (shift result 2)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: int_Z0_0 = (upd int_Z0 result0 1)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_4: Int_Z0_0 = (upd Int_Z0 result0 1)),
   forall (p_struct_L_12_0: ((memory) ((pointer) struct_S_3) struct_L_12)),
   forall (HW_5: p_struct_L_12_0 = (upd p_struct_L_12 l s0)),
   forall (result1: ((pointer) struct_S_3)),
@@ -54,7 +54,7 @@ Save.
   forall (result3: ((pointer) Z0)),
   forall (HW_9: result3 = (shift result2 2)),
   forall (result4: Z),
-  forall (HW_10: result4 = (acc int_Z0_0 result3)),
+  forall (HW_10: result4 = (acc Int_Z0_0 result3)),
   (* File "separation3.c", line 17, characters 13-25 *) result4 = 1.
 Proof.
 intuition; subst.
@@ -91,11 +91,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
+  forall (Int_Z0: ((memory) Z Z0)),
+  forall (Int_Z1: ((memory) Z Z1)),
   forall (alloc: alloc_table),
   forall (b_struct_S_3: ((memory) ((pointer) Z0) struct_S_3)),
   forall (c_struct_S_3: ((memory) ((pointer) Z1) struct_S_3)),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (int_Z1: ((memory) Z Z1)),
   forall (l: ((pointer) struct_L_12)),
   forall (s0: ((pointer) struct_S_3)),
   forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
@@ -106,20 +106,20 @@ Save.
   forall (HW_2: result = (acc b_struct_S_3 s0)),
   forall (result0: ((pointer) Z0)),
   forall (HW_3: result0 = (shift result 2)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: int_Z0_0 = (upd int_Z0 result0 1)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_4: Int_Z0_0 = (upd Int_Z0 result0 1)),
   forall (result1: ((pointer) Z1)),
   forall (HW_5: result1 = (acc c_struct_S_3 s0)),
   forall (result2: ((pointer) Z1)),
   forall (HW_6: result2 = (shift result1 2)),
-  forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_7: int_Z1_0 = (upd int_Z1 result2 2)),
+  forall (Int_Z1_0: ((memory) Z Z1)),
+  forall (HW_7: Int_Z1_0 = (upd Int_Z1 result2 2)),
   forall (result3: ((pointer) Z0)),
   forall (HW_8: result3 = (acc b_struct_S_3 s0)),
   forall (result4: ((pointer) Z0)),
   forall (HW_9: result4 = (shift result3 2)),
   forall (result5: Z),
-  forall (HW_10: result5 = (acc int_Z0_0 result4)),
+  forall (HW_10: result5 = (acc Int_Z0_0 result4)),
   (* File "separation3.c", line 25, characters 13-25 *) result5 = 1.
 Proof.
 intuition.

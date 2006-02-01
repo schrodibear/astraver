@@ -7,8 +7,8 @@ Require Export separation1_spec_why.
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (A771:Set),
   forall (p: ((pointer) A771)),
+  forall (Int_Z7: ((memory) Z A771)),
   forall (alloc: alloc_table),
-  forall (int_Z7: ((memory) Z A771)),
   forall (x: ((pointer) Z4)),
   forall (y: ((pointer) Z5)),
   forall (z: ((pointer) Z6)),
@@ -16,10 +16,10 @@ Require Export separation1_spec_why.
                 (valid alloc p) /\ (valid alloc z) /\ (valid alloc y) /\
                 (valid alloc x)),
   forall (HW_2: (valid alloc p)),
-  forall (int_Z7_0: ((memory) Z A771)),
-  forall (HW_3: int_Z7_0 = (upd int_Z7 p 0)),
-  (* File "separation1.c", line 9, characters 13-20 *) (acc int_Z7_0 p) = 0 /\
-  (not_assigns alloc int_Z7 int_Z7_0 (pset_singleton p)).
+  forall (Int_Z7_0: ((memory) Z A771)),
+  forall (HW_3: Int_Z7_0 = (upd Int_Z7 p 0)),
+  (* File "separation1.c", line 9, characters 13-20 *) (acc Int_Z7_0 p) = 0 /\
+  (not_assigns alloc Int_Z7 Int_Z7_0 (pset_singleton p)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -55,20 +55,20 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
+  forall (Int_Z4: ((memory) Z Z4)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
   forall (x: ((pointer) Z4)),
   forall (y: ((pointer) Z5)),
   forall (z: ((pointer) Z6)),
   forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x)),
   forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc x)),
-  forall (int_Z4_0: ((memory) Z Z4)),
+  forall (Int_Z4_0: ((memory) Z Z4)),
   forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
-                (acc int_Z4_0 x) = 0 /\
-                (not_assigns alloc int_Z4 int_Z4_0 (pset_singleton x))),
-  forall (int_Z4_1: ((memory) Z Z4)),
-  forall (HW_4: int_Z4_1 = (upd int_Z4_0 x 1)),
+                (acc Int_Z4_0 x) = 0 /\
+                (not_assigns alloc Int_Z4 Int_Z4_0 (pset_singleton x))),
+  forall (Int_Z4_1: ((memory) Z Z4)),
+  forall (HW_4: Int_Z4_1 = (upd Int_Z4_0 x 1)),
   (* File "separation1.c", line 7, characters 14-23 *) (valid alloc y).
 Proof.
 intuition.

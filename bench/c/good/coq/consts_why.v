@@ -3,11 +3,9 @@
 
 Require Export consts_spec_why.
 
-(* Why obligation from file "why/consts.why", characters 36-105 *)
-Lemma f1_impl_po_1 : 
-  forall (result: Z),
-  forall (Post1: result = (8 + 10)),
-  result = 18.
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_1 : 
+  (* File "consts.c", line 2, characters 13-26 *) (8 + 10) = 18.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

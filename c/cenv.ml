@@ -205,7 +205,7 @@ let global_zone =
     number = 0;
     repr = None;
     name =  "Z0";
-    type_why_zone = Why_Logic "undefined";
+(*    type_why_zone = Why_Logic "undefined";*)
   }
 
 let () =
@@ -224,7 +224,7 @@ let make_zone ?name is_var =
 		number = !count;
 		repr = None;
 		name = n;
-		type_why_zone = Why_Logic "undefined"; 
+(*		type_why_zone = Why_Logic "undefined"; *)
 	      } in
       Hashtbl.add zone_table z.name z;
       count := !count +1;
@@ -242,11 +242,11 @@ let rec type_type_why ty zone_is_var =
 	begin match ty.ctype_node with 
 	  | Tstruct s -> 
 	      let z = make_zone ~name:("struct_"^s) zone_is_var in
-	      z.type_why_zone <- Why_Logic s; 
+(*	      z.type_why_zone <- Why_Logic s; *)
 	      Pointer z
 	  | _ ->
 	      let z = make_zone zone_is_var in
-	      z.type_why_zone <- type_type_why ty zone_is_var; 
+(*	      z.type_why_zone <- type_type_why ty zone_is_var; *)
 	      Pointer z
 	end
     | Tvoid -> Unit
@@ -262,11 +262,11 @@ let rec type_type_why ty zone_is_var =
 	end
     | Tunion s -> 
 	let z = make_zone ~name:("union_"^s) zone_is_var in
-	z.type_why_zone <- Why_Logic s; 
+(*	z.type_why_zone <- Why_Logic s; *)
 	Pointer z
     | Tstruct s -> 
 	let z = make_zone ~name:("struct_"^s) zone_is_var in
-	z.type_why_zone <- Why_Logic s; 
+(*	z.type_why_zone <- Why_Logic s; *)
 	Pointer z
 
 

@@ -13,27 +13,26 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init2.why", characters 321-336 *)
-Lemma f_impl_po_1 : 
-  forall (a: ((memory) Z)),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_1 : 
+  forall (a_struct_anonymous_0_0: ((memory) Z struct_anonymous_0_0)),
   forall (alloc: alloc_table),
-  forall (b: ((memory) Z)),
-  forall (c: ((memory) pointer)),
-  forall (d: ((memory) Z)),
+  forall (c_struct_anonymous_1_4: ((memory) ((pointer) struct_anonymous_0_0)
+                                  struct_anonymous_1_4)),
   forall (laconstante: Z),
   forall (le: Z),
-  forall (ls: pointer),
+  forall (ls: ((pointer) struct_anonymous_1_4)),
   forall (varglo: Z),
-  forall (Pre1: (valid_range alloc ls 0 1) /\
-                (constant_laconstante laconstante) /\
-                (constant_varglo varglo) /\ (constant_ls alloc a b c d ls) /\
-                (separation2 c c) /\ (constant_le le) /\ (valid1 c)),
-  forall (varloc: Z),
-  forall (Post2: varloc = 4),
-  forall (result: Z),
-  forall (Post1: result = varloc),
-  ((((acc a (acc c ls)) = 1 /\ varglo = 123) /\ result = 4) /\ le = 34) /\
-  laconstante = 7.
+  forall (HW_1: (valid alloc ls) /\ (constant_laconstante laconstante) /\
+                (constant_varglo varglo) /\ (constant_ls ls alloc) /\
+                (constant_le le) /\
+                (separation2 c_struct_anonymous_1_4 c_struct_anonymous_1_4) /\
+                (valid1 c_struct_anonymous_1_4)),
+  (* File "init2.c", line 24, characters 9-78 *)
+  (((((acc a_struct_anonymous_0_0 (acc c_struct_anonymous_1_4 ls)) = 1 /\
+  varglo = 123) /\ 4 = 4) /\ le = 34) /\ laconstante = 7) /\
+  (not_assigns alloc c_struct_anonymous_1_4 c_struct_anonymous_1_4 pset_empty) /\
+  (not_assigns alloc a_struct_anonymous_0_0 a_struct_anonymous_0_0 pset_empty).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

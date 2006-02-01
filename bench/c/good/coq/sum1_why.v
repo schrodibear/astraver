@@ -18,59 +18,56 @@ Qed.
 
 
 
-(* Why obligation from file "why/sum1.why", characters 270-320 *)
-Lemma main_impl_po_1 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_1 : 
   forall (x: Z),
-  forall (Pre4: x = 0),
+  forall (HW_1: (* File "sum1.c", line 10, characters 14-20 *) x = 0),
   forall (i: Z),
-  forall (Post5: i = 0),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
+  forall (HW_2: i = 0),
+  (* File "sum1.c", line 14, characters 17-34 *) (x = i /\ i <= 10).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_2 : 
+  forall (x: Z),
+  forall (HW_1: (* File "sum1.c", line 10, characters 14-20 *) x = 0),
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "sum1.c", line 14, characters 17-34 *) (x = i /\ i <=
+                10)),
+  forall (i0: Z),
   forall (x0: Z),
-  forall (Pre3: Variant1 = (10 - i2)),
-  forall (Pre2: x0 = i2 /\ i2 <= 10),
-  forall (Test2: i2 < 10),
+  forall (HW_4: (* File "sum1.c", line 14, characters 17-34 *) (x0 = i0 /\
+                i0 <= 10)),
+  forall (HW_5: i0 < 10),
   forall (x1: Z),
-  forall (Post3: x1 = (x0 + 1)),
-  forall (i3: Z),
-  forall (Post4: i3 = (i2 + 1)),
-  (x1 = i3 /\ i3 <= 10) /\ (Zwf 0 (10 - i3) (10 - i2)).
+  forall (HW_6: x1 = (x0 + 1)),
+  forall (i1: Z),
+  forall (HW_7: i1 = (i0 + 1)),
+  (* File "sum1.c", line 14, characters 17-34 *) (x1 = i1 /\ i1 <= 10) /\
+  (Zwf 0 (10 - i1) (10 - i0)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum1.why", characters 161-328 *)
-Lemma main_impl_po_2 : 
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_3 : 
   forall (x: Z),
-  forall (Pre4: x = 0),
+  forall (HW_1: (* File "sum1.c", line 10, characters 14-20 *) x = 0),
   forall (i: Z),
-  forall (Post5: i = 0),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "sum1.c", line 14, characters 17-34 *) (x = i /\ i <=
+                10)),
+  forall (i0: Z),
   forall (x0: Z),
-  forall (Pre3: Variant1 = (10 - i2)),
-  forall (Pre2: x0 = i2 /\ i2 <= 10),
-  forall (Test1: i2 >= 10),
-  x0 = 10.
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/sum1.why", characters 205-236 *)
-Lemma main_impl_po_3 : 
-  forall (x: Z),
-  forall (Pre4: x = 0),
-  forall (i: Z),
-  forall (Post5: i = 0),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  x = i1 /\ i1 <= 10.
+  forall (HW_4: (* File "sum1.c", line 14, characters 17-34 *) (x0 = i0 /\
+                i0 <= 10)),
+  forall (HW_8: i0 >= 10),
+  (* File "sum1.c", line 10, characters 29-36 *) x0 = 10.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

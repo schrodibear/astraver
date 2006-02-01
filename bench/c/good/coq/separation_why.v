@@ -69,9 +69,9 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_2 : 
+  forall (Int_Z11: ((memory) Z Z11)),
+  forall (Int_Z12: ((memory) Z Z12)),
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
-  forall (int_Z12: ((memory) Z Z12)),
   forall (p1_struct_anonymous_1_83: ((memory) ((pointer) Z11)
                                     struct_anonymous_1_83)),
   forall (p1_struct_anonymous_1_85: ((memory) ((pointer) Z11)
@@ -132,8 +132,8 @@ Save.
                 (valid1 p1_struct_anonymous_1_85)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
                 (valid alloc u1)),
-  forall (int_Z11_0: ((memory) Z Z11)),
-  forall (int_Z12_0: ((memory) Z Z12)),
+  forall (Int_Z11_0: ((memory) Z Z11)),
+  forall (Int_Z12_0: ((memory) Z Z12)),
   forall (v1_struct_anonymous_1_83_0: ((memory) Z struct_anonymous_1_83)),
   forall (v2_struct_anonymous_1_83_0: ((memory) Z struct_anonymous_1_83)),
   forall (HW_3: (((((not_assigns alloc v2_struct_anonymous_1_83
@@ -144,10 +144,10 @@ Save.
                  p2_struct_anonymous_1_83 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_1_83
                  p1_struct_anonymous_1_83 pset_empty)) /\
-                (not_assigns alloc int_Z12 int_Z12_0
+                (not_assigns alloc Int_Z12 Int_Z12_0
                  (pset_range (pset_singleton (acc p2_struct_anonymous_1_83 u1))
                   0 4))) /\
-                (not_assigns alloc int_Z11 int_Z11_0
+                (not_assigns alloc Int_Z11 Int_Z11_0
                  (pset_range (pset_singleton (acc p1_struct_anonymous_1_83 u1))
                   0 4))),
   (* File "separation.c", line 46, characters 5-14 *) (valid alloc u2).
@@ -157,9 +157,9 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_3 : 
+  forall (Int_Z11: ((memory) Z Z11)),
+  forall (Int_Z12: ((memory) Z Z12)),
   forall (alloc: alloc_table),
-  forall (int_Z11: ((memory) Z Z11)),
-  forall (int_Z12: ((memory) Z Z12)),
   forall (p1_struct_anonymous_1_83: ((memory) ((pointer) Z11)
                                     struct_anonymous_1_83)),
   forall (p1_struct_anonymous_1_85: ((memory) ((pointer) Z11)
@@ -222,8 +222,8 @@ Save.
                 (valid1 p1_struct_anonymous_1_85)),
   forall (HW_2: (* File "separation.c", line 46, characters 5-14 *)
                 (valid alloc u1)),
-  forall (int_Z11_0: ((memory) Z Z11)),
-  forall (int_Z12_0: ((memory) Z Z12)),
+  forall (Int_Z11_0: ((memory) Z Z11)),
+  forall (Int_Z12_0: ((memory) Z Z12)),
   forall (v1_struct_anonymous_1_83_0: ((memory) Z struct_anonymous_1_83)),
   forall (v2_struct_anonymous_1_83_0: ((memory) Z struct_anonymous_1_83)),
   forall (HW_3: (((((not_assigns alloc v2_struct_anonymous_1_83
@@ -234,16 +234,16 @@ Save.
                  p2_struct_anonymous_1_83 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_1_83
                  p1_struct_anonymous_1_83 pset_empty)) /\
-                (not_assigns alloc int_Z12 int_Z12_0
+                (not_assigns alloc Int_Z12 Int_Z12_0
                  (pset_range (pset_singleton (acc p2_struct_anonymous_1_83 u1))
                   0 4))) /\
-                (not_assigns alloc int_Z11 int_Z11_0
+                (not_assigns alloc Int_Z11 Int_Z11_0
                  (pset_range (pset_singleton (acc p1_struct_anonymous_1_83 u1))
                   0 4))),
   forall (HW_4: (* File "separation.c", line 46, characters 5-14 *)
                 (valid alloc u2)),
-  forall (int_Z11_1: ((memory) Z Z11)),
-  forall (int_Z12_1: ((memory) Z Z12)),
+  forall (Int_Z11_1: ((memory) Z Z11)),
+  forall (Int_Z12_1: ((memory) Z Z12)),
   forall (v1_struct_anonymous_1_85_0: ((memory) Z struct_anonymous_1_85)),
   forall (v2_struct_anonymous_1_85_0: ((memory) Z struct_anonymous_1_85)),
   forall (HW_5: (((((not_assigns alloc v2_struct_anonymous_1_85
@@ -254,10 +254,10 @@ Save.
                  p2_struct_anonymous_1_85 pset_empty)) /\
                 (not_assigns alloc p1_struct_anonymous_1_85
                  p1_struct_anonymous_1_85 pset_empty)) /\
-                (not_assigns alloc int_Z12_0 int_Z12_1
+                (not_assigns alloc Int_Z12_0 Int_Z12_1
                  (pset_range (pset_singleton (acc p2_struct_anonymous_1_85 u2))
                   0 4))) /\
-                (not_assigns alloc int_Z11_0 int_Z11_1
+                (not_assigns alloc Int_Z11_0 Int_Z11_1
                  (pset_range (pset_singleton (acc p1_struct_anonymous_1_85 u2))
                   0 4))),
   (((((((((not_assigns alloc v2_struct_anonymous_1_85
@@ -276,11 +276,11 @@ Save.
    pset_empty)) /\
   (not_assigns alloc p1_struct_anonymous_1_83 p1_struct_anonymous_1_83
    pset_empty)) /\
-  (not_assigns alloc int_Z12 int_Z12_1
+  (not_assigns alloc Int_Z12 Int_Z12_1
    (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_1_85 u2))
                 0 4)
     (pset_range (pset_singleton (acc p2_struct_anonymous_1_83 u1)) 0 4)))) /\
-  (not_assigns alloc int_Z11 int_Z11_1
+  (not_assigns alloc Int_Z11 Int_Z11_1
    (pset_union (pset_range (pset_singleton (acc p1_struct_anonymous_1_85 u2))
                 0 4)
     (pset_range (pset_singleton (acc p1_struct_anonymous_1_83 u1)) 0 4))).
@@ -466,6 +466,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_2 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -519,8 +521,6 @@ Save.
                                                 struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88: ((memory) Z
                                                 struct_anonymous_2_88)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -611,28 +611,29 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc u4).
 Proof.
 intuition;generalize (H3 u4);intuition.
@@ -640,6 +641,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_3 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -697,8 +700,6 @@ Save.
                                                 struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_90: ((memory) Z
                                                 struct_anonymous_2_90)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -789,52 +790,54 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w1).
 Proof.
 intuition;generalize (H3 w1);intuition.
@@ -842,6 +845,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_4 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -903,8 +908,6 @@ Save.
                                                 struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_92: ((memory) Z
                                                 struct_anonymous_2_92)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -995,76 +998,79 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w2).
 Proof.
 intuition;generalize (H3 w2);intuition.
@@ -1072,6 +1078,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_5 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -1137,8 +1145,6 @@ Save.
                                                 struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_94: ((memory) Z
                                                 struct_anonymous_2_94)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -1229,100 +1235,104 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w3).
 Proof.
 intuition;generalize (H3 w3);intuition.
@@ -1330,6 +1340,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_6 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -1399,8 +1411,6 @@ Save.
                                                 struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_96: ((memory) Z
                                                 struct_anonymous_2_96)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -1491,124 +1501,129 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w4).
 Proof.
 intuition;generalize (H3 w4);intuition.
@@ -1616,6 +1631,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_7 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -1689,8 +1706,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -1781,148 +1796,154 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w5).
 Proof.
 intuition;generalize (H3 w5);intuition.
@@ -1930,6 +1951,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_8 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -2007,8 +2030,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -2099,172 +2120,179 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
+  forall (Int_Z19_6: ((memory) Z Z19)),
+  forall (Int_Z20_6: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
   forall (anonymous_2_v2_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
-  forall (int_Z19_6: ((memory) Z Z19)),
-  forall (int_Z20_6: ((memory) Z Z20)),
-  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
-                                                   w5))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_5 int_Z19_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                               w5))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
-                  anonymous_2_v2_struct_anonymous_2_100_0 (pset_singleton w5))) /\
+  forall (HW_15: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
+                      anonymous_2_v2_struct_anonymous_2_100_0
+                      (pset_singleton w5)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_100
                   anonymous_2_v1_struct_anonymous_2_100_0 (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_100
                   anonymous_2_p2_struct_anonymous_2_100 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_5 Int_Z20_6
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                               w5))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_5 Int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                               w5))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w6).
 Proof.
 intuition;generalize (H3 w6);intuition.
@@ -2272,6 +2300,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_9 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -2353,8 +2383,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -2445,196 +2473,204 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
+  forall (Int_Z19_6: ((memory) Z Z19)),
+  forall (Int_Z20_6: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
   forall (anonymous_2_v2_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
-  forall (int_Z19_6: ((memory) Z Z19)),
-  forall (int_Z20_6: ((memory) Z Z20)),
-  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
-                                                   w5))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_5 int_Z19_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                               w5))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
-                  anonymous_2_v2_struct_anonymous_2_100_0 (pset_singleton w5))) /\
+  forall (HW_15: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
+                      anonymous_2_v2_struct_anonymous_2_100_0
+                      (pset_singleton w5)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_100
                   anonymous_2_v1_struct_anonymous_2_100_0 (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_100
                   anonymous_2_p2_struct_anonymous_2_100 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_5 Int_Z20_6
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                               w5))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_5 Int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                               w5))
+                   0 4))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
+  forall (Int_Z19_7: ((memory) Z Z19)),
+  forall (Int_Z20_7: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
   forall (anonymous_2_v2_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
-  forall (int_Z19_7: ((memory) Z Z19)),
-  forall (int_Z20_7: ((memory) Z Z20)),
-  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
-                                                   w6))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_6 int_Z19_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
-                                               w6))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
-                  anonymous_2_v2_struct_anonymous_2_102_0 (pset_singleton w6))) /\
+  forall (HW_17: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
+                      anonymous_2_v2_struct_anonymous_2_102_0
+                      (pset_singleton w6)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_102
                   anonymous_2_v1_struct_anonymous_2_102_0 (pset_singleton w6))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_102
                   anonymous_2_p2_struct_anonymous_2_102 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_102
-                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_6 Int_Z20_7
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
+                                               w6))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_6 Int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
+                                               w6))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w7).
 Proof.
 intuition;generalize (H3 w7);intuition.
@@ -2642,6 +2678,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_10 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -2727,8 +2765,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -2819,220 +2855,229 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
+  forall (Int_Z19_6: ((memory) Z Z19)),
+  forall (Int_Z20_6: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
   forall (anonymous_2_v2_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
-  forall (int_Z19_6: ((memory) Z Z19)),
-  forall (int_Z20_6: ((memory) Z Z20)),
-  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
-                                                   w5))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_5 int_Z19_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                               w5))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
-                  anonymous_2_v2_struct_anonymous_2_100_0 (pset_singleton w5))) /\
+  forall (HW_15: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
+                      anonymous_2_v2_struct_anonymous_2_100_0
+                      (pset_singleton w5)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_100
                   anonymous_2_v1_struct_anonymous_2_100_0 (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_100
                   anonymous_2_p2_struct_anonymous_2_100 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_5 Int_Z20_6
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                               w5))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_5 Int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                               w5))
+                   0 4))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
+  forall (Int_Z19_7: ((memory) Z Z19)),
+  forall (Int_Z20_7: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
   forall (anonymous_2_v2_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
-  forall (int_Z19_7: ((memory) Z Z19)),
-  forall (int_Z20_7: ((memory) Z Z20)),
-  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
-                                                   w6))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_6 int_Z19_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
-                                               w6))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
-                  anonymous_2_v2_struct_anonymous_2_102_0 (pset_singleton w6))) /\
+  forall (HW_17: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
+                      anonymous_2_v2_struct_anonymous_2_102_0
+                      (pset_singleton w6)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_102
                   anonymous_2_v1_struct_anonymous_2_102_0 (pset_singleton w6))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_102
                   anonymous_2_p2_struct_anonymous_2_102 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_102
-                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_6 Int_Z20_7
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
+                                               w6))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_6 Int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
+                                               w6))
+                   0 4))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
+  forall (Int_Z19_8: ((memory) Z Z19)),
+  forall (Int_Z20_8: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
   forall (anonymous_2_v2_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
-  forall (int_Z19_8: ((memory) Z Z19)),
-  forall (int_Z20_8: ((memory) Z Z20)),
-  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
-                                                   w7))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_7 int_Z19_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
-                                               w7))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
-                  anonymous_2_v2_struct_anonymous_2_104_0 (pset_singleton w7))) /\
+  forall (HW_19: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
+                      anonymous_2_v2_struct_anonymous_2_104_0
+                      (pset_singleton w7)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_104
                   anonymous_2_v1_struct_anonymous_2_104_0 (pset_singleton w7))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_104
                   anonymous_2_p2_struct_anonymous_2_104 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_104
-                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_7 Int_Z20_8
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
+                                               w7))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_7 Int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
+                                               w7))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w8).
 Proof.
 intuition;generalize (H3 w8);intuition.
@@ -3040,6 +3085,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_11 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -3129,8 +3176,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -3221,244 +3266,254 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
+  forall (Int_Z19_6: ((memory) Z Z19)),
+  forall (Int_Z20_6: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
   forall (anonymous_2_v2_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
-  forall (int_Z19_6: ((memory) Z Z19)),
-  forall (int_Z20_6: ((memory) Z Z20)),
-  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
-                                                   w5))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_5 int_Z19_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                               w5))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
-                  anonymous_2_v2_struct_anonymous_2_100_0 (pset_singleton w5))) /\
+  forall (HW_15: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
+                      anonymous_2_v2_struct_anonymous_2_100_0
+                      (pset_singleton w5)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_100
                   anonymous_2_v1_struct_anonymous_2_100_0 (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_100
                   anonymous_2_p2_struct_anonymous_2_100 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_5 Int_Z20_6
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                               w5))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_5 Int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                               w5))
+                   0 4))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
+  forall (Int_Z19_7: ((memory) Z Z19)),
+  forall (Int_Z20_7: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
   forall (anonymous_2_v2_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
-  forall (int_Z19_7: ((memory) Z Z19)),
-  forall (int_Z20_7: ((memory) Z Z20)),
-  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
-                                                   w6))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_6 int_Z19_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
-                                               w6))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
-                  anonymous_2_v2_struct_anonymous_2_102_0 (pset_singleton w6))) /\
+  forall (HW_17: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
+                      anonymous_2_v2_struct_anonymous_2_102_0
+                      (pset_singleton w6)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_102
                   anonymous_2_v1_struct_anonymous_2_102_0 (pset_singleton w6))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_102
                   anonymous_2_p2_struct_anonymous_2_102 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_102
-                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_6 Int_Z20_7
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
+                                               w6))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_6 Int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
+                                               w6))
+                   0 4))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
+  forall (Int_Z19_8: ((memory) Z Z19)),
+  forall (Int_Z20_8: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
   forall (anonymous_2_v2_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
-  forall (int_Z19_8: ((memory) Z Z19)),
-  forall (int_Z20_8: ((memory) Z Z20)),
-  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
-                                                   w7))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_7 int_Z19_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
-                                               w7))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
-                  anonymous_2_v2_struct_anonymous_2_104_0 (pset_singleton w7))) /\
+  forall (HW_19: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
+                      anonymous_2_v2_struct_anonymous_2_104_0
+                      (pset_singleton w7)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_104
                   anonymous_2_v1_struct_anonymous_2_104_0 (pset_singleton w7))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_104
                   anonymous_2_p2_struct_anonymous_2_104 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_104
-                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_7 Int_Z20_8
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
+                                               w7))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_7 Int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
+                                               w7))
+                   0 4))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w8)),
+  forall (Int_Z19_9: ((memory) Z Z19)),
+  forall (Int_Z20_9: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_106_0: ((memory) Z
                                                    struct_anonymous_2_106)),
   forall (anonymous_2_v2_struct_anonymous_2_106_0: ((memory) Z
                                                    struct_anonymous_2_106)),
-  forall (int_Z19_9: ((memory) Z Z19)),
-  forall (int_Z20_9: ((memory) Z Z20)),
-  forall (HW_21: (((((not_assigns alloc int_Z20_8 int_Z20_9
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
-                                                   w8))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_8 int_Z19_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
-                                               w8))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_106
-                  anonymous_2_v2_struct_anonymous_2_106_0 (pset_singleton w8))) /\
+  forall (HW_21: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_106
+                      anonymous_2_v2_struct_anonymous_2_106_0
+                      (pset_singleton w8)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_106
                   anonymous_2_v1_struct_anonymous_2_106_0 (pset_singleton w8))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_106
                   anonymous_2_p2_struct_anonymous_2_106 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_106
-                  anonymous_2_p1_struct_anonymous_2_106 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_106 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_8 Int_Z20_9
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
+                                               w8))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_8 Int_Z19_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
+                                               w8))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w9).
 Proof.
 intuition;generalize (H3 w9);intuition.
@@ -3466,6 +3521,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_12 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -3559,8 +3616,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -3651,268 +3706,279 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
+  forall (Int_Z19_6: ((memory) Z Z19)),
+  forall (Int_Z20_6: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
   forall (anonymous_2_v2_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
-  forall (int_Z19_6: ((memory) Z Z19)),
-  forall (int_Z20_6: ((memory) Z Z20)),
-  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
-                                                   w5))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_5 int_Z19_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                               w5))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
-                  anonymous_2_v2_struct_anonymous_2_100_0 (pset_singleton w5))) /\
+  forall (HW_15: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
+                      anonymous_2_v2_struct_anonymous_2_100_0
+                      (pset_singleton w5)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_100
                   anonymous_2_v1_struct_anonymous_2_100_0 (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_100
                   anonymous_2_p2_struct_anonymous_2_100 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_5 Int_Z20_6
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                               w5))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_5 Int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                               w5))
+                   0 4))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
+  forall (Int_Z19_7: ((memory) Z Z19)),
+  forall (Int_Z20_7: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
   forall (anonymous_2_v2_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
-  forall (int_Z19_7: ((memory) Z Z19)),
-  forall (int_Z20_7: ((memory) Z Z20)),
-  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
-                                                   w6))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_6 int_Z19_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
-                                               w6))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
-                  anonymous_2_v2_struct_anonymous_2_102_0 (pset_singleton w6))) /\
+  forall (HW_17: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
+                      anonymous_2_v2_struct_anonymous_2_102_0
+                      (pset_singleton w6)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_102
                   anonymous_2_v1_struct_anonymous_2_102_0 (pset_singleton w6))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_102
                   anonymous_2_p2_struct_anonymous_2_102 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_102
-                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_6 Int_Z20_7
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
+                                               w6))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_6 Int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
+                                               w6))
+                   0 4))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
+  forall (Int_Z19_8: ((memory) Z Z19)),
+  forall (Int_Z20_8: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
   forall (anonymous_2_v2_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
-  forall (int_Z19_8: ((memory) Z Z19)),
-  forall (int_Z20_8: ((memory) Z Z20)),
-  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
-                                                   w7))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_7 int_Z19_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
-                                               w7))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
-                  anonymous_2_v2_struct_anonymous_2_104_0 (pset_singleton w7))) /\
+  forall (HW_19: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
+                      anonymous_2_v2_struct_anonymous_2_104_0
+                      (pset_singleton w7)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_104
                   anonymous_2_v1_struct_anonymous_2_104_0 (pset_singleton w7))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_104
                   anonymous_2_p2_struct_anonymous_2_104 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_104
-                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_7 Int_Z20_8
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
+                                               w7))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_7 Int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
+                                               w7))
+                   0 4))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w8)),
+  forall (Int_Z19_9: ((memory) Z Z19)),
+  forall (Int_Z20_9: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_106_0: ((memory) Z
                                                    struct_anonymous_2_106)),
   forall (anonymous_2_v2_struct_anonymous_2_106_0: ((memory) Z
                                                    struct_anonymous_2_106)),
-  forall (int_Z19_9: ((memory) Z Z19)),
-  forall (int_Z20_9: ((memory) Z Z20)),
-  forall (HW_21: (((((not_assigns alloc int_Z20_8 int_Z20_9
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
-                                                   w8))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_8 int_Z19_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
-                                               w8))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_106
-                  anonymous_2_v2_struct_anonymous_2_106_0 (pset_singleton w8))) /\
+  forall (HW_21: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_106
+                      anonymous_2_v2_struct_anonymous_2_106_0
+                      (pset_singleton w8)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_106
                   anonymous_2_v1_struct_anonymous_2_106_0 (pset_singleton w8))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_106
                   anonymous_2_p2_struct_anonymous_2_106 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_106
-                  anonymous_2_p1_struct_anonymous_2_106 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_106 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_8 Int_Z20_9
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
+                                               w8))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_8 Int_Z19_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
+                                               w8))
+                   0 4))),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w9)),
+  forall (Int_Z19_10: ((memory) Z Z19)),
+  forall (Int_Z20_10: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_108_0: ((memory) Z
                                                    struct_anonymous_2_108)),
   forall (anonymous_2_v2_struct_anonymous_2_108_0: ((memory) Z
                                                    struct_anonymous_2_108)),
-  forall (int_Z19_10: ((memory) Z Z19)),
-  forall (int_Z20_10: ((memory) Z Z20)),
-  forall (HW_23: (((((not_assigns alloc int_Z20_9 int_Z20_10
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_108
-                                                   w9))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_9 int_Z19_10
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_108
-                                               w9))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_108
-                  anonymous_2_v2_struct_anonymous_2_108_0 (pset_singleton w9))) /\
+  forall (HW_23: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_108
+                      anonymous_2_v2_struct_anonymous_2_108_0
+                      (pset_singleton w9)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_108
                   anonymous_2_v1_struct_anonymous_2_108_0 (pset_singleton w9))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_108
                   anonymous_2_p2_struct_anonymous_2_108 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_108
-                  anonymous_2_p1_struct_anonymous_2_108 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_108 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_9 Int_Z20_10
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_108
+                                               w9))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_9 Int_Z19_10
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_108
+                                               w9))
+                   0 4))),
   (* File "separation.c", line 81, characters 5-14 *) (valid alloc w10).
 Proof.
 intuition;generalize (H3 w10);intuition.
@@ -3920,6 +3986,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_13 : 
+  forall (Int_Z19: ((memory) Z Z19)),
+  forall (Int_Z20: ((memory) Z Z20)),
   forall (alloc: alloc_table),
   forall (anonymous_2_p1_struct_anonymous_2_100: ((memory) ((pointer) Z19)
                                                  struct_anonymous_2_100)),
@@ -4017,8 +4085,6 @@ Save.
                                                 struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_98: ((memory) Z
                                                 struct_anonymous_2_98)),
-  forall (int_Z19: ((memory) Z Z19)),
-  forall (int_Z20: ((memory) Z Z20)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (tab: ((pointer) struct_anonymous_0_80)),
@@ -4109,389 +4175,309 @@ Save.
                 (valid1_range anonymous_2_p1_struct_anonymous_2_110 5)),
   forall (HW_2: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u3)),
+  forall (Int_Z19_0: ((memory) Z Z19)),
+  forall (Int_Z20_0: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
   forall (anonymous_2_v2_struct_anonymous_2_88_0: ((memory) Z
                                                   struct_anonymous_2_88)),
-  forall (int_Z19_0: ((memory) Z Z19)),
-  forall (int_Z20_0: ((memory) Z Z20)),
-  forall (HW_3: (((((not_assigns alloc int_Z20 int_Z20_0
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
-                                                  u3))
-                      0 4)) /\
-                (not_assigns alloc int_Z19 int_Z19_0
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                              u3))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
-                 anonymous_2_v2_struct_anonymous_2_88_0 (pset_singleton u3))) /\
+  forall (HW_3: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_88
+                     anonymous_2_v2_struct_anonymous_2_88_0
+                     (pset_singleton u3)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_88
                  anonymous_2_v1_struct_anonymous_2_88_0 (pset_singleton u3))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_88
                  anonymous_2_p2_struct_anonymous_2_88 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_88
-                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_88 pset_empty)) /\
+                (not_assigns alloc Int_Z20 Int_Z20_0
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                              u3))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19 Int_Z19_0
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                              u3))
+                  0 4))),
   forall (HW_4: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc u4)),
+  forall (Int_Z19_1: ((memory) Z Z19)),
+  forall (Int_Z20_1: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
   forall (anonymous_2_v2_struct_anonymous_2_90_0: ((memory) Z
                                                   struct_anonymous_2_90)),
-  forall (int_Z19_1: ((memory) Z Z19)),
-  forall (int_Z20_1: ((memory) Z Z20)),
-  forall (HW_5: (((((not_assigns alloc int_Z20_0 int_Z20_1
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
-                                                  u4))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_0 int_Z19_1
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                              u4))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
-                 anonymous_2_v2_struct_anonymous_2_90_0 (pset_singleton u4))) /\
+  forall (HW_5: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_90
+                     anonymous_2_v2_struct_anonymous_2_90_0
+                     (pset_singleton u4)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_90
                  anonymous_2_v1_struct_anonymous_2_90_0 (pset_singleton u4))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_90
                  anonymous_2_p2_struct_anonymous_2_90 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_90
-                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_90 pset_empty)) /\
+                (not_assigns alloc Int_Z20_0 Int_Z20_1
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                              u4))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_0 Int_Z19_1
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                              u4))
+                  0 4))),
   forall (HW_6: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w1)),
+  forall (Int_Z19_2: ((memory) Z Z19)),
+  forall (Int_Z20_2: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
   forall (anonymous_2_v2_struct_anonymous_2_92_0: ((memory) Z
                                                   struct_anonymous_2_92)),
-  forall (int_Z19_2: ((memory) Z Z19)),
-  forall (int_Z20_2: ((memory) Z Z20)),
-  forall (HW_7: (((((not_assigns alloc int_Z20_1 int_Z20_2
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
-                                                  w1))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_1 int_Z19_2
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                              w1))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
-                 anonymous_2_v2_struct_anonymous_2_92_0 (pset_singleton w1))) /\
+  forall (HW_7: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_92
+                     anonymous_2_v2_struct_anonymous_2_92_0
+                     (pset_singleton w1)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_92
                  anonymous_2_v1_struct_anonymous_2_92_0 (pset_singleton w1))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_92
                  anonymous_2_p2_struct_anonymous_2_92 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_92
-                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_92 pset_empty)) /\
+                (not_assigns alloc Int_Z20_1 Int_Z20_2
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                              w1))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_1 Int_Z19_2
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                              w1))
+                  0 4))),
   forall (HW_8: (* File "separation.c", line 81, characters 5-14 *)
                 (valid alloc w2)),
+  forall (Int_Z19_3: ((memory) Z Z19)),
+  forall (Int_Z20_3: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
   forall (anonymous_2_v2_struct_anonymous_2_94_0: ((memory) Z
                                                   struct_anonymous_2_94)),
-  forall (int_Z19_3: ((memory) Z Z19)),
-  forall (int_Z20_3: ((memory) Z Z20)),
-  forall (HW_9: (((((not_assigns alloc int_Z20_2 int_Z20_3
-                     (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
-                                                  w2))
-                      0 4)) /\
-                (not_assigns alloc int_Z19_2 int_Z19_3
-                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                              w2))
-                  0 4))) /\
-                (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
-                 anonymous_2_v2_struct_anonymous_2_94_0 (pset_singleton w2))) /\
+  forall (HW_9: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
+                     anonymous_2_v2_struct_anonymous_2_94_0
+                     (pset_singleton w2)) /\
                 (not_assigns alloc anonymous_2_v1_struct_anonymous_2_94
                  anonymous_2_v1_struct_anonymous_2_94_0 (pset_singleton w2))) /\
                 (not_assigns alloc anonymous_2_p2_struct_anonymous_2_94
                  anonymous_2_p2_struct_anonymous_2_94 pset_empty)) /\
                 (not_assigns alloc anonymous_2_p1_struct_anonymous_2_94
-                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)),
+                 anonymous_2_p1_struct_anonymous_2_94 pset_empty)) /\
+                (not_assigns alloc Int_Z20_2 Int_Z20_3
+                 (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                              w2))
+                  0 4))) /\
+                (not_assigns alloc Int_Z19_2 Int_Z19_3
+                 (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                              w2))
+                  0 4))),
   forall (HW_10: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w3)),
+  forall (Int_Z19_4: ((memory) Z Z19)),
+  forall (Int_Z20_4: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
   forall (anonymous_2_v2_struct_anonymous_2_96_0: ((memory) Z
                                                   struct_anonymous_2_96)),
-  forall (int_Z19_4: ((memory) Z Z19)),
-  forall (int_Z20_4: ((memory) Z Z20)),
-  forall (HW_11: (((((not_assigns alloc int_Z20_3 int_Z20_4
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
-                                                   w3))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_3 int_Z19_4
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                               w3))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
-                  anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
+  forall (HW_11: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
+                      anonymous_2_v2_struct_anonymous_2_96_0
+                      (pset_singleton w3)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_96
                   anonymous_2_v1_struct_anonymous_2_96_0 (pset_singleton w3))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_96
                   anonymous_2_p2_struct_anonymous_2_96 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_96
-                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_96 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_3 Int_Z20_4
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                               w3))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_3 Int_Z19_4
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                               w3))
+                   0 4))),
   forall (HW_12: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w4)),
+  forall (Int_Z19_5: ((memory) Z Z19)),
+  forall (Int_Z20_5: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
   forall (anonymous_2_v2_struct_anonymous_2_98_0: ((memory) Z
                                                   struct_anonymous_2_98)),
-  forall (int_Z19_5: ((memory) Z Z19)),
-  forall (int_Z20_5: ((memory) Z Z20)),
-  forall (HW_13: (((((not_assigns alloc int_Z20_4 int_Z20_5
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
-                                                   w4))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_4 int_Z19_5
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                               w4))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-                  anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+  forall (HW_13: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
+                      anonymous_2_v2_struct_anonymous_2_98_0
+                      (pset_singleton w4)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_98
                   anonymous_2_v1_struct_anonymous_2_98_0 (pset_singleton w4))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_98
                   anonymous_2_p2_struct_anonymous_2_98 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_98
-                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_98 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_4 Int_Z20_5
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                               w4))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_4 Int_Z19_5
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                               w4))
+                   0 4))),
   forall (HW_14: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w5)),
+  forall (Int_Z19_6: ((memory) Z Z19)),
+  forall (Int_Z20_6: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
   forall (anonymous_2_v2_struct_anonymous_2_100_0: ((memory) Z
                                                    struct_anonymous_2_100)),
-  forall (int_Z19_6: ((memory) Z Z19)),
-  forall (int_Z20_6: ((memory) Z Z20)),
-  forall (HW_15: (((((not_assigns alloc int_Z20_5 int_Z20_6
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
-                                                   w5))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_5 int_Z19_6
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                               w5))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
-                  anonymous_2_v2_struct_anonymous_2_100_0 (pset_singleton w5))) /\
+  forall (HW_15: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_100
+                      anonymous_2_v2_struct_anonymous_2_100_0
+                      (pset_singleton w5)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_100
                   anonymous_2_v1_struct_anonymous_2_100_0 (pset_singleton w5))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_100
                   anonymous_2_p2_struct_anonymous_2_100 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_5 Int_Z20_6
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                               w5))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_5 Int_Z19_6
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                               w5))
+                   0 4))),
   forall (HW_16: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w6)),
+  forall (Int_Z19_7: ((memory) Z Z19)),
+  forall (Int_Z20_7: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
   forall (anonymous_2_v2_struct_anonymous_2_102_0: ((memory) Z
                                                    struct_anonymous_2_102)),
-  forall (int_Z19_7: ((memory) Z Z19)),
-  forall (int_Z20_7: ((memory) Z Z20)),
-  forall (HW_17: (((((not_assigns alloc int_Z20_6 int_Z20_7
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
-                                                   w6))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_6 int_Z19_7
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
-                                               w6))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
-                  anonymous_2_v2_struct_anonymous_2_102_0 (pset_singleton w6))) /\
+  forall (HW_17: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_102
+                      anonymous_2_v2_struct_anonymous_2_102_0
+                      (pset_singleton w6)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_102
                   anonymous_2_v1_struct_anonymous_2_102_0 (pset_singleton w6))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_102
                   anonymous_2_p2_struct_anonymous_2_102 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_102
-                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_102 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_6 Int_Z20_7
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
+                                               w6))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_6 Int_Z19_7
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
+                                               w6))
+                   0 4))),
   forall (HW_18: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w7)),
+  forall (Int_Z19_8: ((memory) Z Z19)),
+  forall (Int_Z20_8: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
   forall (anonymous_2_v2_struct_anonymous_2_104_0: ((memory) Z
                                                    struct_anonymous_2_104)),
-  forall (int_Z19_8: ((memory) Z Z19)),
-  forall (int_Z20_8: ((memory) Z Z20)),
-  forall (HW_19: (((((not_assigns alloc int_Z20_7 int_Z20_8
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
-                                                   w7))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_7 int_Z19_8
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
-                                               w7))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
-                  anonymous_2_v2_struct_anonymous_2_104_0 (pset_singleton w7))) /\
+  forall (HW_19: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_104
+                      anonymous_2_v2_struct_anonymous_2_104_0
+                      (pset_singleton w7)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_104
                   anonymous_2_v1_struct_anonymous_2_104_0 (pset_singleton w7))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_104
                   anonymous_2_p2_struct_anonymous_2_104 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_104
-                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_104 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_7 Int_Z20_8
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
+                                               w7))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_7 Int_Z19_8
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
+                                               w7))
+                   0 4))),
   forall (HW_20: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w8)),
+  forall (Int_Z19_9: ((memory) Z Z19)),
+  forall (Int_Z20_9: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_106_0: ((memory) Z
                                                    struct_anonymous_2_106)),
   forall (anonymous_2_v2_struct_anonymous_2_106_0: ((memory) Z
                                                    struct_anonymous_2_106)),
-  forall (int_Z19_9: ((memory) Z Z19)),
-  forall (int_Z20_9: ((memory) Z Z20)),
-  forall (HW_21: (((((not_assigns alloc int_Z20_8 int_Z20_9
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
-                                                   w8))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_8 int_Z19_9
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
-                                               w8))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_106
-                  anonymous_2_v2_struct_anonymous_2_106_0 (pset_singleton w8))) /\
+  forall (HW_21: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_106
+                      anonymous_2_v2_struct_anonymous_2_106_0
+                      (pset_singleton w8)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_106
                   anonymous_2_v1_struct_anonymous_2_106_0 (pset_singleton w8))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_106
                   anonymous_2_p2_struct_anonymous_2_106 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_106
-                  anonymous_2_p1_struct_anonymous_2_106 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_106 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_8 Int_Z20_9
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
+                                               w8))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_8 Int_Z19_9
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
+                                               w8))
+                   0 4))),
   forall (HW_22: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w9)),
+  forall (Int_Z19_10: ((memory) Z Z19)),
+  forall (Int_Z20_10: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_108_0: ((memory) Z
                                                    struct_anonymous_2_108)),
   forall (anonymous_2_v2_struct_anonymous_2_108_0: ((memory) Z
                                                    struct_anonymous_2_108)),
-  forall (int_Z19_10: ((memory) Z Z19)),
-  forall (int_Z20_10: ((memory) Z Z20)),
-  forall (HW_23: (((((not_assigns alloc int_Z20_9 int_Z20_10
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_108
-                                                   w9))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_9 int_Z19_10
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_108
-                                               w9))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_108
-                  anonymous_2_v2_struct_anonymous_2_108_0 (pset_singleton w9))) /\
+  forall (HW_23: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_108
+                      anonymous_2_v2_struct_anonymous_2_108_0
+                      (pset_singleton w9)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_108
                   anonymous_2_v1_struct_anonymous_2_108_0 (pset_singleton w9))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_108
                   anonymous_2_p2_struct_anonymous_2_108 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_108
-                  anonymous_2_p1_struct_anonymous_2_108 pset_empty)),
+                  anonymous_2_p1_struct_anonymous_2_108 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_9 Int_Z20_10
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_108
+                                               w9))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_9 Int_Z19_10
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_108
+                                               w9))
+                   0 4))),
   forall (HW_24: (* File "separation.c", line 81, characters 5-14 *)
                  (valid alloc w10)),
+  forall (Int_Z19_11: ((memory) Z Z19)),
+  forall (Int_Z20_11: ((memory) Z Z20)),
   forall (anonymous_2_v1_struct_anonymous_2_110_0: ((memory) Z
                                                    struct_anonymous_2_110)),
   forall (anonymous_2_v2_struct_anonymous_2_110_0: ((memory) Z
                                                    struct_anonymous_2_110)),
-  forall (int_Z19_11: ((memory) Z Z19)),
-  forall (int_Z20_11: ((memory) Z Z20)),
-  forall (HW_25: (((((not_assigns alloc int_Z20_10 int_Z20_11
-                      (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_110
-                                                   w10))
-                       0 4)) /\
-                 (not_assigns alloc int_Z19_10 int_Z19_11
-                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_110
-                                               w10))
-                   0 4))) /\
-                 (not_assigns alloc anonymous_2_v2_struct_anonymous_2_110
-                  anonymous_2_v2_struct_anonymous_2_110_0
-                  (pset_singleton w10))) /\
+  forall (HW_25: (((((not_assigns alloc anonymous_2_v2_struct_anonymous_2_110
+                      anonymous_2_v2_struct_anonymous_2_110_0
+                      (pset_singleton w10)) /\
                  (not_assigns alloc anonymous_2_v1_struct_anonymous_2_110
                   anonymous_2_v1_struct_anonymous_2_110_0
                   (pset_singleton w10))) /\
                  (not_assigns alloc anonymous_2_p2_struct_anonymous_2_110
                   anonymous_2_p2_struct_anonymous_2_110 pset_empty)) /\
                  (not_assigns alloc anonymous_2_p1_struct_anonymous_2_110
-                  anonymous_2_p1_struct_anonymous_2_110 pset_empty)),
-  (((((((((((((((((((((((((((((((((((((((((((((((((not_assigns alloc int_Z20
-                                                   int_Z20_11
-                                                   (pset_union (pset_range (
-                                                                pset_singleton (
-                                                                acc anonymous_2_p2_struct_anonymous_2_110
-                                                                w10)) 0 4)
-                                                    (pset_union (pset_range (
-                                                                 pset_singleton (
-                                                                 acc anonymous_2_p2_struct_anonymous_2_108
-                                                                 w9)) 0 4)
-                                                     (pset_union (pset_range (
-                                                                  pset_singleton (
-                                                                  acc anonymous_2_p2_struct_anonymous_2_106
-                                                                  w8)) 0 4)
-                                                      (pset_union (pset_range (
-                                                                   pset_singleton (
-                                                                   acc anonymous_2_p2_struct_anonymous_2_104
-                                                                   w7)) 0 4)
-                                                       (pset_union (pset_range (
-                                                                    pset_singleton (
-                                                                    acc anonymous_2_p2_struct_anonymous_2_102
-                                                                    w6)) 0 4)
-                                                        (pset_union (
-                                                         pset_range (
-                                                         pset_singleton (
-                                                         acc anonymous_2_p2_struct_anonymous_2_100
-                                                         w5)) 0 4)
-                                                         (pset_union (
-                                                          pset_range (
-                                                          pset_singleton (
-                                                          acc anonymous_2_p2_struct_anonymous_2_98
-                                                          w4)) 0 4)
-                                                          (pset_union (
-                                                           pset_range (
-                                                           pset_singleton (
-                                                           acc anonymous_2_p2_struct_anonymous_2_96
-                                                           w3)) 0 4)
-                                                           (pset_union (
-                                                            pset_range (
-                                                            pset_singleton (
-                                                            acc anonymous_2_p2_struct_anonymous_2_94
-                                                            w2)) 0 4)
-                                                            (pset_union (
-                                                             pset_range (
-                                                             pset_singleton (
-                                                             acc anonymous_2_p2_struct_anonymous_2_92
-                                                             w1)) 0 4)
-                                                             (pset_union (
-                                                              pset_range (
-                                                              pset_singleton (
-                                                              acc anonymous_2_p2_struct_anonymous_2_90
-                                                              u4)) 0 4)
-                                                              (pset_range (
-                                                               pset_singleton (
-                                                               acc anonymous_2_p2_struct_anonymous_2_88
-                                                               u3)) 0 4))))))))))))) /\
-  (not_assigns alloc int_Z19 int_Z19_11
-   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_110
-                                            w10))
-                0 4)
-    (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_108
-                                             w9))
-                 0 4)
-     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
-                                              w8))
-                  0 4)
-      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
-                                               w7))
-                   0 4)
-       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
-                                                w6))
-                    0 4)
-        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
-                                                 w5))
-                     0 4)
-         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
-                                                  w4))
-                      0 4)
-          (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
-                                                   w3))
-                       0 4)
-           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
-                                                    w2))
-                        0 4)
-            (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
-                                                     w1))
-                         0 4)
-             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
-                                                      u4))
-                          0 4)
-              (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
-                                           u3))
-               0 4)))))))))))))) /\
-  (not_assigns alloc anonymous_2_v2_struct_anonymous_2_98
-   anonymous_2_v2_struct_anonymous_2_98_0 (pset_singleton w4))) /\
+                  anonymous_2_p1_struct_anonymous_2_110 pset_empty)) /\
+                 (not_assigns alloc Int_Z20_10 Int_Z20_11
+                  (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_110
+                                               w10))
+                   0 4))) /\
+                 (not_assigns alloc Int_Z19_10 Int_Z19_11
+                  (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_110
+                                               w10))
+                   0 4))),
+  (((((((((((((((((((((((((((((((((((((((((((((((((not_assigns alloc
+                                                   anonymous_2_v2_struct_anonymous_2_98
+                                                   anonymous_2_v2_struct_anonymous_2_98_0
+                                                   (pset_singleton w4)) /\
   (not_assigns alloc anonymous_2_v2_struct_anonymous_2_96
    anonymous_2_v2_struct_anonymous_2_96_0 (pset_singleton w3))) /\
   (not_assigns alloc anonymous_2_v2_struct_anonymous_2_94
@@ -4585,16 +4571,90 @@ Save.
   (not_assigns alloc anonymous_2_p1_struct_anonymous_2_102
    anonymous_2_p1_struct_anonymous_2_102 pset_empty)) /\
   (not_assigns alloc anonymous_2_p1_struct_anonymous_2_100
-   anonymous_2_p1_struct_anonymous_2_100 pset_empty).
+   anonymous_2_p1_struct_anonymous_2_100 pset_empty)) /\
+  (not_assigns alloc Int_Z20 Int_Z20_11
+   (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_110
+                                            w10))
+                0 4)
+    (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_108
+                                             w9))
+                 0 4)
+     (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_106
+                                              w8))
+                  0 4)
+      (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_104
+                                               w7))
+                   0 4)
+       (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_102
+                                                w6))
+                    0 4)
+        (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_100
+                                                 w5))
+                     0 4)
+         (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_98
+                                                  w4))
+                      0 4)
+          (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_96
+                                                   w3))
+                       0 4)
+           (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_94
+                                                    w2))
+                        0 4)
+            (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_92
+                                                     w1))
+                         0 4)
+             (pset_union (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_90
+                                                      u4))
+                          0 4)
+              (pset_range (pset_singleton (acc anonymous_2_p2_struct_anonymous_2_88
+                                           u3))
+               0 4)))))))))))))) /\
+  (not_assigns alloc Int_Z19 Int_Z19_11
+   (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_110
+                                            w10))
+                0 4)
+    (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_108
+                                             w9))
+                 0 4)
+     (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_106
+                                              w8))
+                  0 4)
+      (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_104
+                                               w7))
+                   0 4)
+       (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_102
+                                                w6))
+                    0 4)
+        (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_100
+                                                 w5))
+                     0 4)
+         (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_98
+                                                  w4))
+                      0 4)
+          (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_96
+                                                   w3))
+                       0 4)
+           (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_94
+                                                    w2))
+                        0 4)
+            (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_92
+                                                     w1))
+                         0 4)
+             (pset_union (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_90
+                                                      u4))
+                          0 4)
+              (pset_range (pset_singleton (acc anonymous_2_p1_struct_anonymous_2_88
+                                           u3))
+               0 4))))))))))))).
 Proof.
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
+  forall (Int_Z0: ((memory) Z Z0)),
+  forall (Int_Z1: ((memory) Z Z1)),
+  forall (Int_Z79: ((memory) Z Z79)),
   forall (alloc: alloc_table),
-  forall (int_Z0: ((memory) Z Z0)),
-  forall (int_Z1: ((memory) Z Z1)),
-  forall (int_Z79: ((memory) Z Z79)),
   forall (s: ((pointer) struct_s1_76)),
   forall (ss: ((pointer) struct_s1_78)),
   forall (t_struct_s1_76: ((memory) ((pointer) Z0) struct_s1_76)),
@@ -4643,22 +4703,22 @@ Admitted.
                 (valid1_range t_struct_s1_78 2) /\ (valid1 u_struct_s1_76)),
   forall (result: ((pointer) Z0)),
   forall (HW_2: result = (acc t_struct_s1_78 ss)),
-  forall (int_Z0_0: ((memory) Z Z0)),
-  forall (HW_3: int_Z0_0 = (upd int_Z0 result 0)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_3: Int_Z0_0 = (upd Int_Z0 result 0)),
   forall (result0: ((pointer) Z0)),
   forall (HW_4: result0 = (acc t_struct_s1_76 s)),
-  forall (int_Z0_1: ((memory) Z Z0)),
-  forall (HW_5: int_Z0_1 = (upd int_Z0_0 result0 1)),
+  forall (Int_Z0_1: ((memory) Z Z0)),
+  forall (HW_5: Int_Z0_1 = (upd Int_Z0_0 result0 1)),
   forall (result1: ((pointer) Z1)),
   forall (HW_6: result1 = (acc u_struct_s1_76 s)),
-  forall (int_Z1_0: ((memory) Z Z1)),
-  forall (HW_7: int_Z1_0 = (upd int_Z1 result1 2)),
-  forall (int_Z79_0: ((memory) Z Z79)),
-  forall (HW_8: int_Z79_0 = (upd int_Z79 v 3)),
+  forall (Int_Z1_0: ((memory) Z Z1)),
+  forall (HW_7: Int_Z1_0 = (upd Int_Z1 result1 2)),
+  forall (Int_Z79_0: ((memory) Z Z79)),
+  forall (HW_8: Int_Z79_0 = (upd Int_Z79 v 3)),
   forall (result2: ((pointer) Z0)),
   forall (HW_9: result2 = (acc t_struct_s1_76 s)),
   forall (result3: Z),
-  forall (HW_10: result3 = (acc int_Z0_1 result2)),
+  forall (HW_10: result3 = (acc Int_Z0_1 result2)),
   (* File "separation.c", line 11, characters 13-25 *) result3 = 1.
 Proof.
 intuition.

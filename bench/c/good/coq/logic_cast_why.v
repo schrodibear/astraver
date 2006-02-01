@@ -46,15 +46,15 @@ Save.
   forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I /\ I <= 4)),
   forall (I0: Z),
-  forall (int_Z2: ((memory) Z Z2)),
+  forall (Int_Z2: ((memory) Z Z2)),
   forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I0 /\ I0 <= 4)),
   forall (HW_6: I0 < 4),
   forall (result: ((pointer) Z2)),
   forall (HW_7: result = (shift t I0)),
   forall (HW_8: (valid alloc result)),
-  forall (int_Z2_0: ((memory) Z Z2)),
-  forall (HW_9: int_Z2_0 = (upd int_Z2 result I0)),
+  forall (Int_Z2_0: ((memory) Z Z2)),
+  forall (HW_9: Int_Z2_0 = (upd Int_Z2 result I0)),
   forall (I1: Z),
   forall (HW_10: I1 = (I0 + 1)),
   (* File "logic_cast.c", line 10, characters 11-25 *) (0 <= I1 /\ I1 <= 4) /\
