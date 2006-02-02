@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.48 2006-02-02 09:25:57 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.49 2006-02-02 10:14:34 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -318,6 +318,11 @@ and expr_node loc ty t =
 						   (expr texpr3))
       | TEsizeof (tctype,n) ->
 	  NEconstant (IntConstant (Int64.to_string n))
+      | TEcast({Ctypes.ctype_node = Tpointer _}as ty, 
+	       {texpr_node = TEconstant (IntConstant "0")}) ->
+	  let info = default_var_info "null" in 
+	  Cenv.set_var_type (Var_info info) ty false;
+	  NEvar (Var_info info)    
       | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
 (*  
 let nt_arrow t f =
@@ -439,6 +444,11 @@ let rec term_node loc t ty =
   | Tresult v -> NTresult v
   | Tnull -> NTnull
 *)
+  | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
+	    {term_node = Tconstant (IntConstant "0")}) ->      
+      let info = default_var_info "null" in 
+      Cenv.set_var_type (Var_info info) ty false;
+      NTvar info
   | Tcast (ty, t) -> NTcast (ty, term t)
   | Trange (t1, t2, t3) -> 
       let info = make_field ty in
