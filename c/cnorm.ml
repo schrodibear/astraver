@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.47 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.48 2006-02-02 09:25:57 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -165,7 +165,8 @@ let rec type_why_for_term t =
     | NTvar v -> v.var_why_type
     | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
 	rename_zone assoc f.logic_why_type
-    | NTunop (Clogic.Uminus,t) | NTunop (Clogic.Utilde,t)  -> type_why_for_term t
+    | NTunop (Clogic.Uminus,t) | NTunop (Clogic.Utilde,t) -> 
+	type_why_for_term t
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
     | NTunop (Clogic.Ufloat_of_int,_) -> Info.Float
     | NTunop (Clogic.Uint_of_float,_) -> Info.Int
@@ -189,7 +190,7 @@ let find_zone_for_term e =
     | ty -> 
 	let l,n = output_why_type ty in
 	Format.eprintf "type of term %a : %s@." Cprint.nterm e n; 
-	make_zone false (* assert false *)
+	assert false 
 
 	  
 let rec expr t =

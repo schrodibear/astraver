@@ -148,11 +148,8 @@ let var_to_term loc v =
     nterm_type = v.var_type}
 
 let in_struct v1 v = 
-(*  match v1.nterm_node with
-    | NTstar(x) ->
-	{ nterm_node = NTarrow (x, v); 
-	  nterm_loc = v1.nterm_loc;
-	  nterm_type = v.var_type}
+  (*  match v1.nterm_node with
+    | NTarrow(x,ty,_,_) ->
     | _ -> *)
   let zone = find_zone_for_term v1 in
   { nterm_node = NTarrow (v1,v.var_why_type, zone, v); 

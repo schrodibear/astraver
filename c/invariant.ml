@@ -284,6 +284,7 @@ let separation_first mark diag v1 v2 =
 	  Cenv.add_pred (pre)  ([], info);
 	  let ty = noattr_type (Tpointer (false,noattr_type (Tvoid))) in
 	  let var = default_var_info (fresh_index()) in
+	  set_var_type (Var_info var) ty false;
 	  let term = noattr_term ty (NTvar var) in
 	  noattr_located (
 	    Cast.Ninvariant_strong (
@@ -305,6 +306,8 @@ let separation_first mark diag v1 v2 =
 	  let ty = noattr_type (Tpointer (false,noattr_type (Tvoid))) in
 	  let var1 = default_var_info (fresh_index()) in
 	  let var2 = default_var_info (fresh_index()) in
+	  set_var_type (Var_info var1) ty false;
+	  set_var_type (Var_info var2) ty false;
 	  let term1 = noattr_term ty (NTvar var1) in
 	  let term2 = noattr_term ty (NTvar var2) in
 	  let pred = (local_separation Loc.dummy_position n1 
