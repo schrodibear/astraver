@@ -550,7 +550,7 @@ Save.
   forall (HW_13: (valid alloc result0)),
   forall (result2: Z),
   forall (HW_14: result2 = (acc balance_Z28_1 result0)),
-  (* File "purse.c", line 41, characters 13-27 *) (result1 + result2) = 150.
+  (* File "purse.c", line 40, characters 13-27 *) (result1 + result2) = 150.
 Proof.
 intuition.
 subst .

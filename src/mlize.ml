@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.73 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.74 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -117,14 +117,20 @@ and trad_desc info d ren = match d with
       let te = trans (p,e) ren' in
       cc_lam bl' te
 
-  | Loop (inv, var, e) ->
+  | Loop (_, None, _) ->
+      assert false
+
+  | Loop (inv, Some var, e) ->
       let p = match inv with Some a -> [a] | None -> [] in
       let infoc = new_label info in
       Monad.wfrec var p info
 	(fun w -> Monad.compose e.info (trad e) infoc (fun _ -> w))
 	ren
 
-  | Rec (f, bl, v, var, p, e) -> 
+  | Rec (_, _, _, None, _, _) ->
+      assert false
+
+  | Rec (f, bl, v, Some var, p, e) -> 
       let bl',env' = trad_binders ren info.t_env bl in
       let ren' = push_date (initial_renaming env') e.info.t_label in
       let recf w ren = cc_lam bl' (abstraction e.info p w ren) in

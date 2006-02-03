@@ -61,6 +61,18 @@ test:
 	coqc -I ../lib/coq test_valid.v
 	coqide -I ../lib/coq test_why.v
 
+partial:
+	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic magic test.mlw
+	coqc -I ../lib/coq test_why.v
+	coqc -I ../lib/coq test_valid.v
+	coqide -I ../lib/coq test_why.v
+
+total:
+	$(WHY) --coq-v8 -d -V --total --valid --coq-tactic magic test.mlw
+	coqc -I ../lib/coq test_why.v
+	coqc -I ../lib/coq test_valid.v
+	coqide -I ../lib/coq test_why.v
+
 byte:
 	$(BWHY) --coq-v8 -d -V --valid --coq-tactic magic test.mlw
 	-coqc -I ../lib/coq test_why.v

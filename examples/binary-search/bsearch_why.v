@@ -299,43 +299,6 @@ Save.
   forall (result0: Z),
   forall (HW_12: result0 = (access t m)),
   forall (HW_15: result0 >= v),
-  0 <= m /\ m < (array_length t).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma binary_search_po_6 : 
-  forall (t: (array Z)),
-  forall (HW_1: (array_length t) >= 1 /\
-                (sorted_array t 1 ((array_length t) - 1))),
-  forall (l: Z),
-  forall (HW_2: l = 1),
-  forall (result: Z),
-  forall (HW_3: result = (array_length t)),
-  forall (u: Z),
-  forall (HW_4: u = (result - 1)),
-  forall (p: Z),
-  forall (HW_5: p = 0),
-  forall (HW_6: 1 <= l /\ u <= ((array_length t) - 1) /\ (0 <= p /\ p <=
-                ((array_length t) - 1)) /\
-                ((p = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l u)))) /\
-                ((p > 0 -> (access t p) = v))),
-  forall (l0: Z),
-  forall (p0: Z),
-  forall (u0: Z),
-  forall (HW_7: 1 <= l0 /\ u0 <= ((array_length t) - 1) /\ (0 <= p0 /\ p0 <=
-                ((array_length t) - 1)) /\
-                ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
-                ((p0 > 0 -> (access t p0) = v))),
-  forall (HW_8: l0 <= u0),
-  forall (m: Z),
-  forall (HW_9: m = (mean l0 u0)),
-  forall (HW_10: l0 <= m /\ m <= u0),
-  forall (HW_11: 0 <= m /\ m < (array_length t)),
-  forall (result0: Z),
-  forall (HW_12: result0 = (access t m)),
-  forall (HW_15: result0 >= v),
   forall (HW_16: 0 <= m /\ m < (array_length t)),
   forall (result1: Z),
   forall (HW_17: result1 = (access t m)),
@@ -348,11 +311,10 @@ Save.
   ((p0 > 0 -> (access t p0) = v))) /\ (Zwf 0 (2 + u1 - l0) (2 + u0 - l0)).
 Proof.
 intuition.
-subst; apply In_left_side; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma binary_search_po_7 : 
+(*Why goal*) Lemma binary_search_po_6 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) >= 1 /\
                 (sorted_array t 1 ((array_length t) - 1))),
@@ -396,13 +358,12 @@ Save.
   ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u0)))) /\
   ((p1 > 0 -> (access t p1) = v))) /\ (Zwf 0 (2 + u0 - l1) (2 + u0 - l0)).
 Proof.
-intuition; subst.
-absurd (mean l0 u0 = 0); omega.
-omega.
+intuition.
+subst; apply In_left_side; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma binary_search_po_8 : 
+(*Why goal*) Lemma binary_search_po_7 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) >= 1 /\
                 (sorted_array t 1 ((array_length t) - 1))),
@@ -428,6 +389,12 @@ Save.
   forall (HW_23: l0 > u0),
   (1 <= p0 /\ p0 <= ((array_length t) - 1)) /\ (access t p0) = v \/ p0 = 0 /\
   ~(In t 1 ((array_length t) - 1)).
+Proof.
+intuition; subst.
+absurd (mean l0 u0 = 0); omega.
+omega.
+Save.
+
 Proof.
 intuition; subst.
 assert (1 <= p0 \/ p0=0). omega. intuition.

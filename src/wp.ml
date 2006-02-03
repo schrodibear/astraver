@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.91 2005-11-18 14:54:08 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.92 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -73,9 +73,12 @@ let default_exns_post e =
   let xs = Effect.get_exns e in
   List.map (fun x -> x, default_post) xs
  
-let while_post_block env inv (phi,_,r) e = 
+let while_post_block env inv var e = 
   let lab = e.info.t_label in
-  let decphi = Papp (r, [phi; put_label_term env lab phi], []) in
+  let decphi = match var with
+    | None -> Ptrue
+    | Some (phi,_,r) -> Papp (r, [phi; put_label_term env lab phi], []) 
+  in
   let ql = default_exns_post (effect e) in
   match inv with
     | None -> 
@@ -86,7 +89,9 @@ let while_post_block env inv (phi,_,r) e =
 	  a_loc = e.info.t_loc;
 	  a_proof = None }, ql
 
-let well_founded_rel (_,_,r) = Papp (well_founded, [Tvar r], [])
+let well_founded_rel = function
+  | None -> Ptrue
+  | Some (_,_,r) -> Papp (well_founded, [Tvar r], [])
 
 (*s [saturate_post k a q] makes a postcondition for a program of type [k]
     out of a normal postcondition [a] and the exc. postconditions from [q] *)
@@ -215,20 +220,22 @@ and wp_desc info d q =
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 (filter_post p2.info q) in
 	let p'3,w3 = wp p3 (filter_post p3.info q) in
-	(match w2, w3 with
-	   | Some {a_value=q2}, Some {a_value=q3} -> 
-	       (* $wp(if p1 then p2 else p3, q) =$ *)
-	       (* $wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
-	       let result1 = p1.info.t_result_name in
-	       let q1 = create_postval (Pif (Tvar result1, q2, q3)) in
-	       let q1 = force_wp_name q1 in
-	       let q1 = saturate_post p1.info q1 q in
-	       let p'1,w1 = wp p1 q1 in
-	       If (p'1, p'2, p'3), w1
-	   | _ ->
-	       (* TODO: w2 et w3 perdues *)
-	       let p'1,_ = wp p1 None in
-	       If (p'1, p'2, p'3), None)
+	let q1 = match w2, w3 with
+	  | None, None ->
+	      None
+	  | _ -> 
+	      let p_or_true = function Some {a_value=q} -> q | None -> Ptrue in
+	      let q2 = p_or_true w2 in
+	      let q3 = p_or_true w3 in
+	      (* $wp(if p1 then p2 else p3, q) =$ *)
+	      (* $wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
+	      let result1 = p1.info.t_result_name in
+	      let q1 = create_postval (Pif (Tvar result1, q2, q3)) in
+	      let q1 = force_wp_name q1 in
+	      saturate_post p1.info q1 q
+	in
+	let p'1,w1 = wp p1 q1 in
+	If (p'1, p'2, p'3), w1
     | AppTerm (p1, t, k) ->
 	let p'1,w1 = wp p1 None in
 	let wapp = opaque_wp k.t_post q k in

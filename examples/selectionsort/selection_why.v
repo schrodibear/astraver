@@ -382,64 +382,16 @@ Save.
   forall (HW_22: 0 <= i /\ i < (array_length t0)),
   forall (result2: Z),
   forall (HW_23: result2 = (access t0 i)),
-  0 <= min /\ min < (array_length t0).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma selection_po_10 : 
-  forall (t: (array Z)),
-  forall (HW_1: (array_length t) >= 1),
-  forall (HW_2: (0 <= 0 /\ 0 <= ((array_length t) - 1)) /\
-                (sorted_array t 0 (0 - 1)) /\ (permut t t) /\
-                (forall (k:Z),
-                 (forall (l:Z),
-                  (0 <= k /\ k < 0 ->
-                   (0 <= l /\ l < (array_length t) -> (access t k) <=
-                    (access t l)))))),
-  forall (i: Z),
-  forall (t0: (array Z)),
-  forall (HW_3: (0 <= i /\ i <= ((array_length t0) - 1)) /\
-                (sorted_array t0 0 (i - 1)) /\ (permut t0 t) /\
-                (forall (k:Z),
-                 (forall (l:Z),
-                  (0 <= k /\ k < i ->
-                   (i <= l /\ l < (array_length t0) -> (access t0 k) <=
-                    (access t0 l)))))),
-  forall (result: Z),
-  forall (HW_4: result = (array_length t0)),
-  forall (HW_5: i < (result - 1)),
-  forall (HW_6: ((i + 1) <= (i + 1) /\ (i + 1) <= (array_length t0)) /\ (i <=
-                i /\ i < (array_length t0)) /\
-                (forall (k:Z),
-                 (i <= k /\ k < (i + 1) -> (access t0 i) <= (access t0 k)))),
-  forall (j: Z),
-  forall (min: Z),
-  forall (HW_7: ((i + 1) <= j /\ j <= (array_length t0)) /\ (i <= min /\
-                min < (array_length t0)) /\
-                (forall (k:Z),
-                 (i <= k /\ k < j -> (access t0 min) <= (access t0 k)))),
-  forall (result0: Z),
-  forall (HW_8: result0 = (array_length t0)),
-  forall (HW_19: j >= result0),
-  forall (HW_20: 0 <= min /\ min < (array_length t0)),
-  forall (result1: Z),
-  forall (HW_21: result1 = (access t0 min)),
-  forall (HW_22: 0 <= i /\ i < (array_length t0)),
-  forall (result2: Z),
-  forall (HW_23: result2 = (access t0 i)),
   forall (HW_24: 0 <= min /\ min < (array_length t0)),
   forall (t1: (array Z)),
   forall (HW_25: t1 = (update t0 min result2)),
   0 <= i /\ i < (array_length t1).
 Proof.
 intuition.
-ArraySubst t1.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma selection_po_11 : 
+(*Why goal*) Lemma selection_po_10 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) >= 1),
   forall (HW_2: (0 <= 0 /\ 0 <= ((array_length t) - 1)) /\
@@ -495,6 +447,35 @@ Save.
     (0 <= k /\ k < i0 ->
      (i0 <= l /\ l < (array_length t2) -> (access t2 k) <= (access t2 l)))))) /\
   (Zwf 0 ((array_length t2) - i0) ((array_length t0) - i)).
+Proof.
+intuition.
+ArraySubst t1.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma selection_po_11 : 
+  forall (t: (array Z)),
+  forall (HW_1: (array_length t) >= 1),
+  forall (HW_2: (0 <= 0 /\ 0 <= ((array_length t) - 1)) /\
+                (sorted_array t 0 (0 - 1)) /\ (permut t t) /\
+                (forall (k:Z),
+                 (forall (l:Z),
+                  (0 <= k /\ k < 0 ->
+                   (0 <= l /\ l < (array_length t) -> (access t k) <=
+                    (access t l)))))),
+  forall (i: Z),
+  forall (t0: (array Z)),
+  forall (HW_3: (0 <= i /\ i <= ((array_length t0) - 1)) /\
+                (sorted_array t0 0 (i - 1)) /\ (permut t0 t) /\
+                (forall (k:Z),
+                 (forall (l:Z),
+                  (0 <= k /\ k < i ->
+                   (i <= l /\ l < (array_length t0) -> (access t0 k) <=
+                    (access t0 l)))))),
+  forall (result: Z),
+  forall (HW_4: result = (array_length t0)),
+  forall (HW_29: i >= (result - 1)),
+  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
 Proof.
 intuition.
 ArraySubst t2.
@@ -568,30 +549,6 @@ omega.
 subst t2 t1; simpl; unfold Zwf; omega.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma selection_po_12 : 
-  forall (t: (array Z)),
-  forall (HW_1: (array_length t) >= 1),
-  forall (HW_2: (0 <= 0 /\ 0 <= ((array_length t) - 1)) /\
-                (sorted_array t 0 (0 - 1)) /\ (permut t t) /\
-                (forall (k:Z),
-                 (forall (l:Z),
-                  (0 <= k /\ k < 0 ->
-                   (0 <= l /\ l < (array_length t) -> (access t k) <=
-                    (access t l)))))),
-  forall (i: Z),
-  forall (t0: (array Z)),
-  forall (HW_3: (0 <= i /\ i <= ((array_length t0) - 1)) /\
-                (sorted_array t0 0 (i - 1)) /\ (permut t0 t) /\
-                (forall (k:Z),
-                 (forall (l:Z),
-                  (0 <= k /\ k < i ->
-                   (i <= l /\ l < (array_length t0) -> (access t0 k) <=
-                    (access t0 l)))))),
-  forall (result: Z),
-  forall (HW_4: result = (array_length t0)),
-  forall (HW_29: i >= (result - 1)),
-  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
 Proof.
 intuition.
 assert (i=0 \/ 0<i). omega. intuition.

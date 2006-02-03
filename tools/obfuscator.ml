@@ -256,6 +256,19 @@ let variant m fmt (t, id) =
   else
     fprintf fmt "%a for %a" (lexpr m) t Ident.print id
 
+let invariant_variant m fmt = function
+  | None, None -> 
+      ()
+  | Some _ as inv, None ->
+      fprintf fmt "{ %a }" (print_option (invariant m)) inv
+  | inv, Some var -> 
+      fprintf fmt "{ %a variant %a }" 
+	(print_option (invariant m)) inv (variant m) var 
+
+let opt_variant m fmt = function
+  | None -> ()
+  | Some var -> fprintf fmt "{ variant %a }" (variant m) var
+
 let is_binop id = 
   id == t_add || id == t_sub || id == t_mul || id == t_div
   || id == t_mod_int || id == t_eq || id == t_neq
@@ -283,8 +296,8 @@ let rec program m fmt p =
   | Sderef id -> 
       fprintf fmt "!%a" (ident m) id
   | Stry ({ pdesc = Sloop (inv, var, { pdesc = Sif (e1, e2, _) })}, _) ->
-      fprintf fmt "while %a do@ { %a variant %a }@ %a done"
-	progm e1 (print_option (invariant m)) inv (variant m) var progm e2
+      fprintf fmt "while %a do@ %a@ %a done"
+	progm e1 (invariant_variant m) (inv,var) progm e2
   | Stry (e1, hl) ->
       fprintf fmt "try %a@ with %a end" 
 	progm e1 (print_list alt (handler m)) hl
@@ -313,9 +326,9 @@ let rec program m fmt p =
 	(print_list space (bracket_assertion m)) al (program m) e
   | Srec (f, bl, v, var, al, e) ->
       let m = List.fold_left rename m (List.map fst bl) in
-      fprintf fmt "(let rec %a %a : %a { variant %a } -> %a %a)" 
+      fprintf fmt "(let rec %a %a : %a %a ->@ %a %a)" 
 	(ident m) f (print_list space (binder m)) bl
-	(type_v m) v (variant m) var
+	(type_v m) v (opt_variant m) var
 	(print_list space (bracket_assertion m)) al (program m) e
   | Sraise (id, None, None) -> 
       fprintf fmt "(raise %a)" Ident.print id

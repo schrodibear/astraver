@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.15 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: output.mli,v 1.16 2006-02-03 13:11:27 filliatr Exp $ i*)
 
 type constant =
   | Prim_int of int64
@@ -88,7 +88,7 @@ type expr =
   | While of 
       expr (* loop condition *)
       * assertion (* invariant *) 
-      * variant (* variant *) 
+      * variant option (* variant *) 
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
@@ -140,7 +140,7 @@ val make_label : string -> expr -> expr;;
   applying simplifications if possible
 
 *)
-val make_while : expr -> assertion -> variant -> expr -> expr;;
+val make_while : expr -> assertion -> variant option -> expr -> expr;;
 
 
 

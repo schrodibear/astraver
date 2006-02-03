@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.165 2006-02-01 16:25:07 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.166 2006-02-03 13:11:27 filliatr Exp $ i*)
 
 
 open Format
@@ -1183,8 +1183,8 @@ let interp_invariant label effects annot =
   in
   let inv = make_and (interp_assigns label effects annot.loop_assigns) inv in
   let var = match annot.variant with
-    | None -> LConst (Prim_int Int64.zero), None
-    | Some (var,r) -> interp_term None "init" var, r
+    | None -> None
+    | Some (var,r) -> Some (interp_term None "init" var, r)
   in
   (inv, var)
 

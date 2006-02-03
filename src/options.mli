@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.43 2005-11-03 14:11:36 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.44 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -50,6 +50,9 @@ val white : bool
 val wbb : bool
 val lvlmax : int
 val all_vc : bool
+
+type termination = UseVariant | Partial | Total
+val termination : termination
 
 (*s Prover options *)
 

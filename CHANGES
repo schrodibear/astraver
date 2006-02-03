@@ -1,4 +1,9 @@
 
+  o new behavior w.r.t. termination proofs: variants can be omitted in
+    loops and recursive functions; new command line options --partial
+    and --total to specify respectively partial correctness
+    (i.e. variants are not considered even when present) or total
+    correctness (i.e. variants are mandatory)
   o fixed bug with polymorphic parameters that should not be generalized
   o new construct "e {{ Q }}" (opaque sub-expression)
   o new construct "assert {P}; e"

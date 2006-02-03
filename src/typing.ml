@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.117 2005-11-30 10:09:01 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.118 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -195,11 +195,18 @@ let typing_info_of_type_c loc env l k =
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
-let state_var lab env (phi,r) = 
-  let lenv = logical_env env in
-  let phi,tphi = Ltyping.term lab env lenv phi in
-  let ids = term_refs env phi in
-  (phi,tphi,r), Effect.add_reads ids Effect.bottom
+let state_var loc lab env = function
+  | None when termination = Total ->
+      raise_located loc 
+	(AnyMessage "a variant is required here (since -total is set)")
+  | None -> 
+      None, Effect.bottom
+  | Some (phi,r) ->
+      let lenv = logical_env env in
+      let phi,tphi = Ltyping.term lab env lenv phi in
+      let ids = term_refs env phi in
+      (if termination = Partial then None else Some (phi,tphi,r)), 
+      Effect.add_reads ids Effect.bottom
 	
 (*s Typing preconditions.
     Return the effect i.e. variables appearing in the precondition. 
@@ -427,7 +434,7 @@ let rec typef lab env expr =
       make_node toplabel (Seq (t_e1, t_e2)) (result_type t_e2) ef
 	      
   | Sloop (invopt, var, e) ->
-      let var,efphi = state_var lab env var in
+      let var,efphi = state_var loc lab env var in
       let t_e = typef lab env e in
       let efe = t_e.info.t_effect in
       let efinv,invopt = state_inv lab env loc invopt in
@@ -669,15 +676,24 @@ let rec typef lab env expr =
       let bl',env',lenv' = binders loc lab env (logical_env env) bl in
       let (ep,p') = state_pre lab env' loc p in
       let v = type_v loc lab env' lenv' v in
-      let (phi,tphi,r) as var, efvar = state_var lab env' var in
+      let var, efvar = state_var loc lab env' var in
       (* e --> let vphi0 = phi in e *)
-      let vphi0 = variant_name () in
-      let tphi = PureType tphi in
-      let env' = Env.add vphi0 tphi env' in
-      let decphi = Papp (r, [phi; Tvar vphi0], []) in
+      let varinfo,env' = match var with
+	| None -> 
+	    None, env'
+	| Some (phi,tphi,r) ->
+	    let vphi0 = variant_name () in
+	    let tphi = PureType tphi in
+	    let env' = Env.add vphi0 tphi env' in
+	    let decphi = Papp (r, [phi; Tvar vphi0], []) in
+	    Some (vphi0,phi,tphi,decphi), env'
+      in
       (* effects for a let/rec construct are computed as a fixpoint *)
       let type_body c =
-	let c = { c with c_pre = decphi :: c.c_pre } in
+	let c = match varinfo with
+	  | None -> c
+	  | Some (_,_,_,decphi) -> { c with c_pre = decphi :: c.c_pre } 
+	in
 	let tf = make_arrow bl' c in
 	let env'' = add_rec f (add f tf env') in
 	typef lab env'' e
@@ -708,14 +724,17 @@ let rec typef lab env expr =
       let info = k_add_effects t_e.info ep in
       let t_e = type_body (type_c_of_typing_info p' info) in
       let tf = make_arrow bl' (type_c_of_typing_info p' t_e.info) in
-      let t_e = 
-	let mk_node_e = gmake_node loc_e env' in
-	mk_node_e (label_name ()) 
-	  (LetIn 
-	     (vphi0,
-	      mk_node_e (label_name ()) (Expression phi) tphi efvar,
-	      t_e))
-	  (result_type t_e) (Effect.union efvar (effect t_e))
+      let t_e = match varinfo with
+	| Some (vphi0,phi,tphi,_) ->
+	    let mk_node_e = gmake_node loc_e env' in
+	    mk_node_e (label_name ()) 
+	      (LetIn 
+		 (vphi0,
+		  mk_node_e (label_name ()) (Expression phi) tphi efvar,
+		  t_e))
+	      (result_type t_e) (Effect.union efvar (effect t_e))
+	| None ->
+	    t_e
       in
       make_node toplabel (Rec (f,bl',v,var,p',t_e)) tf Effect.bottom
 

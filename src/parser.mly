@@ -448,16 +448,17 @@ expr:
    { locate (Sif ($2, $4, $6)) }
 | IF expr THEN expr %prec prec_no_else
    { locate (Sif ($2, $4, locate (Sconst ConstUnit))) }
-| WHILE expr DO LEFTB opt_invariant VARIANT variant RIGHTB expr DONE
+| WHILE expr DO invariant_variant expr DONE
    { (* syntactic suget for
         try loop { invariant variant } if b then e else raise Exit
         with Exit -> void end *)
+     let inv,var = $4 in
      locate 
        (Stry
 	  (locate 
-	     (Sloop ($5, $7, 
+	     (Sloop (inv, var, 
 		     locate 
-		       (Sif ($2, $9,
+		       (Sif ($2, $5,
 			     locate (Sraise (exit_exn, None, None)))))),
 	     [((exit_exn, None), locate (Sconst ConstUnit))])) }
 | IDENT COLON expr
@@ -577,20 +578,31 @@ block_statement:
 ;
 ****/
 
+invariant_variant:
+| /* epsilon */ { None, None }
+| LEFTB opt_invariant RIGHTB { $2, None }
+| LEFTB opt_invariant VARIANT variant RIGHTB { $2, Some $4 }
+;
+
 opt_invariant:
 | /* epsilon */       { None }
 | INVARIANT assertion { Some $2 }
 ;
 
 recfun:
-| ident binders COLON type_v LEFTB VARIANT variant RIGHTB EQUAL 
+| ident binders COLON type_v opt_variant EQUAL 
   list0_bracket_assertion expr %prec prec_recfun
-   { Srec ($1, $2, $4, $7, $10, $11) }
+   { Srec ($1, $2, $4, $5, $7, $8) }
+;
+
+opt_variant:
+| LEFTB VARIANT variant RIGHTB { Some $3 } 
+| /* epsilon */                { None }
 ;
 
 variant:
-| lexpr FOR ident { $1, $3 } 
-| lexpr           { $1, Ident.t_zwf_zero }
+| lexpr FOR ident { ($1, $3) }
+| lexpr           { ($1, Ident.t_zwf_zero) }
 ;
 
 binders:

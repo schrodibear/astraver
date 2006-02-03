@@ -74,51 +74,6 @@ Unset Implicit Arguments.
   forall (t: (array Z)),
   forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
                 (array_length t)),
-  0 <= i /\ i < (array_length t).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma swap_po_2 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (HW_2: 0 <= i /\ i < (array_length t)),
-  forall (result: Z),
-  forall (HW_3: result = (access t i)),
-  0 <= j /\ j < (array_length t).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma swap_po_3 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
-  forall (HW_2: 0 <= i /\ i < (array_length t)),
-  forall (result: Z),
-  forall (HW_3: result = (access t i)),
-  forall (HW_4: 0 <= j /\ j < (array_length t)),
-  forall (result0: Z),
-  forall (HW_5: result0 = (access t j)),
-  0 <= i /\ i < (array_length t).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma swap_po_4 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
-                (array_length t)),
   forall (HW_2: 0 <= i /\ i < (array_length t)),
   forall (result: Z),
   forall (HW_3: result = (access t i)),
@@ -131,11 +86,10 @@ Save.
   0 <= j /\ j < (array_length t0).
 Proof.
 intuition.
-ArraySubst t0.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma swap_po_5 : 
+(*Why goal*) Lemma swap_po_2 : 
   forall (i: Z),
   forall (j: Z),
   forall (t: (array Z)),
@@ -154,6 +108,19 @@ Save.
   forall (t1: (array Z)),
   forall (HW_9: t1 = (update t0 j result)),
   (exchange t1 t i j).
+Proof.
+intuition.
+Save.
+
+Proof.
+intuition.
+Save.
+
+Proof.
+intuition.
+ArraySubst t0.
+Save.
+
 Proof.
 intuition.
 subst; auto with *.

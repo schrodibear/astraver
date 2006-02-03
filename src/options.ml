@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.53 2005-11-09 15:39:31 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.54 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 open Format
 
@@ -44,6 +44,9 @@ let wbb_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
+
+type termination = UseVariant | Partial | Total
+let termination_ = ref UseVariant
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -139,6 +142,8 @@ Typing/Annotations/VCG options:
   --wbb              while loops as black boxes (careful: incomplete WP)
   --split n          split conditions into several pieces up to n levels
   --all-vc           outputs all verification conditions (no auto discharge)
+  --partial          partial correctness
+  --total            total correctness
 
 Prover selection:
   --coq       selects COQ prover (default)
@@ -287,6 +292,10 @@ let files =
 	all_vc_ := true; parse args
     | ("-no-prelude" | "--no-prelude") :: args ->
 	prelude_ := false; parse args
+    | ("-partial" | "--partial") :: args ->
+	termination_ := Partial; parse args
+    | ("-total" | "--total") :: args ->
+	termination_ := Total; parse args
     | f :: args -> 
 	filesq := f :: !filesq; parse args
   in
@@ -329,6 +338,7 @@ let black = !black_
 let wbb = !wbb_
 let lvlmax = !lvlmax_
 let all_vc = !all_vc_
+let termination = !termination_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 

@@ -37,7 +37,6 @@ int test1(purse *p1, purse *p2) {
   @*/
 purse *new_purse();
 
-
 /*@ ensures \result == 150
   @*/
 int test2() {

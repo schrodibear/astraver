@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.28 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: output.ml,v 1.29 2006-02-03 13:11:27 filliatr Exp $ i*)
 
 open Format;;
 
@@ -340,7 +340,7 @@ type expr =
   | While of 
       expr (* loop condition *)
       * assertion (* invariant *) 
-      * variant (* variant *) 
+      * variant option (* variant *) 
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
@@ -423,10 +423,10 @@ let rec iter_expr f e =
     | Deref(id) -> f id
     | If(e1,e2,e3) ->
 	iter_expr f e1; iter_expr f e2; iter_expr f e3
-    | While(e1,inv,(var,_),e2) ->
+    | While(e1,inv,var,e2) ->
 	iter_expr f e1; 
 	iter_assertion f inv; 
-	iter_term f var; 
+	option_iter (fun (var,_) -> iter_term f var) var; 
 	List.iter (iter_expr f) e2
     | Block(el) -> List.iter (iter_expr f) el
     | Assign(id,e) -> f id; iter_expr f e
@@ -452,8 +452,9 @@ let rec iter_expr f e =
 
 
 let fprintf_variant form = function
-  | t, None -> fprintf_term form t
-  | t, Some r -> fprintf form "%a for %s" fprintf_term t r
+  | None -> ()
+  | Some (t, None) -> fprintf form "variant %a" fprintf_term t
+  | Some (t, Some r) -> fprintf form "variant %a for %s" fprintf_term t r
 	  
 let rec fprintf_expr form e =
   match e with
@@ -476,7 +477,7 @@ let rec fprintf_expr form e =
 	  fprintf_expr e1 fprintf_expr e2 fprintf_expr e3
     | While(e1,inv,var,e2) ->
 	fprintf form 
-	  "@[<hv 0>while %a do@ @[<hv 1>@[<hv 2>{ @[<hv 2>invariant@ %a@]@ @[<hv 2>variant@ %a@] }@]@ %a@]@ done@]" 
+	  "@[<hv 0>while %a do@ @[<hv 1>@[<hv 2>{ @[<hv 2>invariant@ %a@]@ @[<hv 2>%a@] }@]@ %a@]@ done@]" 
 	  fprintf_expr e1 
 	  fprintf_assertion inv
 	  fprintf_variant var

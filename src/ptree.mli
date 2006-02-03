@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.30 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.31 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -103,7 +103,7 @@ type t =
 and t_desc =
   | Svar of variable
   | Sderef of variable
-  | Sloop of assertion option * variant * t
+  | Sloop of assertion option * variant option * t
   | Sif of t * t * t
   | Sapp of t * t
   | Sletref of variable * t * t
@@ -111,7 +111,8 @@ and t_desc =
   | Sseq of t * t
   | Slam of ptype_v binder list * assertion list * t
   | Srec of 
-      variable * ptype_v binder list * ptype_v * variant * assertion list * t
+      variable * ptype_v binder list * ptype_v * variant option * 
+	assertion list * t
   | Sraise of variable * t option * ptype_v option
   | Stry of t * (exn_pattern * t) list
   | Sconst of constant

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ast.mli,v 1.50 2005-11-03 14:11:35 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.51 2006-02-03 13:11:28 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -52,7 +52,7 @@ and 'a t_desc =
   | Expression of term (* pure terms including !x *)
   | Var of variable (* only for impure functions *)
   | Seq of 'a t * 'a t
-  | Loop of assertion option * variant * 'a t (* infinite loop *)
+  | Loop of assertion option * variant option * 'a t (* infinite loop *)
   | If of 'a t * 'a t * 'a t
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
@@ -66,7 +66,7 @@ and 'a t_desc =
   | Try of 'a t * (exn_pattern * 'a t) list 
   (* functions and applications *)
   | Lam of type_v binder list * precondition list * 'a t
-  | Rec of variable * type_v binder list * type_v * variant * 
+  | Rec of variable * type_v binder list * type_v * variant option * 
       precondition list * 'a t
   | AppRef of 'a t * variable * 'a
   | AppTerm of 'a t * term * 'a
