@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.110 2006-02-01 16:25:07 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.111 2006-02-03 13:24:35 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -67,9 +67,11 @@ let print_effects3 fmt l =
 
 let alloc = 
   let x = "alloc" in
-  let v = 
+  let v = (*
+
     Cenv.add_sym 
-      Loc.dummy_position x Ctypes.c_void (Var_info (default_var_info x)) 
+      Loc.dummy_position x Ctypes.c_void *)
+    (Var_info (default_var_info x)) 
   in
   set_var_type_why v (Why_Logic "alloc_table");
   match v with

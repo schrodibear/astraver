@@ -3,3 +3,6 @@
 
 Require Export Caduceus.
 
+(*Why type*) Definition Z0: Set.
+Admitted.
+

@@ -2,8 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Export purse_spec_why.
-(* Add LoadPath "../../../../lib/coq". 
-Load caduceus_tactics.*)
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma credit_impl_po_1 : 
@@ -11,9 +9,9 @@ Load caduceus_tactics.*)
   forall (p: ((pointer) A844)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_14: ((memory) Z A844)),
+  forall (balance_p_14: ((memory) Z A844)),
   forall (HW_1: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_struct_anonymous_0_14 alloc p) /\ s >= 0)),
+                ((purse_inv balance_p_14 alloc p) /\ s >= 0)),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
@@ -25,48 +23,41 @@ Save.
   forall (p: ((pointer) A845)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_14: ((memory) Z A845)),
+  forall (balance_p_14: ((memory) Z A845)),
   forall (HW_1: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_struct_anonymous_0_14 alloc p) /\ s >= 0)),
+                ((purse_inv balance_p_14 alloc p) /\ s >= 0)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc balance_struct_anonymous_0_14 p)),
+  forall (HW_3: result = (acc balance_p_14 p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_struct_anonymous_0_14_0: ((memory) Z A845)),
-  forall (HW_5: balance_struct_anonymous_0_14_0 = (upd balance_struct_anonymous_0_14
-                                                   p (result + s))),
+  forall (balance_p_14_0: ((memory) Z A845)),
+  forall (HW_5: balance_p_14_0 = (upd balance_p_14 p (result + s))),
   (* File "purse.c", line 10, characters 13-63 *)
-  ((purse_inv balance_struct_anonymous_0_14_0 alloc p) /\
-  (acc balance_struct_anonymous_0_14_0 p) =
-  ((acc balance_struct_anonymous_0_14 p) + s)) /\
-  (not_assigns alloc balance_struct_anonymous_0_14
-   balance_struct_anonymous_0_14_0 (pset_singleton p)).
+  ((purse_inv balance_p_14_0 alloc p) /\ (acc balance_p_14_0 p) =
+  ((acc balance_p_14 p) + s)) /\
+  (not_assigns alloc balance_p_14 balance_p_14_0 (pset_singleton p)).
 Proof.
 unfold purse_inv; intuition.
-Save.
-
-Proof.
-intuition.
+subst; caduceus.
+subst; caduceus.
+(*
 rewrite HW_5.
 red.
 red in H.
 intuition.
 rewrite acc_upd_eq;auto.
 omega.
+*)
+(*
 rewrite HW_5.
 rewrite acc_upd_eq;auto.
-subst;auto.
+*)
+subst.
 red;intros.
-rewrite HW_5.
 rewrite acc_upd_neq;auto.
-assert (p0<>p).
+assert (p0 <>p).
 apply pset_singleton_elim;auto.
 auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -75,11 +66,10 @@ Save.
   forall (p1: ((pointer) A846)),
   forall (p2: ((pointer) A846)),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_17: ((memory) Z A846)),
+  forall (balance_p2_17: ((memory) Z A846)),
   forall (HW_1: (* File "purse.c", line 25, characters 14-56 *)
-                (((purse_inv balance_struct_anonymous_0_17 alloc p1) /\
-                (purse_inv balance_struct_anonymous_0_17 alloc p2)) /\
-                ~(p1 = p2))),
+                (((purse_inv balance_p2_17 alloc p1) /\
+                (purse_inv balance_p2_17 alloc p2)) /\ ~(p1 = p2))),
   (valid alloc p1).
 Proof.
 unfold purse_inv; intuition.
@@ -91,17 +81,15 @@ Save.
   forall (p1: ((pointer) A847)),
   forall (p2: ((pointer) A847)),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_17: ((memory) Z A847)),
+  forall (balance_p2_17: ((memory) Z A847)),
   forall (HW_1: (* File "purse.c", line 25, characters 14-56 *)
-                (((purse_inv balance_struct_anonymous_0_17 alloc p1) /\
-                (purse_inv balance_struct_anonymous_0_17 alloc p2)) /\
-                ~(p1 = p2))),
+                (((purse_inv balance_p2_17 alloc p1) /\
+                (purse_inv balance_p2_17 alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
-  forall (balance_struct_anonymous_0_17_0: ((memory) Z A847)),
-  forall (HW_3: balance_struct_anonymous_0_17_0 = (upd balance_struct_anonymous_0_17
-                                                   p1 0)),
+  forall (balance_p2_17_0: ((memory) Z A847)),
+  forall (HW_3: balance_p2_17_0 = (upd balance_p2_17 p1 0)),
   (* File "purse.c", line 8, characters 14-36 *)
-  ((purse_inv balance_struct_anonymous_0_17_0 alloc p2) /\ 100 >= 0).
+  ((purse_inv balance_p2_17_0 alloc p2) /\ 100 >= 0).
 Proof.
 unfold purse_inv; intuition.
 subst;caduceus.
@@ -113,69 +101,41 @@ Save.
   forall (p1: ((pointer) A848)),
   forall (p2: ((pointer) A848)),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_17: ((memory) Z A848)),
+  forall (balance_p2_17: ((memory) Z A848)),
   forall (HW_1: (* File "purse.c", line 25, characters 14-56 *)
-                (((purse_inv balance_struct_anonymous_0_17 alloc p1) /\
-                (purse_inv balance_struct_anonymous_0_17 alloc p2)) /\
-                ~(p1 = p2))),
+                (((purse_inv balance_p2_17 alloc p1) /\
+                (purse_inv balance_p2_17 alloc p2)) /\ ~(p1 = p2))),
   forall (HW_2: (valid alloc p1)),
-  forall (balance_struct_anonymous_0_17_0: ((memory) Z A848)),
-  forall (HW_3: balance_struct_anonymous_0_17_0 = (upd balance_struct_anonymous_0_17
-                                                   p1 0)),
+  forall (balance_p2_17_0: ((memory) Z A848)),
+  forall (HW_3: balance_p2_17_0 = (upd balance_p2_17 p1 0)),
   forall (HW_4: (* File "purse.c", line 8, characters 14-36 *)
-                ((purse_inv balance_struct_anonymous_0_17_0 alloc p2) /\
-                100 >= 0)),
-  forall (balance_struct_anonymous_0_17_1: ((memory) Z A848)),
+                ((purse_inv balance_p2_17_0 alloc p2) /\ 100 >= 0)),
+  forall (balance_p2_17_1: ((memory) Z A848)),
   forall (HW_5: (* File "purse.c", line 10, characters 13-63 *)
-                ((purse_inv balance_struct_anonymous_0_17_1 alloc p2) /\
-                (acc balance_struct_anonymous_0_17_1 p2) =
-                ((acc balance_struct_anonymous_0_17_0 p2) + 100)) /\
-                (not_assigns alloc balance_struct_anonymous_0_17_0
-                 balance_struct_anonymous_0_17_1 (pset_singleton p2))),
+                ((purse_inv balance_p2_17_1 alloc p2) /\
+                (acc balance_p2_17_1 p2) = ((acc balance_p2_17_0 p2) + 100)) /\
+                (not_assigns alloc balance_p2_17_0 balance_p2_17_1
+                 (pset_singleton p2))),
   forall (HW_6: (valid alloc p1)),
   forall (result: Z),
-  forall (HW_7: result = (acc balance_struct_anonymous_0_17_1 p1)),
+  forall (HW_7: result = (acc balance_p2_17_1 p1)),
   (* File "purse.c", line 27, characters 13-25 *) result = 0 /\
-  (not_assigns alloc balance_struct_anonymous_0_17
-   balance_struct_anonymous_0_17_1
+  (not_assigns alloc balance_p2_17 balance_p2_17_1
    (pset_union (pset_singleton p2) (pset_singleton p1))).
 Proof.
 unfold purse_inv; intuition.
-Save.
-
-
-Proof.
-intuition;subst;auto.
-red in H1.
-red in H5.
-assert (p1<>p2).
-auto.
-generalize (pset_singleton_intro H4).
-intro.
-generalize (H5 p1 HW_6 H8). 
-intro.
-rewrite H9.
-rewrite acc_upd_eq;auto.
+  subst.
+  rewrite H8; auto; caduceus.
 red;intros.
-assert (p<>p2).
-generalize (pset_union_elim1 H8);intro.
-apply pset_singleton_elim;auto.
-generalize (pset_singleton_intro H9).
-intro.
-generalize (H5 p H4 H10). 
-intro.
-rewrite H11.
-rewrite acc_upd_neq;auto.
-generalize (pset_union_elim2 H8);intro.
-assert (p<>p1).
-apply pset_singleton_elim;auto.
-auto.
+rewrite H8; auto.
+  subst.
+  assert (p<>p1).
+    generalize (pset_union_elim2 H12);intro.
+    apply pset_singleton_elim;auto.
+  caduceus.
+generalize (pset_union_elim1 H12);auto.
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_1 : 
@@ -232,12 +192,14 @@ Save.
   ((purse_inv balance_Z28 alloc result0) /\ 200 >= 0).
 Proof.
 unfold purse_inv; intuition.
+(*
 rewrite H11;auto.
 apply pset_singleton_intro.
 intro;subst.
 rewrite <- shift_zero in H8.
 generalize (fresh_not_valid H7 H8).
 auto.
+*)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -281,6 +243,7 @@ Save.
   (acc balance_Z27_0 result)).
 Proof.
 unfold purse_inv; intuition.
+(*
 rewrite H18;intuition.
 apply pset_singleton_intro; auto.
 intro;subst.
@@ -292,6 +255,7 @@ apply pset_singleton_intro; auto.
 intro;subst.
 rewrite <- shift_zero in H.
 generalize (fresh_not_valid H1 H);tauto.
+*)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -345,6 +309,7 @@ Save.
   (acc balance_Z28_0 result0)).
 Proof.
 unfold purse_inv; intuition.
+(*
 rewrite H26;intuition.
 apply pset_singleton_intro; auto.
 intro;subst.
@@ -356,6 +321,7 @@ intro;subst.
 rewrite <- shift_zero in H20. 
 generalize (fresh_not_valid H1 H20);tauto.
 rewrite H26;intuition.
+*)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -417,10 +383,12 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
+(*
 generalize (fresh_not_valid H1 ).
 intro.
 generalize (H21 0).
 rewrite shift_zero.
+*)
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -484,8 +452,7 @@ Admitted.
   forall (HW_12: result1 = (acc balance_Z27_1 result)),
   (valid alloc result0).
 Proof.
-intuition.
-red in H16;tauto.
+unfold purse_inv; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -553,6 +520,7 @@ Save.
   (* File "purse.c", line 40, characters 13-27 *) (result1 + result2) = 150.
 Proof.
 intuition.
+(*
 subst .
 assert (result<> result0).
 intro;subst.
@@ -567,6 +535,7 @@ rewrite H17.
 rewrite H13;intuition.
 rewrite H12.
 rewrite H8;intuition.
+*)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -575,10 +544,10 @@ Save.
   forall (p: ((pointer) A863)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_15: ((memory) Z A863)),
+  forall (balance_p_15: ((memory) Z A863)),
   forall (HW_1: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_struct_anonymous_0_15 alloc p) /\ 0 <=
-                s /\ s <= (acc balance_struct_anonymous_0_15 p))),
+                ((purse_inv balance_p_15 alloc p) /\ 0 <= s /\ s <=
+                (acc balance_p_15 p))),
   (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
@@ -590,46 +559,28 @@ Save.
   forall (p: ((pointer) A864)),
   forall (s: Z),
   forall (alloc: alloc_table),
-  forall (balance_struct_anonymous_0_15: ((memory) Z A864)),
+  forall (balance_p_15: ((memory) Z A864)),
   forall (HW_1: (* File "purse.c", line 16, characters 14-50 *)
-                ((purse_inv balance_struct_anonymous_0_15 alloc p) /\ 0 <=
-                s /\ s <= (acc balance_struct_anonymous_0_15 p))),
+                ((purse_inv balance_p_15 alloc p) /\ 0 <= s /\ s <=
+                (acc balance_p_15 p))),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc balance_struct_anonymous_0_15 p)),
+  forall (HW_3: result = (acc balance_p_15 p)),
   forall (HW_4: (valid alloc p)),
-  forall (balance_struct_anonymous_0_15_0: ((memory) Z A864)),
-  forall (HW_5: balance_struct_anonymous_0_15_0 = (upd balance_struct_anonymous_0_15
-                                                   p (result - s))),
+  forall (balance_p_15_0: ((memory) Z A864)),
+  forall (HW_5: balance_p_15_0 = (upd balance_p_15 p (result - s))),
   (* File "purse.c", line 18, characters 13-63 *)
-  ((purse_inv balance_struct_anonymous_0_15_0 alloc p) /\
-  (acc balance_struct_anonymous_0_15_0 p) =
-  ((acc balance_struct_anonymous_0_15 p) - s)) /\
-  (not_assigns alloc balance_struct_anonymous_0_15
-   balance_struct_anonymous_0_15_0 (pset_singleton p)).
+  ((purse_inv balance_p_15_0 alloc p) /\ (acc balance_p_15_0 p) =
+  ((acc balance_p_15 p) - s)) /\
+  (not_assigns alloc balance_p_15 balance_p_15_0 (pset_singleton p)).
 Proof.
 unfold purse_inv; intuition.
-Save.
-
-Proof.
-intuition.
-red.
-rewrite HW_5.
-rewrite acc_upd_eq;auto.
-intuition.
-rewrite HW_5.
-rewrite acc_upd_eq;auto.
-rewrite HW_3;auto.
-red;intros.
-rewrite HW_5.
+    subst; caduceus.
+  subst; caduceus.
+subst; red; intros.
 rewrite acc_upd_neq;auto.
 assert (p0<>p).
 apply pset_singleton_elim;auto.
 auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 

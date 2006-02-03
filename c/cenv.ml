@@ -1,9 +1,5 @@
 
 open Format
-(*
-open Clogic
-open Cast
-*)
 open Ctypes
 open Creport
 open Info
@@ -168,13 +164,17 @@ let used_names = Hashtbl.create 97
 let mark_as_used x = Hashtbl.add used_names x ()
 let () = 
   List.iter mark_as_used 
-    [ "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin";
+    [ (* Why keywords *)
+      "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin";
       "bool"; "do"; "done"; "else"; "end"; "exception"; "exists";
       "external"; "false"; "for"; "forall"; "fun"; "function"; "goal";
       "if"; "in"; "int"; "invariant"; "label"; "let"; "logic"; "not";
       "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
       "reads"; "real"; "rec"; "ref"; "returns"; "then"; "true"; "try";
-      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes" ]
+      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes" ;
+      (* caduceus names *)
+      "global" ; "alloc"  
+    ]
 
 let is_used_name n = Hashtbl.mem used_names n
 
@@ -204,8 +204,7 @@ let global_zone =
     zone_is_var = false;
     number = 0;
     repr = None;
-    name =  "Z0";
-(*    type_why_zone = Why_Logic "undefined";*)
+    name =  "global";
   }
 
 let () =
@@ -224,7 +223,6 @@ let make_zone ?name is_var =
 		number = !count;
 		repr = None;
 		name = n;
-(*		type_why_zone = Why_Logic "undefined"; *)
 	      } in
       Hashtbl.add zone_table z.name z;
       count := !count +1;
@@ -233,7 +231,7 @@ let make_zone ?name is_var =
   else
     global_zone
 
-let rec type_type_why ty zone_is_var =
+let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
     | Tint _ | Tenum _ -> Int
     | Tfloat _ -> Float	
@@ -241,37 +239,33 @@ let rec type_type_why ty zone_is_var =
     | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 
 	  | Tstruct s -> 
-	      let z = make_zone ~name:("struct_"^s) zone_is_var in
-(*	      z.type_why_zone <- Why_Logic s; *)
+	      let z = make_zone ?name zone_is_var in
 	      Pointer z
 	  | _ ->
-	      let z = make_zone zone_is_var in
-(*	      z.type_why_zone <- type_type_why ty zone_is_var; *)
+	      let z = make_zone ?name zone_is_var in
 	      Pointer z
 	end
     | Tvoid -> Unit
-    | Tfun (_,ty) -> type_type_why ty zone_is_var
+    | Tfun (_,ty) -> type_type_why ?name ty zone_is_var
     | Tvar v -> 
 	begin
 	  try
-	    type_type_why (find_typedef v) zone_is_var
+	    type_type_why ?name (find_typedef v) zone_is_var
 	  with Not_found -> 
 	    assert false;
 	    (* v is a logic type *)
 	    Why_Logic v
 	end
     | Tunion s -> 
-	let z = make_zone ~name:("union_"^s) zone_is_var in
-(*	z.type_why_zone <- Why_Logic s; *)
+	let z = make_zone ?name zone_is_var in
 	Pointer z
     | Tstruct s -> 
-	let z = make_zone ~name:("struct_"^s) zone_is_var in
-(*	z.type_why_zone <- Why_Logic s; *)
+	let z = make_zone ?name zone_is_var in
 	Pointer z
 
 
 let set_var_type info ty zone_is_var =
-  Info.set_var_type info ty (type_type_why ty zone_is_var) 
+  Info.set_var_type info ty (type_type_why ~name:(env_name info) ty zone_is_var) 
 
 (* global variables and functions *)
 

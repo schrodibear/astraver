@@ -5,21 +5,22 @@ Require Export separation1_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A771:Set),
-  forall (p: ((pointer) A771)),
-  forall (Int_Z7: ((memory) Z A771)),
+  forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (x: ((pointer) Z4)),
-  forall (y: ((pointer) Z5)),
-  forall (z: ((pointer) Z6)),
+  forall (intM_global: ((memory) Z global)),
+  forall (x: ((pointer) global)),
+  forall (y: ((pointer) global)),
+  forall (z: ((pointer) global)),
   forall (HW_1: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc p) /\ (valid alloc z) /\ (valid alloc y) /\
-                (valid alloc x)),
+                (valid alloc x) /\ ~((base_addr y) = (base_addr x)) /\
+                ~((base_addr z) = (base_addr y)) /\
+                ~((base_addr z) = (base_addr x))),
   forall (HW_2: (valid alloc p)),
-  forall (Int_Z7_0: ((memory) Z A771)),
-  forall (HW_3: Int_Z7_0 = (upd Int_Z7 p 0)),
-  (* File "separation1.c", line 9, characters 13-20 *) (acc Int_Z7_0 p) = 0 /\
-  (not_assigns alloc Int_Z7 Int_Z7_0 (pset_singleton p)).
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_3: intM_global0 = (upd intM_global p 0)),
+  (* File "separation1.c", line 9, characters 13-20 *) (acc intM_global0 p) =
+  0 /\ (not_assigns alloc intM_global intM_global0 (pset_singleton p)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -43,10 +44,13 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x: ((pointer) Z4)),
-  forall (y: ((pointer) Z5)),
-  forall (z: ((pointer) Z6)),
-  forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x)),
+  forall (x: ((pointer) global)),
+  forall (y: ((pointer) global)),
+  forall (z: ((pointer) global)),
+  forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x) /\
+                ~((base_addr y) = (base_addr x)) /\
+                ~((base_addr z) = (base_addr y)) /\
+                ~((base_addr z) = (base_addr x))),
   (* File "separation1.c", line 7, characters 14-23 *) (valid alloc x).
 Proof.
 intuition.
@@ -55,20 +59,24 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
-  forall (Int_Z4: ((memory) Z Z4)),
   forall (alloc: alloc_table),
-  forall (x: ((pointer) Z4)),
-  forall (y: ((pointer) Z5)),
-  forall (z: ((pointer) Z6)),
-  forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x)),
+  forall (intM_global: ((memory) Z global)),
+  forall (x: ((pointer) global)),
+  forall (y: ((pointer) global)),
+  forall (z: ((pointer) global)),
+  forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x) /\
+                ~((base_addr y) = (base_addr x)) /\
+                ~((base_addr z) = (base_addr y)) /\
+                ~((base_addr z) = (base_addr x))),
   forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc x)),
-  forall (Int_Z4_0: ((memory) Z Z4)),
+  forall (intM_global0: ((memory) Z global)),
   forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
-                (acc Int_Z4_0 x) = 0 /\
-                (not_assigns alloc Int_Z4 Int_Z4_0 (pset_singleton x))),
-  forall (Int_Z4_1: ((memory) Z Z4)),
-  forall (HW_4: Int_Z4_1 = (upd Int_Z4_0 x 1)),
+                (acc intM_global0 x) = 0 /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_singleton x))),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_4: intM_global1 = (upd intM_global0 x 1)),
   (* File "separation1.c", line 7, characters 14-23 *) (valid alloc y).
 Proof.
 intuition.
@@ -85,6 +93,43 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
+  forall (x: ((pointer) global)),
+  forall (y: ((pointer) global)),
+  forall (z: ((pointer) global)),
+  forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x) /\
+                ~((base_addr y) = (base_addr x)) /\
+                ~((base_addr z) = (base_addr y)) /\
+                ~((base_addr z) = (base_addr x))),
+  forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc x)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_3: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc intM_global0 x) = 0 /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_singleton x))),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_4: intM_global1 = (upd intM_global0 x 1)),
+  forall (HW_5: (* File "separation1.c", line 7, characters 14-23 *)
+                (valid alloc y)),
+  forall (intM_global2: ((memory) Z global)),
+  forall (HW_6: (* File "separation1.c", line 9, characters 13-20 *)
+                (acc intM_global2 y) = 0 /\
+                (not_assigns alloc intM_global1 intM_global2
+                 (pset_singleton y))),
+  forall (HW_7: (* File "separation1.c", line 15, characters 14-23 *)
+                (valid alloc z)),
+  forall (intM_global3: ((memory) Z global)),
+  (* File "separation1.c", line 20, characters 13-19 *)
+  (acc intM_global3 y) = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

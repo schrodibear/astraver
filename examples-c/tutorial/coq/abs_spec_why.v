@@ -8,16 +8,5 @@ Require Export Caduceus.
 
 
 (*Why type*) Definition Z0: Set.
-
-(*Why type*) Definition Z1: Set.
-
-(*Why type*) Definition Z2: Set.
-
-(*Why type*) Definition Z3: Set.
-
-(*Why type*) Definition Z4: Set.
-Admitted.
-
-(*Why type*) Definition Z5: Set.
 Admitted.
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.49 2006-02-02 10:14:34 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.50 2006-02-03 13:24:35 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -108,15 +108,16 @@ let declare_arrow_var info =
 let make_field ty =
   let rec name ty =
     match ty.Ctypes.ctype_node with 
-      | Tvoid -> "Void"
-      | Tint  _ | Tenum _ -> "Int"
-      | Tfloat _ -> "Real"
+      | Tvoid -> "void"
+      | Tint  _ | Tenum _ -> "int"
+      | Tfloat _ -> "float"
       | Ctypes.Tvar s -> s
       | Tarray (_, ty ,_) | Tpointer (_,ty) -> (name ty) ^"P" 
-      | Tstruct s | Tunion s-> s^"P" 
-      | Tfun _ -> "function"
+      | Tstruct s | Tunion s-> s^"P" (* "P" for "pointer" *)
+      | Tfun _ -> "fun"
   in
-  let info = default_var_info (name ty) in
+  let n = (name ty) ^ "M" in (* "M" for "memory" *)
+  let info = default_var_info n in
   set_var_type (Info.Var_info info)  ty  false;
   info
 

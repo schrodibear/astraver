@@ -5,14 +5,19 @@ Require Export struct_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A793:Set),
-  forall (t2: ((pointer) A793)),
+  forall (t2: ((pointer) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_10)),
-  forall (x_struct_T_8: ((memory) Z A793)),
+  forall (pps: ((pointer) global)),
+  forall (s: ((pointer) global)),
+  forall (t_global: ((memory) ((pointer) global) global)),
+  forall (x_global: ((memory) Z global)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
-                ((valid alloc t2) /\ (acc x_struct_T_8 t2) = 0) /\
-                (valid alloc s)),
+                ((valid alloc t2) /\ (acc x_global t2) = 0) /\
+                (valid alloc s) /\ (~((base_addr pps) = (base_addr s)) /\
+                ~((base_addr pps) = (base_addr (acc t_global
+                                                (acc SPM_global s))))) /\
+                (valid alloc pps)),
   (valid alloc t2).
 Proof.
 intuition; subst; auto.
@@ -20,30 +25,34 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A794:Set),
-  forall (t2: ((pointer) A794)),
+  forall (t2: ((pointer) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_10)),
-  forall (x_struct_T_8: ((memory) Z A794)),
-  forall (y_struct_T_8: ((memory) Z A794)),
+  forall (pps: ((pointer) global)),
+  forall (s: ((pointer) global)),
+  forall (t_global: ((memory) ((pointer) global) global)),
+  forall (x_global: ((memory) Z global)),
+  forall (y_global: ((memory) Z global)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
-                ((valid alloc t2) /\ (acc x_struct_T_8 t2) = 0) /\
-                (valid alloc s)),
+                ((valid alloc t2) /\ (acc x_global t2) = 0) /\
+                (valid alloc s) /\ (~((base_addr pps) = (base_addr s)) /\
+                ~((base_addr pps) = (base_addr (acc t_global
+                                                (acc SPM_global s))))) /\
+                (valid alloc pps)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
-  forall (HW_3: result = (acc x_struct_T_8 t2)),
-  forall (x_struct_T_8_0: ((memory) Z A794)),
-  forall (HW_4: x_struct_T_8_0 = (upd x_struct_T_8 t2 (result + 1))),
+  forall (HW_3: result = (acc x_global t2)),
+  forall (x_global0: ((memory) Z global)),
+  forall (HW_4: x_global0 = (upd x_global t2 (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
-  forall (HW_6: result0 = (acc x_struct_T_8_0 t2)),
-  forall (x_struct_T_8_1: ((memory) Z A794)),
-  forall (HW_7: x_struct_T_8_1 = (upd x_struct_T_8_0 t2 (1 + result0))),
+  forall (HW_6: result0 = (acc x_global0 t2)),
+  forall (x_global1: ((memory) Z global)),
+  forall (HW_7: x_global1 = (upd x_global0 t2 (1 + result0))),
   (* File "struct.c", line 9, characters 13-63 *) ((result0 = 1 /\
-  (acc x_struct_T_8_1 t2) = 2) /\ (acc y_struct_T_8 t2) =
-  (acc y_struct_T_8 t2)) /\
-  (not_assigns alloc y_struct_T_8 y_struct_T_8 pset_empty) /\
-  (not_assigns alloc x_struct_T_8 x_struct_T_8_1 (pset_singleton t2)).
+  (acc x_global1 t2) = 2) /\ (acc y_global t2) = (acc y_global t2)) /\
+  (not_assigns alloc y_global y_global pset_empty) /\
+  (not_assigns alloc x_global x_global1 (pset_singleton t2)).
 Proof.
 intuition; subst; caduceus; auto.
 Save.
@@ -69,20 +78,28 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
+  forall (SPM_global: ((memory) ((pointer) global) global)),
+  forall (SPPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (ps: ((pointer) struct_S_10)),
-  forall (s: ((pointer) struct_S_10)),
-  forall (t_struct_S_10: ((memory) ((pointer) struct_T_2) struct_S_10)),
-  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
+  forall (pps: ((pointer) global)),
+  forall (ps: ((pointer) global)),
+  forall (s: ((pointer) global)),
+  forall (t_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (* File "struct.c", line 21, characters 14-24 *)
                 (valid alloc ps) /\ (valid alloc s) /\
-                (valid1 t_struct_S_10) /\
-                (separation2 t_struct_S_10 t_struct_S_10)),
-  forall (ps0: ((pointer) struct_S_10)),
+                (~((base_addr pps) = (base_addr s)) /\
+                ~((base_addr pps) = (base_addr (acc t_global
+                                                (acc SPM_global s))))) /\
+                (valid alloc pps) /\ (valid1 t_global) /\
+                (separation2 t_global t_global)),
+  forall (ps0: ((pointer) global)),
   forall (HW_3: ps0 = s),
-  forall (result: ((pointer) struct_T_2)),
-  forall (HW_4: result = (acc t_struct_S_10 s)),
-  forall (p: ((pointer) struct_T_2)),
-  forall (HW_5: p = result),
+  forall (SPPM_global0: ((memory) ((pointer) global) global)),
+  forall (HW_4: SPPM_global0 = (upd SPPM_global pps ps0)),
+  forall (result: ((pointer) global)),
+  forall (HW_5: result = (acc t_global s)),
+  forall (p: ((pointer) global)),
+  forall (HW_6: p = result),
   (valid alloc ps0).
 Proof.
  intuition.
@@ -115,31 +132,44 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
+  forall (SPM_global: ((memory) ((pointer) global) global)),
+  forall (SPPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (ps: ((pointer) struct_S_10)),
-  forall (s: ((pointer) struct_S_10)),
-  forall (t_struct_S_10: ((memory) ((pointer) struct_T_2) struct_S_10)),
-  forall (x_struct_T_2: ((memory) Z struct_T_2)),
-  forall (HW_1: (* File "struct.c", line 19, characters 14-24 *)
+  forall (pps: ((pointer) global)),
+  forall (ps: ((pointer) global)),
+  forall (s: ((pointer) global)),
+  forall (t_global: ((memory) ((pointer) global) global)),
+  forall (x_global: ((memory) Z global)),
+  forall (HW_1: (* File "struct.c", line 21, characters 14-24 *)
                 (valid alloc ps) /\ (valid alloc s) /\
-                (valid1 t_struct_S_10) /\
-                (separation2 t_struct_S_10 t_struct_S_10)),
-  forall (ps0: ((pointer) struct_S_10)),
+                (~((base_addr pps) = (base_addr s)) /\
+                ~((base_addr pps) = (base_addr (acc t_global
+                                                (acc SPM_global s))))) /\
+                (valid alloc pps) /\ (valid1 t_global) /\
+                (separation2 t_global t_global)),
+  forall (ps0: ((pointer) global)),
   forall (HW_3: ps0 = s),
-  forall (result: ((pointer) struct_T_2)),
-  forall (HW_4: result = (acc t_struct_S_10 s)),
-  forall (p: ((pointer) struct_T_2)),
-  forall (HW_5: p = result),
-  forall (HW_6: (valid alloc ps0)),
-  forall (result0: ((pointer) struct_T_2)),
-  forall (HW_7: result0 = (acc t_struct_S_10 ps0)),
-  forall (x_struct_T_2_0: ((memory) Z struct_T_2)),
-  forall (HW_8: x_struct_T_2_0 = (upd x_struct_T_2 result0 1)),
-  forall (result1: ((pointer) struct_T_2)),
-  forall (HW_9: result1 = (acc t_struct_S_10 s)),
+  forall (SPPM_global0: ((memory) ((pointer) global) global)),
+  forall (HW_4: SPPM_global0 = (upd SPPM_global pps ps0)),
+  forall (result: ((pointer) global)),
+  forall (HW_5: result = (acc t_global s)),
+  forall (p: ((pointer) global)),
+  forall (HW_6: p = result),
+  forall (HW_7: (valid alloc ps0)),
+  forall (result0: ((pointer) global)),
+  forall (HW_8: result0 = (acc t_global ps0)),
+  forall (x_global0: ((memory) Z global)),
+  forall (HW_9: x_global0 = (upd x_global result0 1)),
+  forall (result1: ((pointer) global)),
+  forall (HW_10: result1 = (acc t_global s)),
   forall (result2: Z),
-  forall (HW_10: result2 = (acc x_struct_T_2_0 result1)),
-  (* File "struct.c", line 20, characters 13-25 *) result2 = 1.
+  forall (HW_11: result2 = (acc x_global0 result1)),
+  (* File "struct.c", line 22, characters 13-25 *) result2 = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 Proof.
 intuition.
 (* FILL PROOF HERE *)

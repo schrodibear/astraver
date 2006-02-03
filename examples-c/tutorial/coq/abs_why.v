@@ -5,7 +5,7 @@ Require Export abs_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_1 : 
-  forall (p: ((pointer) Z4)),
+  forall (p: ((pointer) Z0)),
   forall (alloc: alloc_table),
   (valid alloc p).
 Proof.
@@ -14,14 +14,20 @@ Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_2 : 
-  forall (p: ((pointer) Z4)),
+  forall (p: ((pointer) Z0)),
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
   forall (HW_1: (valid alloc p)),
   forall (result: Z),
-  forall (HW_2: result = (acc int_Z4 p)),
+  forall (HW_2: result = (acc Int_Z0 p)),
   forall (HW_3: result < 0),
-  (valid alloc p).
+  forall (HW_4: (valid alloc p)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (acc Int_Z0 p)),
+  forall (HW_6: (valid alloc p)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_7: Int_Z0_0 = (upd Int_Z0 p (Zopp result0))),
+  (* File "abs.c", line 3, characters 13-20 *) (acc Int_Z0_0 p) >= 0.
 Proof.
 intuition.
 subst; caduceus.
@@ -29,140 +35,53 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_3 : 
-  forall (p: ((pointer) Z4)),
+  forall (p: ((pointer) Z0)),
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
   forall (HW_1: (valid alloc p)),
   forall (result: Z),
-  forall (HW_2: result = (acc int_Z4 p)),
-  forall (HW_3: result < 0),
-  forall (HW_4: (valid alloc p)),
-  forall (result0: Z),
-  forall (HW_5: result0 = (acc int_Z4 p)),
-  (valid alloc p).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma abs1_impl_po_4 : 
-  forall (p: ((pointer) Z4)),
-  forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (valid alloc p)),
-  forall (result: Z),
-  forall (HW_2: result = (acc int_Z4 p)),
-  forall (HW_3: result < 0),
-  forall (HW_4: (valid alloc p)),
-  forall (result0: Z),
-  forall (HW_5: result0 = (acc int_Z4 p)),
-  forall (HW_6: (valid alloc p)),
-  forall (int_Z4_0: ((memory) Z Z4)),
-  forall (HW_7: int_Z4_0 = (upd int_Z4 p (Zopp result0))),
-  (* File "abs.c", line 3, characters 13-20 *) (acc int_Z4_0 p) >= 0.
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma abs1_impl_po_5 : 
-  forall (p: ((pointer) Z4)),
-  forall (alloc: alloc_table),
-  forall (int_Z4: ((memory) Z Z4)),
-  forall (HW_1: (valid alloc p)),
-  forall (result: Z),
-  forall (HW_2: result = (acc int_Z4 p)),
+  forall (HW_2: result = (acc Int_Z0 p)),
   forall (HW_8: result >= 0),
-  (* File "abs.c", line 3, characters 13-20 *) (acc int_Z4 p) >= 0.
+  (* File "abs.c", line 3, characters 13-20 *) (acc Int_Z0 p) >= 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
+
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs2_impl_po_1 : 
-  forall (p: ((pointer) Z5)),
+  forall (p: ((pointer) Z0)),
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
-  (valid alloc p).
+  forall (HW_2: (valid alloc p)),
+  forall (result: Z),
+  forall (HW_3: result = (acc Int_Z0 p)),
+  forall (HW_4: result < 0),
+  forall (HW_5: (valid alloc p)),
+  forall (result0: Z),
+  forall (HW_6: result0 = (acc Int_Z0 p)),
+  forall (HW_7: (valid alloc p)),
+  forall (Int_Z0_0: ((memory) Z Z0)),
+  forall (HW_8: Int_Z0_0 = (upd Int_Z0 p (Zopp result0))),
+  (* File "abs.c", line 9, characters 13-20 *) (acc Int_Z0_0 p) >= 0.
 Proof.
-(* intuition. *)
 intuition.
-subst intP0.
-caduceus.
+subst Int_Z0_0; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs2_impl_po_2 : 
-  forall (p: ((pointer) Z5)),
+  forall (p: ((pointer) Z0)),
+  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
   forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc int_Z5 p)),
-  forall (HW_4: result < 0),
-  (valid alloc p).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma abs2_impl_po_3 : 
-  forall (p: ((pointer) Z5)),
-  forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
-  forall (HW_2: (valid alloc p)),
-  forall (result: Z),
-  forall (HW_3: result = (acc int_Z5 p)),
-  forall (HW_4: result < 0),
-  forall (HW_5: (valid alloc p)),
-  forall (result0: Z),
-  forall (HW_6: result0 = (acc int_Z5 p)),
-  (valid alloc p).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma abs2_impl_po_4 : 
-  forall (p: ((pointer) Z5)),
-  forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
-  forall (HW_2: (valid alloc p)),
-  forall (result: Z),
-  forall (HW_3: result = (acc int_Z5 p)),
-  forall (HW_4: result < 0),
-  forall (HW_5: (valid alloc p)),
-  forall (result0: Z),
-  forall (HW_6: result0 = (acc int_Z5 p)),
-  forall (HW_7: (valid alloc p)),
-  forall (int_Z5_0: ((memory) Z Z5)),
-  forall (HW_8: int_Z5_0 = (upd int_Z5 p (Zopp result0))),
-  (* File "abs.c", line 9, characters 13-20 *) (acc int_Z5_0 p) >= 0.
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma abs2_impl_po_5 : 
-  forall (p: ((pointer) Z5)),
-  forall (alloc: alloc_table),
-  forall (int_Z5: ((memory) Z Z5)),
-  forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
-  forall (HW_2: (valid alloc p)),
-  forall (result: Z),
-  forall (HW_3: result = (acc int_Z5 p)),
+  forall (HW_3: result = (acc Int_Z0 p)),
   forall (HW_9: result >= 0),
-  (* File "abs.c", line 9, characters 13-20 *) (acc int_Z5 p) >= 0.
+  (* File "abs.c", line 9, characters 13-20 *) (acc Int_Z0 p) >= 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

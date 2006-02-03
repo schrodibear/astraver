@@ -6,11 +6,13 @@ Require Export false_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false0_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x_0: ((pointer) Z13)),
-  forall (y_0: ((pointer) Z14)),
-  forall (zz: ((pointer) struct_u_12)),
+  forall (x_0: ((pointer) global)),
+  forall (y_0: ((pointer) global)),
+  forall (zz: ((pointer) global)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz)),
+                ~((base_addr x_0) = (base_addr zz)) /\ (valid alloc zz) /\
+                ~((base_addr y_0) = (base_addr zz)) /\
+                ~((base_addr y_0) = (base_addr x_0))),
   (* File "false.c", line 16, characters 13-19 *) False.
 Proof.
 intuition.
@@ -19,14 +21,16 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x_0: ((pointer) Z13)),
-  forall (y_0: ((pointer) Z14)),
-  forall (y_struct_v_10: ((memory) ((pointer) Z1) struct_v_10)),
-  forall (z: ((pointer) struct_v_10)),
-  forall (zz: ((pointer) struct_u_12)),
+  forall (x_0: ((pointer) global)),
+  forall (y_0: ((pointer) global)),
+  forall (y_global: ((memory) ((pointer) global) global)),
+  forall (z: ((pointer) global)),
+  forall (zz: ((pointer) global)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz) /\ (valid1_range y_struct_v_10 5) /\
-                (valid1 y_struct_v_10)),
+                ~((base_addr x_0) = (base_addr zz)) /\ (valid alloc zz) /\
+                ~((base_addr y_0) = (base_addr zz)) /\
+                ~((base_addr y_0) = (base_addr x_0)) /\
+                (valid1_range y_global 5) /\ (valid1 y_global)),
   (valid alloc z).
 Proof.
 intuition.
@@ -35,18 +39,20 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (x_0: ((pointer) Z13)),
-  forall (y_0: ((pointer) Z14)),
-  forall (y_struct_v_10: ((memory) ((pointer) Z1) struct_v_10)),
-  forall (z: ((pointer) struct_v_10)),
-  forall (zz: ((pointer) struct_u_12)),
+  forall (x_0: ((pointer) global)),
+  forall (y_0: ((pointer) global)),
+  forall (y_global: ((memory) ((pointer) global) global)),
+  forall (z: ((pointer) global)),
+  forall (zz: ((pointer) global)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz) /\ (valid1_range y_struct_v_10 5) /\
-                (valid1 y_struct_v_10)),
+                ~((base_addr x_0) = (base_addr zz)) /\ (valid alloc zz) /\
+                ~((base_addr y_0) = (base_addr zz)) /\
+                ~((base_addr y_0) = (base_addr x_0)) /\
+                (valid1_range y_global 5) /\ (valid1 y_global)),
   forall (HW_2: (valid alloc z)),
-  forall (result: ((pointer) Z1)),
-  forall (HW_3: result = (acc y_struct_v_10 z)),
-  forall (result0: ((pointer) Z1)),
+  forall (result: ((pointer) global)),
+  forall (HW_3: result = (acc y_global z)),
+  forall (result0: ((pointer) global)),
   forall (HW_4: result0 = (shift result 5)),
   (valid alloc result0).
 Proof.
@@ -56,12 +62,14 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x_0: ((pointer) Z13)),
-  forall (y_0: ((pointer) Z14)),
-  forall (zz: ((pointer) struct_u_12)),
+  forall (x_0: ((pointer) global)),
+  forall (y_0: ((pointer) global)),
+  forall (zz: ((pointer) global)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz)),
-  forall (result: ((pointer) Z13)),
+                ~((base_addr x_0) = (base_addr zz)) /\ (valid alloc zz) /\
+                ~((base_addr y_0) = (base_addr zz)) /\
+                ~((base_addr y_0) = (base_addr x_0))),
+  forall (result: ((pointer) global)),
   forall (HW_2: result = (shift x_0 (Zopp 1))),
   (valid alloc result).
 Proof.
@@ -71,12 +79,14 @@ Admitted.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma false3_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x_0: ((pointer) Z13)),
-  forall (y_0: ((pointer) Z14)),
-  forall (zz: ((pointer) struct_u_12)),
+  forall (x_0: ((pointer) global)),
+  forall (y_0: ((pointer) global)),
+  forall (zz: ((pointer) global)),
   forall (HW_1: (valid_range alloc y_0 0 4) /\ (valid_range alloc x_0 0 3) /\
-                (valid alloc zz)),
-  forall (result: ((pointer) Z14)),
+                ~((base_addr x_0) = (base_addr zz)) /\ (valid alloc zz) /\
+                ~((base_addr y_0) = (base_addr zz)) /\
+                ~((base_addr y_0) = (base_addr x_0))),
+  forall (result: ((pointer) global)),
   forall (HW_2: result = (shift y_0 5)),
   (valid alloc result).
 Proof.

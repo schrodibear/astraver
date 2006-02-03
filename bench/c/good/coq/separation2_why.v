@@ -6,79 +6,171 @@ Require Export separation2_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (m: ((pointer) struct_anonymous_0_39)),
-  forall (p1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (p2_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p2_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p2_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p2_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (pp1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_33)),
-  forall (pp1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_35)),
-  forall (pp1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_37)),
-  forall (pp1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_39)),
-  forall (pp2_struct_anonymous_1_41: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_41)),
-  forall (pp2_struct_anonymous_1_43: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_43)),
-  forall (u: ((pointer) struct_anonymous_0_33)),
-  forall (u2: ((pointer) struct_anonymous_1_41)),
-  forall (v: ((pointer) struct_anonymous_0_35)),
-  forall (v2_0: ((pointer) struct_anonymous_1_43)),
-  forall (w: ((pointer) struct_anonymous_0_37)),
-  forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
-                ((((((valid alloc (acc pp1_struct_anonymous_0_33 u)) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_41 u2))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_43 v2_0))) /\
-                (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (separation1 p1_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33) /\
-                (separation1 p1_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35) /\
-                (separation1 p1_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37) /\
-                (separation1 p1_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39) /\
-                (valid1_range p2_struct_anonymous_0_33 5) /\
-                (valid1_range p2_struct_anonymous_0_35 5) /\
-                (valid1_range p2_struct_anonymous_0_37 5) /\
-                (valid1_range p2_struct_anonymous_0_39 5) /\
-                (valid1_range p1_struct_anonymous_0_33 5) /\
-                (valid1_range p1_struct_anonymous_0_35 5) /\
-                (valid1_range p1_struct_anonymous_0_37 5) /\
-                (valid1_range p1_struct_anonymous_0_39 5) /\
-                (valid1 p2_struct_anonymous_0_33) /\
-                (valid1 p2_struct_anonymous_0_35) /\
-                (valid1 p2_struct_anonymous_0_37) /\
-                (valid1 p2_struct_anonymous_0_39) /\
-                (valid1 p1_struct_anonymous_0_33) /\
-                (valid1 p1_struct_anonymous_0_35) /\
-                (valid1 p1_struct_anonymous_0_37) /\
-                (valid1 p1_struct_anonymous_0_39)),
+  forall (anonymous_0PM_global: ((memory) ((pointer) global) global)),
+  forall (m: ((pointer) global)),
+  forall (p1_global: ((memory) ((pointer) global) global)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
+  forall (pp1_global: ((memory) ((pointer) global) global)),
+  forall (pp2_global: ((memory) ((pointer) global) global)),
+  forall (u: ((pointer) global)),
+  forall (u2: ((pointer) global)),
+  forall (v: ((pointer) global)),
+  forall (v2_0: ((pointer) global)),
+  forall (w: ((pointer) global)),
+  forall (HW_1: ((* File "separation2.c", line 43, characters 12-116 *)
+                 ((((((valid alloc (acc pp1_global u)) /\
+                 (valid alloc (acc pp1_global v))) /\
+                 (valid alloc (acc pp1_global w))) /\
+                 (valid alloc (acc pp1_global m))) /\
+                 (valid alloc (acc pp2_global u2))) /\
+                 (valid alloc (acc pp2_global v2_0))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))) /\
+                (valid alloc w) /\ (valid alloc v) /\
+                (~((base_addr w) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr w)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global w))))) /\
+                (valid alloc u) /\ (~((base_addr w) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr u2) = (base_addr v)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr u)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global u)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global u))))) /\
+                (valid alloc m) /\ (~((base_addr u2) = (base_addr m)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global m))))) /\
+                ~((base_addr v2_0) = (base_addr u2)) /\
+                (~((base_addr m) = (base_addr w)) /\
+                (~((base_addr w) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global w)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                (~((base_addr m) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr m) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr w)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global w))))) /\
+                (~((base_addr v2_0) = (base_addr v)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global v)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global v))))) /\
+                (~((base_addr v2_0) = (base_addr u)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr m)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global m))))) /\
+                (valid alloc v2_0) /\ (~((base_addr v) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                ~((base_addr v) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (valid alloc u2) /\ (separation1 p1_global p2_global) /\
+                (valid1_range p2_global 5) /\ (valid1_range p1_global 5) /\
+                (valid1 p2_global) /\ (valid1 p1_global)),
   (* File "separation2.c", line 28, characters 12-129 *)
-  ((((((valid alloc u) /\ (valid alloc (acc p1_struct_anonymous_0_33 u))) /\
-  (valid alloc (acc p2_struct_anonymous_0_33 u))) /\
-  (valid alloc (acc pp1_struct_anonymous_0_33 u))) /\
-  (valid_range alloc (acc p1_struct_anonymous_0_33 u) 0 4)) /\
-  (valid_range alloc (acc p2_struct_anonymous_0_33 u) 0 4)).
+  ((((((valid alloc u) /\ (valid alloc (acc p1_global u))) /\
+  (valid alloc (acc p2_global u))) /\ (valid alloc (acc pp1_global u))) /\
+  (valid_range alloc (acc p1_global u) 0 4)) /\
+  (valid_range alloc (acc p2_global u) 0 4)) /\
+  (* File "separation2.c", line 23, characters 3-78 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global y)))))) /\
+  (* File "separation2.c", line 16, characters 3-151 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global y))) /\
+    ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global y)))) /\
+    ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global y))))) /\
+  (* File "separation2.c", line 8, characters 3-164 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global y))) /\
+     ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global y)))) /\
+     ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global y)))))).
 Proof.
 intuition.
 assert (((u = u \/ u = v) \/ u = w) \/ u = m ).
@@ -89,114 +181,249 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (m: ((pointer) struct_anonymous_0_39)),
-  forall (p1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (p2_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p2_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p2_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p2_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (pp1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_33)),
-  forall (pp1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_35)),
-  forall (pp1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_37)),
-  forall (pp1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_39)),
-  forall (pp2_struct_anonymous_1_41: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_41)),
-  forall (pp2_struct_anonymous_1_43: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_43)),
-  forall (u: ((pointer) struct_anonymous_0_33)),
-  forall (u2: ((pointer) struct_anonymous_1_41)),
-  forall (v: ((pointer) struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_0: ((pointer) struct_anonymous_1_43)),
-  forall (v2_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (w: ((pointer) struct_anonymous_0_37)),
-  forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
-                ((((((valid alloc (acc pp1_struct_anonymous_0_33 u)) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_41 u2))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_43 v2_0))) /\
-                (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (separation1 p1_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33) /\
-                (separation1 p1_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35) /\
-                (separation1 p1_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37) /\
-                (separation1 p1_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39) /\
-                (valid1_range p2_struct_anonymous_0_33 5) /\
-                (valid1_range p2_struct_anonymous_0_35 5) /\
-                (valid1_range p2_struct_anonymous_0_37 5) /\
-                (valid1_range p2_struct_anonymous_0_39 5) /\
-                (valid1_range p1_struct_anonymous_0_33 5) /\
-                (valid1_range p1_struct_anonymous_0_35 5) /\
-                (valid1_range p1_struct_anonymous_0_37 5) /\
-                (valid1_range p1_struct_anonymous_0_39 5) /\
-                (valid1 p2_struct_anonymous_0_33) /\
-                (valid1 p2_struct_anonymous_0_35) /\
-                (valid1 p2_struct_anonymous_0_37) /\
-                (valid1 p2_struct_anonymous_0_39) /\
-                (valid1 p1_struct_anonymous_0_33) /\
-                (valid1 p1_struct_anonymous_0_35) /\
-                (valid1 p1_struct_anonymous_0_37) /\
-                (valid1 p1_struct_anonymous_0_39)),
+  forall (anonymous_0PM_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (m: ((pointer) global)),
+  forall (p1_global: ((memory) ((pointer) global) global)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
+  forall (pp1_global: ((memory) ((pointer) global) global)),
+  forall (pp2_global: ((memory) ((pointer) global) global)),
+  forall (u: ((pointer) global)),
+  forall (u2: ((pointer) global)),
+  forall (v: ((pointer) global)),
+  forall (v1_global: ((memory) Z global)),
+  forall (v2_0: ((pointer) global)),
+  forall (v2_global: ((memory) Z global)),
+  forall (w: ((pointer) global)),
+  forall (HW_1: ((* File "separation2.c", line 43, characters 12-116 *)
+                 ((((((valid alloc (acc pp1_global u)) /\
+                 (valid alloc (acc pp1_global v))) /\
+                 (valid alloc (acc pp1_global w))) /\
+                 (valid alloc (acc pp1_global m))) /\
+                 (valid alloc (acc pp2_global u2))) /\
+                 (valid alloc (acc pp2_global v2_0))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))) /\
+                (valid alloc w) /\ (valid alloc v) /\
+                (~((base_addr w) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr w)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global w))))) /\
+                (valid alloc u) /\ (~((base_addr w) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr u2) = (base_addr v)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr u)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global u)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global u))))) /\
+                (valid alloc m) /\ (~((base_addr u2) = (base_addr m)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global m))))) /\
+                ~((base_addr v2_0) = (base_addr u2)) /\
+                (~((base_addr m) = (base_addr w)) /\
+                (~((base_addr w) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global w)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                (~((base_addr m) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr m) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr w)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global w))))) /\
+                (~((base_addr v2_0) = (base_addr v)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global v)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global v))))) /\
+                (~((base_addr v2_0) = (base_addr u)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr m)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global m))))) /\
+                (valid alloc v2_0) /\ (~((base_addr v) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                ~((base_addr v) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (valid alloc u2) /\ (separation1 p1_global p2_global) /\
+                (valid1_range p2_global 5) /\ (valid1_range p1_global 5) /\
+                (valid1 p2_global) /\ (valid1 p1_global)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc u) /\
-                (valid alloc (acc p1_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc p2_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_33 u))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_33 u) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_33 u) 0 4))),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
+                ((((((valid alloc u) /\ (valid alloc (acc p1_global u))) /\
+                (valid alloc (acc p2_global u))) /\
+                (valid alloc (acc pp1_global u))) /\
+                (valid_range alloc (acc p1_global u) 0 4)) /\
+                (valid_range alloc (acc p2_global u) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global0: ((memory) Z global)),
+  forall (v1_global0: ((memory) Z global)),
+  forall (v2_global0: ((memory) Z global)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_33 u) 1)) <=
-                (acc v1_struct_anonymous_0_33_0 u) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_33
-                     v2_struct_anonymous_0_33_0 (pset_singleton u)) /\
-                (not_assigns alloc v1_struct_anonymous_0_33
-                 v1_struct_anonymous_0_33_0 (pset_singleton u))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_33
-                 pp1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_33
-                 p1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc Int_Z0 Int_Z0_0
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_33 u))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_33
-                                                           u))
+                (acc intM_global0 (shift (acc p1_global u) 1)) <=
+                (acc v1_global0 u) /\
+                (((((((not_assigns alloc v2_global v2_global0
+                       (pset_singleton u)) /\
+                (not_assigns alloc v1_global v1_global0 (pset_singleton u))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_union (pset_singleton (acc pp1_global u))
+                  (pset_union (pset_range (pset_singleton (acc p2_global u))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_33
-                                                u))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global u)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   (* File "separation2.c", line 28, characters 12-129 *)
-  ((((((valid alloc v) /\ (valid alloc (acc p1_struct_anonymous_0_35 v))) /\
-  (valid alloc (acc p2_struct_anonymous_0_35 v))) /\
-  (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-  (valid_range alloc (acc p1_struct_anonymous_0_35 v) 0 4)) /\
-  (valid_range alloc (acc p2_struct_anonymous_0_35 v) 0 4)).
+  ((((((valid alloc v) /\ (valid alloc (acc p1_global v))) /\
+  (valid alloc (acc p2_global v))) /\ (valid alloc (acc pp1_global v))) /\
+  (valid_range alloc (acc p1_global v) 0 4)) /\
+  (valid_range alloc (acc p2_global v) 0 4)) /\
+  (* File "separation2.c", line 23, characters 3-78 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global y)))))) /\
+  (* File "separation2.c", line 16, characters 3-151 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global y))) /\
+    ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global y)))) /\
+    ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global y))))) /\
+  (* File "separation2.c", line 8, characters 3-164 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global y))) /\
+     ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global y)))) /\
+     ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global y)))))).
 Proof.
 intuition.
 assert (((v = u \/ v = v) \/ v = w) \/ v = m ).
@@ -207,147 +434,323 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
-  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (m: ((pointer) struct_anonymous_0_39)),
-  forall (p1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (p2_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p2_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p2_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p2_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (pp1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_33)),
-  forall (pp1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_35)),
-  forall (pp1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_37)),
-  forall (pp1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_39)),
-  forall (pp2_struct_anonymous_1_41: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_41)),
-  forall (pp2_struct_anonymous_1_43: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_43)),
-  forall (u: ((pointer) struct_anonymous_0_33)),
-  forall (u2: ((pointer) struct_anonymous_1_41)),
-  forall (v: ((pointer) struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v1_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_0: ((pointer) struct_anonymous_1_43)),
-  forall (v2_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (w: ((pointer) struct_anonymous_0_37)),
-  forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
-                ((((((valid alloc (acc pp1_struct_anonymous_0_33 u)) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_41 u2))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_43 v2_0))) /\
-                (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (separation1 p1_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33) /\
-                (separation1 p1_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35) /\
-                (separation1 p1_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37) /\
-                (separation1 p1_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39) /\
-                (valid1_range p2_struct_anonymous_0_33 5) /\
-                (valid1_range p2_struct_anonymous_0_35 5) /\
-                (valid1_range p2_struct_anonymous_0_37 5) /\
-                (valid1_range p2_struct_anonymous_0_39 5) /\
-                (valid1_range p1_struct_anonymous_0_33 5) /\
-                (valid1_range p1_struct_anonymous_0_35 5) /\
-                (valid1_range p1_struct_anonymous_0_37 5) /\
-                (valid1_range p1_struct_anonymous_0_39 5) /\
-                (valid1 p2_struct_anonymous_0_33) /\
-                (valid1 p2_struct_anonymous_0_35) /\
-                (valid1 p2_struct_anonymous_0_37) /\
-                (valid1 p2_struct_anonymous_0_39) /\
-                (valid1 p1_struct_anonymous_0_33) /\
-                (valid1 p1_struct_anonymous_0_35) /\
-                (valid1 p1_struct_anonymous_0_37) /\
-                (valid1 p1_struct_anonymous_0_39)),
+  forall (anonymous_0PM_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (m: ((pointer) global)),
+  forall (p1_global: ((memory) ((pointer) global) global)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
+  forall (pp1_global: ((memory) ((pointer) global) global)),
+  forall (pp2_global: ((memory) ((pointer) global) global)),
+  forall (u: ((pointer) global)),
+  forall (u2: ((pointer) global)),
+  forall (v: ((pointer) global)),
+  forall (v1_global: ((memory) Z global)),
+  forall (v2_0: ((pointer) global)),
+  forall (v2_global: ((memory) Z global)),
+  forall (w: ((pointer) global)),
+  forall (HW_1: ((* File "separation2.c", line 43, characters 12-116 *)
+                 ((((((valid alloc (acc pp1_global u)) /\
+                 (valid alloc (acc pp1_global v))) /\
+                 (valid alloc (acc pp1_global w))) /\
+                 (valid alloc (acc pp1_global m))) /\
+                 (valid alloc (acc pp2_global u2))) /\
+                 (valid alloc (acc pp2_global v2_0))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))) /\
+                (valid alloc w) /\ (valid alloc v) /\
+                (~((base_addr w) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr w)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global w))))) /\
+                (valid alloc u) /\ (~((base_addr w) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr u2) = (base_addr v)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr u)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global u)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global u))))) /\
+                (valid alloc m) /\ (~((base_addr u2) = (base_addr m)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global m))))) /\
+                ~((base_addr v2_0) = (base_addr u2)) /\
+                (~((base_addr m) = (base_addr w)) /\
+                (~((base_addr w) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global w)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                (~((base_addr m) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr m) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr w)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global w))))) /\
+                (~((base_addr v2_0) = (base_addr v)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global v)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global v))))) /\
+                (~((base_addr v2_0) = (base_addr u)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr m)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global m))))) /\
+                (valid alloc v2_0) /\ (~((base_addr v) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                ~((base_addr v) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (valid alloc u2) /\ (separation1 p1_global p2_global) /\
+                (valid1_range p2_global 5) /\ (valid1_range p1_global 5) /\
+                (valid1 p2_global) /\ (valid1 p1_global)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc u) /\
-                (valid alloc (acc p1_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc p2_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_33 u))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_33 u) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_33 u) 0 4))),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
+                ((((((valid alloc u) /\ (valid alloc (acc p1_global u))) /\
+                (valid alloc (acc p2_global u))) /\
+                (valid alloc (acc pp1_global u))) /\
+                (valid_range alloc (acc p1_global u) 0 4)) /\
+                (valid_range alloc (acc p2_global u) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global0: ((memory) Z global)),
+  forall (v1_global0: ((memory) Z global)),
+  forall (v2_global0: ((memory) Z global)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_33 u) 1)) <=
-                (acc v1_struct_anonymous_0_33_0 u) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_33
-                     v2_struct_anonymous_0_33_0 (pset_singleton u)) /\
-                (not_assigns alloc v1_struct_anonymous_0_33
-                 v1_struct_anonymous_0_33_0 (pset_singleton u))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_33
-                 pp1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_33
-                 p1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc Int_Z0 Int_Z0_0
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_33 u))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_33
-                                                           u))
+                (acc intM_global0 (shift (acc p1_global u) 1)) <=
+                (acc v1_global0 u) /\
+                (((((((not_assigns alloc v2_global v2_global0
+                       (pset_singleton u)) /\
+                (not_assigns alloc v1_global v1_global0 (pset_singleton u))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_union (pset_singleton (acc pp1_global u))
+                  (pset_union (pset_range (pset_singleton (acc p2_global u))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_33
-                                                u))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global u)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   forall (HW_4: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc v) /\
-                (valid alloc (acc p1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc p2_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_35 v) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_35 v) 0 4))),
-  forall (Int_Z0_1: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
+                ((((((valid alloc v) /\ (valid alloc (acc p1_global v))) /\
+                (valid alloc (acc p2_global v))) /\
+                (valid alloc (acc pp1_global v))) /\
+                (valid_range alloc (acc p1_global v) 0 4)) /\
+                (valid_range alloc (acc p2_global v) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global1: ((memory) Z global)),
+  forall (v1_global1: ((memory) Z global)),
+  forall (v2_global1: ((memory) Z global)),
   forall (HW_5: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_1 (shift (acc p1_struct_anonymous_0_35 v) 1)) <=
-                (acc v1_struct_anonymous_0_35_0 v) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_35
-                     v2_struct_anonymous_0_35_0 (pset_singleton v)) /\
-                (not_assigns alloc v1_struct_anonymous_0_35
-                 v1_struct_anonymous_0_35_0 (pset_singleton v))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_35
-                 pp1_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_35
-                 p1_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc Int_Z0_0 Int_Z0_1
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_35 v))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_35
-                                                           v))
+                (acc intM_global1 (shift (acc p1_global v) 1)) <=
+                (acc v1_global1 v) /\
+                (((((((not_assigns alloc v2_global0 v2_global1
+                       (pset_singleton v)) /\
+                (not_assigns alloc v1_global0 v1_global1 (pset_singleton v))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global0 intM_global1
+                 (pset_union (pset_singleton (acc pp1_global v))
+                  (pset_union (pset_range (pset_singleton (acc p2_global v))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_35
-                                                v))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global v)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   (* File "separation2.c", line 28, characters 12-129 *)
-  ((((((valid alloc w) /\ (valid alloc (acc p1_struct_anonymous_0_37 w))) /\
-  (valid alloc (acc p2_struct_anonymous_0_37 w))) /\
-  (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-  (valid_range alloc (acc p1_struct_anonymous_0_37 w) 0 4)) /\
-  (valid_range alloc (acc p2_struct_anonymous_0_37 w) 0 4)).
+  ((((((valid alloc w) /\ (valid alloc (acc p1_global w))) /\
+  (valid alloc (acc p2_global w))) /\ (valid alloc (acc pp1_global w))) /\
+  (valid_range alloc (acc p1_global w) 0 4)) /\
+  (valid_range alloc (acc p2_global w) 0 4)) /\
+  (* File "separation2.c", line 23, characters 3-78 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global y)))))) /\
+  (* File "separation2.c", line 16, characters 3-151 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global y))) /\
+    ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global y)))) /\
+    ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global y))))) /\
+  (* File "separation2.c", line 8, characters 3-164 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global y))) /\
+     ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global y)))) /\
+     ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global y)))))).
 Proof.
 intuition.
 assert (((w = u \/ w = v) \/ w = w) \/ w = m ).
@@ -358,180 +761,397 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
-  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (m: ((pointer) struct_anonymous_0_39)),
-  forall (p1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (p2_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p2_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p2_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p2_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (pp1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_33)),
-  forall (pp1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_35)),
-  forall (pp1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_37)),
-  forall (pp1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_39)),
-  forall (pp2_struct_anonymous_1_41: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_41)),
-  forall (pp2_struct_anonymous_1_43: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_43)),
-  forall (u: ((pointer) struct_anonymous_0_33)),
-  forall (u2: ((pointer) struct_anonymous_1_41)),
-  forall (v: ((pointer) struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v1_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_37: ((memory) Z struct_anonymous_0_37)),
-  forall (v2_0: ((pointer) struct_anonymous_1_43)),
-  forall (v2_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_struct_anonymous_0_37: ((memory) Z struct_anonymous_0_37)),
-  forall (w: ((pointer) struct_anonymous_0_37)),
-  forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
-                ((((((valid alloc (acc pp1_struct_anonymous_0_33 u)) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_41 u2))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_43 v2_0))) /\
-                (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (separation1 p1_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33) /\
-                (separation1 p1_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35) /\
-                (separation1 p1_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37) /\
-                (separation1 p1_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39) /\
-                (valid1_range p2_struct_anonymous_0_33 5) /\
-                (valid1_range p2_struct_anonymous_0_35 5) /\
-                (valid1_range p2_struct_anonymous_0_37 5) /\
-                (valid1_range p2_struct_anonymous_0_39 5) /\
-                (valid1_range p1_struct_anonymous_0_33 5) /\
-                (valid1_range p1_struct_anonymous_0_35 5) /\
-                (valid1_range p1_struct_anonymous_0_37 5) /\
-                (valid1_range p1_struct_anonymous_0_39 5) /\
-                (valid1 p2_struct_anonymous_0_33) /\
-                (valid1 p2_struct_anonymous_0_35) /\
-                (valid1 p2_struct_anonymous_0_37) /\
-                (valid1 p2_struct_anonymous_0_39) /\
-                (valid1 p1_struct_anonymous_0_33) /\
-                (valid1 p1_struct_anonymous_0_35) /\
-                (valid1 p1_struct_anonymous_0_37) /\
-                (valid1 p1_struct_anonymous_0_39)),
+  forall (anonymous_0PM_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (m: ((pointer) global)),
+  forall (p1_global: ((memory) ((pointer) global) global)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
+  forall (pp1_global: ((memory) ((pointer) global) global)),
+  forall (pp2_global: ((memory) ((pointer) global) global)),
+  forall (u: ((pointer) global)),
+  forall (u2: ((pointer) global)),
+  forall (v: ((pointer) global)),
+  forall (v1_global: ((memory) Z global)),
+  forall (v2_0: ((pointer) global)),
+  forall (v2_global: ((memory) Z global)),
+  forall (w: ((pointer) global)),
+  forall (HW_1: ((* File "separation2.c", line 43, characters 12-116 *)
+                 ((((((valid alloc (acc pp1_global u)) /\
+                 (valid alloc (acc pp1_global v))) /\
+                 (valid alloc (acc pp1_global w))) /\
+                 (valid alloc (acc pp1_global m))) /\
+                 (valid alloc (acc pp2_global u2))) /\
+                 (valid alloc (acc pp2_global v2_0))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))) /\
+                (valid alloc w) /\ (valid alloc v) /\
+                (~((base_addr w) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr w)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global w))))) /\
+                (valid alloc u) /\ (~((base_addr w) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr u2) = (base_addr v)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr u)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global u)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global u))))) /\
+                (valid alloc m) /\ (~((base_addr u2) = (base_addr m)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global m))))) /\
+                ~((base_addr v2_0) = (base_addr u2)) /\
+                (~((base_addr m) = (base_addr w)) /\
+                (~((base_addr w) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global w)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                (~((base_addr m) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr m) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr w)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global w))))) /\
+                (~((base_addr v2_0) = (base_addr v)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global v)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global v))))) /\
+                (~((base_addr v2_0) = (base_addr u)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr m)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global m))))) /\
+                (valid alloc v2_0) /\ (~((base_addr v) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                ~((base_addr v) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (valid alloc u2) /\ (separation1 p1_global p2_global) /\
+                (valid1_range p2_global 5) /\ (valid1_range p1_global 5) /\
+                (valid1 p2_global) /\ (valid1 p1_global)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc u) /\
-                (valid alloc (acc p1_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc p2_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_33 u))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_33 u) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_33 u) 0 4))),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
+                ((((((valid alloc u) /\ (valid alloc (acc p1_global u))) /\
+                (valid alloc (acc p2_global u))) /\
+                (valid alloc (acc pp1_global u))) /\
+                (valid_range alloc (acc p1_global u) 0 4)) /\
+                (valid_range alloc (acc p2_global u) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global0: ((memory) Z global)),
+  forall (v1_global0: ((memory) Z global)),
+  forall (v2_global0: ((memory) Z global)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_33 u) 1)) <=
-                (acc v1_struct_anonymous_0_33_0 u) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_33
-                     v2_struct_anonymous_0_33_0 (pset_singleton u)) /\
-                (not_assigns alloc v1_struct_anonymous_0_33
-                 v1_struct_anonymous_0_33_0 (pset_singleton u))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_33
-                 pp1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_33
-                 p1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc Int_Z0 Int_Z0_0
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_33 u))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_33
-                                                           u))
+                (acc intM_global0 (shift (acc p1_global u) 1)) <=
+                (acc v1_global0 u) /\
+                (((((((not_assigns alloc v2_global v2_global0
+                       (pset_singleton u)) /\
+                (not_assigns alloc v1_global v1_global0 (pset_singleton u))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_union (pset_singleton (acc pp1_global u))
+                  (pset_union (pset_range (pset_singleton (acc p2_global u))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_33
-                                                u))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global u)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   forall (HW_4: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc v) /\
-                (valid alloc (acc p1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc p2_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_35 v) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_35 v) 0 4))),
-  forall (Int_Z0_1: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
+                ((((((valid alloc v) /\ (valid alloc (acc p1_global v))) /\
+                (valid alloc (acc p2_global v))) /\
+                (valid alloc (acc pp1_global v))) /\
+                (valid_range alloc (acc p1_global v) 0 4)) /\
+                (valid_range alloc (acc p2_global v) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global1: ((memory) Z global)),
+  forall (v1_global1: ((memory) Z global)),
+  forall (v2_global1: ((memory) Z global)),
   forall (HW_5: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_1 (shift (acc p1_struct_anonymous_0_35 v) 1)) <=
-                (acc v1_struct_anonymous_0_35_0 v) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_35
-                     v2_struct_anonymous_0_35_0 (pset_singleton v)) /\
-                (not_assigns alloc v1_struct_anonymous_0_35
-                 v1_struct_anonymous_0_35_0 (pset_singleton v))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_35
-                 pp1_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_35
-                 p1_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc Int_Z0_0 Int_Z0_1
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_35 v))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_35
-                                                           v))
+                (acc intM_global1 (shift (acc p1_global v) 1)) <=
+                (acc v1_global1 v) /\
+                (((((((not_assigns alloc v2_global0 v2_global1
+                       (pset_singleton v)) /\
+                (not_assigns alloc v1_global0 v1_global1 (pset_singleton v))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global0 intM_global1
+                 (pset_union (pset_singleton (acc pp1_global v))
+                  (pset_union (pset_range (pset_singleton (acc p2_global v))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_35
-                                                v))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global v)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   forall (HW_6: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc w) /\
-                (valid alloc (acc p1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc p2_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_37 w) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_37 w) 0 4))),
-  forall (Int_Z0_2: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_37_0: ((memory) Z struct_anonymous_0_37)),
-  forall (v2_struct_anonymous_0_37_0: ((memory) Z struct_anonymous_0_37)),
+                ((((((valid alloc w) /\ (valid alloc (acc p1_global w))) /\
+                (valid alloc (acc p2_global w))) /\
+                (valid alloc (acc pp1_global w))) /\
+                (valid_range alloc (acc p1_global w) 0 4)) /\
+                (valid_range alloc (acc p2_global w) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global2: ((memory) Z global)),
+  forall (v1_global2: ((memory) Z global)),
+  forall (v2_global2: ((memory) Z global)),
   forall (HW_7: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_2 (shift (acc p1_struct_anonymous_0_37 w) 1)) <=
-                (acc v1_struct_anonymous_0_37_0 w) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_37
-                     v2_struct_anonymous_0_37_0 (pset_singleton w)) /\
-                (not_assigns alloc v1_struct_anonymous_0_37
-                 v1_struct_anonymous_0_37_0 (pset_singleton w))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_37
-                 pp1_struct_anonymous_0_37 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_37
-                 p1_struct_anonymous_0_37 pset_empty)) /\
-                (not_assigns alloc Int_Z0_1 Int_Z0_2
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_37 w))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_37
-                                                           w))
+                (acc intM_global2 (shift (acc p1_global w) 1)) <=
+                (acc v1_global2 w) /\
+                (((((((not_assigns alloc v2_global1 v2_global2
+                       (pset_singleton w)) /\
+                (not_assigns alloc v1_global1 v1_global2 (pset_singleton w))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global1 intM_global2
+                 (pset_union (pset_singleton (acc pp1_global w))
+                  (pset_union (pset_range (pset_singleton (acc p2_global w))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_37
-                                                w))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global w)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   (* File "separation2.c", line 28, characters 12-129 *)
-  ((((((valid alloc m) /\ (valid alloc (acc p1_struct_anonymous_0_39 m))) /\
-  (valid alloc (acc p2_struct_anonymous_0_39 m))) /\
-  (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-  (valid_range alloc (acc p1_struct_anonymous_0_39 m) 0 4)) /\
-  (valid_range alloc (acc p2_struct_anonymous_0_39 m) 0 4)).
+  ((((((valid alloc m) /\ (valid alloc (acc p1_global m))) /\
+  (valid alloc (acc p2_global m))) /\ (valid alloc (acc pp1_global m))) /\
+  (valid_range alloc (acc p1_global m) 0 4)) /\
+  (valid_range alloc (acc p2_global m) 0 4)) /\
+  (* File "separation2.c", line 23, characters 3-78 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global y)))))) /\
+  (* File "separation2.c", line 16, characters 3-151 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global y))) /\
+    ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global y)))) /\
+    ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global y))))) /\
+  (* File "separation2.c", line 8, characters 3-164 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global y))) /\
+     ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global y)))) /\
+     ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global y)))))).
 Proof.
 intuition.
 assert (((m = u \/ m = v) \/ m = w) \/ m = m ).
@@ -542,217 +1162,475 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
-  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (m: ((pointer) struct_anonymous_0_39)),
-  forall (p1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (p2_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p2_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p2_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p2_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (pp1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_33)),
-  forall (pp1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_35)),
-  forall (pp1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_37)),
-  forall (pp1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_39)),
-  forall (pp2_struct_anonymous_1_41: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_41)),
-  forall (pp2_struct_anonymous_1_43: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_43)),
-  forall (u: ((pointer) struct_anonymous_0_33)),
-  forall (u2: ((pointer) struct_anonymous_1_41)),
-  forall (v: ((pointer) struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v1_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_37: ((memory) Z struct_anonymous_0_37)),
-  forall (v1_struct_anonymous_0_39: ((memory) Z struct_anonymous_0_39)),
-  forall (v2_0: ((pointer) struct_anonymous_1_43)),
-  forall (v2_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_struct_anonymous_0_37: ((memory) Z struct_anonymous_0_37)),
-  forall (v2_struct_anonymous_0_39: ((memory) Z struct_anonymous_0_39)),
-  forall (w: ((pointer) struct_anonymous_0_37)),
-  forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
-                ((((((valid alloc (acc pp1_struct_anonymous_0_33 u)) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_41 u2))) /\
-                (valid alloc (acc pp2_struct_anonymous_1_43 v2_0))) /\
-                (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (separation1 p1_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33) /\
-                (separation1 p1_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35) /\
-                (separation1 p1_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37) /\
-                (separation1 p1_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39) /\
-                (valid1_range p2_struct_anonymous_0_33 5) /\
-                (valid1_range p2_struct_anonymous_0_35 5) /\
-                (valid1_range p2_struct_anonymous_0_37 5) /\
-                (valid1_range p2_struct_anonymous_0_39 5) /\
-                (valid1_range p1_struct_anonymous_0_33 5) /\
-                (valid1_range p1_struct_anonymous_0_35 5) /\
-                (valid1_range p1_struct_anonymous_0_37 5) /\
-                (valid1_range p1_struct_anonymous_0_39 5) /\
-                (valid1 p2_struct_anonymous_0_33) /\
-                (valid1 p2_struct_anonymous_0_35) /\
-                (valid1 p2_struct_anonymous_0_37) /\
-                (valid1 p2_struct_anonymous_0_39) /\
-                (valid1 p1_struct_anonymous_0_33) /\
-                (valid1 p1_struct_anonymous_0_35) /\
-                (valid1 p1_struct_anonymous_0_37) /\
-                (valid1 p1_struct_anonymous_0_39)),
+  forall (anonymous_0PM_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (m: ((pointer) global)),
+  forall (p1_global: ((memory) ((pointer) global) global)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
+  forall (pp1_global: ((memory) ((pointer) global) global)),
+  forall (pp2_global: ((memory) ((pointer) global) global)),
+  forall (u: ((pointer) global)),
+  forall (u2: ((pointer) global)),
+  forall (v: ((pointer) global)),
+  forall (v1_global: ((memory) Z global)),
+  forall (v2_0: ((pointer) global)),
+  forall (v2_global: ((memory) Z global)),
+  forall (w: ((pointer) global)),
+  forall (HW_1: ((* File "separation2.c", line 43, characters 12-116 *)
+                 ((((((valid alloc (acc pp1_global u)) /\
+                 (valid alloc (acc pp1_global v))) /\
+                 (valid alloc (acc pp1_global w))) /\
+                 (valid alloc (acc pp1_global m))) /\
+                 (valid alloc (acc pp2_global u2))) /\
+                 (valid alloc (acc pp2_global v2_0))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))) /\
+                (valid alloc w) /\ (valid alloc v) /\
+                (~((base_addr w) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr w)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global w))))) /\
+                (valid alloc u) /\ (~((base_addr w) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr u2) = (base_addr v)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr u)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global u)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global u))))) /\
+                (valid alloc m) /\ (~((base_addr u2) = (base_addr m)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global m))))) /\
+                ~((base_addr v2_0) = (base_addr u2)) /\
+                (~((base_addr m) = (base_addr w)) /\
+                (~((base_addr w) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global w)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                (~((base_addr m) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr m) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr w)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global w))))) /\
+                (~((base_addr v2_0) = (base_addr v)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global v)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global v))))) /\
+                (~((base_addr v2_0) = (base_addr u)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr m)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global m))))) /\
+                (valid alloc v2_0) /\ (~((base_addr v) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                ~((base_addr v) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (valid alloc u2) /\ (separation1 p1_global p2_global) /\
+                (valid1_range p2_global 5) /\ (valid1_range p1_global 5) /\
+                (valid1 p2_global) /\ (valid1 p1_global)),
   forall (HW_2: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc u) /\
-                (valid alloc (acc p1_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc p2_struct_anonymous_0_33 u))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_33 u))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_33 u) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_33 u) 0 4))),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
+                ((((((valid alloc u) /\ (valid alloc (acc p1_global u))) /\
+                (valid alloc (acc p2_global u))) /\
+                (valid alloc (acc pp1_global u))) /\
+                (valid_range alloc (acc p1_global u) 0 4)) /\
+                (valid_range alloc (acc p2_global u) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global0: ((memory) Z global)),
+  forall (v1_global0: ((memory) Z global)),
+  forall (v2_global0: ((memory) Z global)),
   forall (HW_3: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_0 (shift (acc p1_struct_anonymous_0_33 u) 1)) <=
-                (acc v1_struct_anonymous_0_33_0 u) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_33
-                     v2_struct_anonymous_0_33_0 (pset_singleton u)) /\
-                (not_assigns alloc v1_struct_anonymous_0_33
-                 v1_struct_anonymous_0_33_0 (pset_singleton u))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_33
-                 pp1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_33
-                 p1_struct_anonymous_0_33 pset_empty)) /\
-                (not_assigns alloc Int_Z0 Int_Z0_0
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_33 u))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_33
-                                                           u))
+                (acc intM_global0 (shift (acc p1_global u) 1)) <=
+                (acc v1_global0 u) /\
+                (((((((not_assigns alloc v2_global v2_global0
+                       (pset_singleton u)) /\
+                (not_assigns alloc v1_global v1_global0 (pset_singleton u))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_union (pset_singleton (acc pp1_global u))
+                  (pset_union (pset_range (pset_singleton (acc p2_global u))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_33
-                                                u))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global u)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   forall (HW_4: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc v) /\
-                (valid alloc (acc p1_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc p2_struct_anonymous_0_35 v))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_35 v))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_35 v) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_35 v) 0 4))),
-  forall (Int_Z0_1: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
+                ((((((valid alloc v) /\ (valid alloc (acc p1_global v))) /\
+                (valid alloc (acc p2_global v))) /\
+                (valid alloc (acc pp1_global v))) /\
+                (valid_range alloc (acc p1_global v) 0 4)) /\
+                (valid_range alloc (acc p2_global v) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global1: ((memory) Z global)),
+  forall (v1_global1: ((memory) Z global)),
+  forall (v2_global1: ((memory) Z global)),
   forall (HW_5: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_1 (shift (acc p1_struct_anonymous_0_35 v) 1)) <=
-                (acc v1_struct_anonymous_0_35_0 v) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_35
-                     v2_struct_anonymous_0_35_0 (pset_singleton v)) /\
-                (not_assigns alloc v1_struct_anonymous_0_35
-                 v1_struct_anonymous_0_35_0 (pset_singleton v))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_35
-                 pp1_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_35
-                 p1_struct_anonymous_0_35 pset_empty)) /\
-                (not_assigns alloc Int_Z0_0 Int_Z0_1
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_35 v))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_35
-                                                           v))
+                (acc intM_global1 (shift (acc p1_global v) 1)) <=
+                (acc v1_global1 v) /\
+                (((((((not_assigns alloc v2_global0 v2_global1
+                       (pset_singleton v)) /\
+                (not_assigns alloc v1_global0 v1_global1 (pset_singleton v))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global0 intM_global1
+                 (pset_union (pset_singleton (acc pp1_global v))
+                  (pset_union (pset_range (pset_singleton (acc p2_global v))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_35
-                                                v))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global v)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   forall (HW_6: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc w) /\
-                (valid alloc (acc p1_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc p2_struct_anonymous_0_37 w))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_37 w))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_37 w) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_37 w) 0 4))),
-  forall (Int_Z0_2: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_37_0: ((memory) Z struct_anonymous_0_37)),
-  forall (v2_struct_anonymous_0_37_0: ((memory) Z struct_anonymous_0_37)),
+                ((((((valid alloc w) /\ (valid alloc (acc p1_global w))) /\
+                (valid alloc (acc p2_global w))) /\
+                (valid alloc (acc pp1_global w))) /\
+                (valid_range alloc (acc p1_global w) 0 4)) /\
+                (valid_range alloc (acc p2_global w) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global2: ((memory) Z global)),
+  forall (v1_global2: ((memory) Z global)),
+  forall (v2_global2: ((memory) Z global)),
   forall (HW_7: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_2 (shift (acc p1_struct_anonymous_0_37 w) 1)) <=
-                (acc v1_struct_anonymous_0_37_0 w) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_37
-                     v2_struct_anonymous_0_37_0 (pset_singleton w)) /\
-                (not_assigns alloc v1_struct_anonymous_0_37
-                 v1_struct_anonymous_0_37_0 (pset_singleton w))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_37
-                 pp1_struct_anonymous_0_37 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_37
-                 p1_struct_anonymous_0_37 pset_empty)) /\
-                (not_assigns alloc Int_Z0_1 Int_Z0_2
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_37 w))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_37
-                                                           w))
+                (acc intM_global2 (shift (acc p1_global w) 1)) <=
+                (acc v1_global2 w) /\
+                (((((((not_assigns alloc v2_global1 v2_global2
+                       (pset_singleton w)) /\
+                (not_assigns alloc v1_global1 v1_global2 (pset_singleton w))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global1 intM_global2
+                 (pset_union (pset_singleton (acc pp1_global w))
+                  (pset_union (pset_range (pset_singleton (acc p2_global w))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_37
-                                                w))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global w)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   forall (HW_8: (* File "separation2.c", line 28, characters 12-129 *)
-                ((((((valid alloc m) /\
-                (valid alloc (acc p1_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc p2_struct_anonymous_0_39 m))) /\
-                (valid alloc (acc pp1_struct_anonymous_0_39 m))) /\
-                (valid_range alloc (acc p1_struct_anonymous_0_39 m) 0 4)) /\
-                (valid_range alloc (acc p2_struct_anonymous_0_39 m) 0 4))),
-  forall (Int_Z0_3: ((memory) Z Z0)),
-  forall (v1_struct_anonymous_0_39_0: ((memory) Z struct_anonymous_0_39)),
-  forall (v2_struct_anonymous_0_39_0: ((memory) Z struct_anonymous_0_39)),
+                ((((((valid alloc m) /\ (valid alloc (acc p1_global m))) /\
+                (valid alloc (acc p2_global m))) /\
+                (valid alloc (acc pp1_global m))) /\
+                (valid_range alloc (acc p1_global m) 0 4)) /\
+                (valid_range alloc (acc p2_global m) 0 4)) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
+  forall (intM_global3: ((memory) Z global)),
+  forall (v1_global3: ((memory) Z global)),
+  forall (v2_global3: ((memory) Z global)),
   forall (HW_9: (* File "separation2.c", line 31, characters 11-28 *)
-                (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_39 m) 1)) <=
-                (acc v1_struct_anonymous_0_39_0 m) /\
-                (((((not_assigns alloc v2_struct_anonymous_0_39
-                     v2_struct_anonymous_0_39_0 (pset_singleton m)) /\
-                (not_assigns alloc v1_struct_anonymous_0_39
-                 v1_struct_anonymous_0_39_0 (pset_singleton m))) /\
-                (not_assigns alloc pp1_struct_anonymous_0_39
-                 pp1_struct_anonymous_0_39 pset_empty)) /\
-                (not_assigns alloc p2_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39 pset_empty)) /\
-                (not_assigns alloc p1_struct_anonymous_0_39
-                 p1_struct_anonymous_0_39 pset_empty)) /\
-                (not_assigns alloc Int_Z0_2 Int_Z0_3
-                 (pset_union (pset_singleton (acc pp1_struct_anonymous_0_39 m))
-                  (pset_union (pset_range (pset_singleton (acc p2_struct_anonymous_0_39
-                                                           m))
+                (acc intM_global3 (shift (acc p1_global m) 1)) <=
+                (acc v1_global3 m) /\
+                (((((((not_assigns alloc v2_global2 v2_global3
+                       (pset_singleton m)) /\
+                (not_assigns alloc v1_global2 v1_global3 (pset_singleton m))) /\
+                (not_assigns alloc pp2_global pp2_global pset_empty)) /\
+                (not_assigns alloc pp1_global pp1_global pset_empty)) /\
+                (not_assigns alloc p2_global p2_global pset_empty)) /\
+                (not_assigns alloc p1_global p1_global pset_empty)) /\
+                (not_assigns alloc intM_global2 intM_global3
+                 (pset_union (pset_singleton (acc pp1_global m))
+                  (pset_union (pset_range (pset_singleton (acc p2_global m))
                                0 5)
-                   (pset_range (pset_singleton (acc p1_struct_anonymous_0_39
-                                                m))
-                    0 5))))),
+                   (pset_range (pset_singleton (acc p1_global m)) 0 5))))) /\
+                (* File "separation2.c", line 23, characters 3-78 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global
+                                                                  y)))))) /\
+                (* File "separation2.c", line 16, characters 3-151 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global
+                                                                 y))) /\
+                  ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global
+                                                                y)))) /\
+                  ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global
+                                                                 y))))) /\
+                (* File "separation2.c", line 8, characters 3-164 *)
+                (forall (x:((pointer) global)),
+                 (forall (y:((pointer) global)),
+                  (~(x = y) ->
+                   (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global
+                                                                  y))) /\
+                   ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global
+                                                                 y)))) /\
+                   ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global
+                                                                  y))))))),
   (* File "separation2.c", line 55, characters 4-153 *)
-  ((((exists i:Z,
-      (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_33 u) i)) <=
-      (acc v1_struct_anonymous_0_33_0 u)) /\
-  (exists i:Z, (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_35 v) i)) <=
-   (acc v1_struct_anonymous_0_35_0 v))) /\
-  (exists i:Z, (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_37 w) i)) <=
-   (acc v1_struct_anonymous_0_37_0 w))) /\
-  (exists i:Z, (acc Int_Z0_3 (shift (acc p1_struct_anonymous_0_39 m) i)) <=
-   (acc v1_struct_anonymous_0_39_0 m))).
+  ((((exists i:Z, (acc intM_global3 (shift (acc p1_global u) i)) <=
+      (acc v1_global3 u)) /\
+  (exists i:Z, (acc intM_global3 (shift (acc p1_global v) i)) <=
+   (acc v1_global3 v))) /\
+  (exists i:Z, (acc intM_global3 (shift (acc p1_global w) i)) <=
+   (acc v1_global3 w))) /\
+  (exists i:Z, (acc intM_global3 (shift (acc p1_global m) i)) <=
+   (acc v1_global3 m))) /\
+  (* File "separation2.c", line 23, characters 3-78 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     ~((base_addr (acc pp2_global x)) = (base_addr (acc pp2_global y)))))) /\
+  (* File "separation2.c", line 16, characters 3-151 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global y))) /\
+    ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global y)))) /\
+    ~((base_addr (acc pp1_global x)) = (base_addr (acc pp2_global y))))) /\
+  (* File "separation2.c", line 8, characters 3-164 *)
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~(x = y) ->
+     (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global y))) /\
+     ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global y)))) /\
+     ~((base_addr (acc pp1_global x)) = (base_addr (acc pp1_global y)))))).
 Proof.
 intuition.
 exists 1.
@@ -767,393 +1645,388 @@ Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
-  forall (A1346:Set), forall (A1347:Set), forall (A1348:Set),
-  forall (A1349:Set),
-  forall (Int_Z0: ((memory) Z Z0)),
   forall (alloc: alloc_table),
-  forall (m: ((pointer) struct_anonymous_0_39)),
-  forall (p1_struct_anonymous_0_17: ((memory) ((pointer) Z0) A1349)),
-  forall (p1_struct_anonymous_0_18: ((memory) ((pointer) Z0) A1348)),
-  forall (p1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (p2_struct_anonymous_0_17: ((memory) ((pointer) Z0) A1349)),
-  forall (p2_struct_anonymous_0_18: ((memory) ((pointer) Z0) A1348)),
-  forall (p2_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_33)),
-  forall (p2_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_35)),
-  forall (p2_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_37)),
-  forall (p2_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                    struct_anonymous_0_39)),
-  forall (pp1_struct_anonymous_0_17: ((memory) ((pointer) Z0) A1349)),
-  forall (pp1_struct_anonymous_0_18: ((memory) ((pointer) Z0) A1348)),
-  forall (pp1_struct_anonymous_0_33: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_33)),
-  forall (pp1_struct_anonymous_0_35: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_35)),
-  forall (pp1_struct_anonymous_0_37: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_37)),
-  forall (pp1_struct_anonymous_0_39: ((memory) ((pointer) Z0)
-                                     struct_anonymous_0_39)),
-  forall (pp2_struct_anonymous_1_19: ((memory) ((pointer) Z0) A1347)),
-  forall (pp2_struct_anonymous_1_21: ((memory) ((pointer) Z0) A1346)),
-  forall (pp2_struct_anonymous_1_41: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_41)),
-  forall (pp2_struct_anonymous_1_43: ((memory) ((pointer) Z0)
-                                     struct_anonymous_1_43)),
-  forall (u: ((pointer) struct_anonymous_0_33)),
-  forall (u2: ((pointer) struct_anonymous_1_41)),
-  forall (v: ((pointer) struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v1_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v1_struct_anonymous_0_37: ((memory) Z struct_anonymous_0_37)),
-  forall (v1_struct_anonymous_0_39: ((memory) Z struct_anonymous_0_39)),
-  forall (v2_0: ((pointer) struct_anonymous_1_43)),
-  forall (v2_struct_anonymous_0_33: ((memory) Z struct_anonymous_0_33)),
-  forall (v2_struct_anonymous_0_35: ((memory) Z struct_anonymous_0_35)),
-  forall (v2_struct_anonymous_0_37: ((memory) Z struct_anonymous_0_37)),
-  forall (v2_struct_anonymous_0_39: ((memory) Z struct_anonymous_0_39)),
-  forall (w: ((pointer) struct_anonymous_0_37)),
-  forall (HW_1: (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (separation1 p1_struct_anonymous_0_17
-                 p2_struct_anonymous_0_17) /\
-                (separation1 p1_struct_anonymous_0_18
-                 p2_struct_anonymous_0_18) /\
-                (separation1 p1_struct_anonymous_0_33
-                 p2_struct_anonymous_0_33) /\
-                (separation1 p1_struct_anonymous_0_35
-                 p2_struct_anonymous_0_35) /\
-                (separation1 p1_struct_anonymous_0_37
-                 p2_struct_anonymous_0_37) /\
-                (separation1 p1_struct_anonymous_0_39
-                 p2_struct_anonymous_0_39) /\
-                (valid1_range p2_struct_anonymous_0_17 5) /\
-                (valid1_range p2_struct_anonymous_0_18 5) /\
-                (valid1_range p2_struct_anonymous_0_33 5) /\
-                (valid1_range p2_struct_anonymous_0_35 5) /\
-                (valid1_range p2_struct_anonymous_0_37 5) /\
-                (valid1_range p2_struct_anonymous_0_39 5) /\
-                (valid1_range p1_struct_anonymous_0_17 5) /\
-                (valid1_range p1_struct_anonymous_0_18 5) /\
-                (valid1_range p1_struct_anonymous_0_33 5) /\
-                (valid1_range p1_struct_anonymous_0_35 5) /\
-                (valid1_range p1_struct_anonymous_0_37 5) /\
-                (valid1_range p1_struct_anonymous_0_39 5) /\
-                (valid1 p2_struct_anonymous_0_17) /\
-                (valid1 p2_struct_anonymous_0_18) /\
-                (valid1 p2_struct_anonymous_0_33) /\
-                (valid1 p2_struct_anonymous_0_35) /\
-                (valid1 p2_struct_anonymous_0_37) /\
-                (valid1 p2_struct_anonymous_0_39) /\
-                (valid1 p1_struct_anonymous_0_17) /\
-                (valid1 p1_struct_anonymous_0_18) /\
-                (valid1 p1_struct_anonymous_0_33) /\
-                (valid1 p1_struct_anonymous_0_35) /\
-                (valid1 p1_struct_anonymous_0_37) /\
-                (valid1 p1_struct_anonymous_0_39)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc p1_struct_anonymous_0_33 u)),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (HW_3: Int_Z0_0 = (upd Int_Z0 result 0)),
-  forall (result0: ((pointer) Z0)),
-  forall (HW_4: result0 = (acc p1_struct_anonymous_0_33 u)),
-  forall (result1: ((pointer) Z0)),
+  forall (anonymous_0PM_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (m: ((pointer) global)),
+  forall (p1_global: ((memory) ((pointer) global) global)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
+  forall (pp1_global: ((memory) ((pointer) global) global)),
+  forall (pp2_global: ((memory) ((pointer) global) global)),
+  forall (u: ((pointer) global)),
+  forall (u2: ((pointer) global)),
+  forall (v: ((pointer) global)),
+  forall (v1_global: ((memory) Z global)),
+  forall (v2_0: ((pointer) global)),
+  forall (v2_global: ((memory) Z global)),
+  forall (w: ((pointer) global)),
+  forall (HW_1: (valid alloc w) /\ (valid alloc v) /\
+                (~((base_addr w) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr w)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global w))))) /\
+                (valid alloc u) /\ (~((base_addr w) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global w)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                ~((base_addr w) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr u2) = (base_addr v)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global v))))) /\
+                (~((base_addr u2) = (base_addr u)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global u)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global u))))) /\
+                (valid alloc m) /\ (~((base_addr u2) = (base_addr m)) /\
+                ~((base_addr u2) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u2) = (base_addr (acc p2_global
+                                               (acc anonymous_0PM_global m))))) /\
+                ~((base_addr v2_0) = (base_addr u2)) /\
+                (~((base_addr m) = (base_addr w)) /\
+                (~((base_addr w) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr w) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global w)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global w))))) /\
+                (~((base_addr m) = (base_addr v)) /\
+                (~((base_addr v) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global v)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                (~((base_addr m) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global m)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global m))))) /\
+                ~((base_addr m) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr m) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr w)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global w)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global w))))) /\
+                (~((base_addr v2_0) = (base_addr v)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global v)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global v))))) /\
+                (~((base_addr v2_0) = (base_addr u)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global u))))) /\
+                (~((base_addr v2_0) = (base_addr m)) /\
+                ~((base_addr v2_0) = (base_addr (acc p1_global
+                                                 (acc anonymous_0PM_global m)))) /\
+                ~((base_addr v2_0) = (base_addr (acc p2_global
+                                                 (acc anonymous_0PM_global m))))) /\
+                (valid alloc v2_0) /\ (~((base_addr v) = (base_addr u)) /\
+                (~((base_addr u) = (base_addr (acc p1_global
+                                               (acc anonymous_0PM_global v)))) /\
+                ~((base_addr u) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global v))))) /\
+                ~((base_addr v) = (base_addr (acc p1_global
+                                              (acc anonymous_0PM_global u)))) /\
+                ~((base_addr v) = (base_addr (acc p2_global
+                                              (acc anonymous_0PM_global u))))) /\
+                (valid alloc u2) /\ (separation1 p1_global p2_global) /\
+                (valid1_range p2_global 5) /\ (valid1_range p1_global 5) /\
+                (valid1 p2_global) /\ (valid1 p1_global)),
+  forall (result: ((pointer) global)),
+  forall (HW_2: result = (acc p1_global u)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_3: intM_global0 = (upd intM_global result 0)),
+  forall (result0: ((pointer) global)),
+  forall (HW_4: result0 = (acc p1_global u)),
+  forall (result1: ((pointer) global)),
   forall (HW_5: result1 = (shift result0 1)),
-  forall (Int_Z0_1: ((memory) Z Z0)),
-  forall (HW_6: Int_Z0_1 = (upd Int_Z0_0 result1 0)),
-  forall (result2: ((pointer) Z0)),
-  forall (HW_7: result2 = (acc p1_struct_anonymous_0_33 u)),
-  forall (result3: ((pointer) Z0)),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_6: intM_global1 = (upd intM_global0 result1 0)),
+  forall (result2: ((pointer) global)),
+  forall (HW_7: result2 = (acc p1_global u)),
+  forall (result3: ((pointer) global)),
   forall (HW_8: result3 = (shift result2 2)),
-  forall (Int_Z0_2: ((memory) Z Z0)),
-  forall (HW_9: Int_Z0_2 = (upd Int_Z0_1 result3 0)),
-  forall (result4: ((pointer) Z0)),
-  forall (HW_10: result4 = (acc p1_struct_anonymous_0_33 u)),
-  forall (result5: ((pointer) Z0)),
+  forall (intM_global2: ((memory) Z global)),
+  forall (HW_9: intM_global2 = (upd intM_global1 result3 0)),
+  forall (result4: ((pointer) global)),
+  forall (HW_10: result4 = (acc p1_global u)),
+  forall (result5: ((pointer) global)),
   forall (HW_11: result5 = (shift result4 3)),
-  forall (Int_Z0_3: ((memory) Z Z0)),
-  forall (HW_12: Int_Z0_3 = (upd Int_Z0_2 result5 0)),
-  forall (result6: ((pointer) Z0)),
-  forall (HW_13: result6 = (acc p1_struct_anonymous_0_33 u)),
-  forall (result7: ((pointer) Z0)),
+  forall (intM_global3: ((memory) Z global)),
+  forall (HW_12: intM_global3 = (upd intM_global2 result5 0)),
+  forall (result6: ((pointer) global)),
+  forall (HW_13: result6 = (acc p1_global u)),
+  forall (result7: ((pointer) global)),
   forall (HW_14: result7 = (shift result6 4)),
-  forall (Int_Z0_4: ((memory) Z Z0)),
-  forall (HW_15: Int_Z0_4 = (upd Int_Z0_3 result7 0)),
-  forall (result8: ((pointer) Z0)),
-  forall (HW_16: result8 = (acc p2_struct_anonymous_0_33 u)),
-  forall (Int_Z0_5: ((memory) Z Z0)),
-  forall (HW_17: Int_Z0_5 = (upd Int_Z0_4 result8 0)),
-  forall (result9: ((pointer) Z0)),
-  forall (HW_18: result9 = (acc p2_struct_anonymous_0_33 u)),
-  forall (result10: ((pointer) Z0)),
+  forall (intM_global4: ((memory) Z global)),
+  forall (HW_15: intM_global4 = (upd intM_global3 result7 0)),
+  forall (result8: ((pointer) global)),
+  forall (HW_16: result8 = (acc p2_global u)),
+  forall (intM_global5: ((memory) Z global)),
+  forall (HW_17: intM_global5 = (upd intM_global4 result8 0)),
+  forall (result9: ((pointer) global)),
+  forall (HW_18: result9 = (acc p2_global u)),
+  forall (result10: ((pointer) global)),
   forall (HW_19: result10 = (shift result9 1)),
-  forall (Int_Z0_6: ((memory) Z Z0)),
-  forall (HW_20: Int_Z0_6 = (upd Int_Z0_5 result10 0)),
-  forall (result11: ((pointer) Z0)),
-  forall (HW_21: result11 = (acc p2_struct_anonymous_0_33 u)),
-  forall (result12: ((pointer) Z0)),
+  forall (intM_global6: ((memory) Z global)),
+  forall (HW_20: intM_global6 = (upd intM_global5 result10 0)),
+  forall (result11: ((pointer) global)),
+  forall (HW_21: result11 = (acc p2_global u)),
+  forall (result12: ((pointer) global)),
   forall (HW_22: result12 = (shift result11 2)),
-  forall (Int_Z0_7: ((memory) Z Z0)),
-  forall (HW_23: Int_Z0_7 = (upd Int_Z0_6 result12 0)),
-  forall (result13: ((pointer) Z0)),
-  forall (HW_24: result13 = (acc p2_struct_anonymous_0_33 u)),
-  forall (result14: ((pointer) Z0)),
+  forall (intM_global7: ((memory) Z global)),
+  forall (HW_23: intM_global7 = (upd intM_global6 result12 0)),
+  forall (result13: ((pointer) global)),
+  forall (HW_24: result13 = (acc p2_global u)),
+  forall (result14: ((pointer) global)),
   forall (HW_25: result14 = (shift result13 3)),
-  forall (Int_Z0_8: ((memory) Z Z0)),
-  forall (HW_26: Int_Z0_8 = (upd Int_Z0_7 result14 0)),
-  forall (result15: ((pointer) Z0)),
-  forall (HW_27: result15 = (acc p2_struct_anonymous_0_33 u)),
-  forall (result16: ((pointer) Z0)),
+  forall (intM_global8: ((memory) Z global)),
+  forall (HW_26: intM_global8 = (upd intM_global7 result14 0)),
+  forall (result15: ((pointer) global)),
+  forall (HW_27: result15 = (acc p2_global u)),
+  forall (result16: ((pointer) global)),
   forall (HW_28: result16 = (shift result15 4)),
-  forall (Int_Z0_9: ((memory) Z Z0)),
-  forall (HW_29: Int_Z0_9 = (upd Int_Z0_8 result16 0)),
-  forall (v1_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
-  forall (HW_30: v1_struct_anonymous_0_33_0 = (upd v1_struct_anonymous_0_33 u
-                                               0)),
-  forall (v2_struct_anonymous_0_33_0: ((memory) Z struct_anonymous_0_33)),
-  forall (HW_31: v2_struct_anonymous_0_33_0 = (upd v2_struct_anonymous_0_33 u
-                                               0)),
-  forall (pp1_struct_anonymous_0_33_0: ((memory) ((pointer) Z0)
-                                       struct_anonymous_0_33)),
-  forall (HW_32: pp1_struct_anonymous_0_33_0 = (upd pp1_struct_anonymous_0_33
-                                                u null)),
-  forall (result17: ((pointer) Z0)),
-  forall (HW_33: result17 = (acc p1_struct_anonymous_0_35 v)),
-  forall (Int_Z0_10: ((memory) Z Z0)),
-  forall (HW_34: Int_Z0_10 = (upd Int_Z0_9 result17 0)),
-  forall (result18: ((pointer) Z0)),
-  forall (HW_35: result18 = (acc p1_struct_anonymous_0_35 v)),
-  forall (result19: ((pointer) Z0)),
+  forall (intM_global9: ((memory) Z global)),
+  forall (HW_29: intM_global9 = (upd intM_global8 result16 0)),
+  forall (v1_global0: ((memory) Z global)),
+  forall (HW_30: v1_global0 = (upd v1_global u 0)),
+  forall (v2_global0: ((memory) Z global)),
+  forall (HW_31: v2_global0 = (upd v2_global u 0)),
+  forall (pp1_global0: ((memory) ((pointer) global) global)),
+  forall (HW_32: pp1_global0 = (upd pp1_global u null)),
+  forall (result17: ((pointer) global)),
+  forall (HW_33: result17 = (acc p1_global v)),
+  forall (intM_global10: ((memory) Z global)),
+  forall (HW_34: intM_global10 = (upd intM_global9 result17 0)),
+  forall (result18: ((pointer) global)),
+  forall (HW_35: result18 = (acc p1_global v)),
+  forall (result19: ((pointer) global)),
   forall (HW_36: result19 = (shift result18 1)),
-  forall (Int_Z0_11: ((memory) Z Z0)),
-  forall (HW_37: Int_Z0_11 = (upd Int_Z0_10 result19 0)),
-  forall (result20: ((pointer) Z0)),
-  forall (HW_38: result20 = (acc p1_struct_anonymous_0_35 v)),
-  forall (result21: ((pointer) Z0)),
+  forall (intM_global11: ((memory) Z global)),
+  forall (HW_37: intM_global11 = (upd intM_global10 result19 0)),
+  forall (result20: ((pointer) global)),
+  forall (HW_38: result20 = (acc p1_global v)),
+  forall (result21: ((pointer) global)),
   forall (HW_39: result21 = (shift result20 2)),
-  forall (Int_Z0_12: ((memory) Z Z0)),
-  forall (HW_40: Int_Z0_12 = (upd Int_Z0_11 result21 0)),
-  forall (result22: ((pointer) Z0)),
-  forall (HW_41: result22 = (acc p1_struct_anonymous_0_35 v)),
-  forall (result23: ((pointer) Z0)),
+  forall (intM_global12: ((memory) Z global)),
+  forall (HW_40: intM_global12 = (upd intM_global11 result21 0)),
+  forall (result22: ((pointer) global)),
+  forall (HW_41: result22 = (acc p1_global v)),
+  forall (result23: ((pointer) global)),
   forall (HW_42: result23 = (shift result22 3)),
-  forall (Int_Z0_13: ((memory) Z Z0)),
-  forall (HW_43: Int_Z0_13 = (upd Int_Z0_12 result23 0)),
-  forall (result24: ((pointer) Z0)),
-  forall (HW_44: result24 = (acc p1_struct_anonymous_0_35 v)),
-  forall (result25: ((pointer) Z0)),
+  forall (intM_global13: ((memory) Z global)),
+  forall (HW_43: intM_global13 = (upd intM_global12 result23 0)),
+  forall (result24: ((pointer) global)),
+  forall (HW_44: result24 = (acc p1_global v)),
+  forall (result25: ((pointer) global)),
   forall (HW_45: result25 = (shift result24 4)),
-  forall (Int_Z0_14: ((memory) Z Z0)),
-  forall (HW_46: Int_Z0_14 = (upd Int_Z0_13 result25 0)),
-  forall (result26: ((pointer) Z0)),
-  forall (HW_47: result26 = (acc p2_struct_anonymous_0_35 v)),
-  forall (Int_Z0_15: ((memory) Z Z0)),
-  forall (HW_48: Int_Z0_15 = (upd Int_Z0_14 result26 0)),
-  forall (result27: ((pointer) Z0)),
-  forall (HW_49: result27 = (acc p2_struct_anonymous_0_35 v)),
-  forall (result28: ((pointer) Z0)),
+  forall (intM_global14: ((memory) Z global)),
+  forall (HW_46: intM_global14 = (upd intM_global13 result25 0)),
+  forall (result26: ((pointer) global)),
+  forall (HW_47: result26 = (acc p2_global v)),
+  forall (intM_global15: ((memory) Z global)),
+  forall (HW_48: intM_global15 = (upd intM_global14 result26 0)),
+  forall (result27: ((pointer) global)),
+  forall (HW_49: result27 = (acc p2_global v)),
+  forall (result28: ((pointer) global)),
   forall (HW_50: result28 = (shift result27 1)),
-  forall (Int_Z0_16: ((memory) Z Z0)),
-  forall (HW_51: Int_Z0_16 = (upd Int_Z0_15 result28 0)),
-  forall (result29: ((pointer) Z0)),
-  forall (HW_52: result29 = (acc p2_struct_anonymous_0_35 v)),
-  forall (result30: ((pointer) Z0)),
+  forall (intM_global16: ((memory) Z global)),
+  forall (HW_51: intM_global16 = (upd intM_global15 result28 0)),
+  forall (result29: ((pointer) global)),
+  forall (HW_52: result29 = (acc p2_global v)),
+  forall (result30: ((pointer) global)),
   forall (HW_53: result30 = (shift result29 2)),
-  forall (Int_Z0_17: ((memory) Z Z0)),
-  forall (HW_54: Int_Z0_17 = (upd Int_Z0_16 result30 0)),
-  forall (result31: ((pointer) Z0)),
-  forall (HW_55: result31 = (acc p2_struct_anonymous_0_35 v)),
-  forall (result32: ((pointer) Z0)),
+  forall (intM_global17: ((memory) Z global)),
+  forall (HW_54: intM_global17 = (upd intM_global16 result30 0)),
+  forall (result31: ((pointer) global)),
+  forall (HW_55: result31 = (acc p2_global v)),
+  forall (result32: ((pointer) global)),
   forall (HW_56: result32 = (shift result31 3)),
-  forall (Int_Z0_18: ((memory) Z Z0)),
-  forall (HW_57: Int_Z0_18 = (upd Int_Z0_17 result32 0)),
-  forall (result33: ((pointer) Z0)),
-  forall (HW_58: result33 = (acc p2_struct_anonymous_0_35 v)),
-  forall (result34: ((pointer) Z0)),
+  forall (intM_global18: ((memory) Z global)),
+  forall (HW_57: intM_global18 = (upd intM_global17 result32 0)),
+  forall (result33: ((pointer) global)),
+  forall (HW_58: result33 = (acc p2_global v)),
+  forall (result34: ((pointer) global)),
   forall (HW_59: result34 = (shift result33 4)),
-  forall (Int_Z0_19: ((memory) Z Z0)),
-  forall (HW_60: Int_Z0_19 = (upd Int_Z0_18 result34 0)),
-  forall (v1_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
-  forall (HW_61: v1_struct_anonymous_0_35_0 = (upd v1_struct_anonymous_0_35 v
-                                               0)),
-  forall (v2_struct_anonymous_0_35_0: ((memory) Z struct_anonymous_0_35)),
-  forall (HW_62: v2_struct_anonymous_0_35_0 = (upd v2_struct_anonymous_0_35 v
-                                               0)),
-  forall (pp1_struct_anonymous_0_35_0: ((memory) ((pointer) Z0)
-                                       struct_anonymous_0_35)),
-  forall (HW_63: pp1_struct_anonymous_0_35_0 = (upd pp1_struct_anonymous_0_35
-                                                v null)),
-  forall (result35: ((pointer) Z0)),
-  forall (HW_64: result35 = (acc p1_struct_anonymous_0_37 w)),
-  forall (Int_Z0_20: ((memory) Z Z0)),
-  forall (HW_65: Int_Z0_20 = (upd Int_Z0_19 result35 0)),
-  forall (result36: ((pointer) Z0)),
-  forall (HW_66: result36 = (acc p1_struct_anonymous_0_37 w)),
-  forall (result37: ((pointer) Z0)),
+  forall (intM_global19: ((memory) Z global)),
+  forall (HW_60: intM_global19 = (upd intM_global18 result34 0)),
+  forall (v1_global1: ((memory) Z global)),
+  forall (HW_61: v1_global1 = (upd v1_global0 v 0)),
+  forall (v2_global1: ((memory) Z global)),
+  forall (HW_62: v2_global1 = (upd v2_global0 v 0)),
+  forall (pp1_global1: ((memory) ((pointer) global) global)),
+  forall (HW_63: pp1_global1 = (upd pp1_global0 v null)),
+  forall (result35: ((pointer) global)),
+  forall (HW_64: result35 = (acc p1_global w)),
+  forall (intM_global20: ((memory) Z global)),
+  forall (HW_65: intM_global20 = (upd intM_global19 result35 0)),
+  forall (result36: ((pointer) global)),
+  forall (HW_66: result36 = (acc p1_global w)),
+  forall (result37: ((pointer) global)),
   forall (HW_67: result37 = (shift result36 1)),
-  forall (Int_Z0_21: ((memory) Z Z0)),
-  forall (HW_68: Int_Z0_21 = (upd Int_Z0_20 result37 0)),
-  forall (result38: ((pointer) Z0)),
-  forall (HW_69: result38 = (acc p1_struct_anonymous_0_37 w)),
-  forall (result39: ((pointer) Z0)),
+  forall (intM_global21: ((memory) Z global)),
+  forall (HW_68: intM_global21 = (upd intM_global20 result37 0)),
+  forall (result38: ((pointer) global)),
+  forall (HW_69: result38 = (acc p1_global w)),
+  forall (result39: ((pointer) global)),
   forall (HW_70: result39 = (shift result38 2)),
-  forall (Int_Z0_22: ((memory) Z Z0)),
-  forall (HW_71: Int_Z0_22 = (upd Int_Z0_21 result39 0)),
-  forall (result40: ((pointer) Z0)),
-  forall (HW_72: result40 = (acc p1_struct_anonymous_0_37 w)),
-  forall (result41: ((pointer) Z0)),
+  forall (intM_global22: ((memory) Z global)),
+  forall (HW_71: intM_global22 = (upd intM_global21 result39 0)),
+  forall (result40: ((pointer) global)),
+  forall (HW_72: result40 = (acc p1_global w)),
+  forall (result41: ((pointer) global)),
   forall (HW_73: result41 = (shift result40 3)),
-  forall (Int_Z0_23: ((memory) Z Z0)),
-  forall (HW_74: Int_Z0_23 = (upd Int_Z0_22 result41 0)),
-  forall (result42: ((pointer) Z0)),
-  forall (HW_75: result42 = (acc p1_struct_anonymous_0_37 w)),
-  forall (result43: ((pointer) Z0)),
+  forall (intM_global23: ((memory) Z global)),
+  forall (HW_74: intM_global23 = (upd intM_global22 result41 0)),
+  forall (result42: ((pointer) global)),
+  forall (HW_75: result42 = (acc p1_global w)),
+  forall (result43: ((pointer) global)),
   forall (HW_76: result43 = (shift result42 4)),
-  forall (Int_Z0_24: ((memory) Z Z0)),
-  forall (HW_77: Int_Z0_24 = (upd Int_Z0_23 result43 0)),
-  forall (result44: ((pointer) Z0)),
-  forall (HW_78: result44 = (acc p2_struct_anonymous_0_37 w)),
-  forall (Int_Z0_25: ((memory) Z Z0)),
-  forall (HW_79: Int_Z0_25 = (upd Int_Z0_24 result44 0)),
-  forall (result45: ((pointer) Z0)),
-  forall (HW_80: result45 = (acc p2_struct_anonymous_0_37 w)),
-  forall (result46: ((pointer) Z0)),
+  forall (intM_global24: ((memory) Z global)),
+  forall (HW_77: intM_global24 = (upd intM_global23 result43 0)),
+  forall (result44: ((pointer) global)),
+  forall (HW_78: result44 = (acc p2_global w)),
+  forall (intM_global25: ((memory) Z global)),
+  forall (HW_79: intM_global25 = (upd intM_global24 result44 0)),
+  forall (result45: ((pointer) global)),
+  forall (HW_80: result45 = (acc p2_global w)),
+  forall (result46: ((pointer) global)),
   forall (HW_81: result46 = (shift result45 1)),
-  forall (Int_Z0_26: ((memory) Z Z0)),
-  forall (HW_82: Int_Z0_26 = (upd Int_Z0_25 result46 0)),
-  forall (result47: ((pointer) Z0)),
-  forall (HW_83: result47 = (acc p2_struct_anonymous_0_37 w)),
-  forall (result48: ((pointer) Z0)),
+  forall (intM_global26: ((memory) Z global)),
+  forall (HW_82: intM_global26 = (upd intM_global25 result46 0)),
+  forall (result47: ((pointer) global)),
+  forall (HW_83: result47 = (acc p2_global w)),
+  forall (result48: ((pointer) global)),
   forall (HW_84: result48 = (shift result47 2)),
-  forall (Int_Z0_27: ((memory) Z Z0)),
-  forall (HW_85: Int_Z0_27 = (upd Int_Z0_26 result48 0)),
-  forall (result49: ((pointer) Z0)),
-  forall (HW_86: result49 = (acc p2_struct_anonymous_0_37 w)),
-  forall (result50: ((pointer) Z0)),
+  forall (intM_global27: ((memory) Z global)),
+  forall (HW_85: intM_global27 = (upd intM_global26 result48 0)),
+  forall (result49: ((pointer) global)),
+  forall (HW_86: result49 = (acc p2_global w)),
+  forall (result50: ((pointer) global)),
   forall (HW_87: result50 = (shift result49 3)),
-  forall (Int_Z0_28: ((memory) Z Z0)),
-  forall (HW_88: Int_Z0_28 = (upd Int_Z0_27 result50 0)),
-  forall (result51: ((pointer) Z0)),
-  forall (HW_89: result51 = (acc p2_struct_anonymous_0_37 w)),
-  forall (result52: ((pointer) Z0)),
+  forall (intM_global28: ((memory) Z global)),
+  forall (HW_88: intM_global28 = (upd intM_global27 result50 0)),
+  forall (result51: ((pointer) global)),
+  forall (HW_89: result51 = (acc p2_global w)),
+  forall (result52: ((pointer) global)),
   forall (HW_90: result52 = (shift result51 4)),
-  forall (Int_Z0_29: ((memory) Z Z0)),
-  forall (HW_91: Int_Z0_29 = (upd Int_Z0_28 result52 0)),
-  forall (v1_struct_anonymous_0_37_0: ((memory) Z struct_anonymous_0_37)),
-  forall (HW_92: v1_struct_anonymous_0_37_0 = (upd v1_struct_anonymous_0_37 w
-                                               0)),
-  forall (v2_struct_anonymous_0_37_0: ((memory) Z struct_anonymous_0_37)),
-  forall (HW_93: v2_struct_anonymous_0_37_0 = (upd v2_struct_anonymous_0_37 w
-                                               0)),
-  forall (pp1_struct_anonymous_0_37_0: ((memory) ((pointer) Z0)
-                                       struct_anonymous_0_37)),
-  forall (HW_94: pp1_struct_anonymous_0_37_0 = (upd pp1_struct_anonymous_0_37
-                                                w null)),
-  forall (result53: ((pointer) Z0)),
-  forall (HW_95: result53 = (acc p1_struct_anonymous_0_39 m)),
-  forall (Int_Z0_30: ((memory) Z Z0)),
-  forall (HW_96: Int_Z0_30 = (upd Int_Z0_29 result53 0)),
-  forall (result54: ((pointer) Z0)),
-  forall (HW_97: result54 = (acc p1_struct_anonymous_0_39 m)),
-  forall (result55: ((pointer) Z0)),
+  forall (intM_global29: ((memory) Z global)),
+  forall (HW_91: intM_global29 = (upd intM_global28 result52 0)),
+  forall (v1_global2: ((memory) Z global)),
+  forall (HW_92: v1_global2 = (upd v1_global1 w 0)),
+  forall (v2_global2: ((memory) Z global)),
+  forall (HW_93: v2_global2 = (upd v2_global1 w 0)),
+  forall (pp1_global2: ((memory) ((pointer) global) global)),
+  forall (HW_94: pp1_global2 = (upd pp1_global1 w null)),
+  forall (result53: ((pointer) global)),
+  forall (HW_95: result53 = (acc p1_global m)),
+  forall (intM_global30: ((memory) Z global)),
+  forall (HW_96: intM_global30 = (upd intM_global29 result53 0)),
+  forall (result54: ((pointer) global)),
+  forall (HW_97: result54 = (acc p1_global m)),
+  forall (result55: ((pointer) global)),
   forall (HW_98: result55 = (shift result54 1)),
-  forall (Int_Z0_31: ((memory) Z Z0)),
-  forall (HW_99: Int_Z0_31 = (upd Int_Z0_30 result55 0)),
-  forall (result56: ((pointer) Z0)),
-  forall (HW_100: result56 = (acc p1_struct_anonymous_0_39 m)),
-  forall (result57: ((pointer) Z0)),
+  forall (intM_global31: ((memory) Z global)),
+  forall (HW_99: intM_global31 = (upd intM_global30 result55 0)),
+  forall (result56: ((pointer) global)),
+  forall (HW_100: result56 = (acc p1_global m)),
+  forall (result57: ((pointer) global)),
   forall (HW_101: result57 = (shift result56 2)),
-  forall (Int_Z0_32: ((memory) Z Z0)),
-  forall (HW_102: Int_Z0_32 = (upd Int_Z0_31 result57 0)),
-  forall (result58: ((pointer) Z0)),
-  forall (HW_103: result58 = (acc p1_struct_anonymous_0_39 m)),
-  forall (result59: ((pointer) Z0)),
+  forall (intM_global32: ((memory) Z global)),
+  forall (HW_102: intM_global32 = (upd intM_global31 result57 0)),
+  forall (result58: ((pointer) global)),
+  forall (HW_103: result58 = (acc p1_global m)),
+  forall (result59: ((pointer) global)),
   forall (HW_104: result59 = (shift result58 3)),
-  forall (Int_Z0_33: ((memory) Z Z0)),
-  forall (HW_105: Int_Z0_33 = (upd Int_Z0_32 result59 0)),
-  forall (result60: ((pointer) Z0)),
-  forall (HW_106: result60 = (acc p1_struct_anonymous_0_39 m)),
-  forall (result61: ((pointer) Z0)),
+  forall (intM_global33: ((memory) Z global)),
+  forall (HW_105: intM_global33 = (upd intM_global32 result59 0)),
+  forall (result60: ((pointer) global)),
+  forall (HW_106: result60 = (acc p1_global m)),
+  forall (result61: ((pointer) global)),
   forall (HW_107: result61 = (shift result60 4)),
-  forall (Int_Z0_34: ((memory) Z Z0)),
-  forall (HW_108: Int_Z0_34 = (upd Int_Z0_33 result61 0)),
-  forall (result62: ((pointer) Z0)),
-  forall (HW_109: result62 = (acc p2_struct_anonymous_0_39 m)),
-  forall (Int_Z0_35: ((memory) Z Z0)),
-  forall (HW_110: Int_Z0_35 = (upd Int_Z0_34 result62 0)),
-  forall (result63: ((pointer) Z0)),
-  forall (HW_111: result63 = (acc p2_struct_anonymous_0_39 m)),
-  forall (result64: ((pointer) Z0)),
+  forall (intM_global34: ((memory) Z global)),
+  forall (HW_108: intM_global34 = (upd intM_global33 result61 0)),
+  forall (result62: ((pointer) global)),
+  forall (HW_109: result62 = (acc p2_global m)),
+  forall (intM_global35: ((memory) Z global)),
+  forall (HW_110: intM_global35 = (upd intM_global34 result62 0)),
+  forall (result63: ((pointer) global)),
+  forall (HW_111: result63 = (acc p2_global m)),
+  forall (result64: ((pointer) global)),
   forall (HW_112: result64 = (shift result63 1)),
-  forall (Int_Z0_36: ((memory) Z Z0)),
-  forall (HW_113: Int_Z0_36 = (upd Int_Z0_35 result64 0)),
-  forall (result65: ((pointer) Z0)),
-  forall (HW_114: result65 = (acc p2_struct_anonymous_0_39 m)),
-  forall (result66: ((pointer) Z0)),
+  forall (intM_global36: ((memory) Z global)),
+  forall (HW_113: intM_global36 = (upd intM_global35 result64 0)),
+  forall (result65: ((pointer) global)),
+  forall (HW_114: result65 = (acc p2_global m)),
+  forall (result66: ((pointer) global)),
   forall (HW_115: result66 = (shift result65 2)),
-  forall (Int_Z0_37: ((memory) Z Z0)),
-  forall (HW_116: Int_Z0_37 = (upd Int_Z0_36 result66 0)),
-  forall (result67: ((pointer) Z0)),
-  forall (HW_117: result67 = (acc p2_struct_anonymous_0_39 m)),
-  forall (result68: ((pointer) Z0)),
+  forall (intM_global37: ((memory) Z global)),
+  forall (HW_116: intM_global37 = (upd intM_global36 result66 0)),
+  forall (result67: ((pointer) global)),
+  forall (HW_117: result67 = (acc p2_global m)),
+  forall (result68: ((pointer) global)),
   forall (HW_118: result68 = (shift result67 3)),
-  forall (Int_Z0_38: ((memory) Z Z0)),
-  forall (HW_119: Int_Z0_38 = (upd Int_Z0_37 result68 0)),
-  forall (result69: ((pointer) Z0)),
-  forall (HW_120: result69 = (acc p2_struct_anonymous_0_39 m)),
-  forall (result70: ((pointer) Z0)),
+  forall (intM_global38: ((memory) Z global)),
+  forall (HW_119: intM_global38 = (upd intM_global37 result68 0)),
+  forall (result69: ((pointer) global)),
+  forall (HW_120: result69 = (acc p2_global m)),
+  forall (result70: ((pointer) global)),
   forall (HW_121: result70 = (shift result69 4)),
-  forall (Int_Z0_39: ((memory) Z Z0)),
-  forall (HW_122: Int_Z0_39 = (upd Int_Z0_38 result70 0)),
-  forall (v1_struct_anonymous_0_39_0: ((memory) Z struct_anonymous_0_39)),
-  forall (HW_123: v1_struct_anonymous_0_39_0 = (upd v1_struct_anonymous_0_39
-                                                m 0)),
-  forall (v2_struct_anonymous_0_39_0: ((memory) Z struct_anonymous_0_39)),
-  forall (HW_124: v2_struct_anonymous_0_39_0 = (upd v2_struct_anonymous_0_39
-                                                m 0)),
-  forall (pp1_struct_anonymous_0_39_0: ((memory) ((pointer) Z0)
-                                       struct_anonymous_0_39)),
-  forall (HW_125: pp1_struct_anonymous_0_39_0 = (upd pp1_struct_anonymous_0_39
-                                                 m null)),
-  forall (pp2_struct_anonymous_1_41_0: ((memory) ((pointer) Z0)
-                                       struct_anonymous_1_41)),
-  forall (HW_126: pp2_struct_anonymous_1_41_0 = (upd pp2_struct_anonymous_1_41
-                                                 u2 null)),
-  forall (pp2_struct_anonymous_1_43_0: ((memory) ((pointer) Z0)
-                                       struct_anonymous_1_43)),
-  forall (HW_127: pp2_struct_anonymous_1_43_0 = (upd pp2_struct_anonymous_1_43
-                                                 v2_0 null)),
+  forall (intM_global39: ((memory) Z global)),
+  forall (HW_122: intM_global39 = (upd intM_global38 result70 0)),
+  forall (v1_global3: ((memory) Z global)),
+  forall (HW_123: v1_global3 = (upd v1_global2 m 0)),
+  forall (v2_global3: ((memory) Z global)),
+  forall (HW_124: v2_global3 = (upd v2_global2 m 0)),
+  forall (pp1_global3: ((memory) ((pointer) global) global)),
+  forall (HW_125: pp1_global3 = (upd pp1_global2 m null)),
+  forall (pp2_global0: ((memory) ((pointer) global) global)),
+  forall (HW_126: pp2_global0 = (upd pp2_global u2 null)),
+  forall (pp2_global1: ((memory) ((pointer) global) global)),
+  forall (HW_127: pp2_global1 = (upd pp2_global0 v2_0 null)),
   (* File "separation2.c", line 8, characters 3-164 *)
-  ((forall (x:((pointer) A1349)),
-    (forall (y:((pointer) A1349)),
+  ((forall (x:((pointer) global)),
+    (forall (y:((pointer) global)),
      (~(x = y) ->
-      (~((base_addr (acc p1_struct_anonymous_0_17 x)) = (base_addr (acc pp1_struct_anonymous_0_17
-                                                                    y))) /\
-      ~((base_addr (acc p2_struct_anonymous_0_17 x)) = (base_addr (acc pp1_struct_anonymous_0_17
-                                                                   y)))) /\
-      ~((base_addr (acc pp1_struct_anonymous_0_17 x)) = (base_addr (acc pp1_struct_anonymous_0_17
-                                                                    y)))))) /\
-  (forall (x:((pointer) A1348)),
-   (forall (y:((pointer) A1347)),
-    (~((base_addr (acc p1_struct_anonymous_0_18 x)) = (base_addr (acc pp2_struct_anonymous_1_19
-                                                                  y))) /\
-    ~((base_addr (acc p2_struct_anonymous_0_18 x)) = (base_addr (acc pp2_struct_anonymous_1_19
-                                                                 y)))) /\
-    ~((base_addr (acc pp1_struct_anonymous_0_18 x)) = (base_addr (acc pp2_struct_anonymous_1_19
-                                                                  y))))) /\
-  (forall (x:((pointer) A1346)),
-   (forall (y:((pointer) A1346)),
+      (~((base_addr (acc p1_global x)) = (base_addr (acc pp1_global3 y))) /\
+      ~((base_addr (acc p2_global x)) = (base_addr (acc pp1_global3 y)))) /\
+      ~((base_addr (acc pp1_global3 x)) = (base_addr (acc pp1_global3 y)))))) /\
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
+    (~((base_addr (acc p1_global x)) = (base_addr (acc pp2_global1 y))) /\
+    ~((base_addr (acc p2_global x)) = (base_addr (acc pp2_global1 y)))) /\
+    ~((base_addr (acc pp1_global3 x)) = (base_addr (acc pp2_global1 y))))) /\
+  (forall (x:((pointer) global)),
+   (forall (y:((pointer) global)),
     (~(x = y) ->
-     ~((base_addr (acc pp2_struct_anonymous_1_21 x)) = (base_addr (acc pp2_struct_anonymous_1_21
-                                                                   y))))))).
+     ~((base_addr (acc pp2_global1 x)) = (base_addr (acc pp2_global1 y))))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

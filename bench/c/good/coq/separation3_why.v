@@ -5,24 +5,38 @@ Require Export separation3_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
-  forall (Int_Z0: ((memory) Z Z0)),
+  forall (LPM_global: ((memory) ((pointer) global) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (b_struct_S_3: ((memory) ((pointer) Z0) struct_S_3)),
-  forall (l: ((pointer) struct_L_12)),
-  forall (p_struct_L_12: ((memory) ((pointer) struct_S_3) struct_L_12)),
-  forall (s0: ((pointer) struct_S_3)),
+  forall (b_global: ((memory) ((pointer) global) global)),
+  forall (c_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (l: ((pointer) global)),
+  forall (p_global: ((memory) ((pointer) global) global)),
+  forall (q_global: ((memory) ((pointer) global) global)),
+  forall (r_global: ((memory) ((pointer) global) global)),
+  forall (s0: ((pointer) global)),
   forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
-                (valid1 b_struct_S_3) /\ (valid1_range b_struct_S_3 5)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc b_struct_S_3 s0)),
-  forall (result0: ((pointer) Z0)),
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q_global
+                                                (acc LPM_global l)))) /\
+                ~((base_addr s0) = (base_addr (acc r_global
+                                               (acc LPM_global l))))) /\
+                ~((base_addr l) = (base_addr (acc b_global
+                                              (acc SPM_global s0)))) /\
+                ~((base_addr l) = (base_addr (acc c_global
+                                              (acc SPM_global s0))))) /\
+                (valid1 b_global) /\ (valid1_range b_global 5)),
+  forall (result: ((pointer) global)),
+  forall (HW_2: result = (acc b_global s0)),
+  forall (result0: ((pointer) global)),
   forall (HW_3: result0 = (shift result 2)),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: Int_Z0_0 = (upd Int_Z0 result0 1)),
-  forall (p_struct_L_12_0: ((memory) ((pointer) struct_S_3) struct_L_12)),
-  forall (HW_5: p_struct_L_12_0 = (upd p_struct_L_12 l s0)),
-  forall (result1: ((pointer) struct_S_3)),
-  forall (HW_6: result1 = (acc p_struct_L_12_0 l)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_4: intM_global0 = (upd intM_global result0 1)),
+  forall (p_global0: ((memory) ((pointer) global) global)),
+  forall (HW_5: p_global0 = (upd p_global l s0)),
+  forall (result1: ((pointer) global)),
+  forall (HW_6: result1 = (acc p_global0 l)),
   (valid alloc result1).
 Proof.
 intuition.
@@ -30,31 +44,45 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
-  forall (Int_Z0: ((memory) Z Z0)),
+  forall (LPM_global: ((memory) ((pointer) global) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (b_struct_S_3: ((memory) ((pointer) Z0) struct_S_3)),
-  forall (l: ((pointer) struct_L_12)),
-  forall (p_struct_L_12: ((memory) ((pointer) struct_S_3) struct_L_12)),
-  forall (s0: ((pointer) struct_S_3)),
+  forall (b_global: ((memory) ((pointer) global) global)),
+  forall (c_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (l: ((pointer) global)),
+  forall (p_global: ((memory) ((pointer) global) global)),
+  forall (q_global: ((memory) ((pointer) global) global)),
+  forall (r_global: ((memory) ((pointer) global) global)),
+  forall (s0: ((pointer) global)),
   forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
-                (valid1 b_struct_S_3) /\ (valid1_range b_struct_S_3 5)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc b_struct_S_3 s0)),
-  forall (result0: ((pointer) Z0)),
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q_global
+                                                (acc LPM_global l)))) /\
+                ~((base_addr s0) = (base_addr (acc r_global
+                                               (acc LPM_global l))))) /\
+                ~((base_addr l) = (base_addr (acc b_global
+                                              (acc SPM_global s0)))) /\
+                ~((base_addr l) = (base_addr (acc c_global
+                                              (acc SPM_global s0))))) /\
+                (valid1 b_global) /\ (valid1_range b_global 5)),
+  forall (result: ((pointer) global)),
+  forall (HW_2: result = (acc b_global s0)),
+  forall (result0: ((pointer) global)),
   forall (HW_3: result0 = (shift result 2)),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: Int_Z0_0 = (upd Int_Z0 result0 1)),
-  forall (p_struct_L_12_0: ((memory) ((pointer) struct_S_3) struct_L_12)),
-  forall (HW_5: p_struct_L_12_0 = (upd p_struct_L_12 l s0)),
-  forall (result1: ((pointer) struct_S_3)),
-  forall (HW_6: result1 = (acc p_struct_L_12_0 l)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_4: intM_global0 = (upd intM_global result0 1)),
+  forall (p_global0: ((memory) ((pointer) global) global)),
+  forall (HW_5: p_global0 = (upd p_global l s0)),
+  forall (result1: ((pointer) global)),
+  forall (HW_6: result1 = (acc p_global0 l)),
   forall (HW_7: (valid alloc result1)),
-  forall (result2: ((pointer) Z0)),
-  forall (HW_8: result2 = (acc b_struct_S_3 result1)),
-  forall (result3: ((pointer) Z0)),
+  forall (result2: ((pointer) global)),
+  forall (HW_8: result2 = (acc b_global result1)),
+  forall (result3: ((pointer) global)),
   forall (HW_9: result3 = (shift result2 2)),
   forall (result4: Z),
-  forall (HW_10: result4 = (acc Int_Z0_0 result3)),
+  forall (HW_10: result4 = (acc intM_global0 result3)),
   (* File "separation3.c", line 17, characters 13-25 *) result4 = 1.
 Proof.
 intuition; subst.
@@ -91,35 +119,47 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
-  forall (Int_Z0: ((memory) Z Z0)),
-  forall (Int_Z1: ((memory) Z Z1)),
+  forall (LPM_global: ((memory) ((pointer) global) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (b_struct_S_3: ((memory) ((pointer) Z0) struct_S_3)),
-  forall (c_struct_S_3: ((memory) ((pointer) Z1) struct_S_3)),
-  forall (l: ((pointer) struct_L_12)),
-  forall (s0: ((pointer) struct_S_3)),
+  forall (b_global: ((memory) ((pointer) global) global)),
+  forall (c_global: ((memory) ((pointer) global) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (l: ((pointer) global)),
+  forall (q_global: ((memory) ((pointer) global) global)),
+  forall (r_global: ((memory) ((pointer) global) global)),
+  forall (s0: ((pointer) global)),
   forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
-                (valid1 c_struct_S_3) /\ (valid1 b_struct_S_3) /\
-                (valid1_range c_struct_S_3 5) /\
-                (valid1_range b_struct_S_3 5)),
-  forall (result: ((pointer) Z0)),
-  forall (HW_2: result = (acc b_struct_S_3 s0)),
-  forall (result0: ((pointer) Z0)),
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q_global
+                                                (acc LPM_global l)))) /\
+                ~((base_addr s0) = (base_addr (acc r_global
+                                               (acc LPM_global l))))) /\
+                ~((base_addr l) = (base_addr (acc b_global
+                                              (acc SPM_global s0)))) /\
+                ~((base_addr l) = (base_addr (acc c_global
+                                              (acc SPM_global s0))))) /\
+                (valid1 c_global) /\ (valid1 b_global) /\
+                (separation1 b_global c_global) /\
+                (valid1_range c_global 5) /\ (valid1_range b_global 5)),
+  forall (result: ((pointer) global)),
+  forall (HW_2: result = (acc b_global s0)),
+  forall (result0: ((pointer) global)),
   forall (HW_3: result0 = (shift result 2)),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (HW_4: Int_Z0_0 = (upd Int_Z0 result0 1)),
-  forall (result1: ((pointer) Z1)),
-  forall (HW_5: result1 = (acc c_struct_S_3 s0)),
-  forall (result2: ((pointer) Z1)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_4: intM_global0 = (upd intM_global result0 1)),
+  forall (result1: ((pointer) global)),
+  forall (HW_5: result1 = (acc c_global s0)),
+  forall (result2: ((pointer) global)),
   forall (HW_6: result2 = (shift result1 2)),
-  forall (Int_Z1_0: ((memory) Z Z1)),
-  forall (HW_7: Int_Z1_0 = (upd Int_Z1 result2 2)),
-  forall (result3: ((pointer) Z0)),
-  forall (HW_8: result3 = (acc b_struct_S_3 s0)),
-  forall (result4: ((pointer) Z0)),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_7: intM_global1 = (upd intM_global0 result2 2)),
+  forall (result3: ((pointer) global)),
+  forall (HW_8: result3 = (acc b_global s0)),
+  forall (result4: ((pointer) global)),
   forall (HW_9: result4 = (shift result3 2)),
   forall (result5: Z),
-  forall (HW_10: result5 = (acc Int_Z0_0 result4)),
+  forall (HW_10: result5 = (acc intM_global1 result4)),
   (* File "separation3.c", line 25, characters 13-25 *) result5 = 1.
 Proof.
 intuition.
@@ -165,23 +205,35 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (a_struct_S_2: ((memory) Z struct_S_2)),
-  forall (a_struct_S_3: ((memory) Z struct_S_3)),
+  forall (LPM_global: ((memory) ((pointer) global) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
+  forall (a_global: ((memory) Z global)),
   forall (alloc: alloc_table),
-  forall (l: ((pointer) struct_L_12)),
-  forall (q_struct_L_12: ((memory) ((pointer) struct_S_2) struct_L_12)),
-  forall (s0: ((pointer) struct_S_3)),
+  forall (b_global: ((memory) ((pointer) global) global)),
+  forall (c_global: ((memory) ((pointer) global) global)),
+  forall (l: ((pointer) global)),
+  forall (q_global: ((memory) ((pointer) global) global)),
+  forall (r_global: ((memory) ((pointer) global) global)),
+  forall (s0: ((pointer) global)),
   forall (HW_1: (valid alloc l) /\ (valid alloc s0) /\
-                (separation2 q_struct_L_12 q_struct_L_12) /\
-                (valid1 q_struct_L_12)),
-  forall (a_struct_S_3_0: ((memory) Z struct_S_3)),
-  forall (HW_2: a_struct_S_3_0 = (upd a_struct_S_3 s0 1)),
-  forall (result: ((pointer) struct_S_2)),
-  forall (HW_3: result = (acc q_struct_L_12 l)),
-  forall (a_struct_S_2_0: ((memory) Z struct_S_2)),
-  forall (HW_4: a_struct_S_2_0 = (upd a_struct_S_2 result 2)),
+                (~((base_addr l) = (base_addr s0)) /\
+                (~((base_addr s0) = (base_addr (acc q_global
+                                                (acc LPM_global l)))) /\
+                ~((base_addr s0) = (base_addr (acc r_global
+                                               (acc LPM_global l))))) /\
+                ~((base_addr l) = (base_addr (acc b_global
+                                              (acc SPM_global s0)))) /\
+                ~((base_addr l) = (base_addr (acc c_global
+                                              (acc SPM_global s0))))) /\
+                (separation2 q_global q_global) /\ (valid1 q_global)),
+  forall (a_global0: ((memory) Z global)),
+  forall (HW_2: a_global0 = (upd a_global s0 1)),
+  forall (result: ((pointer) global)),
+  forall (HW_3: result = (acc q_global l)),
+  forall (a_global1: ((memory) Z global)),
+  forall (HW_4: a_global1 = (upd a_global0 result 2)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc a_struct_S_3_0 s0)),
+  forall (HW_5: result0 = (acc a_global1 s0)),
   (* File "separation3.c", line 9, characters 13-25 *) result0 = 1.
 Proof.
 intuition; subst; valid.

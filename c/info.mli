@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.25 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.26 2006-02-03 13:24:35 marche Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -118,6 +118,8 @@ val default_fun_info : string -> fun_info
 type env_info =
   | Var_info of var_info
   | Fun_info of fun_info
+
+val env_name : env_info -> string
 
 val set_unique_name : env_info -> string -> unit
 

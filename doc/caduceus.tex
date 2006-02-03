@@ -245,13 +245,13 @@ generating Why code for function abs1
 [...]
 why [...] why/abs.why
 [...]
-time make -f abs.makefile clean do_simplify > simplify.log
-
-real    0m0.244s
-user    0m0.170s
-sys     0m0.060s
-valid obligations:       1
-invalid obligations:       1
+Running Simplify on proof obligations
+(. = valid * = invalid # = timeout/failure)
+simplify/abs_why.sx.all: *.. (2/1/0)
+total           :   3
+valid           :   2 ( 67%)
+invalid         :   1 ( 33%)
+timeout/failure :   0 (  0%)
 \end{verbatim}
 so it that case, there are two proof obligations and only one of them
 has been proved. To investigate the unproved one, we may look at file

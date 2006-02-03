@@ -3,14 +3,13 @@ Require Export assigns_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_1 : 
-  forall (A752:Set),
-  forall (p: ((pointer) A752)),
+  forall (p: ((pointer) global)),
   forall (size: Z),
-  forall (Int_Z2: ((memory) Z A752)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
-  (not_assigns alloc Int_Z2 Int_Z2
+  (not_assigns alloc intM_global intM_global
    (pset_range (pset_singleton p) 0 (size - 1))) /\
   (* File "assigns.c", line 8, characters 7-64 *) ((0 <= size /\ size <=
   size) /\ p = (shift p (size - size))).
@@ -24,21 +23,20 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_2 : 
-  forall (A753:Set),
-  forall (p: ((pointer) A753)),
+  forall (p: ((pointer) global)),
   forall (size: Z),
-  forall (Int_Z2: ((memory) Z A753)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
-  forall (HW_2: (not_assigns alloc Int_Z2 Int_Z2
+  forall (HW_2: (not_assigns alloc intM_global intM_global
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (Int_Z2_0: ((memory) Z A753)),
-  forall (mutable_p: ((pointer) A753)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (mutable_p: ((pointer) global)),
   forall (mutable_size: Z),
-  forall (HW_3: (not_assigns alloc Int_Z2 Int_Z2_0
+  forall (HW_3: (not_assigns alloc intM_global intM_global0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
@@ -56,21 +54,20 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_3 : 
-  forall (A754:Set),
-  forall (p: ((pointer) A754)),
+  forall (p: ((pointer) global)),
   forall (size: Z),
-  forall (Int_Z2: ((memory) Z A754)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
-  forall (HW_2: (not_assigns alloc Int_Z2 Int_Z2
+  forall (HW_2: (not_assigns alloc intM_global intM_global
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (Int_Z2_0: ((memory) Z A754)),
-  forall (mutable_p: ((pointer) A754)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (mutable_p: ((pointer) global)),
   forall (mutable_size: Z),
-  forall (HW_3: (not_assigns alloc Int_Z2 Int_Z2_0
+  forall (HW_3: (not_assigns alloc intM_global intM_global0
                  (pset_range (pset_singleton p) 0 (size - 1))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 mutable_size /\ mutable_size <= size) /\
@@ -79,13 +76,13 @@ Save.
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   forall (HW_6: (valid alloc mutable_p)),
-  forall (Int_Z2_1: ((memory) Z A754)),
-  forall (HW_7: Int_Z2_1 = (upd Int_Z2_0 mutable_p 0)),
-  forall (result: ((pointer) A754)),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_7: intM_global1 = (upd intM_global0 mutable_p 0)),
+  forall (result: ((pointer) global)),
   forall (HW_8: result = (shift mutable_p 1)),
-  forall (mutable_p0: ((pointer) A754)),
+  forall (mutable_p0: ((pointer) global)),
   forall (HW_9: mutable_p0 = result),
-  ((not_assigns alloc Int_Z2 Int_Z2_1
+  ((not_assigns alloc intM_global intM_global1
     (pset_range (pset_singleton p) 0 (size - 1))) /\
   (* File "assigns.c", line 8, characters 7-64 *) ((0 <= mutable_size0 /\
   mutable_size0 <= size) /\ mutable_p0 = (shift p (size - mutable_size0)))) /\

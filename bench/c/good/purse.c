@@ -1,5 +1,5 @@
 
-typedef struct {
+typedef struct purse {
   int balance;
 } purse;
 

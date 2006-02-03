@@ -6,33 +6,34 @@ Require Export invariants_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (n: Z),
-  forall (Int_Z6: ((memory) Z Z6)),
   forall (alloc: alloc_table),
-  forall (c: ((pointer) Z6)),
-  forall (s: ((pointer) struct_s_5)),
-  forall (x_struct_s_5: ((memory) Z struct_s_5)),
-  forall (y_struct_s_5: ((memory) Z struct_s_5)),
+  forall (c: ((pointer) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (x_global: ((memory) Z global)),
+  forall (y_global: ((memory) Z global)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
-                (acc Int_Z6 c) = 12 /\
+                (acc intM_global c) = 12 /\
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-                (acc x_struct_s_5 s) /\ (acc x_struct_s_5 s) <=
-                (acc y_struct_s_5 s)) /\ (acc y_struct_s_5 s) <= 100)) /\
-                (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1)),
+                (acc x_global s) /\ (acc x_global s) <= (acc y_global s)) /\
+                (acc y_global s) <= 100)) /\ (valid alloc s) /\
+                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
+                ~((base_addr c) = (base_addr s))),
   forall (result: Z),
-  forall (HW_2: result = (acc x_struct_s_5 s)),
+  forall (HW_2: result = (acc x_global s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y_struct_s_5 s)),
+  forall (HW_3: result0 = (acc y_global s)),
   forall (HW_4: (result + n) <= (result0 - 20)),
   forall (result1: Z),
-  forall (HW_5: result1 = (acc Int_Z6 c)),
-  forall (x_struct_s_5_0: ((memory) Z struct_s_5)),
-  forall (HW_6: x_struct_s_5_0 = (upd x_struct_s_5 s (result + n + result1))),
-  (* File "invariants.c", line 9, characters 25-33 *) (acc Int_Z6 c) = 12 /\
+  forall (HW_5: result1 = (acc intM_global c)),
+  forall (x_global0: ((memory) Z global)),
+  forall (HW_6: x_global0 = (upd x_global s (result + n + result1))),
+  (* File "invariants.c", line 9, characters 25-33 *) (acc intM_global c) =
+  12 /\
   (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-  (acc x_struct_s_5_0 s) /\ (acc x_struct_s_5_0 s) <=
-  (acc y_struct_s_5 s)) /\ (acc y_struct_s_5 s) <= 100).
+  (acc x_global0 s) /\ (acc x_global0 s) <= (acc y_global s)) /\
+  (acc y_global s) <= 100).
 Proof.
 intuition.
 Save.
@@ -40,29 +41,30 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (n: Z),
-  forall (Int_Z6: ((memory) Z Z6)),
   forall (alloc: alloc_table),
-  forall (c: ((pointer) Z6)),
-  forall (s: ((pointer) struct_s_5)),
-  forall (x_struct_s_5: ((memory) Z struct_s_5)),
-  forall (y_struct_s_5: ((memory) Z struct_s_5)),
+  forall (c: ((pointer) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (x_global: ((memory) Z global)),
+  forall (y_global: ((memory) Z global)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
-                (acc Int_Z6 c) = 12 /\
+                (acc intM_global c) = 12 /\
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-                (acc x_struct_s_5 s) /\ (acc x_struct_s_5 s) <=
-                (acc y_struct_s_5 s)) /\ (acc y_struct_s_5 s) <= 100)) /\
-                (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1)),
+                (acc x_global s) /\ (acc x_global s) <= (acc y_global s)) /\
+                (acc y_global s) <= 100)) /\ (valid alloc s) /\
+                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
+                ~((base_addr c) = (base_addr s))),
   forall (result: Z),
-  forall (HW_2: result = (acc x_struct_s_5 s)),
+  forall (HW_2: result = (acc x_global s)),
   forall (result0: Z),
-  forall (HW_3: result0 = (acc y_struct_s_5 s)),
+  forall (HW_3: result0 = (acc y_global s)),
   forall (HW_7: (result + n) > (result0 - 20)),
-  (* File "invariants.c", line 9, characters 25-33 *) (acc Int_Z6 c) = 12 /\
+  (* File "invariants.c", line 9, characters 25-33 *) (acc intM_global c) =
+  12 /\
   (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
-  (acc x_struct_s_5 s) /\ (acc x_struct_s_5 s) <= (acc y_struct_s_5 s)) /\
-  (acc y_struct_s_5 s) <= 100).
+  (acc x_global s) /\ (acc x_global s) <= (acc y_global s)) /\
+  (acc y_global s) <= 100).
 Proof.
 intuition.
 Save.
@@ -87,28 +89,27 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
-  forall (Int_Z6: ((memory) Z Z6)),
   forall (alloc: alloc_table),
-  forall (c: ((pointer) Z6)),
-  forall (s: ((pointer) struct_s_5)),
-  forall (x_struct_s_5: ((memory) Z struct_s_5)),
-  forall (y_struct_s_5: ((memory) Z struct_s_5)),
+  forall (c: ((pointer) global)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (x_global: ((memory) Z global)),
+  forall (y_global: ((memory) Z global)),
   forall (HW_1: (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1)),
-  forall (x_struct_s_5_0: ((memory) Z struct_s_5)),
-  forall (HW_2: x_struct_s_5_0 = (upd x_struct_s_5 s 0)),
-  forall (y_struct_s_5_0: ((memory) Z struct_s_5)),
-  forall (HW_3: y_struct_s_5_0 = (upd y_struct_s_5 s 0)),
-  forall (Int_Z6_0: ((memory) Z Z6)),
-  forall (HW_4: Int_Z6_0 = (upd Int_Z6 c 12)),
-  forall (result: ((pointer) Z6)),
+                (valid_range alloc c 0 1) /\ ~((base_addr c) = (base_addr s))),
+  forall (x_global0: ((memory) Z global)),
+  forall (HW_2: x_global0 = (upd x_global s 0)),
+  forall (y_global0: ((memory) Z global)),
+  forall (HW_3: y_global0 = (upd y_global s 0)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_4: intM_global0 = (upd intM_global c 12)),
+  forall (result: ((pointer) global)),
   forall (HW_5: result = (shift c 1)),
-  forall (Int_Z6_1: ((memory) Z Z6)),
-  forall (HW_6: Int_Z6_1 = (upd Int_Z6_0 result 14)),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_6: intM_global1 = (upd intM_global0 result 14)),
   (* File "invariants.c", line 6, characters 18-54 *) (((0 <=
-  (acc x_struct_s_5_0 s) /\ (acc x_struct_s_5_0 s) <=
-  (acc y_struct_s_5_0 s)) /\ (acc y_struct_s_5_0 s) <= 100) /\
-  (acc Int_Z6_1 c) = 12).
+  (acc x_global0 s) /\ (acc x_global0 s) <= (acc y_global0 s)) /\
+  (acc y_global0 s) <= 100) /\ (acc intM_global1 c) = 12).
 Proof.
 intros;subst.
 intuition.

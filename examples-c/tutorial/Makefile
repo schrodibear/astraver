@@ -31,7 +31,6 @@ cvcl:
 .PHONY: coq simplify cvcl
 
 why/%.why: %.c 
-	rm -f coq/caduceus_spec_why.v
 	$(EXECCADUCEUS) $<
 
 %: %.c
@@ -41,5 +40,5 @@ why/%.why: %.c
 
 
 clean:
-	for f in $(FILES); do make -f $$f.makefile clean
+	for f in $(FILES); do make -f $$f.makefile clean; done
 	rm -f why/*.why

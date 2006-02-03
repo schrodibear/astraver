@@ -16,12 +16,15 @@ int f(T* t2) {
 struct S { int z; T t; } s;
 struct S *ps;
 
+struct S *pps[] = { (void*)0 };
+
 /*@ requires \valid(ps)
   @ ensures \result == 1
   @*/
 int g() {
   T *p;
   ps = &s;
+  pps[0] = ps;
   p = &(s.t);
   ps->t.x = 1;
   return s.t.x;

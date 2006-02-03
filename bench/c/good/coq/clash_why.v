@@ -5,18 +5,15 @@ Require Export clash_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
-  forall (A803:Set),
-  forall (ma_structure: ((pointer) A803)),
+  forall (ma_structure: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (toto_struct_anonymous_0_6: ((memory) Z A803)),
+  forall (toto_global: ((memory) Z global)),
   forall (HW_1: (valid alloc ma_structure)),
   forall (toto_0: Z),
   forall (HW_3: toto_0 = 0),
-  forall (toto_struct_anonymous_0_6_0: ((memory) Z A803)),
-  forall (HW_4: toto_struct_anonymous_0_6_0 = (upd toto_struct_anonymous_0_6
-                                               ma_structure toto_0)),
-  (not_assigns alloc toto_struct_anonymous_0_6 toto_struct_anonymous_0_6_0
-   (pset_singleton ma_structure)).
+  forall (toto_global0: ((memory) Z global)),
+  forall (HW_4: toto_global0 = (upd toto_global ma_structure toto_0)),
+  (not_assigns alloc toto_global toto_global0 (pset_singleton ma_structure)).
 Proof.
 intuition.
 Save.
@@ -33,17 +30,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
-  forall (A804:Set),
-  forall (ma_structure: ((pointer) A804)),
+  forall (ma_structure: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (substruct_struct_anonymous_2_7: ((memory) ((pointer) struct_anonymous_1_2)
-                                          A804)),
+  forall (substruct_global: ((memory) ((pointer) global) global)),
   forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc
-                 (acc substruct_struct_anonymous_2_7 ma_structure))) /\
-                (valid1 substruct_struct_anonymous_2_7) /\
-                (separation2 substruct_struct_anonymous_2_7
-                 substruct_struct_anonymous_2_7)),
+                (valid alloc (acc substruct_global ma_structure))) /\
+                (valid1 substruct_global) /\
+                (separation2 substruct_global substruct_global)),
   1 >= 1.
 Proof.
 intuition.
@@ -51,45 +44,35 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
-  forall (A805:Set), forall (A806:Set), forall (A807:Set), forall (A808:Set),
-  forall (A809:Set), forall (A810:Set), forall (A811:Set), forall (A812:Set),
-  forall (A813:Set),
-  forall (ma_structure: ((pointer) A813)),
+  forall (A785:Set), forall (A786:Set), forall (A787:Set), forall (A788:Set),
+  forall (A789:Set), forall (A790:Set), forall (A791:Set),
+  forall (ma_structure: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (fst_struct_anonymous_1_2: ((memory) Z struct_anonymous_1_2)),
-  forall (fst_struct_anonymous_1_8: ((memory) Z A812)),
-  forall (substruct_struct_anonymous_2_7: ((memory) ((pointer) struct_anonymous_1_2)
-                                          A813)),
+  forall (fst_global: ((memory) Z global)),
+  forall (substruct_global: ((memory) ((pointer) global) global)),
   forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc
-                 (acc substruct_struct_anonymous_2_7 ma_structure))) /\
-                (valid1 substruct_struct_anonymous_2_7) /\
-                (separation2 substruct_struct_anonymous_2_7
-                 substruct_struct_anonymous_2_7)),
+                (valid alloc (acc substruct_global ma_structure))) /\
+                (valid1 substruct_global) /\
+                (separation2 substruct_global substruct_global)),
   forall (HW_2: 1 >= 1),
-  forall (result: ((pointer) A812)),
+  forall (result: ((pointer) global)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (fst_struct_anonymous_1_8_0: ((memory) Z A812)),
-  forall (HW_4: fst_struct_anonymous_1_8_0 = (upd fst_struct_anonymous_1_8
-                                              result 0)),
-  forall (result0: ((pointer) struct_anonymous_1_2)),
-  forall (HW_5: result0 = (acc substruct_struct_anonymous_2_7 ma_structure)),
+  forall (fst_global0: ((memory) Z global)),
+  forall (HW_4: fst_global0 = (upd fst_global result 0)),
+  forall (result0: ((pointer) global)),
+  forall (HW_5: result0 = (acc substruct_global ma_structure)),
   forall (result1: Z),
-  forall (HW_6: result1 = (acc fst_struct_anonymous_1_8_0 result)),
-  forall (fst_struct_anonymous_1_2_0: ((memory) Z struct_anonymous_1_2)),
-  forall (HW_7: fst_struct_anonymous_1_2_0 = (upd fst_struct_anonymous_1_2
-                                              result0 result1)),
-  ((not_assigns alloc substruct_struct_anonymous_2_7
-    substruct_struct_anonymous_2_7 pset_empty) /\
-  (not_assigns alloc fst_struct_anonymous_1_8 fst_struct_anonymous_1_8_0
-   pset_empty)) /\
-  (not_assigns alloc fst_struct_anonymous_1_2 fst_struct_anonymous_1_2_0
-   (pset_singleton (acc substruct_struct_anonymous_2_7 ma_structure))).
+  forall (HW_6: result1 = (acc fst_global0 result)),
+  forall (fst_global1: ((memory) Z global)),
+  forall (HW_7: fst_global1 = (upd fst_global0 result0 result1)),
+  (not_assigns alloc substruct_global substruct_global pset_empty) /\
+  (not_assigns alloc fst_global fst_global1
+   (pset_singleton (acc substruct_global ma_structure))).
 Proof.
 intuition.
 Save.

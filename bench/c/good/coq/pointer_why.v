@@ -5,23 +5,27 @@ Require Export pointer_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma array1_impl_po_1 : 
-  forall (Int_Z19: ((memory) Z Z19)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "pointer.c", line 42, characters 14-31 *)
-                (valid_index alloc t 2) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s)),
-  forall (result: ((pointer) Z19)),
+                (valid_index alloc t 2) /\
+                (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s)),
+  forall (result: ((pointer) global)),
   forall (HW_3: result = (shift t 2)),
-  forall (p: ((pointer) Z19)),
+  forall (p: ((pointer) global)),
   forall (HW_4: p = result),
-  forall (result0: ((pointer) Z19)),
+  forall (result0: ((pointer) global)),
   forall (HW_5: result0 = (shift p 1)),
-  forall (p0: ((pointer) Z19)),
+  forall (p0: ((pointer) global)),
   forall (HW_6: p0 = result0),
-  forall (Int_Z19_0: ((memory) Z Z19)),
-  forall (HW_7: Int_Z19_0 = (upd Int_Z19 p 1)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_7: intM_global0 = (upd intM_global p 1)),
   (* File "pointer.c", line 42, characters 40-52 *) 1 = 1.
 Proof.
 intuition;subst;auto.
@@ -33,25 +37,27 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
-  forall (A822:Set),
-  forall (x: ((pointer) A822)),
-  forall (Int_Z15: ((memory) Z A822)),
+  forall (x: ((pointer) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "pointer.c", line 12, characters 14-23 *)
-                (valid alloc x) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s)),
+                (valid alloc x) /\ (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s)),
   forall (HW_2: (valid alloc x)),
-  forall (Int_Z15_0: ((memory) Z A822)),
-  forall (HW_3: Int_Z15_0 = (upd Int_Z15 x 0)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_3: intM_global0 = (upd intM_global x 0)),
   forall (HW_4: (valid alloc x)),
   forall (result: Z),
-  forall (HW_5: result = (acc Int_Z15_0 x)),
-  forall (Int_Z15_1: ((memory) Z A822)),
-  forall (HW_6: Int_Z15_1 = (upd Int_Z15_0 x (result + 1))),
-  (* File "pointer.c", line 13, characters 13-36 *) ((acc Int_Z15_1 x) = 1 /\
-  (result + 1) = 1).
+  forall (HW_5: result = (acc intM_global0 x)),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_6: intM_global1 = (upd intM_global0 x (result + 1))),
+  (* File "pointer.c", line 13, characters 13-36 *) ((acc intM_global1 x) =
+  1 /\ (result + 1) = 1).
 Proof.
 intuition.
 Save.
@@ -73,25 +79,28 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A823:Set),
-  forall (x: ((pointer) A823)),
-  forall (Int_Z14: ((memory) Z A823)),
+  forall (x: ((pointer) global)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "pointer.c", line 4, characters 14-23 *)
-                (valid alloc x) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s)),
+                (valid alloc x) /\ (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s)),
   forall (HW_2: (valid alloc x)),
-  forall (Int_Z14_0: ((memory) Z A823)),
-  forall (HW_3: Int_Z14_0 = (upd Int_Z14 x 0)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_3: intM_global0 = (upd intM_global x 0)),
   forall (HW_4: (valid alloc x)),
   forall (result: Z),
-  forall (HW_5: result = (acc Int_Z14_0 x)),
-  forall (Int_Z14_1: ((memory) Z A823)),
-  forall (HW_6: Int_Z14_1 = (upd Int_Z14_0 x (1 + result))),
-  (* File "pointer.c", line 6, characters 13-36 *) ((acc Int_Z14_1 x) = 1 /\
-  result = 0) /\ (not_assigns alloc Int_Z14 Int_Z14_1 (pset_singleton x)).
+  forall (HW_5: result = (acc intM_global0 x)),
+  forall (intM_global1: ((memory) Z global)),
+  forall (HW_6: intM_global1 = (upd intM_global0 x (1 + result))),
+  (* File "pointer.c", line 6, characters 13-36 *) ((acc intM_global1 x) =
+  1 /\ result = 0) /\
+  (not_assigns alloc intM_global intM_global1 (pset_singleton x)).
 Proof.
 intuition.
 Save.
@@ -121,22 +130,26 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (Int_Z16: ((memory) Z Z16)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (r: ((pointer) Z16)),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
+  forall (intM_global: ((memory) Z global)),
+  forall (r: ((pointer) global)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "pointer.c", line 22, characters 14-23 *)
-                (valid alloc r) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s)),
+                (valid alloc r) /\ (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s)),
   forall (HW_2: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc r)),
   forall (result: Z),
-  forall (Int_Z16_0: ((memory) Z Z16)),
+  forall (intM_global0: ((memory) Z global)),
   forall (HW_3: (* File "pointer.c", line 6, characters 13-36 *)
-                ((acc Int_Z16_0 r) = 1 /\ result = 0) /\
-                (not_assigns alloc Int_Z16 Int_Z16_0 (pset_singleton r))),
-  (* File "pointer.c", line 23, characters 13-20 *) (acc Int_Z16_0 r) = 1.
+                ((acc intM_global0 r) = 1 /\ result = 0) /\
+                (not_assigns alloc intM_global intM_global0
+                 (pset_singleton r))),
+  (* File "pointer.c", line 23, characters 13-20 *) (acc intM_global0 r) = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -149,10 +162,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc s)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s)),
   1 >= 1.
 Proof.
 intuition.
@@ -161,33 +178,37 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
-  forall (A824:Set), forall (A825:Set), forall (A826:Set), forall (A827:Set),
-  forall (A828:Set), forall (A829:Set), forall (A830:Set), forall (A831:Set),
-  forall (Int_Z18: ((memory) Z A831)),
+  forall (A861:Set), forall (A862:Set), forall (A863:Set), forall (A864:Set),
+  forall (A865:Set), forall (A866:Set), forall (A867:Set),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
-  forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc s)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s)),
   forall (HW_2: 1 >= 1),
-  forall (result: ((pointer) A831)),
+  forall (result: ((pointer) global)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (Int_Z18_0: ((memory) Z A831)),
-  forall (HW_4: Int_Z18_0 = (upd Int_Z18 result 0)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_4: intM_global0 = (upd intM_global result 0)),
   forall (HW_5: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
   forall (result0: Z),
-  forall (Int_Z18_1: ((memory) Z A831)),
+  forall (intM_global1: ((memory) Z global)),
   forall (HW_6: (* File "pointer.c", line 6, characters 13-36 *)
-                ((acc Int_Z18_1 result) = 1 /\ result0 = 0) /\
-                (not_assigns alloc0 Int_Z18_0 Int_Z18_1
+                ((acc intM_global1 result) = 1 /\ result0 = 0) /\
+                (not_assigns alloc0 intM_global0 intM_global1
                  (pset_singleton result))),
   forall (result1: Z),
-  forall (HW_7: result1 = (acc Int_Z18_1 result)),
+  forall (HW_7: result1 = (acc intM_global1 result)),
   (* File "pointer.c", line 36, characters 13-25 *) (result0 + result1) = 1.
 Proof.
 intuition.
@@ -256,16 +277,18 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma struct1_impl_po_1 : 
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
-  forall (x_struct_S_21: ((memory) ((pointer) Z13) struct_S_21)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "pointer.c", line 53, characters 14-23 *)
-                (valid alloc s) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s) /\ (valid1_range x_struct_S_21 1) /\
-                (valid1 x_struct_S_21)),
-  forall (result: ((pointer) Z13)),
-  forall (HW_2: result = (acc x_struct_S_21 s)),
+                (valid alloc s) /\ (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s) /\
+                (valid1_range x_global 1) /\ (valid1 x_global)),
+  forall (result: ((pointer) global)),
+  forall (HW_2: result = (acc x_global s)),
   (valid alloc result).
 Proof.
 intuition.
@@ -274,26 +297,28 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma struct1_impl_po_2 : 
-  forall (Int_Z13: ((memory) Z Z13)),
+  forall (SPM_global: ((memory) ((pointer) global) global)),
   forall (alloc: alloc_table),
-  forall (s: ((pointer) struct_S_21)),
-  forall (t: ((pointer) Z19)),
-  forall (x_struct_S_21: ((memory) ((pointer) Z13) struct_S_21)),
-  forall (y_struct_S_21: ((memory) Z struct_S_21)),
+  forall (intM_global: ((memory) Z global)),
+  forall (s: ((pointer) global)),
+  forall (t: ((pointer) global)),
+  forall (x_global: ((memory) ((pointer) global) global)),
+  forall (y_global: ((memory) Z global)),
   forall (HW_1: (* File "pointer.c", line 53, characters 14-23 *)
-                (valid alloc s) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s) /\ (valid1_range x_struct_S_21 1) /\
-                (valid1 x_struct_S_21)),
-  forall (result: ((pointer) Z13)),
-  forall (HW_2: result = (acc x_struct_S_21 s)),
+                (valid alloc s) /\ (~((base_addr s) = (base_addr t)) /\
+                ~((base_addr t) = (base_addr (acc x_global (acc SPM_global s))))) /\
+                (valid_range alloc t 0 4) /\ (valid alloc s) /\
+                (valid1_range x_global 1) /\ (valid1 x_global)),
+  forall (result: ((pointer) global)),
+  forall (HW_2: result = (acc x_global s)),
   forall (HW_3: (valid alloc result)),
-  forall (Int_Z13_0: ((memory) Z Z13)),
-  forall (HW_4: Int_Z13_0 = (upd Int_Z13 result 1)),
-  forall (y_struct_S_21_0: ((memory) Z struct_S_21)),
-  forall (HW_5: y_struct_S_21_0 = (upd y_struct_S_21 s 2)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_4: intM_global0 = (upd intM_global result 1)),
+  forall (y_global0: ((memory) Z global)),
+  forall (HW_5: y_global0 = (upd y_global s 2)),
   forall (HW_6: (valid alloc result)),
   forall (result0: Z),
-  forall (HW_7: result0 = (acc Int_Z13_0 result)),
+  forall (HW_7: result0 = (acc intM_global0 result)),
   (* File "pointer.c", line 53, characters 33-45 *) result0 >= 1.
 Proof.
 intuition.

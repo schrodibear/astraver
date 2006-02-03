@@ -5,7 +5,6 @@ Require Export Caduceus.
 
 
 
-(*Why type*) Parameter Z0: Set.
+(*Why type*) Definition Z0: Set.
 
-(*Why type*) Parameter Z1: Set.
 

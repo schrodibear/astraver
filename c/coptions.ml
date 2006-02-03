@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.20 2006-01-27 14:55:16 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.21 2006-02-03 13:24:35 marche Exp $ i*)
 
 (*s The log file *)
 
@@ -52,7 +52,7 @@ let whylib =
 
 (*s command-line options *)
 
-let zones = ref true (* should be false in the future ! *)
+let zones = ref false
 let parse_only = ref false
 let type_only = ref false
 let print_norm = ref false

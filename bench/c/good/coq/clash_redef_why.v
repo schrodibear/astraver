@@ -7,17 +7,15 @@ Require Export clash_redef_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
-  forall (A741:Set),
-  forall (p1: ((pointer) A741)),
-  forall (p2_0: ((pointer) Z0)),
+  forall (p1: ((pointer) global)),
+  forall (p2_0: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (p2_struct_anonymous_0_17: ((memory) ((pointer) Z0) A741)),
+  forall (p2_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "clash_redef.c", line 7, characters 14-24 *)
                 (valid alloc p1)),
   forall (HW_2: (valid alloc p1)),
-  forall (p2_struct_anonymous_0_17_0: ((memory) ((pointer) Z0) A741)),
-  forall (HW_3: p2_struct_anonymous_0_17_0 = (upd p2_struct_anonymous_0_17 p1
-                                              p2_0)),
+  forall (p2_global0: ((memory) ((pointer) global) global)),
+  forall (HW_3: p2_global0 = (upd p2_global p1 p2_0)),
   (* File "clash_redef.c", line 8, characters 13-25 *) 0 = 0.
 Proof.
 intuition.

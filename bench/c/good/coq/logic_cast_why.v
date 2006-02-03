@@ -6,7 +6,7 @@ Require Export logic_cast_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) Z2)),
+  forall (t: ((pointer) global)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
@@ -18,7 +18,7 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) Z2)),
+  forall (t: ((pointer) global)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
@@ -28,7 +28,7 @@ Save.
   forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I0 /\ I0 <= 4)),
   forall (HW_6: I0 < 4),
-  forall (result: ((pointer) Z2)),
+  forall (result: ((pointer) global)),
   forall (HW_7: result = (shift t I0)),
   (valid alloc result).
 Proof.
@@ -39,22 +39,22 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) Z2)),
+  forall (t: ((pointer) global)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
   forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I /\ I <= 4)),
   forall (I0: Z),
-  forall (Int_Z2: ((memory) Z Z2)),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I0 /\ I0 <= 4)),
   forall (HW_6: I0 < 4),
-  forall (result: ((pointer) Z2)),
+  forall (result: ((pointer) global)),
   forall (HW_7: result = (shift t I0)),
   forall (HW_8: (valid alloc result)),
-  forall (Int_Z2_0: ((memory) Z Z2)),
-  forall (HW_9: Int_Z2_0 = (upd Int_Z2 result I0)),
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_9: intM_global0 = (upd intM_global result I0)),
   forall (I1: Z),
   forall (HW_10: I1 = (I0 + 1)),
   (* File "logic_cast.c", line 10, characters 11-25 *) (0 <= I1 /\ I1 <= 4) /\

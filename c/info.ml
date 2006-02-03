@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.29 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.30 2006-02-03 13:24:35 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -221,6 +221,11 @@ let default_fun_info x =
 type env_info =
   | Var_info of var_info
   | Fun_info of fun_info
+
+let env_name e =
+ match e with
+    | Var_info v -> v.var_name
+    | Fun_info f -> f.fun_name
 
 let set_unique_name e n =
   match e with
