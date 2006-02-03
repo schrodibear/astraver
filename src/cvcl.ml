@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.32 2006-01-19 14:17:03 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.33 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -421,11 +421,11 @@ let predefined_symbols fmt =
 
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
-  let f = fwe ^ "_why.cvc" in
-  do_not_edit f
-    prelude
-    sep
-    (fun fmt -> 
-       (*if not no_cvcl_prelude then predefined_symbols fmt;*)
-       Queue.iter (print_elem fmt) queue)
+  let file = fwe ^ "_why.cvc" in
+  do_not_edit_below ~file
+    ~before:prelude
+    ~sep
+    ~after:(fun fmt -> 
+	      (*if not no_cvcl_prelude then predefined_symbols fmt;*)
+	      Queue.iter (print_elem fmt) queue)
 

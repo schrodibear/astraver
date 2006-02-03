@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.39 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.40 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -383,12 +383,13 @@ let prelude = ref
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
-  let f = fwe ^ "_why.sx" in
-  do_not_edit f
+  let file = fwe ^ "_why.sx" in
+  do_not_edit_below ~file
+    ~before:
     (fun fmt -> 
        if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
-    sep
-    (fun fmt -> 
-       if simplify_typing then logic_typing fmt; 
-       Queue.iter (print_elem fmt) queue)
+    ~sep
+    ~after:(fun fmt -> 
+	      if simplify_typing then logic_typing fmt; 
+	      Queue.iter (print_elem fmt) queue)
 

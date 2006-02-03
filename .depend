@@ -38,6 +38,10 @@ src/fpi.cmo: src/pp.cmi src/misc.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
     src/cc.cmi src/fpi.cmi 
 src/fpi.cmx: src/pp.cmx src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx \
     src/cc.cmi src/fpi.cmi 
+src/gappa.cmo: src/pp.cmi src/options.cmi src/misc.cmi src/logic.cmi \
+    src/ident.cmi src/error.cmi src/cc.cmi src/gappa.cmi 
+src/gappa.cmx: src/pp.cmx src/options.cmx src/misc.cmx src/logic.cmi \
+    src/ident.cmx src/error.cmi src/cc.cmi src/gappa.cmi 
 src/harvey.cmo: src/report.cmi src/pp.cmi src/options.cmi src/misc.cmi \
     src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi \
     src/cc.cmi src/harvey.cmi 
@@ -78,16 +82,16 @@ src/main.cmo: src/wp.cmi src/vcg.cmi src/util.cmi src/typing.cmi \
     src/types.cmi src/smtlib.cmi src/simplify.cmi src/report.cmi src/pvs.cmi \
     src/ptree.cmi src/options.cmi src/ocaml.cmi src/monad.cmi src/mizar.cmi \
     src/misc.cmi src/ltyping.cmi src/logic.cmi src/lexer.cmi src/isabelle.cmi \
-    src/ident.cmi src/holl.cmi src/hol4.cmi src/harvey.cmi src/fpi.cmi \
-    src/error.cmi src/env.cmi src/effect.cmi src/dispatcher.cmi src/cvcl.cmi \
-    src/coq.cmi src/cc.cmi src/ast.cmi 
+    src/ident.cmi src/holl.cmi src/hol4.cmi src/harvey.cmi src/gappa.cmi \
+    src/fpi.cmi src/error.cmi src/env.cmi src/effect.cmi src/dispatcher.cmi \
+    src/cvcl.cmi src/coq.cmi src/cc.cmi src/ast.cmi 
 src/main.cmx: src/wp.cmx src/vcg.cmx src/util.cmx src/typing.cmx \
     src/types.cmi src/smtlib.cmx src/simplify.cmx src/report.cmx src/pvs.cmx \
     src/ptree.cmi src/options.cmx src/ocaml.cmx src/monad.cmx src/mizar.cmx \
     src/misc.cmx src/ltyping.cmx src/logic.cmi src/lexer.cmx src/isabelle.cmx \
-    src/ident.cmx src/holl.cmx src/hol4.cmx src/harvey.cmx src/fpi.cmx \
-    src/error.cmi src/env.cmx src/effect.cmx src/dispatcher.cmx src/cvcl.cmx \
-    src/coq.cmx src/cc.cmi src/ast.cmi 
+    src/ident.cmx src/holl.cmx src/hol4.cmx src/harvey.cmx src/gappa.cmx \
+    src/fpi.cmx src/error.cmi src/env.cmx src/effect.cmx src/dispatcher.cmx \
+    src/cvcl.cmx src/coq.cmx src/cc.cmi src/ast.cmi 
 src/misc.cmo: src/types.cmi src/ptree.cmi src/options.cmi src/logic.cmi \
     src/loc.cmi src/ident.cmi src/effect.cmi src/cc.cmi src/ast.cmi \
     src/misc.cmi 
@@ -210,6 +214,7 @@ src/env.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi \
     src/effect.cmi src/cc.cmi src/ast.cmi 
 src/error.cmi: src/ident.cmi src/effect.cmi 
 src/fpi.cmi: src/cc.cmi 
+src/gappa.cmi: src/cc.cmi 
 src/harvey.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/hol4.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/holl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 

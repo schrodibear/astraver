@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.88 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.89 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -49,6 +49,7 @@ let reset () =
   | SmtLib -> Smtlib.reset ()
   | Isabelle -> Isabelle.reset ()
   | Hol4 -> Hol4.reset ()
+  | Gappa -> Gappa.reset ()
   | Dispatcher -> ()
 
 let push_obligations ol = match prover () with
@@ -62,6 +63,7 @@ let push_obligations ol = match prover () with
   | SmtLib -> Smtlib.push_obligations ol
   | Isabelle -> Isabelle.push_obligations ol
   | Hol4 -> Hol4.push_obligations ol
+  | Gappa -> Gappa.push_obligations ol
   | Dispatcher -> Dispatcher.push_obligations ol
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
@@ -81,7 +83,7 @@ let push_parameter id v tv = match prover () with
   | Isabelle -> if is_pure_type_scheme v then Isabelle.push_parameter id tv
   | Hol4 -> if is_pure_type_scheme v then Hol4.push_parameter id tv
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
-  | Harvey | Simplify | SmtLib -> () (* nothing to do? *)
+  | Harvey | Simplify | SmtLib | Gappa -> () (* nothing to do? *)
   | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
   | Dispatcher -> ()
 
@@ -92,7 +94,7 @@ let push_logic id t = match prover () with
   | Isabelle -> Isabelle.push_logic id t
   | Hol4 -> Hol4.push_logic id t
   | Mizar -> Mizar.push_logic id t
-  | Harvey | Simplify | SmtLib -> () (* nothing to do? *)
+  | Harvey | Simplify | SmtLib | Gappa -> () (* nothing to do? *)
   | CVCLite -> Cvcl.push_logic id t
   | Dispatcher -> Dispatcher.push_logic id t
 
@@ -107,6 +109,7 @@ let push_axiom id p = match prover () with
   | Simplify -> Simplify.push_axiom id p
   | CVCLite -> Cvcl.push_axiom id p
   | SmtLib -> Smtlib.push_axiom id p
+  | Gappa -> ()
   | Dispatcher -> Dispatcher.push_axiom id p
 
 let push_predicate id p = match prover () with
@@ -120,6 +123,7 @@ let push_predicate id p = match prover () with
   | Simplify -> Simplify.push_predicate id p
   | CVCLite -> Cvcl.push_predicate id p
   | SmtLib -> Smtlib.push_predicate id p
+  | Gappa -> ()
   | Dispatcher -> Dispatcher.push_predicate id p
 
 let push_function id p = match prover () with
@@ -133,6 +137,7 @@ let push_function id p = match prover () with
   | Simplify -> Simplify.push_function id p
   | CVCLite -> Cvcl.push_function id p
   | SmtLib -> () (* Smtlib.push_function id p *)
+  | Gappa -> ()
   | Dispatcher -> Dispatcher.push_function id p
 
 let push_type id vl = match prover () with
@@ -156,6 +161,7 @@ let output fwe =
     | SmtLib -> Smtlib.output_file fwe
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
+    | Gappa -> Gappa.output_file fwe
     | Dispatcher -> ()
   end;
   if fpi then Fpi.output fwe

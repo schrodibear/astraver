@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.77 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.78 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -248,8 +248,17 @@ val unlocated_wprintf : ('a, Format.formatter, unit) format -> 'a
    when [f] does not exists, it is created by calling [before], inserting
    [sep] and then calling [after]. *)
 
-val do_not_edit : 
-  string -> (formatter -> unit) -> string -> (formatter -> unit) -> unit
+val do_not_edit_below : 
+  file:string -> 
+  before:(formatter -> unit) -> 
+  sep:string -> 
+  after:(formatter -> unit) -> unit
+
+val do_not_edit_above : 
+  file:string -> 
+  before:(formatter -> unit) -> 
+  sep:string -> 
+  after:(formatter -> unit) -> unit
 
 val file_formatter : (Format.formatter -> unit) -> (out_channel -> unit)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.30 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.31 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -273,13 +273,13 @@ let print_obl_list fmt =
 
 let output_file fwe =
   let sep = "(* DO NOT EDIT BELOW THIS LINE *)" in
-  let f = fwe ^ "_why.ml" in
-  do_not_edit f 
-    (fun _ -> ())
-    sep 
-    (fun fmt ->
-       fprintf fmt "@[";
-       fprintf fmt "prioritize_int();;@\n@\n";
-       Queue.iter (print_elem fmt) elem_q;
-       print_obl_list fmt;
-       fprintf fmt "@]@.")
+  let file = fwe ^ "_why.ml" in
+  do_not_edit_below ~file 
+    ~before:(fun _ -> ())
+    ~sep 
+    ~after:(fun fmt ->
+	      fprintf fmt "@[";
+	      fprintf fmt "prioritize_int();;@\n@\n";
+	      Queue.iter (print_elem fmt) elem_q;
+	      print_obl_list fmt;
+	      fprintf fmt "@]@.")

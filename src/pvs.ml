@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.65 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.66 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -348,13 +348,12 @@ let predefined_symbols fmt =
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in
-  let f = fwe ^ "_why.pvs" in
+  let file = fwe ^ "_why.pvs" in
   let th = Filename.basename fwe in
-  do_not_edit f
-    (fun fmt ->
-       begin_theory fmt th)
-    sep
-    (fun fmt ->
-       (*predefined_symbols fmt;*)
-       Queue.iter (output_elem fmt) queue;
-       end_theory fmt th)
+  do_not_edit_below ~file
+    ~before:(fun fmt -> begin_theory fmt th)
+    ~sep
+    ~after:(fun fmt ->
+	      (*predefined_symbols fmt;*)
+	      Queue.iter (output_elem fmt) queue;
+	      end_theory fmt th)

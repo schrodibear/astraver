@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.102 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.103 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -601,7 +601,7 @@ let file_formatter f cout =
   f fmt;
   pp_print_flush fmt ()
 
-let do_not_edit file before sep after =
+let do_not_edit_below ~file ~before ~sep ~after =
   let cout = 
     if not (Sys.file_exists file) then begin
       let cout = open_out file in
@@ -629,4 +629,28 @@ let do_not_edit file before sep after =
   file_formatter after cout;
   close_out cout
 
+let do_not_edit_above ~file ~before ~sep ~after =
+  if not (Sys.file_exists file) then begin
+      let cout = open_out file in
+      file_formatter before cout;
+      output_string cout ("\n" ^ sep ^ "\n\n");
+      file_formatter after cout;
+      close_out cout
+  end else begin
+      let file_bak = file ^ ".bak" in
+      Sys.rename file file_bak;
+      let cout = open_out file in
+      file_formatter before cout;
+      output_string cout ("\n" ^ sep ^ "\n\n");
+      let cin = open_in file_bak in
+      begin try 
+	while input_line cin <> sep do () done;
+	while true do 
+	  let s = input_line cin in output_string cout (s ^ "\n")
+	done
+      with End_of_file -> 
+	()
+      end;
+      close_out cout
+  end
 

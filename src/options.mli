@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.44 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.45 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -60,7 +60,7 @@ type coq_version = V7 | V8
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Dispatcher
 
 val prover : unit -> prover
 
@@ -80,6 +80,8 @@ val no_cvcl_prelude : bool
 val simplify_typing : bool
 
 val fpi : bool
+
+val gappa_rnd : string
 
 (*s [file f] appends [f] to the directory specified with [-dir], if any *)
 

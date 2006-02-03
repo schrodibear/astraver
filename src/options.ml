@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.54 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.55 2006-02-03 15:35:49 filliatr Exp $ i*)
 
 open Format
 
@@ -44,6 +44,7 @@ let wbb_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
+let gappa_rnd_ = ref "float < ieee_64, ne >"
 
 type termination = UseVariant | Partial | Total
 let termination_ = ref UseVariant
@@ -61,7 +62,7 @@ let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Dispatcher
 
 let prover_ = ref (Coq coq_version)
 
@@ -156,7 +157,7 @@ Prover selection:
   --simplify  selects Simplify prover
   --cvcl      selects CVC Lite prover
   --smtlib    selects the SMT-LIB format
-  --fpi       outputs floating-point obligations into a separate .fpi file
+  --gappa     selects the Gappa prover
 
 Coq-specific options:
   --valid, 
@@ -186,6 +187,10 @@ Isabelle/HOL-specific options:
   --isabelle-base-theory <theory>
               sets the Isabelle/HOL base theory
 
+Gappa options:
+  --gappa-rnd <mode>
+              sets the Gappa rounding mode (e.g. float<ieee_64,ne>)
+
 Misc options:
   --ocaml        Ocaml code output
   --ocaml-annot  Show all annotations in ocaml code
@@ -213,6 +218,7 @@ let files =
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
     | ("-fpi" | "--fpi") :: args -> fpi_ := true; parse args
+    | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args
@@ -265,6 +271,10 @@ let files =
 	ocaml_annot_ := true; parse args
     | ("--ocaml-ext" | "-ocaml-ext") :: args -> 
 	ocaml_externals_ := true; parse args
+    | ("-gappa-rnd" | "--gappa-rnd") :: s :: args -> 
+	gappa_rnd_ := s; parse args
+    | ("-gappa-rnd" | "--gappa-rnd") :: [] -> 
+	usage (); exit 1
     | ("-o" | "-output" | "--output") :: f :: args -> 
 	output_ := Some f; parse args
     | ("-o" | "-output" | "--output") :: [] -> 
@@ -339,6 +349,7 @@ let wbb = !wbb_
 let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_
+let gappa_rnd = !gappa_rnd_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 
