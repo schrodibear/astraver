@@ -54,6 +54,10 @@ mizar:
 hol:
 	../bin/why.opt --hol-light -d -V test.mlw
 
+gappa:
+	../bin/why.opt --gappa -d -V test.mlw
+	gappa < test_why_po_1.gappa
+
 test:
 #	$(WHY) --coq-v8 -d -V --coq-tactic magic test.mlw
 	$(WHY) --coq-v8 -d -V --valid --coq-tactic magic test.mlw

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.ml,v 1.1 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.2 2006-02-06 14:31:35 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -29,8 +29,10 @@ open Pp
 
 (* Gappa terms and formulas *)
 
+type exact = Exact | Float
+
 type gterm =
-  | Gvar of string
+  | Gvar of exact * string
   | Grnd of gterm
   | Gcst of real_constant
   | Gneg of gterm
@@ -49,45 +51,125 @@ type gobligation = (string * gterm) list * gpred
 
 (* compilation to Gappa formulas *)
 
+let t_float = Ident.create "float"
 let neg_float = Ident.create "neg_float"
 let add_float = Ident.create "add_float"
 let sub_float = Ident.create "sub_float"
 let mul_float = Ident.create "mul_float"
 let div_float = Ident.create "div_float"
+let float_part = Ident.create "float_part"
+let real_part = Ident.create "real_part"
+let id_rnd = Ident.create "rnd"
 
-let rec term = function
+let rnd e = if e = Exact then (fun t -> t) else (fun t -> Grnd t)
+
+let rec term e = function
   | Tconst (ConstFloat f) -> 
       Gcst f
   | Tconst _ ->
       assert false (*TODO*)
   | Tvar id -> 
-      assert false (*TODO*)
+      Gvar (e, Ident.string id)
   | Tderef id -> 
-      assert false (*TODO*)
+      Gvar (e, Ident.string id)
   (* real ops *)
   | Tapp (id, [t], _) when id == t_neg_real -> 
-      Gneg (term t)
+      Gneg (term e t)
   | Tapp (id, [t1; t2], _) when id == t_add_real -> 
-      Gadd (term t1, term t2)
+      Gadd (term e t1, term e t2)
   | Tapp (id, [t1; t2], _) when id == t_sub_real -> 
-      Gsub (term t1, term t2)
+      Gsub (term e t1, term e t2)
   | Tapp (id, [t1; t2], _) when id == t_mul_real -> 
-      Gmul (term t1, term t2)
+      Gmul (term e t1, term e t2)
   | Tapp (id, [t1; t2], _) when id == t_div_real -> 
-      Gdiv (term t1, term t2)
+      Gdiv (term e t1, term e t2)
   (* float ops *)
   | Tapp (id, [t], _) when id == neg_float -> 
-      Grnd (Gneg (term t))
+      rnd e (Gneg (term e t))
   | Tapp (id, [t1; t2], _) when id == add_float -> 
-      Grnd (Gadd (term t1, term t2))
+      rnd e (Gadd (term e t1, term e t2))
   | Tapp (id, [t1; t2], _) when id == sub_float -> 
-      Grnd (Gsub (term t1, term t2))
+      rnd e (Gsub (term e t1, term e t2))
   | Tapp (id, [t1; t2], _) when id == mul_float -> 
-      Grnd (Gmul (term t1, term t2))
+      rnd e (Gmul (term e t1, term e t2))
   | Tapp (id, [t1; t2], _) when id == div_float -> 
-      Grnd (Gdiv (term t1, term t2))
+      rnd e (Gdiv (term e t1, term e t2))
+  | Tapp (id, [t], _) when id == id_rnd ->
+      Grnd (term Exact t)
+  (* anything else is abstracted *)
+  | Tapp (id, [t], _) when id == float_part ->
+      term Float t
+  | Tapp (id, [t], _) when id == real_part ->
+      term Exact t
   | Tapp _ as t -> 
       assert false (*TODO: abstract*)
+
+(* recognition of a predicate as a conjunction (a list) of Gappa predicates *)
+
+type gappa_pred = 
+  | Equation of (string * gterm)
+  | Interval of (gterm * real_constant * real_constant)
+  | Other of predicate
+
+let rec gpred = function
+  | Papp (id, [Tvar x; t2], _) when is_eq id ->
+      [Equation (Ident.string x, term Float t2)]
+  | Pand (_, _, 
+	  Papp (id1, [Tconst (ConstFloat f1); t1], _),
+	  Papp (id2, [t2; Tconst (ConstFloat f2)], _))
+    when id1 == t_le_real && id2 == t_le_real && t1 = t2 ->
+      [Interval (term Float t1, f1, f2)]
+  | Pand (_, _, p1, p2) ->
+      gpred p1 @ gpred p2
+  | Pnamed (_, p) ->
+      gpred p
+  | Pimplies _ | Forall _ as p -> (* saved for later intros *)
+      [Other p]
+  | Papp _
+  | Por _
+  | Pif _
+  | Piff _
+  | Pnot _
+  | Forallb _
+  | Exists _
+  | Pfpi _
+  | Ptrue | Pfalse | Pvar _ -> (* discarded *)
+      [] 
+
+let fresh_var = 
+  let r = ref 0 in fun () -> incr r; "gappa_" ^ string_of_int !r
+
+(* splits the context into two lists: one list of equations and one list of
+   assumed intervals *)
+let context ctx = 
+  let rec split eqs ins = function
+    | [] ->
+	eqs, ins
+    | Svar (x, TTpure (PTexternal (_, id))) :: l when id == t_float ->
+	let v = fresh_var () in
+	let e = Ident.string x, Grnd (Gvar (Float, v)) in
+	split (e :: eqs) ins l
+    | Svar _ :: l ->
+	split eqs ins l
+    | Spred (_, p) :: l ->
+	let eqs, ins = 
+	  List.fold_left
+	    (fun (eqs,ins) p -> match p with
+	       | Equation e -> e::eqs, ins
+	       | Interval i -> eqs, i :: ins
+	       | Other _ -> eqs, ins)
+	    (eqs, ins) (gpred p)
+	in
+	split eqs ins l
+  in
+  split [] [] ctx
+
+(* Processing obligations.
+   One Why obligation can be split into several Gappa obligations *)
+
+let queue = Queue.create ()
+
+let reset () = Queue.clear queue
 
 let add_ctx_vars =
   List.fold_left 
@@ -102,95 +184,72 @@ let rec intros ctx = function
   | Pimplies (true, a, b) -> 
       let h = fresh_hyp () in 
       intros (Spred (h, a) :: ctx) b
+  | Pnamed (_, p) ->
+      intros ctx p
   | c -> 
       ctx, c
-
-
-let rec split_ands = function
-  | Pand (_, _, p1, p2) -> split_ands p1 @ split_ands p2
-  | Pnamed (_, p) -> split_ands p
-  | p -> [p]
-
-(* recognition of a predicate as a Gappa predicate; raises Exit if it fails *)
-
-type gappa_pred = 
-  | Equation of (string * gterm)
-  | Interval of (gterm * real_constant * real_constant)
-
-let gpred = function
-  | Papp (id, [Tvar x; t2], _) when is_eq id ->
-      Equation (Ident.string x, term t2)
-  | Pand (_, _, 
-	  Papp (id1, [Tconst (ConstFloat f1); t1], _),
-	  Papp (id2, [t2; Tconst (ConstFloat f2)], _))
-    when id1 == t_le_real && id2 == t_le_real && t1 = t2 ->
-      Interval (term t1, f1, f2)
-  | _ ->
-      raise Exit
-
-(* split all the conjunctions  of an hypothesis, returning a list of equations
-   and a list of Gin predicates *)
-let rec hypothesis = function
-  | Papp _ as p ->
-      (try (match gpred p with Equation e -> [e],[] | Interval i -> [],[i])
-       with Exit -> [],[])
-  | Pand _ as p ->
-      List.fold_left 
-	(fun (eqs,ins) p -> let el,il = hypothesis p in el @ eqs, il @ ins)
-	([],[]) (split_ands p)
-  | Pnamed (_, p) -> 
-      hypothesis p
-  | Por _
-  | Pif _
-  | Piff _
-  | Pnot _
-  | Forall _
-  | Forallb _
-  | Exists _
-  | Pfpi _
-  | Ptrue | Pfalse | Pvar _ | Pimplies _ -> [], []
-
-let context ctx = 
-  assert false (*TODO*)
-
-(* Processing obligations.
-   One Why obligation can be split into several Gappa obligations *)
-
-let queue = Queue.create ()
-
-let reset () = Queue.clear queue
 
 let process_obligation (_, _, (ctx, concl)) =
   let rec process ctx concl =
     let ctx,concl = intros ctx concl in
-    match split_ands concl with
-      | [] -> 
-	  assert false
-      | [p] -> 
-	  begin match gpred concl with
-	    | Interval (t,f1,f2) -> 
-		let concl = Gin (t,f1,f2) in
-		let eqs,ins = context ctx in
-		let concl = match ins with
-		  | [] -> concl
-		  | p :: ins ->  
-		      List.fold_right 
-			(fun (t,f1,f2) p -> Gand (Gin (t,f1,f2), p)) ins concl
-		in 
-		Queue.add (eqs, concl) queue
-	    | Equation _ -> 
-		()
-	  end
-      | cl -> 
-	  List.iter (process ctx) cl
+    List.iter (process_one ctx) (gpred concl)
+  and process_one ctx = function
+    | Equation _-> 
+	()
+    | Interval (t,f1,f2) ->
+	let concl = Gin (t,f1,f2) in
+	let eqs,ins = context ctx in
+	let concl = match ins with
+	  | [] -> 
+	      concl
+	  | (t,f1,f2) :: ins ->  
+	      let p = Gin (t,f1,f2) in
+	      let p =
+		List.fold_right 
+		  (fun (t,f1,f2) p -> Gand (Gin (t,f1,f2), p)) ins p
+	      in
+	      Gimplies (p, concl)
+	in 
+	Queue.add (eqs, concl) queue
+    | Other p ->
+	process ctx p
   in
   process ctx concl
 
 let push_obligations = List.iter process_obligation
 
-let print_obligation fmt o =
-  fprintf fmt "@rnd = %s\n" gappa_rnd;
-  fprintf fmt "TODO"
+let print_real fmt = function
+  | (i,f,"") -> fprintf fmt "%s.%s" i f
+  | (i,f,e) -> fprintf fmt "%s.%se%s" i f e
+
+let rec print_term fmt = function
+  | Gvar (Float, x) -> fprintf fmt "%s" x
+  | Gvar (Exact, x) -> fprintf fmt "exact_%s" x
+  | Grnd t -> fprintf fmt "rnd(%a)" print_term t
+  | Gcst r -> print_real fmt r
+  | Gneg t -> fprintf fmt "(-%a)" print_term t
+  | Gadd (t1, t2) -> fprintf fmt "(%a + %a)" print_term t1 print_term t2
+  | Gsub (t1, t2) -> fprintf fmt "(%a - %a)" print_term t1 print_term t2
+  | Gmul (t1, t2) -> fprintf fmt "(%a * %a)" print_term t1 print_term t2
+  | Gdiv (t1, t2) -> fprintf fmt "(%a / %a)" print_term t1 print_term t2
+
+let rec print_pred fmt = function
+  | Gin (t, r1, r2) ->
+      fprintf fmt "%a in [%a, %a]" print_term t print_real r1 print_real r2
+  | Gimplies (p1, p2) ->
+      fprintf fmt "(%a ->@ %a)" print_pred p1 print_pred p2
+  | Gand (p1, p2) ->
+      fprintf fmt "(%a and %a)" print_pred p1 print_pred p2
+  | Gnot p ->
+      fprintf fmt "(not %a)" print_pred p
+
+let print_equation fmt (x, t) = 
+  fprintf fmt "@[%s = %a;@]@\n" x print_term t
+
+let print_obligation fmt (eq,p) =
+  fprintf fmt "@@rnd = %s;@\n@\n" gappa_rnd;
+  fprintf fmt "%a@\n" (print_list newline print_equation) eq;
+  fprintf fmt "@[{ %a }@]@." print_pred p
 
 let output_file fwe =
   let sep = "### DO NOT EDIT ABOVE THIS LINE" in
@@ -198,6 +257,7 @@ let output_file fwe =
   Queue.iter
     (fun o ->
        incr i;
+       if debug then eprintf "gappa obligation %d@." !i;
        let file = fwe ^ "_why" ^ "_po_" ^ string_of_int !i ^ ".gappa" in
        do_not_edit_above ~file
 	 ~before:(fun fmt -> print_obligation fmt o)
