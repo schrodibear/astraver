@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.50 2006-02-03 13:24:35 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.51 2006-02-07 12:48:48 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -149,6 +149,10 @@ let rec type_why e =
     | NEseq (e1,e2) -> type_why e2 
     | NEassign (l,e) -> type_why e
     | NEassign_op (l,op,e) -> type_why e
+    | NEbinary (e1,Bsub_pointer,e2) | NEbinary (e1,Blt_pointer,e2) 
+    | NEbinary (e1,Bgt_pointer,e2) | NEbinary (e1,Ble_pointer,e2)     
+    | NEbinary (e1,Bge_pointer,e2) | NEbinary (e1,Beq_pointer,e2)     
+    | NEbinary (e1,Bneq_pointer,e2) -> Info.Int
     | NEcast (_,e) | NEunary (_,e) | NEincr (_,e) 
     | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
@@ -171,6 +175,14 @@ let rec type_why_for_term t =
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
     | NTunop (Clogic.Ufloat_of_int,_) -> Info.Float
     | NTunop (Clogic.Uint_of_float,_) -> Info.Int
+    | NTbinop (t1,Clogic.Bsub,t2) -> 
+	begin
+	  match type_why_for_term t1, type_why_for_term t2 with
+	    | Pointer _, Pointer _ -> Info.Int
+	    | Pointer _, _ -> assert false
+	    | _, Pointer _ -> assert false
+	    | ty,_ -> ty
+	end
     | NTbinop (t1,_,_) -> type_why_for_term t1
     | NTarrow (t,ty,z,v) -> ty
     | NTif (_,_,t) -> type_why_for_term t

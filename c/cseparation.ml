@@ -414,8 +414,7 @@ let rec term tyf t =
 	     f.logic_name (List.length li) (List.length l); false));
       List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
-  | NTunop (_,t) 
-(*  | NTstar t *)-> term tyf t 
+  | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
   | NTarrow (t,_,_,v) -> term tyf t
   | NTif (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3

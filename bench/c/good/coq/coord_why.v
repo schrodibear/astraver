@@ -18,8 +18,3 @@ intros.
 subst;intuition.
 Save.
 
-Proof.
-intuition.
-subst;auto.
-Save.
-

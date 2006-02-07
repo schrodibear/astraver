@@ -16,10 +16,6 @@ Require Export clash_spec_why.
   (not_assigns alloc toto_global toto_global0 (pset_singleton ma_structure)).
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
 subst.
 red;intros.
 rewrite acc_upd_neq;auto.
@@ -74,29 +70,8 @@ Save.
   (not_assigns alloc fst_global fst_global1
    (pset_singleton (acc substruct_global ma_structure))).
 Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst.
-apply alloc_stack_valid with Z8 result alloc; auto.
-Save.
-
-Proof.
-intros.
-subst;auto.
-Save.
-
-
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition;subst;auto.
+intuition;subst;
+auto.
 red;intros.
 rewrite acc_upd_neq;auto.
 intro;subst.
@@ -106,7 +81,7 @@ apply fresh_not_valid.
 auto.
 red;intros.
 rewrite acc_upd_neq;auto.
-assert (p<> ma_structure # substruct_Z7).
+assert (p<> ma_structure # substruct_struct_anonymous_2_7).
 apply pset_singleton_elim;auto.
 auto.
 Save.

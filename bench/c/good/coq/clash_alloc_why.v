@@ -3,13 +3,3 @@
 
 Require Export clash_alloc_spec_why.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-

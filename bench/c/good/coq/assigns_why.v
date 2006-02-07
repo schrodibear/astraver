@@ -89,11 +89,22 @@ Save.
   (Zwf 0 mutable_size0 mutable_size).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst Int_Z2_1.
+subst mutable_p0.
+subst result.
+red.
+intros.
+subst mutable_p.
+rewrite acc_upd_neq.
+rewrite H3;auto.
+apply pset_range_elim with (pset_singleton p) 0 (size-1);auto.
+omega.
+subst result.
+subst mutable_p0.
+subst mutable_p.
+rewrite shift_shift.
+apply eq_offset_eq_shift;auto.
+omega.
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
 
