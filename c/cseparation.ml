@@ -361,6 +361,8 @@ let rec unifier_type_why tw1 tw2 =
 	unifier_zone z1 z2
     | Info.Int, Info.Int -> ()
     | Info.Float, Info.Float -> ()
+    | Info.Int, Info.Float -> ()
+    | Info.Float, Info.Int -> ()
     | Unit, Unit -> ()
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false
@@ -507,7 +509,7 @@ let rec calcul_zones expr =
 	  | NEvar (Fun_info f) -> f
 	  | _  -> assert false 
 	in
-	let assoc = List.map (fun z -> (z,make_zone true)) f.args_zones in
+	let assoc = List.map (fun z ->(z,make_zone true)) f.args_zones in
 	call.ncall_zones_assoc <- assoc;
 	let arg_types =
 	  List.map 
@@ -516,6 +518,7 @@ let rec calcul_zones expr =
 		 | Pointer z as ty -> 
 		     begin
 		       try
+			 let z = repr z in
 			 Pointer (List.assoc z assoc)
 		       with
 			   Not_found -> ty
