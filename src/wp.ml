@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.92 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.93 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -195,7 +195,6 @@ let add_to_wp loc al w =
 let rec wp p q =
   (* Format.eprintf "wp with size(q) = %d@." (Size.postcondition_opt q); *)
   let q = option_app (force_post_loc p.info.t_loc) q in
-  let env = p.info.t_env in
   let lab = p.info.t_label in
   let q0_ = optpost_app (asst_app (change_label "" lab)) q in
   let d,w = wp_desc p.info p.desc q0_ in

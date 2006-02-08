@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.ml,v 1.2 2006-02-06 14:31:35 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.3 2006-02-08 07:16:00 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -101,7 +101,7 @@ let rec term e = function
       term Float t
   | Tapp (id, [t], _) when id == real_part ->
       term Exact t
-  | Tapp _ as t -> 
+  | Tapp _ -> 
       assert false (*TODO: abstract*)
 
 (* recognition of a predicate as a conjunction (a list) of Gappa predicates *)

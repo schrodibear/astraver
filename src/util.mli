@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.47 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.48 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -112,8 +112,6 @@ val make_var :
   Loc.position -> Ident.t -> type_v -> local_env -> typed_expr
 val make_expression :
   Loc.position -> term -> type_v -> local_env -> typed_expr
-val make_bool : 
-  Loc.position -> bool -> local_env -> typed_expr
 val make_annot_bool :
   Loc.position -> bool -> local_env -> typed_expr
 val make_void :

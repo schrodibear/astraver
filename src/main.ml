@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.89 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.90 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -37,7 +37,6 @@ let typed_progs = ref [] (* for the GUI *)
 let reset () =
   typed_progs := [];
   Vcg.logs := []; 
-  Fpi.reset ();
   match prover () with
   | Pvs -> Pvs.reset ()
   | Coq _ -> Coq.reset ()
@@ -163,8 +162,7 @@ let output fwe =
     | Hol4 -> Hol4.output_file fwe
     | Gappa -> Gappa.output_file fwe
     | Dispatcher -> ()
-  end;
-  if fpi then Fpi.output fwe
+  end
 
 (*s Processing of a single declaration [let id = p]. *)
 
@@ -223,7 +221,6 @@ let interp_program id p =
 	if_debug eprintf "no WP => no obligation@."
     | Some wp -> 
 	let ol,pr = Vcg.vcg_from_wp ids wp in
-	let ol = if fpi then Fpi.split ol else ol in
 	push_obligations ol;
 	push_validation (ids ^ "_wp") (TTpred wp.a_value) (CC_hole pr)
   end;

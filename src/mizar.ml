@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.28 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.29 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -294,16 +294,17 @@ let reprint_parameter fmt id c =
 let print_parameter = reprint_parameter
 
 let print_logic fmt id t = 
-  let (l,t) = Env.specialize_logic_type t in
+  let _ = Env.specialize_logic_type t in
   assert false (*TODO*)
 
 let reprint_logic fmt id t = print_logic fmt id t
 
 let reprint_axiom fmt id p =
-  let (l,p) = Env.specialize_predicate p in
-  assert false; (*TODO*)
+  let _ = Env.specialize_predicate p in
+  assert false (*TODO*)
+  (*
   fprintf fmt "@[ :: Why Axiom @]@\n";
-  fprintf fmt "@[ theorem %s:@\n @[%a@];@]@\n" id print_predicate p
+  fprintf fmt "@[ theorem %s:@\n @[%a@];@]@\n" id print_predicate p *)
 
 let print_axiom = reprint_axiom
 

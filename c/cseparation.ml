@@ -103,13 +103,12 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	  assert false
     end
   and valid_for (t : Cast.nterm) = match t.nterm_type.Ctypes.ctype_node with
-    | Tstruct (n) ->
+    | Tstruct n ->
  	valid_fields true n t
-    | Tarray (_,ty, None) ->
+    | Tarray (_, ty, None) ->
 	error loc ("array size missing in `" ^ name ^ "'")
-    | Tarray (valid,ty, Some s) ->
+    | Tarray (valid, ty, Some s) ->
 	assert valid;
-	let ts = Int64.to_string s in
 	let vrange = make_valid_range_from_0 t s in
 	let valid_form =
 	  make_and

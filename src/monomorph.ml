@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.8 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.9 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -190,7 +190,7 @@ module SV = struct
   let hash s = Hashtbl.hash (list_of s)
 
   let rec pure_type s = function
-    | PTvar ({type_val = None} as v) as t ->
+    | PTvar ({type_val = None} as v) ->
 	(try Vmap.find v s with Not_found -> assert false (*t?*))
     | PTvar {type_val = Some pt} ->
 	pure_type s pt

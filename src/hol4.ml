@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.7 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.8 2006-02-08 07:16:00 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -235,7 +235,7 @@ let print_parameter fmt id v =
 
 (* TODO *)
 let print_logic fmt id t =
-  let (l,t) = Env.specialize_logic_type t in
+  let _ = Env.specialize_logic_type t in
   fprintf fmt "(* logic %s *);;" id
 
 (* TODO *)

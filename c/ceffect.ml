@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.111 2006-02-03 13:24:35 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.112 2006-02-08 07:16:00 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1017,7 +1017,6 @@ let decl d =
 		   nterm_type = ty ;
 		     } in
 	  let (pre,_) = invariant_for_constant d.loc ty t init in
-	  let info = Info.default_logic_info id in 
 	  add_strong_invariant_2 id pre [] ;
 	  add_strong_invariant id pre 
 	    {ef_empty with reads_var =(HeapVarSet.singleton v)}

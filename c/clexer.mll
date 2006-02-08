@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.19 2005-11-07 15:13:28 hubert Exp $ i*)
+(*i $Id: clexer.mll,v 1.20 2006-02-08 07:16:00 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -217,7 +217,7 @@ and annot = parse
     let lb = from_channel c in
     try
       Cparser.file token lb
-    with Parsing.Parse_error as e ->
+    with Parsing.Parse_error ->
       Creport.raise_located (loc lb) (AnyMessage "Syntax error")
 
 }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.70 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.71 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -477,10 +477,7 @@ let wfrec_with_binders bl (phi,a,r) pre info f ren =
   let env = info.t_env in
   let vphi = variant_name () in
   let wr = get_writes info.t_effect in
-  let info' = 
-    let eq = Misc.anonymous Loc.dummy_position (equality (Tvar vphi) phi) in
-    { info with t_effect = keep_writes info.t_effect }
-  in
+  let info' = { info with t_effect = keep_writes info.t_effect } in
   let a = TTpure a in
   let w = wf_name () in
   let k = info' in

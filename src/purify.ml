@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: purify.ml,v 1.2 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: purify.ml,v 1.3 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -42,7 +42,7 @@ let get_post p = match p.info.t_post with
   | Some (q,_) -> q
 
 let make_node p d q =
-  { p with desc = d; info = { p.info with t_post = Some (q,[]) } }
+  { desc = d; info = { p.info with t_post = Some (q,[]) } }
 
 let q_true_false q =
   let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) q in

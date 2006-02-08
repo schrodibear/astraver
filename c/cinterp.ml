@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.166 2006-02-03 13:11:27 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.167 2006-02-08 07:16:00 filliatr Exp $ i*)
 
 
 open Format
@@ -973,7 +973,8 @@ let interp_assigns before assigns = function
 	(fun v m -> StringMap.add (heap_var_name v) (Reference false) m)
 	  assigns.Ceffect.reads_var StringMap.empty in
       let m = ZoneSet.fold
-	(fun (z,s,ty) m -> StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
+	(fun (z,s,ty) m -> 
+	   StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
 	 assigns.Ceffect.reads StringMap.empty in
       let l = 
 	List.fold_left (collect_locations before) m locl
@@ -1622,7 +1623,6 @@ let interp_function_spec id sp ty pl =
       {Ceffect.ef_empty with Ceffect.reads = id.function_reads; 
 	 Ceffect.assigns = id.function_writes} sp 
   in
-  let i = ref 0 in
   let tpl = interp_fun_params id.function_reads pl in   
   let r = heap_var_unique_names id.function_reads_var in
   let w = heap_var_unique_names id.function_writes_var in

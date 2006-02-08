@@ -234,7 +234,6 @@
   let is_typedef = List.exists ((=) Stypedef)
 
   let declaration specs decls =
-    let l = loc() in
     if is_typedef specs then
       let interp = function
 	| (n,d), None -> 

@@ -253,8 +253,7 @@ let rec type_type_why ?name ty zone_is_var =
 	    type_type_why ?name (find_typedef v) zone_is_var
 	  with Not_found -> 
 	    assert false;
-	    (* v is a logic type *)
-	    Why_Logic v
+	    (* v is a logic type => Why_Logic v *)
 	end
     | Tunion s -> 
 	let z = make_zone ?name zone_is_var in

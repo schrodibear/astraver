@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.36 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.37 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -235,9 +235,9 @@ let rec red sp s cct =
 	 | CC_term tf, CC_term ta ->
 	     CC_term (applist tf [ta])
 	 (* beta-redex *)
-	 | CC_lam ((x,_),e) as rf, CC_term ta ->
+	 | CC_lam ((x,_),e), CC_term ta ->
 	     red sp (Idmap.add x ta s) e
-	 | CC_lam ((x,_),e) as rf, ra ->
+	 | CC_lam ((x,_),e), ra ->
 	     red (Idmap.add x ra sp) s e
 	 | rf, ra -> 
 	     CC_app (rf, ra))

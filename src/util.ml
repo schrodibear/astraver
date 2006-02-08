@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.109 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.110 2006-02-08 07:16:01 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -352,11 +352,7 @@ let make_var loc x t env =
 let make_expression loc e t env =
   make_lnode loc (Expression e) env (type_c_of_v t)
     
-let make_bool loc b env = 
-  make_expression loc (Tconst (ConstBool b)) (PureType PTbool) env
-
 let make_annot_bool loc b env =
-  let e = make_bool loc b env in
   let k = type_c_of_v (PureType PTbool) in
   let b = Tconst (ConstBool b) in
   let q = equality (Tvar result) b in
