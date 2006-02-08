@@ -6,11 +6,11 @@ Require Export logic_cast_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) global)),
+  forall (t: ((pointer) t_2)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
-  (* File "logic_cast.c", line 10, characters 11-25 *) (0 <= I /\ I <= 4).
+  0 <= I.
 Proof.
 intuition.
 Save.
@@ -18,19 +18,11 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) global)),
+  forall (t: ((pointer) t_2)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
-  forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
-                I /\ I <= 4)),
-  forall (I0: Z),
-  forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
-                I0 /\ I0 <= 4)),
-  forall (HW_6: I0 < 4),
-  forall (result: ((pointer) global)),
-  forall (HW_7: result = (shift t I0)),
-  (valid alloc result).
+  I <= 4.
 Proof.
 intuition.
 subst;auto.
@@ -39,27 +31,101 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) global)),
+  forall (t: ((pointer) t_2)),
   forall (HW_1: (valid_range alloc t 0 3)),
   forall (I: Z),
   forall (HW_3: I = 0),
   forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I /\ I <= 4)),
   forall (I0: Z),
-  forall (intM_global: ((memory) Z global)),
   forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
                 I0 /\ I0 <= 4)),
   forall (HW_6: I0 < 4),
-  forall (result: ((pointer) global)),
+  forall (result: ((pointer) t_2)),
+  forall (HW_7: result = (shift t I0)),
+  (valid alloc result).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (t: ((pointer) t_2)),
+  forall (HW_1: (valid_range alloc t 0 3)),
+  forall (I: Z),
+  forall (HW_3: I = 0),
+  forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
+                I /\ I <= 4)),
+  forall (I0: Z),
+  forall (intM_t_2: ((memory) Z t_2)),
+  forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
+                I0 /\ I0 <= 4)),
+  forall (HW_6: I0 < 4),
+  forall (result: ((pointer) t_2)),
   forall (HW_7: result = (shift t I0)),
   forall (HW_8: (valid alloc result)),
-  forall (intM_global0: ((memory) Z global)),
-  forall (HW_9: intM_global0 = (upd intM_global result I0)),
+  forall (intM_t_2_0: ((memory) Z t_2)),
+  forall (HW_9: intM_t_2_0 = (upd intM_t_2 result I0)),
   forall (I1: Z),
   forall (HW_10: I1 = (I0 + 1)),
-  (* File "logic_cast.c", line 10, characters 11-25 *) (0 <= I1 /\ I1 <= 4) /\
+  0 <= I1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (t: ((pointer) t_2)),
+  forall (HW_1: (valid_range alloc t 0 3)),
+  forall (I: Z),
+  forall (HW_3: I = 0),
+  forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
+                I /\ I <= 4)),
+  forall (I0: Z),
+  forall (intM_t_2: ((memory) Z t_2)),
+  forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
+                I0 /\ I0 <= 4)),
+  forall (HW_6: I0 < 4),
+  forall (result: ((pointer) t_2)),
+  forall (HW_7: result = (shift t I0)),
+  forall (HW_8: (valid alloc result)),
+  forall (intM_t_2_0: ((memory) Z t_2)),
+  forall (HW_9: intM_t_2_0 = (upd intM_t_2 result I0)),
+  forall (I1: Z),
+  forall (HW_10: I1 = (I0 + 1)),
+  I1 <= 4.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (t: ((pointer) t_2)),
+  forall (HW_1: (valid_range alloc t 0 3)),
+  forall (I: Z),
+  forall (HW_3: I = 0),
+  forall (HW_4: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
+                I /\ I <= 4)),
+  forall (I0: Z),
+  forall (intM_t_2: ((memory) Z t_2)),
+  forall (HW_5: (* File "logic_cast.c", line 10, characters 11-25 *) (0 <=
+                I0 /\ I0 <= 4)),
+  forall (HW_6: I0 < 4),
+  forall (result: ((pointer) t_2)),
+  forall (HW_7: result = (shift t I0)),
+  forall (HW_8: (valid alloc result)),
+  forall (intM_t_2_0: ((memory) Z t_2)),
+  forall (HW_9: intM_t_2_0 = (upd intM_t_2 result I0)),
+  forall (I1: Z),
+  forall (HW_10: I1 = (I0 + 1)),
   (Zwf 0 (4 - I1) (4 - I0)).
 Proof.
 intuition.
+(* FILL PROOF HERE *)
 Save.
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.55 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.56 2006-02-08 10:47:15 hubert Exp $ i*)
 
 open Format
 
@@ -41,6 +41,7 @@ let dir_ = ref ""
 let white_ = ref false
 let black_ = ref true
 let wbb_ = ref false
+let split_user_conj_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
@@ -141,6 +142,7 @@ Typing/Annotations/VCG options:
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
+  --split-user-conj  split also user conjunctions in goals 
   --split n          split conditions into several pieces up to n levels
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
@@ -293,6 +295,8 @@ let files =
 	black_ := true; white_ := false; parse args
     | ("-wbb" | "--wbb") :: args ->
         wbb_ := true; parse args
+    | ("-split-user-conj" | "--split-user-conj") :: args ->
+	split_user_conj_ := true; parse args
     | ("-split" | "--split") :: n :: args ->
 	begin try lvlmax_ := int_of_string n with _ -> usage (); exit 1 end; 
 	parse args
@@ -346,6 +350,7 @@ let dir = !dir_
 let white = !white_
 let black = !black_
 let wbb = !wbb_
+let split_user_conj = !split_user_conj_
 let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_

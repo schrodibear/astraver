@@ -19,7 +19,7 @@ Save.
   forall (HW_4: n = 5),
   forall (n0: Z),
   forall (HW_5: n0 = 0),
-  (* File "continue.c", line 8, characters 17-23 *) 0 <= n0 /\ (Zwf 0 n0 n).
+  (* File "continue.c", line 8, characters 17-23 *) 0 <= n0.
 Proof.
 intuition.
 Save.
@@ -30,10 +30,10 @@ Save.
   forall (n: Z),
   forall (HW_2: (* File "continue.c", line 8, characters 17-23 *) 0 <= n),
   forall (HW_3: n > 0),
-  forall (HW_6: n <> 5),
+  forall (HW_4: n = 5),
   forall (n0: Z),
-  forall (HW_7: n0 = (n - 1)),
-  (* File "continue.c", line 8, characters 17-23 *) 0 <= n0 /\ (Zwf 0 n0 n).
+  forall (HW_5: n0 = 0),
+  (Zwf 0 n0 n).
 Proof.
 intuition.
 Save.
@@ -43,10 +43,40 @@ Save.
   forall (HW_1: (* File "continue.c", line 8, characters 17-23 *) 0 <= 10),
   forall (n: Z),
   forall (HW_2: (* File "continue.c", line 8, characters 17-23 *) 0 <= n),
-  forall (HW_8: n <= 0),
-  (* File "continue.c", line 4, characters 13-25 *) n = 0.
+  forall (HW_3: n > 0),
+  forall (HW_6: n <> 5),
+  forall (n0: Z),
+  forall (HW_7: n0 = (n - 1)),
+  (* File "continue.c", line 8, characters 17-23 *) 0 <= n0.
 Proof.
 intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_5 : 
+  forall (HW_1: (* File "continue.c", line 8, characters 17-23 *) 0 <= 10),
+  forall (n: Z),
+  forall (HW_2: (* File "continue.c", line 8, characters 17-23 *) 0 <= n),
+  forall (HW_3: n > 0),
+  forall (HW_6: n <> 5),
+  forall (n0: Z),
+  forall (HW_7: n0 = (n - 1)),
+  (Zwf 0 n0 n).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f1_impl_po_6 : 
+  forall (HW_1: (* File "continue.c", line 8, characters 17-23 *) 0 <= 10),
+  forall (n: Z),
+  forall (HW_2: (* File "continue.c", line 8, characters 17-23 *) 0 <= n),
+  forall (HW_8: n <= 0),
+  n = 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -71,8 +101,7 @@ Save.
   forall (HW_6: i1 = 6),
   forall (i2: Z),
   forall (HW_7: i2 = (i1 + 1)),
-  (* File "continue.c", line 20, characters 17-24 *) i2 <= 10 /\
-  (Zwf 0 (10 - i2) (10 - i0)).
+  (* File "continue.c", line 20, characters 17-24 *) i2 <= 10.
 Proof.
 intuition.
 Save.
@@ -85,11 +114,12 @@ Save.
   forall (i0: Z),
   forall (HW_3: (* File "continue.c", line 20, characters 17-24 *) i0 <= 10),
   forall (HW_4: i0 < 10),
-  forall (HW_8: i0 <> 5),
+  forall (HW_5: i0 = 5),
   forall (i1: Z),
-  forall (HW_9: i1 = (i0 + 1)),
-  (* File "continue.c", line 20, characters 17-24 *) i1 <= 10 /\
-  (Zwf 0 (10 - i1) (10 - i0)).
+  forall (HW_6: i1 = 6),
+  forall (i2: Z),
+  forall (HW_7: i2 = (i1 + 1)),
+  (Zwf 0 (10 - i2) (10 - i0)).
 Proof.
 intuition.
 Save.
@@ -101,17 +131,51 @@ Save.
   forall (HW_2: (* File "continue.c", line 20, characters 17-24 *) i <= 10),
   forall (i0: Z),
   forall (HW_3: (* File "continue.c", line 20, characters 17-24 *) i0 <= 10),
-  forall (HW_10: i0 >= 10),
-  (* File "continue.c", line 16, characters 13-26 *) i0 = 10.
+  forall (HW_4: i0 < 10),
+  forall (HW_8: i0 <> 5),
+  forall (i1: Z),
+  forall (HW_9: i1 = (i0 + 1)),
+  (* File "continue.c", line 20, characters 17-24 *) i1 <= 10.
 Proof.
 intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_5 : 
+  forall (i: Z),
+  forall (HW_1: i = 0),
+  forall (HW_2: (* File "continue.c", line 20, characters 17-24 *) i <= 10),
+  forall (i0: Z),
+  forall (HW_3: (* File "continue.c", line 20, characters 17-24 *) i0 <= 10),
+  forall (HW_4: i0 < 10),
+  forall (HW_8: i0 <> 5),
+  forall (i1: Z),
+  forall (HW_9: i1 = (i0 + 1)),
+  (Zwf 0 (10 - i1) (10 - i0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_6 : 
+  forall (i: Z),
+  forall (HW_1: i = 0),
+  forall (HW_2: (* File "continue.c", line 20, characters 17-24 *) i <= 10),
+  forall (i0: Z),
+  forall (HW_3: (* File "continue.c", line 20, characters 17-24 *) i0 <= 10),
+  forall (HW_10: i0 >= 10),
+  i0 = 10.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
   forall (i: Z),
   forall (HW_2: i = 0),
-  (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\ i <> 6).
+  i <= 7.
 Proof.
 intuition.
 Save.
@@ -120,19 +184,7 @@ Save.
 (*Why goal*) Lemma f3_impl_po_2 : 
   forall (i: Z),
   forall (HW_2: i = 0),
-  forall (HW_3: (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\
-                i <> 6)),
-  forall (i0: Z),
-  forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
-                7 /\ i0 <> 6)),
-  forall (HW_5: i0 < 6),
-  forall (HW_6: i0 = 5),
-  forall (i1: Z),
-  forall (HW_7: i1 = 6),
-  forall (i2: Z),
-  forall (HW_8: i2 = (i1 + 1)),
-  (* File "continue.c", line 31, characters 17-33 *) (i2 <= 7 /\ i2 <> 6) /\
-  (Zwf 0 (7 - i2) (7 - i0)).
+  i <> 6.
 Proof.
 intuition.
 Save.
@@ -147,11 +199,12 @@ Save.
   forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
                 7 /\ i0 <> 6)),
   forall (HW_5: i0 < 6),
-  forall (HW_9: i0 <> 5),
+  forall (HW_6: i0 = 5),
   forall (i1: Z),
-  forall (HW_10: i1 = (i0 + 1)),
-  (* File "continue.c", line 31, characters 17-33 *) (i1 <= 7 /\ i1 <> 6) /\
-  (Zwf 0 (7 - i1) (7 - i0)).
+  forall (HW_7: i1 = 6),
+  forall (i2: Z),
+  forall (HW_8: i2 = (i1 + 1)),
+  i2 <= 7.
 Proof.
 intuition.
 Save.
@@ -165,9 +218,108 @@ Save.
   forall (i0: Z),
   forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
                 7 /\ i0 <> 6)),
-  forall (HW_11: i0 >= 6),
-  (* File "continue.c", line 27, characters 13-25 *) i0 = 7.
+  forall (HW_5: i0 < 6),
+  forall (HW_6: i0 = 5),
+  forall (i1: Z),
+  forall (HW_7: i1 = 6),
+  forall (i2: Z),
+  forall (HW_8: i2 = (i1 + 1)),
+  i2 <> 6.
 Proof.
 intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_5 : 
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\
+                i <> 6)),
+  forall (i0: Z),
+  forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
+                7 /\ i0 <> 6)),
+  forall (HW_5: i0 < 6),
+  forall (HW_6: i0 = 5),
+  forall (i1: Z),
+  forall (HW_7: i1 = 6),
+  forall (i2: Z),
+  forall (HW_8: i2 = (i1 + 1)),
+  (Zwf 0 (7 - i2) (7 - i0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_6 : 
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\
+                i <> 6)),
+  forall (i0: Z),
+  forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
+                7 /\ i0 <> 6)),
+  forall (HW_5: i0 < 6),
+  forall (HW_9: i0 <> 5),
+  forall (i1: Z),
+  forall (HW_10: i1 = (i0 + 1)),
+  i1 <= 7.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_7 : 
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\
+                i <> 6)),
+  forall (i0: Z),
+  forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
+                7 /\ i0 <> 6)),
+  forall (HW_5: i0 < 6),
+  forall (HW_9: i0 <> 5),
+  forall (i1: Z),
+  forall (HW_10: i1 = (i0 + 1)),
+  i1 <> 6.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_8 : 
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\
+                i <> 6)),
+  forall (i0: Z),
+  forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
+                7 /\ i0 <> 6)),
+  forall (HW_5: i0 < 6),
+  forall (HW_9: i0 <> 5),
+  forall (i1: Z),
+  forall (HW_10: i1 = (i0 + 1)),
+  (Zwf 0 (7 - i1) (7 - i0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f3_impl_po_9 : 
+  forall (i: Z),
+  forall (HW_2: i = 0),
+  forall (HW_3: (* File "continue.c", line 31, characters 17-33 *) (i <= 7 /\
+                i <> 6)),
+  forall (i0: Z),
+  forall (HW_4: (* File "continue.c", line 31, characters 17-33 *) (i0 <=
+                7 /\ i0 <> 6)),
+  forall (HW_11: i0 >= 6),
+  i0 = 7.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

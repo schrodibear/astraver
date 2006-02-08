@@ -280,7 +280,7 @@ let add_ctx_vars =
    return the new goal (context-conclusion), together with a proof-term
    modifier to apply to the proof-term found for the new goal. *)
 let rec intros ctx = function
-  | Forall (true, id, n, t, p) ->
+  | Forall (_, id, n, t, p) ->
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
@@ -288,11 +288,13 @@ let rec intros ctx = function
       ctx', concl',
       (fun pr -> 
 	 ProofTerm (cc_lam [id', CC_var_binder (TTpure t)] (CC_hole (f pr))))
-  | Pimplies (true, a, b) -> 
+  | Pimplies (_, a, b) -> 
       let h = fresh_hyp () in 
       let ctx', concl', f = intros (Spred (h, a) :: ctx) b in
       ctx', concl', 
       (fun pr -> ProofTerm (cc_lam [h, CC_pred_binder a] (CC_hole (f pr))))
+  | Pnamed (_, p) ->
+      intros ctx p
   | c -> 
       ctx, c, (fun pr -> pr)
 
@@ -604,32 +606,40 @@ let conj = match prover () with
 let asym_conj = Ident.create "why_asym_conj"
 
 let rec split lvl ctx = function
-  | Pand (true, true, p1, p2) when lvl < lvlmax ->
-      let o1,pr1 = split (succ lvl) ctx p1 in
+  | Pand (wp, true, p1, p2) 
+      when (wp || Options.split_user_conj) ->
+      let o1,pr1 = split lvl ctx p1 in
       let n1 = List.length o1 in
-      let o2,pr2 = split (succ lvl) ctx p2 in
+      let o2,pr2 = split lvl ctx p2 in
       o1 @ o2, 
       (fun pl -> 
 	 let l1,l2 = split_list n1 pl in 
 	 ProofTerm 
 	   (cc_applist (cc_var conj) [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
   (* asymetric conjunction *)
-  | Pand (true, false, p1, p2) when lvl < lvlmax ->
-      let o1,pr1 = split (succ lvl) ctx p1 in
+  | Pand (wp, false, p1, p2) 
+      when (wp || Options.split_user_conj) ->
+      let o1,pr1 = split lvl ctx p1 in
       let n1 = List.length o1 in
       let p2 = Pimplies (true, p1, p2) in
-      let o2,pr2 = split (succ lvl) ctx p2 in
+      let o2,pr2 = split lvl ctx p2 in
       o1 @ o2, 
       (fun pl -> 
 	 let l1,l2 = split_list n1 pl in 
 	 ProofTerm 
 	   (cc_applist (cc_var asym_conj) 
 	      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
-  | Pimplies (true, _, _)
-  | Forall (true, _, _, _, _) as concl ->
+  | Pimplies (wp, _, _)
+  | Forall (wp, _, _, _,_) as concl 
+      when (wp || Options.split_user_conj) && lvl < lvlmax ->
       let ctx',concl',pr_intros = intros ctx concl in
-      let ol,prl = split lvl ctx' concl' in
+      let ol,prl = split (succ lvl) ctx' concl' in
       ol, (fun pl -> pr_intros (prl pl))
+  | Pnamed (_, p1) as concl ->
+      begin match split lvl ctx p1 with
+	| [_],_ -> [ctx,concl], (function [pr] -> pr | _ -> assert false)
+	| gl -> gl
+      end
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
 

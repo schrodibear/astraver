@@ -4,25 +4,14 @@
 Require Export call_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_1 : 
-  forall (y: Z),
-  forall (ddd: Z),
-  forall (z: Z),
-  forall (HW_1: (* File "call.c", line 11, characters 14-22 *) y = ddd),
-  forall (u: Z),
-  forall (HW_2: u = (z + 1)),
-  (* File "call.c", line 11, characters 48-60 *) z = z.
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: x = 0),
+  forall (HW_1: (constant_x x)),
   forall (x0: Z),
-  forall (HW_2: x0 = (x + 1)),
-  (* File "call.c", line 11, characters 14-22 *) 1 = x0.
+  forall (HW_2: x0 = 0),
+  forall (x1: Z),
+  forall (HW_3: x1 = (x0 + 1)),
+  (* File "call.c", line 11, characters 14-22 *) 1 = x1.
 Proof.
 intuition.
 Save.
@@ -30,15 +19,17 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_2 : 
   forall (x: Z),
-  forall (HW_1: x = 0),
+  forall (HW_1: (constant_x x)),
   forall (x0: Z),
-  forall (HW_2: x0 = (x + 1)),
-  forall (HW_3: (* File "call.c", line 11, characters 14-22 *) 1 = x0),
-  forall (result: Z),
-  forall (HW_4: (* File "call.c", line 11, characters 48-60 *) result = 2),
+  forall (HW_2: x0 = 0),
   forall (x1: Z),
-  forall (HW_5: x1 = result),
-  (* File "call.c", line 18, characters 13-19 *) x1 = 2.
+  forall (HW_3: x1 = (x0 + 1)),
+  forall (HW_4: (* File "call.c", line 11, characters 14-22 *) 1 = x1),
+  forall (result: Z),
+  forall (HW_5: (* File "call.c", line 11, characters 48-60 *) result = 2),
+  forall (x2: Z),
+  forall (HW_6: x2 = result),
+  x2 = 2.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

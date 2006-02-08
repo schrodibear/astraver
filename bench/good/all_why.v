@@ -112,25 +112,12 @@ tauto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma p7_po_1 : 
-  (forall (x:Z), x = x).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p8_po_1 : 
   True /\ (forall (x:Z), x = x).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma p9_po_1 : 
-  (forall (x:Z), (forall (y:Z), (x = y -> x = y))).
-Proof.
-intuition.
-Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma ar6_po_1 : 

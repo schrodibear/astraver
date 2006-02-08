@@ -5,11 +5,14 @@ Require Export passing_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (x: ((pointer) global)),
+  forall (A778:Set),
+  forall (x: ((pointer) A778)),
   forall (alloc: alloc_table),
-  forall (t: ((pointer) global)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
   forall (HW_1: (* File "passing.c", line 21, characters 14-31 *)
-                (valid_index alloc x 0) /\ (valid_range alloc t 0 1)),
+                (valid_index alloc x 0) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
   (valid alloc x).
 Proof.
 intuition.
@@ -19,17 +22,19 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (x: ((pointer) global)),
+  forall (A779:Set),
+  forall (x: ((pointer) A779)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
-  forall (t: ((pointer) global)),
+  forall (intM_x_10: ((memory) Z A779)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
   forall (HW_1: (* File "passing.c", line 21, characters 14-31 *)
-                (valid_index alloc x 0) /\ (valid_range alloc t 0 1)),
+                (valid_index alloc x 0) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
   forall (HW_2: (valid alloc x)),
-  forall (intM_global0: ((memory) Z global)),
-  forall (HW_3: intM_global0 = (upd intM_global x 1)),
-  (* File "passing.c", line 21, characters 53-62 *) (acc intM_global0 x) = 1 /\
-  (not_assigns alloc intM_global intM_global0 (pset_singleton x)).
+  forall (intM_x_10_0: ((memory) Z A779)),
+  forall (HW_3: intM_x_10_0 = (upd intM_x_10 x 1)),
+  (* File "passing.c", line 21, characters 53-62 *) (acc intM_x_10_0 x) = 1.
 Proof.
 intuition.
 subst; caduceus.
@@ -42,24 +47,44 @@ auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_3 : 
+  forall (A780:Set),
+  forall (x: ((pointer) A780)),
+  forall (alloc: alloc_table),
+  forall (intM_x_10: ((memory) Z A780)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
+  forall (HW_1: (* File "passing.c", line 21, characters 14-31 *)
+                (valid_index alloc x 0) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
+  forall (HW_2: (valid alloc x)),
+  forall (intM_x_10_0: ((memory) Z A780)),
+  forall (HW_3: intM_x_10_0 = (upd intM_x_10 x 1)),
+  (not_assigns alloc intM_x_10 intM_x_10_0 (pset_singleton x)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
-  forall (r: ((pointer) global)),
-  forall (t: ((pointer) global)),
+  forall (intM_r_9: ((memory) Z r_9)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
   forall (HW_1: (* File "passing.c", line 13, characters 14-23 *)
-                (valid alloc r) /\ (valid_range alloc t 0 1)),
+                (valid alloc r) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
   forall (HW_2: (* File "passing.c", line 8, characters 14-23 *)
                 (valid alloc r)),
-  forall (intM_global0: ((memory) Z global)),
+  forall (intM_r_9_0: ((memory) Z r_9)),
   forall (HW_3: (* File "passing.c", line 8, characters 43-50 *)
-                (acc intM_global0 r) = 0 /\
-                (not_assigns alloc intM_global intM_global0
-                 (pset_singleton r))),
+                (acc intM_r_9_0 r) = 0 /\
+                (not_assigns alloc intM_r_9 intM_r_9_0 (pset_singleton r))),
   forall (HW_4: (valid alloc r)),
   forall (result: Z),
-  forall (HW_5: result = (acc intM_global0 r)),
-  (* File "passing.c", line 13, characters 32-44 *) result = 0.
+  forall (HW_5: result = (acc intM_r_9_0 r)),
+  result = 0.
 Proof.
 intuition.
 Save.
@@ -86,17 +111,19 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (x: ((pointer) global)),
+  forall (A781:Set),
+  forall (x: ((pointer) A781)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
-  forall (t: ((pointer) global)),
+  forall (intM_x_8: ((memory) Z A781)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
   forall (HW_1: (* File "passing.c", line 8, characters 14-23 *)
-                (valid alloc x) /\ (valid_range alloc t 0 1)),
+                (valid alloc x) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
   forall (HW_2: (valid alloc x)),
-  forall (intM_global0: ((memory) Z global)),
-  forall (HW_3: intM_global0 = (upd intM_global x 0)),
-  (* File "passing.c", line 8, characters 43-50 *) (acc intM_global0 x) = 0 /\
-  (not_assigns alloc intM_global intM_global0 (pset_singleton x)).
+  forall (intM_x_8_0: ((memory) Z A781)),
+  forall (HW_3: intM_x_8_0 = (upd intM_x_8 x 0)),
+  (* File "passing.c", line 8, characters 43-50 *) (acc intM_x_8_0 x) = 0.
 Proof.
 intuition.
 Save.
@@ -119,10 +146,31 @@ intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_2 : 
+  forall (A782:Set),
+  forall (x: ((pointer) A782)),
+  forall (alloc: alloc_table),
+  forall (intM_x_8: ((memory) Z A782)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
+  forall (HW_1: (* File "passing.c", line 8, characters 14-23 *)
+                (valid alloc x) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
+  forall (HW_2: (valid alloc x)),
+  forall (intM_x_8_0: ((memory) Z A782)),
+  forall (HW_3: intM_x_8_0 = (upd intM_x_8 x 0)),
+  (not_assigns alloc intM_x_8 intM_x_8_0 (pset_singleton x)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (t: ((pointer) global)),
-  forall (HW_1: (valid_range alloc t 0 1)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
+  forall (HW_1: (valid_range alloc t 0 1) /\ (constant_r r)),
   (* File "passing.c", line 21, characters 14-31 *) (valid_index alloc t 0).
 Proof.
 intuition.

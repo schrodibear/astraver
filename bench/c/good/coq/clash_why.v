@@ -5,15 +5,19 @@ Require Export clash_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_1 : 
-  forall (ma_structure: ((pointer) global)),
+  forall (A803:Set),
+  forall (ma_structure: ((pointer) A803)),
   forall (alloc: alloc_table),
-  forall (toto_global: ((memory) Z global)),
-  forall (HW_1: (valid alloc ma_structure)),
+  forall (toto_ma_structure_6: ((memory) Z A803)),
+  forall (y: Z),
+  forall (HW_1: (valid alloc ma_structure) /\ (constant_y y)),
   forall (toto_0: Z),
   forall (HW_3: toto_0 = 0),
-  forall (toto_global0: ((memory) Z global)),
-  forall (HW_4: toto_global0 = (upd toto_global ma_structure toto_0)),
-  (not_assigns alloc toto_global toto_global0 (pset_singleton ma_structure)).
+  forall (toto_ma_structure_6_0: ((memory) Z A803)),
+  forall (HW_4: toto_ma_structure_6_0 = (upd toto_ma_structure_6 ma_structure
+                                         toto_0)),
+  (not_assigns alloc toto_ma_structure_6 toto_ma_structure_6_0
+   (pset_singleton ma_structure)).
 Proof.
 intuition.
 subst.
@@ -26,13 +30,16 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
-  forall (ma_structure: ((pointer) global)),
+  forall (A804:Set),
+  forall (ma_structure: ((pointer) A804)),
   forall (alloc: alloc_table),
-  forall (substruct_global: ((memory) ((pointer) global) global)),
+  forall (substruct_ma_structure_7: ((memory) ((pointer) substruct_2) A804)),
+  forall (y: Z),
   forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_global ma_structure))) /\
-                (valid1 substruct_global) /\
-                (separation2 substruct_global substruct_global)),
+                (valid alloc (acc substruct_ma_structure_7 ma_structure))) /\
+                (constant_y y) /\ (valid1 substruct_ma_structure_7) /\
+                (separation2 substruct_ma_structure_7
+                 substruct_ma_structure_7)),
   1 >= 1.
 Proof.
 intuition.
@@ -40,60 +47,141 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
-  forall (A785:Set), forall (A786:Set), forall (A787:Set), forall (A788:Set),
-  forall (A789:Set), forall (A790:Set), forall (A791:Set),
-  forall (ma_structure: ((pointer) global)),
+  forall (A805:Set), forall (A806:Set), forall (A807:Set), forall (A808:Set),
+  forall (A809:Set), forall (A810:Set), forall (A811:Set), forall (A812:Set),
+  forall (A813:Set),
+  forall (ma_structure: ((pointer) A812)),
   forall (alloc: alloc_table),
-  forall (fst_global: ((memory) Z global)),
-  forall (substruct_global: ((memory) ((pointer) global) global)),
+  forall (fst_substruct_2: ((memory) Z substruct_2)),
+  forall (fst_substruct_8: ((memory) Z A813)),
+  forall (substruct_ma_structure_7: ((memory) ((pointer) substruct_2) A812)),
+  forall (y: Z),
   forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
-                (valid alloc (acc substruct_global ma_structure))) /\
-                (valid1 substruct_global) /\
-                (separation2 substruct_global substruct_global)),
+                (valid alloc (acc substruct_ma_structure_7 ma_structure))) /\
+                (constant_y y) /\ (valid1 substruct_ma_structure_7) /\
+                (separation2 substruct_ma_structure_7
+                 substruct_ma_structure_7)),
   forall (HW_2: 1 >= 1),
-  forall (result: ((pointer) global)),
+  forall (result: ((pointer) A813)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (fst_global0: ((memory) Z global)),
-  forall (HW_4: fst_global0 = (upd fst_global result 0)),
-  forall (result0: ((pointer) global)),
-  forall (HW_5: result0 = (acc substruct_global ma_structure)),
+  forall (fst_substruct_8_0: ((memory) Z A813)),
+  forall (HW_4: fst_substruct_8_0 = (upd fst_substruct_8 result 0)),
+  forall (result0: ((pointer) substruct_2)),
+  forall (HW_5: result0 = (acc substruct_ma_structure_7 ma_structure)),
   forall (result1: Z),
-  forall (HW_6: result1 = (acc fst_global0 result)),
-  forall (fst_global1: ((memory) Z global)),
-  forall (HW_7: fst_global1 = (upd fst_global0 result0 result1)),
-  (not_assigns alloc substruct_global substruct_global pset_empty) /\
-  (not_assigns alloc fst_global fst_global1
-   (pset_singleton (acc substruct_global ma_structure))).
+  forall (HW_6: result1 = (acc fst_substruct_8_0 result)),
+  forall (fst_substruct_2_0: ((memory) Z substruct_2)),
+  forall (HW_7: fst_substruct_2_0 = (upd fst_substruct_2 result0 result1)),
+  (not_assigns alloc fst_substruct_2 fst_substruct_2_0
+   (pset_singleton (acc substruct_ma_structure_7 ma_structure))).
 Proof.
 intuition;subst;
 auto.
 red;intros.
 rewrite acc_upd_neq;auto.
-intro;subst.
-rewrite <- shift_zero in H10.
-generalize H10.
-apply fresh_not_valid.
-auto.
-red;intros.
-rewrite acc_upd_neq;auto.
-assert (p<> ma_structure # substruct_struct_anonymous_2_7).
+assert (p<> ma_structure # substruct_ma_structure_7 ).
 apply pset_singleton_elim;auto.
 auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_3 : 
+  forall (A814:Set), forall (A815:Set), forall (A816:Set), forall (A817:Set),
+  forall (A818:Set), forall (A819:Set), forall (A820:Set), forall (A821:Set),
+  forall (A822:Set),
+  forall (ma_structure: ((pointer) A821)),
+  forall (alloc: alloc_table),
+  forall (fst_substruct_2: ((memory) Z substruct_2)),
+  forall (fst_substruct_8: ((memory) Z A822)),
+  forall (substruct_ma_structure_7: ((memory) ((pointer) substruct_2) A821)),
+  forall (y: Z),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_ma_structure_7 ma_structure))) /\
+                (constant_y y) /\ (valid1 substruct_ma_structure_7) /\
+                (separation2 substruct_ma_structure_7
+                 substruct_ma_structure_7)),
+  forall (HW_2: 1 >= 1),
+  forall (result: ((pointer) A822)),
+  forall (alloc0: alloc_table),
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (fst_substruct_8_0: ((memory) Z A822)),
+  forall (HW_4: fst_substruct_8_0 = (upd fst_substruct_8 result 0)),
+  forall (result0: ((pointer) substruct_2)),
+  forall (HW_5: result0 = (acc substruct_ma_structure_7 ma_structure)),
+  forall (result1: Z),
+  forall (HW_6: result1 = (acc fst_substruct_8_0 result)),
+  forall (fst_substruct_2_0: ((memory) Z substruct_2)),
+  forall (HW_7: fst_substruct_2_0 = (upd fst_substruct_2 result0 result1)),
+  (not_assigns alloc fst_substruct_8 fst_substruct_8_0 pset_empty).
+Proof.
+intuition.
+subst;auto.
+red;intros.
+rewrite acc_upd_neq;auto.
+intro;subst.
+rewrite <- shift_zero in H11.
+generalize H11.
+apply fresh_not_valid.
+auto.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_4 : 
+  forall (A823:Set), forall (A824:Set), forall (A825:Set), forall (A826:Set),
+  forall (A827:Set), forall (A828:Set), forall (A829:Set), forall (A830:Set),
+  forall (A831:Set),
+  forall (ma_structure: ((pointer) A830)),
+  forall (alloc: alloc_table),
+  forall (fst_substruct_2: ((memory) Z substruct_2)),
+  forall (fst_substruct_8: ((memory) Z A831)),
+  forall (substruct_ma_structure_7: ((memory) ((pointer) substruct_2) A830)),
+  forall (y: Z),
+  forall (HW_1: ((valid alloc ma_structure) /\ (valid alloc ma_structure) /\
+                (valid alloc (acc substruct_ma_structure_7 ma_structure))) /\
+                (constant_y y) /\ (valid1 substruct_ma_structure_7) /\
+                (separation2 substruct_ma_structure_7
+                 substruct_ma_structure_7)),
+  forall (HW_2: 1 >= 1),
+  forall (result: ((pointer) A831)),
+  forall (alloc0: alloc_table),
+  forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
+                (block_length alloc0 result) = 1 /\
+                (valid_range alloc0 result 0 (1 - 1)) /\
+                (fresh alloc result) /\ (on_stack alloc0 result) /\
+                (alloc_stack result alloc alloc0)),
+  forall (fst_substruct_8_0: ((memory) Z A831)),
+  forall (HW_4: fst_substruct_8_0 = (upd fst_substruct_8 result 0)),
+  forall (result0: ((pointer) substruct_2)),
+  forall (HW_5: result0 = (acc substruct_ma_structure_7 ma_structure)),
+  forall (result1: Z),
+  forall (HW_6: result1 = (acc fst_substruct_8_0 result)),
+  forall (fst_substruct_2_0: ((memory) Z substruct_2)),
+  forall (HW_7: fst_substruct_2_0 = (upd fst_substruct_2 result0 result1)),
+  (not_assigns alloc substruct_ma_structure_7 substruct_ma_structure_7
+   pset_empty).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (x: Z),
-  forall (HW_1: x = 0),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
+  forall (HW_2: x = 0),
   forall (y_0: Z),
-  forall (HW_3: y_0 = 1),
-  (* File "clash.c", line 12, characters 13-62 *) (((x = 0 -> y_0 = 1)) /\
-  ((x <> 0 -> y_0 = 2))).
+  forall (HW_4: y_0 = 1),
+  forall (HW_5: x = 0),
+  y_0 = 1.
 Proof.
 intuition.
 Save.
@@ -101,11 +189,41 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (x: Z),
-  forall (HW_4: x <> 0),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
+  forall (HW_2: x = 0),
   forall (y_0: Z),
-  forall (HW_6: y_0 = 2),
-  (* File "clash.c", line 12, characters 13-62 *) (((x = 0 -> y_0 = 1)) /\
-  ((x <> 0 -> y_0 = 2))).
+  forall (HW_4: y_0 = 1),
+  forall (HW_6: x <> 0),
+  y_0 = 2.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_3 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
+  forall (HW_7: x <> 0),
+  forall (y_0: Z),
+  forall (HW_9: y_0 = 2),
+  forall (HW_10: x = 0),
+  y_0 = 1.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_4 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
+  forall (HW_7: x <> 0),
+  forall (y_0: Z),
+  forall (HW_9: y_0 = 2),
+  forall (HW_11: x <> 0),
+  y_0 = 2.
 Proof.
 intuition.
 Save.
@@ -113,9 +231,10 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (y: Z),
+  forall (HW_1: (constant_y y)),
   forall (y_0: Z),
-  forall (HW_2: y_0 = 0),
-  (* File "clash.c", line 5, characters 13-41 *) (y_0 = 0 /\ y = y).
+  forall (HW_3: y_0 = 0),
+  y_0 = 0.
 Proof.
 intuition.
 Save.
@@ -123,13 +242,15 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
   forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
   forall (y_0: Z),
-  forall (HW_2: y_0 = 2),
-  forall (HW_3: x = 0),
+  forall (HW_3: y_0 = 2),
+  forall (HW_4: x = 0),
   forall (y_1: Z),
-  forall (HW_5: y_1 = 1),
-  (* File "clash.c", line 27, characters 13-65 *) (((x = 0 -> y_1 = 1)) /\
-  ((x <> 0 -> y_1 = 2))).
+  forall (HW_6: y_1 = 1),
+  forall (HW_7: x = 0),
+  y_1 = 1.
 Proof.
 intuition.
 Save.
@@ -137,11 +258,42 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
   forall (y_0: Z),
-  forall (HW_2: y_0 = 2),
-  forall (HW_6: x <> 0),
-  (* File "clash.c", line 27, characters 13-65 *) (((x = 0 -> y_0 = 1)) /\
-  ((x <> 0 -> y_0 = 2))).
+  forall (HW_3: y_0 = 2),
+  forall (HW_4: x = 0),
+  forall (y_1: Z),
+  forall (HW_6: y_1 = 1),
+  forall (HW_8: x <> 0),
+  y_1 = 2.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_3 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
+  forall (y_0: Z),
+  forall (HW_3: y_0 = 2),
+  forall (HW_9: x <> 0),
+  forall (HW_10: x = 0),
+  y_0 = 1.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma h_impl_po_4 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: (constant_y y)),
+  forall (y_0: Z),
+  forall (HW_3: y_0 = 2),
+  forall (HW_11: x <> 0),
+  y_0 = 2.
 Proof.
 intuition.
 Save.

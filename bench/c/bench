@@ -114,8 +114,9 @@ done
 echo "C interp (good)"
 cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
-parsing="../../../bin/caduceus.opt"
+parsing="../../../bin/caduceus.opt -separation -why-opt -split-user-conj"
 
+rm -f why/*.why
 rm -f simplify/*_why.sx.all
 for f in $FILES; do
     echo -n "  Generating simplify VCG for $f.c... "

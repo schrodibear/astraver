@@ -5,15 +5,16 @@ Require Export latespec_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (p: ((pointer) global)),
+  forall (A741:Set),
+  forall (p: ((pointer) A741)),
   forall (alloc: alloc_table),
-  forall (intM_global: ((memory) Z global)),
+  forall (intM_p_5: ((memory) Z A741)),
   forall (HW_1: (* File "latespec.c", line 7, characters 14-23 *)
                 (valid alloc p)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_global0: ((memory) Z global)),
-  forall (HW_3: intM_global0 = (upd intM_global p 0)),
-  (not_assigns alloc intM_global intM_global0 (pset_singleton p)).
+  forall (intM_p_5_0: ((memory) Z A741)),
+  forall (HW_3: intM_p_5_0 = (upd intM_p_5 p 0)),
+  (not_assigns alloc intM_p_5 intM_p_5_0 (pset_singleton p)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

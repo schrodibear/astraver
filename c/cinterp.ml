@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.167 2006-02-08 07:16:00 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.168 2006-02-08 10:47:14 hubert Exp $ i*)
 
 
 open Format
@@ -135,20 +135,6 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Memory(t,z) -> assert false
   
 
-(*let heap_var (ty : Info.why_type) =
-  match ty with
-    | Pointer z ->
-	let z = repr z in
-	let v = Ceffect.memorycell_name z.type_why_zone in
-	v ^ "_" ^ (found_repr ~quote_var:false z)
-    | Addr _ 
-    | Info.Int 
-    | Info.Float 
-    | Unit 
-    | Why_Logic _ 
-    | Memory _ -> assert false
-*)
-
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
@@ -177,11 +163,6 @@ let rec interp_term label old_label t =
 	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t) 
 	in
 	LApp("acc",[interp_var label var;te])
-(*    | NTstar t1 -> 
-	let te1 = f t1 in
-(*	let var = global_var_for_array_type t1.nterm_type in*)
-	let var = heap_var (Cseparation.type_why_for_term t1) in
-	LApp("acc",[interp_var label var;te1])*)
     | NTunop (Utilde, t) -> 
 	LApp ("bw_compl", [f t])
     | NTunop (Ustar, _) -> 
@@ -304,19 +285,11 @@ let rec interp_predicate label old_label p =
 	 else if has_prefix "%separation2" n then "separation2", 2
 	 else assert false
        in
-(*       eprintf "%s :" n;
-       let param = 
-	 HeapVarSet.fold 
-	   (fun x acc -> eprintf "%s" x.var_unique_name; 
-	      interp_var label (heap_var_name x) :: acc)
-	   v.logic_heap_args []
-       in
-       eprintf "@\n";*)
        let tl = match tl, num with
 	 | [x], 2 -> [x; x]
 	 | _ -> tl
        in
-       LPred(name, (*param @ *)List.map ft tl)
+       LPred(name, List.map ft tl)
     | NPapp {napp_pred = v; napp_args = tl; napp_zones_assoc = assoc} ->
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
@@ -506,12 +479,9 @@ let rec interp_expr e =
 	begin
 	  match interp_lvalue e1 with
 	    | LocalRef(v) ->
-		(* v := e2; !v *)
 		let n = v.var_unique_name in
 		append (Assign(n,interp_expr e2)) (Deref n)
 	    | HeapRef(valid,var,e1) ->
-		(* let tmp1 = e1 in 
-		   let tmp2 = e2 in upd var tmp1 tmp2; tmp2 *)
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
 		Let(tmp1, e1,
@@ -524,7 +494,6 @@ let rec interp_expr e =
 	interp_incr_expr op e
     | NEassign_op(e1,op,e2) ->
 	begin match interp_lvalue e1 with
-	  (* v := op !v e2; !v *)
 	  | LocalRef(v) ->
 	      let n = v.var_unique_name in
 	      append
@@ -563,18 +532,6 @@ let rec interp_expr e =
 	in
 	let acc = if valid then "safe_acc_" else "acc_" in
 	Output.make_app acc [Var(var);te]
-(*    | NEstar e1 -> 
-	let te1 = interp_expr e1 in
-	let var = heap_var (type_why e1) in
-	let valid = 
-	  match e1.nexpr_type.Ctypes.ctype_node with
-	    | Tpointer (valid,_)  
-	    | Tarray (valid,_,_) -> valid
-	    | Tstruct _ -> true 
-	    | _ -> assert false
-	in
-	let acc = if valid then "safe_acc_" else "acc_" in
-	make_app acc [Var var;te1]*)
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
 	interp_expr e
@@ -611,10 +568,6 @@ let rec interp_expr e =
 	  | _ -> 
 	      unsupported e.nexpr_loc "cast"
 	end
-(*
-    | NEsizeof(t) -> 
-	Cte (Prim_int (Int64.to_int (Cltyping.sizeof e.nexpr_loc t)))
-*)
 
 and interp_boolean_expr e =
   match e.nexpr_node with
@@ -648,14 +601,12 @@ and interp_incr_expr op e =
 	begin
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
-		(* let tmp = !v in v:= op tmp 1; tmp *)
 		Let("caduceus",Deref(v.var_unique_name),
 		    append 
 		      (Assign(v.var_unique_name,
 			      make_app top [Var "caduceus";one]))
 		      (Var "caduceus"))
 	    | Uprefix_dec | Uprefix_inc ->
-		(* v := op !v 1; !v *)
 		let n = v.var_unique_name in
 		append 
 		  (Assign(n,
@@ -667,9 +618,6 @@ and interp_incr_expr op e =
 	  let acc = if valid then "safe_acc_" else "acc_" in
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
-		(* let tmp1 = e' in
-		   let tmp2 = acc var tmp1 in
-		   upd var tmp1 (tmp2+1); tmp2 *)		
 		Let("caduceus1",e',
 		    Let("caduceus2",
 			(make_app acc [Var var;Var "caduceus1"]),
@@ -679,9 +627,6 @@ and interp_incr_expr op e =
 			      make_app top [one;Var "caduceus2"]])
 			  (Var "caduceus2")))
 	    | Uprefix_dec | Uprefix_inc ->
-		(* let tmp1 = e' in
-		   let tmp2 = (acc var tmp1)+1 in
-		   upd var tmp1 tmp2; tmp2 *)
 		Let("caduceus1",e',
 		    Let("caduceus2",
 			make_app top
@@ -697,14 +642,6 @@ and interp_lvalue e =
     | NEvar (Var_info v) -> LocalRef(v)
     | NEvar (Fun_info v) -> assert false
     | NEunary(Ustar,e1) -> assert false
-(*    | NEstar(e1) ->
-	let var = heap_var (type_why e1) in
-	let valid =
-	  match e1.nexpr_type.Ctypes.ctype_node with
-	    | Tpointer(v,_) | Tarray(v,_,_) -> v
-	    | _ -> assert false
-	in 
-	HeapRef(valid,var,interp_expr e1)*)
     | NEarrow (e1,_,_,f) ->
 	let valid =
 	  match e1.nexpr_type.Ctypes.ctype_node with
@@ -727,14 +664,6 @@ and interp_address e = match e.nexpr_node with
        end
   | NEvar (Fun_info v) -> unsupported e.nexpr_loc "& operator on functions"
   | NEunary (Ustar, _) -> assert false
-(*  | NEstar(e1) ->
-      interp_expr e1
-  | NEarrget (e1, e2) ->
-      build_complex_app (Var "shift_") [interp_expr e1; interp_expr e2]
-  | NEdot ({texpr_node = NEunary (Ustar, e1)}, f) ->
-      assert false
-  | NEdot (e1, f)
-*)
   | NEarrow (e1,_,_, f) ->
       begin match e.nexpr_type.Ctypes.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
@@ -753,10 +682,6 @@ and interp_address e = match e.nexpr_node with
 	    [Var var; interp_expr e1]
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
       end
-(*
-  | NEcast (_, e1) ->
-      interp_address e1
-*)
   | _ -> 
       assert false (* not a left value *)
 
@@ -772,7 +697,6 @@ and interp_statement_expr e =
 	    | LocalRef(v) ->
 		Assign(v.var_unique_name,interp_expr e)
 	    | HeapRef(valid,var,e1) ->
-		(* upd var e1 e *)
 		let upd = if valid then "safe_upd_" else "upd_" in
 		(build_complex_app (Var upd)
 		   [Var var;e1; interp_expr e])
@@ -785,9 +709,6 @@ and interp_statement_expr e =
 		Assign(v.var_unique_name,
 		       make_app top [Deref(v.var_unique_name); one])
 	    | HeapRef(valid,var,e1) -> 
-		(* let tmp1 = e1 in
-		   let tmp2 = acc var tmp1 in 
-		   upd var tmp1 (op tmp2 1) *)
 		let acc = if valid then "safe_acc_" else "acc_" in
 		Let("caduceus1",e1,
 		    Let("caduceus2",
@@ -809,9 +730,6 @@ and interp_statement_expr e =
 		let n = v.var_unique_name in
 		Assign(n, bin_op op (Deref n) (interp_expr e))
 	    | HeapRef(valid,var,e1) -> 
-		(* let tmp1 = e1 in
-		   let tmp2 = acc var e1
-		   upd var tmp1 (op tmp2 e) *)
 		let acc = if valid then "safe_acc_" else "acc_" in
 		Let("caduceus1",e1,
 		    Let("caduceus2",make_app acc [Var var;Var "caduceus1"],
@@ -823,7 +741,6 @@ and interp_statement_expr e =
     | NEcond (_, _, _)
     | NEbinary (_, _, _)
     | NEunary (_, _)
-(*    | NEstar _ *)
     | NEarrow _
     | NEvar _
     | NEstring_literal _
@@ -871,13 +788,6 @@ let collect_locations before acc loc =
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
-(*    | NTstar e ->
-	let var = heap_var (type_why_for_term e) in
-	let m = interp_var (Some before) var in
-	begin match term_or_pset e with
-	  | Term te -> Term (LApp ("acc", [m; te]))
-	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
-	end*)
     | NTrange (e, None, None,f) ->
 	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
 	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
@@ -908,9 +818,6 @@ let collect_locations before acc loc =
   let var,iloc = match loc.nterm_node with
     | NTarrow(e,_,_,f) ->
 	zoned_name f.var_unique_name (Cnorm.type_why_for_term e), Some (pset e)
-(*    | NTstar e1 -> 
-	let var = heap_var (type_why_for_term e1) in
-	var, Some (pset e1)*)
     | NTvar v ->
 	v.var_unique_name, None
     | NTrange (t, None, None,f) -> 
@@ -958,24 +865,13 @@ let rec make_union_loc = function
 
 let interp_assigns before assigns = function
   | Some locl ->
-(*      let m = 
-	HeapVarSet.fold
-	  (fun v m -> 
-	     let t = 
-(*	       eprintf "is_memory_var ( %s ) \n" v.var_unique_name; *)
-	       if Ceffect.is_memory_var v then Memory []  else Reference false
-	     in
-	     StringMap.add (heap_var_name v) t m)
-	  assigns StringMap.empty
-      in
-*)
       let m = HeapVarSet.fold
 	(fun v m -> StringMap.add (heap_var_name v) (Reference false) m)
 	  assigns.Ceffect.reads_var StringMap.empty in
       let m = ZoneSet.fold
 	(fun (z,s,ty) m -> 
 	   StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
-	 assigns.Ceffect.reads StringMap.empty in
+	 assigns.Ceffect.reads m in
       let l = 
 	List.fold_left (collect_locations before) m locl
       in
@@ -1016,7 +912,7 @@ let weak_invariants_for hvs =
 
 let strong_invariant = 
   let h = Hashtbl.create 97 in
-  fun id p (*e*) -> 
+  fun id p  -> 
     try 
       Hashtbl.find h id
     with Not_found -> 
@@ -1119,7 +1015,7 @@ let strong_invariants_for hvs =
 	    then
 	       strong_invariant_name id e1.Ceffect.reads_var
 	    else
-	      strong_invariant id p (*e2*))  acc)
+	      strong_invariant id p )  acc)
        else acc) 
     Ceffect.strong_invariants  
     pred
@@ -1248,7 +1144,6 @@ let make_switch_condition_default tmp l used_cases=
 	   (App(App (Var "neq_int_",Var tmp),(interp_expr e))) test)
       fl
       (Cte (Prim_bool true))
-      (*App(App (Var "neq_int_",Var tmp), (interp_expr e))*)
   in
   cond,fl
 
@@ -1355,14 +1250,6 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	Try(res,"Break", None,Void)
       else
 	res
-(*
-  | NScase(e,s) -> 
-      unsupported "case"
-  | NSdefault(s) -> 
-      unsupported "default"
-  | NSgoto(lab) -> 
-      unsupported "goto"
-*)
   | NSassert(pred) -> 
       Output.Assert(interp_predicate None "init" pred, Void)
   | NSlogic_label(l) -> 
@@ -1385,10 +1272,6 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 		  App (Var "alloca_parameter", Cte (Prim_int n))
 	      | Tstruct _ | Tunion _ ->
 		  App (Var "alloca_parameter", Cte (Prim_int Int64.one))
-		    (*let t = { nterm_node = NTresult;
-		      nterm_loc = stat.nst_loc;
-		      nterm_type = ctype } in
-		      alloc_on_stack stat.nst_loc v t*)
 	      | Tvoid | Tvar _ | Tfun _ -> assert false
 	    end,([],[])
 	| Some (Iexpr e)  ->   
@@ -1406,7 +1289,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	Let(v.var_unique_name,tinit,
 	    Block (decl@[interp_statement ab may_break rem]))
 
-and interp_block ab may_break (*decls,*)stats =
+and interp_block ab may_break stats =
   let rec block = function
     | [] -> 
 	Void
@@ -1432,7 +1315,7 @@ and interp_block ab may_break (*decls,*)stats =
 	if not s.nst_term then unreachable_block bl;
 	append (interp_statement true may_break s) (block bl)
   in
-  (*List.fold_right interp_decl decls *)(block stats)
+  (block stats)
 
 and interp_switch tmp ab may_break l c used_cases post_default =
   match l with
@@ -1580,15 +1463,6 @@ let interp_axiom p =
 
 let interp_effects e =
   HeapVarSet.fold (fun var acc -> var::acc) e []
-
-(*
-let interp_param pre (t,id) =
-  (* TODO : tester si param is assigned *)
-  let tt = Ceffect.interp_type t in
-  (if tt="pointer" then make_and (LNot(LPred("fresh",[LVar id]))) pre
-			 else pre),
-  (id,base_type tt)
-*)
 
 let interp_fun_params reads params =
   let l = List.map 

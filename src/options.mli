@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.45 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.46 2006-02-08 10:47:15 hubert Exp $ i*)
 
 (*s General options *)
 
@@ -48,6 +48,7 @@ val wp_only : bool
 val black : bool
 val white : bool
 val wbb : bool
+val split_user_conj : bool
 val lvlmax : int
 val all_vc : bool
 

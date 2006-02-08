@@ -3,30 +3,6 @@
 
 Require Export struct2_spec_why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_1 : 
-  forall (SPM_global: ((memory) ((pointer) global) global)),
-  forall (UPM_global: ((memory) ((pointer) global) global)),
-  forall (alloc: alloc_table),
-  forall (b_global: ((memory) ((pointer) global) global)),
-  forall (d_global: ((memory) ((pointer) global) global)),
-  forall (intM_global: ((memory) Z global)),
-  forall (s0: ((pointer) global)),
-  forall (u: ((pointer) global)),
-  forall (HW_1: (valid alloc u) /\ (valid alloc s0) /\
-                (~((base_addr u) = (base_addr s0)) /\
-                ~((base_addr s0) = (base_addr (acc d_global
-                                               (acc UPM_global u)))) /\
-                ~((base_addr u) = (base_addr (acc b_global
-                                              (acc SPM_global s0))))) /\
-                (valid1 b_global) /\ (valid1_range b_global 5)),
-  forall (result: ((pointer) global)),
-  forall (HW_2: result = (acc b_global s0)),
-  forall (result0: ((pointer) global)),
-  forall (HW_3: result0 = (shift result 2)),
-  forall (intM_global0: ((memory) Z global)),
-  forall (HW_4: intM_global0 = (upd intM_global result0 1)),
-  (* File "struct2.c", line 6, characters 13-18 *) True.
 Proof.
 intuition.
 Save.
@@ -45,33 +21,6 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_1 : 
-  forall (SPM_global: ((memory) ((pointer) global) global)),
-  forall (UPM_global: ((memory) ((pointer) global) global)),
-  forall (alloc: alloc_table),
-  forall (b_global: ((memory) ((pointer) global) global)),
-  forall (d_global: ((memory) ((pointer) global) global)),
-  forall (intM_global: ((memory) Z global)),
-  forall (s0: ((pointer) global)),
-  forall (u: ((pointer) global)),
-  forall (HW_1: (valid alloc u) /\ (valid alloc s0) /\
-                (~((base_addr u) = (base_addr s0)) /\
-                ~((base_addr s0) = (base_addr (acc d_global
-                                               (acc UPM_global u)))) /\
-                ~((base_addr u) = (base_addr (acc b_global
-                                              (acc SPM_global s0))))) /\
-                (valid1 b_global) /\ (valid1 d_global) /\
-                (separation2 d_global d_global) /\ (valid1_range b_global 5)),
-  forall (result: ((pointer) global)),
-  forall (HW_2: result = (acc d_global u)),
-  forall (result0: ((pointer) global)),
-  forall (HW_3: result0 = (acc b_global result)),
-  forall (result1: ((pointer) global)),
-  forall (HW_4: result1 = (shift result0 2)),
-  forall (intM_global0: ((memory) Z global)),
-  forall (HW_5: intM_global0 = (upd intM_global result1 1)),
-  (* File "struct2.c", line 16, characters 13-18 *) True.
 Proof.
 intuition.
 Save.
