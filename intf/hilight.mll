@@ -14,46 +14,83 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hilight.mll,v 1.3 2003-06-19 07:37:52 filliatr Exp $ i*)
-
 {
 
   open Lexing
 
-  type token = Code of string | Annotation of string
-  exception Lex_error of string
+  exception Lexical_error of string
+  exception Eof 
+
+  type color = Predicate | Comment | Keyword
+
+  let getcolor = function 
+    | Predicate -> "darkgreen"
+    | Comment -> "red"
+    | Keyword -> "blue"
+
+  let insert_text (tbuf:GText.buffer) ty s = 
+    let it = tbuf#end_iter in
+    let new_tag = tbuf#create_tag [`FOREGROUND (getcolor ty)] in
+    tbuf#insert ~tags:[new_tag] ~iter:it s 
+
+  let insert_string (tbuf:GText.buffer) s =
+    let it = tbuf#end_iter in
+    tbuf#insert ~iter:it s 
+
+  let id_or_keyword =
+    let h = Hashtbl.create 97 in
+    List.iter 
+      (fun s -> Hashtbl.add h s ())
+      [ "for"; "if"; "else"; "while"; "and"; "do"; "not"; "real"; 
+	"var"; "begin"; "or"; "to"; "end"; "int"; "true"; "false";
+	"type"; "function"; "of"; "then"; "break"; "void"; "struct";
+	"return"];
+    fun tbuf s -> 
+      if Hashtbl.mem h s then
+	insert_text tbuf Keyword s
+      else 
+	insert_string tbuf s
+
+  let comment = Buffer.create 1024
+
 }
 
-rule next_code = parse
-  | [^'{']* 
-    { let c = Code (lexeme lexbuf) in 
-      c :: next_code lexbuf }
-  | '{'  
-      { let a = Annotation ("{" ^ next_annotation lexbuf) in 
-	a :: next_code lexbuf }
-  | eof  
-      { [] }
-and next_annotation = parse
-  | [^'}']*'}' 
-      { lexeme lexbuf }
-  | _ 
-      { raise (Lex_error "Error in annotation") }
-  | eof  
-      { raise (Lex_error "No closing }") }
+let alpha = ['a'-'z' 'A'-'Z']
+let digit = ['0'-'9']
+let ident = alpha (alpha | '_' | digit)*
+let exponent = ('e' | 'E') ('+' | '-')? digit+
+let float = digit+ '.' digit+ exponent?
+  | digit+ exponent
 
-and next_code_c = parse
-  | "/*"  
-      { let a = Annotation ("/*" ^ next_annotation_c lexbuf) in 
-	a :: next_code_c lexbuf }
-  | [^'/']*
-      { let c = Code (lexeme lexbuf) in c :: next_code_c lexbuf }
-  | eof  
-      { [] }
-and next_annotation_c = parse
-  | [^'/']* "*/"
-      { lexeme lexbuf }
-  | _ 
-      { raise (Lex_error "Error in annotation") }
-  | eof  
-      { raise (Lex_error "No closing }") }
+rule token tbuf = parse
+  | "/*@"
+      { Buffer.add_string comment "/*@"; comment2 tbuf lexbuf; token tbuf lexbuf }
+  | "/*"   
+      { Buffer.add_string comment "/*"; comment1 tbuf lexbuf; token tbuf lexbuf }
+  | ident  
+      { id_or_keyword tbuf (lexeme lexbuf) }
+  | digit+ 
+  | float
+  | _ as s 
+      { insert_string tbuf s }
+  | eof
+      { raise Eof }
 
+and comment1 tbuf = parse
+  | "*/" { Buffer.add_string comment "*/";
+	   let s = Buffer.contents comment in
+	   insert_text tbuf Comment s; 
+	   Buffer.clear comment }
+  | _    { Buffer.add_string  comment (lexeme lexbuf); 
+	   comment1 tbuf lexbuf }
+  | eof  { raise (Lexical_error "unterminated comment") }
+
+and comment2 tbuf = parse
+  | "@*/" | "*/" as s 
+	{ Buffer.add_string comment s;
+	  let t = Buffer.contents comment in
+	  insert_text tbuf Predicate t; 
+	  Buffer.clear comment }
+  | _   { Buffer.add_string  comment (lexeme lexbuf); 
+	  comment2 tbuf lexbuf }
+  | eof { raise (Lexical_error "unterminated comment") }

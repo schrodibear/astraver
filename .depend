@@ -83,15 +83,15 @@ src/main.cmo: src/wp.cmi src/vcg.cmi src/util.cmi src/typing.cmi \
     src/ptree.cmi src/options.cmi src/ocaml.cmi src/monad.cmi src/mizar.cmi \
     src/misc.cmi src/ltyping.cmi src/logic.cmi src/lexer.cmi src/isabelle.cmi \
     src/ident.cmi src/holl.cmi src/hol4.cmi src/harvey.cmi src/gappa.cmi \
-    src/fpi.cmi src/error.cmi src/env.cmi src/effect.cmi src/dispatcher.cmi \
-    src/cvcl.cmi src/coq.cmi src/cc.cmi src/ast.cmi 
+    src/error.cmi src/env.cmi src/effect.cmi src/dispatcher.cmi src/cvcl.cmi \
+    src/coq.cmi src/cc.cmi src/ast.cmi 
 src/main.cmx: src/wp.cmx src/vcg.cmx src/util.cmx src/typing.cmx \
     src/types.cmi src/smtlib.cmx src/simplify.cmx src/report.cmx src/pvs.cmx \
     src/ptree.cmi src/options.cmx src/ocaml.cmx src/monad.cmx src/mizar.cmx \
     src/misc.cmx src/ltyping.cmx src/logic.cmi src/lexer.cmx src/isabelle.cmx \
     src/ident.cmx src/holl.cmx src/hol4.cmx src/harvey.cmx src/gappa.cmx \
-    src/fpi.cmx src/error.cmi src/env.cmx src/effect.cmx src/dispatcher.cmx \
-    src/cvcl.cmx src/coq.cmx src/cc.cmi src/ast.cmi 
+    src/error.cmi src/env.cmx src/effect.cmx src/dispatcher.cmx src/cvcl.cmx \
+    src/coq.cmx src/cc.cmi src/ast.cmi 
 src/misc.cmo: src/types.cmi src/ptree.cmi src/options.cmi src/logic.cmi \
     src/loc.cmi src/ident.cmi src/effect.cmi src/cc.cmi src/ast.cmi \
     src/misc.cmi 
@@ -381,12 +381,16 @@ c/invariant.cmx: src/loc.cmx c/info.cmx c/ctypes.cmx c/cseparation.cmx \
     c/invariant.cmi 
 c/output.cmo: src/loc.cmi c/creport.cmi c/output.cmi 
 c/output.cmx: src/loc.cmx c/creport.cmx c/output.cmi 
+intf/astprinter.cmo: src/pp.cmi src/logic.cmi src/ident.cmi src/coq.cmi \
+    src/cc.cmi 
+intf/astprinter.cmx: src/pp.cmx src/logic.cmi src/ident.cmx src/coq.cmx \
+    src/cc.cmi 
 intf/navig.cmo: intf/navig.cmi 
 intf/navig.cmx: intf/navig.cmi 
-intf/pprinter.cmo: src/vcg.cmi src/util.cmi src/pp.cmi src/misc.cmi \
-    src/logic.cmi src/ident.cmi src/coq.cmi src/cc.cmi intf/pprinter.cmi 
-intf/pprinter.cmx: src/vcg.cmx src/util.cmx src/pp.cmx src/misc.cmx \
-    src/logic.cmi src/ident.cmx src/coq.cmx src/cc.cmi intf/pprinter.cmi 
+intf/pprinter.cmo: src/vcg.cmi src/misc.cmi src/logic.cmi src/ident.cmi \
+    intf/hilight.cmo src/cc.cmi intf/astprinter.cmo intf/pprinter.cmi 
+intf/pprinter.cmx: src/vcg.cmx src/misc.cmx src/logic.cmi src/ident.cmx \
+    intf/hilight.cmx src/cc.cmi intf/astprinter.cmx intf/pprinter.cmi 
 intf/stat.cmo: src/report.cmi intf/pprinter.cmi src/options.cmi src/main.cmo \
     src/env.cmi src/dispatcher.cmi tools/calldp.cmi src/ast.cmi 
 intf/stat.cmx: src/report.cmx intf/pprinter.cmx src/options.cmx src/main.cmx \
@@ -397,8 +401,8 @@ intf/viewer.cmo: src/util.cmi src/report.cmi src/options.cmi intf/navig.cmi \
 intf/viewer.cmx: src/util.cmx src/report.cmx src/options.cmx intf/navig.cmx \
     src/main.cmx src/log.cmi src/loc.cmx intf/hilight.cmx src/env.cmx \
     src/ast.cmi 
-intf/pprinter.cmi: src/vcg.cmi src/util.cmi src/pp.cmi src/misc.cmi \
-    src/logic.cmi src/cc.cmi 
+intf/pprinter.cmi: src/vcg.cmi src/misc.cmi src/logic.cmi src/cc.cmi \
+    intf/astprinter.cmo 
 tools/calldp.cmo: tools/calldp.cmi 
 tools/calldp.cmx: tools/calldp.cmi 
 tools/cvcl_split.cmo: tools/cvcl_split.cmi 

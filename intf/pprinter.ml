@@ -14,123 +14,150 @@
  * (enclosed in the file GPL).
  *)
 
-open Pp
 open Misc
-open Util
 open Vcg
 open Logic
 open Cc
 open Format
+open Astprinter
 
-type loc = { file:string; line:string; spos:string; fpos:string }
+type loc = { file:string; line:string; sp:string; ep:string }
+
 let fcolors = Hashtbl.create 13
 let bcolors = Hashtbl.create 13
 let obligs = Hashtbl.create 5501 (* Nombre premier de Sophie Germain *)
-let ntags = Hashtbl.create 97
-let tags = ref 0
-let last_fct = ref None
-let fcts = ref []
+let last_fct = ref ""
+let last_line = ref 0
+let last_file = ref ""
+let last_colored = ref (GText.tag ())
+let pwd = Sys.getcwd ()
+let source = ref ""
+let tbuf_source = ref (GText.buffer ())
+let tv_source = ref (GText.view ())
 
 let _ = 
   Hashtbl.add fcolors "title" "brown";
+  Hashtbl.add fcolors "comment" "blue";
+  Hashtbl.add fcolors "keyword" "green";
   Hashtbl.add fcolors "var" "darkgreen";
   Hashtbl.add fcolors "predicate" "blue";
+  Hashtbl.add fcolors "lpredicate" "blue";
   Hashtbl.add fcolors "information" "orange";
-  Hashtbl.add fcolors "separator" "brown";
+  Hashtbl.add fcolors "separator" "red";
   Hashtbl.add fcolors "hypothesis" "orange";
-  Hashtbl.add fcolors "conclusion" "red"
+  Hashtbl.add fcolors "conclusion" "red";
+  Hashtbl.add fcolors "highlight" "black"
 
 let _ = 
-  Hashtbl.add bcolors "title" "yellow"
+  Hashtbl.add bcolors "title" "lightgreen";
+  Hashtbl.add bcolors "lpredicate" "lightyellow";
+  Hashtbl.add bcolors "highlight" "yellow"
+
+let fc_highlight = "red"
+let bc_highlight = "lightgreen"
 
 let get_color ty = 
   (try Hashtbl.find fcolors ty with Not_found -> "black") , 
   (try Hashtbl.find bcolors ty with Not_found -> "white")
 
+let get_fc_predicate = 
+  (try Hashtbl.find fcolors "lpredicate" with Not_found -> "black")
+
+let get_bc_predicate = 
+  (try Hashtbl.find bcolors "lpredicate" with Not_found -> "white")
+
+let reset_last_colored () = 
+  !last_colored#set_properties 
+    [`BACKGROUND get_bc_predicate; `FOREGROUND get_fc_predicate];
+  last_colored := GText.tag ()
+
 let unicode_sym s = s
 
-let new_tag () = 
-  tags := !tags + 1;
-  (string_of_int !tags)
+let print_loc = function 
+  | None -> "\"nowhere\""
+  | Some {file=f; line=l; sp=s; ep=e} ->
+      let ff = Filename.concat pwd f in
+      ("file \""^ff^"\", line "^l^", characters "^s^" - "^e)
 
-let unknown_tag () = 
-  "hyp_none_"^(new_tag ())
+let read_file = function 
+  | None -> ()
+  | Some {file=f; line=l; sp=_; ep=_} ->
+      try
+	let in_channel = open_in f in
+	let content = ref "" in
+	try
+          let lexbuf = Lexing.from_channel in_channel in
+          while true do
+            let _ = Hilight.token !tbuf_source lexbuf in
+            ()
+          done
+	with Hilight.Eof -> ()
+      with Sys_error s -> 
+	begin
+	  print_endline ("     [...] Sys_error : "^s); flush stdout;
+	  !tbuf_source#set_text "" 
+	end
 
-let fct_name nb = 
-  match !last_fct with
-    | None -> assert false
-    | Some s -> s^"_"^nb
-
-let hypo s = (* Model : HW_11 *)
-  let r = Str.regexp "\\HW_\\([0-9]+\\)" in
-  if Str.string_match r s 0 then
-    (Str.matched_group 1 s)
-  else
-    s
+let hypo = (* Model : HW_11 *)
+  let r_hyp = Str.regexp "\\HW_\\([0-9]+\\)" in
+  fun s ->
+    if Str.string_match r_hyp s 0 then
+      (Str.matched_group 1 s)
+    else
+      s
 
 let hypothesis s = 
-  "Hypothesis n"^(hypo s)^":"
+  "Hypothesis n"^(hypo s)^": "
 
-let grab_infos hypo s = 
-  let r = Str.regexp "File \"\\(.+\\)\", line \\([0-9]+\\), characters \\([0-9]+\\)-\\([0-9]+\\)" in
-  if Str.string_match r s 0 then
-    Hashtbl.add obligs hypo {file=(Str.matched_group 1 s);
-			     line=(Str.matched_group 2 s);
-			     spos=(Str.matched_group 3 s);
-			     fpos=(Str.matched_group 4 s)}
+let grab_infos = 
+  let r_loc = Str.regexp "File \"\\(.+\\)\", line \\([0-9]+\\), characters \\([0-9]+\\)-\\([0-9]+\\)" in
+  fun s -> 
+    if Str.string_match r_loc s 0 then 
+      let source = Filename.concat pwd (Str.matched_group 1 s) in
+      Some({file=source;
+            line=(Str.matched_group 2 s);
+            sp=(Str.matched_group 3 s);
+            ep=(Str.matched_group 4 s)})
+    else None
+      
+let is_localised = function 
+  | None -> false
+  | _ -> true
 
-(* Est ce que le nom d'une hypothese est unique ???
-   - si oui, alors mettre fonction^hypo_nb comme cle dans la Hashtable
-   - si non, tout est bien dans le meilleur des mondes :D 
+let move_to_line line = 
+  if line <= !tbuf_source#line_count && line <> 0 then begin
+    let it = !tbuf_source#get_iter (`LINE line) in 
+    let mark = `MARK (!tbuf_source#create_mark it) 
+    and y = if !tbuf_source#line_count < 20 then 0.23 else 0.1 in
+    let _ = !tv_source#scroll_to_mark ~use_align:true ~yalign:y mark in 
+    print_endline ("     [...] Moving to line n "^(string_of_int line)); flush stdout
+  end
 
-   Inconvenient : une hypothese est rajoutee autant de fois qu'elle 
-   apparait dans les obligations car on ne peut pas placer plusieurs
-   tags portant le meme nom dans le meme GText.buffer , meme dans 
-   differents evenements.
-*)
+let move_to_source = function
+  | None -> ()
+  | Some loc ->
+      let line = int_of_string loc.line
+      and file = loc.file in 
+      if !last_file = file && !last_line <> line then begin
+	last_line := line;
+	move_to_line line
+      end
+      else if !last_file <> file then begin
+	last_file := file;
+	last_line := line;
+	read_file (Some(loc));
+	move_to_line line
+      end
 
-let get_location s = 
-  try 
-    Some(Hashtbl.find obligs s)
-  with Not_found -> None
-
-let tag_to_name t = 
-  try
-    Some(Hashtbl.find ntags t)
-  with Not_found -> None
-
-let get_new_tag (tbuf:GText.buffer) (title:string) (bc:string) (fc:string) = 
-  let newtag = tbuf#create_tag ~name:title [`BACKGROUND bc; `FOREGROUND fc] in
-  Hashtbl.add ntags newtag title;
-  newtag
-
-let insert_text (tbuf:GText.buffer) ty ?(loc = None) s = 
+let insert_text (tbuf:GText.buffer) ty s = 
   let (fc, bc) = get_color ty 
   and it = tbuf#end_iter 
-  and text = unicode_sym s 
-  and tag = 
-    (match loc with
-    | None -> unknown_tag ()
-    | Some s -> s)
-  in
-  let new_tag = get_new_tag tbuf tag bc fc in 
+  and text = unicode_sym s in
+  let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
   tbuf#insert ~tags:[new_tag] ~iter:it text 
 
-let insert_predicate (tbuf:GText.buffer) ?(loc = None) s =
-  let ty = "predicate" in
-  match loc with
-    | None -> insert_text tbuf ty s
-    | Some nb -> 
-	let mytag = fct_name nb in
-	if not (Hashtbl.mem obligs mytag) then (
-	  insert_text tbuf ty ~loc:(Some(mytag)) s;
-	  grab_infos mytag s
-	) else (
-	  let t = mytag^"_"^(new_tag ()) in 
-	  insert_text tbuf ty ~loc:(Some(t)) s;
-	  grab_infos t s
-	)
-	
+let insert_predicate (tbuf:GText.buffer) s =
+  insert_text tbuf "predicate" s
 
 let insert_string (tbuf:GText.buffer) s =
   let it = tbuf#end_iter in
@@ -149,18 +176,58 @@ let rec intros ctx = function
   | c -> 
       ctx, c
 
-let rec print_predicate fmt = function 
-  | Pnamed (_, p) -> 
-      Format.fprintf fmt "@[<hov 2>%a@]" print_predicate p
+let rec ekteb_predicate (tbuf:GText.buffer) = function 
+  | Pnamed (s, p) ->
+      let fmt = Format.str_formatter in
+      fprintf fmt "@[<hov 2>%a@]" print_predicate p;
+      let loc = grab_infos s
+      and text = flush_str_formatter () in
+      let (fc, bc) = 
+	if is_localised loc then 
+	  get_color "lpredicate" 
+	else get_color "predicate"
+      and it = tbuf#end_iter in
+      let text = unicode_sym text  
+      and new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
+      ignore(
+	new_tag#connect#event ~callback:
+	  (fun ~origin ev it -> 
+	     if GdkEvent.get_type ev = `BUTTON_PRESS then 
+	       move_to_source loc
+	     else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
+	       !last_colored#set_properties 
+		 [`BACKGROUND get_bc_predicate; `FOREGROUND get_fc_predicate];
+	       last_colored := new_tag;
+	       new_tag#set_properties 
+		 [`BACKGROUND bc_highlight; `FOREGROUND fc_highlight]
+	     end;
+	     false)
+      );
+      tbuf#insert ~tags:[new_tag] ~iter:it text 
+  | Pand (_, _, p1, p2) ->
+      ekteb_predicate tbuf p1;
+      insert_string tbuf " /\\ ";
+      ekteb_predicate tbuf p2;
+  | Pimplies(_, p1, p2) ->
+      ekteb_predicate tbuf p1;
+      insert_string tbuf " => ";
+      ekteb_predicate tbuf p2;
   | p -> 
-      Coq.print_predicate_v8 fmt p
-
-let print_cc_type = Coq.print_cc_type_v8
+      let fmt = Format.str_formatter in 
+      print_predicate fmt p;
+      let text = flush_str_formatter () in
+      insert_predicate tbuf text
 
 let print_oblig (tbuf:GText.buffer) (ctx,concl) =
     let ctx, concl = intros ctx concl 
     and fmt = Format.str_formatter in 
-    let print_hyp fmt = function
+    let rec print_list sep print = function
+      | [] -> ()
+      | p::r ->
+	  print p;
+	  insert_string tbuf sep;
+	  print_list sep print r 
+    and print_hyp fmt = function
       | Svar (id, t) ->
 	  fprintf fmt "%a: " Ident.print id;
 	  insert_text tbuf "var" (flush_str_formatter ());
@@ -168,21 +235,36 @@ let print_oblig (tbuf:GText.buffer) (ctx,concl) =
 	  insert_text tbuf "predicate" (flush_str_formatter ());
       | Spred (id, p) ->
 	  let hypo_nb = hypo (Ident.string id) in
-	  insert_text tbuf "hypothesis" ("\n"^(hypothesis hypo_nb));
-          fprintf fmt "@[<hov 2>%a@]" print_predicate p;
-	  insert_predicate tbuf ~loc:(Some(hypo_nb)) (flush_str_formatter ());
+	  insert_text tbuf "hypothesis" (hypothesis hypo_nb);
+          ekteb_predicate tbuf p;
     in
-    fprintf fmt "@[@\n%a@]" (print_list newline print_hyp) ctx;
-    insert_text tbuf "predicate" (flush_str_formatter ());
-
+    print_list "\n" (print_hyp fmt) ctx;
     insert_text tbuf "separator" "\n_______\n\n";
+    (* Conclusion *)
+    ekteb_predicate tbuf concl
 
-    print_predicate fmt concl;
-    insert_text tbuf "conclusion" (flush_str_formatter ())
+let is_buffer_saved = 
+  Hashtbl.mem obligs
 
-let text_of_obligation (tbuf:GText.buffer) (o,s,p) =
-  Hashtbl.clear obligs;
-  insert_text tbuf "title" (s^"\n");
-  last_fct := Some(s);
-  (if not (List.mem s !fcts) then fcts := s :: !fcts);
+let save_buffer s (tbuf:GText.buffer) = 
+  Hashtbl.add obligs s tbuf
+
+let get_buffer = 
+  Hashtbl.find obligs
+  
+let print_all (tbuf:GText.buffer) s p = 
+  insert_text tbuf "title" (s^"\n\n");
   print_oblig tbuf p
+
+let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) = 
+  tbuf_source := tv_s#buffer;
+  tv_source := tv_s;
+  last_fct := s;
+  if (is_buffer_saved s) then 
+    tv#set_buffer (get_buffer s)
+  else begin
+    let tbuf = GText.buffer () in
+    tv#set_buffer tbuf;
+    print_all tbuf s p;
+    save_buffer s tbuf;
+  end

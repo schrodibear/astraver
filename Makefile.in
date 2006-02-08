@@ -156,7 +156,8 @@ bin/why-viewer.byte: $(WVCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
 
 # graphical interface
-GCMO = $(CMO) intf/pprinter.cmo intf/stat.cmo
+GCMO = $(CMO) intf/astprinter.cmo intf/hilight.cmo \
+              intf/pprinter.cmo intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
 gwhy: bin/gwhy.$(OCAMLBEST)

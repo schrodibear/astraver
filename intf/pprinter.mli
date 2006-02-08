@@ -1,22 +1,18 @@
-open Pp
 open Misc
-open Util
 open Vcg
 open Logic
 open Cc
+open Format
+open Astprinter
 
 type loc
 
-val get_color : string -> string * string 
+val reset_last_colored : unit -> unit
 
-val tag_to_name : GText.tag -> string option
-
-val insert_text : GText.buffer -> string -> ?loc:string option -> string -> unit
+val insert_text : GText.buffer -> string -> string -> unit
 
 val insert_string : GText.buffer -> string -> unit
 
-val get_location : string -> loc option
-
 val text_of_obligation :
-    GText.buffer ->
-    'a * string * (Cc.context_element list * Logic.predicate) -> unit
+  GText.view -> GText.view ->
+  'a * string * (Cc.context_element list * Logic.predicate) -> unit
