@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.112 2006-02-08 07:16:00 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.113 2006-02-09 09:28:02 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1019,7 +1019,7 @@ let decl d =
 	  let (pre,_) = invariant_for_constant d.loc ty t init in
 	  add_strong_invariant_2 id pre [] ;
 	  add_strong_invariant id pre 
-	    {ef_empty with reads_var =(HeapVarSet.singleton v)}
+	    {ef_empty with reads_var = (HeapVarSet.singleton v)}
 	end;
     | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
     | Naxiom(id,p) -> () (* TODO *)

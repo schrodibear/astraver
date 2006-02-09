@@ -36,25 +36,6 @@ Save.
 Proof.
 unfold purse_inv; intuition.
 subst; caduceus.
-subst; caduceus.
-(*
-rewrite HW_5.
-red.
-red in H.
-intuition.
-rewrite acc_upd_eq;auto.
-omega.
-*)
-(*
-rewrite HW_5.
-rewrite acc_upd_eq;auto.
-*)
-subst.
-red;intros.
-rewrite acc_upd_neq;auto.
-assert (p0 <>p).
-apply pset_singleton_elim;auto.
-auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -75,7 +56,7 @@ Save.
   (acc balance_p_14_0 p) = ((acc balance_p_14 p) + s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -96,7 +77,24 @@ Save.
   (not_assigns alloc balance_p_14 balance_p_14_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+(*
+rewrite HW_5.
+red.
+red in H.
+intuition.
+rewrite acc_upd_eq;auto.
+omega.
+*)
+(*
+rewrite HW_5.
+rewrite acc_upd_eq;auto.
+*)
+subst.
+red;intros.
+rewrite acc_upd_neq;auto.
+assert (p0 <>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -149,16 +147,6 @@ Save.
   100 >= 0.
 Proof.
 unfold purse_inv; intuition.
-  subst.
-  rewrite H8; auto; caduceus.
-red;intros.
-rewrite H8; auto.
-  subst.
-  assert (p<>p1).
-    generalize (pset_union_elim2 H12);intro.
-    apply pset_singleton_elim;auto.
-  caduceus.
-generalize (pset_union_elim1 H12);auto.
 Save.
 
 
@@ -189,7 +177,8 @@ Save.
   (* File "purse.c", line 27, characters 13-25 *) result = 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+  subst.
+  rewrite H5; auto; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -220,7 +209,14 @@ Save.
    (pset_union (pset_singleton p2) (pset_singleton p1))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+rewrite H5; auto.
+  subst.
+  assert (p<>p1).
+    generalize (pset_union_elim2 H8);intro.
+    apply pset_singleton_elim;auto.
+  caduceus.
+generalize (pset_union_elim1 H8);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -726,8 +722,7 @@ Save.
                   (pset_singleton result0))),
   (valid alloc result).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+unfold purse_inv;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -791,8 +786,7 @@ Save.
   forall (HW_12: result1 = (acc balance_Z27_1 result)),
   (valid alloc result0).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+unfold purse_inv;intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -860,7 +854,6 @@ Save.
   (result1 + result2) = 150.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -898,12 +891,6 @@ Save.
 Proof.
 unfold purse_inv; intuition.
     subst; caduceus.
-  subst; caduceus.
-subst; red; intros.
-rewrite acc_upd_neq;auto.
-assert (p0<>p).
-apply pset_singleton_elim;auto.
-auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -925,7 +912,7 @@ Save.
   (acc balance_p_15_0 p) = ((acc balance_p_15 p) - s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+  subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -947,6 +934,10 @@ Save.
   (not_assigns alloc balance_p_15 balance_p_15_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; red; intros.
+rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 

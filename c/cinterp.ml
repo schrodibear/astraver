@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.168 2006-02-08 10:47:14 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.169 2006-02-09 09:28:02 hubert Exp $ i*)
 
 
 open Format
@@ -28,6 +28,16 @@ open Ctypes
 open Cseparation
 open Pp
 
+
+let print_effects2 fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt (z,s,_) -> fprintf fmt " %s_%s " s z.name)) 
+    (ZoneSet.elements l)
+
+let print_effects fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
+    (HeapVarSet.elements l)
 
 let heap_var_name v =
   match v.var_why_type with
@@ -930,28 +940,30 @@ let interp_strong_invariants () =
 	       Info.output_why_type x.var_why_type) :: acc) 
 	   e.Ceffect.reads_var args
        in
+       let args = 
+	 ZoneSet.fold
+	   (fun (z,s,ty) acc ->
+	      (*if z.zone_is_var then*)
+		(zoned_name s (Pointer z), 
+		 (Info.output_why_type (Info.Memory(ty,z))))::acc
+	      (*else acc*))
+	   e.Ceffect.reads args in
        if args = [] then acc else
        (Predicate(false,id,args,interp_predicate None "" p))::acc)
     Ceffect.strong_invariants_2 []
     
 
-let strong_invariant_name id e =
-  LPred(id, 
-	(HeapVarSet.fold 
-	   (fun x acc -> (LVar (heap_var_name x)) :: acc) 
-	   e []))
-
-
-let print_effects2 fmt l =
-  fprintf fmt "@[%a@]"
-    (print_list space (fun fmt (z,s,_) -> fprintf fmt " %s_%s " s z.name)) 
-    (ZoneSet.elements l)
-
-let print_effects fmt l =
-  fprintf fmt "@[%a@]"
-    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
-    (HeapVarSet.elements l)
-
+let strong_invariant_name id reads_var reads =
+  let args = 
+    HeapVarSet.fold (fun x acc -> (LVar (heap_var_name x)) :: acc) reads_var []
+  in
+  let args = 
+    ZoneSet.fold 
+      (fun (z,s,ty) l -> let z = repr z in
+       (LVar (zoned_name s (Pointer z)))::l)
+      reads args in
+  LPred(id,args)
+    
 let extract_var_from_effect var lf =
   List.fold_left (fun acc (zf,nf,tyf) -> 
 		    if (var.var_unique_name = nf) 
@@ -1013,7 +1025,7 @@ let strong_invariants_for hvs =
 	 (make_and 
 	   (if (Ceffect.mem_strong_invariant_2 id) || (Cenv.mem_pred id)
 	    then
-	       strong_invariant_name id e1.Ceffect.reads_var
+	       strong_invariant_name id e1.Ceffect.reads_var e1.Ceffect.reads
 	    else
 	      strong_invariant id p )  acc)
        else acc) 

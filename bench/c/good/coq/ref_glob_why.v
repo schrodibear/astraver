@@ -11,7 +11,7 @@ Require Export ref_glob_spec_why.
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   forall (intM_x_11_0: ((memory) Z x_11)),
   forall (HW_2: intM_x_11_0 = (upd intM_x_11 x 1)),
   (* File "ref_glob.c", line 13, characters 13-19 *) (acc intM_x_11_0 x) = 1.
@@ -54,7 +54,7 @@ Save.
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   forall (intM_x_11_0: ((memory) Z x_11)),
   forall (HW_2: intM_x_11_0 = (upd intM_x_11 x 1)),
   (not_assigns alloc intM_x_11 intM_x_11_0 (pset_singleton x)).
@@ -69,15 +69,16 @@ Save.
   forall (c1_plas_12: ((memory) ((pointer) c1_9) plas_12)),
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -98,15 +99,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -138,15 +140,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -239,15 +242,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -286,15 +290,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -333,15 +338,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -380,15 +386,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -428,15 +435,16 @@ Save.
   forall (c2_plas_12: ((memory) ((pointer) c2_8) plas_12)),
   forall (intM_c1_9: ((memory) Z c1_9)),
   forall (intM_c2_8: ((memory) Z c2_8)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 30, characters 14-26 *)
                 (valid alloc plas) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc) /\ (valid1_range c2_plas_12 1) /\
-                (valid1_range c1_plas_12 1) /\ (valid1 c2_plas_12) /\
-                (valid1 c1_plas_12)),
+                (constant_x intM_x_11 x alloc) /\
+                (valid1_range c2_plas_12 1) /\ (valid1_range c1_plas_12 1) /\
+                (valid1 c2_plas_12) /\ (valid1 c1_plas_12)),
   forall (HW_2: (valid alloc plas)),
   forall (result: ((pointer) c2_8)),
   forall (HW_3: result = (acc c2_plas_12 plas)),
@@ -475,13 +483,14 @@ Save.
   forall (p: ((pointer) A895)),
   forall (alloc: alloc_table),
   forall (intM_p_10: ((memory) Z A895)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 2, characters 14-23 *)
                 (valid alloc p) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc)),
+                (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (intM_p_10_0: ((memory) Z A895)),
   forall (HW_3: intM_p_10_0 = (upd intM_p_10 p 1)),
@@ -497,13 +506,14 @@ Save.
   forall (p: ((pointer) A896)),
   forall (alloc: alloc_table),
   forall (intM_p_10: ((memory) Z A896)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
   forall (HW_1: (* File "ref_glob.c", line 2, characters 14-23 *)
                 (valid alloc p) /\ (valid alloc x) /\
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
-                (constant_x x alloc)),
+                (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (intM_p_10_0: ((memory) Z A896)),
   forall (HW_3: intM_p_10_0 = (upd intM_p_10 p 1)),
@@ -518,6 +528,7 @@ Save.
   forall (A897:Set),
   forall (p: ((pointer) A897)),
   forall (alloc: alloc_table),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (intPM_p_14: ((memory) ((pointer) intPM_15) A897)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -525,7 +536,7 @@ Save.
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc intPM_p_14 p))) /\
                 (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   (valid alloc p).
 Proof.
 intuition.
@@ -537,6 +548,7 @@ Save.
   forall (A898:Set),
   forall (p: ((pointer) A898)),
   forall (alloc: alloc_table),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (intPM_p_14: ((memory) ((pointer) intPM_15) A898)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -544,7 +556,7 @@ Save.
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc intPM_p_14 p))) /\
                 (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (result: ((pointer) intPM_15)),
   forall (HW_3: result = (acc intPM_p_14 p)),
@@ -560,6 +572,7 @@ Save.
   forall (p: ((pointer) A899)),
   forall (alloc: alloc_table),
   forall (intM_intPM_15: ((memory) Z intPM_15)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (intPM_p_14: ((memory) ((pointer) intPM_15) A899)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -567,7 +580,7 @@ Save.
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc intPM_p_14 p))) /\
                 (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (result: ((pointer) intPM_15)),
   forall (HW_3: result = (acc intPM_p_14 p)),
@@ -587,6 +600,7 @@ Save.
   forall (p: ((pointer) A900)),
   forall (alloc: alloc_table),
   forall (intM_intPM_15: ((memory) Z intPM_15)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (intPM_p_14: ((memory) ((pointer) intPM_15) A900)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -594,7 +608,7 @@ Save.
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc intPM_p_14 p))) /\
                 (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (result: ((pointer) intPM_15)),
   forall (HW_3: result = (acc intPM_p_14 p)),
@@ -614,6 +628,7 @@ Save.
   forall (p: ((pointer) A901)),
   forall (alloc: alloc_table),
   forall (intM_intPM_15: ((memory) Z intPM_15)),
+  forall (intM_x_11: ((memory) Z x_11)),
   forall (intPM_p_14: ((memory) ((pointer) intPM_15) A901)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -621,7 +636,7 @@ Save.
   forall (HW_1: (* File "ref_glob.c", line 45, characters 14-38 *)
                 ((valid alloc p) /\ (valid alloc (acc intPM_p_14 p))) /\
                 (valid alloc x) /\ (valid_range alloc t 0 2) /\
-                (constant_plas plas) /\ (constant_x x alloc)),
+                (constant_plas plas) /\ (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (result: ((pointer) intPM_15)),
   forall (HW_3: result = (acc intPM_p_14 p)),

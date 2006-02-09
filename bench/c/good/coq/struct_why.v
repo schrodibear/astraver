@@ -7,15 +7,20 @@ Require Export struct_spec_why.
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (A814:Set),
   forall (t2: ((pointer) A814)),
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (x_t2_10: ((memory) Z A814)),
+  forall (x_t_2: ((memory) Z t_2)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_t2_10 t2) = 0) /\
                 (valid alloc s) /\ (constant_ps ps) /\ (valid alloc pps) /\
-                (constant_s s alloc)),
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc)),
   (valid alloc t2).
 Proof.
 intuition; subst; auto.
@@ -25,15 +30,20 @@ Save.
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (A815:Set),
   forall (t2: ((pointer) A815)),
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (x_t2_10: ((memory) Z A815)),
+  forall (x_t_2: ((memory) Z t_2)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_t2_10 t2) = 0) /\
                 (valid alloc s) /\ (constant_ps ps) /\ (valid alloc pps) /\
-                (constant_s s alloc)),
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
@@ -72,15 +82,20 @@ Save.
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (A816:Set),
   forall (t2: ((pointer) A816)),
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (x_t2_10: ((memory) Z A816)),
+  forall (x_t_2: ((memory) Z t_2)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_t2_10 t2) = 0) /\
                 (valid alloc s) /\ (constant_ps ps) /\ (valid alloc pps) /\
-                (constant_s s alloc)),
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
@@ -101,15 +116,20 @@ Save.
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (A817:Set),
   forall (t2: ((pointer) A817)),
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (x_t2_10: ((memory) Z A817)),
+  forall (x_t_2: ((memory) Z t_2)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_t2_10 t2) = 0) /\
                 (valid alloc s) /\ (constant_ps ps) /\ (valid alloc pps) /\
-                (constant_s s alloc)),
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
@@ -130,16 +150,21 @@ Save.
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (A818:Set),
   forall (t2: ((pointer) A818)),
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (x_t2_10: ((memory) Z A818)),
+  forall (x_t_2: ((memory) Z t_2)),
   forall (y_t2_10: ((memory) Z A818)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
                 ((valid alloc t2) /\ (acc x_t2_10 t2) = 0) /\
                 (valid alloc s) /\ (constant_ps ps) /\ (valid alloc pps) /\
-                (constant_s s alloc)),
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc)),
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
@@ -158,15 +183,21 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (SPPM_pps_14: ((memory) ((pointer) s_12) pps_14)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
+  forall (x_t_2: ((memory) Z t_2)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 21, characters 14-24 *)
                 (valid alloc ps) /\ (valid alloc s) /\ (constant_ps ps) /\
-                (valid alloc pps) /\ (constant_s s alloc) /\
+                (valid alloc pps) /\
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc) /\
                 (valid1 t_s_12) /\ (separation2 t_s_12 t_s_12)),
   forall (ps0: ((pointer) s_12)),
   forall (HW_3: ps0 = s),
@@ -208,16 +239,21 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
+  forall (SPM_s_12: ((memory) ((pointer) SPM_18) s_12)),
   forall (SPPM_pps_14: ((memory) ((pointer) s_12) pps_14)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
+  forall (t_SPM_18: ((memory) ((pointer) t_2) SPM_18)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
   forall (x_t_2: ((memory) Z t_2)),
+  forall (y_t_2: ((memory) Z t_2)),
+  forall (z_SPM_18: ((memory) Z SPM_18)),
   forall (HW_1: (* File "struct.c", line 21, characters 14-24 *)
                 (valid alloc ps) /\ (valid alloc s) /\ (constant_ps ps) /\
-                (valid alloc pps) /\ (constant_s s alloc) /\
+                (valid alloc pps) /\
+                (constant_s z_SPM_18 t_SPM_18 SPM_s_12 y_t_2 x_t_2 s alloc) /\
                 (valid1 t_s_12) /\ (separation2 t_s_12 t_s_12)),
   forall (ps0: ((pointer) s_12)),
   forall (HW_3: ps0 = s),

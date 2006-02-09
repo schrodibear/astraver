@@ -25,7 +25,6 @@ Save.
   I <= 4.
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -46,6 +45,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

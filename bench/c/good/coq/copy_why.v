@@ -194,7 +194,10 @@ intuition.
 subst.
 rewrite acc_upd_eq;auto.
 rewrite acc_upd_neq;auto.
-
+apply H4.
+auto with *.
+apply neq_offset_neq_shift.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -234,7 +237,6 @@ Save.
   (Zwf 0 i0 i).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -266,6 +268,5 @@ Save.
   (acc intM_t2_5_0 (shift t2 k)) = (acc intM_t1_4 (shift t1 k)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

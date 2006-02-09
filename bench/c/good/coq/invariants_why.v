@@ -10,7 +10,10 @@ Require Export invariants_spec_why.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -18,8 +21,8 @@ Require Export invariants_spec_why.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -41,7 +44,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -49,8 +55,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -63,24 +69,8 @@ Save.
   0 <= (acc x_s_5_0 s).
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition;subst; caduceus.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
-subst;caduceus.
-Save.
-
-Proof.
-intuition.
+subst.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -90,7 +80,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -98,8 +91,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -112,7 +105,8 @@ Save.
   (acc x_s_5_0 s) <= (acc y_s_5 s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -122,7 +116,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -130,8 +127,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -144,7 +141,6 @@ Save.
   (acc y_s_5 s) <= 100.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -154,7 +150,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -162,8 +161,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -172,7 +171,6 @@ Save.
   (* File "invariants.c", line 9, characters 25-33 *) (acc intM_c_6 c) = 12.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -182,7 +180,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -190,8 +191,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -200,7 +201,6 @@ Save.
   0 <= (acc x_s_5 s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -210,7 +210,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -218,8 +221,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -228,7 +231,6 @@ Save.
   (acc x_s_5 s) <= (acc y_s_5 s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -238,7 +240,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -246,8 +251,8 @@ Save.
                 (* File "invariants.c", line 6, characters 18-54 *) ((0 <=
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
-                (constant_c c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s s alloc)),
+                (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -256,7 +261,6 @@ Save.
   (acc y_s_5 s) <= 100.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -265,10 +269,14 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
-  forall (HW_1: (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1) /\ (constant_s s alloc)),
+  forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
+                (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -281,33 +289,9 @@ Save.
   forall (HW_6: intM_c_6_1 = (upd intM_c_6_0 result 14)),
   0 <= (acc x_s_5_0 s).
 Proof.
-intros;subst.
 intuition.
-Save.
-
-Proof.
-intuition;subst;auto;caduceus.
-Qed.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition;subst;caduceus.
-rewrite acc_upd_neq;caduceus.
-assert (offset c +1 <> offset c).
-intuition.
-assert (shift c 1 <> shift c 0 -> shift c 1 <> c).
-rewrite shift_zero;auto.
-apply H3.
-apply neq_offset_neq_shift.
-auto with *.
+subst.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -316,10 +300,14 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
-  forall (HW_1: (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1) /\ (constant_s s alloc)),
+  forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
+                (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -333,7 +321,7 @@ Save.
   (acc x_s_5_0 s) <= (acc y_s_5_0 s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -342,10 +330,14 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
-  forall (HW_1: (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1) /\ (constant_s s alloc)),
+  forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
+                (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -359,7 +351,7 @@ Save.
   (acc y_s_5_0 s) <= 100.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -368,10 +360,14 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
+  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
+  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
+  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
-  forall (HW_1: (valid alloc s) /\ (constant_c c alloc) /\
-                (valid_range alloc c 0 1) /\ (constant_s s alloc)),
+  forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
+                (valid_range alloc c 0 1) /\
+                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -384,7 +380,14 @@ Save.
   forall (HW_6: intM_c_6_1 = (upd intM_c_6_0 result 14)),
   (acc intM_c_6_1 c) = 12.
 Proof.
+intuition;subst;caduceus.
+rewrite acc_upd_neq;caduceus.
+assert (offset c +1 <> offset c).
 intuition.
-(* FILL PROOF HERE *)
+assert (shift c 1 <> shift c 0 -> shift c 1 <> c).
+rewrite shift_zero;auto.
+apply H4.
+apply neq_offset_neq_shift.
+auto with *.
 Save.
 

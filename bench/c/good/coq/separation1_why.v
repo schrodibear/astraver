@@ -9,13 +9,17 @@ Require Export separation1_spec_why.
   forall (p: ((pointer) A777)),
   forall (alloc: alloc_table),
   forall (intM_p_7: ((memory) Z A777)),
+  forall (intM_x_4: ((memory) Z x_4)),
+  forall (intM_y_5: ((memory) Z y_5)),
+  forall (intM_z_6: ((memory) Z z_6)),
   forall (x: ((pointer) x_4)),
   forall (y: ((pointer) y_5)),
   forall (z: ((pointer) z_6)),
   forall (HW_1: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc p) /\ (valid alloc z) /\ (valid alloc y) /\
-                (valid alloc x) /\ (constant_z z alloc) /\
-                (constant_y y alloc) /\ (constant_x x alloc)),
+                (valid alloc x) /\ (constant_z intM_z_6 z alloc) /\
+                (constant_y intM_y_5 y alloc) /\
+                (constant_x intM_x_4 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (intM_p_7_0: ((memory) Z A777)),
   forall (HW_3: intM_p_7_0 = (upd intM_p_7 p 0)),
@@ -46,13 +50,17 @@ Save.
   forall (p: ((pointer) A778)),
   forall (alloc: alloc_table),
   forall (intM_p_7: ((memory) Z A778)),
+  forall (intM_x_4: ((memory) Z x_4)),
+  forall (intM_y_5: ((memory) Z y_5)),
+  forall (intM_z_6: ((memory) Z z_6)),
   forall (x: ((pointer) x_4)),
   forall (y: ((pointer) y_5)),
   forall (z: ((pointer) z_6)),
   forall (HW_1: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc p) /\ (valid alloc z) /\ (valid alloc y) /\
-                (valid alloc x) /\ (constant_z z alloc) /\
-                (constant_y y alloc) /\ (constant_x x alloc)),
+                (valid alloc x) /\ (constant_z intM_z_6 z alloc) /\
+                (constant_y intM_y_5 y alloc) /\
+                (constant_x intM_x_4 x alloc)),
   forall (HW_2: (valid alloc p)),
   forall (intM_p_7_0: ((memory) Z A778)),
   forall (HW_3: intM_p_7_0 = (upd intM_p_7 p 0)),
@@ -65,12 +73,16 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (intM_x_4: ((memory) Z x_4)),
+  forall (intM_y_5: ((memory) Z y_5)),
+  forall (intM_z_6: ((memory) Z z_6)),
   forall (x: ((pointer) x_4)),
   forall (y: ((pointer) y_5)),
   forall (z: ((pointer) z_6)),
   forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x) /\
-                (constant_z z alloc) /\ (constant_y y alloc) /\
-                (constant_x x alloc)),
+                (constant_z intM_z_6 z alloc) /\
+                (constant_y intM_y_5 y alloc) /\
+                (constant_x intM_x_4 x alloc)),
   (* File "separation1.c", line 7, characters 14-23 *) (valid alloc x).
 Proof.
 intuition.
@@ -81,12 +93,15 @@ Save.
 (*Why goal*) Lemma main_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intM_x_4: ((memory) Z x_4)),
+  forall (intM_y_5: ((memory) Z y_5)),
+  forall (intM_z_6: ((memory) Z z_6)),
   forall (x: ((pointer) x_4)),
   forall (y: ((pointer) y_5)),
   forall (z: ((pointer) z_6)),
   forall (HW_1: (valid alloc z) /\ (valid alloc y) /\ (valid alloc x) /\
-                (constant_z z alloc) /\ (constant_y y alloc) /\
-                (constant_x x alloc)),
+                (constant_z intM_z_6 z alloc) /\
+                (constant_y intM_y_5 y alloc) /\
+                (constant_x intM_x_4 x alloc)),
   forall (HW_2: (* File "separation1.c", line 7, characters 14-23 *)
                 (valid alloc x)),
   forall (intM_x_4_0: ((memory) Z x_4)),

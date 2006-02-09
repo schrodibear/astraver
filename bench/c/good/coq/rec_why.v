@@ -13,7 +13,3 @@ Proof.
 intuition.
 Save.
 
-Proof.
-intuition.
-Save.
-

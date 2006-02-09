@@ -38,12 +38,6 @@ Save.
 Proof.
 intuition.
 subst; caduceus.
-red;intros.
-subst.
-rewrite acc_upd_neq;auto.
-assert (p<> x).
-apply pset_singleton_elim;auto.
-auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -63,7 +57,12 @@ Save.
   (not_assigns alloc intM_x_10 intM_x_10_0 (pset_singleton x)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst.
+rewrite acc_upd_neq;auto.
+assert (p<> x).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -89,26 +88,6 @@ Proof.
 intuition.
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (A781:Set),
@@ -126,23 +105,7 @@ Save.
   (* File "passing.c", line 8, characters 43-50 *) (acc intM_x_8_0 x) = 0.
 Proof.
 intuition.
-Save.
-
-
-Proof.
-intuition.
 subst; caduceus.
-red;intros.
-subst.
-rewrite acc_upd_neq;auto.
-assert (p<>x).
-apply pset_singleton_elim;auto.
-auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -162,7 +125,12 @@ Save.
   (not_assigns alloc intM_x_8 intM_x_8_0 (pset_singleton x)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst.
+rewrite acc_upd_neq;auto.
+assert (p<>x).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -174,15 +142,5 @@ Save.
   (* File "passing.c", line 21, characters 14-31 *) (valid_index alloc t 0).
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 

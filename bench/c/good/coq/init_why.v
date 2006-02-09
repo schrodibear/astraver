@@ -5,7 +5,10 @@ Require Export init_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -18,8 +21,9 @@ Require Export init_spec_why.
                 ((acc intM_b_2 (acc b_s_9 s)) = 1 /\
                 (acc intM_b_2 (shift (acc b_s_9 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (result: ((pointer) t_7)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
@@ -74,7 +78,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -87,8 +94,9 @@ Save.
                 ((acc intM_b_2 (acc b_s_9 s)) = 1 /\
                 (acc intM_b_2 (shift (acc b_s_9 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (result: ((pointer) t_7)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
@@ -112,7 +120,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -125,8 +136,9 @@ Save.
                 ((acc intM_b_2 (acc b_s_9 s)) = 1 /\
                 (acc intM_b_2 (shift (acc b_s_9 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (result: ((pointer) t_7)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
@@ -149,7 +161,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -162,8 +177,9 @@ Save.
                 ((acc intM_b_2 (acc b_s_9 s)) = 1 /\
                 (acc intM_b_2 (shift (acc b_s_9 s) 2)) = 4)) /\
                 (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (result: ((pointer) t_7)),
   forall (HW_2: result = (shift t 1)),
   forall (result0: Z),
@@ -186,12 +202,17 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
+  forall (intM_b_2: ((memory) Z b_2)),
   forall (s: ((pointer) s_9)),
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc)),
   2 >= 1.
 Proof.
 intuition.
@@ -201,13 +222,18 @@ Save.
 (*Why goal*) Lemma g_impl_po_2 : 
   forall (A909:Set), forall (A910:Set), forall (A911:Set), forall (A912:Set),
   forall (A913:Set), forall (A914:Set), forall (A915:Set), forall (A916:Set),
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
+  forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_5: ((memory) Z A916)),
   forall (s: ((pointer) s_9)),
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc)),
   forall (HW_2: 2 >= 1),
   forall (result: ((pointer) A916)),
   forall (alloc0: alloc_table),
@@ -267,12 +293,17 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
+  forall (intM_b_2: ((memory) Z b_2)),
   forall (s: ((pointer) s_9)),
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc)),
   3 >= 1.
 Proof.
 intuition.
@@ -282,13 +313,18 @@ Save.
 (*Why goal*) Lemma h_impl_po_2 : 
   forall (A917:Set), forall (A918:Set), forall (A919:Set), forall (A920:Set),
   forall (A921:Set), forall (A922:Set), forall (A923:Set), forall (A924:Set),
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
+  forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_u_6: ((memory) Z A924)),
   forall (s: ((pointer) s_9)),
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc)),
   forall (HW_2: 3 >= 1),
   forall (result: ((pointer) A924)),
   forall (alloc0: alloc_table),
@@ -380,8 +416,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (a_s_9: ((memory) Z s_9)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -389,8 +428,9 @@ Save.
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (x0: Z),
   forall (HW_2: x0 = 45),
   forall (intM_t_7_0: ((memory) Z t_7)),
@@ -490,8 +530,11 @@ rewrite acc_upd_eq;auto.
 Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (a_s_9: ((memory) Z s_9)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -499,8 +542,9 @@ Save.
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (x0: Z),
   forall (HW_2: x0 = 45),
   forall (intM_t_7_0: ((memory) Z t_7)),
@@ -539,8 +583,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
+  forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
+  forall (a_SPM_13: ((memory) Z SPM_13)),
   forall (a_s_9: ((memory) Z s_9)),
   forall (alloc: alloc_table),
+  forall (b_SPM_13: ((memory) ((pointer) b_2) SPM_13)),
   forall (b_s_9: ((memory) ((pointer) b_2) s_9)),
   forall (intM_b_2: ((memory) Z b_2)),
   forall (intM_t_7: ((memory) Z t_7)),
@@ -548,8 +595,9 @@ Save.
   forall (t: ((pointer) t_7)),
   forall (x: Z),
   forall (HW_1: (valid_range alloc t 0 2) /\ (valid alloc s) /\
-                (constant_x x) /\ (constant_s s alloc) /\ (valid1 b_s_9) /\
-                (valid1_range b_s_9 3)),
+                (constant_x x) /\
+                (constant_s b_SPM_13 a_SPM_13 SPM_s_9 intM_b_2 s alloc) /\
+                (valid1 b_s_9) /\ (valid1_range b_s_9 3)),
   forall (x0: Z),
   forall (HW_2: x0 = 45),
   forall (intM_t_7_0: ((memory) Z t_7)),

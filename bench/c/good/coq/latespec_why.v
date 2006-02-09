@@ -17,11 +17,11 @@ Require Export latespec_spec_why.
   (not_assigns alloc intM_p_5 intM_p_5_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst;auto.
+rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
