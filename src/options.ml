@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.56 2006-02-08 10:47:15 hubert Exp $ i*)
+(*i $Id: options.ml,v 1.57 2006-02-10 09:57:32 filliatr Exp $ i*)
 
 open Format
 
@@ -36,7 +36,6 @@ let no_cvcl_prelude_ = ref false
 let simplify_typing_ = ref false
 let no_harvey_prelude_ = ref false
 let werror_ = ref false
-let fpi_ = ref false
 let dir_ = ref ""
 let white_ = ref false
 let black_ = ref true
@@ -219,7 +218,6 @@ let files =
     | ("-hol4" | "--hol4") :: args -> prover_ := Hol4; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
-    | ("-fpi" | "--fpi") :: args -> fpi_ := true; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
@@ -331,7 +329,7 @@ let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with
   | None when prover () = Coq V7 -> "Require Why."
-  | None -> "Require Import Why."
+  | None -> "Require Export Why."
   | Some s -> s
 let pvs_preamble = match !pvs_preamble_ with
   | None -> "importing why@why"
@@ -345,7 +343,6 @@ let simplify_typing = !simplify_typing_
 let no_harvey_prelude = !no_harvey_prelude_
 let wol = !wol_
 let werror = !werror_
-let fpi = !fpi_
 let dir = !dir_
 let white = !white_
 let black = !black_
@@ -381,8 +378,8 @@ let if_debug_2 f x y = if debug then f x y
 let if_debug_3 f x y z = if debug then f x y z
 
 (* compatibility checks *)
-let () = if fpi && valid then begin
-  Printf.eprintf "options -valid and -fpi are not compatible\n";
+let () = if prover () = Gappa && valid then begin
+  Printf.eprintf "options -gappa and -valid are not compatible\n";
   exit 1
 end
 let () = if white && black then begin

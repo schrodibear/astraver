@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.46 2006-02-08 10:47:15 hubert Exp $ i*)
+(*i $Id: options.mli,v 1.47 2006-02-10 09:57:32 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -79,8 +79,6 @@ val no_simplify_prelude : bool
 val no_harvey_prelude : bool
 val no_cvcl_prelude : bool
 val simplify_typing : bool
-
-val fpi : bool
 
 val gappa_rnd : string
 
