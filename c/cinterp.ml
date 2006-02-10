@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.169 2006-02-09 09:28:02 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.170 2006-02-10 14:46:04 moy Exp $ i*)
 
 
 open Format
@@ -162,6 +162,8 @@ let rec interp_term label old_label t =
 	term_bin_op t1.nterm_type t2.nterm_type op (f t1) (f t2)
     | NTbase_addr t -> 
 	LApp("base_addr",[f t])
+    | NToffset t -> 
+	LApp("offset",[f t])
     | NTblock_length t -> 
 	LApp("block_length",[interp_var label "alloc"; f t])
     | NTat (t, l) -> 

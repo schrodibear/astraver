@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.113 2006-02-09 09:28:02 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.114 2006-02-10 14:46:04 moy Exp $ i*)
 
 open Cast
 open Cnorm
@@ -213,6 +213,7 @@ let rec term t = match t.nterm_node with
   | NTunop (Utilde, t) -> term t
   | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
   | NTbase_addr t -> term t
+  | NToffset t -> term t
   | NTblock_length t -> reads_add_alloc (term t)
   | NTat (t, _) -> 
       term t
@@ -266,6 +267,7 @@ let rec assign_location t = match t.nterm_node with
   | NTunop (Utilde, _)  
   | NTunop ((Ufloat_of_int | Uint_of_float), _)  
   | NTbase_addr _  
+  | NToffset _  
   | NTblock_length _  
   | NTat (_, _)  
   | NTold _  

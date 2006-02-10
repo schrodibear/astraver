@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.51 2006-02-07 12:48:48 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.52 2006-02-10 14:46:04 moy Exp $ i*)
 
 open Creport
 open Cconst
@@ -193,6 +193,7 @@ let rec type_why_for_term t =
 	  | Pointer z -> Addr z
 	  | _ -> assert false
 	end  
+    | NToffset t -> Info.Int
     | NTblock_length t -> Info.Int
     | NTcast (_,t) -> assert false (* type_why_for_term t *)
     | NTrange (t,_,_,_) -> type_why_for_term t
@@ -337,18 +338,6 @@ and expr_node loc ty t =
 	  Cenv.set_var_type (Var_info info) ty false;
 	  NEvar (Var_info info)    
       | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
-(*  
-let nt_arrow t f =
-  match t.nterm_node with
-    | NTstar(x) -> NTarrow (x, f)
-    | _ -> NTarrow (t, f)
-
-
-let nt_star loc ty t =
-  NTstar { nterm_node = t;
-	   nterm_loc = loc;
-	   nterm_type = ty}
-*)
 
 let nt_arrow loc valid ty e tw z f =
   NTarrow ({nterm_node = e;
@@ -452,11 +441,8 @@ let rec term_node loc t ty =
   | Told t1 -> NTold (term t1)
   | Tat (t1, s) -> NTat (term t1, s)
   | Tbase_addr t -> NTbase_addr (term t)
+  | Toffset t -> NToffset (term t)
   | Tblock_length t -> NTblock_length (term t)
-(*
-  | Tresult v -> NTresult v
-  | Tnull -> NTnull
-*)
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
@@ -813,6 +799,8 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "@ can't be used here"
 	| NTbase_addr t -> error t.nterm_loc 
 	      "base_addr can't be used here"
+	| NToffset t -> error t.nterm_loc 
+	      "offset can't be used here"
 	| NTblock_length t -> error t.nterm_loc 
 	      "block_length can't be used here"
 (*

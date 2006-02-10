@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.85 2006-01-26 17:01:55 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.86 2006-02-10 14:46:04 moy Exp $ i*)
 
 open Cast
 open Clogic
@@ -202,7 +202,7 @@ and type_term_node loc env = function
 	     let t2 = type_int_term env t2 in
 	     Tarrget (t1, t2), ty
 	 | _ ->
-	     error loc "subscripted value is neither array nor pointer")
+	     error loc "subscripted value must be either array or pointer")
   | PLrange (t1, t2, t3) ->
       let t1 = type_term env t1 in
       (match t1.term_type.ctype_node with
@@ -211,7 +211,7 @@ and type_term_node loc env = function
 	     let t3 = type_int_term_option env t3 in
 	     Trange (t1, t2, t3), ty
 	 | _ ->
-	     error loc "subscripted value is neither array nor pointer")
+	     error loc "subscripted value must be either array or pointer")
   | PLif (t1, t2, t3) ->
       (* TODO type de t1 ? *)
       unsupported loc "logic if-then-else"
@@ -226,12 +226,17 @@ and type_term_node loc env = function
       let t = type_term env t in
       (match t.term_type.ctype_node with
 	 | Tarray _ | Tpointer _ -> Tbase_addr t, c_addr
-	 | _ -> error loc "subscripted value is neither array nor pointer")
+	 | _ -> error loc "base_addr argument must be either array or pointer")
+  | PLoffset t ->
+      let t = type_term env t in
+      (match t.term_type.ctype_node with
+	 | Tarray _ | Tpointer _ -> Toffset t, c_int
+	 | _ -> error loc "offset argument must be either array or pointer")
   | PLblock_length t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
 	 | Tarray _ | Tpointer _ -> Tblock_length t, c_int
-	 | _ -> error loc "subscripted value is neither array nor pointer")
+	 | _ -> error loc "block_length argument must be either array or pointer")
   | PLresult ->
       (try 
 	 let t = Env.find "result" env in 
@@ -527,7 +532,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
   | PLat (p, l) ->
       (* TODO check label l *)
       Pat (type_predicate env p, l)
-  | PLcast _ | PLblock_length _ | PLbase_addr _ | PLarrget _ | PLarrow _ 
+  | PLcast _ | PLblock_length _ | PLbase_addr _ | PLoffset _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
   | PLresult | PLrange _ ->
       (*raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))*)

@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
 
- o new bahavior w.r.t termination: loop variants can now be omitted
+ o new built-in logic function \offset
+ o new behavior w.r.t termination: loop variants can now be omitted
  o partial evaluation (of expressions such as 1 == 1)
  o bug fix for function specifications given later than function body
  o support for the major changes in Why 1.99

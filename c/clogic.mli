@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.51 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.52 2006-02-10 14:46:04 moy Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -57,6 +57,7 @@ and lexpr_node =
   | PLold of lexpr
   | PLat of lexpr * string
   | PLbase_addr of lexpr
+  | PLoffset of lexpr
   | PLblock_length of lexpr
   | PLresult
   | PLnull
@@ -103,6 +104,7 @@ and 'ctype term_node =
   | Told of 'ctype term
   | Tat of 'ctype term * string
   | Tbase_addr of 'ctype term
+  | Toffset of 'ctype term
   | Tblock_length of 'ctype term
 (*
   | Tresult of Info.env_info
@@ -181,18 +183,14 @@ and 'ctype nterm_node =
   | NTvar of Info.var_info
   | NTapp of 'ctype napp
   | NTunop of term_unop * 'ctype nterm
-(*  | NTstar of 'ctype nterm*)
   | NTbinop of 'ctype nterm * term_binop * 'ctype nterm
   | NTarrow of 'ctype nterm * Info.why_type * Info.zone * Info.var_info
   | NTif of 'ctype nterm * 'ctype nterm * 'ctype nterm
   | NTold of 'ctype nterm
   | NTat of 'ctype nterm * string
   | NTbase_addr of 'ctype nterm
+  | NToffset of 'ctype nterm
   | NTblock_length of 'ctype nterm
-(*
-  | NTresult of Info.env_info
-  | NTnull
-*)
   | NTcast of 'ctype * 'ctype nterm
   | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option 
       * Info.var_info

@@ -349,8 +349,8 @@ Admitted.
   forall (A656:Set), ((pointer) A656) -> ((pset) A656) -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A658:Set)
-  (A657:Set) (a:alloc_table) (m1:((memory) A657 A658)) (m2:((memory) A657
+(*Why predicate*) Definition not_assigns (A657:Set)
+  (A658:Set) (a:alloc_table) (m1:((memory) A657 A658)) (m2:((memory) A657
   A658)) (l:((pset) A658))
   := (forall (p:((pointer) A658)),
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
@@ -618,26 +618,26 @@ Admitted.
     (forall (m:((memory) A697 A696)), (not_assigns a m m l)))).
 Admitted.
 
-(*Why predicate*) Definition valid1 (A699:Set)
-  (A698:Set) (m1:((memory) ((pointer) A698) A699))
+(*Why predicate*) Definition valid1 (A698:Set)
+  (A699:Set) (m1:((memory) ((pointer) A698) A699))
   := (forall (p:((pointer) A699)),
       (forall (a:alloc_table), ((valid a p) -> (valid a (acc m1 p))))).
 
-(*Why predicate*) Definition valid1_range (A701:Set)
-  (A700:Set) (m1:((memory) ((pointer) A700) A701)) (size:Z)
+(*Why predicate*) Definition valid1_range (A700:Set)
+  (A701:Set) (m1:((memory) ((pointer) A700) A701)) (size:Z)
   := (forall (p:((pointer) A701)),
       (forall (a:alloc_table),
        ((valid a p) -> (valid_range a (acc m1 p) 0 (size - 1))))).
 
-(*Why predicate*) Definition separation1 (A703:Set)
-  (A702:Set) (m1:((memory) ((pointer) A702) A703))
+(*Why predicate*) Definition separation1 (A702:Set)
+  (A703:Set) (m1:((memory) ((pointer) A702) A703))
   (m2:((memory) ((pointer) A702) A703))
   := (forall (p:((pointer) A703)),
       (forall (a:alloc_table),
        ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
 
-(*Why predicate*) Definition separation1_range1 (A705:Set)
-  (A704:Set) (m1:((memory) ((pointer) A704) A705))
+(*Why predicate*) Definition separation1_range1 (A704:Set)
+  (A705:Set) (m1:((memory) ((pointer) A704) A705))
   (m2:((memory) ((pointer) A704) A705)) (size:Z)
   := (forall (p:((pointer) A705)),
       (forall (a:alloc_table),
@@ -646,8 +646,8 @@ Admitted.
          (0 <= i /\ i < size ->
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
 
-(*Why predicate*) Definition separation1_range (A707:Set)
-  (A706:Set) (m:((memory) ((pointer) A706) A707)) (size:Z)
+(*Why predicate*) Definition separation1_range (A706:Set)
+  (A707:Set) (m:((memory) ((pointer) A706) A707)) (size:Z)
   := (forall (p:((pointer) A707)),
       (forall (a:alloc_table),
        ((valid a p) ->
@@ -659,16 +659,16 @@ Admitted.
              ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
                                                               (shift p i2)))))))))))).
 
-(*Why predicate*) Definition separation2 (A709:Set)
-  (A708:Set) (m1:((memory) ((pointer) A708) A709))
+(*Why predicate*) Definition separation2 (A708:Set)
+  (A709:Set) (m1:((memory) ((pointer) A708) A709))
   (m2:((memory) ((pointer) A708) A709))
   := (forall (p1:((pointer) A709)),
       (forall (p2:((pointer) A709)),
        (forall (a:alloc_table),
         (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2))))))).
 
-(*Why predicate*) Definition separation2_range1 (A711:Set)
-  (A710:Set) (m1:((memory) ((pointer) A710) A711))
+(*Why predicate*) Definition separation2_range1 (A710:Set)
+  (A711:Set) (m1:((memory) ((pointer) A710) A711))
   (m2:((memory) ((pointer) A710) A711)) (size:Z)
   := (forall (p:((pointer) A711)),
       (forall (q:((pointer) A711)),
