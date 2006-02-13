@@ -43,6 +43,8 @@ Require Export separation3_spec_why.
   (valid alloc result1).
 Proof.
 intuition.
+subst;auto.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -91,36 +93,7 @@ Save.
   forall (HW_10: result4 = (acc intM_b_0_0 result3)),
   result4 = 1.
 Proof.
-intuition; subst.
-generalize (H3 s0 alloc HW_2);intro.
-apply valid_range_valid_shift with 0 (5-1);auto.
-omega.
-Save.
-
-Proof.
 intuition; subst; try caduceus.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst.
-caduceus.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
-Save.
-
-Proof.
-intuition.
-subst.
-caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -171,45 +144,7 @@ Save.
   forall (HW_10: result5 = (acc intM_b_0_0 result4)),
   result5 = 1.
 Proof.
-intuition.
-Save.
-
-Proof.
-intuition; subst.
-generalize (H2 s0 alloc HW_2);
- intuition.
-apply valid_range_valid_shift with 0 (5-1);auto.
-omega.
-Save.
-
-Proof.
 intuition; subst; caduceus; auto.
-Save.
-
-Proof.
-intuition.
-subst.
-generalize (H2 s0 alloc HW_2).
-intro.
-apply valid_range_valid_shift with 0 (5-1).
-auto.
-omega.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst.
-auto.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -249,26 +184,5 @@ Save.
   forall (HW_5: result0 = (acc a_p_3_0 s0)),
   result0 = 1.
 Proof.
-intuition; subst; valid.
-Save.
-
-Proof.
 intuition; subst; caduceus.
 Save.
-
-Proof.
-intuition.
-subst.
-red in H3;auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
-Save.
-

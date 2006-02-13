@@ -16,34 +16,7 @@ Require Export ref_glob_spec_why.
   forall (HW_2: intM_x_11_0 = (upd intM_x_11 x 1)),
   (* File "ref_glob.c", line 13, characters 13-19 *) (acc intM_x_11_0 x) = 1.
 Proof.
-intuition.
-Qed.
-
-Proof.
 intuition;subst; caduceus.
-red.
-intros.
-rewrite acc_upd_neq;auto.
-generalize (pset_singleton_elim H0);auto.
-Qed.
-
-Proof.
-intuition.
-Save.
-
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -60,8 +33,12 @@ Save.
   (not_assigns alloc intM_x_11 intM_x_11_0 (pset_singleton x)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+red.
+intros.
+subst.
+rewrite acc_upd_neq;auto.
+generalize (pset_singleton_elim H4);auto.
+Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f4_impl_po_1 : 
@@ -90,6 +67,7 @@ Save.
   (* File "ref_glob.c", line 2, characters 14-23 *) (valid alloc result0).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -178,61 +156,7 @@ Save.
   (acc intM_c1_9_0 (acc c1_plas_12 plas)) = 1.
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
 subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst.
-rewrite H8;auto.
-apply pset_singleton_intro.
-red in H2.
-replace (plas # c1_Z12 <> plas # c2_Z12) with (shift (plas # c1_Z12) 0 <> shift (plas # c2_Z12) 0).
-apply neq_base_addr_neq_shift.
-apply H2 with alloc;auto.
-rewrite shift_zero;rewrite shift_zero;auto.
-subst;auto.
-red;intros.
-rewrite H8;auto.
-rewrite H6;auto.
-subst.
-rewrite acc_upd_neq;auto.
-generalize (pset_union_elim1 H10);intro.
-assert (p<> plas # c2_Z12).
-apply pset_singleton_elim;auto.
-auto.
-subst.
-generalize (pset_union_elim2 H10);auto.
-subst.
-generalize (pset_union_elim1 H10);auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -280,7 +204,8 @@ Save.
   (acc intM_c2_8_1 (acc c2_plas_12 plas)) = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -425,7 +350,9 @@ Save.
    (pset_singleton (acc c1_plas_12 plas))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst.
+rewrite H9;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -474,7 +401,12 @@ Save.
    (pset_singleton (acc c2_plas_12 plas))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+rewrite H11;auto.
+subst;auto.
+rewrite acc_upd_neq;auto.
+generalize (pset_singleton_elim H13);auto.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -497,7 +429,7 @@ Save.
   (* File "ref_glob.c", line 4, characters 13-20 *) (acc intM_p_10_0 p) = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -520,7 +452,10 @@ Save.
   (not_assigns alloc intM_p_10 intM_p_10_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst;caduceus.
+rewrite acc_upd_neq;auto.
+generalize (pset_singleton_elim H5);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -563,7 +498,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -591,7 +526,7 @@ Save.
   (acc intM_intPM_15_0 (acc intPM_p_14 p)) = 2.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -619,7 +554,10 @@ Save.
    (pset_singleton (acc intPM_p_14 p))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst;caduceus.
+rewrite acc_upd_neq;auto.
+generalize (pset_singleton_elim H6);auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

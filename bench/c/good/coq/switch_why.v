@@ -2848,14 +2848,6 @@ Proof.
 intuition.
 Save.
 
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f5_impl_po_1 : 
   forall (x: Z),

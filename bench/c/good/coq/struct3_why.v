@@ -38,22 +38,6 @@ caduceus;
 red;auto.
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst.
-caduceus.
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
   forall (A769:Set),
@@ -99,38 +83,5 @@ Save.
   result3 = 3.
 Proof.
 intuition; subst; auto.
+caduceus.
 Save.
-
-Proof.
-intuition; subst; auto; caduceus.
-Save.
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
-Save.
-

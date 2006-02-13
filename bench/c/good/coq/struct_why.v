@@ -59,25 +59,6 @@ Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition;subst;caduceus.
-red;intros.
-assert (p<> t2).
-apply pset_singleton_elim;auto.
-rewrite acc_upd_neq;auto.
-rewrite acc_upd_neq;auto.
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (A816:Set),
@@ -108,8 +89,7 @@ Save.
   forall (HW_7: x_t2_10_1 = (upd x_t2_10_0 t2 (1 + result0))),
   (acc x_t2_10_1 t2) = 2.
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -142,8 +122,12 @@ Save.
   forall (HW_7: x_t2_10_1 = (upd x_t2_10_0 t2 (1 + result0))),
   (not_assigns alloc x_t2_10 x_t2_10_1 (pset_singleton t2)).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;caduceus.
+red;intros.
+assert (p<> t2).
+apply pset_singleton_elim;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -210,31 +194,7 @@ Save.
   (valid alloc ps0).
 Proof.
  intuition.
-Save.
-
-Proof.
- intuition.
 subst; auto.
-Save.
-
-Proof.
-intuition.
-subst;
-auto.
-Save.
-
-Proof.
-intuition; subst; auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -275,16 +235,6 @@ Save.
   result2 = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+caduceus.
 Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-

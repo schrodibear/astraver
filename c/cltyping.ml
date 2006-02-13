@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.86 2006-02-10 14:46:04 moy Exp $ i*)
+(*i $Id: cltyping.ml,v 1.87 2006-02-13 16:16:26 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -578,4 +578,3 @@ let type_spec result env s =
     assigns = m;
     ensures = q;
     decreases = v }
-

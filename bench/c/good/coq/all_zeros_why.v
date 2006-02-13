@@ -16,9 +16,6 @@ Require Export all_zeros_spec_why.
   0 <= k.
 Proof.
 intuition.
-subst.
-red in HW_1.
-intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -35,6 +32,8 @@ Save.
 Proof.
 intuition.
 subst;auto.
+red in HW_1.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -53,7 +52,6 @@ Save.
   (acc intM_t_5 (shift t i)) = 0.
 Proof.
 intuition; subst.
-assert (k0=n \/ k0<n). omega. intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -83,9 +81,6 @@ Save.
 Proof.
 intuition.
 subst.
-assert (k0=i \/  i< k0).
-omega.
-intuition.
 subst.
 auto.
 Save.
@@ -121,6 +116,7 @@ Save.
    (forall (i:Z), (0 <= i /\ i < n -> (acc intM_t_5 (shift t i)) = 0))).
 Proof.
 intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -227,7 +223,11 @@ Save.
   (acc intM_t_5 (shift t i)) = 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+assert (k0=i \/  i< k0).
+omega.
+intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -320,7 +320,6 @@ Save.
   (acc intM_t_4 (shift t i)) = 0.
 Proof.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -348,7 +347,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -382,10 +381,6 @@ Save.
    (forall (i:Z), (0 <= i /\ i < n -> (acc intM_t_4 (shift t i)) = 0))).
 Proof.
 intuition.
-subst.
-apply HW_9.
-apply H3.
-omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -420,10 +415,7 @@ Save.
 Proof.
 intuition.
 subst.
-assert (i = mutable_n -1 \/ mutable_n -1 < i).
-omega.
 intuition.
-subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -489,7 +481,10 @@ Save.
   (acc intM_t_4 (shift t i)) = 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (i = mutable_n -1 \/ mutable_n -1 < i).
+omega.
+intuition.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

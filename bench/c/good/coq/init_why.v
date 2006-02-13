@@ -43,33 +43,6 @@ Require Export init_spec_why.
 Proof.
 intuition.
 subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-unfold valid1_range in H6.
-apply valid_range_valid_shift with 0 (3-1).
-apply H6;auto.
-omega.
-Save.
-
-Proof.
-intuition.
-subst;auto.
 rewrite H0.
 rewrite H4.
 rewrite H1.
@@ -115,7 +88,6 @@ Save.
   2.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -253,19 +225,6 @@ Save.
   result1 = 4.
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition;subst.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
 subst;auto.
 rewrite acc_upd_neq;auto.
 rewrite acc_upd_eq;auto.
@@ -274,21 +233,6 @@ apply neq_offset_neq_shift.
 omega.
 rewrite shift_zero.
 auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -356,34 +300,6 @@ Save.
   (result2 + result4 + result6) = 12.
 Proof.
 intuition;subst;auto.
-Save.
-
-Proof.
-intuition;subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst.
 rewrite acc_upd_neq;auto.
 rewrite acc_upd_neq;auto.
 rewrite acc_upd_eq;auto.
@@ -397,21 +313,6 @@ rewrite shift_zero;auto.
 replace (shift result 2 <> result) with (shift result 2 <> shift result 0).
 apply neq_offset_neq_shift;omega.
 rewrite shift_zero;auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -464,70 +365,11 @@ Save.
   (acc intM_t_7_2 (shift t 1)) = 2.
 Proof.
 intuition;subst;auto.
-Save.
-
-Proof.
-intuition;subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-apply valid_range_valid_shift with 0 (3-1).
-apply H3;auto.
-omega.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-apply valid_range_valid_shift with 0 (3-1).
-apply H3;auto.
-omega.
-Save.
-
-Proof.
-intuition;subst;auto.
 rewrite acc_upd_neq.
 rewrite acc_upd_eq;auto.
 apply neq_offset_neq_shift;omega.
-rewrite acc_upd_neq.
-rewrite acc_upd_neq.
-rewrite acc_upd_eq;auto.
-replace (shift (s # b_Z7) 1 <> s # b_Z7) with (shift (s # b_Z7) 1 <> shift (s # b_Z7) 0).
-apply neq_offset_neq_shift;omega.
-rewrite shift_zero;auto.
-replace (shift (s # b_Z7) 2 <> s # b_Z7) with (shift (s # b_Z7) 2 <> shift (s # b_Z7) 0).
-apply neq_offset_neq_shift;omega.
-rewrite shift_zero;auto.
-rewrite acc_upd_eq;auto.
 Save.
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
   forall (SPM_s_9: ((memory) ((pointer) SPM_13) s_9)),
@@ -578,7 +420,16 @@ Save.
   (acc intM_b_2_2 (acc b_s_9 s)) = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
+rewrite acc_upd_neq.
+rewrite acc_upd_neq.
+rewrite acc_upd_eq;auto.
+replace (shift (s # b_s_9) 1 <> s # b_s_9) with (shift (s # b_s_9) 1 <> shift (s # b_s_9) 0).
+apply neq_offset_neq_shift;omega.
+rewrite shift_zero;auto.
+replace (shift (s # b_s_9) 2 <> s # b_s_9) with (shift (s # b_s_9) 2 <> shift (s # b_s_9) 0).
+apply neq_offset_neq_shift;omega.
+rewrite shift_zero;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -631,6 +482,6 @@ Save.
   (acc intM_b_2_2 (shift (acc b_s_9 s) 2)) = 4.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 

@@ -1086,38 +1086,7 @@ Save.
     (pset_range (pset_singleton (acc p1_u1_83 u1)) 0 4))).
 Proof.
 intuition.
-apply not_assigns_trans with v2_Z57_0.
-unfold not_assigns;intros.
-apply H5;auto.
-apply pset_union_elim2 with (pset_singleton u2);auto.
-unfold not_assigns;intros.
-apply H8;auto.
-apply pset_union_elim1 with (pset_singleton u1);auto.
-apply not_assigns_trans with v1_Z57_0.
-unfold not_assigns;intros.
-apply H10;auto.
-apply pset_union_elim2 with (pset_singleton u2);auto.
-unfold not_assigns;intros.
-apply H14;auto.
-apply pset_union_elim1 with (pset_singleton u1);auto.
-apply not_assigns_trans with int_Z8_0.
-unfold not_assigns;intros.
-apply H9;auto.
-generalize (pset_union_elim2 H15);intro.
-apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p2_Z57)) 0 4);auto.
-unfold not_assigns;intros.
-apply H13;auto.
-generalize (pset_union_elim1 H15);intro.
-generalize (pset_union_elim2 H15);intro.
-auto.
-apply not_assigns_trans with int_Z7_0.
-unfold not_assigns;intros.
-apply H7;auto.
-generalize (pset_union_elim2 H15);auto.
-unfold not_assigns;intros.
-apply H11;auto.
-generalize (pset_union_elim1 H15);auto.
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_4 : 
@@ -1496,8 +1465,7 @@ Save.
     (pset_range (pset_singleton (acc p2_u1_83 u1)) 0 4))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f1_impl_po_5 : 
@@ -3762,16 +3730,6 @@ Save.
                 (not_assigns alloc v1_u2_85 v1_u2_85_0 (pset_singleton u2))) /\
                 (not_assigns alloc v2_u2_85 v2_u2_85_0 (pset_singleton u2))),
   (not_assigns alloc v1_u2_85 v1_u2_85_0 (pset_singleton u2)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -44274,65 +44232,5 @@ Save.
   result3 = 1.
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
-subst.
-generalize (H5 ss alloc HW_2);intuition.
-Save.
-
-Proof.
-intuition;subst;auto.
-Save.
-
-Proof.
-intuition.
-subst.
-auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
-Save.
-
-Proof.
-intuition.
-Save.
-
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
 Save.
 

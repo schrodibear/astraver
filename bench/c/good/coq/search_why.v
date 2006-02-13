@@ -31,7 +31,6 @@ Save.
   (acc intM_t_7 (shift t k)) <> v.
 Proof.
 intuition.
-subst; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -88,12 +87,7 @@ Save.
   (acc intM_t_7 (shift t i)) = v.
 Proof.
 intuition.
-subst.
-assert (k=i \/ k<i).
-  omega.
-intuition.
-subst; auto.
-apply H2 with k; auto.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -158,7 +152,11 @@ Save.
   (acc intM_t_7 (shift t k)) <> v.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (k=i \/ k<i).
+  omega.
+intuition.
+subst; auto.
+apply H4 with k; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -246,7 +244,6 @@ Save.
   (acc intM_t_6 (shift t k)) <> v.
 Proof.
 intuition.
-subst; auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -303,11 +300,7 @@ Save.
   (acc intM_t_6 (shift t i)) = v.
 Proof.
 intuition.
-assert (k=i\/ k < i).
-  omega.
-intuition.
-subst; auto.
-apply H2 with k;auto.
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -340,8 +333,6 @@ Save.
   (acc intM_t_6 (shift t i0)) <> v.
 Proof.
 intuition.
-subst.
-apply H2 with i0; auto with *.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -407,7 +398,12 @@ Save.
   (acc intM_t_6 (shift t k)) <> v.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (k=i\/ k < i).
+  omega.
+intuition.
+subst; auto.
+apply H4 with k;auto.
+
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -491,7 +487,10 @@ Save.
   (acc intM_t_6 (shift t i0)) <> v.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (i0=i\/ i0 < i).
+  omega.
+intuition.
+apply H4 with i0;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

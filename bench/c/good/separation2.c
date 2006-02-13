@@ -3,7 +3,7 @@ typedef struct { int *pp2; } las2;
 las u, v, w, m;
 las2 u2, v2;
 
-/*@
+/*
   invariant inv1:
   \forall las x,las y;
   &x != &y =>
@@ -11,14 +11,14 @@ las2 u2, v2;
   &&  \base_addr(x.p2) != \base_addr(y.pp1)
   &&  \base_addr(x.pp1) != \base_addr(y.pp1)
 */
-/*@
+/*
   invariant inv2:
   \forall las x,las2 y;
   \base_addr(x.p1) != \base_addr(y.pp2)
   &&  \base_addr(x.p2) != \base_addr(y.pp2)
   &&  \base_addr(x.pp1) != \base_addr(y.pp2)
 */
-/*@
+/*
   invariant inv3:
   \forall las2 x,las2 y;
   &x != &y => \base_addr(x.pp2) != \base_addr(y.pp2)

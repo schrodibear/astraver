@@ -47,29 +47,9 @@ Save.
   result3 = 3.
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
 subst;caduceus.
-subst;auto.
 Save.
 
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst.
-caduceus.
-Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
@@ -113,26 +93,7 @@ Save.
   forall (HW_10: result3 = (acc intM_t_1_2 result2)),
   result3 = 3.
 Proof.
-intuition.
-Save.
-
-Proof.
 intuition;subst;caduceus;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -186,34 +147,7 @@ Save.
   result4 = 12.
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
 subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst.
-apply valid_range_valid_shift with 0 3.
-apply alloc_stack_valid_range with Z3 result alloc;auto.
-omega.
-Save.
-
-Proof.
-intuition.
-subst;caduceus;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -327,57 +261,6 @@ Save.
   result10 = 3.
 Proof.
 intuition;subst;caduceus.
-apply valid_range_valid_shift with 0 (4-1);auto.
-omega.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-apply alloc_stack_valid with Z5 result3 alloc0;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -451,22 +334,5 @@ Save.
   result4 = 3.
 Proof.
 intuition;subst.
-apply valid_range_valid_shift with 0 (5-1);auto.
-apply alloc_stack_valid_range with Z7 result0 alloc0;auto.
-omega.
-Save.
-
-Proof.
-intuition;subst;auto.
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
 subst;caduceus.
 Save.
-

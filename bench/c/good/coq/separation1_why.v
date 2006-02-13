@@ -26,22 +26,7 @@ Require Export separation1_spec_why.
   (* File "separation1.c", line 9, characters 13-20 *) (acc intM_p_7_0 p) = 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
 subst;caduceus.
-red;intros.
-subst;rewrite acc_upd_neq;auto.
-assert (p0<>p).
-apply pset_singleton_elim;auto.
-auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -67,7 +52,11 @@ Save.
   (not_assigns alloc intM_p_7 intM_p_7_0 (pset_singleton p)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst;rewrite acc_upd_neq;auto.
+assert (p0<>p).
+apply pset_singleton_elim;auto.
+auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -115,29 +104,3 @@ Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-

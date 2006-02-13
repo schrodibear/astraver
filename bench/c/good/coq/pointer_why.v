@@ -3,14 +3,6 @@
 
 Require Export pointer_spec_why.
 
-Proof.
-intuition;subst;auto.
-Save.
-
-Proof.
-intuition.
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
   forall (A833:Set),
@@ -39,20 +31,7 @@ Save.
   forall (HW_6: intM_x_15_1 = (upd intM_x_15_0 x (result + 1))),
   (acc intM_x_15_1 x) = 1.
 Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
 intuition;subst;auto.
-rewrite acc_upd_eq;auto.
 rewrite acc_upd_eq;auto.
 rewrite acc_upd_eq;auto.
 Save.
@@ -86,7 +65,7 @@ Save.
   (result + 1) = 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -117,30 +96,9 @@ Save.
   forall (HW_6: intM_x_14_1 = (upd intM_x_14_0 x (1 + result))),
   (acc intM_x_14_1 x) = 1.
 Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
 intuition;subst;auto.
 rewrite acc_upd_eq;auto.
 rewrite acc_upd_eq;auto.
-rewrite acc_upd_eq;auto.
-red.
-intros.
-assert (p<>x).
-apply pset_singleton_elim;auto.
-rewrite acc_upd_neq;auto.
-rewrite acc_upd_neq;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -172,7 +130,7 @@ Save.
   result = 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -204,7 +162,12 @@ Save.
   (not_assigns alloc intM_x_14 intM_x_14_1 (pset_singleton x)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intros.
+subst;caduceus.
+assert (p<>x).
+apply pset_singleton_elim;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -231,11 +194,6 @@ Save.
                 ((acc intM_r_16_0 r) = 1 /\ result = 0) /\
                 (not_assigns alloc intM_r_16 intM_r_16_0 (pset_singleton r))),
   (acc intM_r_16_0 r) = 1.
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -302,66 +260,6 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma struct1_impl_po_1 : 
   forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
@@ -383,7 +281,7 @@ Save.
   (valid alloc result).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst;auto.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -417,27 +315,5 @@ Save.
 Proof.
 intuition.
 subst;auto.
-
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst.
 caduceus.
 Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
