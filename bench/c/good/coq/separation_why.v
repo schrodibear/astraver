@@ -43168,8 +43168,7 @@ Save.
               (pset_range (pset_singleton (acc anonymous_2_p1_u3_88 u3)) 0 4))))))))))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_62 : 
@@ -43869,8 +43868,7 @@ Save.
               (pset_range (pset_singleton (acc anonymous_2_p2_u3_88 u3)) 0 4))))))))))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
@@ -44232,5 +44230,7 @@ Save.
   result3 = 1.
 Proof.
 intuition.
+subst;auto.
+caduceus.
 Save.
 
