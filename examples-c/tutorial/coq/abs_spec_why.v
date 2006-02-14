@@ -7,6 +7,6 @@ Require Export Caduceus.
 
 
 
-(*Why type*) Definition Z0: Set.
+(*Why type*) Definition global: Set.
 Admitted.
 

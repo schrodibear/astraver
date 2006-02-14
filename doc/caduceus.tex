@@ -253,38 +253,39 @@ valid           :   2 ( 67%)
 invalid         :   1 ( 33%)
 timeout/failure :   0 (  0%)
 \end{verbatim}
-so it that case, there are two proof obligations and only one of them
-has been proved. To investigate the unproved one, we may look at file
-\verb|simplify.log|:
+so it that case, there are three proof obligations and only two of them
+has been proved. To investigate the unproved one, we may run \simplify{}
+manually by:
 \begin{verbatim}
-> cat simplify.log
-[...]
-Simplify simplify/abs_why.sx.all
+> Simplify simplify/abs_why.sx.all
 Counterexample:
   context:
     (AND
-      (EQ null p)
-      (EQ (ISpointer p) |@true|)
-      (EQ (ISalloc alloc) |@true|)
+      (< (offset p) 0)
     )
 
 1: Invalid.
 
 2: Valid.
+
+3: Valid.
 \end{verbatim}
-The counter example given contains \verb|(EQ null p)|, meaning that
+The counter example given contains \verb|< (offset p) 0|, meaning that
 this program may not run as expected if pointer \verb|p| is
-null: indeed, a segmentation fault would occur in that case. If you try to
+outside its valid memory block (see
+Section~\ref{pointer-arith}). Indeed, a segmentation fault would occur
+in that case. If you try to 
 use \coq\ instead of \simplify, you will face the same problem when
 trying to prove the first obligation: you will end up with
 \begin{verbatim}
 1 subgoal
-p : pointer
-alloc : alloc
+p : pointer global
+alloc : alloc_table
 ______________________________________(1/1)
 valid alloc p
 \end{verbatim}
-which is not provable.
+which is not provable: there is no hypothesis which ensures the
+validity of \verb|p|.
 
 To fix this problem, one should specify a pre-condition to function
 \verb|abs|, which can be given using the \verb|\valid| predicate of
@@ -299,44 +300,29 @@ void abs2(int *p) \{
 \end{code}
 If you run \caduceus{} again on this version, you will first notice
 that the first obligation is now automatically discharged by Why, and
-Simplify will succeed to prove the second obligation. If you run Coq
-instead, then this obligation will not be proved automatically: you
+as before \simplify{} will succeed to prove the others. If you run \coq{}
+instead, then this last obligation will not be proved automatically: you
 will have to make the proof by hand. After 
 executing the \verb|intuition| tactic, the goal to solve has the
 following shape:
 \begin{verbatim}
+p : pointer global
 ...
-result : bool
-Post5 : if result then ... else ...
+intM_global : memory Z global
+...
+result0 : Z
+HW_6 : result0 = p # intM_global
+...
+intM_global0 : memory Z global
+HW_8 : intM_global0 = upd intM_global p (- result0)
 ______________________________________(1/1)
-if result
-then ...
-\end{verbatim}
-It is indeed quite large, because it has two cases depending on the
-value of \verb|result|, which is (see \verb|Post5|) the condition of
-the \verb|if| in the C program. With Coq, the simplest thing to do
-with such a goal shape is to make two cases, with
-\begin{verbatim}
-destruct result; intuition.
-\end{verbatim}
-instead of \verb|intuition| alone. This will then result in one
-subgoal (the other case has been solved automatically):
-\begin{verbatim}
-p : pointer
-...
-intP : memory Z
-...
-result : Z
-H : result = p # intP
-intP0 : memory Z
-H0 : intP0 = upd intP p (- result)
-______________________________________(1/1)
-p # intP0 >= 0
+p # intM_global0 >= 0
 \end{verbatim}
 \indextt{upd}\indextt{\#}\indextt{memory} This should be read as
-follows: \verb|intP| and \verb|intP0| are \emph{memory states}
-containing integers. \verb|p # intP| denotes the value stored in
-\verb|intP| at ``address'' \verb|p|, i.e it is the logical
+follows: \verb|intM_global| and \verb|intM_global0| are \emph{global
+  memory states} containing integers (integer memory, global). %
+\verb|p # intM_global| denotes the value stored in 
+\verb|intM_global| at ``address'' \verb|p|, i.e it is the logical
 representation of the C expression \verb|*p|. \verb|upd| is the logical
 function representing memory update: $(\verb|upd|~s~p~v)$ is the
 memory state obtained from $s$ by putting value $v$ at ``address''
@@ -346,17 +332,16 @@ is why in the following we will refer to them as \emph{pointers} instead
 of addresses.
 
 So, what should be proved is that the value stored at pointer \verb|p|
-in the memory state \verb|intP0| is non-negative. Using tactic
-\verb|subst intP0|, we have to prove that
+in the memory state \verb|intM_global0| is non-negative. Using tactic
+\verb|subst intM_global0|, we have to prove that
 \begin{verbatim}
-Post3 : caduceus_1 = p # intP
-Post5 : caduceus_1 < 0
-result : Z
-H : result = p # intP
+HW_3 : result = p # intM_global
+HW_4 : result < 0
+HW_6 : result0 = p # intM_global
 ______________________________________(1/1)
-p # (upd intP p (- result)) >= 0
+p # (upd intM_global p (- result0)) >= 0
 \end{verbatim}
-but \verb|p # (upd intP p (- result))| is simply \verb|-result| since
+but \verb|p # (upd intM_global p (- result0))| is simply \verb|-result0| since
 we access exactly to the value which has just been updated. This shape
 $p~\verb|#|~(\verb|upd|~s~q~v)$ will indeed occur very often when making
 proofs, and it should be rewritten into $v$ when $p=q$ and into
@@ -405,24 +390,38 @@ automatically. With Coq, after \verb|intuition; subst; auto.| we have
 2 subgoals corresponding to the two terms of the conjunction:
 \indextt{shift}
 \begin{verbatim} 
-t : pointer
+t : pointer global
 i : Z
 j : Z
-alloc : alloc
-intP : memory Z
-H : valid_index alloc t i
-H0 : valid_index alloc t j
-Pre1 : valid alloc (shift t i)
+...
+intM_global : memory Z global
+...
+result : pointer global
+HW_2 : result = shift t i
+...
+result0 : Z
+HW_4 : result0 = result # intM_global
+result1 : pointer global
+HW_5 : result1 = shift t i
+result2 : pointer global
+HW_6 : result2 = shift t j
+HW_7 : valid alloc result2
+result3 : Z
+HW_8 : result3 = result2 # intM_global
+...
+intM_global0 : memory Z global
+HW_10 : intM_global0 = upd intM_global result1 result3
+result4 : pointer global
+HW_11 : result4 = shift t j
+...
+intM_global1 : memory Z global
+HW_13 : intM_global1 = upd intM_global0 result4 result0
 ______________________________________(1/2)
-shift t i
-# (upd (upd intP (shift t i) (shift t j # intP)) (shift t j)
-     (shift t i # intP)) = shift t j # intP
+shift t i # intM_global1 = shift t j # intM_global
 
 
 ______________________________________(2/2)
-shift t j
-# (upd (upd intP (shift t i) (shift t j # intP)) (shift t j)
-     (shift t i # intP)) = shift t i # intP
+shift t j # intM_global1 = shift t i # intM_global
 \end{verbatim}
 We meet here for the first time the function \verb|shift|:
 $(\verb|shift|~p~i)$ denotes in the logic the C expression $p+i$
@@ -435,10 +434,20 @@ tactic. However, this does not work immediately, because indeed we do
 not know whether $i$ and $j$ are different. So the Coq proof may be made by
 a case reasoning such as:
 \begin{verbatim}
-assert (i=j \/ i<>j); [omega | intuition].
-subst i; caduceus.
-caduceus.
-caduceus.
+assert (i=j \/ i<>j).
+  omega.
+\end{verbatim}
+and then one may conclude with
+\begin{verbatim}
+subst; caduceus.
+\end{verbatim}
+Remaining subgoals are solves analogously. Indeed, one should make the
+proof script shorter by factorizing, like this:
+\begin{verbatim}
+intros.
+assert (i=j \/ i<>j).
+  omega.
+intuition; subst; caduceus.
 \end{verbatim}
 
 
@@ -485,24 +494,31 @@ A loop annotation is placed right before the loop; the keyword
 (resp. the variant). The invariant is optional and must appear before
 the variant when present.
 
-With Simplify, the two proof obligations generated are solved
-automatically. With Coq, the second one (which appears to be the
+With Simplify, the five proof obligations generated are solved
+automatically. With Coq, the first one (which appears to be the
 validity of the invariant when entering the loop) is solved by
-\verb|intuition|, whereas the first one (the preservation of the
-invariant) needs a little more reasoning:
+\verb|intuition|. The second one is the validity of the access
+\verb|t[i]| is solved by \verb|intuition; subst; auto|. The third one
+ is the post-condition, is solved by \verb|intuition; subst; auto|,
+ thanks to the fact the the loop invariant is true at exit of the
+ loop. The fourth one is the preservation of the
+invariant, and needs a little more reasoning:
 \begin{verbatim}
-destruct result0; intuition.
-subst ; auto.
-assert (k<i1 \/ k=i1) ; [omega | intuition ].
-apply (H0 k); auto with *.
+intuition.
+assert (h : k<i \/ k=i); [ omega | inversion_clear h].
+(* case k < i *)
+apply (H2 k); auto.
+(* case k=i *)
 subst; auto.
-subst; auto.
-apply (H0 i0); auto with *.
 \end{verbatim} 
-
-Notice that both the validity of the post-condition and the
-decreasingness of the variant have been discharged automatically by
-Why.
+The fifth subgoal if the validity of the invariant when entering the
+loop, and solved by 
+\begin{verbatim}
+intuition.
+apply H2 with i0; auto with *.
+\end{verbatim}
+Notice that both the decreasingness of the variant have been
+discharged automatically by Why.
 
 \section{Structures}
 \label{sec:purse}

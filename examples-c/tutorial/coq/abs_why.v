@@ -5,7 +5,7 @@ Require Export abs_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_1 : 
-  forall (p: ((pointer) Z0)),
+  forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
   (valid alloc p).
 Proof.
@@ -14,20 +14,20 @@ Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_2 : 
-  forall (p: ((pointer) Z0)),
-  forall (Int_Z0: ((memory) Z Z0)),
+  forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (valid alloc p)),
   forall (result: Z),
-  forall (HW_2: result = (acc Int_Z0 p)),
+  forall (HW_2: result = (acc intM_global p)),
   forall (HW_3: result < 0),
   forall (HW_4: (valid alloc p)),
   forall (result0: Z),
-  forall (HW_5: result0 = (acc Int_Z0 p)),
+  forall (HW_5: result0 = (acc intM_global p)),
   forall (HW_6: (valid alloc p)),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (HW_7: Int_Z0_0 = (upd Int_Z0 p (Zopp result0))),
-  (* File "abs.c", line 3, characters 13-20 *) (acc Int_Z0_0 p) >= 0.
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_7: intM_global0 = (upd intM_global p (Zopp result0))),
+  (acc intM_global0 p) >= 0.
 Proof.
 intuition.
 subst; caduceus.
@@ -35,14 +35,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs1_impl_po_3 : 
-  forall (p: ((pointer) Z0)),
-  forall (Int_Z0: ((memory) Z Z0)),
+  forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (valid alloc p)),
   forall (result: Z),
-  forall (HW_2: result = (acc Int_Z0 p)),
+  forall (HW_2: result = (acc intM_global p)),
   forall (HW_8: result >= 0),
-  (* File "abs.c", line 3, characters 13-20 *) (acc Int_Z0 p) >= 0.
+  (acc intM_global p) >= 0.
 Proof.
 intuition.
 Save.
@@ -50,37 +50,38 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs2_impl_po_1 : 
-  forall (p: ((pointer) Z0)),
-  forall (Int_Z0: ((memory) Z Z0)),
+  forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc Int_Z0 p)),
+  forall (HW_3: result = (acc intM_global p)),
   forall (HW_4: result < 0),
   forall (HW_5: (valid alloc p)),
   forall (result0: Z),
-  forall (HW_6: result0 = (acc Int_Z0 p)),
+  forall (HW_6: result0 = (acc intM_global p)),
   forall (HW_7: (valid alloc p)),
-  forall (Int_Z0_0: ((memory) Z Z0)),
-  forall (HW_8: Int_Z0_0 = (upd Int_Z0 p (Zopp result0))),
-  (* File "abs.c", line 9, characters 13-20 *) (acc Int_Z0_0 p) >= 0.
+  forall (intM_global0: ((memory) Z global)),
+  forall (HW_8: intM_global0 = (upd intM_global p (Zopp result0))),
+  (acc intM_global0 p) >= 0.
 Proof.
 intuition.
-subst Int_Z0_0; caduceus.
+subst intM_global0.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma abs2_impl_po_2 : 
-  forall (p: ((pointer) Z0)),
-  forall (Int_Z0: ((memory) Z Z0)),
+  forall (p: ((pointer) global)),
   forall (alloc: alloc_table),
+  forall (intM_global: ((memory) Z global)),
   forall (HW_1: (* File "abs.c", line 8, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
   forall (result: Z),
-  forall (HW_3: result = (acc Int_Z0 p)),
+  forall (HW_3: result = (acc intM_global p)),
   forall (HW_9: result >= 0),
-  (* File "abs.c", line 9, characters 13-20 *) (acc Int_Z0 p) >= 0.
+  (acc intM_global p) >= 0.
 Proof.
 intuition.
 Save.
