@@ -3,26 +3,3 @@
 
 Require Export separation4_spec_why.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;auto.
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-subst;auto.
-apply valid_range_valid_shift with 0 (5-1).
-auto.
-omega.
-Save.
-

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.170 2006-02-10 14:46:04 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.171 2006-02-16 12:39:49 hubert Exp $ i*)
 
 
 open Format
@@ -314,7 +314,7 @@ let rec interp_predicate label old_label p =
 		 v.logic_heap_args targs in
 	let targs = List.fold_right 
 	  (fun (z,s,_) l -> 
-	     if z.zone_is_var then LVar(zoned_name s (Pointer z))::l else l)
+	     LVar(zoned_name s (Pointer z))::l)
 	  reads targs in
 	LPred (v.logic_name,targs)
     | NPfalse -> 
@@ -1410,10 +1410,8 @@ let interp_predicate_args id args =
       id.logic_heap_args args in
   ZoneSet.fold 
     (fun (z,s,ty) l -> 
-       if z.zone_is_var then
 	 (zoned_name s (Pointer z), 
-	  (Info.output_why_type (Info.Memory(ty,z))))::l
-       else l)
+	  (Info.output_why_type (Info.Memory(ty,z))))::l)
     id.logic_heap_zone args
 
 let type_to_base_type l = 

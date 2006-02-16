@@ -1,5 +1,3 @@
-
-
 typedef struct S {
   int a;
   int b[5];
