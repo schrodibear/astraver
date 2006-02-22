@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.9 2006-02-08 09:08:22 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.10 2006-02-22 14:47:34 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -98,6 +98,9 @@ module Model = struct
   let cols = new GTree.column_list
   let name = cols#add string
   let fullname = cols#add string
+  let simplify_result = cols#add string
+  let harvey_result = cols#add string
+  let cvcl_result = cols#add string
   let simplify = cols#add GtkStock.conv
   let harvey = cols#add GtkStock.conv
   let cvcl = cols#add GtkStock.conv
@@ -129,8 +132,11 @@ module Model = struct
 	     let row = model#append () in
 	     Queue.add f fq;
 	     Hashtbl.add frows f row;
-	     model#set ~row ~column:name f;
+	     model#set ~row ~column:name (f^" [0|0|0]   ");
 	     model#set ~row ~column:fullname f;
+	     model#set ~row ~column:simplify_result "0";
+	     model#set ~row ~column:harvey_result "0";
+	     model#set ~row ~column:cvcl_result "0";
 	     row
 	 in
 	 let row_n = model#append ~parent:row () in
@@ -204,6 +210,20 @@ let get_prover = function
 let prove fct = 
   ignore (Thread.create fct ())
 
+let update_statistics (model:GTree.tree_store) row result = 
+  let stat = (string_of_int result) in
+  match !default_prover with
+    | Dispatcher.Simplify -> model#set ~row ~column:Model.simplify_result stat
+    | Dispatcher.Harvey -> model#set ~row ~column:Model.harvey_result stat
+    | Dispatcher.Cvcl -> model#set ~row ~column:Model.cvcl_result stat
+
+let get_statistics (model:GTree.tree_store) row = 
+  let simplify = model#get ~row ~column:Model.simplify_result
+  and harvey = model#get ~row ~column:Model.harvey_result 
+  and cvcl = model#get ~row ~column:Model.cvcl_result in
+  "["^simplify^"|"^harvey^"|"^cvcl^"]"
+  
+
 (* 
  * Returns children of a function 
  *)
@@ -254,6 +274,7 @@ let run_prover_oblig p column_p (view:GTree.view) (model:GTree.tree_store) s () 
 let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () = 
   try
     let row = Model.find_fct f in
+    model#set ~row ~column:column_p `GO_DOWN;
     let n = model#iter_n_children (Some(row)) in
     let mychildren = children f n in
     let succeed = Queue.fold
@@ -274,9 +295,10 @@ let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () =
 	let path = model#get_path row in
 	view#expand_row path
       end;
-    let statistics = (string_of_int (succeed * 100 / n)) in
-    !flash_info ("Function \""^f^"\" statistics : "^statistics^" %");
-    model#set ~row ~column:Model.name (f^" [ "^(print_prover p)^" -> "^statistics^" %]")
+    update_statistics model row succeed;
+    let statistics = get_statistics model row in
+    !flash_info ("Function \""^f^"\" statistics : "^statistics^" / "^(string_of_int n));
+    model#set ~row ~column:Model.name (f^" "^statistics^"/"^(string_of_int n))
   with Not_found -> 
     begin 
       print_endline ("     [...] Error : function \""^f^"\" not found !"); 
@@ -374,7 +396,7 @@ let main () =
   (* left tree of proof obligations *)
   let model = Model.create_model () in
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:250 ~packing:hp#add1 () in
+    ~width:300 ~packing:hp#add1 () in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
@@ -498,7 +520,7 @@ let main () =
   let _ = tv1#set_editable false in
   let _ = tv1#set_wrap_mode `WORD in
   let _ = GtkBase.Widget.add_events tv1#as_widget
-    [`ENTER_NOTIFY; `LEAVE_NOTIFY; `POINTER_MOTION] in
+    [`ENTER_NOTIFY; `POINTER_MOTION] in
   let _ = tv1#event#connect#motion_notify
     ~callback:
     (fun e -> 
@@ -514,15 +536,16 @@ let main () =
        in
        let it = tv1#get_iter_at_location ~x:b_x ~y:b_y in
        let tags = it#tags in
+       if tags = [] then Tags.reset_last_colored () else
        List.iter 
 	 ( fun t ->
+	     Tags.reset_last_colored ();
 	     ignore (GtkText.Tag.event 
 		       t#as_tag
 		       tv2#as_widget
 		       e 
 		       it#as_iter))
 	 tags;
-       if tags = [] then Pprinter.reset_last_colored ();
        false)
   in
 
@@ -546,7 +569,9 @@ let main () =
                let o = Model.find_oblig s in
                let buf = update_buffer tv1 in
                buf#set_text "";
-               Pprinter.text_of_obligation tv1 tv2 o
+               Pprinter.text_of_obligation tv1 tv2 o;
+	       let mark = `MARK (tv1#buffer#create_mark tv1#buffer#end_iter) in
+	       tv1#scroll_to_mark ~use_align:true mark
              with Not_found -> ())
           view#selection#get_selected_rows;
       end
@@ -555,7 +580,7 @@ let main () =
   (*
    * Running obligation 
    *)
-  ignore (view#event#connect#button_press ~callback:
+  ignore (view#event#connect#button_release ~callback:
 	    (fun ev -> 
 	       if GdkEvent.Button.button ev = 3 then 
 		 List.iter 

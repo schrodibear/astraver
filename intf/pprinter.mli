@@ -4,10 +4,7 @@ open Logic
 open Cc
 open Format
 open Astprinter
-
-type loc
-
-val reset_last_colored : unit -> unit
+open Tags
 
 val insert_text : GText.buffer -> string -> string -> unit
 

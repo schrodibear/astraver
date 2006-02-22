@@ -17,20 +17,14 @@
 {
 
   open Lexing
+  open Colors
 
   exception Lexical_error of string
   exception Eof 
 
-  type color = Predicate | Comment | Keyword
-
-  let getcolor = function 
-    | Predicate -> "darkgreen"
-    | Comment -> "red"
-    | Keyword -> "blue"
-
   let insert_text (tbuf:GText.buffer) ty s = 
     let it = tbuf#end_iter in
-    let new_tag = tbuf#create_tag [`FOREGROUND (getcolor ty)] in
+    let new_tag = tbuf#create_tag [`FOREGROUND (get_fc ty)] in
     tbuf#insert ~tags:[new_tag] ~iter:it s 
 
   let insert_string (tbuf:GText.buffer) s =
@@ -47,7 +41,7 @@
 	"return"];
     fun tbuf s -> 
       if Hashtbl.mem h s then
-	insert_text tbuf Keyword s
+	insert_text tbuf "keyword" s
       else 
 	insert_string tbuf s
 
@@ -63,6 +57,8 @@ let float = digit+ '.' digit+ exponent?
   | digit+ exponent
 
 rule token tbuf = parse
+  | "//@"
+      { Buffer.add_string comment "//@"; comment3 tbuf lexbuf; token tbuf lexbuf }
   | "/*@"
       { Buffer.add_string comment "/*@"; comment2 tbuf lexbuf; token tbuf lexbuf }
   | "/*"   
@@ -79,7 +75,7 @@ rule token tbuf = parse
 and comment1 tbuf = parse
   | "*/" { Buffer.add_string comment "*/";
 	   let s = Buffer.contents comment in
-	   insert_text tbuf Comment s; 
+	   insert_text tbuf "comment" s; 
 	   Buffer.clear comment }
   | _    { Buffer.add_string  comment (lexeme lexbuf); 
 	   comment1 tbuf lexbuf }
@@ -89,8 +85,17 @@ and comment2 tbuf = parse
   | "@*/" | "*/" as s 
 	{ Buffer.add_string comment s;
 	  let t = Buffer.contents comment in
-	  insert_text tbuf Predicate t; 
+	  insert_text tbuf "predicate" t; 
 	  Buffer.clear comment }
   | _   { Buffer.add_string  comment (lexeme lexbuf); 
 	  comment2 tbuf lexbuf }
   | eof { raise (Lexical_error "unterminated comment") }
+
+and comment3 tbuf = parse 
+  | "\n" { Buffer.add_string comment "\n";
+	   let t = Buffer.contents comment in
+	   insert_text tbuf "predicate" t; 
+	   Buffer.clear comment }
+  | _    { Buffer.add_string  comment (lexeme lexbuf); 
+	   comment3 tbuf lexbuf}
+  | eof  { raise (Lexical_error "unterminated comment") }

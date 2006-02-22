@@ -66,8 +66,8 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
-	    intf/hilight.ml tools/why2html.ml src/float_lexer.ml \
-	    tools/cvcl_split.ml tools/simplify_split.ml
+	    intf/hilight.ml intf/tagsplit.ml tools/why2html.ml \
+	    src/float_lexer.ml tools/cvcl_split.ml tools/simplify_split.ml
 
 # main targets
 ##############
@@ -156,8 +156,8 @@ bin/why-viewer.byte: $(WVCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
 
 # graphical interface
-GCMO = $(CMO) intf/astprinter.cmo intf/hilight.cmo \
-              intf/pprinter.cmo intf/stat.cmo
+GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tagsplit.cmo intf/astprinter.cmo \
+              intf/hilight.cmo intf/pprinter.cmo intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
 gwhy: bin/gwhy.$(OCAMLBEST)
