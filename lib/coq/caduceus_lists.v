@@ -27,10 +27,9 @@ elim H; clear H; intuition.
 exists (cons a x0); exists x1; simpl; subst; auto.
 Qed.
 
-Implicit Arguments In_app_cons.
-
 End MoreList.
 
+Implicit Arguments In_app_cons [A].
 
 (** the Coq pointer list associated to a (finite) linked list *)
 

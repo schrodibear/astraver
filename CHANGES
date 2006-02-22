@@ -1,4 +1,5 @@
 
+  o Mizar output updated for Mizar 7.6.01
   o new behavior w.r.t. termination proofs: variants can be omitted in
     loops and recursive functions; new command line options --partial
     and --total to specify respectively partial correctness

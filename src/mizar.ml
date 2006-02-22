@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.29 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.30 2006-02-22 07:49:08 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -336,9 +336,9 @@ struct
 
   let re_oblig_loc = Str.regexp " :: Why obligation from .*"
 
-  let environ = " vocabulary INT_1, ARYTM_1, MARGREL1, ALGSTR_1, FUNCT_1, FUNCT_4, FINSEQ_1,
+  let environ = " vocabularies INT_1, ARYTM_1, MARGREL1, ALGSTR_1, FUNCT_1, FUNCT_4, FINSEQ_1,
   AFINSQ_1, WHY;
- notation TARSKI, SUBSET_1, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, INT_1,
+ notations TARSKI, SUBSET_1, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, INT_1,
   MARGREL1, ALGSTR_1, AFINSQ_1, WHY;
  constructors NAT_1, ALGSTR_1, AFINSQ_1, WHY;
  clusters XREAL_0, INT_1, WHY;
