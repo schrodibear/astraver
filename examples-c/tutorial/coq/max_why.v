@@ -8,8 +8,7 @@ Require Export max_spec_why.
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x > y),
-  (* File "max.c", line 2, characters 5-88 *) ((x >= x /\ x >= y) /\
-  (forall (z:Z), (z >= x /\ z >= y -> z >= x))).
+  (x >= x /\ x >= y) /\ (forall (z:Z), (z >= x /\ z >= y -> z >= x)).
 Proof.
 intuition.
 Save.
@@ -19,8 +18,7 @@ Save.
   forall (x: Z),
   forall (y: Z),
   forall (HW_2: x <= y),
-  (* File "max.c", line 2, characters 5-88 *) ((y >= x /\ y >= y) /\
-  (forall (z:Z), (z >= x /\ z >= y -> z >= y))).
+  (y >= x /\ y >= y) /\ (forall (z:Z), (z >= x /\ z >= y -> z >= y)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

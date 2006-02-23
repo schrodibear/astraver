@@ -1,4 +1,6 @@
 
+  o new option --split-user-conj to split user conjunctions in goals
+    (resulting in more numerous proof obligations)
   o Mizar output updated for Mizar 7.6.01
   o new behavior w.r.t. termination proofs: variants can be omitted in
     loops and recursive functions; new command line options --partial
@@ -10,7 +12,6 @@
   o new construct "assert {P}; e"
   o any logic term can be used in programs
   o types must be declared (new declaration "type foo")
-
   o fixed bug with missing exceptional postconditions (false in now
     inserted and a warning is emitted)
   o array types now accepted in logic/predicate arguments

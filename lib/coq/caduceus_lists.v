@@ -539,11 +539,9 @@ Qed.
 Lemma no_rep_false : forall (p1 : pointer Z)(lp : plist Z),
 no_rep (p1 :: p1 :: lp) -> False.
 intros.
-simpl in H.
+unfold no_rep in H; fold no_rep in H.
 inversion_clear H as [H0 H1].
-destruct (eq_pointer_dec p1 p1) as [_ | p1_diff_p1].
-contradiction.
-absurd (p1 = p1); trivial.
+destruct (In_dec eq_pointer_dec p1 (p1 :: lp)); auto with *.
 Qed.
 
 Lemma no_rep_false2 : forall (p1 : pointer Z)(lp1 lp2 : plist Z),
