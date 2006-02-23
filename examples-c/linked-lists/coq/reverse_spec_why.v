@@ -3,22 +3,19 @@
 
 Require Export Caduceus.
 
-(*Why type*) Definition Z18: Set.
 Admitted.
 
-(*Why type*) Definition Z19: Set.
 Admitted.
 
-(*Why type*) Definition Z2: Set.
 Admitted.
 
-(*Why type*) Definition Z3: Set.
 Admitted.
 
-(*Why type*) Definition Z20: Set.
 Admitted.
 
-(*Why type*) Definition Z23: Set.
+Admitted.
+
+(*Why type*) Definition global: Set.
 Admitted.
 
 (*Why type*) Definition plist: Set.
@@ -30,24 +27,24 @@ exact (Length Z23).
 Defined.
 
 (*Why logic*) Definition lpath :
-  ((memory) ((pointer) Z23) Z23) -> alloc_table -> ((pointer) Z23) -> plist
-  -> ((pointer) Z23) -> Prop.
+  ((memory) ((pointer) global) global) -> alloc_table -> ((pointer) global)
+  -> plist -> ((pointer) global) -> Prop.
 exact (fun m a => lpath _ a (acc m)).
 Defined.
 
-(*Why logic*) Definition cons : ((pointer) Z23) -> plist -> plist.
+(*Why logic*) Definition cons : ((pointer) global) -> plist -> plist.
 exact (fun p => cons p).
 Defined.
 
 (*Why axiom*) Lemma Path_cons_inv :
-  (forall (tl_Z23:((memory) ((pointer) Z23) Z23)),
-   (forall (alloc:alloc_table),
-    (* File "list.h", line 50, characters 6-124 *)
-    (forall (p1:((pointer) Z23)),
-     (forall (l:plist),
-      (forall (p2:((pointer) Z23)),
-       ((valid alloc p1) /\ (lpath tl_Z23 alloc (acc tl_Z23 p1) l p2) <->
-        (lpath tl_Z23 alloc p1 (cons p1 l) p2))))))).
+  (forall (alloc:alloc_table),
+   (* File "list.h", line 50, characters 6-124 *)
+   (forall (p1:((pointer) global)),
+    (forall (l:plist),
+     (forall (p2:((pointer) global)),
+      ((valid alloc p1) /\
+       (lpath tl_global alloc (acc tl_global p1) l p2) <->
+       (lpath tl_global alloc p1 (cons p1 l) p2)))))).
 Admitted.
 
 (*Why logic*) Definition nil : plist.
@@ -55,18 +52,16 @@ exact nil.
 Defined.
 
 (*Why axiom*) Lemma Path_null_ax :
-  (forall (tl_Z23:((memory) ((pointer) Z23) Z23)),
-   (forall (alloc:alloc_table),
-    (* File "list.h", line 44, characters 26-58 *)
-    (forall (p:((pointer) Z23)), (lpath tl_Z23 alloc p nil p)))).
+  (forall (alloc:alloc_table),
+   (* File "list.h", line 44, characters 26-58 *)
+   (forall (p:((pointer) global)), (lpath tl_global alloc p nil p))).
 Admitted.
 
 (*Why axiom*) Lemma Path_null_inv_ax :
-  (forall (tl_Z23:((memory) ((pointer) Z23) Z23)),
-   (forall (alloc:alloc_table),
-    (* File "list.h", line 47, characters 6-63 *)
-    (forall (p:((pointer) Z23)),
-     (forall (l:plist), ((lpath tl_Z23 alloc p l p) -> l = nil))))).
+  (forall (alloc:alloc_table),
+   (* File "list.h", line 47, characters 6-63 *)
+   (forall (p:((pointer) global)),
+    (forall (l:plist), ((lpath tl_global alloc p l p) -> l = nil)))).
 Admitted.
 
 (*Why logic*) Definition app : plist -> plist -> plist.
@@ -84,7 +79,8 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition cyclic :
-  ((memory) ((pointer) Z23) Z3) -> alloc_table -> ((pointer) Z3) -> Prop.
+  ((memory) ((pointer) global) global) -> alloc_table
+  -> ((pointer) global) -> Prop.
 Admitted.
 
 (*Why logic*) Definition disjoint : plist -> plist -> Prop.
@@ -102,51 +98,51 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition finite :
-  ((memory) ((pointer) Z23) Z2) -> alloc_table -> ((pointer) Z2) -> Prop.
+  ((memory) ((pointer) global) global) -> alloc_table
+  -> ((pointer) global) -> Prop.
 Admitted.
 
-(*Why predicate*) Definition llist  (tl_Z23:((memory) ((pointer) Z23) Z23))
-  (alloc:alloc_table) (p:((pointer) Z23)) (l:plist)
+(*Why predicate*) Definition llist  (tl_global:((memory) ((pointer) global)
+  global)) (alloc:alloc_table) (p:((pointer) global)) (l:plist)
   := (* File "list.h", line 61, characters 40-56 *)
-     (lpath tl_Z23 alloc p l null).
+     (lpath tl_global alloc p l null).
 
-(*Why predicate*) Definition is_list  (tl_Z23:((memory) ((pointer) Z23) Z23))
-  (alloc:alloc_table) (l:((pointer) Z23))
+(*Why predicate*) Definition is_list  (tl_global:((memory) ((pointer) global)
+  global)) (alloc:alloc_table) (l:((pointer) global))
   := (* File "list.h", line 63, characters 33-63 *)
-     (exists pl:plist, (llist tl_Z23 alloc l pl)).
+     (exists pl:plist, (llist tl_global alloc l pl)).
 
 (*Why axiom*) Lemma is_list_llist_ax :
-  (forall (tl_Z23:((memory) ((pointer) Z23) Z23)),
-   (forall (alloc:alloc_table),
-    (* File "list.h", line 66, characters 6-64 *)
-    (forall (p:((pointer) Z23)),
-     ((is_list tl_Z23 alloc p) <-> (exists l:plist, (llist tl_Z23 alloc p l)))))).
+  (forall (alloc:alloc_table),
+   (* File "list.h", line 66, characters 6-64 *)
+   (forall (p:((pointer) global)),
+    ((is_list tl_global alloc p) <->
+     (exists l:plist, (llist tl_global alloc p l))))).
 Admitted.
 
 (*Why logic*) Definition length :
-  ((memory) ((pointer) Z23) Z23) -> alloc_table -> ((pointer) Z23) -> Length.
+  alloc_table -> ((pointer) global) -> Length.
 Admitted.
 
 (*Why logic*) Definition list_length : plist -> Z.
 Admitted.
 
 (*Why axiom*) Lemma llist_function_ax :
-  (forall (tl_Z23:((memory) ((pointer) Z23) Z23)),
-   (forall (alloc:alloc_table),
-    (* File "list.h", line 69, characters 6-99 *)
-    (forall (l1:plist),
-     (forall (l2:plist),
-      (forall (p:((pointer) Z23)),
-       ((llist tl_Z23 alloc p l1) -> ((llist tl_Z23 alloc p l2) -> l1 = l2))))))).
+  (forall (alloc:alloc_table),
+   (* File "list.h", line 69, characters 6-99 *)
+   (forall (l1:plist),
+    (forall (l2:plist),
+     (forall (p:((pointer) global)),
+      ((llist tl_global alloc p l1) ->
+       ((llist tl_global alloc p l2) -> l1 = l2)))))).
 Admitted.
 
 (*Why axiom*) Lemma llist_valid :
-  (forall (tl_Z23:((memory) ((pointer) Z23) Z23)),
-   (forall (alloc:alloc_table),
-    (* File "list.h", line 73, characters 6-85 *)
-    (forall (p1:((pointer) Z23)),
-     (forall (l:plist),
-      ((llist tl_Z23 alloc p1 l) -> (~(p1 = null) -> (valid alloc p1))))))).
+  (forall (alloc:alloc_table),
+   (* File "list.h", line 73, characters 6-85 *)
+   (forall (p1:((pointer) global)),
+    (forall (l:plist),
+     ((llist tl_global alloc p1 l) -> (~(p1 = null) -> (valid alloc p1)))))).
 Admitted.
 
 (*Why logic*) Definition rev : plist -> plist.

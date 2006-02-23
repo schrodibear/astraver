@@ -193,6 +193,14 @@ let rec next_name ?local_names n i =
 let unique_name ?local_names n = 
   try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
+(*s Environments for the logical side *)
+
+let types = Hashtbl.create 17
+let add_type x = Hashtbl.add types x ()
+let mem_type = Hashtbl.mem types
+let find_type = Hashtbl.find types
+let iter_types f = Hashtbl.iter (fun s _ -> f s) types
+
 (* type why *)
 
 let count = ref 0
@@ -252,8 +260,11 @@ let rec type_type_why ?name ty zone_is_var =
 	  try
 	    type_type_why ?name (find_typedef v) zone_is_var
 	  with Not_found -> 
-	    assert false;
-	    (* v is a logic type => Why_Logic v *)
+	    if mem_type v
+	    then
+	      Why_Logic v
+	    else
+	      (Format.eprintf "Undefined type %s@." v; assert false)
 	end
     | Tunion s -> 
 	let z = make_zone ?name zone_is_var in
@@ -296,13 +307,6 @@ let add_sym l x ty info =
     set_var_type info ty false;
     Hashtbl.add sym_t x info;
     info
-
-(*s Environments for the logical side *)
-
-let types = Hashtbl.create 17
-let add_type x = Hashtbl.add types x ()
-let mem_type = Hashtbl.mem types
-let iter_types f = Hashtbl.iter (fun s _ -> f s) types
 
 let functions = 
   (Hashtbl.create 97 : 

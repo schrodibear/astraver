@@ -366,6 +366,10 @@ let rec unifier_type_why tw1 tw2 =
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false
     | _ ->
+	let _,t1 = output_why_type tw1 
+	and _,t2 = output_why_type tw2
+	in
+	Format.eprintf "anomaly : unify why type %s and %s@." t1 t2;
 	assert false
 	  
 
@@ -413,7 +417,7 @@ let rec term tyf t =
       assert (List.length li = List.length l || 
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
-      List.iter2 
+            List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
@@ -457,9 +461,10 @@ let rec predicate tyf p =
 	     f.logic_name (List.length li) (List.length l); false));
       List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
-  | NPrel (t1,_,t2) ->
-      term tyf t1; term tyf t2;
-      unifier_type_why (type_why_for_term t1) (type_why_for_term t2)
+  | NPrel (t1,op,t2) ->      
+      term tyf t1; 
+      term tyf t2;
+      unifier_type_why (type_why_for_term t1) (type_why_for_term t2)      
   | NPand (p1,p2) 
   | NPor (p1,p2) 
   | NPimplies (p1,p2) 

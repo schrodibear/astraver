@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.105 2006-01-27 10:36:41 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.106 2006-02-23 12:12:31 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -959,6 +959,7 @@ let type_spec_decl loc = function
       let ty = type_logic_type (Env.empty ()) ty in
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
+      id.logic_why_type <- type_type_why ty false;
       let ll = List.map (type_location env') ll in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
@@ -966,6 +967,7 @@ let type_spec_decl loc = function
       let ty = type_logic_type (Env.empty ()) ty in
       let pl,env' = type_logic_parameters (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
+      id.logic_why_type <- type_type_why ty false;
       let t = type_term env' t in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function_def (pl, ty, t))
