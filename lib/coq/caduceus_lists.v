@@ -217,7 +217,7 @@ Lemma llist_not_starting :
    llist a next (next p) l -> ~ In p l.
 Proof.
 red; intros.
-elim (In_app_cons l p H0); intros.
+elim (In_app_cons l _ H0); intros.
 elim H1; clear H1; intros.
 subst l.
 elim (llist_append x (cons p x0) H); intuition.
@@ -540,11 +540,10 @@ Lemma no_rep_false : forall (p1 : pointer Z)(lp : plist Z),
 no_rep (p1 :: p1 :: lp) -> False.
 intros.
 simpl in H.
-inversion_clear H.
-casetype False.
-destruct (In_dec eq_pointer_dec p1 (p1 :: lp));auto.
-apply n.
-left;auto.
+inversion_clear H as [H0 H1].
+destruct (eq_pointer_dec p1 p1) as [_ | p1_diff_p1].
+contradiction.
+absurd (p1 = p1); trivial.
 Qed.
 
 Lemma no_rep_false2 : forall (p1 : pointer Z)(lp1 lp2 : plist Z),
@@ -609,53 +608,24 @@ Qed.
 
 Lemma no_rep_sublist3 : forall (l l1 l2 : plist Z) ( a : pointer Z), no_rep l ->
 l = l1 ++a::l2 -> no_rep (a::l1++l2).
-induction l.
-intros.
-destruct l1.
-simpl in H0.
-inversion H0.
-inversion H0.
-intros.
-destruct l1.
-simpl in *|-*.
-inversion H.
-inversion H0;subst;auto.
-inversion H0;subst.
+induction l as [ | p1 l].
+intros l1 l2 a _ H; destruct l1; simpl in H; discriminate.
+destruct l1 as [ | p1' l1]; intros l2 a H1 H2.
+simpl in H2; simpl app; rewrite <- H2; trivial.
+simpl in H2; injection H2; clear H2; intros; subst;
 rewrite <- app_comm_cons.
-inversion H.
-case (In_dec eq_pointer_dec p (a0 :: l1 ++ l2));intros.
-destruct (In_dec eq_pointer_dec p (l1 ++ a0 :: l2));intros.
-inversion H1.
-elim n.
-apply in_or_app.
-rewrite app_comm_cons in i.
-generalize (in_app_or (a0:: l1) l2 p i).
-intuition.
-generalize (in_inv H4).
-intuition.
-right;left;auto.
-rewrite <- app_comm_cons in H0.
-assert (l1 ++ a0 :: l2 = l1 ++ a0 :: l2).
-auto.
-generalize (IHl l1 l2 a0 H2 H3).
-intro.
-simpl.
-case (In_dec eq_pointer_dec a0 (p :: l1 ++ l2));intro.
-inversion i.
-subst.
-elim n.
-left;auto.
-inversion H4.
-destruct (In_dec eq_pointer_dec a0 (l1 ++ l2)).
-inversion H6.
-elim (n0 H5).
-split;auto.
+inversion H1 as [H2 H3].
+destruct (In_dec eq_pointer_dec p1' (l1 ++ a :: l2)) as [i | not_i].
+contradiction.
 split.
-destruct (In_dec eq_pointer_dec p (l1 ++ l2)).
-elim n.
-right;auto.
-auto.
-apply no_rep_sublist1 with a0;auto.
+destruct (In_dec eq_pointer_dec a (p1' :: l1 ++ l2)) as [[i' | i'] | not_i']; trivial.
+apply not_i; subst; apply in_or_app; right; left; trivial.
+assert (H4 := IHl l1 l2 a H3 (refl_equal _)); simpl in H4.
+destruct (In_dec eq_pointer_dec a (l1 ++ l2)) as [ _ | not_i''].
+intuition.
+absurd (In a (l1 ++ l2)); trivial.
+rewrite app_comm_cons;
+apply no_rep_sublist2 with (p1' :: l1 ++ a :: l2) a; trivial.
 Qed.
 
 Lemma no_rep_in_app2 :
