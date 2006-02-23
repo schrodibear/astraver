@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.115 2006-02-16 12:39:49 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.116 2006-02-23 12:49:32 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -974,7 +974,6 @@ let decl d =
   match d.Cast.node with
     | Nlogic(id,ltype) -> 
 	let l = logic_type ltype in
-	eprintf "id : %s eff : %a | %a@\n" id.logic_name print_effects2 l.reads print_effects l.reads_var ;
 	lprintf 
 	  "effects of logic declaration of %s: @[%a %a@]@." id.logic_name
 	  print_effects l.reads_var print_effects2 l.reads;

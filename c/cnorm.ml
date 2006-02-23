@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.53 2006-02-23 12:12:31 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.54 2006-02-23 12:49:33 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -224,7 +224,6 @@ and expr_node loc ty t =
 	    | Var_info v ->
 		let t' = NEvar env_info in
 		if var_requires_indirection v then(
-		  Format.eprintf "var_ind :%s ty : %a@\n" v.var_name ctype v.var_type;
 		   let info = make_field ty in
 		   let info = declare_arrow_var info in
 		   let zone = 
