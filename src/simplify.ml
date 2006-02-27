@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.40 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.41 2006-02-27 13:26:13 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -80,9 +80,26 @@ let prefix id =
   else if id == t_ge_real then "ge_real"
   else assert false
 
+let is_simplify_ident s =
+  let is_simplify_char = function
+    | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' -> true 
+    | _ -> false
+  in
+  try 
+    String.iter (fun c -> if not (is_simplify_char c) then raise Exit) s; true
+  with Exit ->
+    false
+
+let idents fmt s =
+  if is_simplify_ident s then fprintf fmt "%s" s else fprintf fmt "|%s|" s
+
+let ident fmt id = idents fmt (Ident.string id)
+
+let sortp fmt id = idents fmt ("IS" ^ Ident.string id)
+
 let rec print_term fmt = function
   | Tvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
@@ -116,10 +133,10 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, [], _) ->
-      Ident.print fmt id 
+      ident fmt id 
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	Ident.print id (print_list space print_term) tl
+	ident id (print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -130,10 +147,10 @@ let external_type = function
 
 let has_type ty fmt id = match ty with
   | PTexternal([PTexternal (_,ty)], id) when id == farray ->
-      fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
-	Ident.print ty Ident.print id
+      fprintf fmt "(FORALL (k) (EQ (%a (select %a k)) |@@true|))" 
+	sortp ty ident id
   | PTexternal(_, ty) ->
-      fprintf fmt "(EQ (IS%a %a) |@@true|)" Ident.print ty Ident.print id
+      fprintf fmt "(EQ (%a %a) |@@true|)" sortp ty ident id
   | _ -> 
       assert false
 
@@ -147,7 +164,7 @@ let rec print_predicate pos fmt p =
   | Pfalse ->
       fprintf fmt "FALSE"
   | Pvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE ; was well_founded@\n"
   | Papp (id, [a; b], _) when is_eq id ->
@@ -160,9 +177,9 @@ let rec print_predicate pos fmt p =
       fprintf fmt "@[(AND (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, _) when Hashtbl.mem defpred id -> 
-      fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" ident id print_terms tl
   | Papp (id, tl, _) -> 
-      fprintf fmt "@[(EQ (%a@ %a) |@@true|)@]" Ident.print id print_terms tl
+      fprintf fmt "@[(EQ (%a@ %a) |@@true|)@]" ident id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(IMPLIES@ %a@ %a)@]" (print_predicate (not pos)) a pp b
   | Piff (a, b) ->
@@ -181,15 +198,15 @@ let rec print_predicate pos fmt p =
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
-	Ident.print id' (has_type ty) id' pp p'
+	ident id' (has_type ty) id' pp p'
   | Forall (_,id,n,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id' pp p'
+      fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' pp p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(EXISTS (%a)@ %a)@]" Ident.print id' pp p'
+      fprintf fmt "@[(EXISTS (%a)@ %a)@]" ident id' pp p'
   | Pfpi _ ->
       failwith "fpi not supported with Simplify"
   | Pnamed (_, p) ->
@@ -210,8 +227,8 @@ let cc_has_type ty fmt id = match ty with
   | Cc.TTpure ty when external_type ty ->
       has_type ty fmt id
   | Cc.TTarray (Cc.TTpure (PTexternal(_,ty))) ->
-      fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
-	Ident.print ty Ident.print id
+      fprintf fmt "(FORALL (k) (EQ (%a (select %a k)) |@@true|))" 
+	sortp ty ident id
   | _ -> 
       assert false
 
@@ -221,9 +238,9 @@ let print_sequent fmt (hyps,concl) =
 	print_predicate false fmt concl
     | Svar (id, ty) :: hyps when simplify_typing && cc_external_type ty -> 
 	fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
-	  Ident.print id (cc_has_type ty) id print_seq hyps
+	  ident id (cc_has_type ty) id print_seq hyps
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id print_seq hyps
+	fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id print_seq hyps
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(IMPLIES %a@ %a)@]" 
 	  (print_predicate true) p print_seq hyps
@@ -266,18 +283,18 @@ let print_axiom fmt id p =
 
 let print_predicate fmt id p =
   let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[(DEFPRED (%s %a) @[%a@])@]@\n@\n" id
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+  fprintf fmt "@[(DEFPRED (%a %a) @[%a@])@]@\n@\n" idents id
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
     (print_predicate false) p;
   Hashtbl.add defpred (Ident.create id) ()
 
 let print_function fmt id p =
   let (bl,_,e) = p.Env.scheme_type in
   fprintf fmt "@[(BG_PUSH@\n ;; Why function %s@\n" id;
-  fprintf fmt "  @[(FORALL (%a) (EQ (%s %a) %a))@])@]@\n@\n"
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
-    id
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+  fprintf fmt "  @[(FORALL (%a) (EQ (%a %a) %a))@])@]@\n@\n"
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
+    idents id
+    (print_list space (fun fmt (x,_) -> ident fmt x)) bl 
     print_term e
 
 let print_elem fmt = function
@@ -294,8 +311,8 @@ let logic_typing fmt =
     (fun f s -> match s.Env.scheme_type with
        | Function ([], PTexternal (_,ty)) ->
 	   fprintf fmt
-	     "@[(BG_PUSH (EQ (IS%a %a) |@@true|))@]@\n@\n" 
-	     Ident.print ty Ident.print f 
+	     "@[(BG_PUSH (EQ (%a %a) |@@true|))@]@\n@\n" 
+	     sortp ty ident f 
        | Function (pl, PTexternal (_,ty)) ->
 	   let n = ref 0 in
 	   let pl = List.map (fun pt -> incr n; "x"^string_of_int !n, pt) pl in
@@ -306,15 +323,16 @@ let logic_typing fmt =
 		  | _ -> acc) pl []
 	   in
 	   fprintf fmt
-             "@[(BG_PUSH (FORALL (%a)@\n;; @[(PATS (IS%a (%a %a)))@]@\n(IMPLIES (AND %a)
+             "@[(BG_PUSH (FORALL (%a)@\n;; @[(PATS (%a (%a %a)))@]@\n(IMPLIES (AND %a)
                (EQ (IS%a (%a %a)) |@@true|))))@]@\n@\n"
 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
-	     Ident.print ty Ident.print f 
+	     sortp ty ident f 
 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
-	     (print_list space (fun fmt (x,t) -> 
-				  fprintf fmt "(EQ (IS%s %s) |@@true|)" t x))
+	     (print_list space 
+		(fun fmt (x,t) -> 
+		   fprintf fmt "(EQ (%a %s) |@@true|)" idents t x))
 	     epl
-             Ident.print ty Ident.print f 
+             Ident.print ty ident f 
 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
        | Function _ | Logic.Predicate _ -> ())
 

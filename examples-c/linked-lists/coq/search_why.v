@@ -4,142 +4,123 @@
 Require Export caduceus_why.
 Require Export LinkedLists.
 
-(* Why obligation from file "why/search.why", characters 170-437 *)
-Lemma search_impl_po_1 : 
-  forall (l: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search_impl_po_1 : 
+  forall (l: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
+  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
+                (is_list tl_global alloc l)),
   (well_founded length_order).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 177-302 *)
-Lemma search_impl_po_2 : 
-  forall (l: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search_impl_po_2 : 
+  forall (l: ((pointer) global)),
   forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
-  forall (Variant1: Length),
-  forall (p1: pointer),
-  forall (Pre7: Variant1 = (length alloc tl p1)),
-  forall (Pre6: (is_list alloc tl p1)),
-  (~(p1 = null) -> (valid alloc p1)).
+  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
+                (is_list tl_global alloc l)),
+  forall (HW_2: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc l)),
+  forall (p: ((pointer) global)),
+  forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc p)),
+  forall (HW_4: ~(p = null)),
+  (valid alloc p).
 Proof.
 intuition.
 inversion Pre7; intuition.
 absurd (p1 = null); auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 416-429 *)
-Lemma search_impl_po_3 : 
-  forall (l: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search_impl_po_3 : 
+  forall (l: ((pointer) global)),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (hd: ((memory) Z)),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
-  forall (Variant1: Length),
-  forall (p1: pointer),
-  forall (Pre7: Variant1 = (length alloc tl p1)),
-  forall (Pre6: (is_list alloc tl p1)),
-  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
-  forall (Test2: ~(p1 = null) /\ (acc hd p1) <> v),
-  (valid alloc p1).
+  forall (hd_global: ((memory) Z global)),
+  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
+                (is_list tl_global alloc l)),
+  forall (HW_2: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc l)),
+  forall (p: ((pointer) global)),
+  forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc p)),
+  forall (HW_4: ~(p = null)),
+  forall (HW_5: (valid alloc p)),
+  forall (result: Z),
+  forall (HW_6: result = (acc hd_global p)),
+  forall (HW_7: result <> v),
+  forall (HW_8: (valid alloc p)),
+  forall (result0: ((pointer) global)),
+  forall (HW_9: result0 = (acc tl_global p)),
+  forall (p0: ((pointer) global)),
+  forall (HW_10: p0 = result0),
+  (* File "search.c", line 9, characters 17-27 *)
+  (is_list tl_global alloc p0) /\
+  (length_order (length alloc p0) (length alloc p)).
 Proof.
 destruct result1; intuition; subst; auto.
 inversion Pre7; intuition.
 absurd (p1 = null); auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 411-429 *)
-Lemma search_impl_po_4 : 
-  forall (l: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search_impl_po_4 : 
+  forall (l: ((pointer) global)),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (hd: ((memory) Z)),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
-  forall (Variant1: Length),
-  forall (p1: pointer),
-  forall (Pre7: Variant1 = (length alloc tl p1)),
-  forall (Pre6: (is_list alloc tl p1)),
-  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
-  forall (Test2: ~(p1 = null) /\ (acc hd p1) <> v),
-  forall (p2: pointer),
-  forall (Post2: p2 = (acc tl p1)),
-  (is_list alloc tl p2) /\
-  (length_order (length alloc tl p2) (length alloc tl p1)).
+  forall (hd_global: ((memory) Z global)),
+  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
+                (is_list tl_global alloc l)),
+  forall (HW_2: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc l)),
+  forall (p: ((pointer) global)),
+  forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc p)),
+  forall (HW_4: ~(p = null)),
+  forall (HW_5: (valid alloc p)),
+  forall (result: Z),
+  forall (HW_6: result = (acc hd_global p)),
+  forall (HW_11: result = v),
+  forall (HW_12: ~(p = null)),
+  (acc hd_global p) = v.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 170-437 *)
-Lemma search_impl_po_5 : 
-  forall (l: pointer),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma search_impl_po_5 : 
+  forall (l: ((pointer) global)),
   forall (v: Z),
   forall (alloc: alloc_table),
-  forall (hd: ((memory) Z)),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
-  forall (Variant1: Length),
-  forall (p1: pointer),
-  forall (Pre7: Variant1 = (length alloc tl p1)),
-  forall (Pre6: (is_list alloc tl p1)),
-  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
-  forall (Test2: ~(p1 = null) /\ (acc hd p1) <> v),
-  forall (p2: pointer),
-  forall (Post5: (is_list alloc tl p2) /\
-                 (length_order (length alloc tl p2) (length alloc tl p1))),
-  (length_order (length alloc tl p2) Variant1).
-Proof.
-intuition.
-subst; auto.
-Save.
-
-(* Why obligation from file "why/search.why", characters 170-437 *)
-Lemma search_impl_po_6 : 
-  forall (l: pointer),
-  forall (v: Z),
-  forall (alloc: alloc_table),
-  forall (hd: ((memory) Z)),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
-  forall (Variant1: Length),
-  forall (p1: pointer),
-  forall (Pre7: Variant1 = (length alloc tl p1)),
-  forall (Pre6: (is_list alloc tl p1)),
-  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
-  forall (Test1: p1 = null \/ ~(p1 = null) /\ (acc hd p1) = v),
-  (forall (result:pointer),
-   (result = p1 -> (~(result = null) -> (acc hd result) = v))).
+  forall (hd_global: ((memory) Z global)),
+  forall (tl_global: ((memory) ((pointer) global) global)),
+  forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
+                (is_list tl_global alloc l)),
+  forall (HW_2: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc l)),
+  forall (p: ((pointer) global)),
+  forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc p)),
+  forall (HW_13: p = null),
+  forall (HW_14: ~(p = null)),
+  (acc hd_global p) = v.
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 326-346 *)
-Lemma search_impl_po_7 : 
-  forall (l: pointer),
-  forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre8: (is_list alloc tl l)),
-  forall (p: pointer),
-  forall (Post4: p = l),
-  (is_list alloc tl p).
+Proof.
+intuition.
+subst; auto.
+Save.
+
 Proof.
 intuition.
 (* FILL PROOF HERE *)

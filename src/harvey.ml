@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.32 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.33 2006-02-27 13:26:13 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -83,9 +83,36 @@ let is_harvey_keyword =
     ["true"; "false"; "le"; "lt"];
   Hashtbl.mem ht
 
+let is_harvey_ident s =
+  let is_harvey_char = function
+    | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' -> true 
+    | _ -> false
+  in
+  try 
+    String.iter (fun c -> if not (is_harvey_char c) then raise Exit) s; true
+  with Exit ->
+    false
+
+let renamings = Hashtbl.create 17
+let fresh_name = 
+  let r = ref 0 in fun () -> incr r; "harvey__" ^ string_of_int !r
+
 let ident fmt id =
   let s = Ident.string id in
-  if is_harvey_keyword s then fprintf fmt "harvey_%s" s else Ident.print fmt id
+  if is_harvey_keyword s then
+    fprintf fmt "harvey__%s" s
+  else if not (is_harvey_ident s) then 
+    let s' = 
+      try
+	Hashtbl.find renamings s
+      with Not_found ->
+	let s' = fresh_name () in
+	Hashtbl.add renamings s s';
+	s'
+    in
+    fprintf fmt "%s" s'
+  else
+    Ident.print fmt id
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -93,7 +120,7 @@ let rec print_term fmt = function
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
-      fprintf fmt "harvey_%b" b
+      fprintf fmt "harvey__%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat _) ->
