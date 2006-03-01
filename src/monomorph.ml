@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.10 2006-03-01 14:46:58 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.11 2006-03-01 15:40:48 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -319,7 +319,7 @@ module Make(X : S) = struct
   let rec declare_logic fmt id i =
     if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
       Hinstance.add declared_logic (id,i) ();
-      eprintf "declare_logic %a@." Ident.print id;
+      (*eprintf "declare_logic %a@." Ident.print id;*)
       assert (Hashtbl.mem logic_symbols id);
       match Hashtbl.find logic_symbols id with
 	| Uninterp t ->
