@@ -20,12 +20,12 @@ src/cvcl.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
     src/monomorph.cmx src/misc.cmx src/ltyping.cmx src/logic.cmi src/loc.cmx \
     src/lexer.cmx src/ident.cmx src/error.cmi src/env.cmx src/cc.cmi \
     src/cvcl.cmi 
-src/dispatcher.cmo: src/vcg.cmi src/simplify.cmi src/options.cmi \
-    src/logic.cmi src/harvey.cmi src/env.cmi src/cvcl.cmi tools/calldp.cmi \
-    src/dispatcher.cmi 
-src/dispatcher.cmx: src/vcg.cmx src/simplify.cmx src/options.cmx \
-    src/logic.cmi src/harvey.cmx src/env.cmx src/cvcl.cmx tools/calldp.cmx \
-    src/dispatcher.cmi 
+src/dispatcher.cmo: src/zenon.cmi src/vcg.cmi src/simplify.cmi \
+    src/options.cmi src/logic.cmi src/harvey.cmi src/env.cmi src/cvcl.cmi \
+    tools/calldp.cmi src/dispatcher.cmi 
+src/dispatcher.cmx: src/zenon.cmx src/vcg.cmx src/simplify.cmx \
+    src/options.cmx src/logic.cmi src/harvey.cmx src/env.cmx src/cvcl.cmx \
+    tools/calldp.cmx src/dispatcher.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/types.cmi src/report.cmi src/misc.cmi src/logic.cmi \
