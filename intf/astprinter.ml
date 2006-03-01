@@ -41,10 +41,14 @@ let rec print_pure_type fmt = function
   | PTexternal ([v], id) when id == farray -> 
       fprintf fmt "@[(array %a)@]" print_pure_type v
   | PTexternal([],id) -> Ident.print fmt id
+  | PTexternal([l],id) -> 
+      fprintf fmt "@[%a %a@]"
+	print_pure_type l
+	Ident.print id
   | PTexternal(l,id) -> 
-      fprintf fmt "@[((%a) %a)@]"
-      Ident.print id
-      (print_list space print_pure_type) l
+      fprintf fmt "@[(%a) %a@]"
+	(print_list comma print_pure_type) l
+	Ident.print id
   | PTvar { type_val = Some t} -> 
       fprintf fmt "%a" print_pure_type t      
   | PTvar v ->
@@ -52,9 +56,82 @@ let rec print_pure_type fmt = function
 
 let print_binder = Coq.print_binder_v8
 let print_binder_type = Coq.print_binder_type_v8
-let print_term = Coq.print_term_v8
 
-let infix_relation id =
+let print_term fmt t = 
+  let rec print0 fmt = function
+    | Tapp (id, [a;b], _) when is_relation id ->
+	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (Coq.prefix_id id)
+	print3 a print3 b
+    | t -> 
+	print1 fmt t
+  and print1 fmt = function
+    | Tapp (id, [a;b], _) when id == t_add_int ->
+	fprintf fmt "%a +@ %a" print1 a print2 b
+    | Tapp (id, [a;b], _) when id == t_sub_int ->
+	fprintf fmt "%a -@ %a" print1 a print2 b
+    | t ->
+	print2 fmt t
+  and print2 fmt = function
+    | Tapp (id, [a;b], _) when id == t_mul_int ->
+	fprintf fmt "%a *@ %a" print2 a print3 b
+    | Tapp (id, [a;b], _) when id == t_div_int ->
+	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
+    | Tapp (id, [a;b], _) when id == t_mod_int ->
+	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
+    | t ->
+	print3 fmt t
+  and print3 fmt = function
+    | Tconst (ConstInt n) -> 
+	fprintf fmt "%s" n
+    | Tconst (ConstBool b) -> 
+	fprintf fmt "%b" b
+    | Tconst ConstUnit -> 
+	fprintf fmt "tt" 
+    | Tconst (ConstFloat (i,f,e)) -> 
+	let f = if f = "0" then "" else f in
+	let e = (if e = "" then 0 else int_of_string e) - String.length f in
+	if e = 0 then
+	  fprintf fmt "(%s%s)%%R" i f
+	else if e > 0 then
+	  fprintf fmt "(%s%s * 1%s)%%R" i f (String.make e '0')
+	else
+	  fprintf fmt "(%s%s / 1%s)%%R" i f (String.make (-e) '0')
+    | Tvar id when id == implicit ->
+	fprintf fmt "?"
+    | Tvar id when id == t_zwf_zero ->
+	fprintf fmt "(Zwf Z0)"
+    | Tvar id | Tapp (id, [], _) -> 
+	Ident.print fmt id
+    | Tderef _ ->
+	assert false
+    | Tapp (id, _, _) as t when (Ident.string id = "acc") ->
+	print_fct_acc fmt t
+    | Tapp (id, _, _) as t when (Ident.string id = "shift") ->
+	print_fct_shift fmt t 
+    | Tapp (id, [t], _) when id == t_neg_int ->
+	fprintf fmt "(Zopp %a)" print3 t
+    | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
+	fprintf fmt "@[(%a)@]" print0 t
+    | Tapp (id, [a; b; c], _) when id == if_then_else -> 
+	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print0 a print0 b print0 c
+    | Tapp (id, tl, _) when id == t_zwf_zero -> 
+	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
+    | Tapp (id, tl, _) when is_relation id || is_arith id -> 
+	fprintf fmt "(@[%s %a@])" (Coq.prefix_id id) print_terms tl
+    | Tapp (id, tl, _) -> 
+	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
+  and print_terms fmt tl =
+    print_list space print3 fmt tl
+  and print_fct_acc fmt = function
+    | Tapp (id, [m; term], _) -> fprintf fmt "%a__(%a)__" print3 term print3 m
+    | _ as t -> print3 fmt t
+  and print_fct_shift fmt = function 
+    | Tapp (id, [p; offset], _) -> fprintf fmt "%a[%a]" print3 p print3 offset;
+    | _ as t -> print3 fmt t
+  in
+  print3 fmt t
+
+(*let infix_relation id =
   if id == t_lt_int then "<" 
   else if id == t_le_int then "<="
   else if id == t_gt_int then ">"
@@ -68,7 +145,7 @@ let pprefix_id id =
   else if id == t_le_real then "Rle"
   else if id == t_gt_real then "Rgt" 
   else if id == t_ge_real then "Rge"
-  else assert false
+  else assert false*)
 
 let print_predicate fmt p =
   let rec print0 fmt = function
@@ -102,7 +179,7 @@ let print_predicate fmt p =
 	fprintf fmt "(Zwf 0 %a %a)" print_term a print_term b
     | Papp (id, [a;b], _) when is_int_comparison id ->
 	fprintf fmt "@[%a %s@ %a@]" 
-	  print_term a (infix_relation id) print_term b
+	  print_term a (Coq.infix_relation id) print_term b
     | Papp (id, [a;b], _) when id == t_eq_real ->
 	fprintf fmt "(@[eq %a %a@])" print_term a print_term b
     | Papp (id, [a;b], _) when id == t_neq_real ->
@@ -113,7 +190,7 @@ let print_predicate fmt p =
 	fprintf fmt "@[~(%a = %a)@]" print_term a print_term b
     | Papp (id, [a;b], _) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
-	(pprefix_id id) print_term a print_term b
+	(Coq.pprefix_id id) print_term a print_term b
     | Papp (id, l, _) ->
 	fprintf fmt "@[(@[%a %a@])@]" Ident.print id
 	  (print_list space print_term) l
@@ -145,34 +222,9 @@ let print_predicate fmt p =
   in
   print0 fmt p
 
-let rec print_cc_type_v8 fmt = function
+let rec print_cc_type fmt = function
   | TTpure pt -> 
       print_pure_type fmt pt
-  | TTarray v -> 
-      fprintf fmt "(@[array@ %a@])" print_cc_type_v8 v
-  | TTlambda (b, t) ->
-      fprintf fmt "(@[fun %a =>@ %a@])" print_binder b print_cc_type_v8 t
-  | TTarrow (b, t) -> 
-      fprintf fmt "@[forall %a,@ %a@]" print_binder b print_cc_type_v8 t
-  | TTtuple ([_,CC_var_binder t], None) -> 
-      print_cc_type_v8 fmt t
-  | TTtuple (bl, None) ->
-      fprintf fmt "(@[tuple_%d@ %a@])" (List.length bl) 
-	(print_list space print_binder_type) bl
-  | TTtuple (bl, Some q) -> 
-      fprintf fmt "(@[sig_%d@ %a@ (@[fun %a =>@ (%a)@])@])" (List.length bl)
-	(print_list space print_binder_type) bl 
-	(print_list nothing 
-	   (fun fmt b -> fprintf fmt "%a@ " print_binder b)) bl
-	print_cc_type_v8 q
-  | TTpred p ->
-      print_predicate fmt p
-  | TTapp (tt, l) ->
-      fprintf fmt "(@[%a@ %a@])" print_cc_type_v8 tt
-	(print_list space print_cc_type_v8) l
-  | TTterm t ->
-      print_term fmt t
-  | TTSet ->
-      fprintf fmt "Set"
+  | t -> Coq.print_cc_type_v8 fmt t
 
-let print_cc_type = print_cc_type_v8
+let clean_tree p = p
