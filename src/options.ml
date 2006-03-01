@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.57 2006-02-10 09:57:32 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.58 2006-03-01 14:46:58 filliatr Exp $ i*)
 
 open Format
 
@@ -62,7 +62,7 @@ let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Dispatcher
 
 let prover_ = ref (Coq coq_version)
 
@@ -158,6 +158,7 @@ Prover selection:
   --simplify  selects Simplify prover
   --cvcl      selects CVC Lite prover
   --smtlib    selects the SMT-LIB format
+  --zenon     selects the Zenon prover
   --gappa     selects the Gappa prover
 
 Coq-specific options:
@@ -218,6 +219,7 @@ let files =
     | ("-hol4" | "--hol4") :: args -> prover_ := Hol4; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
+    | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args

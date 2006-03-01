@@ -101,7 +101,7 @@ CMO = src/lib.cmo \
 	   src/monomorph.cmo src/pvs.cmo src/hol4.cmo src/gappa.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo src/cvcl.cmo \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
-	   tools/calldp.cmo src/dispatcher.cmo \
+	   src/zenon.cmo tools/calldp.cmo src/dispatcher.cmo \
            src/isabelle.cmo src/ocaml.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 

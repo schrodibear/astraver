@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.90 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.91 2006-03-01 14:46:58 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -44,6 +44,7 @@ let reset () =
   | Mizar -> Mizar.reset ()
   | Harvey -> Harvey.reset ()
   | Simplify -> Simplify.reset ()
+  | Zenon -> Zenon.reset ()
   | CVCLite -> Cvcl.reset ()
   | SmtLib -> Smtlib.reset ()
   | Isabelle -> Isabelle.reset ()
@@ -58,6 +59,7 @@ let push_obligations ol = match prover () with
   | Mizar -> Mizar.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
   | Simplify -> Simplify.push_obligations ol
+  | Zenon -> Zenon.push_obligations ol
   | CVCLite -> Cvcl.push_obligations ol
   | SmtLib -> Smtlib.push_obligations ol
   | Isabelle -> Isabelle.push_obligations ol
@@ -82,7 +84,7 @@ let push_parameter id v tv = match prover () with
   | Isabelle -> if is_pure_type_scheme v then Isabelle.push_parameter id tv
   | Hol4 -> if is_pure_type_scheme v then Hol4.push_parameter id tv
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
-  | Harvey | Simplify | SmtLib | Gappa -> () (* nothing to do? *)
+  | Harvey | Simplify | Zenon | SmtLib | Gappa -> () (* nothing to do? *)
   | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
   | Dispatcher -> ()
 
@@ -94,6 +96,7 @@ let push_logic id t = match prover () with
   | Hol4 -> Hol4.push_logic id t
   | Mizar -> Mizar.push_logic id t
   | Harvey | Simplify | SmtLib | Gappa -> () (* nothing to do? *)
+  | Zenon -> Zenon.push_logic id t
   | CVCLite -> Cvcl.push_logic id t
   | Dispatcher -> Dispatcher.push_logic id t
 
@@ -106,6 +109,7 @@ let push_axiom id p = match prover () with
   | Mizar -> Mizar.push_axiom id p
   | Harvey -> Harvey.push_axiom id p
   | Simplify -> Simplify.push_axiom id p
+  | Zenon -> Zenon.push_axiom id p
   | CVCLite -> Cvcl.push_axiom id p
   | SmtLib -> Smtlib.push_axiom id p
   | Gappa -> ()
@@ -121,6 +125,7 @@ let push_predicate id p = match prover () with
   | Harvey -> Harvey.push_predicate id p
   | Simplify -> Simplify.push_predicate id p
   | CVCLite -> Cvcl.push_predicate id p
+  | Zenon -> Zenon.push_predicate id p
   | SmtLib -> Smtlib.push_predicate id p
   | Gappa -> ()
   | Dispatcher -> Dispatcher.push_predicate id p
@@ -135,6 +140,7 @@ let push_function id p = match prover () with
   | Harvey -> Harvey.push_function id p
   | Simplify -> Simplify.push_function id p
   | CVCLite -> Cvcl.push_function id p
+  | Zenon -> Zenon.push_function id p
   | SmtLib -> () (* Smtlib.push_function id p *)
   | Gappa -> ()
   | Dispatcher -> Dispatcher.push_function id p
@@ -157,6 +163,7 @@ let output fwe =
     | Harvey -> Harvey.output_file fwe
     | Simplify -> Simplify.output_file fwe
     | CVCLite -> Cvcl.output_file fwe
+    | Zenon -> Zenon.output_file fwe
     | SmtLib -> Smtlib.output_file fwe
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe

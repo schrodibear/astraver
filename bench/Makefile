@@ -79,5 +79,9 @@ byte:
 	-coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	-coqc -I ../lib/coq test_valid.v
 
-stat:
+gwhy:
 	../bin/gwhy.opt -d test.mlw
+
+zenon:
+	../bin/why.opt -d -V --zenon test.mlw
+	zenon test_why.znn
