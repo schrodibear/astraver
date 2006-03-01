@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.14 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.15 2006-03-01 14:52:12 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -61,6 +61,8 @@ let call_cvcl f =
   wrapper (Calldp.cvcl ~timeout:!timeout ~filename:f ())
 let call_simplify f = 
   wrapper (Calldp.simplify ~timeout:!timeout ~filename:f ())
+let call_zenon f = 
+  wrapper (Calldp.zenon ~timeout:!timeout ~filename:f ())
 let call_harvey f = 
   List.iter wrapper 
     (Calldp.harvey ~timeout:!timeout ~eclauses:!eclauses ~filename:f ())
@@ -75,6 +77,9 @@ let split f =
   else 
   if Filename.check_suffix f ".sx" || Filename.check_suffix f ".sx.all" then
     Simplify_split.iter call_simplify f 
+  else 
+  if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then
+    call_zenon f (* TODO: Zenon_split *)
   else 
   if Filename.check_suffix f ".rv" then
     call_harvey f 

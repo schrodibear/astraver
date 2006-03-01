@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.mli,v 1.1 2006-03-01 14:46:58 filliatr Exp $ i*)
+(*i $Id: zenon.mli,v 1.2 2006-03-01 14:52:12 filliatr Exp $ i*)
 
 open Cc
 
@@ -27,5 +27,6 @@ val push_axiom : string -> Logic.predicate Env.scheme -> unit
 val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
 val push_function : string -> Logic.function_def Env.scheme -> unit
 
+val prelude_done : bool ref
 val output_file : string -> unit
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.4 2005-06-23 14:28:44 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.5 2006-03-01 14:52:12 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -52,7 +52,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey | Cvcl
+type prover = Simplify | Harvey | Cvcl | Zenon
 
 let push_elem p e = match p, e with
   | Simplify, Logic _ -> ()
@@ -67,11 +67,16 @@ let push_elem p e = match p, e with
   | Cvcl, Axiom (id, a) -> Cvcl.push_axiom id a
   | Cvcl, PredicateDef (id, p) -> Cvcl.push_predicate id p
   | Cvcl, FunctionDef (id, f) -> Cvcl.push_function id f
+  | Zenon, Logic (id, d) -> Zenon.push_logic id d
+  | Zenon, Axiom (id, a) -> Zenon.push_axiom id a
+  | Zenon, PredicateDef (id, p) -> Zenon.push_predicate id p
+  | Zenon, FunctionDef (id, f) -> Zenon.push_function id f
 
 let push_obligation p o = match p with
   | Simplify -> Simplify.push_obligations [o]
   | Harvey -> Harvey.push_obligations [o]
   | Cvcl -> Cvcl.push_obligations [o]
+  | Zenon -> Zenon.push_obligations [o]
 
 (* output_file is a CRITICAL SECTION *)
 let output_file p (elems,o) =
@@ -79,6 +84,7 @@ let output_file p (elems,o) =
     | Simplify -> Simplify.reset () 
     | Harvey -> Harvey.reset () 
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
+    | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
   end;
   List.iter (push_elem p) elems;
   push_obligation p o;
@@ -87,6 +93,7 @@ let output_file p (elems,o) =
     | Simplify -> Simplify.output_file f; f ^ "_why.sx"
     | Harvey -> Harvey.output_file f; f ^ "_why.rv"
     | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
+    | Zenon -> Zenon.output_file f; f ^ "_why.znn"
 
 open Printf
 
@@ -94,6 +101,7 @@ let prover_name = function
   | Simplify -> "Simplify" 
   | Harvey -> "haRVey"
   | Cvcl -> "CVC Lite"
+  | Zenon -> "Zenon"
 
 let call_prover ~obligation:o ?timeout p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -109,6 +117,8 @@ let call_prover ~obligation:o ?timeout p =
 	   | [r] -> r | _ -> assert false)
     | Cvcl ->
 	Calldp.cvcl ?timeout ~filename ()
+    | Zenon -> 
+	Calldp.zenon ?timeout ~filename ()
   in
   if not debug then begin try Sys.remove filename with _ -> () end;
   r

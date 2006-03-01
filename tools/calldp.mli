@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.mli,v 1.2 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: calldp.mli,v 1.3 2006-03-01 14:52:12 filliatr Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -33,6 +33,10 @@ val harvey :
   prover_result list
 
 val cvcl : 
+  ?timeout:int -> filename:string -> unit -> 
+  prover_result
+
+val zenon : 
   ?timeout:int -> filename:string -> unit -> 
   prover_result
 
