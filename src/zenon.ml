@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.2 2006-03-01 15:16:46 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.3 2006-03-01 15:39:17 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -260,29 +260,25 @@ module Mono = struct
 
   let print_predicate_def_instance fmt id i (bl,p) =
     fprintf fmt "@[;; Why predicate %s@]@\n" id;
-    assert false (*TODO*)
-    (*
-    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+    fprintf fmt "@[<hov 2>\"%s%a\" " id instance i;
+    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " Ident.print x) bl;
+    fprintf fmt "(<=> (%s%a %a)@ %a)" 
       id instance i
-      print_logic_type (Predicate (List.map snd bl))
-      (print_list comma 
-	 (fun fmt (x,pt) -> 
-	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
-      print_predicate p
-    *)
+      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" Ident.print x)) bl
+      print_predicate p;
+    List.iter (fun _ -> fprintf fmt "))") bl;
+    fprintf fmt "@]@\n"
 
   let print_function_def_instance fmt id i (bl,t,e) =
     fprintf fmt "@[;; Why function %s@]@\n" id;
-    assert false (*TODO*)
-    (*
-    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+    fprintf fmt "@[<hov 2>\"%s%a\" " id instance i;
+    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " Ident.print x) bl;
+    fprintf fmt "(= (%s%a %a)@ %a)" 
       id instance i
-      print_logic_type (Function (List.map snd bl, t))
-      (print_list comma 
-	 (fun fmt (x,pt) -> 
-	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
-      print_term e
-    *)
+      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" Ident.print x)) bl
+      print_term e;
+    List.iter (fun _ -> fprintf fmt "))@]@\n") bl;
+    fprintf fmt "@]@\n"
 
   let print_axiom_instance fmt id i p =
     fprintf fmt "@[;; Why axiom %s@]@\n" id;
