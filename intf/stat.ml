@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.10 2006-02-22 14:47:34 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.11 2006-03-01 10:31:52 dogguy Exp $ i*)
 
 open Printf
 open Options
 open Ast
 open Env
+(*open Cache*)
 open Pprinter
 
 let _ = gui := true
@@ -98,6 +99,8 @@ module Model = struct
   let cols = new GTree.column_list
   let name = cols#add string
   let fullname = cols#add string
+  let total = cols#add int
+  let result = cols#add int
   let simplify_result = cols#add string
   let harvey_result = cols#add string
   let cvcl_result = cols#add string
@@ -132,8 +135,9 @@ module Model = struct
 	     let row = model#append () in
 	     Queue.add f fq;
 	     Hashtbl.add frows f row;
-	     model#set ~row ~column:name (f^" [0|0|0]   ");
+	     model#set ~row ~column:name f;
 	     model#set ~row ~column:fullname f;
+	     model#set ~row ~column:total 0;
 	     model#set ~row ~column:simplify_result "0";
 	     model#set ~row ~column:harvey_result "0";
 	     model#set ~row ~column:cvcl_result "0";
@@ -143,6 +147,7 @@ module Model = struct
 	 Hashtbl.add orows s row_n;
 	 model#set ~row:row_n ~column:name n;
 	 model#set ~row:row_n ~column:fullname s;
+	 model#set ~row:row_n ~column:result 0;
 	 model#set ~row:row_n ~column:simplify `REMOVE;
 	 model#set ~row:row_n ~column:harvey `REMOVE;
 	 model#set ~row:row_n ~column:cvcl `REMOVE;
@@ -210,9 +215,9 @@ let get_prover = function
 let prove fct = 
   ignore (Thread.create fct ())
 
-let update_statistics (model:GTree.tree_store) row result = 
+let update_statistics p (model:GTree.tree_store) row result = 
   let stat = (string_of_int result) in
-  match !default_prover with
+  match p with
     | Dispatcher.Simplify -> model#set ~row ~column:Model.simplify_result stat
     | Dispatcher.Harvey -> model#set ~row ~column:Model.harvey_result stat
     | Dispatcher.Cvcl -> model#set ~row ~column:Model.cvcl_result stat
@@ -235,6 +240,19 @@ let children f n =
   done;
   q
 
+let get_all_results f (model:GTree.tree_store) = 
+  let row = Model.find_fct f in
+  let n = model#iter_n_children (Some(row)) in
+  let mychildren = children f n in
+  Queue.fold
+    (fun nb oblig -> 
+       let (_, oblig, _) = oblig in
+       let row =  Hashtbl.find Model.orows oblig in
+       let result = model#get ~row ~column:Model.result in
+       result + nb)
+    0
+    mychildren
+
 (* 
  * run a prover on an obligation and update the model 
  *)
@@ -243,15 +261,17 @@ let run_prover_child p column_p (view:GTree.view) (model:GTree.tree_store) o =
   try 
     let row = Hashtbl.find Model.orows oblig in
     model#set ~row ~column:column_p `EXECUTE;
-    let r = Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p 
-    and s = ref 0 in
-    model#set ~row ~column:column_p
-      (match r with 
-	 | Calldp.Valid -> s:=1; `YES 
-	 | Calldp.ProverFailure _ -> `NO
-	 | Calldp.Timeout -> `CUT
-	 | _ -> `STOP);
-    !s
+    let r = Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p in
+    let get_result r =
+      match r with 
+	| Calldp.Valid -> model#set ~row ~column:column_p `YES ; 1
+	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `NO; 0
+	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
+	| _ -> model#set ~row ~column:column_p `STOP; 0 in
+    let result = get_result r in
+    model#set ~row ~column:Model.result 
+      (max result (model#get ~row ~column:Model.result));
+    result
   with Not_found -> begin
     print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
     flush stdout;
@@ -274,6 +294,7 @@ let run_prover_oblig p column_p (view:GTree.view) (model:GTree.tree_store) s () 
 let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () = 
   try
     let row = Model.find_fct f in
+    model#set ~row ~column:Model.total 0;
     model#set ~row ~column:column_p `GO_DOWN;
     let n = model#iter_n_children (Some(row)) in
     let mychildren = children f n in
@@ -295,10 +316,12 @@ let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () =
 	let path = model#get_path row in
 	view#expand_row path
       end;
-    update_statistics model row succeed;
-    let statistics = get_statistics model row in
+    update_statistics p model row succeed;
+    let statistics = get_statistics model row 
+    and total = string_of_int (get_all_results f model) 
+    and children = (string_of_int n) in
     !flash_info ("Function \""^f^"\" statistics : "^statistics^" / "^(string_of_int n));
-    model#set ~row ~column:Model.name (f^" "^statistics^"/"^(string_of_int n))
+    model#set ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
   with Not_found -> 
     begin 
       print_endline ("     [...] Error : function \""^f^"\" not found !"); 
@@ -396,7 +419,7 @@ let main () =
   (* left tree of proof obligations *)
   let model = Model.create_model () in
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:300 ~packing:hp#add1 () in
+    ~width:350 ~packing:hp#add1 () in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
@@ -405,7 +428,12 @@ let main () =
     ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () in
   let collapse_all_m = configuration_factory#add_image_item ~key:GdkKeysyms._C 
     ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () in
-
+  let _ = 
+    Hashtbl.iter 
+      (fun f row -> 
+	 let n = model#iter_n_children (Some(row)) in
+	 model#set ~row ~column:Model.name (f^" 0/"^(string_of_int n)^" [0|0|0]   "))
+      Model.frows in
   (* proof menu *)
   let proof_menu = factory#add_submenu "Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 

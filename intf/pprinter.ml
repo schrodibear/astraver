@@ -115,20 +115,6 @@ let move_to_source = function
 	move_to_line line
       end
 
-let insert_text (tbuf:GText.buffer) ty s = 
-  let (fc, bc) = get_color ty 
-  and it = tbuf#end_iter 
-  and text = unicode_sym s in
-  let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
-  tbuf#insert ~tags:[new_tag] ~iter:it text 
-
-let insert_predicate (tbuf:GText.buffer) s =
-  insert_text tbuf "predicate" s
-
-let insert_string (tbuf:GText.buffer) s =
-  let it = tbuf#end_iter in
-  tbuf#insert ~iter:it s 
-
 let rec intros ctx = function 
   | Forall (true, id, n, t, p) ->
       let id' = Ident.next_away id (predicate_vars p) in
@@ -142,26 +128,25 @@ let rec intros ctx = function
   | c -> 
       ctx, c
 
+let create_tag (tbuf:GText.buffer) t loc = 
+  let (fc, bc) = get_color "lpredicate" in
+  let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
+  ignore(
+    new_tag#connect#event ~callback:
+      (fun ~origin ev it -> 
+	 if GdkEvent.get_type ev = `BUTTON_PRESS then 
+	   move_to_source (Some(loc))
+	 else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
+	   Tags.refresh_last_colored new_tag;
+	   new_tag#set_properties 
+	     [`BACKGROUND bc_hilight; `FOREGROUND fc_hilight]
+	 end;
+	 false)
+  );
+  add_gtktag t new_tag
+
 let create_all_tags (tbuf:GText.buffer) = 
-  Hashtbl.iter 
-    (fun t loc -> 
-       let (fc, bc) = get_color "lpredicate" in
-       let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
-       ignore(
-	 new_tag#connect#event ~callback:
-	   (fun ~origin ev it -> 
-	      if GdkEvent.get_type ev = `BUTTON_PRESS then 
-		move_to_source (Some(loc))
-	      else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
-		Tags.refresh_last_colored new_tag;
-		new_tag#set_properties 
-		  [`BACKGROUND bc_hilight; `FOREGROUND fc_hilight]
-		    end;
-	      false)
-       );
-       add_gtktag t new_tag
-    )
-    Tags.loctags
+  Hashtbl.iter (create_tag tbuf) Tags.loctags
 
 let print_oblig fmt (ctx,concl) = 
   let ctx, concl = intros ctx concl in
@@ -180,13 +165,8 @@ let print_oblig fmt (ctx,concl) =
     | Spred (id, p) ->
 	fprintf fmt "@[@{<hypothesis>%a:@} @{<predicate>%a@}@]" print_name id print_predicate p
   in
-  print_list (print_hyp fmt) ctx;
-  fprintf fmt "@{<separator>%s@\n@}" "-------------";
-  pp_open_box fmt 0;
-  pp_open_tag fmt "conclusion";
-  print_predicate fmt concl;
-  pp_close_tag fmt ();
-  pp_close_box fmt ()
+  print_list (print_hyp fmt) ctx
+  (*fprintf fmt "@{<separator>%s@\n@}@[@{<conclusion>%a@}@]" "-------------" print_predicate concl*)
 
 let is_buffer_saved = 
   Hashtbl.mem obligs
@@ -202,11 +182,19 @@ let print_all (tbuf:GText.buffer) s p =
   let fmt = Format.str_formatter in
   pp_set_tags fmt true;
   let str = 
-    fprintf fmt "@[%a@]@\n" print_oblig p;
+    fprintf fmt "@[%a@]" print_oblig p;
     flush_str_formatter ()
   in
   create_all_tags tbuf;
-  split tbuf (Lexing.from_string str)
+  split tbuf (Lexing.from_string str);
+  let (_,concl) = p in
+  let mytag = tbuf#create_tag [`UNDERLINE `DOUBLE;`FOREGROUND (get_fc "separator")] in
+  tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter "_                                                        _\n\n";
+  let conclusion = 
+    fprintf fmt "@[@{<conclusion>%a@}@]" print_predicate concl;
+    create_all_tags tbuf;
+    flush_str_formatter () in
+  split tbuf (Lexing.from_string conclusion)
 
 let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) = 
   tbuf_source := tv_s#buffer;

@@ -19,13 +19,14 @@ open Colors
 type loc = { file:string; line:string; sp:string; ep:string }
 
 let last_colored = ref (GText.tag ())
+let tag = ref 0
 
 let gtktags = Hashtbl.create 57
 let loctags = Hashtbl.create 57
 
-let new_tag = 
-  let tag = ref 0 in
-  fun (l:loc) ->
+let tag_ref = !tag
+
+let new_tag (l:loc) =
     incr tag;
     let mytag = string_of_int !tag in
     Hashtbl.add loctags mytag l;
