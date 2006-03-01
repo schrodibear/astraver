@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.4 2006-03-01 14:52:12 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.5 2006-03-01 15:52:40 filliatr Exp $ i*)
 
 open Printf
 
@@ -50,7 +50,7 @@ let simplify ?(timeout=10) ~filename:f () =
 let zenon ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
   call
-    (sprintf "timeout %d Simplify %s > %s 2>&1 && grep -q -w PROOF-FOUND %s" 
+    (sprintf "timeout %d zenon %s > %s 2>&1 && grep -q PROOF-FOUND %s" 
        timeout f out out)
     out
 
