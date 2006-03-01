@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.mli,v 1.20 2006-02-08 09:08:22 filliatr Exp $ i*)
+(*i $Id: coq.mli,v 1.21 2006-03-01 10:23:04 dogguy Exp $ i*)
 
 open Cc
 open Vcg
@@ -36,6 +36,11 @@ val push_type : string -> Ident.t list -> unit
 val output_file : string -> unit
 
 (* exported for the GUI *)
+
+val prefix_id : Ident.t -> string
+val pprefix_id : Ident.t -> string
+val infix_relation : Ident.t -> string
+
 
 val print_predicate_v8 : Format.formatter -> Logic.predicate -> unit
 val print_cc_type_v8 : Format.formatter -> Cc.cc_type -> unit
