@@ -391,18 +391,20 @@ intf/hilight.cmo: intf/colors.cmi
 intf/hilight.cmx: intf/colors.cmx 
 intf/navig.cmo: intf/navig.cmi 
 intf/navig.cmx: intf/navig.cmi 
-intf/pprinter.cmo: src/vcg.cmi intf/tags.cmo src/options.cmi src/misc.cmi \
-    src/logic.cmi src/ident.cmi intf/hilight.cmo intf/colors.cmi src/cc.cmi \
-    intf/astprinter.cmo intf/pprinter.cmi 
-intf/pprinter.cmx: src/vcg.cmx intf/tags.cmx src/options.cmx src/misc.cmx \
-    src/logic.cmi src/ident.cmx intf/hilight.cmx intf/colors.cmx src/cc.cmi \
-    intf/astprinter.cmx intf/pprinter.cmi 
+intf/pprinter.cmo: src/vcg.cmi intf/tagsplit.cmo intf/tags.cmo \
+    src/options.cmi src/misc.cmi src/logic.cmi src/ident.cmi intf/hilight.cmo \
+    intf/colors.cmi src/cc.cmi intf/astprinter.cmo intf/pprinter.cmi 
+intf/pprinter.cmx: src/vcg.cmx intf/tagsplit.cmx intf/tags.cmx \
+    src/options.cmx src/misc.cmx src/logic.cmi src/ident.cmx intf/hilight.cmx \
+    intf/colors.cmx src/cc.cmi intf/astprinter.cmx intf/pprinter.cmi 
 intf/stat.cmo: intf/tags.cmo src/report.cmi intf/pprinter.cmi src/options.cmi \
     src/main.cmo src/env.cmi src/dispatcher.cmi tools/calldp.cmi src/ast.cmi 
 intf/stat.cmx: intf/tags.cmx src/report.cmx intf/pprinter.cmx src/options.cmx \
     src/main.cmx src/env.cmx src/dispatcher.cmx tools/calldp.cmx src/ast.cmi 
 intf/tags.cmo: intf/colors.cmi 
 intf/tags.cmx: intf/colors.cmx 
+intf/tagsplit.cmo: intf/tags.cmo intf/colors.cmi 
+intf/tagsplit.cmx: intf/tags.cmx intf/colors.cmx 
 intf/viewer.cmo: src/util.cmi src/report.cmi src/options.cmi intf/navig.cmi \
     src/main.cmo src/log.cmi src/loc.cmi intf/hilight.cmo src/env.cmi \
     src/ast.cmi 
