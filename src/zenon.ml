@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.1 2006-03-01 14:46:58 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.2 2006-03-01 15:16:46 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -146,7 +146,7 @@ let rec print_term fmt = function
       fprintf fmt "@[(%a%a %a)@]" Ident.print id instance i print_terms tl
 
 and print_terms fmt tl = 
-  print_list comma print_term fmt tl
+  print_list space print_term fmt tl
 
 let rec print_predicate fmt = function
   | Ptrue ->
