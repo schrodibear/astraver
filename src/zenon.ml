@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.3 2006-03-01 15:39:17 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.4 2006-03-02 15:39:18 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -55,6 +55,43 @@ let push_function id p = Queue.add (FunctionDef (id, p)) queue
 
 (*s Pretty print *)
 
+let is_zenon_keyword =
+  let ht = Hashtbl.create 17 in
+  List.iter (fun kw -> Hashtbl.add ht kw ()) 
+    ["True"; "False"];
+  Hashtbl.mem ht
+
+let is_zenon_ident s =
+  let is_zenon_char = function
+    | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' -> true 
+    | _ -> false
+  in
+  try 
+    String.iter (fun c -> if not (is_zenon_char c) then raise Exit) s; true
+  with Exit ->
+    false
+
+let renamings = Hashtbl.create 17
+let fresh_name = 
+  let r = ref 0 in fun () -> incr r; "zenon__" ^ string_of_int !r
+
+let ident fmt id =
+  let s = Ident.string id in
+  if is_zenon_keyword s then
+    fprintf fmt "zenon__%s" s
+  else if not (is_zenon_ident s) then 
+    let s' = 
+      try
+	Hashtbl.find renamings s
+      with Not_found ->
+	let s' = fresh_name () in
+	Hashtbl.add renamings s s';
+	s'
+    in
+    fprintf fmt "%s" s'
+  else
+    Ident.print fmt id
+
 let infix id =
   if id == t_lt then "<"
   else if id == t_le then "<="
@@ -94,7 +131,7 @@ let rec print_pure_type fmt = function
       fprintf fmt "ARRAY_%a" print_pure_type pt
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i
+  | PTexternal (i,id) -> fprintf fmt "%a%a" ident id instance i
 
 and instance fmt = function
   | [] -> ()
@@ -102,7 +139,7 @@ and instance fmt = function
 
 let rec print_term fmt = function
   | Tvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool true) -> 
@@ -123,11 +160,11 @@ let rec print_term fmt = function
   | Tderef _ -> 
       assert false
   | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
-      fprintf fmt "@[(%a %a)@]" Ident.print id print_terms tl
+      fprintf fmt "@[(%a %a)@]" ident id print_terms tl
   | Tapp (id, [a], _) when id == t_sqrt_real || id == t_int_of_real ->
-      fprintf fmt "@[(%a %a)@]" Ident.print id print_term a
+      fprintf fmt "@[(%a %a)@]" ident id print_term a
   | Tapp (id, [a], _) when id == t_real_of_int ->
-      fprintf fmt "@[(%a %a)@]" Ident.print id print_term a
+      fprintf fmt "@[(%a %a)@]" ident id print_term a
   | Tapp (id, [a; b; c], _) when id == if_then_else ->
       fprintf fmt "@[(ITE %a@ %a@ %a)@]" 
 	print_term a print_term b print_term c
@@ -141,9 +178,9 @@ let rec print_term fmt = function
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a %a)@]" (infix id) print_term a print_term b
   | Tapp (id, [], i) ->
-      fprintf fmt "%a%a" Ident.print id instance i
+      fprintf fmt "%a%a" ident id instance i
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[(%a%a %a)@]" Ident.print id instance i print_terms tl
+      fprintf fmt "@[(%a%a %a)@]" ident id instance i print_terms tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -156,7 +193,7 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "False"
   | Pvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "True ;; was well_founded@\n"
   | Papp (id, [a; b], _) when id == t_eq_bool ->
@@ -173,7 +210,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(/\\ (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[(%a%a@ %a)@]" Ident.print id instance i print_terms tl
+      fprintf fmt "@[(%a%a@ %a)@]" ident id instance i print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(=> %a@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -192,12 +229,12 @@ let rec print_predicate fmt = function
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(A. ((%a \"%a\")@ %a))@]" 
-	Ident.print id' print_pure_type t print_predicate p'
+	ident id' print_pure_type t print_predicate p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(E. ((%a \"%a\")@ %a))@]" 
-	Ident.print id' print_pure_type t print_predicate p'
+	ident id' print_pure_type t print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported with Zenon"
   | Pnamed (_, p) -> (* TODO: print name *)
@@ -222,7 +259,7 @@ let print_sequent fmt (hyps,concl) =
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(A. ((%a \"%a\")@ %a))@]" 
-	  Ident.print id print_cc_type v print_seq hyps
+	  ident id print_cc_type v print_seq hyps
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(=> %a@ %a)@]" print_predicate p print_seq hyps
   in
@@ -261,10 +298,10 @@ module Mono = struct
   let print_predicate_def_instance fmt id i (bl,p) =
     fprintf fmt "@[;; Why predicate %s@]@\n" id;
     fprintf fmt "@[<hov 2>\"%s%a\" " id instance i;
-    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " Ident.print x) bl;
+    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
     fprintf fmt "(<=> (%s%a %a)@ %a)" 
       id instance i
-      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" Ident.print x)) bl
+      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
       print_predicate p;
     List.iter (fun _ -> fprintf fmt "))") bl;
     fprintf fmt "@]@\n"
@@ -272,10 +309,10 @@ module Mono = struct
   let print_function_def_instance fmt id i (bl,t,e) =
     fprintf fmt "@[;; Why function %s@]@\n" id;
     fprintf fmt "@[<hov 2>\"%s%a\" " id instance i;
-    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " Ident.print x) bl;
+    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
     fprintf fmt "(= (%s%a %a)@ %a)" 
       id instance i
-      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" Ident.print x)) bl
+      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
       print_term e;
     List.iter (fun _ -> fprintf fmt "))@]@\n") bl;
     fprintf fmt "@]@\n"
