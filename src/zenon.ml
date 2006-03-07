@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.4 2006-03-02 15:39:18 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.5 2006-03-07 09:39:41 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -75,22 +75,21 @@ let renamings = Hashtbl.create 17
 let fresh_name = 
   let r = ref 0 in fun () -> incr r; "zenon__" ^ string_of_int !r
 
-let ident fmt id =
-  let s = Ident.string id in
+let rename s =
   if is_zenon_keyword s then
-    fprintf fmt "zenon__%s" s
-  else if not (is_zenon_ident s) then 
-    let s' = 
-      try
-	Hashtbl.find renamings s
-      with Not_found ->
-	let s' = fresh_name () in
-	Hashtbl.add renamings s s';
-	s'
-    in
-    fprintf fmt "%s" s'
-  else
-    Ident.print fmt id
+    "zenon__" ^ s
+  else if not (is_zenon_ident s) then begin
+    try
+      Hashtbl.find renamings s
+    with Not_found ->
+      let s' = fresh_name () in
+      Hashtbl.add renamings s s';
+      s'
+  end else
+    s
+
+let ident fmt id = fprintf fmt "%s" (rename (string id))
+let idents fmt s = fprintf fmt "%s" (rename s)
 
 let infix id =
   if id == t_lt then "<"
@@ -287,31 +286,31 @@ module Mono = struct
 
   let print_parameter fmt id c =
     fprintf fmt 
-      "@[;; Why parameter %s@]@\n" id;
+      "@[;; Why parameter %a@]@\n" idents id;
     fprintf fmt 
-      "@[<hov 2>;;  %s: %a@]@\n@\n" id print_cc_type c
+      "@[<hov 2>;;  %a: %a@]@\n@\n" idents id print_cc_type c
 
   let print_logic_instance fmt id i t =
-    fprintf fmt ";; Why logic %s@\n" id;
-    fprintf fmt "@[;; %s%a: %a@]@\n@\n" id instance i print_logic_type t
+    fprintf fmt ";; Why logic %a@\n" idents id;
+    fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
 
   let print_predicate_def_instance fmt id i (bl,p) =
-    fprintf fmt "@[;; Why predicate %s@]@\n" id;
-    fprintf fmt "@[<hov 2>\"%s%a\" " id instance i;
+    fprintf fmt "@[;; Why predicate %a@]@\n" idents id;
+    fprintf fmt "@[<hov 2>\"%a%a\" " idents id instance i;
     List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
-    fprintf fmt "(<=> (%s%a %a)@ %a)" 
-      id instance i
+    fprintf fmt "(<=> (%a%a %a)@ %a)" 
+      idents id instance i
       (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
       print_predicate p;
     List.iter (fun _ -> fprintf fmt "))") bl;
     fprintf fmt "@]@\n"
 
   let print_function_def_instance fmt id i (bl,t,e) =
-    fprintf fmt "@[;; Why function %s@]@\n" id;
-    fprintf fmt "@[<hov 2>\"%s%a\" " id instance i;
+    fprintf fmt "@[;; Why function %a@]@\n" idents id;
+    fprintf fmt "@[<hov 2>\"%a%a\" " idents id instance i;
     List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
-    fprintf fmt "(= (%s%a %a)@ %a)" 
-      id instance i
+    fprintf fmt "(= (%a%a %a)@ %a)" 
+      idents id instance i
       (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
       print_term e;
     List.iter (fun _ -> fprintf fmt "))@]@\n") bl;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.31 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.32 2006-03-07 09:39:41 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -37,7 +37,8 @@ type pure_type =
   | PTexternal of pure_type list * Ident.t
 
 and type_var =
-  { tag : int; mutable type_val : pure_type option }
+  { tag : int; 
+    mutable type_val : pure_type option }
 
 type instance = pure_type list
 
@@ -65,9 +66,6 @@ type predicate =
   | Piff of predicate * predicate
   | Pnot of predicate
   | Forall of is_wp * Ident.t * Ident.t * pure_type * predicate
-(*
-  | Forallb of is_wp * Ident.t * Ident.t * predicate * predicate * predicate
-*)
   | Forallb of is_wp * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
   | Pfpi of term * real_constant * real_constant
