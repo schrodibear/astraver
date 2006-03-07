@@ -20,32 +20,12 @@ open Ident
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Vcg
 open Format
 open Cc
 open Pp
-(*
-type elem = 
-  | Parameter of string * cc_type
-  | Obligation of obligation
-  | Logic of string * logic_type Env.scheme
-  | Axiom of string * predicate Env.scheme
-  | Predicate of string * predicate_def Env.scheme
 
-let elem_q = Queue.create ()
-
-let reset () = Queue.clear elem_q
-
-let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
-
-let push_logic id t = Queue.add (Logic (id, t)) elem_q
-
-let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
-
-let push_predicate id p = Queue.add (Predicate (id, p)) elem_q
-
-let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
-*)
 (*s Pretty print *)
 
 let rec print_pure_type fmt = function
@@ -367,23 +347,16 @@ end)
 
 let reset = Gen.reset
 
-let push_obligations = 
-  List.iter (fun ((_,l,_) as o) -> Gen.add_elem (Oblig, l) (Obligation o))
+let push_decl = function
+  | Dgoal ((_,l,_) as o) -> Gen.add_elem (Oblig, l) (Obligation o)
+  | Dlogic (_, id, t) -> Gen.add_elem (Lg, id) (Logic (id, t))
+  | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
+  | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))
+  | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, id) (Function (id, p))
+  | Dtype _ -> assert false (*TODO*)
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))
-
-let push_logic id t = 
-  Gen.add_elem (Lg, id) (Logic (id, t))
-
-let push_axiom id p =
-  Gen.add_elem (Ax, id) (Axiom (id, p))
-
-let push_predicate id p =
-  Gen.add_elem (Pr, id) (Predicate (id, p))
-
-let push_function id p =
-  Gen.add_elem (Fun, id) (Function (id, p))
 
 let _ = 
   Gen.add_regexp 

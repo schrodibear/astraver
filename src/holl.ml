@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.31 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.32 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -22,6 +22,7 @@ open Ident
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Vcg
 open Format
 open Cc
@@ -40,13 +41,13 @@ let reset () = Queue.clear elem_q
 
 let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
 
-let push_logic id t = Queue.add (Logic (id, t)) elem_q
-
-let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
-
-let push_predicate id p = Queue.add (Predicate (id, p)) elem_q
-
-let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
+let push_decl = function
+  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
+  | Dgoal o -> Queue.add (Obligation o) elem_q
+  | Dfunction_def _ -> () (*TODO*)
+  | Dtype _ -> () (*TODO*)
 
 (*s Pretty print *)
 

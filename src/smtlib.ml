@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.7 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.8 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -23,6 +23,7 @@ open Options
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Cc
 open Format
 open Pp
@@ -36,11 +37,13 @@ let oblig = Queue.create ()
 
 let reset () = Queue.clear theory; Queue.clear oblig
 
-let push_obligations = List.iter (fun o -> Queue.add o oblig)
-
-let push_axiom id p = Queue.add (Axiom (id, p)) theory
-
-let push_predicate id p = Queue.add (Predicate (id, p)) theory
+let push_decl = function
+  | Dgoal o -> Queue.add o oblig
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
+  | Dfunction_def _ -> assert false (*TODO*)
+  | Dtype _ -> assert false (*TODO*)
+  | Dlogic _ -> assert false (*TODO*)
 
 let defpred = Hashtbl.create 97
 

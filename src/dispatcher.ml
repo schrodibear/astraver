@@ -14,29 +14,18 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.5 2006-03-01 14:52:12 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.6 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 open Options
 open Vcg
 open Logic
+open Logic_decl
 
-type elem =
-  | Logic of string * logic_type Env.scheme
-  | Axiom of string * predicate Env.scheme
-  | PredicateDef of string * predicate_def Env.scheme
-  | FunctionDef of string * function_def Env.scheme
+type elem = Logic_decl.t
 
 let stack = ref []
 
 let add_elem e = stack := e :: !stack
-
-let push_logic id t = add_elem (Logic (id,t))
-
-let push_axiom id p = add_elem (Axiom (id, p))
-
-let push_predicate id p = add_elem (PredicateDef (id, p))
-
-let push_function id p = add_elem (FunctionDef (id, p))
 
 let oblig = Queue.create ()
 let oblig_h = Hashtbl.create 97
@@ -46,7 +35,9 @@ let add_oblig ((_,id,_) as o) =
   Queue.add so oblig;
   Hashtbl.add oblig_h id so
 
-let push_obligations = List.iter add_oblig
+let push_decl = function
+  | Dgoal o -> add_oblig o
+  | d -> add_elem d
 
 let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
@@ -54,29 +45,19 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 type prover = Simplify | Harvey | Cvcl | Zenon
 
-let push_elem p e = match p, e with
-  | Simplify, Logic _ -> ()
-  | Simplify, Axiom (id, a) -> Simplify.push_axiom id a
-  | Simplify, PredicateDef (id, p) -> Simplify.push_predicate id p
-  | Simplify, FunctionDef (id, f) -> Simplify.push_function id f
-  | Harvey, Logic _ -> ()
-  | Harvey, Axiom (id, a) -> Harvey.push_axiom id a
-  | Harvey, PredicateDef (id, p) -> Harvey.push_predicate id p
-  | Harvey, FunctionDef (id, f) -> Harvey.push_function id f
-  | Cvcl, Logic (id, d) -> Cvcl.push_logic id d
-  | Cvcl, Axiom (id, a) -> Cvcl.push_axiom id a
-  | Cvcl, PredicateDef (id, p) -> Cvcl.push_predicate id p
-  | Cvcl, FunctionDef (id, f) -> Cvcl.push_function id f
-  | Zenon, Logic (id, d) -> Zenon.push_logic id d
-  | Zenon, Axiom (id, a) -> Zenon.push_axiom id a
-  | Zenon, PredicateDef (id, p) -> Zenon.push_predicate id p
-  | Zenon, FunctionDef (id, f) -> Zenon.push_function id f
+let push_elem p e = 
+  assert (match e with Dgoal _ -> false | _ -> true);
+  match p with
+  | Simplify -> Simplify.push_decl e
+  | Harvey -> Harvey.push_decl e
+  | Cvcl -> Cvcl.push_decl e
+  | Zenon -> Zenon.push_decl e
 
 let push_obligation p o = match p with
-  | Simplify -> Simplify.push_obligations [o]
-  | Harvey -> Harvey.push_obligations [o]
-  | Cvcl -> Cvcl.push_obligations [o]
-  | Zenon -> Zenon.push_obligations [o]
+  | Simplify -> Simplify.push_decl (Dgoal o)
+  | Harvey -> Harvey.push_decl (Dgoal o)
+  | Cvcl -> Cvcl.push_decl (Dgoal o)
+  | Zenon -> Zenon.push_decl (Dgoal o)
 
 (* output_file is a CRITICAL SECTION *)
 let output_file p (elems,o) =

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.91 2006-03-01 14:46:58 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.92 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -29,6 +29,7 @@ open Report
 open Misc
 open Util
 open Logic
+open Logic_decl
 
 (*s Prover dependent functions. *)
 
@@ -52,30 +53,31 @@ let reset () =
   | Gappa -> Gappa.reset ()
   | Dispatcher -> ()
 
-let push_obligations ol = match prover () with
-  | Pvs -> Pvs.push_obligations ol
-  | Coq _ -> Coq.push_obligations ol
-  | HolLight -> Holl.push_obligations ol
-  | Mizar -> Mizar.push_obligations ol
-  | Harvey -> Harvey.push_obligations ol
-  | Simplify -> Simplify.push_obligations ol
-  | Zenon -> Zenon.push_obligations ol
-  | CVCLite -> Cvcl.push_obligations ol
-  | SmtLib -> Smtlib.push_obligations ol
-  | Isabelle -> Isabelle.push_obligations ol
-  | Hol4 -> Hol4.push_obligations ol
-  | Gappa -> Gappa.push_obligations ol
-  | Dispatcher -> Dispatcher.push_obligations ol
+let push_decl d = match prover () with
+  | Pvs -> Pvs.push_decl d
+  | Coq _ -> Coq.push_decl d
+  | HolLight -> Holl.push_decl d
+  | Mizar -> Mizar.push_decl d
+  | Harvey -> Harvey.push_decl d
+  | Simplify -> Simplify.push_decl d
+  | Zenon -> Zenon.push_decl d
+  | CVCLite -> Cvcl.push_decl d
+  | SmtLib -> Smtlib.push_decl d
+  | Isabelle -> Isabelle.push_decl d
+  | Hol4 -> Hol4.push_decl d
+  | Gappa -> Gappa.push_decl d
+  | Dispatcher -> Dispatcher.push_decl d
+
+let push_obligations = List.iter (fun o -> push_decl (Dgoal o)) 
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
 let push_validation id tt v = 
   if valid && prover_is_coq then Coq.push_validation id tt v
 
-let is_pure_type_scheme s = 
-  match s.scheme_type with
-    | Set -> assert false
-    | TypeV v -> is_pure_type_v v
+let is_pure_type_scheme s = match s.scheme_type with
+  | Set -> assert false
+  | TypeV v -> is_pure_type_v v
 
 let push_parameter id v tv = match prover () with
   | Pvs -> if is_pure_type_scheme v then Pvs.push_parameter id tv
@@ -87,67 +89,6 @@ let push_parameter id v tv = match prover () with
   | Harvey | Simplify | Zenon | SmtLib | Gappa -> () (* nothing to do? *)
   | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
   | Dispatcher -> ()
-
-let push_logic id t = match prover () with
-  | Pvs -> Pvs.push_logic id t
-  | Coq _ -> Coq.push_logic id t
-  | HolLight -> Holl.push_logic id t
-  | Isabelle -> Isabelle.push_logic id t
-  | Hol4 -> Hol4.push_logic id t
-  | Mizar -> Mizar.push_logic id t
-  | Harvey | Simplify | SmtLib | Gappa -> () (* nothing to do? *)
-  | Zenon -> Zenon.push_logic id t
-  | CVCLite -> Cvcl.push_logic id t
-  | Dispatcher -> Dispatcher.push_logic id t
-
-let push_axiom id p = match prover () with
-  | Pvs -> Pvs.push_axiom id p
-  | Coq _ -> Coq.push_axiom id p
-  | HolLight -> Holl.push_axiom id p
-  | Isabelle -> Isabelle.push_axiom id p
-  | Hol4 -> Hol4.push_axiom id p
-  | Mizar -> Mizar.push_axiom id p
-  | Harvey -> Harvey.push_axiom id p
-  | Simplify -> Simplify.push_axiom id p
-  | Zenon -> Zenon.push_axiom id p
-  | CVCLite -> Cvcl.push_axiom id p
-  | SmtLib -> Smtlib.push_axiom id p
-  | Gappa -> ()
-  | Dispatcher -> Dispatcher.push_axiom id p
-
-let push_predicate id p = match prover () with
-  | Pvs -> Pvs.push_predicate id p
-  | Coq _ -> Coq.push_predicate id p
-  | HolLight -> Holl.push_predicate id p
-  | Isabelle -> Isabelle.push_predicate id p
-  | Hol4 -> Hol4.push_predicate id p
-  | Mizar -> Mizar.push_predicate id p
-  | Harvey -> Harvey.push_predicate id p
-  | Simplify -> Simplify.push_predicate id p
-  | CVCLite -> Cvcl.push_predicate id p
-  | Zenon -> Zenon.push_predicate id p
-  | SmtLib -> Smtlib.push_predicate id p
-  | Gappa -> ()
-  | Dispatcher -> Dispatcher.push_predicate id p
-
-let push_function id p = match prover () with
-  | Pvs -> Pvs.push_function id p
-  | Coq _ -> Coq.push_function id p
-  | HolLight -> () (* Holl.push_function id p *)
-  | Isabelle -> Isabelle.push_function id p
-  | Hol4 -> () (* Hol4.push_function id p *)
-  | Mizar -> () (* Mizar.push_function id p *)
-  | Harvey -> Harvey.push_function id p
-  | Simplify -> Simplify.push_function id p
-  | CVCLite -> Cvcl.push_function id p
-  | Zenon -> Zenon.push_function id p
-  | SmtLib -> () (* Smtlib.push_function id p *)
-  | Gappa -> ()
-  | Dispatcher -> Dispatcher.push_function id p
-
-let push_type id vl = match prover () with
-  | Coq _ -> Coq.push_type id vl
-  | _ -> () (*TODO*)
 
 let output fwe = 
   if wol then begin
@@ -289,7 +230,7 @@ let interp_decl ?(prelude=false) d =
 	let t = Ltyping.logic_type t in
 	let t = generalize_logic_type t in
 	add_global_logic id t;
-	if not ext then push_logic (Ident.string id) t
+	if not ext then push_decl (Dlogic (loc, Ident.string id, t))
       in
       List.iter add ids
   | Predicate_def (loc, id, pl, p) ->
@@ -304,7 +245,7 @@ let interp_decl ?(prelude=false) d =
       in
       let p = Ltyping.predicate lab env lenv' p in
       let p = generalize_predicate_def (pl,p) in
-      push_predicate (Ident.string id) p
+      push_decl (Dpredicate_def (loc, Ident.string id, p))
   | Function_def (loc, id, pl, ty, e) ->
       if is_logic id lenv then raise_located loc (Clash id);
       let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
@@ -319,19 +260,20 @@ let interp_decl ?(prelude=false) d =
       let e,ty' = Ltyping.term lab env lenv' e in
       if ty <> ty' then Ltyping.expected_type loc (PureType ty);
       let f = generalize_function_def (pl,ty,e) in
-      push_function (Ident.string id) f
+      push_decl (Dfunction_def (loc, Ident.string id, f))
   | Axiom (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
       let p = generalize_predicate p in
-      push_axiom (Ident.string id) p
+      push_decl (Daxiom (loc, Ident.string id, p))
   | Goal (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
       if not (Vset.is_empty (generalize_predicate p).scheme_vars) then 
 	raise_located loc PolymorphicGoal;
-      push_obligations [(loc, Ident.string id, ([], p))]
+      push_decl (Dgoal (loc, Ident.string id, ([], p)))
   | TypeDecl (loc, ext, vl, id) ->
       Env.add_type loc vl id;
-      if not ext then push_type (Ident.string id) vl
+      let vl = List.map Ident.string vl in
+      if not ext then push_decl (Dtype (loc, vl, Ident.string id))
 
 (*s Prelude *)
 

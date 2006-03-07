@@ -14,13 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.mli,v 1.1 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: gappa.mli,v 1.2 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 open Cc
 
 val reset : unit -> unit
 
-val push_obligations : obligation list -> unit
+val push_decl : Logic_decl.t -> unit
 
 val output_file : string -> unit
 

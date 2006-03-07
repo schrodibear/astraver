@@ -14,17 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.mli,v 1.2 2006-01-18 15:13:03 filliatr Exp $ i*)
+(*i $Id: smtlib.mli,v 1.3 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 open Cc
 
 val reset : unit -> unit
 
-val push_obligations : obligation list -> unit
-
-val push_axiom : string -> Logic.predicate Env.scheme -> unit
-
-val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
+val push_decl : Logic_decl.t -> unit
 
 val output_file : string -> unit
 

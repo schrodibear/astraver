@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.ml,v 1.3 2006-02-08 07:16:00 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.4 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -216,7 +216,9 @@ let process_obligation (_, _, (ctx, concl)) =
   in
   process ctx concl
 
-let push_obligations = List.iter process_obligation
+let push_decl = function
+  | Logic_decl.Dgoal o -> process_obligation o
+  | _ -> ()
 
 let print_real fmt = function
   | (i,f,"") -> fprintf fmt "%s.%s" i f

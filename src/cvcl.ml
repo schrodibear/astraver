@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.33 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.34 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -23,6 +23,7 @@ open Options
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Vcg
 open Format
 open Cc
@@ -43,15 +44,13 @@ let queue = Queue.create ()
 
 let push_parameter id v = Queue.add (Parameter (id, v)) queue
 
-let push_logic id t = Queue.add (Logic (id, t)) queue
-
-let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
-
-let push_axiom id p = Queue.add (Axiom (id, p)) queue
-
-let push_predicate id p = Queue.add (PredicateDef (id, p)) queue
-
-let push_function id p = Queue.add (FunctionDef (id, p)) queue
+let push_decl = function
+  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) queue
+  | Dgoal o -> Queue.add (Oblig o) queue
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
+  | Dpredicate_def (_, id, p) -> Queue.add (PredicateDef (id, p)) queue
+  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
+  | Dtype _ -> () (*TODO*)
 
 (*s Pretty print *)
 

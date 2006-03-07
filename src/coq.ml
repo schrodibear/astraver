@@ -14,10 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.141 2006-01-19 14:17:03 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.142 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 open Options
 open Logic
+open Logic_decl
 open Types
 open Vcg
 open Cc
@@ -857,26 +858,17 @@ end)
 
 let reset = Gen.reset
 
-let push_obligations = 
-  List.iter (fun ((_,l,_) as o) -> Gen.add_elem (Oblig, l) (Obligation o))
+let push_decl = function
+  | Dgoal ((_,l,_) as o) -> Gen.add_elem (Oblig, l) (Obligation o)
+  | Dlogic (_, id, t) -> Gen.add_elem (Lg, id) (Logic (id, t))
+  | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
+  | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))
+  | Dfunction_def (_, id, f) -> Gen.add_elem (Fun, id) (Function (id, f))
+  | Dtype (_, vl, id) -> Gen.add_elem (Ty, id) (AbstractType (id, vl))
+
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))
-
-let push_logic id t = 
-  Gen.add_elem (Lg, id) (Logic (id, t))
-
-let push_axiom id p =
-  Gen.add_elem (Ax, id) (Axiom (id, p))
-
-let push_predicate id p =
-  Gen.add_elem (Pr, id) (Predicate (id, p))
-
-let push_function id f =
-  Gen.add_elem (Fun, id) (Function (id, f))
-
-let push_type id vl =
-  Gen.add_elem (Ty, id) (AbstractType (id, vl))
 
 let _ = 
   Gen.add_regexp 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.11 2005-11-03 14:11:37 filliatr Exp $ i*)
+(*i $Id: regen.mli,v 1.12 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -42,7 +42,7 @@ type element =
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | Function of string * function_def Env.scheme
-  | AbstractType of string * Ident.t list
+  | AbstractType of string * string list
 
 module type S = sig
  

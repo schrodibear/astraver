@@ -14,15 +14,21 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.mli,v 1.18 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.1 2006-03-07 11:12:50 filliatr Exp $ i*)
 
-open Vcg
-open Cc
+(*s Logical declarations. 
+    This is what is sent to the various provers (see main.ml and the provers
+    interfaces). *)
 
-val reset : unit -> unit
+open Logic
 
-val push_decl : Logic_decl.t -> unit
+type loc = Loc.position
+type 'a scheme = 'a Env.scheme
 
-val push_parameter : string -> Cc.cc_type -> unit
-
-val output_file : string -> unit
+type t = 
+  | Dtype of loc * string list * string
+  | Dlogic of loc * string * logic_type scheme
+  | Dpredicate_def of loc * string * predicate_def scheme
+  | Dfunction_def of loc * string * function_def scheme
+  | Daxiom of loc * string * predicate scheme
+  | Dgoal of Cc.obligation

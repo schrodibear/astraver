@@ -14,24 +14,18 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.mli,v 1.21 2006-03-01 10:23:04 dogguy Exp $ i*)
+(*i $Id: coq.mli,v 1.22 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 open Cc
 open Vcg
 
 val reset : unit -> unit
 
-val push_obligations : obligation list -> unit
+val push_decl : Logic_decl.t -> unit
 
 val push_validation : string -> cc_type -> validation -> unit
 
 val push_parameter : string -> cc_type -> unit
-
-val push_logic : string -> Logic.logic_type Env.scheme -> unit
-val push_axiom : string -> Logic.predicate Env.scheme -> unit
-val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
-val push_function : string -> Logic.function_def Env.scheme -> unit
-val push_type : string -> Ident.t list -> unit
 
 val output_file : string -> unit
 

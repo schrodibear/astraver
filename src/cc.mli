@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.14 2006-01-18 15:13:02 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.15 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -89,4 +89,5 @@ type sequent = context_element list * predicate
 type obligation = Loc.position * string * sequent
 
 type validation = proof cc_term
+
 

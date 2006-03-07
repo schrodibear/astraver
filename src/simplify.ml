@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.41 2006-02-27 13:26:13 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.42 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -23,6 +23,7 @@ open Options
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Cc
 open Format
 open Pp
@@ -37,13 +38,13 @@ let queue = Queue.create ()
 
 let reset () = Queue.clear queue
 
-let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
-
-let push_axiom id p = Queue.add (Axiom (id, p)) queue
-
-let push_predicate id p = Queue.add (Predicate (id, p)) queue
-
-let push_function id p = Queue.add (FunctionDef (id, p)) queue
+let push_decl = function
+  | Dgoal o -> Queue.add (Oblig o) queue
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) queue
+  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
+  | Dtype _ -> ()
+  | Dlogic _ -> ()
 
 let defpred = Hashtbl.create 97
 

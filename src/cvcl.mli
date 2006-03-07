@@ -14,19 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.mli,v 1.4 2006-01-18 15:13:02 filliatr Exp $ i*)
+(*i $Id: cvcl.mli,v 1.5 2006-03-07 11:12:49 filliatr Exp $ i*)
 
 open Cc
 
 val reset : unit -> unit
 
-val push_logic : string -> Logic.logic_type Env.scheme -> unit
-val push_axiom : string -> Logic.predicate Env.scheme -> unit
-val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
-val push_function : string -> Logic.function_def Env.scheme -> unit
+val push_decl : Logic_decl.t -> unit
 
 val push_parameter : string -> Cc.cc_type -> unit
-val push_obligations : obligation list -> unit
 
 val output_file : string -> unit
 

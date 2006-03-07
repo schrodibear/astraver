@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.8 2006-02-08 07:16:00 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.9 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -22,6 +22,7 @@ open Ident
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Vcg
 open Format
 open Cc
@@ -40,13 +41,13 @@ let reset () = Queue.clear elem_q
 
 let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
 
-let push_logic id t = Queue.add (Logic (id, t)) elem_q
-
-let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
-
-let push_predicate id p = Queue.add (Predicate (id, p)) elem_q
-
-let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
+let push_decl = function
+  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
+  | Dfunction_def _ -> assert false (*TODO*)
+  | Dgoal o -> Queue.add (Obligation o) elem_q
+  | Dtype _ -> assert false (*TODO*)
 
 (*s Pretty print *)
 

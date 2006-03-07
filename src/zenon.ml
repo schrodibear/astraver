@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.5 2006-03-07 09:39:41 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.6 2006-03-07 11:12:50 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -23,6 +23,7 @@ open Options
 open Misc
 open Error
 open Logic
+open Logic_decl
 open Vcg
 open Format
 open Cc
@@ -32,7 +33,6 @@ open Env
 open Report
 
 type elem = 
-  | Parameter of string * cc_type
   | Logic of string * logic_type Env.scheme
   | Oblig of obligation 
   | Axiom of string * predicate Env.scheme
@@ -41,17 +41,13 @@ type elem =
 
 let queue = Queue.create ()
 
-let push_parameter id v = Queue.add (Parameter (id, v)) queue
-
-let push_logic id t = Queue.add (Logic (id, t)) queue
-
-let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
-
-let push_axiom id p = Queue.add (Axiom (id, p)) queue
-
-let push_predicate id p = Queue.add (PredicateDef (id, p)) queue
-
-let push_function id p = Queue.add (FunctionDef (id, p)) queue
+let push_decl = function
+  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) queue
+  | Dgoal o -> Queue.add (Oblig o) queue
+  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
+  | Dpredicate_def (_, id, p) -> Queue.add (PredicateDef (id, p)) queue
+  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
+  | Dtype _ -> ()
 
 (*s Pretty print *)
 
@@ -334,7 +330,6 @@ let print_elem fmt = function
   | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
   | FunctionDef (id, p) -> Output.print_function_def fmt id p
   | Logic (id, t) -> Output.print_logic fmt id t
-  | Parameter (id, t) -> Output.print_parameter fmt id t
 
 let prelude_done = ref false
 let prelude fmt = 

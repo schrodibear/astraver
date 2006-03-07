@@ -212,7 +212,8 @@ src/annot.cmi: src/types.cmi src/logic.cmi src/env.cmi src/ast.cmi
 src/ast.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/cc.cmi 
 src/cc.cmi: src/logic.cmi src/loc.cmi src/ident.cmi 
-src/coq.cmi: src/vcg.cmi src/logic.cmi src/ident.cmi src/env.cmi src/cc.cmi 
+src/coq.cmi: src/vcg.cmi src/logic_decl.cmi src/logic.cmi src/ident.cmi \
+    src/cc.cmi 
 src/cvcl.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
 src/dispatcher.cmi: src/logic.cmi src/env.cmi src/cc.cmi tools/calldp.cmi 
 src/effect.cmi: src/logic.cmi src/ident.cmi 
@@ -226,6 +227,7 @@ src/hol4.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi
 src/holl.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
 src/isabelle.cmi: src/logic.cmi src/env.cmi src/cc.cmi 
 src/lexer.cmi: src/ptree.cmi src/parser.cmi 
+src/logic_decl.cmi: src/loc.cmi src/env.cmi 
 src/logic.cmi: src/ident.cmi 
 src/ltyping.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/env.cmi src/effect.cmi src/ast.cmi 
