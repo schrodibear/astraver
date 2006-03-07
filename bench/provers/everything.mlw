@@ -1,0 +1,25 @@
+
+(* Fichier regroupant tous les aspects du langage logique de Why,
+   pour tester les sorties vers les différents proveurs *)
+
+(* propositional logic *)
+
+logic A,B,C : prop
+
+goal prop_1 : A -> A
+
+(* first-order logic *)
+
+type t
+
+logic c : t
+logic f : t -> t
+logic p : t -> prop
+
+goal fol_1 : (forall x:t. p(x)) -> p(c)
+
+(* arithmetic *)
+
+goal arith_1 : forall x:int. x=0 -> x+1=1
+
+
