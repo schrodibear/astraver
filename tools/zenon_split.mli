@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify_split.mli,v 1.3 2006-03-07 15:12:01 filliatr Exp $ i*)
+(*i $Id: zenon_split.mli,v 1.1 2006-03-07 15:12:01 filliatr Exp $ i*)
 
-(* Split a Simplify input file into several files, one for each query.
+(* Split a Zenon input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)
 
 val iter : (string -> unit) -> string -> unit

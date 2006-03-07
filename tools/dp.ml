@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.15 2006-03-01 14:52:12 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.16 2006-03-07 15:12:01 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -79,7 +79,7 @@ let split f =
     Simplify_split.iter call_simplify f 
   else 
   if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then
-    call_zenon f (* TODO: Zenon_split *)
+    Zenon_split.iter call_zenon f (* TODO: Zenon_split *)
   else 
   if Filename.check_suffix f ".rv" then
     call_harvey f 

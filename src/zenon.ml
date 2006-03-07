@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.6 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.7 2006-03-07 15:12:01 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -88,29 +88,29 @@ let ident fmt id = fprintf fmt "%s" (rename (string id))
 let idents fmt s = fprintf fmt "%s" (rename s)
 
 let infix id =
-  if id == t_lt then "<"
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
+  if id == t_lt then "why__lt"
+  else if id == t_le then "why__le"
+  else if id == t_gt then "why__gt"
+  else if id == t_ge then "why__ge"
   (* int cmp *)
-  else if id == t_lt_int then "<"
-  else if id == t_le_int then "<="
-  else if id == t_gt_int then ">"
-  else if id == t_ge_int then ">="
+  else if id == t_lt_int then "why__lt_int"
+  else if id == t_le_int then "why__le_int"
+  else if id == t_gt_int then "why__gt_int"
+  else if id == t_ge_int then "why__ge_int"
   (* int ops *)
-  else if id == t_add_int then "+"
-  else if id == t_sub_int then "-"
-  else if id == t_mul_int then "*"
-  else if id == t_div_int then "/"
+  else if id == t_add_int then "why__add_int"
+  else if id == t_sub_int then "why__sub_int"
+  else if id == t_mul_int then "why__mul_int"
+  else if id == t_div_int then "why__div_int"
   (* real ops *)
-  else if id == t_add_real then "+"
-  else if id == t_sub_real then "-"
-  else if id == t_mul_real then "*"
-  else if id == t_div_real then "/"
-  else if id == t_lt_real then "<"
-  else if id == t_le_real then "<="
-  else if id == t_gt_real then ">"
-  else if id == t_ge_real then ">="
+  else if id == t_add_real then "why__add_real"
+  else if id == t_sub_real then "why__sub_real"
+  else if id == t_mul_real then "why__mul_real"
+  else if id == t_div_real then "why__div_real"
+  else if id == t_lt_real then "why__lt_real"
+  else if id == t_le_real then "why__le_real"
+  else if id == t_gt_real then "why__gt_real"
+  else if id == t_ge_real then "why__ge_real"
   else assert false
 
 let external_type = function
@@ -136,7 +136,7 @@ let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" ident id
   | Tconst (ConstInt n) -> 
-      fprintf fmt "%s" n
+      fprintf fmt "why__int_const_%s" n
   | Tconst (ConstBool true) -> 
       fprintf fmt "true"
   | Tconst (ConstBool false) -> 
@@ -147,11 +147,11 @@ let rec print_term fmt = function
       let f = if f = "0" then "" else f in
       let e = (if e = "" then 0 else int_of_string e) - String.length f in
       if e = 0 then
-	fprintf fmt "%s%s" i f
+	fprintf fmt "why__real_const_%s%s" i f
       else if e > 0 then
-	fprintf fmt "(* %s%s 1%s)" i f (String.make e '0')
+	fprintf fmt "(why__mul_real why__real_const_%s%s why__real_const_1%s)" i f (String.make e '0')
       else
-	fprintf fmt "(/ %s%s 1%s)" i f (String.make (-e) '0')
+	fprintf fmt "(why_div_real why__real_const_%s%s why__real_const_1%s)" i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
   | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
@@ -168,8 +168,10 @@ let rec print_term fmt = function
   | Tapp (id, [a; b; c], _) when id == store ->
       fprintf fmt "@[(update@ %a@ %a@ %a)@]" 
 	print_term a print_term b print_term c
-  | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
-      fprintf fmt "@[(- 0 %a)@]" print_term t
+  | Tapp (id, [t], _) when id == t_neg_int ->
+      fprintf fmt "@[(why__sub_int why__int_const_0 %a)@]" print_term t
+  | Tapp (id, [t], _) when id == t_neg_real ->
+      fprintf fmt "@[(why__sub_real why__real_const_0 %a)@]" print_term t
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a %a)@]" (infix id) print_term a print_term b
   | Tapp (id, [], i) ->
@@ -299,7 +301,7 @@ module Mono = struct
       (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
       print_predicate p;
     List.iter (fun _ -> fprintf fmt "))") bl;
-    fprintf fmt "@]@\n"
+    fprintf fmt "@]@\n@\n"
 
   let print_function_def_instance fmt id i (bl,t,e) =
     fprintf fmt "@[;; Why function %a@]@\n" idents id;
@@ -337,6 +339,15 @@ let prelude fmt =
     prelude_done := true;
     fprintf fmt "
 ;; Zenon prelude
+
+\"why__prelude_1\" ; x+0=x
+   (A. ((x \"INT\") (= (why__add_int x why__int_const_0) x)))
+\"why__prelude_2\" ; 0+x=x
+   (A. ((x \"INT\") (= (why__add_int why__int_const_0 x) x)))
+\"why__prelude_3\" ; x+y=y+x
+   (A. ((x \"INT\") (A. ((y \"INT\") 
+     (= (why__add_int x y) (why__add_int y x))))))
+
 "
   end
 

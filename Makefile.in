@@ -67,7 +67,8 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    intf/hilight.ml intf/tagsplit.ml tools/why2html.ml \
-	    src/float_lexer.ml tools/cvcl_split.ml tools/simplify_split.ml
+	    src/float_lexer.ml tools/cvcl_split.ml tools/simplify_split.ml \
+	    tools/zenon_split.ml
 
 # main targets
 ##############
@@ -177,7 +178,7 @@ bin/why2html.opt: tools/why2html.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo \
-        tools/calldp.cmo tools/dp.cmo
+        tools/zenon_split.cmo tools/calldp.cmo tools/dp.cmo
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/dp.byte: $(DPCMO)

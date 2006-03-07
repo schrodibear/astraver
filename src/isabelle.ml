@@ -301,6 +301,19 @@ let reprint_function fmt id p =
 
 let print_function fmt id p = reprint_function fmt id p
 
+let type_parameters fmt l = 
+  let one fmt x = fprintf fmt "'%s " x in
+  match l with
+    | [] -> ()
+    | [x] -> one fmt x
+    | l -> fprintf fmt "(%a) " (print_list comma one) l
+
+let reprint_type fmt id vl =
+  fprintf fmt "@[<hov 2>(*Why type*) typedecl %a%s;@\n"
+    type_parameters vl id
+
+let print_type fmt id vl = reprint_type fmt id vl
+
 let theory_name = ref ""
 
 open Regen
@@ -316,7 +329,7 @@ struct
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
       | Function (id, f) -> print_function fmt id f
-      | AbstractType _ -> assert false(*TODO*)
+      | AbstractType (id, vl) -> print_type fmt id vl
     end;
     fprintf fmt "@\n"
       
@@ -327,7 +340,7 @@ struct
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
     | Function (id, f) -> reprint_function fmt id f
-    | AbstractType _ -> assert false (*TODO*)
+    | AbstractType (id, vl) -> reprint_type fmt id vl
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -353,7 +366,7 @@ let push_decl = function
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
   | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))
   | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, id) (Function (id, p))
-  | Dtype _ -> assert false (*TODO*)
+  | Dtype (_, vl, id) -> Gen.add_elem (Ty, id) (AbstractType (id, vl))
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))

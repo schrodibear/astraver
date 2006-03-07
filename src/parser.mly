@@ -309,6 +309,8 @@ exn_condition:
 logic_type:
 | list0_primitive_type_sep_comma ARROW PROP
    { PPredicate $1 }
+| PROP
+   { PPredicate [] }
 | list0_primitive_type_sep_comma ARROW primitive_type
    { PFunction ($1, $3) }
 | primitive_type
