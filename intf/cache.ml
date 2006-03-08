@@ -26,7 +26,11 @@ let source_file = ref "/tmp/gwhy.cache"
 let debug = ref true
 
 let exists p o = 
-  try Queue.iter (fun pr -> if p = pr then raise Exit) (Hashtbl.find !cache o); false
+  try 
+    Queue.iter 
+      (fun pr -> if p = pr then raise Exit) 
+      (Hashtbl.find !cache o); 
+    false
   with Exit -> true
 
 let change_debug () = 

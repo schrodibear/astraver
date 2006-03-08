@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.15 2006-03-08 10:39:00 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.16 2006-03-08 14:45:34 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -176,20 +176,6 @@ module Model = struct
 	   provers
       );
     model
-
-  let reset_icons () = 
-    if Cache.is_empty () then 
-      print_endline ("Cache is empty :'(")
-    else print_endline ("Cache is not empty :D");
-    flush stdout;
-    Hashtbl.iter 
-      (fun s (_,_,seq) -> 
-	 if in_cache (Astprinter.clean seq) then
-	   print_endline ("yes "^s) 
-	 else print_endline ("no "^s) 
-      ) 
-      obligs;
-    flush stdout;
       
 end
 
@@ -231,6 +217,11 @@ let set_timeout v = timeout := v
 let default_prover = ref Model.simplify
 let set_prover p = default_prover := p
 let print_prover p = p.Model.pr_name
+let get_prover s = 
+  let rec next p = match p with
+    | [] -> assert false;
+    | p' :: r -> if p'.Model.pr_name = s then p'.Model.pr_icon else next r
+  in next Model.provers
 
 let prove fct = 
   ignore (Thread.create fct ())
@@ -269,10 +260,9 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o =
     let r = 
       Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p.Model.pr_id
     in
-    let get_result r =
-      match r with 
-	| Calldp.Valid ->  
-	    Cache.add seq (print_prover p);
+    let get_result = function
+	| Calldp.Valid -> 
+	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
 	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `NO; 0
 	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
@@ -434,7 +424,6 @@ let main () =
 
   (* left tree of proof obligations *)
   let model = Model.create_model () in
-  Model.reset_icons ();
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
     ~width:350 ~packing:hp#add1 () in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
@@ -657,14 +646,46 @@ let main () =
    *)
   buf1#place_cursor ~where:buf1#start_iter;
 
+  (* Setting special icons for prooved obligation in cache *)
+  let _ = 
+    load_cache "/tmp/gwhy.cache";
+    if not (Cache.is_empty ()) then 
+      Hashtbl.iter 
+	(fun s (_,o,seq) -> 
+	   let cleaned = Astprinter.clean seq in
+	   if in_cache cleaned then
+	     begin 
+	       let row = Hashtbl.find Model.orows o in
+	       try 
+		 Queue.iter 
+		   (fun p -> 
+		      let zecol = get_prover p in
+		      model#set ~row ~column:zecol `HARDDISK
+		   )
+		   (Cache.find cleaned)
+	       with Not_found -> 
+		 begin 
+		   print_endline ("sequent not found for "^o);
+		   flush stdout
+		 end
+	     end
+	   else begin
+	     (*print_endline oblig;
+	     flush stdout*)
+	   end
+	) 
+	Model.obligs;
+  in
+
+  (* initialisation for check menus *)
   List.iter
     (fun (p,cb) -> if p == !default_prover then ignore (cb ())) provers_cb;
 
   w#add_accel_group accel_group;
   w#show ()
 
+(* Main *)
 let _ = 
   ignore (GtkMain.Main.init ());
-  load_cache "/tmp/gwhy.cache";
   main () ;
   GtkThread.main ()
