@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.12 2006-03-08 08:26:14 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.13 2006-03-08 09:08:59 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -77,23 +77,10 @@ let decomp_name =
     if Str.string_match r s 0 then
       Str.matched_group 1 s, Str.matched_group 2 s
     else
-      s, "1"
+      "goals", s
 
 module Model = struct
 
-  open StdLabels
-
-  let f =
-    [ "1"; "2"; "3" ]
-
-  let g =
-    [ "1"; "2" ]
-
-  let toplevel =
-    [ "f", f;
-      "g", g;
-    ]
-      
   open Gobject.Data
       
   let cols = new GTree.column_list
@@ -121,6 +108,11 @@ module Model = struct
   let frows = Hashtbl.create 17 
   let find_fct = Hashtbl.find frows
 
+  (* function -> list of its obligations *)
+  let fobligs = Hashtbl.create 97
+  let find_fobligs = Hashtbl.find fobligs
+  let iter_fobligs fct f = Queue.iter f (Hashtbl.find fobligs fct)
+
   (* functions *)
   let fq = Queue.create ()
     
@@ -137,6 +129,7 @@ module Model = struct
 	     let row = model#append () in
 	     Queue.add f fq;
 	     Hashtbl.add frows f row;
+	     Hashtbl.add fobligs f (Queue.create ());
 	     model#set ~row ~column:name f;
 	     model#set ~row ~column:fullname f;
 	     model#set ~row ~column:total 0;
@@ -147,6 +140,7 @@ module Model = struct
 	 in
 	 let row_n = model#append ~parent:row () in
 	 Hashtbl.add orows s row_n;
+	 Queue.add row_n (Hashtbl.find fobligs f);
 	 model#set ~row:row_n ~column:name n;
 	 model#set ~row:row_n ~column:fullname s;
 	 model#set ~row:row_n ~column:result 0;
@@ -258,25 +252,10 @@ let get_statistics (model:GTree.tree_store) row =
   "["^simplify^"|"^harvey^"|"^zenon^"|"^cvcl^"]"
   
 
-(* 
- * Returns children of a function 
- *)
-let children f n = 
-  let q = Queue.create () in
-  for i = 1 to n do
-    let child = Hashtbl.find Model.obligs (f^"_po_"^(string_of_int i)) in
-    Queue.add child q
-  done;
-  q
-
 let get_all_results f (model:GTree.tree_store) = 
-  let row = Model.find_fct f in
-  let n = model#iter_n_children (Some(row)) in
-  let mychildren = children f n in
+  let mychildren = Model.find_fobligs f in
   Queue.fold
-    (fun nb oblig -> 
-       let (_, oblig, _) = oblig in
-       let row =  Hashtbl.find Model.orows oblig in
+    (fun nb row -> 
        let result = model#get ~row ~column:Model.result in
        result + nb)
     0
@@ -328,13 +307,17 @@ let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () =
     model#set ~row ~column:Model.total 0;
     model#set ~row ~column:column_p `GO_DOWN;
     let n = model#iter_n_children (Some(row)) in
-    let mychildren = children f n in
-    let succeed = Queue.fold
-      (fun nb oblig -> 
-	 let result = run_prover_child p column_p view model oblig in
-	 result + nb)
-      0
-      mychildren in
+    let mychildren = Model.find_fobligs f in
+    let succeed = 
+      Queue.fold
+	(fun nb row -> 
+	   let s = model#get ~row ~column:Model.fullname in
+	   let oblig = Model.find_oblig s in
+	   let result = run_prover_child p column_p view model oblig in
+	   result + nb)
+	0
+	mychildren 
+    in
     if succeed = n then 
       begin 
 	model#set ~row ~column:column_p `APPLY;
@@ -350,9 +333,11 @@ let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () =
     update_statistics p model row succeed;
     let statistics = get_statistics model row 
     and total = string_of_int (get_all_results f model) 
-    and children = (string_of_int n) in
-    !flash_info ("Function \""^f^"\" statistics : "^statistics^" / "^(string_of_int n));
-    model#set ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
+    and children = string_of_int n in
+    !flash_info 
+      ("Function \""^f^"\" statistics : "^statistics^" / "^(string_of_int n));
+    model#set 
+      ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
   with Not_found -> 
     begin 
       print_endline ("     [...] Error : function \""^f^"\" not found !"); 
@@ -373,7 +358,7 @@ let main () =
 	    ~width:window_width ~height:window_height ~title:"Why viewer" ()
   in
   w#misc#modify_font !general_font;
-  let accel_group = GtkData.AccelGroup.create () in
+  (* let accel_group = GtkData.AccelGroup.create () in *)
   let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
   let vbox = GPack.vbox ~homogeneous:false ~packing:w#add () in
 
@@ -383,20 +368,25 @@ let main () =
   let accel_group = factory#accel_group in
   let file_menu = factory#add_submenu "File" in
   let file_factory = new GMenu.factory file_menu ~accel_group in
-  let refresh_m = file_factory#add_image_item ~stock:`REFRESH ~label:"Refresh"
-    ~key:GdkKeysyms._R () in
+  let _ = 
+    file_factory#add_image_item ~stock:`REFRESH ~label:"Refresh"
+      ~key:GdkKeysyms._R () 
+  in
   let _ = file_factory#add_separator () in
-  let quit_m = file_factory#add_image_item ~key:GdkKeysyms._Q ~label:"Quit" 
-    ~callback:(fun () -> exit 0) () in
-
+  let _ = 
+    file_factory#add_image_item ~key:GdkKeysyms._Q ~label:"Quit" 
+      ~callback:(fun () -> exit 0) () 
+  in
   (* configuration menu *)
   let configuration_menu = factory#add_submenu "Configuration" in
-  let configuration_factory = new GMenu.factory configuration_menu ~accel_group in
-  let customize_colors_m =
+  let configuration_factory = 
+    new GMenu.factory configuration_menu ~accel_group 
+  in
+  let _ =
     configuration_factory#add_image_item ~label:"Customize colors" 
       ~stock:`SELECT_COLOR
       ~callback:(fun () -> !flash_info "Not implemented") () in
-  let customize_fonts_m = 
+  let _ = 
     configuration_factory#add_image_item ~label:"Customize fonts" 
       ~stock:`SELECT_FONT
       ~callback:(fun () -> !flash_info "Not implemented") () in
@@ -404,7 +394,6 @@ let main () =
   (* menus for povers *)
   let simplify_m = configuration_factory#add_check_item ~active:true
     ~callback:(fun b -> default_prover := Dispatcher.Simplify) "Simplify" in
-  let provers = Some(simplify_m#as_item) in
   let harvey_m = configuration_factory#add_check_item ~active:false
     ~callback:(fun b -> default_prover := Dispatcher.Harvey) "Harvey" in
   let zenon_m = configuration_factory#add_check_item ~active:false
@@ -456,9 +445,10 @@ let main () =
       | Dispatcher.Zenon -> cvcl_callback ()
   in 
   let _ = configuration_factory#add_separator ()  in
-  let next_prover_m = configuration_factory#add_image_item ~key:GdkKeysyms._N 
-    ~label:"Switch to next prover" ~callback:switch_next_prover () in
-  
+  let _ = 
+    configuration_factory#add_image_item ~key:GdkKeysyms._N 
+      ~label:"Switch to next prover" ~callback:switch_next_prover () 
+  in
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
 
@@ -471,10 +461,14 @@ let main () =
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_simplify,vc_harvey,vc_zenon,vc_cvcl = View.add_columns ~view ~model in
-  let expand_all_m = configuration_factory#add_image_item ~key:GdkKeysyms._E 
-    ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () in
-  let collapse_all_m = configuration_factory#add_image_item ~key:GdkKeysyms._C 
-    ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () in
+  let _ = 
+    configuration_factory#add_image_item ~key:GdkKeysyms._E 
+      ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () 
+  in
+  let _ = 
+    configuration_factory#add_image_item ~key:GdkKeysyms._C 
+      ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () 
+  in
   let _ = 
     Hashtbl.iter 
       (fun f row -> 
@@ -484,9 +478,13 @@ let main () =
   (* proof menu *)
   let proof_menu = factory#add_submenu "Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 
-  let all_m = proof_factory#add_image_item ~label:"Prove all obligations" 
-    ~key:GdkKeysyms._A 
-    ~callback:(fun () -> prove (run_prover_all !default_prover (get_prover !default_prover) view model)) () in
+  let _ = 
+    proof_factory#add_image_item ~label:"Prove all obligations" 
+      ~key:GdkKeysyms._A 
+      ~callback:(fun () -> 
+		   prove (run_prover_all !default_prover 
+			    (get_prover !default_prover) view model)) () 
+  in
   let fct_callback () = 
     List.iter 
       (fun p -> 
@@ -497,8 +495,10 @@ let main () =
 	 else let name,_ = decomp_name s in 
 	 prove (run_prover_fct !default_prover (get_prover !default_prover) view model name))
       view#selection#get_selected_rows in
-  let fct_m = proof_factory#add_image_item ~label:"Prove selected function" 
-    ~key:GdkKeysyms._F ~callback:fct_callback () in
+  let _ = 
+    proof_factory#add_image_item ~label:"Prove selected function" 
+      ~key:GdkKeysyms._F ~callback:fct_callback () 
+  in
   let oblig_callback () =
     List.iter 
       (fun p -> 
@@ -510,9 +510,10 @@ let main () =
 	 else 
 	   prove (run_prover_oblig !default_prover (get_prover !default_prover) view model s))
       view#selection#get_selected_rows in
-  let oblig_m = proof_factory#add_image_item ~label:"Prove selected obligation" 
-    ~key:GdkKeysyms._O ~callback:oblig_callback () in
-
+  let _ = 
+    proof_factory#add_image_item ~label:"Prove selected obligation" 
+      ~key:GdkKeysyms._O ~callback:oblig_callback () 
+  in
 
   (* run Simplify on all proof obligations *)
   (* ???? why can't I make a function for this callback? *)
@@ -591,7 +592,6 @@ let main () =
   let _ = tv2#misc#modify_font !lower_view_general_font in
   let _ = tv2#set_editable false in
   let _ = tv2#set_wrap_mode `WORD in
-  let tb2 = tv2#buffer in
 
   (* upper text view: obligation *)
   let buf1 = GText.buffer () in 
