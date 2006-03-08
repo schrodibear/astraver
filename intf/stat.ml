@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.13 2006-03-08 09:08:59 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.14 2006-03-08 10:28:01 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -81,6 +81,13 @@ let decomp_name =
 
 module Model = struct
 
+  type prover = {
+    pr_name : string;
+    pr_result : string GTree.column;
+    pr_icon : GtkStock.id GTree.column;
+    pr_id : Dispatcher.prover;
+  }
+
   open Gobject.Data
       
   let cols = new GTree.column_list
@@ -88,14 +95,34 @@ module Model = struct
   let fullname = cols#add string
   let total = cols#add int
   let result = cols#add int
-  let simplify_result = cols#add string
-  let harvey_result = cols#add string
-  let zenon_result = cols#add string
-  let cvcl_result = cols#add string
-  let simplify = cols#add GtkStock.conv
-  let harvey = cols#add GtkStock.conv
-  let zenon = cols#add GtkStock.conv
-  let cvcl = cols#add GtkStock.conv
+
+  let simplify = {
+    pr_name = "Simplify";
+    pr_result = cols#add string;
+    pr_icon = cols#add GtkStock.conv;
+    pr_id = Dispatcher.Simplify;
+  }
+  let zenon = {
+    pr_name = "Zenon";
+    pr_result = cols#add string;
+    pr_icon = cols#add GtkStock.conv;
+    pr_id = Dispatcher.Zenon;
+  }
+  let harvey = {
+    pr_name = "haRVey";
+    pr_result = cols#add string;
+    pr_icon = cols#add GtkStock.conv;
+    pr_id = Dispatcher.Harvey;
+  }
+  let cvcl = {
+    pr_name = "CVCL";
+    pr_result = cols#add string;
+    pr_icon = cols#add GtkStock.conv;
+    pr_id = Dispatcher.Cvcl;
+  }
+
+  let provers = [simplify; zenon; harvey; cvcl]
+  let () = assert (List.length provers > 0)
 
   (* all obligations *)
   let obligs = Hashtbl.create 97
@@ -133,9 +160,9 @@ module Model = struct
 	     model#set ~row ~column:name f;
 	     model#set ~row ~column:fullname f;
 	     model#set ~row ~column:total 0;
-	     model#set ~row ~column:simplify_result "0";
-	     model#set ~row ~column:harvey_result "0";
-	     model#set ~row ~column:cvcl_result "0";
+	     List.iter 
+	       (fun p -> model#set ~row ~column:p.pr_result "0") 
+	       provers;
 	     row
 	 in
 	 let row_n = model#append ~parent:row () in
@@ -144,10 +171,9 @@ module Model = struct
 	 model#set ~row:row_n ~column:name n;
 	 model#set ~row:row_n ~column:fullname s;
 	 model#set ~row:row_n ~column:result 0;
-	 model#set ~row:row_n ~column:simplify `REMOVE;
-	 model#set ~row:row_n ~column:harvey `REMOVE;
-	 model#set ~row:row_n ~column:zenon `REMOVE;
-	 model#set ~row:row_n ~column:cvcl `REMOVE;
+	 List.iter
+	   (fun p -> model#set ~row:row_n ~column:p.pr_icon `REMOVE)
+	   provers
       );
     model
 
@@ -170,7 +196,8 @@ end
 module View = struct
 
   open GtkTree
-    
+  open Model
+
   let add_columns ~(view : GTree.view) ~model =
     let renderer = GTree.cell_renderer_text [`XALIGN 0.] in
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
@@ -179,33 +206,16 @@ module View = struct
 	 ~renderer:(renderer, ["text", Model.name])
 	 ())
     in
-    let vc_simplify = 
-      GTree.view_column ~title:"Simplify" 
-	~renderer:(icon_renderer, ["stock_id", Model.simplify]) ()
-    in
-    vc_simplify#set_clickable true;
-    let _ = view#append_column vc_simplify in
-    let vc_harvey = 
-      GTree.view_column ~title:"haRVey" 
-	~renderer:(icon_renderer, ["stock_id", Model.harvey]) ()
-    in
-    vc_harvey#set_clickable true;
-    let _ = view#append_column vc_harvey in
-    let vc_zenon = 
-      GTree.view_column ~title:"Zenon" 
-	~renderer:(icon_renderer, ["stock_id", Model.zenon]) ()
-    in
-    vc_zenon#set_clickable true;
-    let _ = view#append_column vc_zenon in
-
-    let vc_cvcl = 
-      GTree.view_column ~title:"CVC Lite" 
-	~renderer:(icon_renderer, ["stock_id", Model.cvcl]) ()
-    in
-    vc_cvcl#set_clickable true;
-    let _ = view#append_column vc_cvcl in
-
-    vc_simplify, vc_harvey, vc_zenon, vc_cvcl
+    List.map
+      (fun p ->
+	 let vc = 
+	   GTree.view_column ~title:p.pr_name 
+	     ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
+	 in
+	 vc#set_clickable true;
+	 let _ = view#append_column vc in
+	 p, vc)
+      provers
 
 end
 
@@ -218,38 +228,24 @@ let set_timeout v = timeout := v
 (*
  * Default prover
  *)
-let default_prover = ref Dispatcher.Simplify
+let default_prover = ref Model.simplify
 let set_prover p = default_prover := p
-let print_prover p = match p with 
-  | Dispatcher.Simplify -> "Simplify"
-  | Dispatcher.Harvey -> "Harvey"
-  | Dispatcher.Cvcl -> "Cvc Lite"
-  | Dispatcher.Zenon -> "Zenon"
-
-let get_prover = function
-  | Dispatcher.Simplify -> Model.simplify 
-  | Dispatcher.Harvey -> Model.harvey
-  | Dispatcher.Cvcl -> Model.cvcl
-  | Dispatcher.Zenon -> Model.zenon
-
+let print_prover p = p.Model.pr_name
 
 let prove fct = 
   ignore (Thread.create fct ())
 
 let update_statistics p (model:GTree.tree_store) row result = 
-  let stat = (string_of_int result) in
-  match p with
-    | Dispatcher.Simplify -> model#set ~row ~column:Model.simplify_result stat
-    | Dispatcher.Harvey -> model#set ~row ~column:Model.harvey_result stat
-    | Dispatcher.Cvcl -> model#set ~row ~column:Model.cvcl_result stat
-    | Dispatcher.Zenon -> model#set ~row ~column:Model.zenon_result stat
+  let stat = string_of_int result in
+  model#set ~row ~column:p.Model.pr_result stat
 
 let get_statistics (model:GTree.tree_store) row = 
-  let simplify = model#get ~row ~column:Model.simplify_result
-  and harvey = model#get ~row ~column:Model.harvey_result 
-  and cvcl = model#get ~row ~column:Model.cvcl_result 
-  and zenon = model#get ~row ~column:Model.zenon_result in
-  "["^simplify^"|"^harvey^"|"^zenon^"|"^cvcl^"]"
+  let sl = 
+    List.map 
+      (fun p -> model#get ~row ~column:p.Model.pr_result) 
+      Model.provers 
+  in
+  "[" ^ String.concat "|" sl ^ "]"
   
 
 let get_all_results f (model:GTree.tree_store) = 
@@ -264,12 +260,15 @@ let get_all_results f (model:GTree.tree_store) =
 (* 
  * run a prover on an obligation and update the model 
  *)
-let run_prover_child p column_p (view:GTree.view) (model:GTree.tree_store) o = 
+let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o = 
+  let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
   try 
     let row = Hashtbl.find Model.orows oblig in
     model#set ~row ~column:column_p `EXECUTE;
-    let r = Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p in
+    let r = 
+      Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p.Model.pr_id
+    in
     let get_result r =
       match r with 
 	| Calldp.Valid ->  
@@ -288,10 +287,10 @@ let run_prover_child p column_p (view:GTree.view) (model:GTree.tree_store) o =
     0
   end
 
-let run_prover_oblig p column_p (view:GTree.view) (model:GTree.tree_store) s () = 
+let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s () = 
   try 
     let oblig = Hashtbl.find Model.obligs s in
-    let _ = run_prover_child p column_p view model oblig in
+    let _ = run_prover_child p view model oblig in
     ()
   with Not_found -> begin
     print_endline ("     [...] Error : obligation \""^s^"\" not found !"); 
@@ -301,7 +300,8 @@ let run_prover_oblig p column_p (view:GTree.view) (model:GTree.tree_store) s () 
 (*
  * run a prover on a function and update the model 
  *)
-let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () = 
+let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f () = 
+  let column_p = p.Model.pr_icon in
   try
     let row = Model.find_fct f in
     model#set ~row ~column:Model.total 0;
@@ -313,7 +313,7 @@ let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () =
 	(fun nb row -> 
 	   let s = model#get ~row ~column:Model.fullname in
 	   let oblig = Model.find_oblig s in
-	   let result = run_prover_child p column_p view model oblig in
+	   let result = run_prover_child p view model oblig in
 	   result + nb)
 	0
 	mychildren 
@@ -347,9 +347,9 @@ let run_prover_fct p column_p (view:GTree.view) (model:GTree.tree_store) f () =
 (*
  * run a prover on all obligations and update the model 
  *)
-let run_prover_all p column_p (view:GTree.view) (model:GTree.tree_store) () =
+let run_prover_all p (view:GTree.view) (model:GTree.tree_store) () =
   Queue.iter 
-    (fun f -> run_prover_fct p column_p view model f ()) 
+    (fun f -> run_prover_fct p view model f ()) 
     Model.fq
 
 let main () = 
@@ -392,57 +392,37 @@ let main () =
       ~callback:(fun () -> !flash_info "Not implemented") () in
   let _ = configuration_factory#add_separator ()  in
   (* menus for povers *)
-  let simplify_m = configuration_factory#add_check_item ~active:true
-    ~callback:(fun b -> default_prover := Dispatcher.Simplify) "Simplify" in
-  let harvey_m = configuration_factory#add_check_item ~active:false
-    ~callback:(fun b -> default_prover := Dispatcher.Harvey) "Harvey" in
-  let zenon_m = configuration_factory#add_check_item ~active:false
-    ~callback:(fun b -> default_prover := Dispatcher.Zenon) "Zenon" in
-  let cvcl_m = configuration_factory#add_check_item ~active:false 
-    ~callback:(fun b -> default_prover := Dispatcher.Cvcl) "CVC Lite" in
-  let simplify_callback () = 
-    simplify_m#set_active true;
-    harvey_m#set_active false;
-    zenon_m#set_active false;
-    cvcl_m#set_active false;
-    set_prover Dispatcher.Simplify;
-    !flash_info "Simplify selected for default mode" in
-  let harvey_callback () =
-    simplify_m#set_active false;
-    harvey_m#set_active true;
-    zenon_m#set_active false;
-    cvcl_m#set_active false;
-    set_prover Dispatcher.Harvey; 
-    !flash_info "Harvey selected for default mode" in
-  let zenon_callback () =
-    simplify_m#set_active false;
-    harvey_m#set_active false;
-    zenon_m#set_active true;
-    cvcl_m#set_active false;
-    set_prover Dispatcher.Zenon; 
-    !flash_info "Zenon selected for default mode" in
-  let cvcl_callback () = 
-    simplify_m#set_active false;
-    harvey_m#set_active false;
-    zenon_m#set_active false;
-    cvcl_m#set_active true;
-    set_prover Dispatcher.Cvcl; 
-    !flash_info "Cvc Lite selected for default mode" in
-  let _ = simplify_m#event#connect#button_release 
-    ~callback:(fun ev -> simplify_callback (); true) in
-  let _ = harvey_m#event#connect#button_release 
-    ~callback:(fun ev -> harvey_callback (); true) in
-  let _ = zenon_m#event#connect#button_release 
-    ~callback:(fun ev -> zenon_callback (); true) in
-  let _ = cvcl_m#event#connect#button_release 
-    ~callback:(fun ev -> cvcl_callback (); true) in
-
+  let provers_m =
+    List.map
+      (fun p -> 
+	 p, 
+	 configuration_factory#add_check_item ~active:true
+	   ~callback:(fun b -> default_prover := p) p.Model.pr_name)
+      Model.provers
+  in
+  let provers_cb = 
+    List.map
+      (fun (p,m) ->
+	 let callback ev =
+	   List.iter (fun (p',m') -> m'#set_active (p == p')) provers_m;
+	   set_prover p;
+	   !flash_info (p.Model.pr_name ^ " selected for default mode");
+	   true
+	 in
+	 m#event#connect#button_release ~callback;
+	 p, callback)
+    provers_m
+  in
   let switch_next_prover () = 
-    match !default_prover with
-      | Dispatcher.Simplify -> harvey_callback ()
-      | Dispatcher.Harvey -> zenon_callback ()
-      | Dispatcher.Cvcl -> simplify_callback ()
-      | Dispatcher.Zenon -> cvcl_callback ()
+    let current_prover = !default_prover in
+    let p1,cb1 = List.hd provers_cb in
+    let rec find_next = function
+      | [] -> assert false
+      | [p',_] -> assert (current_prover == p'); cb1 ()
+      | (p',_) :: (_,cb'') :: _ when current_prover == p' -> cb'' ()
+      | _ :: r -> find_next r
+    in
+    ignore (find_next provers_cb)
   in 
   let _ = configuration_factory#add_separator ()  in
   let _ = 
@@ -460,7 +440,7 @@ let main () =
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
-  let vc_simplify,vc_harvey,vc_zenon,vc_cvcl = View.add_columns ~view ~model in
+  let vc_provers = View.add_columns ~view ~model in
   let _ = 
     configuration_factory#add_image_item ~key:GdkKeysyms._E 
       ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () 
@@ -482,8 +462,7 @@ let main () =
     proof_factory#add_image_item ~label:"Prove all obligations" 
       ~key:GdkKeysyms._A 
       ~callback:(fun () -> 
-		   prove (run_prover_all !default_prover 
-			    (get_prover !default_prover) view model)) () 
+		   prove (run_prover_all !default_prover view model)) () 
   in
   let fct_callback () = 
     List.iter 
@@ -491,9 +470,9 @@ let main () =
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
-	   prove (run_prover_fct !default_prover (get_prover !default_prover) view model s)
+	   prove (run_prover_fct !default_prover view model s)
 	 else let name,_ = decomp_name s in 
-	 prove (run_prover_fct !default_prover (get_prover !default_prover) view model name))
+	 prove (run_prover_fct !default_prover view model name))
       view#selection#get_selected_rows in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected function" 
@@ -506,37 +485,25 @@ let main () =
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
 	   let name = s^"_po_1" in
-	   prove (run_prover_oblig !default_prover (get_prover !default_prover) view model name)
+	   prove (run_prover_oblig !default_prover view model name)
 	 else 
-	   prove (run_prover_oblig !default_prover (get_prover !default_prover) view model s))
+	   prove (run_prover_oblig !default_prover view model s))
       view#selection#get_selected_rows in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected obligation" 
       ~key:GdkKeysyms._O ~callback:oblig_callback () 
   in
 
-  (* run Simplify on all proof obligations *)
-  (* ???? why can't I make a function for this callback? *)
-  let _ = vc_simplify#connect#clicked 
-    (fun () -> 
-       prove (run_prover_all Dispatcher.Simplify Model.simplify view model)) 
-  in
-  
-  (* run Harvey on all proof obligations *)
-  let _ = vc_harvey#connect#clicked
-    (fun () -> 
-       prove (run_prover_all Dispatcher.Harvey Model.harvey view model))
-  in
-  (* run Zenon on all proof obligations *)
-  let _ = vc_zenon#connect#clicked
-    (fun () -> 
-       prove (run_prover_all Dispatcher.Zenon Model.zenon view model))
-  in
-  (* run CVC Lite on all proof obligations *)
-  let _ = vc_cvcl#connect#clicked
-    (fun () -> 
-       prove (run_prover_all Dispatcher.Cvcl Model.cvcl view model))
-  in
+  (* run provers on all proof obligations *)
+  List.iter
+    (fun (p,vc) -> 
+       let _ =
+	 vc#connect#clicked 
+	   ~callback:(fun () -> 
+	      prove (run_prover_all p view model))
+       in
+       ())
+    vc_provers;
 
   let _ = view#misc#connect#realize ~callback:view#expand_all in
 
@@ -667,11 +634,10 @@ let main () =
 		   (fun p -> 
 		      let row = model#get_iter p in
 		      let s = model#get ~row ~column:Model.fullname in
-		      let column = get_prover !default_prover in
 		      if model#iter_has_child row then
-			prove (run_prover_fct !default_prover column view model s)
+			prove (run_prover_fct !default_prover view model s)
 		      else 
-			prove (run_prover_oblig !default_prover column view model s)
+			prove (run_prover_oblig !default_prover view model s)
 		   )
 		   view#selection#get_selected_rows;
 	       false
@@ -689,6 +655,9 @@ let main () =
    * Startup configuration 
    *)
   buf1#place_cursor ~where:buf1#start_iter;
+
+  List.iter
+    (fun (p,cb) -> if p == !default_prover then ignore (cb ())) provers_cb;
 
   w#add_accel_group accel_group;
   w#show ()

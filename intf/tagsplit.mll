@@ -50,14 +50,16 @@
 
 }
 
+let tag = ['a'-'z' 'A'-'Z' '0'-'9' '_']+
+
 rule split tbuf = parse
-  | "<" (([^ '<' ' ']+) as t) ">" 
+  | "<" (tag as t) ">" 
       {
 	output tbuf ();
 	current_tags := t :: !current_tags; 
 	split tbuf lexbuf 
       }
-  | "</" (([^ '<' ' ']+) as t) ">" 
+  | "</" (tag as t) ">" 
       { 
 	output tbuf ();
 	match !current_tags with

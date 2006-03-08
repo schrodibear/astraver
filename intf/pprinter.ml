@@ -47,7 +47,6 @@ let read_file = function
   | Some {file=f; line=l; sp=_; ep=_} ->
       try
 	let in_channel = open_in f in
-	let content = ref "" in
 	try
           let lexbuf = Lexing.from_channel in_channel in
           while true do

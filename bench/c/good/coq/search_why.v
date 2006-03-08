@@ -398,3 +398,110 @@ Proof.
 intuition.
 Save.
 
+(*Why logic*) Definition A : Prop.
+Admitted.
+
+(*Why logic*) Definition B : Prop.
+Admitted.
+
+(*Why logic*) Definition C : Prop.
+Admitted.
+
+(* Why obligation from file "why/search.why", line 91, characters 1-21: *)
+(*Why goal*) Lemma prop_1 : 
+  (A -> A).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/search.why", line 93, characters 1-35: *)
+(*Why goal*) Lemma prop_2 : 
+  (A \/ B -> B \/ A).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(*Why type*) Definition t: Set.
+Admitted.
+
+(*Why logic*) Definition c : t.
+Admitted.
+
+(*Why logic*) Definition f : t -> t.
+Admitted.
+
+(*Why logic*) Definition p : t -> Prop.
+Admitted.
+
+(*Why logic*) Definition q : t -> Prop.
+Admitted.
+
+(* Why obligation from file "why/search.why", line 104, characters 1-40: *)
+(*Why goal*) Lemma fol_1 : 
+  ((forall (x:t), (p x)) -> (p c)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/search.why", line 106, characters 1-57: *)
+(*Why goal*) Lemma fol_2 : 
+  ((forall (x:t), ((p x) <-> (q x))) -> ((p c) -> (q c))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/search.why", line 111, characters 1-44: *)
+(*Why goal*) Lemma eq_1 : 
+  ((p c) -> (forall (x:t), (x = c -> (p x)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/search.why", line 116, characters 1-42: *)
+(*Why goal*) Lemma arith_1 : 
+  (forall (x:Z), (x = 0 -> (x + 1) = 1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/search.why", line 118, characters 1-61: *)
+(*Why goal*) Lemma arith_2 : 
+  (forall (x:Z), (0 <= x /\ x <= 1 -> x = 0 \/ x = 1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/search.why", line 120, characters 1-45: *)
+(*Why goal*) Lemma arith_3 : 
+  (forall (x:Z), (x < 3 -> x <= 2)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(*Why type*) Definition list: Set.
+Admitted.
+
+(*Why logic*) Definition nbocc : t -> list -> Z.
+Admitted.
+
+(*Why predicate*) Definition equiv  (l1:list) (l2:list)
+  := (forall (x:t), (nbocc x l1) = (nbocc x l2)).
+
+(* Why obligation from file "why/search.why", line 131, characters 1-89: *)
+(*Why goal*) Lemma equiv_trans : 
+  (forall (l1:list),
+   (forall (l2:list),
+    (forall (l3:list), ((equiv l1 l2) -> ((equiv l2 l3) -> (equiv l1 l3)))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
