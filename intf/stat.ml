@@ -14,13 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.11 2006-03-01 10:31:52 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.12 2006-03-08 08:26:14 dogguy Exp $ i*)
 
 open Printf
 open Options
 open Ast
 open Env
-(*open Cache*)
+open Cache
 open Pprinter
 
 let _ = gui := true
@@ -103,9 +103,11 @@ module Model = struct
   let result = cols#add int
   let simplify_result = cols#add string
   let harvey_result = cols#add string
+  let zenon_result = cols#add string
   let cvcl_result = cols#add string
   let simplify = cols#add GtkStock.conv
   let harvey = cols#add GtkStock.conv
+  let zenon = cols#add GtkStock.conv
   let cvcl = cols#add GtkStock.conv
 
   (* all obligations *)
@@ -150,9 +152,24 @@ module Model = struct
 	 model#set ~row:row_n ~column:result 0;
 	 model#set ~row:row_n ~column:simplify `REMOVE;
 	 model#set ~row:row_n ~column:harvey `REMOVE;
+	 model#set ~row:row_n ~column:zenon `REMOVE;
 	 model#set ~row:row_n ~column:cvcl `REMOVE;
       );
     model
+
+  let reset_icons () = 
+    if Cache.is_empty () then 
+      print_endline ("Cache is empty :'(")
+    else print_endline ("Cache is not empty :D");
+    flush stdout;
+    Hashtbl.iter 
+      (fun s (_,_,seq) -> 
+	 if in_cache (Astprinter.clean seq) then
+	   print_endline ("yes "^s) 
+	 else print_endline ("no "^s) 
+      ) 
+      obligs;
+    flush stdout;
       
 end
 
@@ -180,6 +197,12 @@ module View = struct
     in
     vc_harvey#set_clickable true;
     let _ = view#append_column vc_harvey in
+    let vc_zenon = 
+      GTree.view_column ~title:"Zenon" 
+	~renderer:(icon_renderer, ["stock_id", Model.zenon]) ()
+    in
+    vc_zenon#set_clickable true;
+    let _ = view#append_column vc_zenon in
 
     let vc_cvcl = 
       GTree.view_column ~title:"CVC Lite" 
@@ -188,7 +211,7 @@ module View = struct
     vc_cvcl#set_clickable true;
     let _ = view#append_column vc_cvcl in
 
-    vc_simplify, vc_harvey, vc_cvcl
+    vc_simplify, vc_harvey, vc_zenon, vc_cvcl
 
 end
 
@@ -207,10 +230,14 @@ let print_prover p = match p with
   | Dispatcher.Simplify -> "Simplify"
   | Dispatcher.Harvey -> "Harvey"
   | Dispatcher.Cvcl -> "Cvc Lite"
+  | Dispatcher.Zenon -> "Zenon"
+
 let get_prover = function
   | Dispatcher.Simplify -> Model.simplify 
   | Dispatcher.Harvey -> Model.harvey
   | Dispatcher.Cvcl -> Model.cvcl
+  | Dispatcher.Zenon -> Model.zenon
+
 
 let prove fct = 
   ignore (Thread.create fct ())
@@ -221,12 +248,14 @@ let update_statistics p (model:GTree.tree_store) row result =
     | Dispatcher.Simplify -> model#set ~row ~column:Model.simplify_result stat
     | Dispatcher.Harvey -> model#set ~row ~column:Model.harvey_result stat
     | Dispatcher.Cvcl -> model#set ~row ~column:Model.cvcl_result stat
+    | Dispatcher.Zenon -> model#set ~row ~column:Model.zenon_result stat
 
 let get_statistics (model:GTree.tree_store) row = 
   let simplify = model#get ~row ~column:Model.simplify_result
   and harvey = model#get ~row ~column:Model.harvey_result 
-  and cvcl = model#get ~row ~column:Model.cvcl_result in
-  "["^simplify^"|"^harvey^"|"^cvcl^"]"
+  and cvcl = model#get ~row ~column:Model.cvcl_result 
+  and zenon = model#get ~row ~column:Model.zenon_result in
+  "["^simplify^"|"^harvey^"|"^zenon^"|"^cvcl^"]"
   
 
 (* 
@@ -257,14 +286,16 @@ let get_all_results f (model:GTree.tree_store) =
  * run a prover on an obligation and update the model 
  *)
 let run_prover_child p column_p (view:GTree.view) (model:GTree.tree_store) o = 
-  let (_, oblig, _) = o in
+  let (_, oblig, seq) = o in
   try 
     let row = Hashtbl.find Model.orows oblig in
     model#set ~row ~column:column_p `EXECUTE;
     let r = Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p in
     let get_result r =
       match r with 
-	| Calldp.Valid -> model#set ~row ~column:column_p `YES ; 1
+	| Calldp.Valid ->  
+	    Cache.add seq (print_prover p);
+	    model#set ~row ~column:column_p `YES ; 1
 	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `NO; 0
 	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
 	| _ -> model#set ~row ~column:column_p `STOP; 0 in
@@ -376,23 +407,35 @@ let main () =
   let provers = Some(simplify_m#as_item) in
   let harvey_m = configuration_factory#add_check_item ~active:false
     ~callback:(fun b -> default_prover := Dispatcher.Harvey) "Harvey" in
+  let zenon_m = configuration_factory#add_check_item ~active:false
+    ~callback:(fun b -> default_prover := Dispatcher.Zenon) "Zenon" in
   let cvcl_m = configuration_factory#add_check_item ~active:false 
     ~callback:(fun b -> default_prover := Dispatcher.Cvcl) "CVC Lite" in
   let simplify_callback () = 
     simplify_m#set_active true;
     harvey_m#set_active false;
+    zenon_m#set_active false;
     cvcl_m#set_active false;
     set_prover Dispatcher.Simplify;
     !flash_info "Simplify selected for default mode" in
   let harvey_callback () =
     simplify_m#set_active false;
     harvey_m#set_active true;
+    zenon_m#set_active false;
     cvcl_m#set_active false;
     set_prover Dispatcher.Harvey; 
     !flash_info "Harvey selected for default mode" in
+  let zenon_callback () =
+    simplify_m#set_active false;
+    harvey_m#set_active false;
+    zenon_m#set_active true;
+    cvcl_m#set_active false;
+    set_prover Dispatcher.Zenon; 
+    !flash_info "Zenon selected for default mode" in
   let cvcl_callback () = 
     simplify_m#set_active false;
     harvey_m#set_active false;
+    zenon_m#set_active false;
     cvcl_m#set_active true;
     set_prover Dispatcher.Cvcl; 
     !flash_info "Cvc Lite selected for default mode" in
@@ -400,14 +443,17 @@ let main () =
     ~callback:(fun ev -> simplify_callback (); true) in
   let _ = harvey_m#event#connect#button_release 
     ~callback:(fun ev -> harvey_callback (); true) in
+  let _ = zenon_m#event#connect#button_release 
+    ~callback:(fun ev -> zenon_callback (); true) in
   let _ = cvcl_m#event#connect#button_release 
     ~callback:(fun ev -> cvcl_callback (); true) in
 
   let switch_next_prover () = 
     match !default_prover with
       | Dispatcher.Simplify -> harvey_callback ()
-      | Dispatcher.Harvey -> cvcl_callback ()
+      | Dispatcher.Harvey -> zenon_callback ()
       | Dispatcher.Cvcl -> simplify_callback ()
+      | Dispatcher.Zenon -> cvcl_callback ()
   in 
   let _ = configuration_factory#add_separator ()  in
   let next_prover_m = configuration_factory#add_image_item ~key:GdkKeysyms._N 
@@ -418,12 +464,13 @@ let main () =
 
   (* left tree of proof obligations *)
   let model = Model.create_model () in
+  Model.reset_icons ();
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
     ~width:350 ~packing:hp#add1 () in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
-  let vc_simplify,vc_harvey,vc_cvcl = View.add_columns ~view ~model in
+  let vc_simplify,vc_harvey,vc_zenon,vc_cvcl = View.add_columns ~view ~model in
   let expand_all_m = configuration_factory#add_image_item ~key:GdkKeysyms._E 
     ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () in
   let collapse_all_m = configuration_factory#add_image_item ~key:GdkKeysyms._C 
@@ -478,6 +525,11 @@ let main () =
   let _ = vc_harvey#connect#clicked
     (fun () -> 
        prove (run_prover_all Dispatcher.Harvey Model.harvey view model))
+  in
+  (* run Zenon on all proof obligations *)
+  let _ = vc_zenon#connect#clicked
+    (fun () -> 
+       prove (run_prover_all Dispatcher.Zenon Model.zenon view model))
   in
   (* run CVC Lite on all proof obligations *)
   let _ = vc_cvcl#connect#clicked
@@ -643,5 +695,6 @@ let main () =
 
 let _ = 
   ignore (GtkMain.Main.init ());
+  load_cache "/tmp/gwhy.cache";
   main () ;
   GtkThread.main ()

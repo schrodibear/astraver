@@ -158,7 +158,7 @@ bin/why-viewer.byte: $(WVCMO)
 
 # graphical interface
 GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tagsplit.cmo intf/astprinter.cmo \
-              intf/hilight.cmo intf/pprinter.cmo intf/stat.cmo
+              intf/cache.cmo intf/hilight.cmo intf/pprinter.cmo intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
 gwhy: bin/gwhy.$(OCAMLBEST)

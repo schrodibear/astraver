@@ -18,7 +18,7 @@ open Colors
 
 type loc = { file:string; line:string; sp:string; ep:string }
 
-let last_colored = ref (GText.tag ())
+let last_colored = ref [(GText.tag ())]
 let tag = ref 0
 
 let gtktags = Hashtbl.create 57
@@ -47,9 +47,12 @@ let get_gtktag index =
 
 
 let reset_last_colored () = 
-  !last_colored#set_properties 
-    [`BACKGROUND get_bc_predicate; `FOREGROUND get_fc_predicate];
-  last_colored := GText.tag ()
+  List.iter (fun tag ->
+	       tag#set_properties 
+		 [`BACKGROUND get_bc_predicate; `FOREGROUND get_fc_predicate];
+	    )
+    !last_colored;
+  last_colored := [GText.tag ()]
 
 let refresh_last_colored tag = 
   reset_last_colored ();

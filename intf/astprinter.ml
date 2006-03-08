@@ -107,7 +107,7 @@ let print_term fmt t =
     | Tapp (id, _, _) as t when (Ident.string id = "acc") ->
 	print_fct_acc fmt t
     | Tapp (id, _, _) as t when (Ident.string id = "shift") ->
-	print_fct_shift fmt t 
+	print_fct_shift fmt t
     | Tapp (id, [t], _) when id == t_neg_int ->
 	fprintf fmt "(Zopp %a)" print3 t
     | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
@@ -122,30 +122,23 @@ let print_term fmt t =
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
   and print_terms fmt tl =
     print_list space print3 fmt tl
+  and is_shift = function 
+    | Tapp (id, _, _) as t when (Ident.string id = "shift") -> true
+    | _ -> false
   and print_fct_acc fmt = function
-    | Tapp (id, [m; term], _) -> fprintf fmt "%a__(%a)__" print3 term print3 m
-    | _ as t -> print3 fmt t
-  and print_fct_shift fmt = function 
+    | Tapp (id, [m; term], _) -> 
+	if (is_shift term) 
+	then fprintf fmt "%a{%a}" print_fct_acc_shift term print3 m
+	else fprintf fmt "%a{%a}" print3 term print3 m
+    | t -> print3 fmt t
+  and print_fct_acc_shift fmt = function 
     | Tapp (id, [p; offset], _) -> fprintf fmt "%a[%a]" print3 p print3 offset;
-    | _ as t -> print3 fmt t
+    | t -> print3 fmt t
+  and print_fct_shift fmt = function 
+    | Tapp (id, [p; offset], _) -> fprintf fmt "%a + %a" print3 p print3 offset;
+    | t -> print3 fmt t
   in
   print3 fmt t
-
-(*let infix_relation id =
-  if id == t_lt_int then "<" 
-  else if id == t_le_int then "<="
-  else if id == t_gt_int then ">"
-  else if id == t_ge_int then ">="
-  else if id == t_eq_int then "="
-  else if id == t_neq_int then "<>"
-  else assert false
-
-let pprefix_id id =
-  if id == t_lt_real then "Rlt"
-  else if id == t_le_real then "Rle"
-  else if id == t_gt_real then "Rgt" 
-  else if id == t_ge_real then "Rge"
-  else assert false*)
 
 let print_predicate fmt p =
   let rec print0 fmt = function
@@ -227,4 +220,32 @@ let rec print_cc_type fmt = function
       print_pure_type fmt pt
   | t -> Coq.print_cc_type_v8 fmt t
 
-let clean_tree p = p
+let clean (seq:Cc.sequent) = 
+  let (ctx, p) = seq in
+  let rec clean0 = function 
+    | Pvar _ | Papp (_, _, _) | Pfpi (_,_,_) | Ptrue | Pfalse as p -> p
+    | Pimplies (i, p1, p2) -> 
+	Pimplies (i, clean0 p1, clean0 p2)
+    | Pif (t, p1, p2) ->
+      Pif (t, clean0 p1, clean0 p2)
+    | Pand (wp, sym, p1, p2) ->
+	Pand (wp, sym, clean0 p1, clean0 p2)
+    | Por (p1, p2) ->
+	Por (clean0 p1, clean0 p2)
+    | Piff (p1, p2) ->
+	Piff (clean0 p1, clean0 p2)
+    | Pnot p ->
+	Pnot (clean0 p)
+    | Forall (wp, id1, id2, pt, p) ->
+	Forall (wp, id1, id2, pt, clean0 p)
+    | Forallb (wp, p1, p2) ->
+	Forallb (wp, clean0 p1, clean0 p2)
+    | Exists (id1, id2, pt, p) ->
+	Exists (id1, id2, pt, clean0 p)
+    | Pnamed (_, p) ->
+	clean0 p
+  and clean1 = function 
+    | Svar _ as c -> c
+    | Spred (id, p) -> Spred (id, clean0 p)
+  in (List.map clean1 ctx, clean0 p)
+

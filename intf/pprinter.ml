@@ -137,7 +137,7 @@ let create_tag (tbuf:GText.buffer) t loc =
 	 if GdkEvent.get_type ev = `BUTTON_PRESS then 
 	   move_to_source (Some(loc))
 	 else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
-	   Tags.refresh_last_colored new_tag;
+	   Tags.refresh_last_colored [new_tag];
 	   new_tag#set_properties 
 	     [`BACKGROUND bc_hilight; `FOREGROUND fc_hilight]
 	 end;
@@ -166,7 +166,6 @@ let print_oblig fmt (ctx,concl) =
 	fprintf fmt "@[@{<hypothesis>%a:@} @{<predicate>%a@}@]" print_name id print_predicate p
   in
   print_list (print_hyp fmt) ctx
-  (*fprintf fmt "@{<separator>%s@\n@}@[@{<conclusion>%a@}@]" "-------------" print_predicate concl*)
 
 let is_buffer_saved = 
   Hashtbl.mem obligs
@@ -189,7 +188,8 @@ let print_all (tbuf:GText.buffer) s p =
   split tbuf (Lexing.from_string str);
   let (_,concl) = p in
   let mytag = tbuf#create_tag [`UNDERLINE `DOUBLE;`FOREGROUND (get_fc "separator")] in
-  tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter "_                                                        _\n\n";
+  tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
+    "_                                                        _\n\n";
   let conclusion = 
     fprintf fmt "@[@{<conclusion>%a@}@]" print_predicate concl;
     create_all_tags tbuf;
