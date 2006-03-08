@@ -220,7 +220,7 @@ let rec print_cc_type fmt = function
       print_pure_type fmt pt
   | t -> Coq.print_cc_type_v8 fmt t
 
-let clean (seq:Cc.sequent) = 
+let clean (seq:Cc.sequent):Cc.sequent = 
   let (ctx, p) = seq in
   let rec clean0 = function 
     | Pvar _ | Papp (_, _, _) | Pfpi (_,_,_) | Ptrue | Pfalse as p -> p

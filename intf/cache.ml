@@ -14,36 +14,20 @@
  * (enclosed in the file GPL).
  *)
 
+(* open Options *) (* for ref debug *)
 open Marshal
 open Digest
-open Astprinter
 
 let flags = []
-let size = "5000" (* maximum cache size  *)
+let size = 5000 (* maximum cache size *)
 let extention = ".cache"
 let cache = ref (Hashtbl.create 97)
 let source_file = ref "/tmp/gwhy.cache"
 let debug = ref true
 
-module MySet = struct
-
-  let add set s = 
-    if not (Hashtbl.mem set s) then
-      Hashtbl.add set s 0
-
-  let remove set = Hashtbl.remove set 
-
-  let empty set = Hashtbl.length set = 0
-
-  let create (p:string) = 
-    let set = Hashtbl.create 97
-    in Hashtbl.add set p 0;
-    set
-
-  let singleton set = 
-    Hashtbl.length set = 1
-
-end
+let exists p o = 
+  try Queue.iter (fun pr -> if p = pr then raise Exit) (Hashtbl.find !cache o); false
+  with Exit -> true
 
 let change_debug () = 
   debug := not !debug;
@@ -69,30 +53,46 @@ let load_cache source =
       let in_channel = open_in !source_file in
       cache := from_channel in_channel
     with 
-      | Sys_error s -> print_endline ("     [...] Sys_error : "^s); flush stdout
-      | _ -> ()
-
-let in_cache = Hashtbl.mem !cache
+      | Sys_error s -> 
+	  print_endline ("     [...] Sys_error : "^s); 
+	  flush stdout
+      | End_of_file -> 
+	  print_endline ("     [...] cache empty !"); 
+	  flush stdout
+      | _ -> 
+	  print_endline ("     [...] error while loading cache !"); 
+	  flush stdout
 
 let clear_cache () = 
   Hashtbl.clear !cache
 
 let save_cache () = 
   let out_channel = open_out !source_file in
-  to_channel out_channel !cache flags 
+  to_channel out_channel !cache flags;
+  close_out out_channel
 
 let remove = Hashtbl.remove !cache
 
-let in_cache = Hashtbl.mem !cache
-
+let in_cache x = Hashtbl.mem !cache x
+let find x = Hashtbl.find !cache x
 let is_empty () = Hashtbl.length !cache = 0
 
-let add oblig prover = 
-  let o = clean oblig in
-  if Hashtbl.mem !cache oblig then
-    let set = Hashtbl.find !cache oblig in
-    MySet.add set prover;
-    Hashtbl.replace !cache oblig set
-  else 
-    Hashtbl.add !cache oblig (MySet.create prover);
-  save_cache () (* actually, must be addded when exiting gui *)
+let add (seq:Cc.sequent) (prover:string) = 
+  let o = Astprinter.clean seq in
+  if in_cache o then
+    begin 
+      if not (exists prover o) then
+	Queue.add prover (Hashtbl.find !cache o) 
+    end
+  else
+    begin 
+      let q = Queue.create () in
+      let _ = Queue.add prover q in
+      Hashtbl.add !cache o q;
+    end;
+  save_cache () (* actually, must be done when exiting gui *)
+
+let listing () = 
+  let l = Hashtbl.length !cache in
+  print_endline (string_of_int l);
+  flush stdout
