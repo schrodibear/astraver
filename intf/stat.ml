@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.14 2006-03-08 10:28:01 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.15 2006-03-08 10:39:00 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -484,8 +484,9 @@ let main () =
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
-	   let name = s^"_po_1" in
-	   prove (run_prover_oblig !default_prover view model name)
+	   let row = Queue.peek (Model.find_fobligs s) in
+	   let s = model#get ~row ~column:Model.fullname in
+	   prove (run_prover_oblig !default_prover view model s)
 	 else 
 	   prove (run_prover_oblig !default_prover view model s))
       view#selection#get_selected_rows in
