@@ -70,7 +70,7 @@ let load_cache source =
       cache := from_channel in_channel
     with 
       | Sys_error s -> print_endline ("     [...] Sys_error : "^s); flush stdout
-      | End_of_file -> ()
+      | _ -> ()
 
 let in_cache = Hashtbl.mem !cache
 

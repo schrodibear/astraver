@@ -34,8 +34,6 @@ let source = ref ""
 let tbuf_source = ref (GText.buffer ())
 let tv_source = ref (GText.view ())
 
-let unicode_sym s = s
-
 let print_loc = function 
   | None -> "\"nowhere\""
   | Some {file=f; line=l; sp=s; ep=e} ->
@@ -103,7 +101,7 @@ let move_to_source = function
   | Some loc ->
       let line = int_of_string loc.line
       and file = loc.file in 
-      if !last_file = file && !last_line <> line then begin
+      if !last_file = file then begin
 	last_line := line;
 	move_to_line line
       end
