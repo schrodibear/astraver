@@ -95,4 +95,4 @@ let add oblig prover =
     Hashtbl.replace !cache oblig set
   else 
     Hashtbl.add !cache oblig (MySet.create prover);
-  save_cache () (* must be addded when exiting gui *)
+  save_cache () (* actually, must be addded when exiting gui *)
