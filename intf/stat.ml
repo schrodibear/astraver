@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.16 2006-03-08 14:45:34 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.17 2006-03-08 16:00:10 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -248,34 +248,42 @@ let get_all_results f (model:GTree.tree_store) =
     0
     mychildren
 
+(*
+ * Should i proove this obligation again ?
+ *)
+let try_proof oblig =
+  (Cache.is_enabled () && not (Cache.o_in_cache oblig)) or not (Cache.is_enabled ())
+
 (* 
  * run a prover on an obligation and update the model 
  *)
 let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
-  try 
-    let row = Hashtbl.find Model.orows oblig in
-    model#set ~row ~column:column_p `EXECUTE;
-    let r = 
-      Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p.Model.pr_id
-    in
-    let get_result = function
+  if try_proof o then
+    try 
+      let row = Hashtbl.find Model.orows oblig in
+      model#set ~row ~column:column_p `EXECUTE;
+      let r = 
+	Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p.Model.pr_id
+      in
+      let get_result = function
 	| Calldp.Valid -> 
 	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
 	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `NO; 0
 	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
 	| _ -> model#set ~row ~column:column_p `STOP; 0 in
-    let result = get_result r in
-    model#set ~row ~column:Model.result 
-      (max result (model#get ~row ~column:Model.result));
-    result
-  with Not_found -> begin
-    print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
-    flush stdout;
-    0
-  end
+      let result = get_result r in
+      model#set ~row ~column:Model.result 
+	(max result (model#get ~row ~column:Model.result));
+      result
+    with Not_found -> begin
+      print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
+      flush stdout;
+      0
+    end
+  else 1
 
 let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s () = 
   try 
