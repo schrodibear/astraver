@@ -33,10 +33,10 @@
   let buffer = Buffer.create 1024
 }
 
-let decl = "external" | "parameter" | "logic" | "predicate" | "axiom"
-let keyw = "let" | "in" | "begin" | "end" | "if" | "then" | "else" | 
-           "ref" | "array" | "while" | "do" | "done" | "assert" | 
-	   "label" | "fun" | "rec" | "forall" | "and" | "->" | "type"
+let keyw = "external" | "parameter" | "logic" | "predicate" | "axiom" |
+    "let" | "in" | "begin" | "end" | "if" | "then" | "else" | "of" |
+    "ref" | "array" | "while" | "do" | "done" | "assert" | "label" | 
+    "fun" | "rec" | "forall" | "and" | "->" | "type" | "exception"
 let alpha = ['a'-'z' 'A'-'Z']
 let digit = ['0'-'9']
 let ident = (alpha | '_' | digit)+
@@ -55,8 +55,6 @@ rule scan tbuf = parse
 	    annotation tbuf lexbuf; 
 	    scan tbuf lexbuf }
   | keyw  { insert_text tbuf "keyword" (lexeme lexbuf);
-	    scan tbuf lexbuf }
-  | decl  { insert_text tbuf "keyword" (lexeme lexbuf); 
 	    scan tbuf lexbuf }
   | eof   { raise Eof }
   | ident { insert_string tbuf (lexeme lexbuf); 

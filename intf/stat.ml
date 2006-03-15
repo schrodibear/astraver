@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.20 2006-03-15 13:23:54 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.21 2006-03-15 13:26:04 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -382,7 +382,6 @@ let main () =
 	    ~title:"gWhy : Easy proof with easy tool" ()
   in
   w#misc#modify_font !general_font;
-  (* let accel_group = GtkData.AccelGroup.create () in *)
   let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
   let vbox = GPack.vbox ~homogeneous:false ~packing:w#add () in
 
@@ -443,20 +442,6 @@ let main () =
       ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () 
   in
   let _ = configuration_factory#add_separator ()  in
-  (*let cache_m = configuration_factory#add_radio_item ~active:(Cache.is_enabled ())
-    "Cache enabled" in
-    let _ = cache_m#event#connect#button_release
-    ~callback:(fun ev -> 
-    Cache.swap_active (); 
-    cache_m#set_active (Cache.is_enabled ());
-    false) in
-    let ocache_m = configuration_factory#add_radio_item ~active:(Cache.try_proof ()) 
-    "Proove saved obligations" in
-    let _ = ocache_m#event#connect#button_release
-    ~callback:(fun ev -> 
-    Cache.prove_obligs (); 
-    cache_m#set_active (Cache.try_proof ()); 
-    false) in*)
   let _ = configuration_factory#add_image_item ~label:"Clear cache" 
     ~callback:(fun () -> 
 		 Cache.clear ();
