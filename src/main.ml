@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.93 2006-03-15 08:57:08 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.94 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -33,25 +33,16 @@ open Logic_decl
 
 (*s Prover dependent functions. *)
 
-let typed_progs = ref [] (* for the GUI *)
-
 let reset () =
-  typed_progs := [];
   Vcg.logs := []; 
   match prover () with
   | Pvs -> Pvs.reset ()
   | Coq _ -> Coq.reset ()
   | HolLight -> Holl.reset ()
   | Mizar -> Mizar.reset ()
-  | Harvey -> Harvey.reset ()
-  | Simplify -> Simplify.reset ()
-  | Zenon -> Zenon.reset ()
-  | CVCLite -> Cvcl.reset ()
-  | SmtLib -> Smtlib.reset ()
   | Isabelle -> Isabelle.reset ()
   | Hol4 -> Hol4.reset ()
-  | Gappa -> Gappa.reset ()
-  | Dispatcher -> ()
+  | Harvey | Simplify | Zenon | CVCLite | SmtLib | Gappa | Dispatcher -> ()
 
 let add_loc = function
   | Dtype (loc, _, s)
@@ -102,10 +93,11 @@ let push_parameter id v tv = match prover () with
 
 let output fwe = 
   if wol then begin
-    let cout = open_out (fwe ^ ".wol") in
-    output_value cout !Vcg.logs;    close_out cout
+    let cout = open_out (Options.out_file (fwe ^ ".wol")) in
+    output_value cout !Vcg.logs;
+    close_out cout
   end else if ocaml then 
-    Options.output Ocaml.output 
+    Pp.print_in_file Ocaml.output (Options.out_file "out")
   else begin match prover () with
     | Pvs -> Pvs.output_file fwe
     | Coq _ -> Coq.output_file fwe
@@ -147,15 +139,8 @@ let interp_program id p =
   print_if_debug print_expr p;
   if type_only then raise Exit;
 
-  (***
-  if_debug eprintf "* purification@.";
-  let p = Purify.purify p in
-  print_if_debug print_expr p;
-  ***)
-
   if_debug eprintf "* weakest preconditions@.";
   let p,wp = Wp.wp p in
-  if !Options.gui then typed_progs := p :: !typed_progs;
   print_if_debug print_wp wp;
   (* print_if_debug print_expr p; *)
   if wp_only then raise Exit;
@@ -297,8 +282,10 @@ let load_prelude () =
     begin match prover () with
       | Pvs | CVCLite ->
 	  let prover_prelude = Filename.temp_file "why_prelude" "" in
-	  (*eprintf "prover prelude in %s@." prover_prelude;*)
-	  output prover_prelude
+	  output prover_prelude;
+	  Sys.remove prover_prelude
+      | Simplify when no_simplify_prelude ->
+	  Simplify.reset ()
       | _ ->
 	  ()
     end
@@ -317,21 +304,29 @@ let deal_channel parsef cin =
   let p = parsef cin in
   if not parse_only then List.iter interp_decl p
 
+let single_file () = match prover () with
+  | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher | SmtLib -> true
+  | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
+
 let deal_file f =
   reset ();
   let cin = open_in f in 
   deal_channel (why_parser f) cin;
   close_in cin;
   let fwe = Filename.chop_extension f in
-  output (Options.file fwe)
+  if not (single_file ()) then output (Options.out_file fwe)
 
 let main () =
   if prelude then load_prelude ();
   if files = [] then begin
     deal_channel (why_parser "standard input") stdin;
-    output "Output" 
-  end else
-    List.iter deal_file files
+    output (Options.out_file "out")
+  end else begin
+    List.iter deal_file files;
+    if single_file () then 
+      let lf = Filename.chop_extension (last files) in
+      output (Options.out_file lf)
+  end
 
 
 

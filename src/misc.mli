@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.78 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.79 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -96,6 +96,7 @@ val option_fold : ('a -> 'b -> 'b) -> 'a option -> 'b -> 'b
 
 val list_of_some : 'a option -> 'a list
 val difference : 'a list -> 'a list -> 'a list
+val last : 'a list -> 'a
 
 val list_combine3 : 'a list -> 'b list -> 'c list -> ('a * 'b * 'c) list
 

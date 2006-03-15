@@ -15,11 +15,11 @@ src/coq.cmx: src/vcg.cmx src/util.cmx src/types.cmi src/report.cmx \
 src/cvcl.cmo: src/vcg.cmi src/report.cmi src/pp.cmi src/options.cmi \
     src/monomorph.cmi src/misc.cmi src/ltyping.cmi src/logic_decl.cmi \
     src/logic.cmi src/loc.cmi src/lexer.cmi src/ident.cmi src/error.cmi \
-    src/env.cmi src/cc.cmi src/cvcl.cmi 
+    src/env.cmi src/coq.cmi src/cc.cmi src/cvcl.cmi 
 src/cvcl.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
     src/monomorph.cmx src/misc.cmx src/ltyping.cmx src/logic_decl.cmi \
     src/logic.cmi src/loc.cmx src/lexer.cmx src/ident.cmx src/error.cmi \
-    src/env.cmx src/cc.cmi src/cvcl.cmi 
+    src/env.cmx src/coq.cmx src/cc.cmi src/cvcl.cmi 
 src/dispatcher.cmo: src/zenon.cmi src/vcg.cmi src/simplify.cmi \
     src/options.cmi src/logic_decl.cmi src/logic.cmi src/harvey.cmi \
     src/cvcl.cmi tools/calldp.cmi src/dispatcher.cmi 
@@ -84,16 +84,16 @@ src/ltyping.cmx: src/util.cmx src/types.cmi src/report.cmx src/ptree.cmi \
     src/env.cmx src/effect.cmx src/ast.cmi src/ltyping.cmi 
 src/main.cmo: src/zenon.cmi src/wp.cmi src/vcg.cmi src/util.cmi \
     src/typing.cmi src/types.cmi src/smtlib.cmi src/simplify.cmi \
-    src/report.cmi src/pvs.cmi src/ptree.cmi src/options.cmi src/ocaml.cmi \
-    src/monad.cmi src/mizar.cmi src/misc.cmi src/ltyping.cmi \
+    src/report.cmi src/pvs.cmi src/ptree.cmi src/pp.cmi src/options.cmi \
+    src/ocaml.cmi src/monad.cmi src/mizar.cmi src/misc.cmi src/ltyping.cmi \
     src/logic_decl.cmi src/logic.cmi src/loc.cmi src/lexer.cmi \
     src/isabelle.cmi src/ident.cmi src/holl.cmi src/hol4.cmi src/harvey.cmi \
     src/gappa.cmi src/error.cmi src/env.cmi src/effect.cmi src/dispatcher.cmi \
     src/cvcl.cmi src/coq.cmi src/cc.cmi src/ast.cmi 
 src/main.cmx: src/zenon.cmx src/wp.cmx src/vcg.cmx src/util.cmx \
     src/typing.cmx src/types.cmi src/smtlib.cmx src/simplify.cmx \
-    src/report.cmx src/pvs.cmx src/ptree.cmi src/options.cmx src/ocaml.cmx \
-    src/monad.cmx src/mizar.cmx src/misc.cmx src/ltyping.cmx \
+    src/report.cmx src/pvs.cmx src/ptree.cmi src/pp.cmx src/options.cmx \
+    src/ocaml.cmx src/monad.cmx src/mizar.cmx src/misc.cmx src/ltyping.cmx \
     src/logic_decl.cmi src/logic.cmi src/loc.cmx src/lexer.cmx \
     src/isabelle.cmx src/ident.cmx src/holl.cmx src/hol4.cmx src/harvey.cmx \
     src/gappa.cmx src/error.cmi src/env.cmx src/effect.cmx src/dispatcher.cmx \
@@ -237,8 +237,8 @@ src/hol4.cmi: src/vcg.cmi src/logic_decl.cmi src/cc.cmi
 src/holl.cmi: src/vcg.cmi src/logic_decl.cmi src/cc.cmi 
 src/isabelle.cmi: src/logic_decl.cmi src/cc.cmi 
 src/lexer.cmi: src/ptree.cmi src/parser.cmi 
-src/logic.cmi: src/ident.cmi 
 src/logic_decl.cmi: src/logic.cmi src/loc.cmi src/env.cmi src/cc.cmi 
+src/logic.cmi: src/ident.cmi 
 src/ltyping.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/env.cmi src/effect.cmi src/ast.cmi 
 src/misc.cmi: src/types.cmi src/ptree.cmi src/logic.cmi src/loc.cmi \
@@ -270,8 +270,8 @@ src/vcg.cmi: src/types.cmi src/logic.cmi src/log.cmi src/loc.cmi \
     src/ident.cmi src/cc.cmi src/ast.cmi 
 src/wp.cmi: src/env.cmi src/ast.cmi 
 src/zenon.cmi: src/logic_decl.cmi src/cc.cmi 
-c/cast.cmi: src/loc.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cconst.cmi 
 c/cast_misc.cmi: c/cast.cmi 
+c/cast.cmi: src/loc.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cconst.cmi 
 c/cconst.cmi: src/loc.cmi 
 c/ceffect.cmi: c/output.cmi src/loc.cmi c/info.cmi c/clogic.cmi c/cast.cmi 
 c/cenv.cmi: src/loc.cmi src/lib.cmi c/info.cmi c/ctypes.cmi 
@@ -364,16 +364,16 @@ c/cparser.cmx: src/ptree.cmi src/loc.cmx c/ctypes.cmx c/creport.cmx \
     c/cparser.cmi 
 c/cpp.cmo: c/coptions.cmi c/cpp.cmi 
 c/cpp.cmx: c/coptions.cmx c/cpp.cmi 
-c/cprint.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cenv.cmi \
-    c/cast.cmi c/cprint.cmi 
-c/cprint.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi c/cenv.cmx \
-    c/cast.cmi c/cprint.cmi 
 c/cprint_annot.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi \
     c/cenv.cmi c/cast.cmi 
 c/cprint_annot.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi \
     c/cenv.cmx c/cast.cmi 
 c/cprint_graph.cmo: c/info.cmi c/cenv.cmi c/cprint_graph.cmi 
 c/cprint_graph.cmx: c/info.cmx c/cenv.cmx c/cprint_graph.cmi 
+c/cprint.cmo: src/pp.cmi c/info.cmi c/ctypes.cmi c/clogic.cmi c/cenv.cmi \
+    c/cast.cmi c/cprint.cmi 
+c/cprint.cmx: src/pp.cmx c/info.cmx c/ctypes.cmx c/clogic.cmi c/cenv.cmx \
+    c/cast.cmi c/cprint.cmi 
 c/creport.cmo: src/loc.cmi c/ctypes.cmi c/coptions.cmi c/cerror.cmi \
     c/creport.cmi 
 c/creport.cmx: src/loc.cmx c/ctypes.cmx c/coptions.cmx c/cerror.cmi \

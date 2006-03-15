@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.58 2006-03-01 14:46:58 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.59 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 open Format
 
@@ -122,7 +122,7 @@ let usage () =
 Usage: why [options] [files...]
 
 If no file is given, the source is read on standard input and
-output is written in file `WhyOutput'
+output is written in file `out...'
 
 Generic Options:
   -h, --help     prints this message
@@ -361,15 +361,7 @@ let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_
 let ocaml_externals = !ocaml_externals_
 
-let output o = match !output_ with
-  | None -> 
-      o Format.std_formatter
-  | Some f -> 
-      let cout = open_out f in
-      let fmt = Format.formatter_of_out_channel cout in
-      o fmt;
-      Format.pp_print_flush fmt ();
-      close_out cout
+let out_file f = match !output_ with None -> file f | Some f -> f
 
 let if_verbose f x = if verbose then f x
 let if_verbose_2 f x y = if verbose then f x y

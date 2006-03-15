@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.19 2005-11-18 14:54:06 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.20 2006-03-15 16:03:50 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -26,13 +26,13 @@ let add ~file ~f =
   Hashtbl.replace files file (f :: l)
 
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
-let simplify_all fmt f = fprintf fmt "simplify/%s_why.sx.all" f
 let coq_v fmt f = fprintf fmt "coq/%s_why.v" f
 let coq_vo fmt f = fprintf fmt "coq/%s_why.vo" f
 let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
-let cvcl_all fmt f = fprintf fmt "cvcl/%s_why.cvc.all" f
-let harvey_all fmt f = fprintf fmt "harvey/%s_why.all.rv" f
-let smtlib_all fmt f = fprintf fmt "smtlib/%s_why.smt" f
+let cvcl fmt f = fprintf fmt "cvcl/%s_why.cvc" f
+let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
+let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
+let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
 let isabelle fmt f = 
   fprintf fmt "isabelle/%s_why.thy isabelle/%s_spec_why.thy" f f
 
@@ -83,28 +83,27 @@ let generic f targets =
        fprintf fmt "\tcp -f %s/isabelle/caduceus_why.thy isabelle/@\n@\n" 
 	 Coptions.libdir;
 
-       fprintf fmt "simplify: %a@\n" (print_files simplify_all) targets;
+       fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)@\n@\n";
-       fprintf fmt "simplify/%%_why.sx.all: simplify/%%_why.sx@\n";
-       fprintf fmt "\t@@cat simplify/caduceus_why.sx simplify/%s_spec_why.sx $< > $@@@\n@\n" f;
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
-       fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl_all) targets;
+       fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout 10 $^)@\n@\n";
-       fprintf fmt "cvcl/%%_why.cvc.all: cvcl/%%_why.cvc@\n";
-       fprintf fmt "\t@@cat cvcl/caduceus_why.cvc cvcl/%s_spec_why.cvc $< > $@@@\n@\n" f;
        fprintf fmt "cvcl/%%_why.cvc: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -no-cvcl-prelude -dir cvcl $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
-       fprintf fmt "harvey: %a@\n" (print_files harvey_all) targets;
+       fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
        fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout 10 $^)@\n@\n";
-       fprintf fmt "harvey/%%_why.all.rv: harvey/%%_why.rv@\n";
-       fprintf fmt "\t@@rv_merge $(CADULIB)/harvey/caduceus_why.rv harvey/%s_spec_why.rv $< > $@@@\n@\n" f;
        fprintf fmt "harvey/%%_why.rv: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
-       fprintf fmt "smtlib: %a@\n" (print_files smtlib_all) targets;
+       fprintf fmt "zenon: %a@\n" (print_files zenon) targets;
+       fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && (dp -timeout 10 $^)@\n@\n";
+       fprintf fmt "zenon/%%_why.znn: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       
+       fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;

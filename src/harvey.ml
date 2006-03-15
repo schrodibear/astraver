@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.34 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.35 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -240,7 +240,7 @@ let output_obligation fmt (loc, o, s) =
   fprintf fmt "@[%a@]@\n" output_sequent s
 
 let output_file f = 
-  let fname = f ^ "_why.rv" in
+  let fname = Options.out_file (f ^ "_why.rv") in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
   if Options.no_harvey_prelude then 

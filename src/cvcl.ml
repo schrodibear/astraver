@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.34 2006-03-07 11:12:49 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.35 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -214,7 +214,8 @@ let rec print_cc_type fmt = function
       fprintf fmt "(@[ARRAY INT OF %a@])" print_cc_type v
   | TTarrow ((_,CC_var_binder t1), t2) -> 
       fprintf fmt "(%a ->@ %a)" print_cc_type t1 print_cc_type t2
-  | _ -> 
+  | t -> 
+      (*fprintf fmt "%%BUG -> COQ PRINTER@\n%a" Coq.print_cc_type_v8 t *)
       assert false
 
 let print_sequent fmt (hyps,concl) =
@@ -321,106 +322,9 @@ let predicate_of_string s =
   let p = Ltyping.predicate Label.empty env lenv p in
   generalize_predicate p
 
-(* declaring predefined symbols *)
-(****
-let predefined_symbols fmt = 
-  let a = PTvarid (Ident.create "a") in
-  let farray_a = PTexternal ([a], farray) in
-  let int_array = PTexternal ([PTint], farray) in
-  List.iter 
-    (fun (s,t) -> Output.print_logic fmt s (generalize_logic_type t))
-    [ "array_length", Function ([farray_a], PTint);
-      "access", Function ([farray_a; PTint], a);
-      "store", Function ([farray_a; PTint; a], PTunit);
-
-      "sorted_array", Predicate [int_array; PTint; PTint];
-      "exchange"    , Predicate [int_array; int_array; PTint; PTint];
-      "sub_permut"  , Predicate [PTint; PTint; int_array; int_array];
-      "permut"      , Predicate [int_array; int_array];
-      "array_le"    , Predicate [int_array; PTint; PTint; PTint];
-      "array_ge"    , Predicate [int_array; PTint; PTint; PTint];
-    ];
-  List.iter
-    (fun (s,p) -> 
-       try 
-	 Output.print_axiom fmt s (predicate_of_string p)
-       with e -> 
-	 eprintf "error in CVC Lite prelude: %a@." explain_exception e;
-	 exit 1)
-    [ "array_length_store",
-        "forall t:int array. forall i:int. forall v:int.
-         array_length(store(t,i,v)) = array_length(t)";
-
-      "exchange_def",
-        "forall t1:int array. forall t2:int array. forall i:int. forall j:int.
-         exchange(t1,t2,i,j) <-> 
-         (array_length(t1) = array_length(t2) and
-         t1[i] = t2[j] and t2[i] = t1[j] and
-         forall k:int. (k <> i and k <> j) -> t1[k] = t2[k])";
-
-      "permut_refl",
-        "forall t:int array. permut(t,t)";
- 
-      "permut_sym",
-        "forall t1:int array. forall t2:int array.
-         permut(t1,t2) -> permut(t2,t1)";
- 
-      "permut_trans",
-        "forall t1:int array. forall t2:int array. forall t3:int array.
-         (permut(t1,t2) and permut(t2,t3)) -> permut(t1,t3)";
-  
-      "permut_exchange",
-        "forall t:int array. forall i:int. forall j:int.
-         permut(t, store(store(t,i,t[j]),j,t[i]))";
-
-      "permut_array_length",
-        "forall t1:int array. forall t2:int array.
-         permut(t1,t2) -> array_length(t1) = array_length(t2)";
-
-      "sub_permut_refl",
-        "forall t:int array. forall g:int. forall d:int.
-             sub_permut(g,d,t,t)";
-
-      "sub_permut_sym",
-        "forall t1:int array. forall t2:int array. forall g:int. forall d:int.
-             sub_permut(g,d,t1,t2) -> sub_permut(g,d,t2,t1)";
-
-      "sub_permut_trans",
-        "forall t1:int array. forall t2:int array. forall t3:int array.
-         forall g:int. forall d:int.
-             sub_permut(g,d,t1,t2) -> sub_permut(g,d,t2,t3) ->
-             sub_permut(g,d,t1,t3)";
-
-      "sub_permut_exchange_1",
-        "forall t:int array.
-         forall g:int. forall d:int. forall i:int. forall j:int.
-             (g <= i and i <= d and g <= j and j <= d) ->
-             sub_permut(g,d,t,store(store(t,i,t[j]),j,t[i]))";
-
-      "sub_permut_exchange_2",
-        "forall t1:int array. forall t2:int array.
-         forall g:int. forall d:int. forall i:int. forall j:int.
-             (g <= i and i <= d and g <= j and j <= d and
-              exchange(t1,t2,i,j)) -> sub_permut(g,d,t1,t2)";
-
-      "sub_permut_permut",
-        "forall t1:int array. forall t2:int array. forall g:int. forall d:int. 
-         sub_permut(g,d,t1,t2) -> permut(t1,t2)";
-
-      "sub_permut_array_length",
-        "forall t1:int array. forall t2:int array. forall g:int. forall d:int. 
-         sub_permut(g,d,t1,t2) -> array_length(t1) = array_length(t2)";
-
-      "sorted_array_def",
-        "forall t:int array. forall i:int. forall j:int.
-         sorted_array(t,i,j) <->
-         forall k:int. i <= k < j -> t[k] <= t[k+1]";
-    ]
-***)
-
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
-  let file = fwe ^ "_why.cvc" in
+  let file = out_file (fwe ^ "_why.cvc") in
   do_not_edit_below ~file
     ~before:prelude
     ~sep

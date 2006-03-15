@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.48 2006-03-01 14:46:58 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.49 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -33,7 +33,7 @@ val if_debug_3 : ('a -> 'b -> 'c -> unit) -> 'a -> 'b -> 'c -> unit
 val ocaml : bool
 val ocaml_annot : bool
 val ocaml_externals : bool
-val output : (Format.formatter -> unit) -> unit
+
 
 val wol : bool
 
@@ -85,6 +85,11 @@ val gappa_rnd : string
 (*s [file f] appends [f] to the directory specified with [-dir], if any *)
 
 val file : string -> string
+
+(* [out_file f] returns the file specified with option -o, 
+   or [file f] otherwise *)
+
+val out_file : string -> string
 
 (*s Files given on the command line *)
 

@@ -117,11 +117,11 @@ export CADUCEUSLIB=`pwd`/../../../lib
 parsing="../../../bin/caduceus.opt -separation -why-opt -split-user-conj"
 
 rm -f why/*.why
-rm -f simplify/*_why.sx.all
+rm -f simplify/*_why.sx
 for f in $FILES; do
     echo -n "  Generating simplify VCG for $f.c... "
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
-        if $make -f $f.makefile simplify/${f}_why.sx.all > /tmp/caduceus.tmp 2>&1 ; then
+        if $make -f $f.makefile simplify/${f}_why.sx > /tmp/caduceus.tmp 2>&1 ; then
 	    echo "ok"
 	else
 	   echo "why FAILED :"
@@ -134,7 +134,7 @@ for f in $FILES; do
 	exit 1
     fi
 done
-../../../bin/dp.opt -timeout 20 simplify/*_why.sx.all || true
+../../../bin/dp.opt -timeout 20 simplify/*_why.sx || true
 
 
 for f in $FILES; do

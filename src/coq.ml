@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.142 2006-03-07 11:12:49 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.143 2006-03-15 16:03:50 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -140,9 +140,9 @@ let print_term_v7 fmt t =
     | Tapp (id, [a;b], _) when id == t_mul_int ->
 	openz fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closez fmt
     | Tapp (id, [a;b], _) when id == t_div_int ->
-	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
+	fprintf fmt "(@[Zdiv %a@ %a@])" print3 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
-	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
+	fprintf fmt "(@[Zmod %a@ %a@])" print3 a print3 b
     | t ->
 	print3 fmt t
   and print3 fmt = function
@@ -418,9 +418,9 @@ let print_term_v8 fmt t =
     | Tapp (id, [a;b], _) when id == t_mul_int ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
     | Tapp (id, [a;b], _) when id == t_div_int ->
-	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
+	fprintf fmt "(@[Zdiv %a@ %a@])" print3 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
-	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
+	fprintf fmt "(@[Zmod %a@ %a@])" print3 a print3 b
     | t ->
 	print3 fmt t
   and print3 fmt = function

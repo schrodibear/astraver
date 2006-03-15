@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.103 2006-02-03 15:35:49 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.104 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -52,6 +52,11 @@ let difference l1 l2 =
     | a::rem -> if List.mem a l2 then diff rem else a::(diff rem)
   in
   diff l1
+
+let rec last = function
+  | [] -> invalid_arg "last"
+  | [x] -> x
+  | _ :: l -> last l
 
 let rec list_combine3 a b c = match a, b, c with
   | [], [], [] -> []

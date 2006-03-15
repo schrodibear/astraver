@@ -1,10 +1,175 @@
-(BG_PUSH (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t))))
-
-(BG_PUSH (< 0 l))
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; pgm_max_end_po_1, Why obligation from file "max.mlw", line 0, characters 0-0:
+(BG_PUSH
+ ;; Why axiom lt_int_bool_axiom
+ (FORALL (x) (FORALL (y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y)))))
+
+(BG_PUSH
+ ;; Why axiom le_int_bool_axiom
+ (FORALL (x) (FORALL (y) (IFF (EQ (le_int_bool x y) |@true|) (<= x y)))))
+
+(BG_PUSH
+ ;; Why axiom gt_int_bool_axiom
+ (FORALL (x) (FORALL (y) (IFF (EQ (gt_int_bool x y) |@true|) (> x y)))))
+
+(BG_PUSH
+ ;; Why axiom ge_int_bool_axiom
+ (FORALL (x) (FORALL (y) (IFF (EQ (ge_int_bool x y) |@true|) (>= x y)))))
+
+(BG_PUSH
+ ;; Why axiom eq_int_bool_axiom
+ (FORALL (x) (FORALL (y) (IFF (EQ (eq_int_bool x y) |@true|) (EQ x y)))))
+
+(BG_PUSH
+ ;; Why axiom neq_int_bool_axiom
+ (FORALL (x) (FORALL (y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y)))))
+
+(BG_PUSH
+ ;; Why axiom sorted_array_def
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (j)
+ (IFF (EQ (sorted_array t i j) |@true|)
+ (FORALL (k)
+ (IMPLIES (AND (<= i k) (< k j)) (<= (select t k) (select t (+ k 1))))))))))
+
+(BG_PUSH
+ ;; Why axiom exchange_def
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (i)
+ (FORALL (j)
+ (IFF (EQ (exchange t1 t2 i j) |@true|)
+ (AND (EQ (array_length t1) (array_length t2))
+ (AND (EQ (select t1 i) (select t2 j))
+ (AND (EQ (select t2 i) (select t1 j))
+ (FORALL (k)
+ (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (select t1 k) (select t2 k)))))))))))))
+
+(BG_PUSH
+ ;; Why axiom permut_refl
+ (FORALL (t) (EQ (permut t t) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom permut_sym
+ (FORALL (t1)
+ (FORALL (t2)
+ (IMPLIES (EQ (permut t1 t2) |@true|) (EQ (permut t2 t1) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom permut_trans
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (t3)
+ (IMPLIES (AND (EQ (permut t1 t2) |@true|) (EQ (permut t2 t3) |@true|))
+ (EQ (permut t1 t3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom permut_exchange
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (j)
+ (EQ (permut t (update (update t i (select t j)) j (select t i))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_refl
+ (FORALL (t) (FORALL (g) (FORALL (d) (EQ (sub_permut g d t t) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_sym
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (g)
+ (FORALL (d)
+ (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
+ (EQ (sub_permut g d t2 t1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_trans
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (t3)
+ (FORALL (g)
+ (FORALL (d)
+ (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
+ (IMPLIES (EQ (sub_permut g d t2 t3) |@true|)
+ (EQ (sub_permut g d t1 t3) |@true|))))))))
+
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (g)
+ (FORALL (d)
+ (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
+ (FORALL (t3)
+ (IMPLIES (EQ (sub_permut g d t2 t3) |@true|)
+ (EQ (sub_permut g d t1 t3) |@true|)))))))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_exchange_1
+ (FORALL (t)
+ (FORALL (g)
+ (FORALL (d)
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
+ (EQ (sub_permut g d t
+ (update (update t i (select t j)) j (select t i))) |@true|)))))))
+
+ (FORALL (g)
+ (FORALL (d)
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
+ (FORALL (t)
+ (EQ (sub_permut g d t
+ (update (update t i (select t j)) j (select t i))) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_exchange_2
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (g)
+ (FORALL (d)
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES
+ (AND (<= g i)
+ (AND (<= i d)
+ (AND (<= g j) (AND (<= j d) (EQ (exchange t1 t2 i j) |@true|)))))
+ (EQ (sub_permut g d t1 t2) |@true|)))))))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_permut
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (g)
+ (FORALL (d)
+ (IMPLIES (EQ (sub_permut g d t1 t2) |@true|) (EQ (permut t1 t2) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom array_length_update
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (v) (EQ (array_length (update t i v)) (array_length t))))))
+
+(BG_PUSH
+ ;; Why axiom sub_permut_array_length
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (g)
+ (FORALL (d)
+ (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
+ (EQ (array_length t1) (array_length t2))))))))
+
+(BG_PUSH
+ ;; Why axiom permut_array_length
+ (FORALL (t1)
+ (FORALL (t2)
+ (IMPLIES (EQ (permut t1 t2) |@true|)
+ (EQ (array_length t1) (array_length t2))))))
+
+;; pgm_max_end_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
@@ -15,13 +180,36 @@
 (AND (AND (<= 0 x) (< x l))
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))))))))
 
-;; pgm_max_end_po_2, Why obligation from file "max.mlw", line 0, characters 0-0:
+;; pgm_max_end_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
 (IMPLIES (EQ x 0)
 (FORALL (y)
 (IMPLIES (EQ y 1)
+(IMPLIES (AND (AND (<= 0 y) (<= y l))
+         (AND (AND (<= 0 x) (< x l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+(FORALL (x0)
+(FORALL (y0)
+(IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
+         (AND (AND (<= 0 x0) (< x0 l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+(IMPLIES (< y0 l) (AND (<= 0 y0) (< y0 (array_length a))))))))))))))
+
+;; pgm_max_end_po_3, Why obligation from file "", line 0, characters 0-0:
+(FORALL (a)
+(IMPLIES (EQ (array_length a) l)
+(FORALL (x)
+(IMPLIES (EQ x 0)
+(FORALL (y)
+(IMPLIES (EQ y 1)
+(IMPLIES (AND (AND (<= 0 y) (<= y l))
+         (AND (AND (<= 0 x) (< x l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
@@ -29,8 +217,32 @@
          (FORALL (k)
          (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
 (IMPLIES (< y0 l)
+(IMPLIES (AND (<= 0 y0) (< y0 (array_length a)))
+(FORALL (result)
+(IMPLIES (EQ result (select a y0)) (AND (<= 0 x0) (< x0 (array_length a)))))))))))))))))
+
+;; pgm_max_end_po_4, Why obligation from file "", line 0, characters 0-0:
+(FORALL (a)
+(IMPLIES (EQ (array_length a) l)
+(FORALL (x)
+(IMPLIES (EQ x 0)
+(FORALL (y)
+(IMPLIES (EQ y 1)
+(IMPLIES (AND (AND (<= 0 y) (<= y l))
+         (AND (AND (<= 0 x) (< x l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+(FORALL (x0)
+(FORALL (y0)
+(IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
+         (AND (AND (<= 0 x0) (< x0 l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+(IMPLIES (< y0 l)
+(IMPLIES (AND (<= 0 y0) (< y0 (array_length a)))
 (FORALL (result)
 (IMPLIES (EQ result (select a y0))
+(IMPLIES (AND (<= 0 x0) (< x0 (array_length a)))
 (FORALL (result0)
 (IMPLIES (EQ result0 (select a x0))
 (IMPLIES (> result result0)
@@ -43,15 +255,19 @@
 (AND (AND (<= 0 x1) (< x1 l))
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x1))))))
-(AND (<= 0 (- l y0)) (< (- l y1) (- l y0)))))))))))))))))))))))
+(AND (<= 0 (- l y0)) (< (- l y1) (- l y0))))))))))))))))))))))))))
 
-;; pgm_max_end_po_3, Why obligation from file "max.mlw", line 0, characters 0-0:
+;; pgm_max_end_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
 (IMPLIES (EQ x 0)
 (FORALL (y)
 (IMPLIES (EQ y 1)
+(IMPLIES (AND (AND (<= 0 y) (<= y l))
+         (AND (AND (<= 0 x) (< x l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
@@ -59,8 +275,10 @@
          (FORALL (k)
          (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
 (IMPLIES (< y0 l)
+(IMPLIES (AND (<= 0 y0) (< y0 (array_length a)))
 (FORALL (result)
 (IMPLIES (EQ result (select a y0))
+(IMPLIES (AND (<= 0 x0) (< x0 (array_length a)))
 (FORALL (result0)
 (IMPLIES (EQ result0 (select a x0))
 (IMPLIES (<= result result0)
@@ -71,47 +289,19 @@
 (AND (AND (<= 0 x0) (< x0 l))
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x0))))))
-(AND (<= 0 (- l y0)) (< (- l y1) (- l y0)))))))))))))))))))))
+(AND (<= 0 (- l y0)) (< (- l y1) (- l y0))))))))))))))))))))))))
 
-;; pgm_max_end_po_4, Why obligation from file "max.mlw", line 0, characters 0-0:
+;; pgm_max_end_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x)
 (IMPLIES (EQ x 0)
 (FORALL (y)
 (IMPLIES (EQ y 1)
-(FORALL (x0)
-(FORALL (y0)
-(IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
-         (AND (AND (<= 0 x0) (< x0 l))
+(IMPLIES (AND (AND (<= 0 y) (<= y l))
+         (AND (AND (<= 0 x) (< x l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
-(IMPLIES (< y0 l)
-(FORALL (result)
-(IMPLIES (EQ result (select a y0)) (AND (<= 0 x0) (< x0 (array_length a)))))))))))))))
-
-;; pgm_max_end_po_5, Why obligation from file "max.mlw", line 0, characters 0-0:
-(FORALL (a)
-(IMPLIES (EQ (array_length a) l)
-(FORALL (x)
-(IMPLIES (EQ x 0)
-(FORALL (y)
-(IMPLIES (EQ y 1)
-(FORALL (x0)
-(FORALL (y0)
-(IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
-         (AND (AND (<= 0 x0) (< x0 l))
-         (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
-(IMPLIES (< y0 l) (AND (<= 0 y0) (< y0 (array_length a)))))))))))))
-
-;; pgm_max_end_po_6, Why obligation from file "max.mlw", line 0, characters 0-0:
-(FORALL (a)
-(IMPLIES (EQ (array_length a) l)
-(FORALL (x)
-(IMPLIES (EQ x 0)
-(FORALL (y)
-(IMPLIES (EQ y 1)
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
@@ -119,6 +309,7 @@
          (FORALL (k)
          (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
 (IMPLIES (>= y0 l)
+(IMPLIES (EQ (array_length a) l)
 (FORALL (a0)
 (IMPLIES (AND (EQ (array_length a0) l)
          (AND (EQ (select a0 x0) (select a (- l 1)))
@@ -134,5 +325,5 @@
 (AND (EQ (select a0 x0) (select a (- l 1)))
 (AND (EQ (select a0 (- l 1)) (select a x0))
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (- l 1))) (<= (select a0 k) (select a0 (- l 1))))))))))))))))))))
+(IMPLIES (AND (<= 0 k) (< k (- l 1))) (<= (select a0 k) (select a0 (- l 1))))))))))))))))))))))
 

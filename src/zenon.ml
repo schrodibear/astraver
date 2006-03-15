@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.7 2006-03-07 15:12:01 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.8 2006-03-15 16:03:51 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -355,7 +355,7 @@ let reset () = Queue.clear queue; Output.reset ()
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
-  let file = fwe ^ "_why.znn" in
+  let file = out_file (fwe ^ "_why.znn") in
   do_not_edit_below ~file
     ~before:prelude
     ~sep

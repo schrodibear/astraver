@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.171 2006-02-16 12:39:49 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.172 2006-03-15 16:03:50 filliatr Exp $ i*)
 
 
 open Format
@@ -99,7 +99,7 @@ let interp_term_bin_op ty1 ty2 op =
   | (Tenum _ | Tint _), _, Bsub -> "sub_int"
   | (Tenum _ | Tint _), _, Bmul -> "mul_int"
   | (Tenum _ | Tint _), _, Bdiv -> "div_int"
-  | (Tenum _ | Tint _), _, Bmod -> "dmod_int"
+  | (Tenum _ | Tint _), _, Bmod -> "mod_int"
   | Tfloat _, _, Badd -> "add_real"
   | Tfloat _, _, Bsub -> "sub_real"
   | Tfloat _, _, Bmul -> "mul_real"
