@@ -31,7 +31,7 @@ let disable () = active := false
 let swap_active () = active := not !active
 let is_enabled () = !active
 
-let prove_obligs () = obligs := not !obligs
+let swap_try_proof () = obligs := not !obligs
 let try_proof () = !obligs
 
 let exists p o = 
