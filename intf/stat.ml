@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.21 2006-03-15 13:26:04 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.22 2006-03-15 16:27:20 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -274,7 +274,7 @@ let get_all_results f (model:GTree.tree_store) =
 let try_proof oblig =
   (Cache.try_proof ())
   or not (Cache.is_enabled ())
-  or (Cache.is_enabled () && not (Cache.o_in_cache oblig)) 
+  or (Cache.is_enabled () && not (in_cache (Astprinter.clean oblig))) 
 
 (* 
  * run a prover on an obligation and update the model 
@@ -282,7 +282,7 @@ let try_proof oblig =
 let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
-  if (try_proof o) then
+  if (try_proof seq) then
     try 
       let row = Hashtbl.find Model.orows oblig in
       model#set ~row ~column:column_p `EXECUTE;
