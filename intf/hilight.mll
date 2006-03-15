@@ -35,7 +35,7 @@
     let h = Hashtbl.create 97 in
     List.iter 
       (fun s -> Hashtbl.add h s ())
-      [ "for"; "if"; "else"; "while"; "and"; "do"; "not"; "real"; 
+      [ "typedef" ; "for"; "if"; "else"; "while"; "and"; "do"; "not"; "real"; 
 	"var"; "begin"; "or"; "to"; "end"; "int"; "true"; "false";
 	"type"; "function"; "of"; "then"; "break"; "void"; "struct";
 	"return"];
@@ -59,6 +59,8 @@ let float = digit+ '.' digit+ exponent?
 rule token tbuf = parse
   | "//@"
       { Buffer.add_string comment "//@"; comment3 tbuf lexbuf; token tbuf lexbuf }
+  | "//"
+      { Buffer.add_string comment "//"; comment4 tbuf lexbuf; token tbuf lexbuf }
   | "/*@"
       { Buffer.add_string comment "/*@"; comment2 tbuf lexbuf; token tbuf lexbuf }
   | "/*"   
@@ -79,7 +81,7 @@ and comment1 tbuf = parse
 	   Buffer.clear comment }
   | _    { Buffer.add_string  comment (lexeme lexbuf); 
 	   comment1 tbuf lexbuf }
-  | eof  { raise (Lexical_error "unterminated comment") }
+  | eof  { () }
 
 and comment2 tbuf = parse
   | "@*/" | "*/" as s 
@@ -89,7 +91,7 @@ and comment2 tbuf = parse
 	  Buffer.clear comment }
   | _   { Buffer.add_string  comment (lexeme lexbuf); 
 	  comment2 tbuf lexbuf }
-  | eof { raise (Lexical_error "unterminated comment") }
+  | eof { () }
 
 and comment3 tbuf = parse 
   | "\n" { Buffer.add_string comment "\n";
@@ -98,4 +100,13 @@ and comment3 tbuf = parse
 	   Buffer.clear comment }
   | _    { Buffer.add_string  comment (lexeme lexbuf); 
 	   comment3 tbuf lexbuf}
-  | eof  { raise (Lexical_error "unterminated comment") }
+  | eof  { () }
+
+and comment4 tbuf = parse 
+  | "\n" { Buffer.add_string comment "\n";
+	   let t = Buffer.contents comment in
+	   insert_text tbuf "comment" t; 
+	   Buffer.clear comment }
+  | _    { Buffer.add_string  comment (lexeme lexbuf); 
+	   comment4 tbuf lexbuf}
+  | eof  { () }
