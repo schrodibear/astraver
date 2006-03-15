@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.18 2006-03-15 08:47:02 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.19 2006-03-15 09:12:06 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -205,6 +205,26 @@ module View = struct
 
 end
 
+let update_buffer tv =
+  let buf = GText.buffer () in
+  tv#set_buffer buf;
+  buf
+
+let select_obligs (model:GTree.tree_store) (tv:GText.view) (tv_s:GText.view) selected_rows = 
+  List.iter
+    (fun p ->
+       let row = model#get_iter p in
+       let s = model#get ~row ~column:Model.fullname in
+	 try
+	   let o = Model.find_oblig s in
+	   let buf = update_buffer tv in
+	   buf#set_text "";
+	   Pprinter.text_of_obligation tv tv_s o (Astprinter.is_active ());
+	   let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
+	   tv#scroll_to_mark ~use_align:true mark
+	 with Not_found -> ())
+    selected_rows
+
 (* 
  * Timeout 
  *)
@@ -252,7 +272,9 @@ let get_all_results f (model:GTree.tree_store) =
  * Should i proove this obligation again ?
  *)
 let try_proof oblig =
-  (Cache.is_enabled () && not (Cache.o_in_cache oblig)) or not (Cache.is_enabled ())
+  (Cache.try_proof ())
+  or not (Cache.is_enabled ())
+  or (Cache.is_enabled () && not (Cache.o_in_cache oblig)) 
 
 (* 
  * run a prover on an obligation and update the model 
@@ -260,7 +282,7 @@ let try_proof oblig =
 let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
-  if (Cache.try_proof ()) or (try_proof o) then
+  if (try_proof o) then
     try 
       let row = Hashtbl.find Model.orows oblig in
       model#set ~row ~column:column_p `EXECUTE;
@@ -568,27 +590,6 @@ let main () =
 		     status_context#pop ();
 		     ignore (status_context#push s));
   flash_info := (fun s -> status_context#flash ~delay:2000 s);
- 
-  (* status bar  *)
-  let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Cache.is_enabled ()) 
-    ~packing:hbox#pack() in
-  let _ = mypprint#connect#toggled ~callback:(fun () -> Astprinter.swap_active ()) in
-  (* cache *)
-  let mycache = GButton.check_button ~label:"Cache   " ~active:(Cache.is_enabled ()) 
-    ~packing:hbox#pack() in
-  let _ = mycache#connect#toggled ~callback:(fun () -> Cache.swap_active ()) in
-  let myoblig = GButton.check_button ~label:"Hard Proof   " ~active:(Cache.try_proof ()) 
-    ~packing:hbox#pack() in
-  let _ = myoblig#connect#toggled ~callback:(fun () -> Cache.prove_obligs ()) in
-  (* timeout set *)
-  let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
-  let timeout = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
-  timeout#adjustment#set_bounds ~lower:1. ~upper:999. ~step_incr:1. ();
-  timeout#adjustment#set_value 10.;
-  let _ = 
-    timeout#connect#value_changed ~callback:
-      (fun () -> set_timeout timeout#value_as_int)
-  in
 
   (* lower text view: source code *)
   let tv2 = GText.view ~packing:(sw2#add) () in
@@ -602,6 +603,33 @@ let main () =
   let _ = tv1#misc#modify_font !upper_view_general_font in
   let _ = tv1#set_editable false in
   let _ = tv1#set_wrap_mode `WORD in
+ 
+  (* status bar  *)
+  let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Cache.is_enabled ()) 
+    ~packing:hbox#pack() in
+  let _ = mypprint#connect#toggled 
+    ~callback:(fun () -> Astprinter.swap_active ();
+		 let list = view#selection#get_selected_rows in
+		 select_obligs model tv1 tv2 list
+	      ) in
+  (* cache *)
+  let mycache = GButton.check_button ~label:"Cache   " ~active:(Cache.is_enabled ()) 
+    ~packing:hbox#pack() in
+  let _ = mycache#connect#toggled ~callback:(fun () -> Cache.swap_active ()) in
+  let myoblig = GButton.check_button ~label:"Hard Proof   " ~active:(Cache.try_proof ()) 
+    ~packing:hbox#pack() in
+  let _ = myoblig#connect#toggled ~callback:(fun () -> Cache.swap_try_proof ()) in
+  (* timeout set *)
+  let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
+  let timeout = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
+  timeout#adjustment#set_bounds ~lower:1. ~upper:999. ~step_incr:1. ();
+  timeout#adjustment#set_value 10.;
+  let _ = 
+    timeout#connect#value_changed ~callback:
+      (fun () -> set_timeout timeout#value_as_int)
+  in
+  
+  (* for text components *)
   let _ = GtkBase.Widget.add_events tv1#as_widget
     [`ENTER_NOTIFY; `POINTER_MOTION] in
   let _ = 
@@ -631,12 +659,6 @@ let main () =
 	 tags;
        false)
   in
-
-  let update_buffer tv =
-    let buf = GText.buffer () in
-    tv#set_buffer buf;
-    buf
-  in
   
   (*
    * obligation selection 
@@ -644,19 +666,8 @@ let main () =
   let _ =
     view#selection#connect#after#changed ~callback:
       begin fun () ->
-        List.iter
-          (fun p ->
-             let row = model#get_iter p in
-             let s = model#get ~row ~column:Model.fullname in
-             try
-               let o = Model.find_oblig s in
-               let buf = update_buffer tv1 in
-               buf#set_text "";
-               Pprinter.text_of_obligation tv1 tv2 o (Astprinter.is_active ());
-	       let mark = `MARK (tv1#buffer#create_mark tv1#buffer#end_iter) in
-	       tv1#scroll_to_mark ~use_align:true mark
-             with Not_found -> ())
-          view#selection#get_selected_rows;
+	let list = view#selection#get_selected_rows in
+        select_obligs model tv1 tv2 list
       end
   in
 
@@ -728,17 +739,6 @@ let main () =
        in model#set ~row ~column:Model.name (k^" "^" "^success^"/"^n^" "^s)
     )
     Model.frows
-(*
-  let update_statistics p (model:GTree.tree_store) row result = 
-  let stat = string_of_int result in
-  model#set ~row ~column:p.Model.pr_result stat
-*)
-    (*let statistics = get_statistics model row 
-      and total = string_of_int (get_all_results f model) 
-      and children = string_of_int n in
-      model#set 
-      ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)*)
-
   in
 
   (* initialisation for check menus *)
