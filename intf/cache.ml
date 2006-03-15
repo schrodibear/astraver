@@ -89,9 +89,7 @@ let remove x = Hashtbl.remove !cache x
 let in_cache x = Hashtbl.mem !cache x
 let find x = Hashtbl.find !cache x
 let is_empty () = Hashtbl.length !cache = 0
-let o_in_cache o = 
-  let (_,_,seq) = o in
-  in_cache seq
+let o_in_cache o = let (_,_,seq) = o in in_cache seq
 
 let add (seq:Cc.sequent) (prover:string) = 
   let o = Astprinter.clean seq in
