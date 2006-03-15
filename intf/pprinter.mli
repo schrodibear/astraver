@@ -12,4 +12,4 @@ open Tags
 
 val text_of_obligation :
   GText.view -> GText.view ->
-  'a * string * (Cc.context_element list * Logic.predicate) -> unit
+  'a * string * (Cc.context_element list * Logic.predicate) -> bool -> unit

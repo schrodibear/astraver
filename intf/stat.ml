@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.17 2006-03-08 16:00:10 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.18 2006-03-15 08:47:02 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -218,9 +218,9 @@ let default_prover = ref Model.simplify
 let set_prover p = default_prover := p
 let print_prover p = p.Model.pr_name
 let get_prover s = 
-  let rec next p = match p with
+  let rec next = function
     | [] -> assert false;
-    | p' :: r -> if p'.Model.pr_name = s then p'.Model.pr_icon else next r
+    | p' :: r -> if p'.Model.pr_name = s then p' else next r
   in next Model.provers
 
 let prove fct = 
@@ -260,7 +260,7 @@ let try_proof oblig =
 let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
-  if try_proof o then
+  if (Cache.try_proof ()) or (try_proof o) then
     try 
       let row = Hashtbl.find Model.orows oblig in
       model#set ~row ~column:column_p `EXECUTE;
@@ -283,7 +283,10 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o =
       flush stdout;
       0
     end
-  else 1
+  else begin
+    !flash_info "No need to prove these obligations";
+    1
+  end
 
 let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s () = 
   try 
@@ -388,45 +391,7 @@ let main () =
     configuration_factory#add_image_item ~label:"Customize fonts" 
       ~stock:`SELECT_FONT
       ~callback:(fun () -> !flash_info "Not implemented") () in
-  let _ = configuration_factory#add_separator ()  in
-  (* menus for povers *)
-  let provers_m =
-    List.map
-      (fun p -> 
-	 p, 
-	 configuration_factory#add_check_item ~active:true
-	   ~callback:(fun b -> default_prover := p) p.Model.pr_name)
-      Model.provers
-  in
-  let provers_cb = 
-    List.map
-      (fun (p,m) ->
-	 let callback ev =
-	   List.iter (fun (p',m') -> m'#set_active (p == p')) provers_m;
-	   set_prover p;
-	   !flash_info (p.Model.pr_name ^ " selected for default mode");
-	   true
-	 in
-	 m#event#connect#button_release ~callback;
-	 p, callback)
-    provers_m
-  in
-  let switch_next_prover () = 
-    let current_prover = !default_prover in
-    let p1,cb1 = List.hd provers_cb in
-    let rec find_next = function
-      | [] -> assert false
-      | [p',_] -> assert (current_prover == p'); cb1 ()
-      | (p',_) :: (_,cb'') :: _ when current_prover == p' -> cb'' ()
-      | _ :: r -> find_next r
-    in
-    ignore (find_next provers_cb)
-  in 
-  let _ = configuration_factory#add_separator ()  in
-  let _ = 
-    configuration_factory#add_image_item ~key:GdkKeysyms._N 
-      ~label:"Switch to next prover" ~callback:switch_next_prover () 
-  in
+
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
 
@@ -439,6 +404,14 @@ let main () =
   let _ = view#set_rules_hint true in
   let vc_provers = View.add_columns ~view ~model in
   let _ = 
+    Hashtbl.iter 
+      (fun f row -> 
+	 let n = model#iter_n_children (Some(row)) in
+	 model#set ~row ~column:Model.name (f^" 0/"^(string_of_int n)^" [0|0|0]   "))
+      Model.frows in
+  (* cache and view menu *)
+  let _ = configuration_factory#add_separator ()  in
+  let _ = 
     configuration_factory#add_image_item ~key:GdkKeysyms._E 
       ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () 
   in
@@ -446,12 +419,26 @@ let main () =
     configuration_factory#add_image_item ~key:GdkKeysyms._C 
       ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () 
   in
-  let _ = 
-    Hashtbl.iter 
-      (fun f row -> 
-	 let n = model#iter_n_children (Some(row)) in
-	 model#set ~row ~column:Model.name (f^" 0/"^(string_of_int n)^" [0|0|0]   "))
-      Model.frows in
+  let _ = configuration_factory#add_separator ()  in
+  (*let cache_m = configuration_factory#add_radio_item ~active:(Cache.is_enabled ())
+    "Cache enabled" in
+    let _ = cache_m#event#connect#button_release
+    ~callback:(fun ev -> 
+    Cache.swap_active (); 
+    cache_m#set_active (Cache.is_enabled ());
+    false) in
+    let ocache_m = configuration_factory#add_radio_item ~active:(Cache.try_proof ()) 
+    "Proove saved obligations" in
+    let _ = ocache_m#event#connect#button_release
+    ~callback:(fun ev -> 
+    Cache.prove_obligs (); 
+    cache_m#set_active (Cache.try_proof ()); 
+    false) in*)
+  let _ = configuration_factory#add_image_item ~label:"Clear cache" 
+    ~callback:(fun () -> 
+		 Cache.clear ();
+		 !flash_info "Cache cleared"
+	      ) () in 
   (* proof menu *)
   let proof_menu = factory#add_submenu "Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 
@@ -491,6 +478,46 @@ let main () =
     proof_factory#add_image_item ~label:"Prove selected obligation" 
       ~key:GdkKeysyms._O ~callback:oblig_callback () 
   in
+  (* menus for povers *)
+  let _ = proof_factory#add_separator ()  in
+  let provers_m =
+    List.map
+      (fun p -> 
+	 p, 
+	 proof_factory#add_check_item ~active:true
+	   ~callback:(fun b -> default_prover := p) p.Model.pr_name)
+      Model.provers
+  in
+  let provers_cb = 
+    List.map
+      (fun (p,m) ->
+	 let callback ev =
+	   List.iter (fun (p',m') -> m'#set_active (p == p')) provers_m;
+	   set_prover p;
+	   !flash_info (p.Model.pr_name ^ " selected for default mode");
+	   true
+	 in
+	 m#event#connect#button_release ~callback;
+	 p, callback)
+    provers_m
+  in
+  let switch_next_prover () = 
+    let current_prover = !default_prover in
+    let p1,cb1 = List.hd provers_cb in
+    let rec find_next = function
+      | [] -> assert false
+      | [p',_] -> assert (current_prover == p'); cb1 ()
+      | (p',_) :: (_,cb'') :: _ when current_prover == p' -> cb'' ()
+      | _ :: r -> find_next r
+    in
+    ignore (find_next provers_cb)
+  in 
+  let _ = proof_factory#add_separator ()  in
+  let _ = 
+    proof_factory#add_image_item ~key:GdkKeysyms._N 
+      ~label:"Switch to next prover" ~callback:switch_next_prover () 
+  in
+
 
   (* run provers on all proof obligations *)
   List.iter
@@ -542,6 +569,17 @@ let main () =
 		     ignore (status_context#push s));
   flash_info := (fun s -> status_context#flash ~delay:2000 s);
  
+  (* status bar  *)
+  let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Cache.is_enabled ()) 
+    ~packing:hbox#pack() in
+  let _ = mypprint#connect#toggled ~callback:(fun () -> Astprinter.swap_active ()) in
+  (* cache *)
+  let mycache = GButton.check_button ~label:"Cache   " ~active:(Cache.is_enabled ()) 
+    ~packing:hbox#pack() in
+  let _ = mycache#connect#toggled ~callback:(fun () -> Cache.swap_active ()) in
+  let myoblig = GButton.check_button ~label:"Hard Proof   " ~active:(Cache.try_proof ()) 
+    ~packing:hbox#pack() in
+  let _ = myoblig#connect#toggled ~callback:(fun () -> Cache.prove_obligs ()) in
   (* timeout set *)
   let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
   let timeout = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
@@ -566,8 +604,8 @@ let main () =
   let _ = tv1#set_wrap_mode `WORD in
   let _ = GtkBase.Widget.add_events tv1#as_widget
     [`ENTER_NOTIFY; `POINTER_MOTION] in
-  let _ = tv1#event#connect#motion_notify
-    ~callback:
+  let _ = 
+    tv1#event#connect#motion_notify ~callback:
     (fun e -> 
        let win = match tv1#get_window `WIDGET with
 	 | None -> assert false
@@ -614,7 +652,7 @@ let main () =
                let o = Model.find_oblig s in
                let buf = update_buffer tv1 in
                buf#set_text "";
-               Pprinter.text_of_obligation tv1 tv2 o;
+               Pprinter.text_of_obligation tv1 tv2 o (Astprinter.is_active ());
 	       let mark = `MARK (tv1#buffer#create_mark tv1#buffer#end_iter) in
 	       tv1#scroll_to_mark ~use_align:true mark
              with Not_found -> ())
@@ -668,7 +706,8 @@ let main () =
 		 Queue.iter 
 		   (fun p -> 
 		      let zecol = get_prover p in
-		      model#set ~row ~column:zecol `HARDDISK
+		      model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
+		      model#set ~row ~column:Model.result 1
 		   )
 		   (Cache.find cleaned)
 	       with Not_found -> 
@@ -677,12 +716,29 @@ let main () =
 		   flush stdout
 		 end
 	     end
-	   else begin
-	     (*print_endline oblig;
-	     flush stdout*)
-	   end
 	) 
 	Model.obligs;
+  in
+  let _ = (* update statistics for functions *)
+    Hashtbl.iter 
+    (fun k row -> 
+       let success = (string_of_int (get_all_results k model))
+       and n = (string_of_int (model#iter_n_children (Some(row))))
+       in let s = get_statistics model (Hashtbl.find Model.frows k)
+       in model#set ~row ~column:Model.name (k^" "^" "^success^"/"^n^" "^s)
+    )
+    Model.frows
+(*
+  let update_statistics p (model:GTree.tree_store) row result = 
+  let stat = string_of_int result in
+  model#set ~row ~column:p.Model.pr_result stat
+*)
+    (*let statistics = get_statistics model row 
+      and total = string_of_int (get_all_results f model) 
+      and children = string_of_int n in
+      model#set 
+      ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)*)
+
   in
 
   (* initialisation for check menus *)

@@ -22,6 +22,12 @@ open Misc
 open Pp
 open Tags
 
+let active = ref true
+let desactivate () = active := false
+let activate () = active := true
+let swap_active () = active := not !active
+let is_active () = !active
+
 let grab_infos = 
   let r_loc = Str.regexp "File \"\\(.+\\)\", line \\([0-9]+\\), characters \\([0-9]+\\)-\\([0-9]+\\)" in
   fun s -> 
@@ -126,17 +132,23 @@ let print_term fmt t =
     | Tapp (id, _, _) as t when (Ident.string id = "shift") -> true
     | _ -> false
   and print_fct_acc fmt = function
-    | Tapp (id, [m; term], _) -> 
-	if (is_shift term) 
-	then fprintf fmt "%a{%a}" print_fct_acc_shift term print3 m
-	else fprintf fmt "%a{%a}" print3 term print3 m
-    | t -> print3 fmt t
+	| Tapp (id, [m; term], _) ->
+	    if (is_active ()) 
+	    then 
+	      if (is_shift term) 
+	      then fprintf fmt "%a{%a}" print_fct_acc_shift term print3 m
+	      else fprintf fmt "%a{%a}" print3 term print3 m
+	    else fprintf fmt "(acc %a %a)" print3 term print3 m
+	| t -> print3 fmt t
   and print_fct_acc_shift fmt = function 
     | Tapp (id, [p; offset], _) -> fprintf fmt "%a[%a]" print3 p print3 offset;
     | t -> print3 fmt t
-  and print_fct_shift fmt = function 
-    | Tapp (id, [p; offset], _) -> fprintf fmt "%a + %a" print3 p print3 offset;
-    | t -> print3 fmt t
+  and print_fct_shift fmt = function
+	 | Tapp (id, [p; offset], _) -> 
+	     if (is_active ()) 
+	     then fprintf fmt "%a + %a" print3 p print3 offset
+	     else fprintf fmt "(shift %a %a)" print3 p print3 offset
+	 | t -> print3 fmt t
   in
   print3 fmt t
 

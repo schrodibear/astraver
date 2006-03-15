@@ -23,11 +23,16 @@ let max_size = ref 5000 (* maximum cache size *)
 let cache = ref (Hashtbl.create 97)
 let source_file = ref "/tmp/gwhy.cache"
 let active = ref true
+let obligs = ref false
 let ok = ref true
 
 let enable () = active := true
 let disable () = active := false
+let swap_active () = active := not !active
 let is_enabled () = !active
+
+let prove_obligs () = obligs := not !obligs
+let try_proof () = !obligs
 
 let exists p o = 
   try 
@@ -71,14 +76,14 @@ let load_cache source =
   if !ok then read_cache ();
   is_full := fool ()
     
-let save_cache () = 
+let save () = 
   let out_channel = open_out !source_file in
   to_channel out_channel !cache flags;
   close_out out_channel
 
-let clear_cache () = 
+let clear () = 
   Hashtbl.clear !cache;
-  save_cache ()
+  save ()
 
 let remove x = Hashtbl.remove !cache x
 let in_cache x = Hashtbl.mem !cache x
@@ -104,4 +109,4 @@ let add (seq:Cc.sequent) (prover:string) =
 	is_full := fool ()
       end
   end;
-  save_cache () (* actually, must be done when exiting gui *)
+  save () (* actually, must be done when exiting gui *)

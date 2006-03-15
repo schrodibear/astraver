@@ -26,11 +26,13 @@ open Tagsplit
 open Tags
 
 let obligs = Hashtbl.create 5501 (* Nombre premier de Sophie Germain *)
+let pprinter = Hashtbl.create 5501
 let last_fct = ref ""
 let last_line = ref 0
 let last_file = ref ""
 let pwd = Sys.getcwd ()
 let source = ref ""
+let selection = ref ""
 let tbuf_source = ref (GText.buffer ())
 let tv_source = ref (GText.view ())
 
@@ -167,8 +169,9 @@ let print_oblig fmt (ctx,concl) =
 let is_buffer_saved = 
   Hashtbl.mem obligs
 
-let save_buffer s (tbuf:GText.buffer) = 
-  Hashtbl.add obligs s tbuf
+let save_buffer s (tbuf:GText.buffer) pprint = 
+  Hashtbl.add obligs s tbuf;
+  Hashtbl.add pprinter s pprint
 
 let get_buffer = 
   Hashtbl.find obligs
@@ -193,15 +196,36 @@ let print_all (tbuf:GText.buffer) s p =
     flush_str_formatter () in
   split tbuf (Lexing.from_string conclusion)
 
-let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) = 
+let unchanged s pprint = 
+  (is_buffer_saved s) 
+  && (try 
+	(Hashtbl.find pprinter s) = pprint
+      with Not_found -> pprint)
+
+let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) pprint = 
   tbuf_source := tv_s#buffer;
   tv_source := tv_s;
   last_fct := s;
-  if (is_buffer_saved s) then 
+  if (unchanged s pprint) then 
     tv#set_buffer (get_buffer s)
   else begin
     let tbuf = GText.buffer () in
     tv#set_buffer tbuf;
+    let _ = 
+      tv#event#connect#button_release 
+	~callback:(fun ev -> 
+		     let buf = tv#buffer in
+		     let (its, ite) = buf#selection_bounds in
+		     if ite <> its then begin
+		       let ite = its#forward_char in
+		       let text = buf#get_text ~start:its ~stop:ite () in
+		       if text <> "" then begin
+			 selection := text;
+			 print_endline text; flush stdout
+		       end
+		     end;
+		     false)
+    in
     print_all tbuf s p;
-    save_buffer s tbuf;
+    save_buffer s tbuf pprint;
   end
