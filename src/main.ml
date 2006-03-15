@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.92 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.93 2006-03-15 08:57:08 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -53,7 +53,17 @@ let reset () =
   | Gappa -> Gappa.reset ()
   | Dispatcher -> ()
 
-let push_decl d = match prover () with
+let add_loc = function
+  | Dtype (loc, _, s)
+  | Dlogic (loc, s, _)
+  | Dpredicate_def (loc, s, _)
+  | Dfunction_def (loc, s, _) 
+  | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
+  | Dgoal _ -> ()
+
+let push_decl d = 
+  add_loc d;
+  match prover () with
   | Pvs -> Pvs.push_decl d
   | Coq _ -> Coq.push_decl d
   | HolLight -> Holl.push_decl d

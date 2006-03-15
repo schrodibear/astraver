@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.13 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.14 2006-03-15 08:57:08 filliatr Exp $ i*)
 
 open Format
 
@@ -41,3 +41,8 @@ val join : 'a * 'b -> 'a * 'b -> 'a * 'b
 
 val current_offset : int ref
 val reloc : Lexing.position -> Lexing.position
+
+(* Identifiers localization *)
+
+val add_ident : string -> position -> unit
+val ident : string -> position

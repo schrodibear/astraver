@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.15 2006-01-18 09:40:41 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.16 2006-03-15 08:57:08 filliatr Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -81,3 +81,9 @@ let report_obligation_position fmt (b,e) =
   
 let current_offset = ref 0
 let reloc p = { p with pos_cnum = p.pos_cnum + !current_offset }
+
+(* Identifiers localization *)
+
+let ident_t = Hashtbl.create 97
+let add_ident = Hashtbl.add ident_t
+let ident = Hashtbl.find ident_t
