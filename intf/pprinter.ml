@@ -27,36 +27,43 @@ open Tags
 
 let obligs = Hashtbl.create 5501 (* Nombre premier de Sophie Germain *)
 let pprinter = Hashtbl.create 5501
+let files = Hashtbl.create 10
 let last_fct = ref ""
 let last_line = ref 0
 let last_file = ref ""
 let pwd = Sys.getcwd ()
 let source = ref ""
-let selection = ref ""
-let tbuf_source = ref (GText.buffer ())
 let tv_source = ref (GText.view ())
 
 let print_loc = function 
   | None -> "\"nowhere\""
   | Some {file=f; line=l; sp=s; ep=e} ->
-      let ff = Filename.concat pwd f in
+      let ff = if Filename.is_relative f then Filename.concat pwd f else f in
       ("file \""^ff^"\", line "^l^", characters "^s^" - "^e)
+
+let is_cfile f = Filename.check_suffix f ".c"
+  (* otherwise it's .why *)
 
 let read_file = function 
   | None -> ()
   | Some {file=f; line=l; sp=_; ep=_} ->
       try
 	let in_channel = open_in f in
-	try
-          let lexbuf = Lexing.from_channel in_channel in
-          while true do
-            Hilight.token !tbuf_source lexbuf;
-          done
-	with Hilight.Eof -> ()
+	begin 
+	  try
+            let lexbuf = Lexing.from_channel in_channel 
+	    and hilight = if (is_cfile f) then 
+	      Hilight.token
+	  else Whyhilight.scan in
+            while true do
+              hilight !tv_source#buffer lexbuf;
+            done
+	  with Hilight.Eof | Whyhilight.Eof -> ()
+	end;
       with Sys_error s -> 
 	begin
 	  print_endline ("     [...] Sys_error : "^s); flush stdout;
-	  !tbuf_source#set_text "" 
+	  !tv_source#buffer#set_text "" 
 	end
 
 let hypo = (* Model : HW_11 *)
@@ -102,17 +109,23 @@ let move_to_source = function
   | None -> ()
   | Some loc ->
       let line = int_of_string loc.line
-      and file = loc.file in 
-      if !last_file = file then begin
-	last_line := line;
-	move_to_line line
-      end
-      else if !last_file <> file then begin
-	last_file := file;
-	last_line := line;
-	read_file (Some(loc));
-	move_to_line line
-      end
+      and file = loc.file in
+      last_line := line;
+      if !last_file = file then 
+	  move_to_line line
+      else 
+	begin 
+	  last_file := file;
+	  if (Hashtbl.mem files file) then 
+	    !tv_source#set_buffer (Hashtbl.find files file)
+	  else  
+	    begin
+	      !tv_source#set_buffer (GText.buffer ());
+	      read_file (Some(loc));
+	      Hashtbl.add files file !tv_source#buffer;
+	    end;
+	  move_to_line line
+	end
 
 let rec intros ctx = function 
   | Forall (true, id, n, t, p) ->
@@ -202,8 +215,62 @@ let unchanged s pprint =
 	(Hashtbl.find pprinter s) = pprint
       with Not_found -> pprint)
 
+let is_ident_char s = String.length s = 1 && match s.[0] with
+  | 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' -> true
+  | _ -> false
+
+let show_definition (tv:GText.view) (tv_s:GText.view) = 
+  let buf = tv#buffer in
+  let find_backward (it:GText.iter) = 
+    let rec find start stop = 
+      if (start = buf#start_iter) then
+	start 
+      else
+	let c = buf#get_text ~start ~stop () in
+	if is_ident_char c then 
+	  find (start#backward_char) start
+	else stop
+    in find (it#backward_char) it
+  in
+  let find_forward (it:GText.iter) = 
+    let rec find start stop = 
+      if (stop = buf#end_iter) then
+	stop
+      else
+	let c = buf#get_text ~start ~stop () in
+	if is_ident_char c then 
+	  find stop (stop#forward_char) 
+	else start
+    in find it (it#forward_char)
+  in
+  let buf = tv#buffer in
+  let win = match tv#get_window `WIDGET with
+    | None -> assert false
+    | Some w -> w
+  in
+  let x,y = Gdk.Window.get_pointer_location win in
+  let b_x,b_y = tv#window_to_buffer_coords ~tag:`WIDGET ~x ~y in
+  let it = tv#get_iter_at_location ~x:b_x ~y:b_y in
+  let start = if (it = buf#start_iter) then it else find_backward it in
+  let stop = if (it = buf#end_iter) then it else find_forward it in
+  let text = buf#get_text ~start ~stop () in
+  if start <> stop && text <> "" then begin
+    try 
+      let pos = fst (Loc.ident text) in
+      let loc = {file=pos.Lexing.pos_fname; 
+		 line=(string_of_int pos.Lexing.pos_lnum); 
+		 sp=(string_of_int pos.Lexing.pos_bol); 
+		 ep=(string_of_int pos.Lexing.pos_cnum)} 
+      in 
+      (*
+       * print_endline (text ^ "  " ^ (print_loc (Some(loc)))); 
+       * flush stdout;
+       *)
+      move_to_source (Some(loc))
+    with Not_found -> ()
+  end
+    
 let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) pprint = 
-  tbuf_source := tv_s#buffer;
   tv_source := tv_s;
   last_fct := s;
   if (unchanged s pprint) then 
@@ -214,16 +281,8 @@ let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) pprint =
     let _ = 
       tv#event#connect#button_release 
 	~callback:(fun ev -> 
-		     let buf = tv#buffer in
-		     let (its, ite) = buf#selection_bounds in
-		     if ite <> its then begin
-		       let ite = its#forward_char in
-		       let text = buf#get_text ~start:its ~stop:ite () in
-		       if text <> "" then begin
-			 selection := text;
-			 print_endline text; flush stdout
-		       end
-		     end;
+		     if GdkEvent.Button.button ev = 3 then
+		       show_definition tv tv_s; 
 		     false)
     in
     print_all tbuf s p;
