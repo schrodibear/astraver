@@ -81,9 +81,9 @@ let print_term fmt t =
     | Tapp (id, [a;b], _) when id == t_mul_int ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
     | Tapp (id, [a;b], _) when id == t_div_int ->
-	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
+	fprintf fmt "(@[int_div %a@ %a@])" print2 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
-	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
+	fprintf fmt "(@[int_mod %a@ %a@])" print2 a print3 b
     | t ->
 	print3 fmt t
   and print3 fmt = function
