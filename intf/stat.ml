@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.19 2006-03-15 09:12:06 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.20 2006-03-15 13:23:54 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -378,7 +378,8 @@ let run_prover_all p (view:GTree.view) (model:GTree.tree_store) () =
 let main () = 
   let w = GWindow.window 
 	    ~allow_grow:true ~allow_shrink:true
-	    ~width:window_width ~height:window_height ~title:"Why viewer" ()
+	    ~width:window_width ~height:window_height 
+	    ~title:"gWhy : Easy proof with easy tool" ()
   in
   w#misc#modify_font !general_font;
   (* let accel_group = GtkData.AccelGroup.create () in *)
@@ -579,18 +580,6 @@ let main () =
   (* bottom line *)
   let hbox = GPack.hbox ~packing:vbox#pack () in
 
-  (* status bar *)
-  let status_bar = 
-    GMisc.statusbar ~packing:(hbox#pack ~fill:true ~expand:true) () 
-  in
-  status_bar#misc#modify_font !statusbar_font ;
-  let status_context = status_bar#new_context "messages" in
-  ignore (status_context#push "Welcome to the Why GUI");
-  display_info := (fun s -> 
-		     status_context#pop ();
-		     ignore (status_context#push s));
-  flash_info := (fun s -> status_context#flash ~delay:2000 s);
-
   (* lower text view: source code *)
   let tv2 = GText.view ~packing:(sw2#add) () in
   let _ = tv2#misc#modify_font !lower_view_general_font in
@@ -628,6 +617,18 @@ let main () =
     timeout#connect#value_changed ~callback:
       (fun () -> set_timeout timeout#value_as_int)
   in
+
+  (* status bar *)
+  let status_bar = 
+    GMisc.statusbar ~packing:(hbox#pack ~fill:true ~expand:true) () 
+  in
+  status_bar#misc#modify_font !statusbar_font ;
+  let status_context = status_bar#new_context "messages" in
+  (*ignore (status_context#push "Welcome to the Why GUI");*)
+  display_info := (fun s -> 
+		     status_context#pop ();
+		     ignore (status_context#push s));
+  flash_info := (fun s -> status_context#flash ~delay:2000 s);
   
   (* for text components *)
   let _ = GtkBase.Widget.add_events tv1#as_widget

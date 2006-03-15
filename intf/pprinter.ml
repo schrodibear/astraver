@@ -151,7 +151,7 @@ let create_tag (tbuf:GText.buffer) t loc =
 	 else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
 	   Tags.refresh_last_colored [new_tag];
 	   new_tag#set_properties 
-	     [`BACKGROUND bc_hilight; `FOREGROUND fc_hilight]
+	       [`BACKGROUND bc_hilight; `FOREGROUND fc_hilight]
 	 end;
 	 false)
   );
