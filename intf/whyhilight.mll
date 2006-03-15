@@ -33,7 +33,7 @@
   let buffer = Buffer.create 1024
 }
 
-let keyw = "external" | "parameter" | "logic" | "predicate" | "axiom" |
+let keyw = "goal" | "external" | "parameter" | "logic" | "predicate" | "axiom" |
     "let" | "in" | "begin" | "end" | "if" | "then" | "else" | "of" |
     "ref" | "array" | "while" | "do" | "done" | "assert" | "label" | 
     "fun" | "rec" | "forall" | "and" | "->" | "type" | "exception"
