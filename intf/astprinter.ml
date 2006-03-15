@@ -138,7 +138,7 @@ let print_term fmt t =
 	      if (is_shift term) 
 	      then fprintf fmt "%a{%a}" print_fct_acc_shift term print3 m
 	      else fprintf fmt "%a{%a}" print3 term print3 m
-	    else fprintf fmt "(acc %a %a)" print3 term print3 m
+	    else fprintf fmt "(acc %a %a)" print3 m print3 term
 	| t -> print3 fmt t
   and print_fct_acc_shift fmt = function 
     | Tapp (id, [p; offset], _) -> fprintf fmt "%a[%a]" print3 p print3 offset;
