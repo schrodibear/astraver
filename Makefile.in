@@ -83,7 +83,7 @@ WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 
 TOOLS=$(WHY2HTML) $(DP) $(RVMERGE) $(WHYOBFUSCATOR)
 
-all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(TOOLS)
+all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
 opt: bin/why.opt bin/caduceus.opt
 
@@ -162,6 +162,8 @@ GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tagsplit.cmo intf/astprinter.cm
 	      intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
+gwhy-yes: bin/gwhy.$(OCAMLBEST)
+gwhy-no:
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)

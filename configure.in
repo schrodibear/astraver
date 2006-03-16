@@ -26,6 +26,7 @@
 #   OCAMLYACC     "ocamlyac"
 #   OCAMLLIB      the path to the ocaml standard library
 #   OCAMLVERSION  the ocaml version number
+#   LABLGTK2	  "yes" is available, "no" otherwise
 #   OCAMLWEB      "ocamlweb" (not mandatory)
 
 # check for one particular file of the sources 
@@ -133,6 +134,9 @@ AC_CHECK_PROG(OCAMLYACC,ocamlyacc,ocamlyacc,no)
 if test "$OCAMLYACC" = no ; then
 	AC_MSG_ERROR(Cannot find ocamlyacc.)
 fi
+
+# checking for lablgtk2
+AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no)
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
@@ -248,6 +252,7 @@ AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
+AC_SUBST(LABLGTK2)
 AC_SUBST(OCAMLWEB)
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
