@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.9 2006-03-20 13:44:40 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.10 2006-03-20 15:26:14 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -285,7 +285,7 @@ module Mono = struct
       "@[<hov 2>;;  %a: %a@]@\n@\n" idents id print_cc_type c
 
   let print_logic_instance fmt id i t =
-    fprintf fmt ";; Why logic %a@\n" idents id
+    fprintf fmt ";; Why logic %a@\n@\n" idents id
     (*
     fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
     *)
