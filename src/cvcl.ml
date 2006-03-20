@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.35 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.36 2006-03-20 13:44:40 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -90,7 +90,7 @@ let rec print_pure_type fmt = function
   | PTreal -> fprintf fmt "REAL"
   | PTunit -> fprintf fmt "UNIT"
   | PTexternal ([pt], id) when id == farray -> 
-      fprintf fmt "ARRAY INT OF %a" print_pure_type pt
+      fprintf fmt "(ARRAY INT OF %a)" print_pure_type pt
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
   | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i
@@ -247,8 +247,11 @@ let rec print_logic_type fmt = function
 
 module Mono = struct
 
-  let declare_type fmt pt = 
-    fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt
+  let declare_type fmt = function
+    | PTexternal ([_], id) when id == farray -> (* primitive *)
+	()
+    | pt -> 
+	fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt
 
   let print_parameter fmt id c =
     fprintf fmt 
@@ -307,9 +310,7 @@ let prelude fmt =
     fprintf fmt "
 UNIT: TYPE;
 tt: UNIT;
-sqrt_real: REAL -> REAL;
-int_of_real: REAL -> INT;
-mod_int: (INT, INT) -> INT;
+
 "
   end
 

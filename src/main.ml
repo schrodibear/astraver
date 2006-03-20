@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.94 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.95 2006-03-20 13:44:40 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -280,7 +280,7 @@ let load_prelude () =
     close_in c;
     (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
-      | Pvs | CVCLite ->
+      | Pvs ->
 	  let prover_prelude = Filename.temp_file "why_prelude" "" in
 	  output prover_prelude;
 	  Sys.remove prover_prelude

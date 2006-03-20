@@ -274,7 +274,7 @@ db debug: bin/why.byte src/logic.cmo
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE)
+install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE) gwhy-@LABLGTK2@
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)

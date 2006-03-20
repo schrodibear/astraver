@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.16 2006-03-07 15:12:01 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.17 2006-03-20 13:44:40 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -37,6 +37,7 @@ let () = Arg.parse spec (fun s -> Queue.push s files) usage
 let () = 
   Cvcl_split.debug := !debug; 
   Simplify_split.debug := !debug;
+  Zenon_split.debug := !debug;
   Calldp.debug := !debug
 
 (* stats *)

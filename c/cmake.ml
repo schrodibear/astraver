@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.20 2006-03-15 16:03:50 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.21 2006-03-20 13:44:40 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -48,7 +48,7 @@ let generic f targets =
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
        fprintf fmt "COQDEP=coqdep -I `coqc -where`/user-contrib@\n@\n";	    
-       fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib@\n@\n";
+       fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 
 	 (print_files simplify) targets;
 

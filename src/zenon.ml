@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.8 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.9 2006-03-20 13:44:40 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -265,14 +265,10 @@ let print_sequent fmt (hyps,concl) =
 let rec print_logic_type fmt = function
   | Predicate [] ->
       fprintf fmt "prop"
-  | Predicate [pt] ->
-      fprintf fmt "%a -> prop" print_pure_type pt
   | Predicate pl ->
-      fprintf fmt "%a -> prop)" (print_list comma print_pure_type) pl
+      fprintf fmt "%a -> prop" (print_list comma print_pure_type) pl
   | Function ([], pt) ->
       print_pure_type fmt pt
-  | Function ([pt1], pt2) ->
-      fprintf fmt "%a -> %a" print_pure_type pt1 print_pure_type pt2
   | Function (pl, pt) ->
       fprintf fmt "%a -> %a" 
 	(print_list comma print_pure_type) pl print_pure_type pt
@@ -289,8 +285,10 @@ module Mono = struct
       "@[<hov 2>;;  %a: %a@]@\n@\n" idents id print_cc_type c
 
   let print_logic_instance fmt id i t =
-    fprintf fmt ";; Why logic %a@\n" idents id;
+    fprintf fmt ";; Why logic %a@\n" idents id
+    (*
     fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
+    *)
 
   let print_predicate_def_instance fmt id i (bl,p) =
     fprintf fmt "@[;; Why predicate %a@]@\n" idents id;

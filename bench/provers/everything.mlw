@@ -55,6 +55,8 @@ axiom tl_cons : forall x:t. forall l:list. tl (cons(x,l)) = l
 goal hdtlconscons :
     forall x,y:t. hd(tl(cons(x, cons(y, nil)))) = y
 
+(* first-order *)
+
 logic nbocc : t, list -> int
 
 predicate equiv(l1:list, l2:list) = forall x:t. nbocc(x,l1) = nbocc(x,l2)
