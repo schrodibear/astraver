@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.6 2006-03-20 13:44:40 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.7 2006-03-20 14:23:42 filliatr Exp $ i*)
 
 open Printf
 
@@ -118,5 +118,5 @@ let harvey ?(timeout=10) ?(eclauses=2000) ~filename:f () =
     in
     iter 0;
     List.rev !results
-  end
-  else [ProverFailure "rvc failed"]
+  end else 
+    [ProverFailure "rvc failed"]
