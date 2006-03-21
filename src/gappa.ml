@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.ml,v 1.4 2006-03-07 11:12:49 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.5 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -145,7 +145,7 @@ let context ctx =
   let rec split eqs ins = function
     | [] ->
 	eqs, ins
-    | Svar (x, TTpure (PTexternal (_, id))) :: l when id == t_float ->
+    | Svar (x, PTexternal (_, id)) :: l when id == t_float ->
 	let v = fresh_var () in
 	let e = Ident.string x, Grnd (Gvar (Float, v)) in
 	split (e :: eqs) ins l
@@ -180,7 +180,7 @@ let rec intros ctx = function
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      intros (Svar (id', TTpure t) :: ctx) p'
+      intros (Svar (id', t) :: ctx) p'
   | Pimplies (true, a, b) -> 
       let h = fresh_hyp () in 
       intros (Spred (h, a) :: ctx) b

@@ -5,6 +5,39 @@ Require Export pointer_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
+  forall (A832:Set),
+  forall (x: ((pointer) A832)),
+  forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
+  forall (alloc: alloc_table),
+  forall (intM_x_13: ((memory) Z x_13)),
+  forall (intM_x_15: ((memory) Z A832)),
+  forall (r: ((pointer) r_16)),
+  forall (s: ((pointer) s_21)),
+  forall (t: ((pointer) t_19)),
+  forall (x_SPM_28: ((memory) ((pointer) x_13) SPM_28)),
+  forall (y_SPM_28: ((memory) Z SPM_28)),
+  forall (HW_1: (* File "pointer.c", line 12, characters 14-23 *)
+                (valid alloc x) /\ (valid_range alloc t 0 4) /\
+                (valid alloc s) /\
+                (constant_s y_SPM_28 x_SPM_28 SPM_s_21 intM_x_13 s alloc) /\
+                (constant_r r)),
+  forall (HW_2: (valid alloc x)),
+  forall (intM_x_15_0: ((memory) Z A832)),
+  forall (HW_3: intM_x_15_0 = (upd intM_x_15 x 0)),
+  forall (HW_4: (valid alloc x)),
+  forall (result: Z),
+  forall (HW_5: result = (acc intM_x_15_0 x)),
+  forall (intM_x_15_1: ((memory) Z A832)),
+  forall (HW_6: intM_x_15_1 = (upd intM_x_15_0 x (result + 1))),
+  (acc intM_x_15_1 x) = 1.
+Proof.
+intuition;subst;auto.
+rewrite acc_upd_eq;auto.
+rewrite acc_upd_eq;auto.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f2_impl_po_2 : 
   forall (A833:Set),
   forall (x: ((pointer) A833)),
   forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
@@ -29,39 +62,6 @@ Require Export pointer_spec_why.
   forall (HW_5: result = (acc intM_x_15_0 x)),
   forall (intM_x_15_1: ((memory) Z A833)),
   forall (HW_6: intM_x_15_1 = (upd intM_x_15_0 x (result + 1))),
-  (acc intM_x_15_1 x) = 1.
-Proof.
-intuition;subst;auto.
-rewrite acc_upd_eq;auto.
-rewrite acc_upd_eq;auto.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f2_impl_po_2 : 
-  forall (A834:Set),
-  forall (x: ((pointer) A834)),
-  forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
-  forall (alloc: alloc_table),
-  forall (intM_x_13: ((memory) Z x_13)),
-  forall (intM_x_15: ((memory) Z A834)),
-  forall (r: ((pointer) r_16)),
-  forall (s: ((pointer) s_21)),
-  forall (t: ((pointer) t_19)),
-  forall (x_SPM_28: ((memory) ((pointer) x_13) SPM_28)),
-  forall (y_SPM_28: ((memory) Z SPM_28)),
-  forall (HW_1: (* File "pointer.c", line 12, characters 14-23 *)
-                (valid alloc x) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s) /\
-                (constant_s y_SPM_28 x_SPM_28 SPM_s_21 intM_x_13 s alloc) /\
-                (constant_r r)),
-  forall (HW_2: (valid alloc x)),
-  forall (intM_x_15_0: ((memory) Z A834)),
-  forall (HW_3: intM_x_15_0 = (upd intM_x_15 x 0)),
-  forall (HW_4: (valid alloc x)),
-  forall (result: Z),
-  forall (HW_5: result = (acc intM_x_15_0 x)),
-  forall (intM_x_15_1: ((memory) Z A834)),
-  forall (HW_6: intM_x_15_1 = (upd intM_x_15_0 x (result + 1))),
   (result + 1) = 1.
 Proof.
 intuition.
@@ -70,6 +70,39 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
+  forall (A834:Set),
+  forall (x: ((pointer) A834)),
+  forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
+  forall (alloc: alloc_table),
+  forall (intM_x_13: ((memory) Z x_13)),
+  forall (intM_x_14: ((memory) Z A834)),
+  forall (r: ((pointer) r_16)),
+  forall (s: ((pointer) s_21)),
+  forall (t: ((pointer) t_19)),
+  forall (x_SPM_28: ((memory) ((pointer) x_13) SPM_28)),
+  forall (y_SPM_28: ((memory) Z SPM_28)),
+  forall (HW_1: (* File "pointer.c", line 4, characters 14-23 *)
+                (valid alloc x) /\ (valid_range alloc t 0 4) /\
+                (valid alloc s) /\
+                (constant_s y_SPM_28 x_SPM_28 SPM_s_21 intM_x_13 s alloc) /\
+                (constant_r r)),
+  forall (HW_2: (valid alloc x)),
+  forall (intM_x_14_0: ((memory) Z A834)),
+  forall (HW_3: intM_x_14_0 = (upd intM_x_14 x 0)),
+  forall (HW_4: (valid alloc x)),
+  forall (result: Z),
+  forall (HW_5: result = (acc intM_x_14_0 x)),
+  forall (intM_x_14_1: ((memory) Z A834)),
+  forall (HW_6: intM_x_14_1 = (upd intM_x_14_0 x (1 + result))),
+  (acc intM_x_14_1 x) = 1.
+Proof.
+intuition;subst;auto.
+rewrite acc_upd_eq;auto.
+rewrite acc_upd_eq;auto.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_2 : 
   forall (A835:Set),
   forall (x: ((pointer) A835)),
   forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
@@ -94,15 +127,14 @@ Save.
   forall (HW_5: result = (acc intM_x_14_0 x)),
   forall (intM_x_14_1: ((memory) Z A835)),
   forall (HW_6: intM_x_14_1 = (upd intM_x_14_0 x (1 + result))),
-  (acc intM_x_14_1 x) = 1.
+  result = 0.
 Proof.
-intuition;subst;auto.
-rewrite acc_upd_eq;auto.
-rewrite acc_upd_eq;auto.
+intuition.
+subst;caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_2 : 
+(*Why goal*) Lemma f_impl_po_3 : 
   forall (A836:Set),
   forall (x: ((pointer) A836)),
   forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
@@ -126,38 +158,6 @@ Save.
   forall (result: Z),
   forall (HW_5: result = (acc intM_x_14_0 x)),
   forall (intM_x_14_1: ((memory) Z A836)),
-  forall (HW_6: intM_x_14_1 = (upd intM_x_14_0 x (1 + result))),
-  result = 0.
-Proof.
-intuition.
-subst;caduceus.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_3 : 
-  forall (A837:Set),
-  forall (x: ((pointer) A837)),
-  forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
-  forall (alloc: alloc_table),
-  forall (intM_x_13: ((memory) Z x_13)),
-  forall (intM_x_14: ((memory) Z A837)),
-  forall (r: ((pointer) r_16)),
-  forall (s: ((pointer) s_21)),
-  forall (t: ((pointer) t_19)),
-  forall (x_SPM_28: ((memory) ((pointer) x_13) SPM_28)),
-  forall (y_SPM_28: ((memory) Z SPM_28)),
-  forall (HW_1: (* File "pointer.c", line 4, characters 14-23 *)
-                (valid alloc x) /\ (valid_range alloc t 0 4) /\
-                (valid alloc s) /\
-                (constant_s y_SPM_28 x_SPM_28 SPM_s_21 intM_x_13 s alloc) /\
-                (constant_r r)),
-  forall (HW_2: (valid alloc x)),
-  forall (intM_x_14_0: ((memory) Z A837)),
-  forall (HW_3: intM_x_14_0 = (upd intM_x_14 x 0)),
-  forall (HW_4: (valid alloc x)),
-  forall (result: Z),
-  forall (HW_5: result = (acc intM_x_14_0 x)),
-  forall (intM_x_14_1: ((memory) Z A837)),
   forall (HW_6: intM_x_14_1 = (upd intM_x_14_0 x (1 + result))),
   (not_assigns alloc intM_x_14 intM_x_14_1 (pset_singleton x)).
 Proof.
@@ -220,12 +220,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
-  forall (A838:Set), forall (A839:Set), forall (A840:Set), forall (A841:Set),
-  forall (A842:Set), forall (A843:Set), forall (A844:Set), forall (A845:Set),
+  forall (A837:Set), forall (A838:Set), forall (A839:Set), forall (A840:Set),
+  forall (A841:Set), forall (A842:Set), forall (A843:Set), forall (A844:Set),
   forall (SPM_s_21: ((memory) ((pointer) SPM_28) s_21)),
   forall (alloc: alloc_table),
   forall (intM_x_13: ((memory) Z x_13)),
-  forall (intM_z_18: ((memory) Z A845)),
+  forall (intM_z_18: ((memory) Z A844)),
   forall (r: ((pointer) r_16)),
   forall (s: ((pointer) s_21)),
   forall (t: ((pointer) t_19)),
@@ -235,19 +235,19 @@ Save.
                 (constant_s y_SPM_28 x_SPM_28 SPM_s_21 intM_x_13 s alloc) /\
                 (constant_r r)),
   forall (HW_2: 1 >= 1),
-  forall (result: ((pointer) A845)),
+  forall (result: ((pointer) A844)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intM_z_18_0: ((memory) Z A845)),
+  forall (intM_z_18_0: ((memory) Z A844)),
   forall (HW_4: intM_z_18_0 = (upd intM_z_18 result 0)),
   forall (HW_5: (* File "pointer.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
   forall (result0: Z),
-  forall (intM_z_18_1: ((memory) Z A845)),
+  forall (intM_z_18_1: ((memory) Z A844)),
   forall (HW_6: (* File "pointer.c", line 6, characters 13-36 *)
                 ((acc intM_z_18_1 result) = 1 /\ result0 = 0) /\
                 (not_assigns alloc0 intM_z_18_0 intM_z_18_1

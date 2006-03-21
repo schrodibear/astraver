@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.54 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.55 2006-03-21 15:37:40 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -126,9 +126,15 @@ let generalize_function_def (bl,t,e) =
 
 (* specialization *)
 
+let dump_type_var = ref (fun (v:type_var) -> ())
+
 let new_type_var =
   let c = ref 0 in
-  fun () -> incr c;{ tag = !c; type_val = None }
+  fun () -> 
+    incr c; 
+    let v = { tag = !c; type_val = None } in 
+    (*at_exit (fun () -> !dump_type_var v); *)
+    v
 
 let rec subst_pure_type s t =
   match t with
@@ -251,14 +257,14 @@ and subst_cc_binder s (id, bt) = (id, subst_cc_bind_type s bt)
 
 let subst_sequent s (h, p) = 
   let subst_hyp = function
-    | Svar (id, t) -> Svar (id, subst_cc_type s t)
+    | Svar (id, t) -> Svar (id, subst_pure_type s t)
     | Spred (id, p) -> Spred (id, subst_predicate s p)
   in
   (List.map subst_hyp h, subst_predicate s p)
 
 let find_sequent_vars (h, p) =
   let find_hyp_vars acc = function
-    | Svar (_, t) -> find_cc_type_vars acc t
+    | Svar (_, t) -> find_pure_type_vars acc t
     | Spred (_, p) -> find_predicate_vars acc p
   in
   let l = List.fold_left find_hyp_vars Vset.empty h in

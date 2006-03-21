@@ -1,7 +1,7 @@
 
 exception Return of int
 
-parameter N : int
+logic N : int
 
 parameter i : int ref
 parameter t : int array

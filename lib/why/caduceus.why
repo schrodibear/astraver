@@ -23,7 +23,7 @@ parameter any_pointer: unit -> {} 'z pointer { true }
 type 'z addr
 type alloc_table
 
-parameter null : 'z pointer
+logic null : 'z pointer
 
 logic block_length: alloc_table, 'z pointer -> int
 logic base_addr: 'z pointer -> 'z addr

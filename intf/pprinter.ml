@@ -131,7 +131,7 @@ let rec intros ctx = function
   | Forall (true, id, n, t, p) ->
       let id' = Ident.next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      let ctx', concl' = intros (Svar (id', TTpure t) :: ctx) p' in
+      let ctx', concl' = intros (Svar (id', t) :: ctx) p' in
       ctx', concl'
   | Pimplies (true, a, b) -> 
       let h = fresh_hyp () in 
@@ -173,7 +173,7 @@ let print_oblig fmt (ctx,concl) =
     fprintf fmt "%s" (hypothesis hypo_nb)
   and print_hyp fmt = function
     | Svar (id, t) ->
-	fprintf fmt "@[@{<var>%a:@}@ @{<cc_type>%a@}@]" Ident.print id print_cc_type t
+	fprintf fmt "@[@{<var>%a:@}@ @{<cc_type>%a@}@]" Ident.print id print_pure_type t
     | Spred (id, p) ->
 	fprintf fmt "@[@{<hypothesis>%a:@} @{<predicate>%a@}@]" print_name id print_predicate p
   in

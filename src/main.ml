@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.95 2006-03-20 13:44:40 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.96 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -81,15 +81,12 @@ let is_pure_type_scheme s = match s.scheme_type with
   | TypeV v -> is_pure_type_v v
 
 let push_parameter id v tv = match prover () with
-  | Pvs -> if is_pure_type_scheme v then Pvs.push_parameter id tv
-  | Coq _ -> if is_pure_type_scheme v || valid then Coq.push_parameter id tv
-  | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
-  | Isabelle -> if is_pure_type_scheme v then Isabelle.push_parameter id tv
-  | Hol4 -> if is_pure_type_scheme v then Hol4.push_parameter id tv
-  | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
-  | Harvey | Simplify | Zenon | SmtLib | Gappa -> () (* nothing to do? *)
-  | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
-  | Dispatcher -> ()
+  | Coq _ -> 
+      if valid then Coq.push_parameter id tv
+  | Pvs | HolLight | Isabelle | Hol4 | Mizar
+  | Harvey | Simplify | Zenon | SmtLib | Gappa 
+  | CVCLite | Dispatcher -> 
+      ()
 
 let output fwe = 
   if wol then begin

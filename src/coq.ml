@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.143 2006-03-15 16:03:50 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.144 2006-03-21 15:37:40 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -301,7 +301,7 @@ let print_sequent_v7 fmt (hyps,concl) =
     | [] ->
 	print_predicate_v7 fmt concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_cc_type_v7 v;
+	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_pure_type v;
 	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
 	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_predicate_v7 p;
@@ -585,7 +585,7 @@ let print_sequent_v8 fmt (hyps,concl) =
 	print_predicate_v8 fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "forall (%a: @[%a@]),@\n" 
-	Ident.print id print_cc_type_v8 v;
+	Ident.print id print_pure_type v;
 	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
 	fprintf fmt "forall (%a: @[%a@]),@\n" 

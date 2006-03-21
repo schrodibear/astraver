@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.43 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.44 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -237,9 +237,9 @@ let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
 	print_predicate false fmt concl
-    | Svar (id, ty) :: hyps when simplify_typing && cc_external_type ty -> 
+    | Svar (id, ty) :: hyps when simplify_typing && external_type ty -> 
 	fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
-	  ident id (cc_has_type ty) id print_seq hyps
+	  ident id (has_type ty) id print_seq hyps
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id print_seq hyps
     | Spred (_,p) :: hyps -> 

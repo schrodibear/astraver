@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.110 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.111 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -406,7 +406,7 @@ let rec print_pure_type fmt = function
   | PTexternal([t],id) -> 
       fprintf fmt "%a %a" print_pure_type t Ident.print id
   | PTexternal(l,id) -> fprintf fmt "(%a) %a" 
-      (print_list space print_pure_type) l
+      (print_list comma print_pure_type) l
       Ident.print id
 
 let rec print_logic_type fmt lt =
@@ -825,3 +825,11 @@ let print_decl fmt = function
       fprintf fmt "%atype %a" print_external e Ident.print id
 
 let print_pfile = print_list newline print_decl
+
+(* debug *)
+
+(**
+let () = 
+  Env.dump_type_var := 
+    (fun v -> eprintf "@[type_var %d = %a@]@." v.tag print_pure_type (PTvar v))
+**)

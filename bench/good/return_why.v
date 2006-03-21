@@ -1,7 +1,9 @@
 
 Require Import Why.
 
-(*Why*) Parameter N : Z.
+
+(*Why logic*) Definition N : Z.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 

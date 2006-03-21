@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.34 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.35 2006-03-21 15:37:40 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -146,3 +146,7 @@ module Label : sig
   val add : string -> t -> t
   val mem : string -> t -> bool
 end
+
+(* debug *)
+
+val dump_type_var : (type_var -> unit) ref

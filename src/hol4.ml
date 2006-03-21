@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.9 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.10 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -222,7 +222,7 @@ let print_sequent fmt (hyps,concl) =
     | [] ->
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "!%a:%a.@\n" Ident.print id print_cc_type v;
+	fprintf fmt "!%a:%a.@\n" Ident.print id print_pure_type v;
 	print_seq fmt hyps
     | Spred (_, p) :: hyps -> 
 	fprintf fmt "@[%a@] ==>@\n" print_predicate p;

@@ -2,16 +2,11 @@
 Require Import Why.
 Require Import Omega.
 
-(*Why*) Parameter v2 : Z.
 
-(*Why*) Parameter v3 : Z.
 
 (*Why type*) Definition foo: Set.
 Admitted.
 
-(*Why*) Parameter v5 : foo.
-
-(*Why*) Parameter f1 : forall (_: Z), forall (_: bool), Z.
 
 
 
@@ -19,13 +14,10 @@ Admitted.
 
 
 
-(*Why*) Parameter f4 : forall (_: unit), unit.
 
-(*Why*) Parameter f5 : forall (_: foo), foo.
 
-(*Why*) Parameter f6 : forall (x: foo), foo.
 
-(*Why*) Parameter f7 : forall (x: foo), foo.
+
 
 
 

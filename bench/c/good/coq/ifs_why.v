@@ -5,12 +5,12 @@ Require Export ifs_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma V4A_impl_po_1 : 
-  forall (A801:Set), forall (A802:Set),
-  forall (Parametre: ((pointer) A801)),
-  forall (Pn_Bac: ((pointer) A802)),
+  forall (A800:Set), forall (A801:Set),
+  forall (Parametre: ((pointer) A800)),
+  forall (Pn_Bac: ((pointer) A801)),
   forall (Ch_Pn: ((pointer) Ch_Pn_15)),
   forall (SPMEP: ((pointer) SPMEP_16)),
-  forall (VC_Parametre_17: ((memory) ((pointer) VC_1) A801)),
+  forall (VC_Parametre_17: ((memory) ((pointer) VC_1) A800)),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "ifs.c", line 16, characters 14-61 *)
                 ((valid alloc Parametre) /\ (valid_range alloc Pn_Bac 0 4)) /\

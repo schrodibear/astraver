@@ -20,8 +20,10 @@ open Types
 open Logic
 open Cc
 
+(***
 val vcg : 
   string -> (Loc.position * predicate) cc_term -> obligation list * validation
+***)
 
 val logs : Log.t ref
 val log_print_function : (Format.formatter -> sequent -> unit) ref

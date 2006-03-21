@@ -129,7 +129,7 @@ let print_term fmt t =
   and print_terms fmt tl =
     print_list space print3 fmt tl
   and is_shift = function 
-    | Tapp (id, _, _) as t when (Ident.string id = "shift") -> true
+    | Tapp (id, _, _) when (Ident.string id = "shift") -> true
     | _ -> false
   and print_fct_acc fmt = function
 	| Tapp (id, [m; term], _) ->

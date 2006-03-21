@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.67 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.68 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -226,7 +226,7 @@ let print_sequent fmt (hyps,concl) =
     | [] ->
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "FORALL (%a: %a) :@\n" Ident.print id print_cc_type v;
+	fprintf fmt "FORALL (%a: %a) :@\n" Ident.print id print_pure_type v;
 	print_seq hyps
     | Spred (_,p) :: hyps -> 
 	print_predicate fmt p; fprintf fmt " IMPLIES@\n";

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.42 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.43 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -183,6 +183,10 @@ let instance x i =
 	 (match v.type_val with None -> PTvar v | Some pt -> pt) :: l) i []
   in 
   add_instance_if_closed x l; 
+  (*
+    eprintf "instance %a[@[%a@]]@." 
+    Ident.print x (Pp.print_list Pp.comma print_pure_type) l;
+  *)
   l
 
 let iter_instances f = Hashtbl.iter (fun x -> Instances.iter (f x)) instances_t
@@ -318,7 +322,7 @@ and type_tvar loc lab env lenv x =
   if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
   match snd (find_logic xu lenv) with
     | Function ([], t) -> Tvar x, t
-    | _ -> raise_located loc (MustBePure)
+    | _ -> raise_located loc MustBePure
 
 and type_tapp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
@@ -326,7 +330,7 @@ and type_tapp loc lenv x tl =
     | vars, Function (at, t) -> 
 	check_type_args loc at tl; t, instance x vars
     | _ -> 
-	raise_located loc (AppNonFunction)
+	raise_located loc AppNonFunction
 
 and check_type_args loc at tl =
   let rec check_arg = function

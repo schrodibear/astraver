@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.11 2006-03-01 15:40:48 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.12 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -99,7 +99,7 @@ module IterIT = struct
   let sequent f g (ctx,p) =
     List.iter 
       (function 
-	 | Svar (_,cc) -> cc_type f g cc | Spred (_,p) -> predicate f g p)
+	 | Svar (_,pt) -> g pt | Spred (_,p) -> predicate f g p)
       ctx;
     predicate f g p
 	
@@ -316,6 +316,8 @@ module Make(X : S) = struct
   module Hinstance = Hashtbl.Make(Instance)
   let declared_logic = Hinstance.create 97
 
+  let vset_elements s = Vset.fold (fun x l -> x :: l) s []
+
   let rec declare_logic fmt id i =
     if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
       Hinstance.add declared_logic (id,i) ();
@@ -326,15 +328,20 @@ module Make(X : S) = struct
 	    assert (Vset.cardinal t.scheme_vars = List.length i);
 	    let s = 
 	      List.fold_right2 Vmap.add 
-		(Vset.elements t.scheme_vars) i Vmap.empty
+		(vset_elements t.scheme_vars) i Vmap.empty
 	    in
 	    let t = SubstV.logic_type s t.scheme_type in
+	    (*
+	      eprintf "Monomorph.declare_logic i=[%a] t=%a@."
+	      (Pp.print_list Pp.comma Util.print_pure_type) i
+	      Util.print_logic_type t;
+	    *)
 	    print_logic_instance fmt (Ident.string id) i t
 	| PredicateDef p ->
 	    assert (Vset.cardinal p.scheme_vars = List.length i);
 	    let s = 
 	      List.fold_right2 Vmap.add 
-		(Vset.elements p.scheme_vars) i Vmap.empty
+		(vset_elements p.scheme_vars) i Vmap.empty
 	    in
 	    let p = SubstV.predicate_def s p.scheme_type in
  	    print_predicate_def_instance fmt (Ident.string id) i p
@@ -342,7 +349,7 @@ module Make(X : S) = struct
 	    assert (Vset.cardinal p.scheme_vars = List.length i);
 	    let s = 
 	      List.fold_right2 Vmap.add 
-		(Vset.elements p.scheme_vars) i Vmap.empty
+		(vset_elements p.scheme_vars) i Vmap.empty
 	    in
 	    let p = SubstV.function_def s p.scheme_type in
  	    print_function_def_instance fmt (Ident.string id) i p

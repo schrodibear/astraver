@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.36 2006-03-20 13:44:40 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.37 2006-03-21 15:37:40 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -224,7 +224,7 @@ let print_sequent fmt (hyps,concl) =
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(FORALL (%a:%a):@ %a)@]" 
-	  Ident.print id print_cc_type v print_seq hyps
+	  Ident.print id print_pure_type v print_seq hyps
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(%a =>@ %a)@]" print_predicate p print_seq hyps
   in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.7 2006-03-20 14:23:42 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.8 2006-03-21 15:37:41 filliatr Exp $ i*)
 
 open Printf
 
@@ -53,7 +53,7 @@ let cvcl ?(timeout=10) ~filename:f () =
     Timeout
   else if c <> 0 then (* e.g. timeout missing *)
     ProverFailure ("command failed: " ^ cmd)
-  else if Sys.command (sprintf "grep -q -w Error %s" out) = 0 then
+  else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
     ProverFailure ("command failed: " ^ cmd ^ "\n" ^ file_contents out)
   else
     let c = Sys.command (sprintf "grep -q -w Valid %s" out) in

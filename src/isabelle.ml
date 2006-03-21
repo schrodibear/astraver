@@ -212,7 +212,7 @@ let print_sequent fmt (hyps,concl) =
     | [] ->
 	fprintf fmt "shows \"@[%a@]\"@\n" print_predicate concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "fixes %a::\"%a\"@\n" Ident.print id print_cc_type v;
+	fprintf fmt "fixes %a::\"%a\"@\n" Ident.print id print_pure_type v;
 	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
 	fprintf fmt "assumes %a: \"@[%a@]\"@\n" Ident.print id print_predicate p;

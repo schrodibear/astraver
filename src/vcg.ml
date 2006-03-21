@@ -247,7 +247,7 @@ let alpha_eq a b =
 
 let lookup_boolean_instance a b =
   let rec lookup = function
-    | Svar (x, TTpure PTbool) ::
+    | Svar (x, PTbool) ::
       Spred (h, Pif (Tvar x1, c, d)) :: _ 
       when x == x1 && a === c && b === d -> 
 	x, h
@@ -284,7 +284,7 @@ let rec intros ctx = function
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      let ctx', concl', f = intros (Svar (id', TTpure t) :: ctx) p' in
+      let ctx', concl', f = intros (Svar (id', t) :: ctx) p' in
       ctx', concl',
       (fun pr -> 
 	 ProofTerm (cc_lam [id', CC_var_binder (TTpure t)] (CC_hole (f pr))))
@@ -433,7 +433,7 @@ let rewrite_var_left_lemma = Ident.create "why_rewrite_var_left"
 let rewrite_var ctx concl = match ctx, concl with
   (* ..., v=t, p(v) |- p(t) *)
   | Spred (h1, p1) ::
-    Svar (id'1, TTpure PTbool) ::
+    Svar (id'1, PTbool) ::
     Spred (h2, Papp (ide, [Tvar v; t], _)) ::
     Svar (v', ty) :: _,
     p
@@ -442,7 +442,7 @@ let rewrite_var ctx concl = match ctx, concl with
       ProofTerm 
 	(cc_applist (CC_var rewrite_var_lemma)
 	   [CC_var h2;
-	    CC_type (TTlambda ((v, CC_var_binder ty), TTpred p1));
+	    CC_type (TTlambda ((v, CC_var_binder (TTpure ty)), TTpred p1));
 	    CC_var h1])
   (* ..., v=t, p(t) |- p(v) *)
   | _ :: 
@@ -455,7 +455,7 @@ let rewrite_var ctx concl = match ctx, concl with
       ProofTerm 
 	(cc_applist (CC_var rewrite_var_left_lemma)
 	   [CC_var h2;
-	    CC_type (TTlambda ((v, CC_var_binder ty), TTpred p));
+	    CC_type (TTlambda ((v, CC_var_binder (TTpure ty)), TTpred p));
 	    CC_var h1])
   | _ -> 
       raise Exit
@@ -464,7 +464,7 @@ let rewrite_var ctx concl = match ctx, concl with
 let boolean_case_lemma = Ident.create "why_boolean_case"
 let boolean_case ctx concl = match ctx, concl with
   | Spred (h1, Pif (Tvar x1, a, b)) ::
-    Svar (x, TTpure PTbool) ::
+    Svar (x, PTbool) ::
     ctx,
     Pif (Tvar x2, c, d)
     when x1 == x && x2 == x ->
@@ -647,6 +647,7 @@ let rec split lvl ctx = function
 (*s The VCG; it's trivial, we just traverse the CC term and push a 
     new obligation on each hole. *)
 
+(***
 let vcg base t =
   let po = ref [] in
   let cpt = ref 0 in
@@ -734,6 +735,7 @@ let vcg base t =
   in
   let cc' = traverse [] t in
   List.rev !po, cc'
+***)
 
 (* Proof obligations from the WP *)
 

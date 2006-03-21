@@ -5,8 +5,8 @@ Require Export passing_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A778:Set),
-  forall (x: ((pointer) A778)),
+  forall (A777:Set),
+  forall (x: ((pointer) A777)),
   forall (alloc: alloc_table),
   forall (r: ((pointer) r_9)),
   forall (t: ((pointer) t_11)),
@@ -22,6 +22,26 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
+  forall (A778:Set),
+  forall (x: ((pointer) A778)),
+  forall (alloc: alloc_table),
+  forall (intM_x_10: ((memory) Z A778)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
+  forall (HW_1: (* File "passing.c", line 21, characters 14-31 *)
+                (valid_index alloc x 0) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
+  forall (HW_2: (valid alloc x)),
+  forall (intM_x_10_0: ((memory) Z A778)),
+  forall (HW_3: intM_x_10_0 = (upd intM_x_10 x 1)),
+  (* File "passing.c", line 21, characters 53-62 *) (acc intM_x_10_0 x) = 1.
+Proof.
+intuition.
+subst; caduceus.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma f_impl_po_3 : 
   forall (A779:Set),
   forall (x: ((pointer) A779)),
   forall (alloc: alloc_table),
@@ -33,26 +53,6 @@ Save.
                 (constant_r r)),
   forall (HW_2: (valid alloc x)),
   forall (intM_x_10_0: ((memory) Z A779)),
-  forall (HW_3: intM_x_10_0 = (upd intM_x_10 x 1)),
-  (* File "passing.c", line 21, characters 53-62 *) (acc intM_x_10_0 x) = 1.
-Proof.
-intuition.
-subst; caduceus.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma f_impl_po_3 : 
-  forall (A780:Set),
-  forall (x: ((pointer) A780)),
-  forall (alloc: alloc_table),
-  forall (intM_x_10: ((memory) Z A780)),
-  forall (r: ((pointer) r_9)),
-  forall (t: ((pointer) t_11)),
-  forall (HW_1: (* File "passing.c", line 21, characters 14-31 *)
-                (valid_index alloc x 0) /\ (valid_range alloc t 0 1) /\
-                (constant_r r)),
-  forall (HW_2: (valid alloc x)),
-  forall (intM_x_10_0: ((memory) Z A780)),
   forall (HW_3: intM_x_10_0 = (upd intM_x_10 x 1)),
   (not_assigns alloc intM_x_10 intM_x_10_0 (pset_singleton x)).
 Proof.
@@ -90,6 +90,26 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
+  forall (A780:Set),
+  forall (x: ((pointer) A780)),
+  forall (alloc: alloc_table),
+  forall (intM_x_8: ((memory) Z A780)),
+  forall (r: ((pointer) r_9)),
+  forall (t: ((pointer) t_11)),
+  forall (HW_1: (* File "passing.c", line 8, characters 14-23 *)
+                (valid alloc x) /\ (valid_range alloc t 0 1) /\
+                (constant_r r)),
+  forall (HW_2: (valid alloc x)),
+  forall (intM_x_8_0: ((memory) Z A780)),
+  forall (HW_3: intM_x_8_0 = (upd intM_x_8 x 0)),
+  (* File "passing.c", line 8, characters 43-50 *) (acc intM_x_8_0 x) = 0.
+Proof.
+intuition.
+subst; caduceus.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma g_impl_po_2 : 
   forall (A781:Set),
   forall (x: ((pointer) A781)),
   forall (alloc: alloc_table),
@@ -101,26 +121,6 @@ Save.
                 (constant_r r)),
   forall (HW_2: (valid alloc x)),
   forall (intM_x_8_0: ((memory) Z A781)),
-  forall (HW_3: intM_x_8_0 = (upd intM_x_8 x 0)),
-  (* File "passing.c", line 8, characters 43-50 *) (acc intM_x_8_0 x) = 0.
-Proof.
-intuition.
-subst; caduceus.
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma g_impl_po_2 : 
-  forall (A782:Set),
-  forall (x: ((pointer) A782)),
-  forall (alloc: alloc_table),
-  forall (intM_x_8: ((memory) Z A782)),
-  forall (r: ((pointer) r_9)),
-  forall (t: ((pointer) t_11)),
-  forall (HW_1: (* File "passing.c", line 8, characters 14-23 *)
-                (valid alloc x) /\ (valid_range alloc t 0 1) /\
-                (constant_r r)),
-  forall (HW_2: (valid alloc x)),
-  forall (intM_x_8_0: ((memory) Z A782)),
   forall (HW_3: intM_x_8_0 = (upd intM_x_8 x 0)),
   (not_assigns alloc intM_x_8 intM_x_8_0 (pset_singleton x)).
 Proof.
