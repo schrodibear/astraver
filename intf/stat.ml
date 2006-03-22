@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.24 2006-03-22 11:46:20 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.25 2006-03-22 12:18:00 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -431,7 +431,7 @@ let main () =
   (* left tree of proof obligations *)
   let model = Model.create_model () in
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:350 ~packing:hp#add1 () in
+    ~width:380 ~packing:hp#add1 () in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
