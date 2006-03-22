@@ -213,7 +213,7 @@ let print_predicate fmt p =
     | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[forall (%s:%a),@ %a@])" (Ident.string id')
+	fprintf fmt "@[\\forall %s:%a;@ %a@]" (Ident.string id')
 	  print_pure_type t print0 p'
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in

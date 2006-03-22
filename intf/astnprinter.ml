@@ -116,16 +116,16 @@ let print_predicate fmt p =
 	fprintf fmt "(@[if %a@ then %a@ else %a@])"
 	  print_term a print0 b print0 c
     | Pimplies (_, a, b) -> 
-	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
+	fprintf fmt "(@[%a =>@ %a@])" print1 a print0 b
     | Piff (a, b) -> 
 	fprintf fmt "(@[%a <->@ %a@])" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
-    | Por (a, b) -> fprintf fmt "@[%a \\/@ %a@]" print2 a print1 b
+    | Por (a, b) -> fprintf fmt "@[%a or@ %a@]" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
     | Pand (_, _, a, b) | Forallb (_, a, b) -> 
-        fprintf fmt "@[%a /\\@ %a@]" print3 a print2 b
+        fprintf fmt "@[%a and@ %a@]" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function
     | Ptrue -> 
@@ -162,7 +162,7 @@ let print_predicate fmt p =
     | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[forall (%s:%a),@ %a@])" (Ident.string id')
+	fprintf fmt "(@[forall %s:%a.@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in

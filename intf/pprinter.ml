@@ -40,6 +40,9 @@ let activate () = active := true
 let swap_active () = active := not !active
 let is_active () = !active
 
+let reset_last_file () = 
+  last_file := ""
+
 let print_loc = function 
   | None -> "\"nowhere\""
   | Some {file=f; line=l; sp=s; ep=e} ->

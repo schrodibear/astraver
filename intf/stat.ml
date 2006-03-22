@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.25 2006-03-22 12:18:00 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.26 2006-03-22 14:11:40 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -129,7 +129,9 @@ module Model = struct
   let find_oblig = Hashtbl.find obligs
 
   (* obligation name -> its model row *)
-  let orows = Hashtbl.create 97 
+  let orows = Hashtbl.create 97
+  (* obligation name -> its failure messages *)
+  let fwrows = Hashtbl.create 97
   
   (* function -> its model row *)
   let frows = Hashtbl.create 17 
@@ -143,6 +145,18 @@ module Model = struct
   (* functions *)
   let fq = Queue.create ()
     
+  let add_failure row (p:prover) (message:string) = 
+    try 
+      let messages = Hashtbl.find fwrows row in
+      if Hashtbl.mem messages p then
+	Hashtbl.replace messages p message
+      else Hashtbl.add messages p message
+    with Not_found -> begin
+      let h = Hashtbl.create 97 in
+      Hashtbl.add h p message;
+      Hashtbl.add fwrows row h
+    end
+
   let create_model () =
     let model = GTree.tree_store cols in
     Dispatcher.iter
@@ -304,8 +318,22 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench =
 	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
 	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
-	| Calldp.CannotDecide | Calldp.Invalid _ -> model#set ~row ~column:column_p `NO; 0
-	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `PREFERENCES; 0
+	| Calldp.CannotDecide -> model#set ~row ~column:column_p `MISSING_IMAGE; 0
+	| Calldp.Invalid so -> 
+	    begin
+	      (match so with
+		| None -> ()
+		| Some s -> 
+		    let name = model#get ~row ~column:Model.fullname in 
+		    Model.add_failure name p s);
+	      model#set ~row ~column:column_p `NO; 0
+	    end
+	| Calldp.ProverFailure so -> 
+	    begin
+	      let name = model#get ~row ~column:Model.fullname in 
+	      Model.add_failure name p so;
+	      model#set ~row ~column:column_p `PREFERENCES; 0
+	    end 
       in
       let result = get_result r in
       model#set ~row ~column:Model.result 
@@ -452,6 +480,16 @@ let main () =
     configuration_factory#add_image_item ~key:GdkKeysyms._C 
       ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () 
   in
+  (*let _ = 
+    configuration_factory#add_image_item ~key:GdkKeysyms._X 
+    ~label:"Collapse function" 
+    ~callback:(fun () -> match view#selection#get_selected_rows with
+    | [] -> ()
+    | p::_ -> 
+    let path = model#get_iter p in
+    if not (model#iter_has_child path) then
+    view#collapse_row p) () 
+    in*)
   let _ = configuration_factory#add_separator ()  in
   let _ = configuration_factory#add_image_item ~label:"Clear cache" 
     ~callback:(fun () -> 
@@ -702,11 +740,34 @@ let main () =
 	    (fun ev -> GdkEvent.Button.button ev = 3));
   ignore (tv2#event#connect#button_press ~callback:
 	    (fun ev -> GdkEvent.Button.button ev = 3));
+  (*
+   * Obligations : failed with ...
+   *)
+  ignore (tv2#event#connect#button_release ~callback:
+	    (fun ev -> if (GdkEvent.Button.button ev) = 3 then 
+	       (match view#selection#get_selected_rows with
+		  | [] -> ()
+		  | p::_ ->
+		      let row = model#get_iter p in
+		      if not (model#iter_has_child row) then
+			try
+			  let name = model#get ~row ~column:Model.fullname in
+			  let failed_with = Hashtbl.find Model.fwrows name 
+			  and buffer = Buffer.create 1024 in
+			  Hashtbl.iter
+			    (fun p m -> Buffer.add_string buffer (p.Model.pr_name ^ ": \n" ^ m ^" \n\n"))
+			    failed_with;
+			  tv2#buffer#set_text (Buffer.contents buffer);
+			  Pprinter.reset_last_file ();
+			  Buffer.clear buffer
+			with Not_found -> ()); 
+	       true));
 
   (*
    * Startup configuration 
    *)
-  buf1#place_cursor ~where:buf1#start_iter;
+  (*buf1#place_cursor ~where:buf1#start_iter;*)
+  (*view#selection#select_iter*)
 
   (* Setting special icons for prooved obligation in cache *)
   let _ = 
