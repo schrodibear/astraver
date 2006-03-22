@@ -20,7 +20,6 @@ open Vcg
 open Logic
 open Cc
 open Format
-open Astprinter
 open Colors
 open Tagsplit
 open Tags
@@ -34,6 +33,12 @@ let last_file = ref ""
 let pwd = Sys.getcwd ()
 let source = ref ""
 let tv_source = ref (GText.view ())
+
+let active = ref true
+let desactivate () = active := false
+let activate () = active := true
+let swap_active () = active := not !active
+let is_active () = !active
 
 let print_loc = function 
   | None -> "\"nowhere\""
@@ -161,6 +166,11 @@ let create_all_tags (tbuf:GText.buffer) =
   Hashtbl.iter (create_tag tbuf) Tags.loctags
 
 let print_oblig fmt (ctx,concl) = 
+  let print_pure_type, print_predicate = 
+    if is_active () 
+    then Astpprinter.print_pure_type, Astpprinter.print_predicate
+    else Astnprinter.print_pure_type, Astnprinter.print_predicate
+  in 
   let ctx, concl = intros ctx concl in
   let rec print_list print = function
       | [] -> ()
@@ -204,6 +214,11 @@ let print_all (tbuf:GText.buffer) s p =
   tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
     "_                                                        _\n\n";
   let conclusion = 
+    let print_predicate = 
+      if is_active () 
+      then Astpprinter.print_predicate
+      else Astnprinter.print_predicate
+    in 
     fprintf fmt "@[@{<conclusion>%a@}@]" print_predicate concl;
     create_all_tags tbuf;
     flush_str_formatter () in
@@ -270,10 +285,10 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
     with Not_found -> ()
   end
     
-let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) pprint = 
+let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) = 
   tv_source := tv_s;
   last_fct := s;
-  if (unchanged s pprint) then 
+  if (unchanged s (is_active ())) then 
     tv#set_buffer (get_buffer s)
   else begin
     let tbuf = GText.buffer () in
@@ -286,5 +301,5 @@ let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) pprint =
 		     false)
     in
     print_all tbuf s p;
-    save_buffer s tbuf pprint;
+    save_buffer s tbuf (is_active ());
   end

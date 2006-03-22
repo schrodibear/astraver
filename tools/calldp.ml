@@ -14,12 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.8 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.9 2006-03-22 11:31:53 dogguy Exp $ i*)
 
 open Printf
 
 type prover_result = 
-  | Valid | Invalid | CannotDecide | Timeout | ProverFailure of string
+  | Valid | Invalid of string option | CannotDecide | Timeout | ProverFailure of string
 
 type prover_caller = timeout:int -> filename:string -> prover_result
 
@@ -58,7 +58,7 @@ let cvcl ?(timeout=10) ~filename:f () =
   else
     let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
     remove_file out;
-    if c = 0 then Valid else Invalid
+    if c = 0 then Valid else Invalid None
 
 let simplify ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
@@ -73,7 +73,9 @@ let simplify ?(timeout=10) ~filename:f () =
   else
     let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
     remove_file out;
-    if c = 0 then Valid else Invalid
+    let r = if c = 0 then Valid else Invalid (Some (file_contents out)) in
+    remove_file out;
+    r
 
 let zenon ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
@@ -88,7 +90,7 @@ let zenon ?(timeout=10) ~filename:f () =
   else
     let c = Sys.command (sprintf "grep -q PROOF-FOUND %s" out) in
     remove_file out;
-    if c = 0 then Valid else Invalid
+    if c = 0 then Valid else Invalid None
 
 let harvey ?(timeout=10) ?(eclauses=2000) ~filename:f () =
   let out = Sys.command (sprintf "rvc -e -t %s > /dev/null 2>&1" f) in
@@ -110,7 +112,7 @@ let harvey ?(timeout=10) ?(eclauses=2000) ~filename:f () =
 	    Sys.command 
 	      "grep \"Proof obligation in\" out | grep -q \"is valid\"" 
 	  in
-	  add (if out = 0 then Valid else Invalid)
+	  add (if out = 0 then Valid else Invalid None)
 	end;
 	flush stdout;
 	iter (i+1)

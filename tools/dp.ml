@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.17 2006-03-20 13:44:40 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.18 2006-03-22 11:31:53 dogguy Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -52,7 +52,7 @@ let is_timeout () = printf "#"; incr ntimeout
 let wrapper r = 
   begin match r with
     | Valid -> is_valid ()
-    | Invalid | CannotDecide -> is_invalid ()
+    | Invalid _ | CannotDecide -> is_invalid ()
     | Timeout -> is_timeout ()
     | ProverFailure _ -> printf "!"
   end;

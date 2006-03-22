@@ -157,9 +157,9 @@ bin/why-viewer.byte: $(WVCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
 
 # graphical interface
-GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tagsplit.cmo intf/astprinter.cmo \
-              intf/cache.cmo intf/hilight.cmo intf/whyhilight.cmo intf/pprinter.cmo \
-	      intf/stat.cmo
+GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tools.cmo intf/tagsplit.cmo \
+	      intf/astnprinter.cmo intf/astpprinter.cmo intf/cache.cmo intf/hilight.cmo \
+	      intf/whyhilight.cmo intf/pprinter.cmo intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
 gwhy-yes: bin/gwhy.$(OCAMLBEST)

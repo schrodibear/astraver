@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.22 2006-03-15 16:27:20 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.23 2006-03-22 11:31:53 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -219,7 +219,7 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view) (tv_s:GText.view) sel
 	   let o = Model.find_oblig s in
 	   let buf = update_buffer tv in
 	   buf#set_text "";
-	   Pprinter.text_of_obligation tv tv_s o (Astprinter.is_active ());
+	   Pprinter.text_of_obligation tv tv_s o;
 	   let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
 	   tv#scroll_to_mark ~use_align:true mark
 	 with Not_found -> ())
@@ -274,7 +274,7 @@ let get_all_results f (model:GTree.tree_store) =
 let try_proof oblig =
   (Cache.try_proof ())
   or not (Cache.is_enabled ())
-  or (Cache.is_enabled () && not (in_cache (Astprinter.clean oblig))) 
+  or (Cache.is_enabled () && not (in_cache (Cache.clean oblig))) 
 
 (* 
  * run a prover on an obligation and update the model 
@@ -293,9 +293,10 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o =
 	| Calldp.Valid -> 
 	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
-	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `NO; 0
 	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
-	| _ -> model#set ~row ~column:column_p `STOP; 0 in
+	| Calldp.CannotDecide | Calldp.Invalid _ -> model#set ~row ~column:column_p `NO; 0
+	| Calldp.ProverFailure _ -> model#set ~row ~column:column_p `PREFERENCES; 0
+      in
       let result = get_result r in
       model#set ~row ~column:Model.result 
 	(max result (model#get ~row ~column:Model.result));
@@ -582,7 +583,7 @@ let main () =
   let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Cache.is_enabled ()) 
     ~packing:hbox#pack() in
   let _ = mypprint#connect#toggled 
-    ~callback:(fun () -> Astprinter.swap_active ();
+    ~callback:(fun () -> Pprinter.swap_active ();
 		 let list = view#selection#get_selected_rows in
 		 select_obligs model tv1 tv2 list
 	      ) in
@@ -695,7 +696,7 @@ let main () =
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
 	(fun s (_,o,seq) -> 
-	   let cleaned = Astprinter.clean seq in
+	   let cleaned = Cache.clean seq in
 	   if in_cache cleaned then
 	     begin 
 	       let row = Hashtbl.find Model.orows o in

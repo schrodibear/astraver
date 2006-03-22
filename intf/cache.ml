@@ -17,6 +17,8 @@
 open Options
 open Marshal
 open Digest
+open Logic
+open Cc
 
 let flags = []
 let max_size = ref 5000 (* maximum cache size *)
@@ -56,6 +58,34 @@ let read_cache () =
     | _ -> 
 	print_endline ("     [...] error while loading cache !"); 
 	flush stdout
+let clean (seq:Cc.sequent):Cc.sequent = 
+  let (ctx, p) = seq in
+  let rec clean0 = function 
+    | Pvar _ | Papp (_, _, _) | Pfpi (_,_,_) | Ptrue | Pfalse as p -> p
+    | Pimplies (i, p1, p2) -> 
+	Pimplies (i, clean0 p1, clean0 p2)
+    | Pif (t, p1, p2) ->
+      Pif (t, clean0 p1, clean0 p2)
+    | Pand (wp, sym, p1, p2) ->
+	Pand (wp, sym, clean0 p1, clean0 p2)
+    | Por (p1, p2) ->
+	Por (clean0 p1, clean0 p2)
+    | Piff (p1, p2) ->
+	Piff (clean0 p1, clean0 p2)
+    | Pnot p ->
+	Pnot (clean0 p)
+    | Forall (wp, id1, id2, pt, p) ->
+	Forall (wp, id1, id2, pt, clean0 p)
+    | Forallb (wp, p1, p2) ->
+	Forallb (wp, clean0 p1, clean0 p2)
+    | Exists (id1, id2, pt, p) ->
+	Exists (id1, id2, pt, clean0 p)
+    | Pnamed (_, p) ->
+	clean0 p
+  and clean1 = function 
+    | Svar _ as c -> c
+    | Spred (id, p) -> Spred (id, clean0 p)
+  in (List.map clean1 ctx, clean0 p)
 	  
 let fool () = Hashtbl.length !cache > !max_size 
   (* i mean fool ... cache doesn't want to do his job *)
@@ -92,7 +122,7 @@ let is_empty () = Hashtbl.length !cache = 0
 let o_in_cache o = let (_,_,seq) = o in in_cache seq
 
 let add (seq:Cc.sequent) (prover:string) = 
-  let o = Astprinter.clean seq in
+  let o = clean seq in
   if not !is_full then begin
     if in_cache o then
       begin 
