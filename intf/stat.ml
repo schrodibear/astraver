@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.27 2006-03-22 14:46:40 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.28 2006-03-22 15:25:30 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -477,7 +477,7 @@ let main () =
 	 model#set ~row ~column:Model.name (f^" 0/"^(string_of_int n)^" [0|0|0]   "))
       Model.frows in
   (* cache and view menu *)
-  let _ = configuration_factory#add_separator ()  in
+  let _ = configuration_factory#add_separator () in
   let _ = 
     configuration_factory#add_image_item ~key:GdkKeysyms._E 
       ~label:"Expand all" ~callback:(fun () -> view#expand_all ()) () 
@@ -513,11 +513,14 @@ let main () =
 		       with Not_found -> ()) () 
   in
   let _ = configuration_factory#add_separator ()  in
-  let _ = configuration_factory#add_image_item ~label:"Clear cache" 
+  let clear_cache_m = configuration_factory#add_image_item ~label:"Clear cache" 
+    (*~stock:`CLEAR*)
     ~callback:(fun () -> 
 		 Cache.clear ();
 		 !flash_info "Cache cleared"
-	      ) () in 
+	      ) () 
+  in 
+  
   (* proof menu *)
   let proof_menu = factory#add_submenu "Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 
