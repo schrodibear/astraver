@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.26 2006-03-22 14:11:40 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.27 2006-03-22 14:46:40 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -93,8 +93,11 @@ module Model = struct
   let cols = new GTree.column_list
   let name = cols#add string
   let fullname = cols#add string
+  let parent = cols#add string
   let total = cols#add int
   let result = cols#add int
+
+  let first_row = ref None
 
   let simplify = {
     pr_name = "Simplify";
@@ -173,6 +176,7 @@ module Model = struct
 	     Hashtbl.add fobligs f (Queue.create ());
 	     model#set ~row ~column:name f;
 	     model#set ~row ~column:fullname f;
+	     model#set ~row ~column:parent f;
 	     model#set ~row ~column:total 0;
 	     List.iter 
 	       (fun p -> model#set ~row ~column:p.pr_result "0") 
@@ -180,10 +184,12 @@ module Model = struct
 	     row
 	 in
 	 let row_n = model#append ~parent:row () in
+	 (match !first_row with None -> first_row := Some(row_n) | Some _ -> ());
 	 Hashtbl.add orows s row_n;
 	 Queue.add row_n (Hashtbl.find fobligs f);
 	 model#set ~row:row_n ~column:name n;
 	 model#set ~row:row_n ~column:fullname s;
+	 model#set ~row:row_n ~column:parent f;
 	 model#set ~row:row_n ~column:result 0;
 	 List.iter
 	   (fun p -> model#set ~row:row_n ~column:p.pr_icon `REMOVE)
@@ -480,16 +486,32 @@ let main () =
     configuration_factory#add_image_item ~key:GdkKeysyms._C 
       ~label:"Collapse all" ~callback:(fun () -> view#collapse_all ()) () 
   in
-  (*let _ = 
+  let _ = 
+    configuration_factory#add_image_item ~key:GdkKeysyms._Z 
+      ~label:"Expand function" 
+      ~callback:(fun () -> match view#selection#get_selected_rows with
+		   | [] -> ()
+		   | p::_ -> 
+		       let iter = model#get_iter p in
+		       try 
+			 let parent = model#get ~row:iter ~column:Model.parent in
+			 let row = model#get_path (Hashtbl.find Model.frows parent) in
+			 view#expand_row row
+		       with Not_found -> ()) () 
+  in
+  let _ = 
     configuration_factory#add_image_item ~key:GdkKeysyms._X 
-    ~label:"Collapse function" 
-    ~callback:(fun () -> match view#selection#get_selected_rows with
-    | [] -> ()
-    | p::_ -> 
-    let path = model#get_iter p in
-    if not (model#iter_has_child path) then
-    view#collapse_row p) () 
-    in*)
+      ~label:"Collapse function" 
+      ~callback:(fun () -> match view#selection#get_selected_rows with
+		   | [] -> ()
+		   | p::_ -> 
+		       let iter = model#get_iter p in
+		       try 
+			 let parent = model#get ~row:iter ~column:Model.parent in
+			 let row = model#get_path (Hashtbl.find Model.frows parent) in
+			 view#collapse_row row
+		       with Not_found -> ()) () 
+  in
   let _ = configuration_factory#add_separator ()  in
   let _ = configuration_factory#add_image_item ~label:"Clear cache" 
     ~callback:(fun () -> 
@@ -766,8 +788,14 @@ let main () =
   (*
    * Startup configuration 
    *)
-  (*buf1#place_cursor ~where:buf1#start_iter;*)
-  (*view#selection#select_iter*)
+  let _ = 
+    match !Model.first_row with
+      | None -> () 
+      | Some row -> 
+	  let path = model#get_path row in
+	  view#selection#select_path path;
+	  select_obligs model tv1 tv2 [path]; 
+  in
 
   (* Setting special icons for prooved obligation in cache *)
   let _ = 

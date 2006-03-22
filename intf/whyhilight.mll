@@ -15,7 +15,6 @@
  *)
 
 {
-  open Arg
   open Lexing
   open Colors
 
