@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.23 2006-03-22 11:31:53 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.24 2006-03-22 11:46:20 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -268,6 +268,16 @@ let get_all_results f (model:GTree.tree_store) =
     0
     mychildren
 
+let collapse_row (view:GTree.view) path bench = 
+  if not bench then begin
+    view#collapse_row path
+  end
+
+let expand_row (view:GTree.view) path bench = 
+  if not bench then begin
+    view#expand_row path
+  end
+
 (*
  * Should i proove this obligation again ?
  *)
@@ -279,10 +289,10 @@ let try_proof oblig =
 (* 
  * run a prover on an obligation and update the model 
  *)
-let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o = 
+let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
-  if (try_proof seq) then
+  if bench or (try_proof seq) then
     try 
       let row = Hashtbl.find Model.orows oblig in
       model#set ~row ~column:column_p `EXECUTE;
@@ -311,10 +321,10 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o =
     1
   end
 
-let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s () = 
+let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s bench () = 
   try 
     let oblig = Hashtbl.find Model.obligs s in
-    let _ = run_prover_child p view model oblig in
+    let _ = run_prover_child p view model oblig bench in
     ()
   with Not_found -> begin
     print_endline ("     [...] Error : obligation \""^s^"\" not found !"); 
@@ -324,7 +334,7 @@ let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s () =
 (*
  * run a prover on a function and update the model 
  *)
-let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f () = 
+let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () = 
   let column_p = p.Model.pr_icon in
   try
     let row = Model.find_fct f in
@@ -337,7 +347,7 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f () =
 	(fun nb row -> 
 	   let s = model#get ~row ~column:Model.fullname in
 	   let oblig = Model.find_oblig s in
-	   let result = run_prover_child p view model oblig in
+	   let result = run_prover_child p view model oblig bench in
 	   result + nb)
 	0
 	mychildren 
@@ -346,13 +356,13 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f () =
       begin 
 	model#set ~row ~column:column_p `APPLY;
 	let path = model#get_path row in
-	view#collapse_row path
+	collapse_row view path bench
       end
     else 
       begin 
 	model#set ~row ~column:column_p `CANCEL;
 	let path = model#get_path row in
-	view#expand_row path
+	expand_row view path bench
       end;
     update_statistics p model row succeed;
     let statistics = get_statistics model row 
@@ -371,9 +381,9 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f () =
 (*
  * run a prover on all obligations and update the model 
  *)
-let run_prover_all p (view:GTree.view) (model:GTree.tree_store) () =
+let run_prover_all p (view:GTree.view) (model:GTree.tree_store) bench () =
   Queue.iter 
-    (fun f -> run_prover_fct p view model f ()) 
+    (fun f -> run_prover_fct p view model f bench ()) 
     Model.fq
 
 let main () = 
@@ -452,10 +462,18 @@ let main () =
   let proof_menu = factory#add_submenu "Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 
   let _ = 
+    proof_factory#add_image_item ~label:"Start benchmark" 
+      ~key:GdkKeysyms._B 
+      ~callback:(fun () -> 
+		   List.iter
+		     (fun p -> prove (run_prover_all p view model true))
+		     Model.provers) () 
+  in
+  let _ = 
     proof_factory#add_image_item ~label:"Prove all obligations" 
       ~key:GdkKeysyms._A 
       ~callback:(fun () -> 
-		   prove (run_prover_all !default_prover view model)) () 
+		   prove (run_prover_all !default_prover view model false)) () 
   in
   let fct_callback () = 
     List.iter 
@@ -463,9 +481,9 @@ let main () =
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
-	   prove (run_prover_fct !default_prover view model s)
+	   prove (run_prover_fct !default_prover view model s false)
 	 else let name,_ = decomp_name s in 
-	 prove (run_prover_fct !default_prover view model name))
+	 prove (run_prover_fct !default_prover view model name false))
       view#selection#get_selected_rows in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected function" 
@@ -479,9 +497,9 @@ let main () =
 	 if model#iter_has_child row then
 	   let row = Queue.peek (Model.find_fobligs s) in
 	   let s = model#get ~row ~column:Model.fullname in
-	   prove (run_prover_oblig !default_prover view model s)
+	   prove (run_prover_oblig !default_prover view model s false)
 	 else 
-	   prove (run_prover_oblig !default_prover view model s))
+	   prove (run_prover_oblig !default_prover view model s false))
       view#selection#get_selected_rows in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected obligation" 
@@ -534,7 +552,7 @@ let main () =
        let _ =
 	 vc#connect#clicked 
 	   ~callback:(fun () -> 
-	      prove (run_prover_all p view model))
+	      prove (run_prover_all p view model false))
        in
        ())
     vc_provers;
@@ -669,9 +687,9 @@ let main () =
 		      let row = model#get_iter p in
 		      let s = model#get ~row ~column:Model.fullname in
 		      if model#iter_has_child row then
-			prove (run_prover_fct !default_prover view model s)
+			prove (run_prover_fct !default_prover view model s false)
 		      else 
-			prove (run_prover_oblig !default_prover view model s)
+			prove (run_prover_oblig !default_prover view model s false)
 		   )
 		   view#selection#get_selected_rows;
 	       false
