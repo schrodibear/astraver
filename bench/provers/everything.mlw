@@ -39,7 +39,7 @@ goal arith_2 : forall x:int. 0 <= x <= 1 -> (x = 0 or x = 1)
 goal arith_3 : forall x:int. x < 3 -> x <= 2
 
 
-(* list *)
+(* list (of elements of type t; see list.mlw for polymorphic lists) *)
 
 type list
 
@@ -54,6 +54,7 @@ axiom tl_cons : forall x:t. forall l:list. tl (cons(x,l)) = l
 
 goal hdtlconscons :
     forall x,y:t. hd(tl(cons(x, cons(y, nil)))) = y
+
 
 (* first-order *)
 

@@ -84,7 +84,9 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t)),
   forall (HW_10: i >= result),
-  (forall (k:Z), (0 <= k /\ k < (array_length t) -> (access t k) <> 0)).
+  forall (k: Z),
+  forall (HW_11: 0 <= k /\ k < (array_length t)),
+  (access t k) <> 0.
 Proof.
 intuition.
 subst.
@@ -171,7 +173,9 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t)),
   forall (HW_10: i >= result),
-  (forall (k:Z), (0 <= k /\ k < (array_length t) -> (access t k) <> 0)).
+  forall (k: Z),
+  forall (HW_11: 0 <= k /\ k < (array_length t)),
+  (access t k) <> 0.
 Proof.
 intuition.
 subst.
@@ -188,7 +192,9 @@ Save.
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
   forall (HW_4: i = result),
-  (forall (k:Z), (i <= k /\ k < (array_length t0) -> (access t0 k) <> 0)).
+  forall (k: Z),
+  forall (HW_5: i <= k /\ k < (array_length t0)),
+  (access t0 k) <> 0.
 Proof.
 intuition.
 Save.
@@ -202,7 +208,7 @@ Save.
   forall (HW_2: 0 <= i /\ i <= (array_length t0)),
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
-  forall (HW_5: i <> result),
+  forall (HW_6: i <> result),
   0 <= i /\ i < (array_length t0).
 Proof.
 intuition.
@@ -217,11 +223,11 @@ Save.
   forall (HW_2: 0 <= i /\ i <= (array_length t0)),
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
-  forall (HW_5: i <> result),
-  forall (HW_6: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <> result),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_7: result0 = (access t0 i)),
-  forall (HW_8: result0 = 0),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_9: result0 = 0),
   (access t0 i) = 0.
 Proof.
 intuition.
@@ -236,11 +242,11 @@ Save.
   forall (HW_2: 0 <= i /\ i <= (array_length t0)),
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
-  forall (HW_5: i <> result),
-  forall (HW_6: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <> result),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_7: result0 = (access t0 i)),
-  forall (HW_9: result0 <> 0),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_10: result0 <> 0),
   (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i)).
 Proof.
 intuition.
@@ -255,12 +261,12 @@ Save.
   forall (HW_2: 0 <= i /\ i <= (array_length t0)),
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
-  forall (HW_5: i <> result),
-  forall (HW_6: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <> result),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_7: result0 = (access t0 i)),
-  forall (HW_9: result0 <> 0),
-  forall (HW_10: (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i))),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_10: result0 <> 0),
+  forall (HW_11: (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i))),
   0 <= (i + 1) /\ (i + 1) <= (array_length t0).
 Proof.
 intuition.
@@ -275,17 +281,19 @@ Save.
   forall (HW_2: 0 <= i /\ i <= (array_length t0)),
   forall (result: Z),
   forall (HW_3: result = (array_length t0)),
-  forall (HW_5: i <> result),
-  forall (HW_6: 0 <= i /\ i < (array_length t0)),
+  forall (HW_6: i <> result),
+  forall (HW_7: 0 <= i /\ i < (array_length t0)),
   forall (result0: Z),
-  forall (HW_7: result0 = (access t0 i)),
-  forall (HW_9: result0 <> 0),
-  forall (HW_10: (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i))),
-  forall (HW_11: 0 <= (i + 1) /\ (i + 1) <= (array_length t0)),
-  forall (HW_13: (forall (k:Z),
+  forall (HW_8: result0 = (access t0 i)),
+  forall (HW_10: result0 <> 0),
+  forall (HW_11: (Zwf 0 ((array_length t0) - (i + 1)) ((array_length t0) - i))),
+  forall (HW_12: 0 <= (i + 1) /\ (i + 1) <= (array_length t0)),
+  forall (HW_14: (forall (k:Z),
                   ((i + 1) <= k /\ k < (array_length t0) -> (access t0 k) <>
                    0))),
-  (forall (k:Z), (i <= k /\ k < (array_length t0) -> (access t0 k) <> 0)).
+  forall (k: Z),
+  forall (HW_15: i <= k /\ k < (array_length t0)),
+  (access t0 k) <> 0.
 Proof.
 intuition.
 assert( k=i \/ i+1<=k). omega.

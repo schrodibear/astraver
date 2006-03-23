@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.55 2006-03-21 15:37:40 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.56 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -400,6 +400,7 @@ module Penv = struct
   let add id v e = 
     { e with map = Idmap.add id v e.map; elements = (id,v)::e.elements }
   let find id e = Idmap.find id e.map
+  let mem id e = Idmap.mem id e.map
   let fold f e x0 = List.fold_right f e.elements x0
   let iter f e = List.iter f e.elements
   let add_rec x e = { e with rec_funs = Idset.add x e.rec_funs }
@@ -414,41 +415,73 @@ module Penv = struct
       v
 end
 
+(*** turns a program environment into a logical environment 
+
+let add_logic_aux id v env = match v with
+  | Ref pt | PureType pt -> Idmap.add id pt env
+  | _ -> env
+
+let logical_env e = 
+  let transl m lenv = 
+    Idmap.fold (fun id v e -> add_logic_aux id v.scheme_type e) m lenv
+  in
+  transl e.Penv.map (transl !env.Penv.map Idmap.empty)
+
+***)
+
+(* The global environment.
+ *
+ * We have a global typing environment env
+ * We also keep a table of programs for extraction purposes
+ * and a table of initializations (still for extraction)
+ *)
+
+let (env : type_v scheme Penv.t ref) = ref (Penv.empty ())
 
 (* Local environments *)
 
-type type_info = Set | TypeV of type_v
+type local_env = {
+  progs: type_v scheme Penv.t;
+  logic: pure_type Idmap.t 
+}
 
-type local_env = type_info scheme Penv.t
+(* logical variables *)
 
-let empty () = (Penv.empty () : local_env)
+let is_logic x env = Idmap.mem x env.logic
 
-let add id v = Penv.add id (empty_scheme (TypeV v))
+let find_logic x env = Idmap.find x env.logic
 
-let add_set id = Penv.add id (empty_scheme Set)
+let add_logic x pt env = { env with logic = Idmap.add x pt env.logic }
 
-let find_type_var = Penv.find_type_var
+(* empty local environment: contains the references as *)
 
-let specialize_type_scheme s =
-  match s.scheme_type with 
-    | TypeV v -> specialize_type_v {s with scheme_type = v }
-    | Set -> assert false (* ? *)
+let add_logic_ref id v env = match v with
+  | Ref pt -> Idmap.add id pt env
+  | PureType _ | Arrow _ -> env
+
+let empty () = 
+  { progs = Penv.empty (); 
+    logic = 
+      Idmap.fold (fun id v e -> add_logic_ref id v.scheme_type e) 
+	!env.Penv.map Idmap.empty }
+
+let add_logic_pure_or_ref id v env = match v with
+  | Ref pt | PureType pt -> Idmap.add id pt env
+  | Arrow _ -> env
+
+let add id v env = 
+  { progs = Penv.add id (empty_scheme v) env.progs;
+    logic = add_logic_pure_or_ref id v env.logic }
+
+let find_type_var x env = Penv.find_type_var x env.progs
+
+let specialize_type_scheme = specialize_type_v
 
 let find id env =
-  let s = Penv.find id env in
+  let s = Penv.find id env.progs in
   snd (specialize_type_scheme s)
 
-let is_local env id =
-  try
-    match (Penv.find id env).scheme_type with TypeV _ -> true | Set -> false
-  with Not_found -> 
-    false
-
-let is_local_set env id =
-  try
-    match (Penv.find id env).scheme_type with TypeV _ -> false | Set -> true
-  with Not_found -> 
-    false
+let is_local env id = Penv.mem id env.progs
 
 
 (* typed programs *)
@@ -465,24 +498,13 @@ type typing_info = {
   
 type typed_expr = typing_info Ast.t
 
-(* The global environment.
- *
- * We have a global typing environment env
- * We also keep a table of programs for extraction purposes
- * and a table of initializations (still for extraction)
- *)
-
-let (env : type_info scheme Penv.t ref) = ref (Penv.empty ())
-
 let (pgm_table : (typed_expr option) Idmap.t ref) = ref Idmap.empty
-
-let (init_table : term Idmap.t ref) = ref Idmap.empty
 
 (* Operations on the global environment. *)
 
 let generalize_type_v t =
   let l = find_type_v_vars Vset.empty t in
-  { scheme_vars = l ; scheme_type = TypeV t }
+  { scheme_vars = l ; scheme_type = t }
 
 let add_global_gen id v p =
   try
@@ -497,43 +519,25 @@ let add_global id v p =
   let v = generalize_type_v v in
   add_global_gen id v p
 
-let add_global_set id =
-  try
-    let _ = Penv.find id !env in
-    raise_unlocated (Error.Clash id)
-  with Not_found -> 
-    env := Penv.add id { scheme_vars = Vset.empty; scheme_type = Set} !env
+let is_global id = Penv.mem id !env
 
-let is_global id =
-  try
-    match (Penv.find id !env).scheme_type with TypeV _ -> true | Set -> false
-  with Not_found -> 
-    false
-
-let is_global_set id =
-  try
-    match (Penv.find id !env).scheme_type with TypeV _ -> false | Set -> true
-  with Not_found -> 
-    false
-
-
-
-
-let lookup_global id = find id !env
+let lookup_global id = 
+  let s = Penv.find id !env in
+  snd (specialize_type_scheme s)
 
 let find_pgm id = Idmap.find id !pgm_table
 
 
 let all_vars () =
   let add_var (id,v) s = match v.scheme_type with
-    | TypeV (Arrow _ | PureType _) -> Idset.add id s 
+    | Arrow _ | PureType _ -> Idset.add id s 
     | _ -> s
   in
   Penv.fold add_var !env (Idset.add t_eq (Idset.singleton t_neq))
 
 let all_refs () =
   let add_ref (id,v) s = match v.scheme_type with
-    | TypeV (Ref _) -> Idset.add id s 
+    | Ref _ -> Idset.add id s 
     | _ -> s
   in
   Penv.fold add_ref !env Idset.empty
@@ -569,13 +573,6 @@ let add_type loc v id =
 
 let type_arity = Hashtbl.find types
 
-(* initializations *)
-
-let initialize id c = init_table := Idmap.add id c !init_table
-
-let find_init id = Idmap.find id !init_table
-
-
 (* access in env, local then global *)
 
 let type_in_env env id =
@@ -590,10 +587,10 @@ let is_ref env id =
 let fold_all f lenv x0 =
   let f (id,s) = f (id,s.scheme_type) in
   let x1 = Penv.fold f !env x0 in
-  Penv.fold f lenv x1
+  Penv.fold f lenv.progs x1
 
-let add_rec = Penv.add_rec
-let is_rec = Penv.is_rec
+let add_rec x env = { env with progs = Penv.add_rec x env.progs }
+let is_rec x env = Penv.is_rec x env.progs
 
 
 let type_v_of_logic tl tr = match tl with
@@ -605,19 +602,23 @@ let type_v_of_logic tl tr = match tl with
 
 (* Logical environment *)
 
-type logical_env = logic_type scheme Idmap.t
-
-let logic_table = ref Idmap.empty
+let logic_table = ref (Idmap.empty : logic_type scheme Idmap.t)
 
 let add_global_logic x t = 
   logic_table := Idmap.add x t !logic_table;
   match t.scheme_type with
     | Function (tl, tr) ->
 	let v = type_v_of_logic tl tr in
-	let v = { scheme_vars = t.scheme_vars ; scheme_type = TypeV v } in
+	let v = { scheme_vars = t.scheme_vars ; scheme_type = v } in
 	add_global_gen x v None
     | Predicate _ ->
 	()
+
+let is_global_logic x = Idmap.mem x !logic_table
+
+let find_global_logic x =
+  let t = Idmap.find x !logic_table in
+  specialize_logic_type t
 
 let is_global_logic x = Idmap.mem x !logic_table
 
@@ -632,31 +633,7 @@ let is_logic_function x =
 let iter_global_logic f = Idmap.iter f !logic_table
 
 let add_global_logic_gen x t =
- add_global_logic x (generalize_logic_type t)
-
-let is_logic = Idmap.mem
-
-let find_logic x env = specialize_logic_type (Idmap.find x env)
-
-let add_logic_aux id vars v env = match v with
-  | (Ref pt) | (PureType pt) -> 
-      Idmap.add id { scheme_vars = vars ; 
-		     scheme_type = (Function ([], pt)) } env
-  | _ -> 
-      env
-
-let add_logic ?(generalize=true) id v env =
-  let l = if generalize then find_type_v_vars Vset.empty v else Vset.empty in
-  add_logic_aux id l v env
-
-let logical_env e = 
-  let transl m lenv = 
-    Idmap.fold (fun id v e -> match v.scheme_type with 
-		  | TypeV t -> add_logic_aux id v.scheme_vars t e
-		  | _ -> e) m lenv
-  in
-  transl e.Penv.map (transl !env.Penv.map !logic_table)
-  
+  add_global_logic x (generalize_logic_type t)
 
 (*s Labels *)
 

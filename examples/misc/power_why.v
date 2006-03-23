@@ -99,7 +99,9 @@ Qed.
 
 (* Obligations *)
 
-(*Why*) Parameter x : Z.
+
+(*Why logic*) Definition x : Z.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma power1_po_1 : 

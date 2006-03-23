@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.12 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.13 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -28,7 +28,6 @@ open Format
 
 module type S = sig
   val declare_type : formatter -> pure_type -> unit
-  val print_parameter : formatter -> string -> cc_type -> unit
   val print_logic_instance : 
     formatter -> string -> instance -> logic_type -> unit
   val print_predicate_def_instance : 
@@ -286,10 +285,6 @@ module Make(X : S) = struct
 	X.declare_type fmt pt
     | _ -> 
 	()
-
-  let print_parameter fmt id c =
-    IterIT.cc_type (fun _ _ -> ()) (declare_type fmt) c;
-    X.print_parameter fmt id c
 
   let print_logic_instance fmt id i t =
     IterIT.logic_type (declare_type fmt) t;

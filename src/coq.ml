@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.144 2006-03-21 15:37:40 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.145 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -909,6 +909,7 @@ let print_lam_scheme fmt l =
        if v8 then fprintf fmt "fun (A%d:Set) =>@ " x.tag
        else fprintf fmt "[A%d:Set]@ " x.tag)
     l
+
 let print_validation fmt (id, tt, v) =
   let (l,tt,v) = Env.specialize_validation tt v in
   let print_cc_type fmt t = print_scheme fmt l; print_cc_type fmt t in

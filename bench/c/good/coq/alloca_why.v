@@ -16,31 +16,30 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A845:Set), forall (A846:Set), forall (A847:Set), forall (A848:Set),
-  forall (A849:Set), forall (A850:Set), forall (A851:Set), forall (A852:Set),
+  forall (A828:Set),
   forall (alloc: alloc_table),
-  forall (intM_t_0: ((memory) Z A852)),
+  forall (intM_t_0: ((memory) Z A828)),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (valid_range alloc u 0 3)),
   forall (HW_2: 3 >= 1),
-  forall (result: ((pointer) A852)),
+  forall (result: ((pointer) A828)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intM_t_0_0: ((memory) Z A852)),
+  forall (intM_t_0_0: ((memory) Z A828)),
   forall (HW_4: intM_t_0_0 = (upd intM_t_0 result 1)),
-  forall (result0: ((pointer) A852)),
+  forall (result0: ((pointer) A828)),
   forall (HW_5: result0 = (shift result 1)),
-  forall (intM_t_0_1: ((memory) Z A852)),
+  forall (intM_t_0_1: ((memory) Z A828)),
   forall (HW_6: intM_t_0_1 = (upd intM_t_0_0 result0 2)),
-  forall (result1: ((pointer) A852)),
+  forall (result1: ((pointer) A828)),
   forall (HW_7: result1 = (shift result 2)),
-  forall (intM_t_0_2: ((memory) Z A852)),
+  forall (intM_t_0_2: ((memory) Z A828)),
   forall (HW_8: intM_t_0_2 = (upd intM_t_0_1 result1 3)),
-  forall (result2: ((pointer) A852)),
+  forall (result2: ((pointer) A828)),
   forall (HW_9: result2 = (shift result 2)),
   forall (result3: Z),
   forall (HW_10: result3 = (acc intM_t_0_2 result2)),
@@ -63,31 +62,30 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
-  forall (A853:Set), forall (A854:Set), forall (A855:Set), forall (A856:Set),
-  forall (A857:Set), forall (A858:Set), forall (A859:Set), forall (A860:Set),
+  forall (A829:Set),
   forall (alloc: alloc_table),
-  forall (intM_t_1: ((memory) Z A860)),
+  forall (intM_t_1: ((memory) Z A829)),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (valid_range alloc u 0 3)),
   forall (HW_2: 3 >= 1),
-  forall (result: ((pointer) A860)),
+  forall (result: ((pointer) A829)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 3 /\
                 (valid_range alloc0 result 0 (3 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intM_t_1_0: ((memory) Z A860)),
+  forall (intM_t_1_0: ((memory) Z A829)),
   forall (HW_4: intM_t_1_0 = (upd intM_t_1 result 1)),
-  forall (result0: ((pointer) A860)),
+  forall (result0: ((pointer) A829)),
   forall (HW_5: result0 = (shift result 1)),
-  forall (intM_t_1_1: ((memory) Z A860)),
+  forall (intM_t_1_1: ((memory) Z A829)),
   forall (HW_6: intM_t_1_1 = (upd intM_t_1_0 result0 2)),
-  forall (result1: ((pointer) A860)),
+  forall (result1: ((pointer) A829)),
   forall (HW_7: result1 = (shift result 2)),
-  forall (intM_t_1_2: ((memory) Z A860)),
+  forall (intM_t_1_2: ((memory) Z A829)),
   forall (HW_8: intM_t_1_2 = (upd intM_t_1_1 result1 3)),
-  forall (result2: ((pointer) A860)),
+  forall (result2: ((pointer) A829)),
   forall (HW_9: result2 = (shift result 2)),
   forall (result3: Z),
   forall (HW_10: result3 = (acc intM_t_1_2 result2)),
@@ -110,35 +108,34 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
-  forall (A861:Set), forall (A862:Set), forall (A863:Set), forall (A864:Set),
-  forall (A865:Set), forall (A866:Set), forall (A867:Set), forall (A868:Set),
+  forall (A830:Set),
   forall (alloc: alloc_table),
-  forall (intM_t_4: ((memory) Z A868)),
+  forall (intM_t_4: ((memory) Z A830)),
   forall (intM_u_11: ((memory) Z u_11)),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (* File "alloca.c", line 17, characters 14-24 *)
                 (acc intM_u_11 (shift u 2)) = 12 /\ (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
-  forall (result: ((pointer) A868)),
+  forall (result: ((pointer) A830)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 4 /\
                 (valid_range alloc0 result 0 (4 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intM_t_4_0: ((memory) Z A868)),
+  forall (intM_t_4_0: ((memory) Z A830)),
   forall (HW_4: intM_t_4_0 = (upd intM_t_4 result 1)),
-  forall (result0: ((pointer) A868)),
+  forall (result0: ((pointer) A830)),
   forall (HW_5: result0 = (shift result 1)),
-  forall (intM_t_4_1: ((memory) Z A868)),
+  forall (intM_t_4_1: ((memory) Z A830)),
   forall (HW_6: intM_t_4_1 = (upd intM_t_4_0 result0 2)),
-  forall (result1: ((pointer) A868)),
+  forall (result1: ((pointer) A830)),
   forall (HW_7: result1 = (shift result 2)),
-  forall (intM_t_4_2: ((memory) Z A868)),
+  forall (intM_t_4_2: ((memory) Z A830)),
   forall (HW_8: intM_t_4_2 = (upd intM_t_4_1 result1 3)),
-  forall (result2: ((pointer) A868)),
+  forall (result2: ((pointer) A830)),
   forall (HW_9: result2 = (shift result 3)),
-  forall (intM_t_4_3: ((memory) Z A868)),
+  forall (intM_t_4_3: ((memory) Z A830)),
   forall (HW_10: intM_t_4_3 = (upd intM_t_4_2 result2 4)),
   forall (result3: ((pointer) u_11)),
   forall (HW_11: result3 = (shift u 2)),
@@ -162,33 +159,32 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_impl_po_2 : 
-  forall (A869:Set), forall (A870:Set), forall (A871:Set), forall (A872:Set),
-  forall (A873:Set), forall (A874:Set), forall (A875:Set), forall (A876:Set),
+  forall (A831:Set),
   forall (alloc: alloc_table),
-  forall (intM_t_5: ((memory) Z A876)),
+  forall (intM_t_5: ((memory) Z A831)),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
-  forall (result: ((pointer) A876)),
+  forall (result: ((pointer) A831)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 4 /\
                 (valid_range alloc0 result 0 (4 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intM_t_5_0: ((memory) Z A876)),
+  forall (intM_t_5_0: ((memory) Z A831)),
   forall (HW_4: intM_t_5_0 = (upd intM_t_5 result 1)),
-  forall (result0: ((pointer) A876)),
+  forall (result0: ((pointer) A831)),
   forall (HW_5: result0 = (shift result 1)),
-  forall (intM_t_5_1: ((memory) Z A876)),
+  forall (intM_t_5_1: ((memory) Z A831)),
   forall (HW_6: intM_t_5_1 = (upd intM_t_5_0 result0 2)),
-  forall (result1: ((pointer) A876)),
+  forall (result1: ((pointer) A831)),
   forall (HW_7: result1 = (shift result 2)),
-  forall (intM_t_5_2: ((memory) Z A876)),
+  forall (intM_t_5_2: ((memory) Z A831)),
   forall (HW_8: intM_t_5_2 = (upd intM_t_5_1 result1 3)),
-  forall (result2: ((pointer) A876)),
+  forall (result2: ((pointer) A831)),
   forall (HW_9: result2 = (shift result 3)),
-  forall (intM_t_5_3: ((memory) Z A876)),
+  forall (intM_t_5_3: ((memory) Z A831)),
   forall (HW_10: intM_t_5_3 = (upd intM_t_5_2 result2 4)),
   5 >= 1.
 Proof.
@@ -198,63 +194,61 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_impl_po_3 : 
-  forall (A877:Set), forall (A878:Set), forall (A879:Set), forall (A880:Set),
-  forall (A881:Set), forall (A882:Set), forall (A883:Set), forall (A884:Set),
-  forall (A885:Set),
+  forall (A832:Set), forall (A833:Set),
   forall (alloc: alloc_table),
-  forall (intM_t_5: ((memory) Z A884)),
-  forall (intM_u_6: ((memory) Z A885)),
+  forall (intM_t_5: ((memory) Z A832)),
+  forall (intM_u_6: ((memory) Z A833)),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (valid_range alloc u 0 3)),
   forall (HW_2: 4 >= 1),
-  forall (result: ((pointer) A884)),
+  forall (result: ((pointer) A832)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 4 /\
                 (valid_range alloc0 result 0 (4 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (intM_t_5_0: ((memory) Z A884)),
+  forall (intM_t_5_0: ((memory) Z A832)),
   forall (HW_4: intM_t_5_0 = (upd intM_t_5 result 1)),
-  forall (result0: ((pointer) A884)),
+  forall (result0: ((pointer) A832)),
   forall (HW_5: result0 = (shift result 1)),
-  forall (intM_t_5_1: ((memory) Z A884)),
+  forall (intM_t_5_1: ((memory) Z A832)),
   forall (HW_6: intM_t_5_1 = (upd intM_t_5_0 result0 2)),
-  forall (result1: ((pointer) A884)),
+  forall (result1: ((pointer) A832)),
   forall (HW_7: result1 = (shift result 2)),
-  forall (intM_t_5_2: ((memory) Z A884)),
+  forall (intM_t_5_2: ((memory) Z A832)),
   forall (HW_8: intM_t_5_2 = (upd intM_t_5_1 result1 3)),
-  forall (result2: ((pointer) A884)),
+  forall (result2: ((pointer) A832)),
   forall (HW_9: result2 = (shift result 3)),
-  forall (intM_t_5_3: ((memory) Z A884)),
+  forall (intM_t_5_3: ((memory) Z A832)),
   forall (HW_10: intM_t_5_3 = (upd intM_t_5_2 result2 4)),
   forall (HW_11: 5 >= 1),
-  forall (result3: ((pointer) A885)),
+  forall (result3: ((pointer) A833)),
   forall (alloc1: alloc_table),
   forall (HW_12: (valid alloc1 result3) /\ (offset result3) = 0 /\
                  (block_length alloc1 result3) = 5 /\
                  (valid_range alloc1 result3 0 (5 - 1)) /\
                  (fresh alloc0 result3) /\ (on_stack alloc1 result3) /\
                  (alloc_stack result3 alloc0 alloc1)),
-  forall (intM_u_6_0: ((memory) Z A885)),
+  forall (intM_u_6_0: ((memory) Z A833)),
   forall (HW_13: intM_u_6_0 = (upd intM_u_6 result3 0)),
-  forall (result4: ((pointer) A885)),
+  forall (result4: ((pointer) A833)),
   forall (HW_14: result4 = (shift result3 1)),
-  forall (intM_u_6_1: ((memory) Z A885)),
+  forall (intM_u_6_1: ((memory) Z A833)),
   forall (HW_15: intM_u_6_1 = (upd intM_u_6_0 result4 0)),
-  forall (result5: ((pointer) A885)),
+  forall (result5: ((pointer) A833)),
   forall (HW_16: result5 = (shift result3 2)),
-  forall (result6: ((pointer) A884)),
+  forall (result6: ((pointer) A832)),
   forall (HW_17: result6 = (shift result 2)),
   forall (result7: Z),
   forall (HW_18: result7 = (acc intM_t_5_3 result6)),
-  forall (intM_u_6_2: ((memory) Z A885)),
+  forall (intM_u_6_2: ((memory) Z A833)),
   forall (HW_19: intM_u_6_2 = (upd intM_u_6_1 result5 result7)),
-  forall (result8: ((pointer) A885)),
+  forall (result8: ((pointer) A833)),
   forall (HW_20: result8 = (shift result3 3)),
-  forall (intM_u_6_3: ((memory) Z A885)),
+  forall (intM_u_6_3: ((memory) Z A833)),
   forall (HW_21: intM_u_6_3 = (upd intM_u_6_2 result8 0)),
-  forall (result9: ((pointer) A885)),
+  forall (result9: ((pointer) A833)),
   forall (HW_22: result9 = (shift result3 2)),
   forall (result10: Z),
   forall (HW_23: result10 = (acc intM_u_6_3 result9)),
@@ -275,13 +269,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_not_alias_impl_po_2 : 
-  forall (A886:Set), forall (A887:Set), forall (A888:Set), forall (A889:Set),
-  forall (A890:Set), forall (A891:Set), forall (A892:Set), forall (A893:Set),
+  forall (A834:Set),
   forall (alloc: alloc_table),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (valid_range alloc u 0 3)),
   forall (HW_2: 5 >= 1),
-  forall (result: ((pointer) A893)),
+  forall (result: ((pointer) A834)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 5 /\
@@ -295,16 +288,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma two_local_arrays_not_alias_impl_po_3 : 
-  forall (A894:Set), forall (A895:Set), forall (A896:Set), forall (A897:Set),
-  forall (A898:Set), forall (A899:Set), forall (A900:Set), forall (A901:Set),
-  forall (A902:Set),
+  forall (A835:Set), forall (A836:Set),
   forall (alloc: alloc_table),
-  forall (intM_t_7: ((memory) Z A902)),
-  forall (intM_v_8: ((memory) Z A901)),
+  forall (intM_t_7: ((memory) Z A836)),
+  forall (intM_v_8: ((memory) Z A835)),
   forall (u: ((pointer) u_11)),
   forall (HW_1: (valid_range alloc u 0 3)),
   forall (HW_2: 5 >= 1),
-  forall (result: ((pointer) A902)),
+  forall (result: ((pointer) A836)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 5 /\
@@ -312,22 +303,22 @@ Save.
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
   forall (HW_4: 6 >= 1),
-  forall (result0: ((pointer) A901)),
+  forall (result0: ((pointer) A835)),
   forall (alloc1: alloc_table),
   forall (HW_5: (valid alloc1 result0) /\ (offset result0) = 0 /\
                 (block_length alloc1 result0) = 6 /\
                 (valid_range alloc1 result0 0 (6 - 1)) /\
                 (fresh alloc0 result0) /\ (on_stack alloc1 result0) /\
                 (alloc_stack result0 alloc0 alloc1)),
-  forall (result1: ((pointer) A902)),
+  forall (result1: ((pointer) A836)),
   forall (HW_6: result1 = (shift result 4)),
-  forall (intM_t_7_0: ((memory) Z A902)),
+  forall (intM_t_7_0: ((memory) Z A836)),
   forall (HW_7: intM_t_7_0 = (upd intM_t_7 result1 3)),
-  forall (result2: ((pointer) A901)),
+  forall (result2: ((pointer) A835)),
   forall (HW_8: result2 = (shift result0 4)),
-  forall (intM_v_8_0: ((memory) Z A901)),
+  forall (intM_v_8_0: ((memory) Z A835)),
   forall (HW_9: intM_v_8_0 = (upd intM_v_8 result2 1)),
-  forall (result3: ((pointer) A902)),
+  forall (result3: ((pointer) A836)),
   forall (HW_10: result3 = (shift result 4)),
   forall (result4: Z),
   forall (HW_11: result4 = (acc intM_t_7_0 result3)),

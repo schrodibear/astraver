@@ -5,10 +5,10 @@ Require Export separation1_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A776:Set),
-  forall (p: ((pointer) A776)),
+  forall (A759:Set),
+  forall (p: ((pointer) A759)),
   forall (alloc: alloc_table),
-  forall (intM_p_7: ((memory) Z A776)),
+  forall (intM_p_7: ((memory) Z A759)),
   forall (intM_x_4: ((memory) Z x_4)),
   forall (intM_y_5: ((memory) Z y_5)),
   forall (intM_z_6: ((memory) Z z_6)),
@@ -21,7 +21,7 @@ Require Export separation1_spec_why.
                 (constant_y intM_y_5 y alloc) /\
                 (constant_x intM_x_4 x alloc)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_p_7_0: ((memory) Z A776)),
+  forall (intM_p_7_0: ((memory) Z A759)),
   forall (HW_3: intM_p_7_0 = (upd intM_p_7 p 0)),
   (* File "separation1.c", line 9, characters 13-20 *) (acc intM_p_7_0 p) = 0.
 Proof.
@@ -40,10 +40,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A777:Set),
-  forall (p: ((pointer) A777)),
+  forall (A760:Set),
+  forall (p: ((pointer) A760)),
   forall (alloc: alloc_table),
-  forall (intM_p_7: ((memory) Z A777)),
+  forall (intM_p_7: ((memory) Z A760)),
   forall (intM_x_4: ((memory) Z x_4)),
   forall (intM_y_5: ((memory) Z y_5)),
   forall (intM_z_6: ((memory) Z z_6)),
@@ -56,7 +56,7 @@ Save.
                 (constant_y intM_y_5 y alloc) /\
                 (constant_x intM_x_4 x alloc)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_p_7_0: ((memory) Z A777)),
+  forall (intM_p_7_0: ((memory) Z A760)),
   forall (HW_3: intM_p_7_0 = (upd intM_p_7 p 0)),
   (not_assigns alloc intM_p_7 intM_p_7_0 (pset_singleton p)).
 Proof.

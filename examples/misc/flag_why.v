@@ -4,7 +4,9 @@
 Require Import Why.
 Require Import Sumbool.
 
-(*Why*) Parameter N : Z.
+
+(*Why logic*) Definition N : Z.
+Admitted.
 
 Axiom N_non_negative : (0 <= N)%Z.
 
@@ -23,6 +25,7 @@ Definition eq_white c := bool_of_sumbool (eq_color_dec c white).
 
 Definition monochrome (t:array color) (i j:Z) (c:color) : Prop :=
   forall k:Z, (i <= k < j)%Z -> access t k = c.
+
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_1 : 

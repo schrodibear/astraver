@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.37 2006-03-21 15:37:40 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.38 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -33,7 +33,6 @@ open Env
 open Report
 
 type elem = 
-  | Parameter of string * cc_type
   | Logic of string * logic_type Env.scheme
   | Oblig of obligation 
   | Axiom of string * predicate Env.scheme
@@ -41,8 +40,6 @@ type elem =
   | FunctionDef of string * function_def Env.scheme
 
 let queue = Queue.create ()
-
-let push_parameter id v = Queue.add (Parameter (id, v)) queue
 
 let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) queue
@@ -202,22 +199,6 @@ let rec print_predicate fmt = function
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
 
-let cc_external_type = function
-  | Cc.TTpure ty -> external_type ty
-  | Cc.TTarray (Cc.TTpure (PTexternal _)) -> true
-  | _ -> false
-
-let rec print_cc_type fmt = function
-  | TTpure pt -> 
-      print_pure_type fmt pt
-  | TTarray v -> 
-      fprintf fmt "(@[ARRAY INT OF %a@])" print_cc_type v
-  | TTarrow ((_,CC_var_binder t1), t2) -> 
-      fprintf fmt "(%a ->@ %a)" print_cc_type t1 print_cc_type t2
-  | t -> 
-      (*fprintf fmt "%%BUG -> COQ PRINTER@\n%a" Coq.print_cc_type_v8 t *)
-      assert false
-
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
@@ -252,12 +233,6 @@ module Mono = struct
 	()
     | pt -> 
 	fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt
-
-  let print_parameter fmt id c =
-    fprintf fmt 
-      "@[%%%% Why parameter %s@]@\n" id;
-    fprintf fmt 
-      "@[<hov 2>%s: %a;@]@\n@\n" id print_cc_type c
 
   let print_logic_instance fmt id i t =
     fprintf fmt "%%%% Why logic %s@\n" id;
@@ -301,7 +276,6 @@ let print_elem fmt = function
   | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
   | FunctionDef (id, p) -> Output.print_function_def fmt id p
   | Logic (id, t) -> Output.print_logic fmt id t
-  | Parameter (id, t) -> Output.print_parameter fmt id t
 
 let prelude_done = ref false
 let prelude fmt = 
@@ -315,13 +289,6 @@ tt: UNIT;
   end
 
 let reset () = Queue.clear queue; Output.reset ()
-
-let predicate_of_string s =
-  let p = Lexer.lexpr_of_string s in
-  let env = Env.empty () in
-  let lenv = Env.logical_env env in
-  let p = Ltyping.predicate Label.empty env lenv p in
-  generalize_predicate p
 
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in

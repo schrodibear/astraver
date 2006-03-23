@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.mli,v 1.3 2005-06-23 12:52:04 filliatr Exp $ i*)
+(*i $Id: monomorph.mli,v 1.4 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)
@@ -27,7 +27,6 @@ open Format
 module type S = sig
   val declare_type : formatter -> pure_type -> unit
 
-  val print_parameter : formatter -> string -> cc_type -> unit
   val print_logic_instance : 
     formatter -> string -> instance -> logic_type -> unit
   val print_predicate_def_instance : 
@@ -43,7 +42,6 @@ module Make(X : S) : sig
   val print_obligation : formatter -> obligation -> unit
   val print_axiom : formatter -> string -> predicate Env.scheme -> unit
   val print_logic : formatter -> string -> logic_type Env.scheme -> unit
-  val print_parameter : formatter -> string -> cc_type -> unit
   val print_predicate_def : 
     formatter -> string -> predicate_def Env.scheme -> unit
   val print_function_def : 

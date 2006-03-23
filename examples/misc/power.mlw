@@ -1,7 +1,7 @@
 
 (* Fast exponentiation, using X^2n = (X^n)^2 and X^(2n+1) = X.(X^n)^2 *)
 
-parameter x : int
+logic x : int
 
 parameter n,m,y : int ref
 

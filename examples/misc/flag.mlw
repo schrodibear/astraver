@@ -3,14 +3,14 @@
 
 external type color
 
-external parameter blue : color
-external parameter white : color
-external parameter red : color
+external logic blue : color
+external logic white : color
+external logic red : color
 
 external parameter eq_blue  : c:color -> {} bool { if result then c=blue else c<>blue }
 external parameter eq_white : c:color -> {} bool { if result then c=white else c<>white }
 
-parameter N : int
+logic N : int
 parameter t : color array
 
 external logic monochrome : color farray, int, int, color -> prop

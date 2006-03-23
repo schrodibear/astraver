@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.96 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.97 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -76,9 +76,7 @@ let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 let push_validation id tt v = 
   if valid && prover_is_coq then Coq.push_validation id tt v
 
-let is_pure_type_scheme s = match s.scheme_type with
-  | Set -> assert false
-  | TypeV v -> is_pure_type_v v
+let is_pure_type_scheme s = is_pure_type_v s.scheme_type
 
 let push_parameter id v tv = match prover () with
   | Coq _ -> 
@@ -194,13 +192,12 @@ let cannot_be_generalized = function
 let interp_decl ?(prelude=false) d = 
   let env = Env.empty () in
   let lab = Label.empty in
-  let lenv = Env.logical_env env in
   match d with 
   | Program (id, p) ->
       if Env.is_global id then raise_located p.ploc (Clash id);
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ext, ids, v) ->
-      let v = Ltyping.type_v loc lab env lenv v in
+      let v = Ltyping.type_v loc lab env v in
       if ext && is_mutable v then raise_located loc MutableExternal;
       let gv = Env.generalize_type_v v in
       let v_spec = snd (specialize_type_scheme gv) in
@@ -218,7 +215,7 @@ let interp_decl ?(prelude=false) d =
       add_exception id v
   | Logic (loc, ext, ids, t) ->
       let add id =
-	if is_logic id lenv then raise_located loc (Clash id);
+	if is_global_logic id then raise_located loc (Clash id);
 	let t = Ltyping.logic_type t in
 	let t = generalize_logic_type t in
 	add_global_logic id t;
@@ -226,39 +223,33 @@ let interp_decl ?(prelude=false) d =
       in
       List.iter add ids
   | Predicate_def (loc, id, pl, p) ->
-      if is_logic id lenv then raise_located loc (Clash id);
+      if is_global_logic id then raise_located loc (Clash id);
       let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
       let t = Predicate (List.map snd pl) in
       let t = generalize_logic_type t in
       add_global_logic id t;
-      let lenv' = 
-	List.fold_right 
-	  (fun (x,pt) -> add_logic ~generalize:false x (PureType pt)) pl lenv 
-      in
-      let p = Ltyping.predicate lab env lenv' p in
+      let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
+      let p = Ltyping.predicate lab env' p in
       let p = generalize_predicate_def (pl,p) in
       push_decl (Dpredicate_def (loc, Ident.string id, p))
   | Function_def (loc, id, pl, ty, e) ->
-      if is_logic id lenv then raise_located loc (Clash id);
+      if is_global_logic id then raise_located loc (Clash id);
       let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
       let ty = Ltyping.pure_type env ty in
       let t = Function (List.map snd pl, ty) in
       let t = generalize_logic_type t in
       add_global_logic id t;
-      let lenv' = 
-	List.fold_right 
-	  (fun (x,pt) -> add_logic ~generalize:false x (PureType pt)) pl lenv 
-      in
-      let e,ty' = Ltyping.term lab env lenv' e in
+      let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
+      let e,ty' = Ltyping.term lab env' e in
       if ty <> ty' then Ltyping.expected_type loc (PureType ty);
       let f = generalize_function_def (pl,ty,e) in
       push_decl (Dfunction_def (loc, Ident.string id, f))
   | Axiom (loc, id, p) ->
-      let p = Ltyping.predicate lab env lenv p in
+      let p = Ltyping.predicate lab env p in
       let p = generalize_predicate p in
       push_decl (Daxiom (loc, Ident.string id, p))
   | Goal (loc, id, p) ->
-      let p = Ltyping.predicate lab env lenv p in
+      let p = Ltyping.predicate lab env p in
       if not (Vset.is_empty (generalize_predicate p).scheme_vars) then 
 	raise_located loc PolymorphicGoal;
       push_decl (Dgoal (loc, Ident.string id, ([], p)))

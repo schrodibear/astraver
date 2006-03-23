@@ -411,10 +411,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (A894:Set),
-  forall (p: ((pointer) A894)),
+  forall (A871:Set),
+  forall (p: ((pointer) A871)),
   forall (alloc: alloc_table),
-  forall (intM_p_10: ((memory) Z A894)),
+  forall (intM_p_10: ((memory) Z A871)),
   forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -424,7 +424,7 @@ Save.
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
                 (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_p_10_0: ((memory) Z A894)),
+  forall (intM_p_10_0: ((memory) Z A871)),
   forall (HW_3: intM_p_10_0 = (upd intM_p_10 p 1)),
   (* File "ref_glob.c", line 4, characters 13-20 *) (acc intM_p_10_0 p) = 1.
 Proof.
@@ -434,10 +434,10 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
-  forall (A895:Set),
-  forall (p: ((pointer) A895)),
+  forall (A872:Set),
+  forall (p: ((pointer) A872)),
   forall (alloc: alloc_table),
-  forall (intM_p_10: ((memory) Z A895)),
+  forall (intM_p_10: ((memory) Z A872)),
   forall (intM_x_11: ((memory) Z x_11)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
@@ -447,7 +447,7 @@ Save.
                 (valid_range alloc t 0 2) /\ (constant_plas plas) /\
                 (constant_x intM_x_11 x alloc)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_p_10_0: ((memory) Z A895)),
+  forall (intM_p_10_0: ((memory) Z A872)),
   forall (HW_3: intM_p_10_0 = (upd intM_p_10 p 1)),
   (not_assigns alloc intM_p_10 intM_p_10_0 (pset_singleton p)).
 Proof.
@@ -460,11 +460,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_1 : 
-  forall (A896:Set),
-  forall (p: ((pointer) A896)),
+  forall (A873:Set),
+  forall (p: ((pointer) A873)),
   forall (alloc: alloc_table),
   forall (intM_x_11: ((memory) Z x_11)),
-  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A896)),
+  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A873)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
@@ -480,11 +480,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_2 : 
-  forall (A897:Set),
-  forall (p: ((pointer) A897)),
+  forall (A874:Set),
+  forall (p: ((pointer) A874)),
   forall (alloc: alloc_table),
   forall (intM_x_11: ((memory) Z x_11)),
-  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A897)),
+  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A874)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
@@ -503,12 +503,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_3 : 
-  forall (A898:Set),
-  forall (p: ((pointer) A898)),
+  forall (A875:Set),
+  forall (p: ((pointer) A875)),
   forall (alloc: alloc_table),
   forall (intM_intPM_15: ((memory) Z intPM_15)),
   forall (intM_x_11: ((memory) Z x_11)),
-  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A898)),
+  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A875)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
@@ -531,12 +531,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_4 : 
-  forall (A899:Set),
-  forall (p: ((pointer) A899)),
+  forall (A876:Set),
+  forall (p: ((pointer) A876)),
   forall (alloc: alloc_table),
   forall (intM_intPM_15: ((memory) Z intPM_15)),
   forall (intM_x_11: ((memory) Z x_11)),
-  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A899)),
+  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A876)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),
@@ -562,12 +562,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma h_impl_po_5 : 
-  forall (A900:Set),
-  forall (p: ((pointer) A900)),
+  forall (A877:Set),
+  forall (p: ((pointer) A877)),
   forall (alloc: alloc_table),
   forall (intM_intPM_15: ((memory) Z intPM_15)),
   forall (intM_x_11: ((memory) Z x_11)),
-  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A900)),
+  forall (intPM_p_14: ((memory) ((pointer) intPM_15) A877)),
   forall (plas: ((pointer) plas_12)),
   forall (t: ((pointer) t_13)),
   forall (x: ((pointer) x_11)),

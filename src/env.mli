@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.35 2006-03-21 15:37:40 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.36 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -28,16 +28,16 @@ open Logic
 open Types
 open Ast
 
-(*s local environments *)
+(*s type schemes *)
+
+module Vset : Set.S with type elt = type_var
+module Vmap : Map.S with type key = type_var
+
+type 'a scheme = private { scheme_vars : Vset.t; scheme_type : 'a }
+
+(*s AST for typed programs are decorated with local environments *)
 
 type local_env
-
-val empty : unit -> local_env
-val add : Ident.t -> type_v -> local_env -> local_env
-val is_local : local_env -> Ident.t -> bool
-val find_type_var : Ident.t -> local_env -> type_var
-
-(*s typed programs *)
 
 type typing_info = { 
   t_loc : Loc.position;
@@ -51,24 +51,17 @@ type typing_info = {
   
 type typed_expr = typing_info Ast.t
 
-module Vset : Set.S with type elt = type_var
-module Vmap : Map.S with type key = type_var
-
-type 'a scheme = private { scheme_vars : Vset.t; scheme_type : 'a }
-
-type type_info = Set | TypeV of type_v
-
 (*s global environment *)
 
 val add_global : Ident.t -> type_v -> typed_expr option -> unit
-val add_global_gen : Ident.t -> type_info scheme -> typed_expr option -> unit
-val add_global_set : Ident.t -> unit
+val add_global_gen : Ident.t -> type_v scheme -> typed_expr option -> unit
 val is_global : Ident.t -> bool
-val is_global_set : Ident.t -> bool
 val lookup_global : Ident.t -> type_v
 
 val all_vars : unit -> Ident.set
 val all_refs : unit -> Ident.set
+
+(*s types (only global) *)
 
 val add_type : Loc.position -> Ident.t list -> Ident.t -> unit
 val is_type : Ident.t -> bool
@@ -80,14 +73,27 @@ val add_exception : Ident.t -> pure_type option -> unit
 val is_exception : Ident.t -> bool
 val find_exception : Ident.t -> pure_type option
 
+(*s logical elements *)
+
+type var_subst = type_var Vmap.t
+
+val add_global_logic : Ident.t -> logic_type scheme -> unit
+val find_global_logic : Ident.t -> var_subst * logic_type
+
+val iter_global_logic : (Ident.t -> logic_type scheme -> unit) -> unit
+val is_global_logic : Ident.t -> bool
+val is_logic_function : Ident.t -> bool
+
 (*s a table keeps the program (for extraction) *)
 
 val find_pgm : Ident.t -> typed_expr option
 
-(*s a table keeps the initializations of mutable objects *)
+(*s local environments *)
 
-val initialize : Ident.t -> term -> unit
-val find_init : Ident.t -> term
+val empty : unit -> local_env
+val add : Ident.t -> type_v -> local_env -> local_env
+val is_local : local_env -> Ident.t -> bool
+val find_type_var : Ident.t -> local_env -> type_var
 
 (*s access in env (local then global) *)
 
@@ -95,34 +101,27 @@ val type_in_env : local_env -> Ident.t -> type_v
 val is_in_env : local_env -> Ident.t -> bool
 val is_ref : local_env -> Ident.t -> bool
 
-val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
+val fold_all : (Ident.t * type_v -> 'a -> 'a) -> local_env -> 'a -> 'a
 
 val add_rec : Ident.t -> local_env -> local_env
 val is_rec : Ident.t -> local_env -> bool
 
-(*s Logical environment *)
+(*s logical elements *)
 
-val add_global_logic : Ident.t -> logic_type scheme -> unit
-val iter_global_logic : (Ident.t -> logic_type scheme -> unit) -> unit
-val is_logic_function : Ident.t -> bool
+val add_logic : Ident.t -> pure_type -> local_env -> local_env
+val find_logic : Ident.t -> local_env -> pure_type
 
-type logical_env
-
-val add_logic : 
-  ?generalize:bool -> Ident.t -> type_v -> logical_env -> logical_env
-val is_logic : Ident.t -> logical_env -> bool
+(* type variables and generalization/specialization *)
 
 val new_type_var : unit -> type_var
 
 val generalize_logic_type : logic_type -> logic_type scheme
-val generalize_type_v : type_v -> type_info scheme
+val generalize_type_v : type_v -> type_v scheme
 val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme
 val generalize_function_def : function_def -> function_def scheme
 
-type var_subst = type_var Vmap.t
-
-val specialize_type_scheme : type_info scheme -> var_subst * type_v
+val specialize_type_scheme : type_v scheme -> var_subst * type_v
 val specialize_logic_type : logic_type scheme -> var_subst * logic_type
 val specialize_predicate : predicate scheme -> var_subst * predicate
 val specialize_predicate_def : 
@@ -133,10 +132,6 @@ val specialize_function_def :
 val specialize_sequent : Cc.sequent -> var_subst * Cc.sequent
 val specialize_validation : 
   Cc.cc_type -> Cc.validation -> var_subst * Cc.cc_type * Cc.validation
-
-val find_logic : Ident.t -> logical_env -> var_subst * logic_type
-
-val logical_env : local_env -> logical_env
 
 (*s Labels *)
 

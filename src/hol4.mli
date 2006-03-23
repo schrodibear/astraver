@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.mli,v 1.3 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: hol4.mli,v 1.4 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -24,7 +24,5 @@ open Cc
 val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
-
-val push_parameter : string -> Cc.cc_type -> unit
 
 val output_file : string -> unit

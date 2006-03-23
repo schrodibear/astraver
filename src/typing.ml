@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.118 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.119 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -202,8 +202,7 @@ let state_var loc lab env = function
   | None -> 
       None, Effect.bottom
   | Some (phi,r) ->
-      let lenv = logical_env env in
-      let phi,tphi = Ltyping.term lab env lenv phi in
+      let phi,tphi = Ltyping.term lab env phi in
       let ids = term_refs env phi in
       (if termination = Partial then None else Some (phi,tphi,r)), 
       Effect.add_reads ids Effect.bottom
@@ -233,19 +232,18 @@ let predicates_effect lab env loc pl =
   List.fold_left state Effect.bottom pl
 
 let state_pre lab env loc pl =
-  let lenv = logical_env env in
-  let pl = List.map (type_assert lab env lenv) pl in
+  let pl = List.map (type_assert lab env) pl in
   predicates_effect lab env loc (List.map (fun x -> x.a_value) pl), pl
 
 let state_assert lab env loc a =
-  let a = type_assert lab env (logical_env env) a in
+  let a = type_assert lab env a in
   predicates_effect lab env loc [a.a_value], a
 
 let state_inv lab env loc = function
   | None -> 
       Effect.bottom, None
   | Some i -> 
-      let i = type_assert lab env (logical_env env) i in
+      let i = type_assert lab env i in
       predicates_effect lab env loc [i.a_value], Some i
 	
 
@@ -257,7 +255,7 @@ let state_inv lab env loc = function
 
 let state_post lab env (id,v,ef) loc q =
   check_unbound_exn loc (snd q);
-  let q = type_post lab env (logical_env env) id v ef q in
+  let q = type_post lab env id v ef q in
   let ids = apost_vars q in
   let ef,q = 
     Idset.fold
@@ -446,7 +444,7 @@ let rec typef lab env expr =
       assert false
 
   | Slam (bl, p, e) ->
-      let bl',env',_ = binders loc lab env (logical_env env) bl in
+      let bl',env' = binders loc lab env bl in
       let (ep,p') = state_pre lab env' loc p in
       let t_e = typef lab env' e in
       check_for_not_mutable e.ploc t_e.info.t_result_type;
@@ -673,9 +671,9 @@ let rec typef lab env expr =
 
   | Srec (f,bl,v,var,p,e) ->
       let loc_e = e.ploc in
-      let bl',env',lenv' = binders loc lab env (logical_env env) bl in
+      let bl',env' = binders loc lab env bl in
       let (ep,p') = state_pre lab env' loc p in
-      let v = type_v loc lab env' lenv' v in
+      let v = type_v loc lab env' v in
       let var, efvar = state_var loc lab env' var in
       (* e --> let vphi0 = phi in e *)
       let varinfo,env' = match var with
@@ -754,7 +752,7 @@ let rec typef lab env expr =
       in
       let v = match ct with 
 	| None -> PureType (PTvar (new_type_var ()))
-	| Some v -> type_v loc lab env (logical_env env) v
+	| Some v -> type_v loc lab env v
       in
       make_node toplabel (Raise (id, t_e)) v (Effect.add_exn id ef)
 
@@ -785,14 +783,14 @@ let rec typef lab env expr =
   | Sabsurd ct -> 	    
       let v = match ct with 
 	| None -> PureType (PTvar (new_type_var ()))
-	| Some v -> type_v loc lab env (logical_env env) v
+	| Some v -> type_v loc lab env v
       in
       let absurd = make_node (label_name ()) Absurd v Effect.bottom in
       make_node toplabel 
 	(Assertion ([anonymous loc Pfalse], absurd)) v Effect.bottom
 
   | Sany c ->
-      let c = type_c loc lab env (logical_env env) c in
+      let c = type_c loc lab env c in
       make_node toplabel (Any c) c.c_result_type c.c_effect
 
   | Spost (e, q, tr) ->

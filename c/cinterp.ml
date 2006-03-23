@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.172 2006-03-15 16:03:50 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.173 2006-03-23 08:49:43 filliatr Exp $ i*)
 
 
 open Format
@@ -1536,7 +1536,7 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
 		 (fun (info,v) -> 
 		    let x = info.var_unique_name in
 		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
-		    [Param (false,x,Base_type ([], "int"));
+		    [Logic (false,x,Base_type ([], "int"));
 		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])
 		 el)
 	| _ -> assert false

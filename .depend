@@ -14,12 +14,12 @@ src/coq.cmx: src/vcg.cmx src/util.cmx src/types.cmi src/report.cmx \
     src/cc.cmi src/coq.cmi 
 src/cvcl.cmo: src/vcg.cmi src/report.cmi src/pp.cmi src/options.cmi \
     src/monomorph.cmi src/misc.cmi src/ltyping.cmi src/logic_decl.cmi \
-    src/logic.cmi src/loc.cmi src/lexer.cmi src/ident.cmi src/error.cmi \
-    src/env.cmi src/cc.cmi src/cvcl.cmi 
+    src/logic.cmi src/loc.cmi src/ident.cmi src/error.cmi src/env.cmi \
+    src/cc.cmi src/cvcl.cmi 
 src/cvcl.cmx: src/vcg.cmx src/report.cmx src/pp.cmx src/options.cmx \
     src/monomorph.cmx src/misc.cmx src/ltyping.cmx src/logic_decl.cmi \
-    src/logic.cmi src/loc.cmx src/lexer.cmx src/ident.cmx src/error.cmi \
-    src/env.cmx src/cc.cmi src/cvcl.cmi 
+    src/logic.cmi src/loc.cmx src/ident.cmx src/error.cmi src/env.cmx \
+    src/cc.cmi src/cvcl.cmi 
 src/dispatcher.cmo: src/zenon.cmi src/vcg.cmi src/simplify.cmi \
     src/options.cmi src/logic_decl.cmi src/logic.cmi src/harvey.cmi \
     src/cvcl.cmi tools/calldp.cmi src/dispatcher.cmi 

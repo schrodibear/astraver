@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.68 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.69 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -294,7 +294,6 @@ let print_obligations fmt ol =
 
 type elem = 
   | Obligations of obligation list
-  | Parameter of string * cc_type
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | PredicateDef of string * predicate_def Env.scheme
@@ -312,11 +311,8 @@ let push_decl = function
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
   | Dtype _ -> () (*TODO*)
 
-let push_parameter id v = Queue.add (Parameter (id,v)) queue
-
 let output_elem fmt = function
   | Obligations ol -> print_obligations fmt ol
-  | Parameter (id, v) -> Output.print_parameter fmt id v
   | Logic (id, t) -> Output.print_logic fmt id t
   | Axiom (id, p) -> Output.print_axiom fmt id p
   | PredicateDef (id, p) -> Output.print_predicate_def fmt id p

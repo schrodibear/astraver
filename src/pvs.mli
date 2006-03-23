@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.mli,v 1.18 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: pvs.mli,v 1.19 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 open Vcg
 open Cc
@@ -22,7 +22,5 @@ open Cc
 val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
-
-val push_parameter : string -> Cc.cc_type -> unit
 
 val output_file : string -> unit

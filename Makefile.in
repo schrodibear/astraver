@@ -243,6 +243,7 @@ WHYVO=lib/coq/Why.vo
 
 bench:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY)"
+	cd bench/provers; sh ./bench "../../$(BINARY)"
 
 bench-c:: $(CADUCEUS) $(WHYVO)
 	cd bench/c; sh ./bench

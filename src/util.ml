@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.111 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.112 2006-03-23 08:49:44 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -749,12 +749,8 @@ let print_cc_subst fmt =
 
 
 let print_env fmt e =
-  let print_type_info fmt = function
-    | Set -> fprintf fmt "Set"
-    | TypeV v -> print_type_v fmt v
-  in
   fold_all (fun (id, v) () -> fprintf fmt "%a:%a, " Ident.dbprint id 
-		print_type_info v) e ()
+		print_type_v v) e ()
 
 (*s For debugging purposes *)
 
