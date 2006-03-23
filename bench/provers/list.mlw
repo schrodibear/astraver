@@ -1,0 +1,47 @@
+
+(* polymorphic lists *)
+
+type 'a list
+
+logic nil : 'a list
+logic cons : 'a, 'a list -> 'a list
+
+(* hd and tl *)
+
+logic hd : 'a list -> 'a
+logic tl : 'a list -> 'a list
+
+axiom hd_cons : forall x:'a. forall l:'a list. hd (cons(x,l)) = x
+axiom tl_cons : forall x:'a. forall l:'a list. tl (cons(x,l)) = l
+
+goal hdtlconscons :
+  forall x,y:int. hd(tl(cons(x, cons(y, nil)))) = y
+  (* forall x,y:'a. hd(tl(cons(x, cons(y, nil)))) = y *)
+
+(* length *)
+
+(* append *)
+
+logic append : 'a list, 'a list -> 'a list
+
+axiom append_def_1 : 
+  forall l:'a list. append(nil,l) = l
+
+axiom append_def_2 : 
+  forall x:'a. forall l1,l2:'a list.
+  append(cons(x,l1),l2) = cons(x,append(l1,l2))
+
+goal append_1 : 
+  append(cons(1,cons(2,nil)), cons(3,cons(4,nil))) = 
+  cons(1, cons(2, cons(3, cons(4, nil))))
+
+(* flatten *)
+
+logic flatten : 'a list list -> 'a list
+
+axiom flatten_def_1 : 
+  flatten(nil) = nil
+
+axiom flatten_def_2 : 
+  forall x:'a list. forall l:'a list list. 
+  flatten(cons(x,l)) = append(x,flatten(l))
