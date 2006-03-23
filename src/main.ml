@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.97 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.98 2006-03-23 10:41:00 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -119,7 +119,7 @@ let interp_program id p =
   if_verbose_3 eprintf "*** interpreting program %a@." Ident.print id;
 
   if_debug eprintf "* typing with effects@.";
-  let env = Env.empty () in
+  let env = Env.empty_progs () in
   let p = Typing.typef Label.empty env p in
   if effect p <> Effect.bottom then
     raise_located ploc (GlobalWithEffects (id, effect p));
@@ -190,13 +190,13 @@ let cannot_be_generalized = function
   | Arrow _ -> false
 
 let interp_decl ?(prelude=false) d = 
-  let env = Env.empty () in
   let lab = Label.empty in
   match d with 
   | Program (id, p) ->
       if Env.is_global id then raise_located p.ploc (Clash id);
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ext, ids, v) ->
+      let env = Env.empty_progs () in
       let v = Ltyping.type_v loc lab env v in
       if ext && is_mutable v then raise_located loc MutableExternal;
       let gv = Env.generalize_type_v v in
@@ -210,6 +210,7 @@ let interp_decl ?(prelude=false) d =
 	let tv = Monad.trad_scheme_v (initial_renaming env) env gv in
 	List.iter (add_parameter gv tv) ids
   | Exception (loc, id, v) ->
+      let env = Env.empty_progs () in
       if is_exception id then raise_located loc (ClashExn id);
       let v = option_app (Ltyping.pure_type env) v in
       add_exception id v
@@ -223,6 +224,7 @@ let interp_decl ?(prelude=false) d =
       in
       List.iter add ids
   | Predicate_def (loc, id, pl, p) ->
+      let env = Env.empty_logic () in
       if is_global_logic id then raise_located loc (Clash id);
       let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
       let t = Predicate (List.map snd pl) in
@@ -233,6 +235,7 @@ let interp_decl ?(prelude=false) d =
       let p = generalize_predicate_def (pl,p) in
       push_decl (Dpredicate_def (loc, Ident.string id, p))
   | Function_def (loc, id, pl, ty, e) ->
+      let env = Env.empty_logic () in
       if is_global_logic id then raise_located loc (Clash id);
       let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
       let ty = Ltyping.pure_type env ty in
@@ -245,10 +248,12 @@ let interp_decl ?(prelude=false) d =
       let f = generalize_function_def (pl,ty,e) in
       push_decl (Dfunction_def (loc, Ident.string id, f))
   | Axiom (loc, id, p) ->
+      let env = Env.empty_logic () in
       let p = Ltyping.predicate lab env p in
       let p = generalize_predicate p in
       push_decl (Daxiom (loc, Ident.string id, p))
   | Goal (loc, id, p) ->
+      let env = Env.empty_logic () in
       let p = Ltyping.predicate lab env p in
       if not (Vset.is_empty (generalize_predicate p).scheme_vars) then 
 	raise_located loc PolymorphicGoal;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.36 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.37 2006-03-23 10:41:00 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -90,7 +90,9 @@ val find_pgm : Ident.t -> typed_expr option
 
 (*s local environments *)
 
-val empty : unit -> local_env
+val empty_progs : unit -> local_env
+val empty_logic : unit -> local_env
+
 val add : Ident.t -> type_v -> local_env -> local_env
 val is_local : local_env -> Ident.t -> bool
 val find_type_var : Ident.t -> local_env -> type_var

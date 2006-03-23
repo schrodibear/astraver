@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.32 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.33 2006-03-23 10:41:01 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -30,7 +30,6 @@ open Cc
 open Pp
 
 type elem = 
-  | Parameter of string * cc_type
   | Obligation of obligation
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
@@ -39,8 +38,6 @@ type elem =
 let elem_q = Queue.create ()
 
 let reset () = Queue.clear elem_q
-
-let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
 
 let push_decl = function
   | Dgoal o -> Queue.add (Obligation o) elem_q
@@ -245,14 +242,6 @@ let print_predicate fmt p =
   in
   print0 fmt p
 
-let rec print_cc_type fmt = function
-  | TTpure pt -> 
-      print_pure_type fmt pt
-  | TTarray (TTpure pt) -> 
-      print_pure_type fmt (PTexternal ([pt],farray))
-  | _ ->
-      assert false
-
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
@@ -288,12 +277,6 @@ let print_obligation fmt ((_,_,(_,t)) as o) =
   reprint_obligation fmt o;
   fprintf fmt "@[  :: FILL PROOF HERE@\n  @[%a@]@]@\n end;@\n" print_thesis t
 
-let reprint_parameter fmt id c =
-  fprintf fmt 
-    "@[<hov 2> :: Why Parameter (TODO)@]@\n" (* id print_cc_type c *)
-
-let print_parameter = reprint_parameter
-
 let print_logic fmt id t = 
   let _ = Env.specialize_logic_type t in
   assert false (*TODO*)
@@ -316,7 +299,7 @@ struct
 
   let print_element fmt e = 
     begin match e with
-      | Parameter (id, c) -> print_parameter fmt id c
+      | Parameter _ -> assert false
       | Obligation o -> print_obligation fmt o
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
@@ -327,7 +310,7 @@ struct
     fprintf fmt "@\n"
       
   let reprint_element fmt = function
-    | Parameter (id, c) -> reprint_parameter fmt id c
+    | Parameter _ -> assert false
     | Obligation o -> reprint_obligation fmt o
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.69 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.70 2006-03-23 10:41:01 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -317,27 +317,6 @@ let output_elem fmt = function
   | Axiom (id, p) -> Output.print_axiom fmt id p
   | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
   | FunctionDef (id, p) -> Output.print_function_def fmt id p
-
-(* declaring predefined symbols *)
-(***
-let predefined_symbols fmt = 
-  let a = PTvarid (Ident.create "a") in
-  let farray_a = PTexternal ([a], farray) in
-  let int_array = PTexternal ([PTint], farray) in
-  List.iter 
-    (fun (s,t) -> Output.print_logic fmt s (Env.generalize_logic_type t))
-    [ "array_length", Function ([farray_a], PTint);
-      "access", Function ([farray_a; PTint], a);
-      "store", Function ([farray_a; PTint; a], PTunit);
-
-      "sorted_array", Predicate [int_array; PTint; PTint];
-      "exchange"    , Predicate [int_array; int_array; PTint; PTint];
-      "sub_permut"  , Predicate [PTint; PTint; int_array; int_array];
-      "permut"      , Predicate [int_array; int_array];
-      "array_le"    , Predicate [int_array; PTint; PTint; PTint];
-      "array_ge"    , Predicate [int_array; PTint; PTint; PTint];
-    ]
-***)
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in

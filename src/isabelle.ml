@@ -199,14 +199,6 @@ let rec print_predicate fmt = function
   | Pnamed (n, p) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
 
-let rec print_cc_type fmt = function
-  | TTpure pt -> 
-      print_pure_type fmt pt
-  | TTarray v -> 
-      fprintf fmt "(@[%a list@])" print_cc_type v
-  | _ ->
-      assert false
-
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
@@ -223,13 +215,6 @@ let print_sequent fmt (hyps,concl) =
 let print_predicate_scheme fmt p =
   let (l,p) = Env.specialize_predicate p in
   print_predicate fmt p
-
-let reprint_parameter fmt id c =
-  fprintf fmt 
-    "@[<hov 2>(*Why*) consts %s ::@ @[\"%a\"@]@];@\n" id print_cc_type c
-
-let print_parameter = reprint_parameter
-
 
 let print_logic_type fmt s = 
   let (l,t) = Env.specialize_logic_type s in
@@ -323,7 +308,7 @@ struct
 
   let print_element fmt e = 
     begin match e with
-      | Parameter (id, c) -> print_parameter fmt id c
+      | Parameter _-> assert false
       | Obligation o -> print_obligation fmt o
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
@@ -334,7 +319,7 @@ struct
     fprintf fmt "@\n"
       
   let reprint_element fmt = function
-    | Parameter (id, c) -> reprint_parameter fmt id c
+    | Parameter _ -> assert false
     | Obligation o -> reprint_obligation fmt o
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
@@ -367,9 +352,6 @@ let push_decl = function
   | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))
   | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, id) (Function (id, p))
   | Dtype (_, vl, id) -> Gen.add_elem (Ty, id) (AbstractType (id, vl))
-
-let push_parameter id v =
-  Gen.add_elem (Param, id) (Parameter (id,v))
 
 let _ = 
   Gen.add_regexp 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.33 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.34 2006-03-23 10:41:00 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -29,7 +29,6 @@ open Cc
 open Pp
 
 type elem = 
-  | Parameter of string * cc_type
   | Obligation of obligation
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
@@ -38,8 +37,6 @@ type elem =
 let elem_q = Queue.create ()
 
 let reset () = Queue.clear elem_q
-
-let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
 
 let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
@@ -210,14 +207,6 @@ let rec print_predicate fmt = function
   | Pnamed (n, p) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
 
-let rec print_cc_type fmt = function
-  | TTpure pt -> 
-      print_pure_type fmt pt
-  | TTarray v -> 
-      fprintf fmt "(@[%a list@])" print_cc_type v
-  | _ ->
-      assert false
-
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
@@ -230,10 +219,6 @@ let print_sequent fmt (hyps,concl) =
 	print_seq fmt hyps
   in
   fprintf fmt "@[%a@]@?" print_seq hyps
-
-(* TODO *)
-let print_parameter fmt id v =
-  fprintf fmt "(* parameter %s *);;" id
 
 (* TODO *)
 let print_logic fmt id t =
@@ -254,7 +239,6 @@ let print_obligation fmt loc id sq =
   fprintf fmt "@[<hov 2>let %s =@ `%a`;;@\n@\n@]" id print_sequent sq
 
 let print_elem fmt = function
-  | Parameter (id, v) -> print_parameter fmt id v
   | Obligation (loc, s, sq) -> print_obligation fmt loc s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
@@ -265,7 +249,7 @@ let print_obl_list fmt =
   let print = function
     | Obligation (_,id,_) -> 
 	if !comma then fprintf fmt "; "; fprintf fmt "%s" id; comma := true
-    | Parameter _ | Axiom _ | Logic _ | Predicate _ -> 
+    | Axiom _ | Logic _ | Predicate _ -> 
 	()
   in
   fprintf fmt "let all = ["; 

@@ -96,7 +96,7 @@ CMO = src/lib.cmo \
 	   src/effect.cmo src/pp.cmo src/misc.cmo 	\
 	   src/parser.cmo src/lexer.cmo src/report.cmo \
            src/env.cmo src/rename.cmo src/util.cmo 	\
-           src/ltyping.cmo src/typing.cmo src/purify.cmo src/wp.cmo \
+           src/ltyping.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo \
 	   src/monomorph.cmo src/pvs.cmo src/hol4.cmo src/gappa.cmo \

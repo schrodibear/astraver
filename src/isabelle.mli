@@ -22,6 +22,4 @@ val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
 
-val push_parameter : string -> Cc.cc_type -> unit
-
 val output_file : string -> unit

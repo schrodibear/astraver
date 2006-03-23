@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.44 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.45 2006-03-23 10:41:00 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -153,32 +153,6 @@ let predicate_expected loc =
 let term_expected loc =
   raise_located loc (AnyMessage "syntax error: term expected")
 
-(* Table of closed instances *)
-(***
-module Instances = 
-  Set.Make(struct type t = pure_type list let compare = compare end)
-
-let instances_t = Hashtbl.create 97
-
-let instances x = 
-  try Hashtbl.find instances_t x with Not_found -> Instances.empty
-
-let add_instance x i =
-  let s = try Hashtbl.find instances_t x with Not_found -> Instances.empty in
-  Hashtbl.replace instances_t x (Instances.add i s)
-
-let add_instance_if_closed x i = 
-  try 
-    let ci = 
-      List.map (fun pt -> if is_closed_pure_type pt then pt else raise Exit) i
-    in
-    add_instance x ci
-  with Exit -> 
-    ()
-
-let iter_instances f = Hashtbl.iter (fun x -> Instances.iter (f x)) instances_t
-***)
-
 let instance x i = 
   let l = 
     Vmap.fold 
@@ -186,12 +160,10 @@ let instance x i =
 	 (match v.type_val with None -> PTvar v | Some pt -> pt) :: l) i []
   in 
   (*
-  add_instance_if_closed x l; 
     eprintf "instance %a[@[%a@]]@." 
     Ident.print x (Pp.print_list Pp.comma print_pure_type) l;
   *)
   l
-
 
 (* typing predicates *)
 
@@ -479,7 +451,7 @@ and binders loc lab env = function
       (id, v) :: bl', env'
 
 let logic_type lt = 
-  let env = Env.empty () in
+  let env = Env.empty_logic () in
   match lt with
   | PPredicate pl -> 
       Predicate (List.map (pure_type env) pl)

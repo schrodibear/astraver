@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.mli,v 1.7 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: holl.mli,v 1.8 2006-03-23 10:41:00 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -24,7 +24,5 @@ open Cc
 val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
-
-val push_parameter : string -> Cc.cc_type -> unit
 
 val output_file : string -> unit

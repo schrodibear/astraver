@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.56 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.57 2006-03-23 10:41:00 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -415,20 +415,6 @@ module Penv = struct
       v
 end
 
-(*** turns a program environment into a logical environment 
-
-let add_logic_aux id v env = match v with
-  | Ref pt | PureType pt -> Idmap.add id pt env
-  | _ -> env
-
-let logical_env e = 
-  let transl m lenv = 
-    Idmap.fold (fun id v e -> add_logic_aux id v.scheme_type e) m lenv
-  in
-  transl e.Penv.map (transl !env.Penv.map Idmap.empty)
-
-***)
-
 (* The global environment.
  *
  * We have a global typing environment env
@@ -459,11 +445,14 @@ let add_logic_ref id v env = match v with
   | Ref pt -> Idmap.add id pt env
   | PureType _ | Arrow _ -> env
 
-let empty () = 
+let empty_progs () = 
   { progs = Penv.empty (); 
     logic = 
       Idmap.fold (fun id v e -> add_logic_ref id v.scheme_type e) 
 	!env.Penv.map Idmap.empty }
+
+let empty_logic () =
+  { progs = Penv.empty (); logic = Idmap.empty }
 
 let add_logic_pure_or_ref id v env = match v with
   | Ref pt | PureType pt -> Idmap.add id pt env
