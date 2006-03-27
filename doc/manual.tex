@@ -484,30 +484,6 @@ Any program establishing \texttt{x = 2} can be substituted to the
 second assignment without changing the second obligation.
 
 
-\subsection{Restrictions with respect to ML}
-The ML input language is close to (some fragment of) \caml. However,
-there are some---more or less significant---differences:
-\begin{itemize}
-\item There is \textit{no type inference}; binders are explicitly
-  typed. 
-\item The use of references is constrained: when dereferenced, updated
-  or passed to a function, a reference must be a variable. Thus one
-  cannot write
-\begin{verbatim}
-     (if b then x else y) := 1
-\end{verbatim}
-as in ML, but one must write instead
-\begin{verbatim}
-     if b then x := 1 else y := 1
-\end{verbatim}
-\item Array access is written \texttt{t[e]} instead of \texttt{t.(e)},
-  and array update is written \texttt{t[e1] := e2} instead of
-  \texttt{t.(e1) <- e2}.
-\end{itemize}
-Getting true \caml\ code from a \why\ source is the subject of the
-next section.
-
-
 
 \section{Tools}
 

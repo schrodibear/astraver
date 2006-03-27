@@ -1,4 +1,6 @@
 
-all: LinkedLists.vo length_why.vo rev_why.vo 
+VO=LinkedLists.vo length_valid.vo rev_valid.vo 
+
+all: $(VO)
 
 include ../Makefile.common
