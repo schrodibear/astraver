@@ -4,6 +4,7 @@
 \usepackage{url}
 \usepackage{makeidx}
 \usepackage{verbatim}
+\usepackage{graphicx}
 \input{./version.tex}
 
 \newcommand{\caml}{\textsf{Caml}}
@@ -16,6 +17,7 @@
 \newcommand{\isabelle}{\textsf{Isabelle/HOL}\index{Isabelle/HOL@\textsf{Isabelle/HOL}}}
 \newcommand{\holfour}{\textsf{HOL 4}\index{HOL 4@\textsf{HOL 4}}}
 \newcommand{\cvclite}{\textsf{CVC Lite}\index{CVC Lite@\textsf{CVC Lite}}}
+\newcommand{\zenon}{\textsf{Zenon}\index{Zenon@\textsf{Zenon}}}
 \newcommand{\krakatoa}{\textsf{Krakatoa}\index{Krakatoa@\textsf{Krakatoa}}}
 \newcommand{\caduceus}{\textsf{Caduceus}\index{Caduceus@\textsf{Caduceus}}}
 \newcommand{\java}{\textsc{Java}\index{Java@\textsf{Java}}}
@@ -170,7 +172,7 @@ The input file contains the following kinds of declaration:
      parameter t : int array
 \end{verbatim}
     (Types are detailed in Section~\ref{types} and their syntax is
-    given in Section~\ref{syntax:types}.)
+    given in Section~\ref{syntax}.)
 
     The prefix \te{external}\indextt{external} indicates that
     $x_1,\dots,x_n$ are already defined on the prover side (and thus
@@ -240,7 +242,7 @@ The input file contains the following kinds of declaration:
 Annotations are inserted into the program to give its specification.
 Annotations are written in a first-order predicate calculus syntax
 which is not related to any particular prover. Its syntax is given in
-Section~\ref{syntax:logic}. 
+Section~\ref{syntax}. 
 
 Annotations are predicates over the values of the variables
 visible at the corresponding program point.
@@ -452,7 +454,7 @@ with the following syntax:
 \begin{verbatim}
      x:int -> y:int -> { } returns z:int { z = x + y }
 \end{verbatim}
-Section~\ref{syntax:types} gives the syntax of types.
+Section~\ref{syntax} gives the syntax of types.
 
 
 \subsection{Weakest preconditions}
@@ -509,17 +511,62 @@ next section.
 
 \section{Tools}
 
-\subsection{Graphical user interface}
+\subsection{Graphical user interface (\texttt{gwhy})}
 \indextt{gwhy}\index{GUI}
 
-gwhy TODO
+The graphical user interface \texttt{gwhy} is a tool to help the user
+in the process of calling the various automatic provers on the goals
+(in order to analyze the failures and to determine what is wrong in
+the programs, the specifications, or sometimes the provers).
+\texttt{gwhy} is similar to \why\
+and is passed the same options and files. A screenshort is given
+Figure~\ref{fig:gwhy}. On the left side appears the list of all goals
+(either from \texttt{goal} commands in the \why\ files or resulting
+from verification conditions generation). In front of each goal, the
+results for each automatic prover is displayed. Provers can be
+launched by clicking on their names at the top of their columns.
+A green bullet means a proved goal; a red bullet means an unproved
+goal (that may be either a ``don't know'' or an ``invalid'' answer
+from the prover); the scissors means a timeout from the prover (the
+timeout limit can be set in the bottom bar); finally, a ``tools'' icon
+means an unexpected failure in the prover call.
 
-\subsection{Calling decision procedures}
+The top right window displays the currently selected goal.
+In this window, a right click on some identifier displays its location
+in the corresponding \why\ input file in the bottom right window.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\textwidth]{gwhy-screenshot.eps}
+  \caption{The \texttt{gwhy} graphical interface}
+  \label{fig:gwhy}
+\end{figure}
+
+Note that you need the Unix \texttt{timeout} command to be installed
+on your system before running \texttt{gwhy}.
+
+\subsection{Calling decision procedures (\texttt{dp})}
 \indextt{dp}
 
-dp TODO
+A small tool is provided to call the decision procedures (\simplify,
+\harvey, \zenon\ and \cvclite) on files containing several goals, with
+a timeout for each goal, and to display s short summary of the
+results. Here is an example:
+\begin{verbatim}
+% dp -timeout 5 swap0_why.sx peano_why.sx
+(. = valid * = invalid # = timeout/failure)
+swap0_why.sx: ....... (7/0/0)
+peano_why.sx: ............*...*..*.... (21/3/0)
+total           :  31
+valid           :  28 ( 90%)
+invalid         :   3 ( 10%)
+timeout/failure :   0 (  0%)
+\end{verbatim}
 
-\subsection{Why obfuscator}
+Note: as for \texttt{gwhy}, you need the Unix \texttt{timeout} command
+to be installed on your system to run \texttt{dp}.
+
+\subsection{Why obfuscator (\texttt{why-obfuscator})}
 \indextt{why-obfuscator}
 A tool is provided to obfuscate some \why\ files. It is invoked as
 follows:
@@ -535,7 +582,7 @@ redirected with option \texttt{-o}. The identifiers are renamed as
 \texttt{x1}, \texttt{x2}, ... unless a different name prefix is set
 with option \texttt{-prefix}.
 
-\subsection{Caml code generation}
+\subsection{Caml code generation (\texttt{why --ocaml})}
 \label{ocamlcode}\index{Caml code generation}
 In order to run your \why\ code, true \caml\ code can be
 produced with option \texttt{--ocaml}: 
@@ -573,7 +620,7 @@ is translated into the following piece of \caml\ code:
 external \caml\ code. However, it is possible to make them arguments
 of the functor too, with command line option \texttt{--ocaml-ext}.
 
-\subsection{Why to HTML converter}
+\subsection{Why to HTML converter (\texttt{why2html})}
 A tool to convert \why\ input files to HTML is provided. Its usage is
 immediate:
 \begin{verbatim}
@@ -1043,6 +1090,273 @@ Syntax of input files is given Figure~\ref{fig:input}.
 \end{figure}
 
 \section{Semantics}
+
+\subsection{Logic}
+
+The abstract syntax for types ($\tau$), terms ($t$) and predicates
+($P$) is given by the following grammars:
+\begin{displaymath}
+  \begin{array}{rrl}
+    \tau & ~::=~ & \alpha ~|~ (\tau,\dots,\tau)~s \\
+    t & ~::=~ & x ~|~ f(t,\dots,t) \\
+    P & ~::=~ & p(t,\dots,t) \\ 
+      &    |~~ & \top ~|~ \bot ~|~ P \land P ~|~ P \lor P
+                 ~|~ \lnot P ~|~ P\Rightarrow P \\
+      &    |~~ & \forall x:\tau.\,P ~|~ \exists x:\tau.\,P
+  \end{array}
+\end{displaymath}
+A theory $\Sigma$ is a finite list of declarations $\delta$ where
+\begin{displaymath}
+  \begin{array}{rrl}
+  \delta & ~::=~ & 
+      \texttt{type}~\vec{\alpha}~s ~|~ x:\tau ~|~
+      \mathtt{logic}~f:\forall\vec{\alpha}.\,\tau,\dots,\tau\rightarrow\tau \\
+         &    |~~ &   
+      \mathtt{logic}~p:\forall\vec{\alpha}.\,\tau,\dots,\tau\rightarrow\mathtt{prop} ~|~ 
+      \texttt{axiom}~\forall\vec{\alpha}.\,P ~|~
+      \texttt{goal}~\forall\vec{\alpha}.\,P \\
+  \end{array} 
+\end{displaymath}
+
+\subsubsection{Typing}
+
+\newcommand{\kw}[1]{\ensuremath{\mathsf{#1}}}
+\newcommand{\wf}[1]{#1~\kw{wf}}
+\newcommand{\Subst}[2]{\ensuremath{\mathsf{Subst}(#1,#2)}}
+
+Well-formed types ($\Sigma\vdash\wf{\tau}$):
+% types wf
+\begin{displaymath}
+  \frac{}{\Sigma\vdash\wf{\alpha}}(\mathsf{Ty}_1)
+  \qquad
+  \frac{\mathtt{type}~(\alpha_1,\dots,\alpha_n)~s\in\Sigma
+        \quad
+        \forall i,\,\Sigma\vdash\wf{\tau_i}}
+       {\Sigma\vdash\wf{(\tau_1,\dots,\tau_n)~s}}(\mathsf{Ty}_2)
+\end{displaymath}
+Well-typed terms ($\Sigma\vdash t:\tau$):
+\begin{displaymath}
+  \frac{x:\tau\in\Sigma}{\Sigma\vdash x:\tau}(\mathsf{T}_1)
+  \qquad
+  \frac{
+    \begin{array}{c}
+      \texttt{logic}~f:\forall\vec{\alpha}.\,\tau_1,\dots,\tau_n\rightarrow\tau\in\Sigma \\[0.2em]
+      \Subst{\sigma}{\Sigma} \quad
+       \forall i,\, \Sigma\vdash t_i:\sigma(\tau_i) \\
+    \end{array}}
+       {\Sigma\vdash f(t_1,\dots,t_n):\sigma(\tau)}(\mathsf{T}_2)
+\end{displaymath}
+\begin{description}
+\item[~~~]
+  where $\sigma$ is a mapping from type variables to types, naturally
+  extended to types with $\sigma((\tau_1,\dots,\tau_n)~s) =
+  (\sigma(\tau_1),\dots,\sigma(\tau_n))~s$. 
+  We write $\Subst{\sigma}{\Sigma}$ whenever
+  $\Sigma\vdash\wf{\sigma(\alpha)}$ holds for any type variable $\alpha$.
+\end{description}
+Well-typed predicates ($\Sigma\vdash\wf{P}$):
+\begin{displaymath}
+ \frac{
+    \begin{array}{c}
+      \texttt{logic}~p:\forall\vec{\alpha}.\,\tau_1,\dots,\tau_n\rightarrow\mathtt{prop}\in\Sigma \quad
+        \Subst{\sigma}{\Sigma} \quad
+        \forall i,\,\Sigma\vdash t_i:\sigma(\tau_i) \\
+    \end{array}}
+       {\Sigma\vdash\wf{p(t_1,\dots,t_n)}}(\mathsf{P}_1)
+\end{displaymath}
+\begin{displaymath}
+  \frac{}
+       {\Sigma\vdash\wf{\top}}(\mathsf{P}_2)
+  \qquad
+  \frac{}
+       {\Sigma\vdash\wf{\bot}}(\mathsf{P}_3)
+  \qquad
+  \frac{\Sigma\vdash\wf{P_1} \quad \Sigma\vdash\wf{P_2}}
+       {\Sigma\vdash\wf{P_1\land P_2}}(\mathsf{P}_4)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{P_1} \quad \Sigma\vdash\wf{P_2}}
+       {\Sigma\vdash\wf{P_1\lor P_2}}(\mathsf{P}_5)
+  \qquad
+  \frac{\Sigma\vdash\wf{P}}
+       {\Sigma\vdash\wf{\lnot P}}(\mathsf{P}_6)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{P_1} \quad \Sigma\vdash\wf{P_2}}
+       {\Sigma\vdash\wf{P_1\Rightarrow P_2}}(\mathsf{P}_7)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma,x:\tau\vdash\wf{P}}
+       {\Sigma\vdash\wf{\forall x:\tau.\,P}}(\mathsf{P}_8)
+  \qquad
+  \frac{\Sigma,x:\tau\vdash\wf{P}}
+       {\Sigma\vdash\wf{\exists x:\tau.\,P}}(\mathsf{P}_8)
+\end{displaymath}
+Well-formed theories ($\vdash\wf{\Sigma}$):
+\begin{displaymath}
+  \frac{}{\vdash\wf{\emptyset}}(\textsf{Th}_1)
+  \qquad
+  \frac{\texttt{type}~s\not\in\Sigma}
+       {\vdash\wf{\Sigma,\texttt{type}~(\alpha_1,\dots,\alpha_n)~s}}(\textsf{Th}_2)
+  \qquad
+  \frac{x\not\in\Sigma \quad \Sigma\vdash\wf{\tau}}
+       {\vdash\wf{\Sigma,x:\tau}}(\textsf{Th}_3)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\texttt{logic}~f\not\in\Sigma \quad
+        \forall i,\, \Sigma\vdash\wf{\tau_i}}
+       {\vdash\wf{\Sigma,\mathtt{logic}~f:\forall\vec{\alpha}.\,\tau_1,\dots,\tau_n\rightarrow\tau_{n+1}}}(\textsf{Th}_4)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\texttt{logic}~p\not\in\Sigma \quad
+        \forall i,\, \Sigma\vdash\wf{\tau_i}}
+       {\vdash\wf{\Sigma,\mathtt{logic}~p:\forall\vec{\alpha}.\,\tau_1,\dots,\tau_n\rightarrow\mathtt{prop}}}(\textsf{Th}_5)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{P}}
+       {\vdash\wf{\Sigma,\texttt{axiom}~\forall\vec{\alpha}.\,P}}(\textsf{Th}_6)  \qquad
+  \frac{\Sigma\vdash\wf{P}}
+       {\vdash\wf{\Sigma,\texttt{goal}~\forall\vec{\alpha}.\,P}}(\textsf{Th}_6)  
+\end{displaymath}
+Well-formed definitions of functions and predicates:
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{\tau_i} \quad
+        \Sigma,x_1:\tau_1,\dots,x_n:\tau_n\vdash t:\tau}
+       {\Sigma\vdash\wf{\mathtt{function}~f(x_1:\tau_1,\dots,x_n:\tau_n) : \tau = t}}(\textsf{Th}_7)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{\tau_i} \quad
+        \Sigma,x_1:\tau_1,\dots,x_n:\tau_n\vdash\wf{P}}
+       {\Sigma\vdash\wf{\mathtt{predicate}~p(x_1:\tau_1,\dots,x_n:\tau_n) = P}}(\textsf{Th}_8)
+\end{displaymath}
+Then, as far as typing and validity in concerned, the function $f$
+(resp. the predicate $p$) is added to $\Sigma$ as 
+$\mathtt{logic}~f:\tau_1,\dots,\tau_n\rightarrow\tau$
+(resp. $\mathtt{logic}~p:\tau_1,\dots,\tau_n\rightarrow\mathtt{prop}$).
+
+\subsubsection{Validity}
+
+Validity is defined as a set of natural deduction rules
+($\Sigma\models P$). For the sake of clarity, 
+we write $\Sigma,P$ for $\Sigma,\texttt{axiom}~P$ in the following.
+A substitution $\sigma$ over from type variables to types in extended
+to terms and predicates in the obvious way. We write $P[t/x]$ for the
+substitution of all the occurrences of a free variable $x$ in $P$ by a
+term $t$. 
+\begin{displaymath}
+  \frac{\texttt{axiom}~\forall\vec{\alpha}.\,P\in\Sigma \quad
+        \Subst{\sigma}{\Sigma}}
+       {\Sigma\models\sigma(P)}(\mathsf{Ax})
+  \qquad
+  \frac{\Sigma\models Q \quad 
+        \Sigma,Q\models P}
+       {\Sigma\models P}(\mathsf{Cut})
+\end{displaymath}
+\begin{displaymath}
+  \frac{}{\Sigma\models\top}(\mathsf{True})
+  \qquad
+  \frac{\Sigma\models\bot \quad \Sigma\vdash\wf{P}}
+       {\Sigma\models P}(\mathsf{False})
+  \qquad
+  \frac{\Sigma\vdash\wf{P}}{\Sigma\models P\lor\lnot P}(\mathsf{EM})
+\end{displaymath}
+% and
+\begin{displaymath}
+  \frac{\Sigma\models P \quad \Sigma\models Q}
+       {\Sigma\models P\land Q}(\mathsf{And}_1)
+  \qquad
+  \frac{\Sigma\models P\land Q}
+       {\Sigma\models P}(\mathsf{And}_2)
+  \qquad
+  \frac{\Sigma\models P\land Q}
+       {\Sigma\models Q}(\mathsf{And}_3)
+\end{displaymath}
+% or
+\begin{displaymath}
+  \frac{\Sigma\models P \quad \Sigma\vdash\wf{Q}}
+       {\Sigma\models P\lor Q}(\mathsf{Or}_1)
+  \qquad
+  \frac{\Sigma\models Q \quad \Sigma\vdash\wf{P}}
+       {\Sigma\models P\lor Q}(\mathsf{Or}_2)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\models P\lor Q \quad
+        \Sigma,P\models R \quad \Sigma,Q\models R}
+       {\Sigma\models R}(\mathsf{Or}_3)
+\end{displaymath}
+% not
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{P} \quad \Sigma,P\models\bot}
+       {\Sigma\models\lnot P}(\mathsf{Not}_1)
+  \qquad
+  \frac{\Sigma\models P \quad \Sigma\models\lnot P}
+       {\Sigma\models\bot}(\mathsf{Not}_2)
+\end{displaymath}
+% implies
+\begin{displaymath}
+  \frac{\Sigma\vdash\wf{P} \quad \Sigma,P\models Q}
+       {\Sigma\models P\Rightarrow Q}(\mathsf{Imp}_1)
+  \qquad
+  \frac{\Sigma\models P\Rightarrow Q \quad \Sigma\models P}
+       {\Sigma\models Q}(\mathsf{Imp}_2)
+\end{displaymath}
+% forall
+\begin{displaymath}
+  \frac{x\not\in\Sigma \quad
+        \Sigma\vdash\wf{\tau} \quad 
+        \Sigma,x:\tau\models P}
+       {\Sigma\models\forall x:\tau.\,P}(\mathsf{Forall}_1)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\models\forall x:\tau.\,P \quad
+        \Sigma\vdash t:\tau}
+       {\Sigma\models P[t/x]}(\mathsf{Forall}_2)
+\end{displaymath}
+% exists
+\begin{displaymath}
+  \frac{%\Sigma\vdash\wf{\tau} \quad INUTILE CAR CONSEQUENCE
+        \Sigma\vdash t:\tau \quad
+        x\not\in\Sigma \quad
+        \Sigma\models P[t/x]}
+       {\Sigma\models\exists x:\tau.\,P}(\mathsf{Exists}_1)
+\end{displaymath}
+\begin{displaymath}
+  \frac{\Sigma\models\exists x:\tau.\,P \quad
+        x\not\in\Sigma \quad
+        \Sigma,x:\tau,P\models Q}
+       {\Sigma\models Q}(\mathsf{Exists}_2)
+\end{displaymath}
+Deduction rules for equality: 
+\begin{displaymath}
+  \frac{\Sigma\vdash t:\tau}
+       {\Sigma\models t=t}(\mathsf{Eq}_1)
+  \qquad
+  \frac{\Sigma\models x=y \quad
+        \Sigma,z:\tau\vdash\wf{P} \quad 
+        \Sigma\models P[x/z]}
+       {\Sigma\models P[y/z]}(\mathsf{Eq}_2)
+\end{displaymath}
+Arithmetic:
+An arithmetic proposition $P$ is a proposition built from 
+variables of type \textit{int}, integers constants,
+the functions symbols \textit{add\_int} and \textit{sub\_int}, the predicates
+\textit{lt\_int, le\_int, gt\_int, ge\_int} and the equality.
+If $x_1,\dots,x_n$ are the free variables of $P$,
+we write $x_1,\dots,x_n\models_A P$ whenever $P$ is valid in
+Presburger arithmetic (which is decidable).
+Then we have the following deduction rule for arithmetic:
+\begin{displaymath}
+  \frac{x_1,\dots,x_n\models_A P}
+       {\Sigma\models\forall x_1:\mathit{int}.\,\dots\forall
+         x_n:\mathit{int}.\, P}(\mathsf{Arith})
+\end{displaymath}
+
+
+\subsection{Programs}
+
+\subsubsection{Typing}
+
+\subsubsection{Weakest preconditions}
 
 
 \section{Prelude}
