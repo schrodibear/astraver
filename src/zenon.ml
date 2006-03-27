@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.11 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.12 2006-03-27 09:49:56 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -204,7 +204,8 @@ let rec print_predicate fmt = function
   | Papp (id, [a;b], _) when is_int_comparison id || is_real_comparison id ->
       fprintf fmt "@[(%s %a %a)@]" (infix id) print_term a print_term b
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[(/\\ (<= 0 %a)@ (< %a %a))@]" 
+      fprintf fmt 
+	"@[(/\\ (why__le_int why__int_const_0 %a)@ (why__lt_int %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
       fprintf fmt "@[(%a%a@ %a)@]" ident id instance i print_terms tl

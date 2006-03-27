@@ -60,7 +60,7 @@ gappa:
 
 test:
 #	$(WHY) --coq-v8 -d -V --coq-tactic magic test.mlw
-	$(WHY) --coq-v8 -d -V --valid --coq-tactic magic test.mlw
+	$(WHY) --coq-v8 -d -V --valid --coq-tactic intuition test.mlw
 	coqc -I ../lib/coq test_why.v || coqide -I ../lib/coq test_why.v
 	coqc -I ../lib/coq test_valid.v
 

@@ -8,10 +8,16 @@ WHYOPTIONS=--coq-v8 --valid
 dp: simplify cvcl
 
 simplify: $(VO:_valid.vo=_why.sx)
-	dp -timeout 10 $^
+	dp -timeout 10 $^  2>/dev/null
 
-cvcl: $(VO:_why.vo=_why.cvc)
-	dp -timeout 10 $^
+zenon: $(VO:_valid.vo=_why.znn)
+	dp -timeout 10 $^ 2>/dev/null
+
+cvcl: $(VO:_valid.vo=_why.cvc)
+	dp -timeout 10 $^  2>/dev/null
+
+harvey: $(VO:_valid.vo=_why.rv)
+	dp -timeout 10 $^  2>/dev/null
 
 %_valid.v %_why.v: %.mlw $(WHY)
 	$(WHY) $(WHYOPTIONS) $<
@@ -34,11 +40,14 @@ cvcl: $(VO:_why.vo=_why.cvc)
 %_why.sx: %.mlw $(WHY)
 	$(WHY) --simplify $<
 
+%_why.znn: %.mlw $(WHY)
+	$(WHY) --zenon $<
+
 %_why.cvc: %.mlw $(WHY)
 	$(WHY) --cvcl $<
 
-%_why.sx: %.c $(WHY)
-	$(WHY) --simplify $(WHYOPTIONS) $<
+%_why.rv: %.mlw $(WHY)
+	$(WHY) --harvey $<
 
 %_why.miz: %.mlw $(WHY)
 	$(WHY) --mizar $<

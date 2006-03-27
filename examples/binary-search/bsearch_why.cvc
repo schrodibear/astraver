@@ -1,56 +1,170 @@
 
 UNIT: TYPE;
 tt: UNIT;
-sqrt_real: [REAL -> REAL];
-int_of_real: [REAL -> INT];
-mod_int: [[INT, INT] -> INT];
 
-mean: [[INT, INT] -> INT] = LAMBDA (x:INT, y:INT): (x+y)/2;
-
-v: INT;
-
-In: [[ARRAY INT OF INT, INT, INT] -> BOOLEAN] =
-  LAMBDA (t:ARRAY INT OF INT, l:INT, u:INT):
-  EXISTS (i:INT): l <= i AND i <= u AND t[i] = v;
 
 %%%% DO NOT EDIT BELOW THIS LINE
 
+%% Why logic add_int
+add_int: ((INT, INT) -> INT);
+
+%% Why logic sub_int
+sub_int: ((INT, INT) -> INT);
+
+%% Why logic mul_int
+mul_int: ((INT, INT) -> INT);
+
+%% Why logic div_int
+div_int: ((INT, INT) -> INT);
+
+%% Why logic mod_int
+mod_int: ((INT, INT) -> INT);
+
+%% Why logic neg_int
+neg_int: (INT -> INT);
+
+%% Why logic lt_int
+lt_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic le_int
+le_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic gt_int
+gt_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic ge_int
+ge_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic eq_int
+eq_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic neq_int
+neq_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic lt_int_bool
+lt_int_bool: ((INT, INT) -> BOOLEAN);
+
+%% Why logic le_int_bool
+le_int_bool: ((INT, INT) -> BOOLEAN);
+
+%% Why logic gt_int_bool
+gt_int_bool: ((INT, INT) -> BOOLEAN);
+
+%% Why logic ge_int_bool
+ge_int_bool: ((INT, INT) -> BOOLEAN);
+
+%% Why logic eq_int_bool
+eq_int_bool: ((INT, INT) -> BOOLEAN);
+
+%% Why logic neq_int_bool
+neq_int_bool: ((INT, INT) -> BOOLEAN);
+
+%% Why axiom lt_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((lt_int_bool(x, y) <=> TRUE) <=> (x < y))));
+
+%% Why axiom le_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((le_int_bool(x, y) <=> TRUE) <=> (x <= y))));
+
+%% Why axiom gt_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((gt_int_bool(x, y) <=> TRUE) <=> (x > y))));
+
+%% Why axiom ge_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((ge_int_bool(x, y) <=> TRUE) <=> (x >= y))));
+
+%% Why axiom eq_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((eq_int_bool(x, y) <=> TRUE) <=> (x = y))));
+
+%% Why axiom neq_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((neq_int_bool(x, y) <=> TRUE) <=> (x /= y))));
+
+%% Why logic add_real
+add_real: ((REAL, REAL) -> REAL);
+
+%% Why logic sub_real
+sub_real: ((REAL, REAL) -> REAL);
+
+%% Why logic mul_real
+mul_real: ((REAL, REAL) -> REAL);
+
+%% Why logic div_real
+div_real: ((REAL, REAL) -> REAL);
+
+%% Why logic neg_real
+neg_real: (REAL -> REAL);
+
+%% Why logic sqrt_real
+sqrt_real: (REAL -> REAL);
+
+%% Why logic real_of_int
+real_of_int: (INT -> REAL);
+
+%% Why logic int_of_real
+int_of_real: (REAL -> INT);
+
+%% Why logic lt_real
+lt_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic le_real
+le_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic gt_real
+gt_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic ge_real
+ge_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic eq_real
+eq_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic neq_real
+neq_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic eq_bool
+eq_bool: ((BOOLEAN, BOOLEAN) -> BOOLEAN);
+
+%% Why logic neq_bool
+neq_bool: ((BOOLEAN, BOOLEAN) -> BOOLEAN);
+
+%% Why logic eq_unit
+eq_unit: ((UNIT, UNIT) -> BOOLEAN);
+
+%% Why logic neq_unit
+neq_unit: ((UNIT, UNIT) -> BOOLEAN);
+
 %% Why logic sorted_array
-sorted_array: [[ARRAY INT OF INT, INT, INT] -> BOOLEAN];
-
-%% Why logic exchange
-exchange: [[ARRAY INT OF INT, ARRAY INT OF INT, INT, INT] -> BOOLEAN];
-
-%% Why logic sub_permut
-sub_permut: [[INT, INT, ARRAY INT OF INT, ARRAY INT OF INT] -> BOOLEAN];
-
-%% Why logic permut
-permut: [[ARRAY INT OF INT, ARRAY INT OF INT] -> BOOLEAN];
-
-%% Why logic array_le
-array_le: [[ARRAY INT OF INT, INT, INT, INT] -> BOOLEAN];
-
-%% Why logic array_ge
-array_ge: [[ARRAY INT OF INT, INT, INT, INT] -> BOOLEAN];
-
-%% Why logic array_length
-array_length_INT: [ARRAY INT OF INT -> INT];
-
-%% Why logic store
-store_INT: [[ARRAY INT OF INT, INT, INT] -> UNIT];
-
-%% Why axiom array_length_store
-ASSERT (FORALL (t:ARRAY INT OF INT):
-       (FORALL (i:INT):
-       (FORALL (v:INT):
-       (array_length_INT((t WITH [i] := v)) = array_length_INT(t)))));
+sorted_array: (((ARRAY INT OF INT), INT, INT) -> BOOLEAN);
 
 %% Why logic access
-access_INT: [[ARRAY INT OF INT, INT] -> INT];
+access_INT: (((ARRAY INT OF INT), INT) -> INT);
+
+%% Why axiom sorted_array_def
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (j:INT):
+       (sorted_array(t, i, j) <=>
+       (FORALL (k:INT): (((i <= k) AND (k < j)) => (t[k] <= t[(k + 1)])))))));
+
+%% Why logic array_le
+array_le: (((ARRAY INT OF INT), INT, INT, INT) -> BOOLEAN);
+
+%% Why logic array_ge
+array_ge: (((ARRAY INT OF INT), INT, INT, INT) -> BOOLEAN);
+
+%% Why logic exchange
+exchange: (((ARRAY INT OF INT), (ARRAY INT OF INT), INT, INT) -> BOOLEAN);
+
+%% Why logic array_length
+array_length_INT: ((ARRAY INT OF INT) -> INT);
 
 %% Why axiom exchange_def
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (i:INT):
        (FORALL (j:INT):
        (exchange(t1, t2, i, j) <=>
@@ -59,61 +173,66 @@ ASSERT (FORALL (t1:ARRAY INT OF INT):
        ((t2[i] = t1[j]) AND
        (FORALL (k:INT): (((k /= i) AND (k /= j)) => (t1[k] = t2[k])))))))))));
 
+%% Why logic permut
+permut: (((ARRAY INT OF INT), (ARRAY INT OF INT)) -> BOOLEAN);
+
 %% Why axiom permut_refl
-ASSERT (FORALL (t:ARRAY INT OF INT): permut(t, t));
+ASSERT (FORALL (t:(ARRAY INT OF INT)): permut(t, t));
 
 %% Why axiom permut_sym
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT): (permut(t1, t2) => permut(t2, t1))));
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)): (permut(t1, t2) => permut(t2, t1))));
 
 %% Why axiom permut_trans
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
-       (FORALL (t3:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
+       (FORALL (t3:(ARRAY INT OF INT)):
        ((permut(t1, t2) AND permut(t2, t3)) => permut(t1, t3)))));
 
-%% Why axiom permut_exchange
-ASSERT (FORALL (t:ARRAY INT OF INT):
-       (FORALL (i:INT):
-       (FORALL (j:INT): permut(t, ((t WITH [i] := t[j]) WITH [j] := t[i])))));
+%% Why logic update
+update_INT: (((ARRAY INT OF INT), INT, INT) -> (ARRAY INT OF INT));
 
-%% Why axiom permut_array_length
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
-       (permut(t1, t2) => (array_length_INT(t1) = array_length_INT(t2)))));
+%% Why axiom permut_exchange
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (j:INT):
+       permut(t, update_INT(update_INT(t, i, t[j]), j, t[i])))));
+
+%% Why logic sub_permut
+sub_permut: ((INT, INT, (ARRAY INT OF INT), (ARRAY INT OF INT)) -> BOOLEAN);
 
 %% Why axiom sub_permut_refl
-ASSERT (FORALL (t:ARRAY INT OF INT):
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
        (FORALL (g:INT): (FORALL (d:INT): sub_permut(g, d, t, t))));
 
 %% Why axiom sub_permut_sym
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (sub_permut(g, d, t1, t2) => sub_permut(g, d, t2, t1))))));
 
 %% Why axiom sub_permut_trans
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
-       (FORALL (t3:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
+       (FORALL (t3:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (sub_permut(g, d, t1, t2) =>
        (sub_permut(g, d, t2, t3) => sub_permut(g, d, t1, t3))))))));
 
 %% Why axiom sub_permut_exchange_1
-ASSERT (FORALL (t:ARRAY INT OF INT):
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (FORALL (i:INT):
        (FORALL (j:INT):
        (((g <= i) AND ((i <= d) AND ((g <= j) AND (j <= d)))) =>
-       sub_permut(g, d, t, ((t WITH [i] := t[j]) WITH [j] := t[i]))))))));
+       sub_permut(g, d, t, update_INT(update_INT(t, i, t[j]), j, t[i]))))))));
 
 %% Why axiom sub_permut_exchange_2
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (FORALL (i:INT):
@@ -123,223 +242,282 @@ ASSERT (FORALL (t1:ARRAY INT OF INT):
        sub_permut(g, d, t1, t2))))))));
 
 %% Why axiom sub_permut_permut
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT): (sub_permut(g, d, t1, t2) => permut(t1, t2))))));
 
+%% Why axiom array_length_update
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (v:INT):
+       (array_length_INT(update_INT(t, i, v)) = array_length_INT(t)))));
+
 %% Why axiom sub_permut_array_length
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (sub_permut(g, d, t1, t2) =>
        (array_length_INT(t1) = array_length_INT(t2)))))));
 
-%% Why axiom sorted_array_def
-ASSERT (FORALL (t:ARRAY INT OF INT):
-       (FORALL (i:INT):
-       (FORALL (j:INT):
-       (sorted_array(t, i, j) <=>
-       (FORALL (k:INT): (((i <= k) AND (k < j)) => (t[k] <= t[(k + 1)])))))));
+%% Why axiom permut_array_length
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
+       (permut(t1, t2) => (array_length_INT(t1) = array_length_INT(t2)))));
 
-%% binary_search_po_1, Why obligation from file "bsearch.mlw", characters 576-593
+%% binary_search_po_1, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (t:(ARRAY INT OF INT)):
       (((array_length_INT(t) >= 1) AND
        sorted_array(t, 1, (array_length_INT(t) - 1))) =>
-      (FORALL (l0:INT):
-      ((l0 = 1) =>
-      (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
-      (FORALL (p0:INT):
-      ((p0 = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (l1:INT):
-      (FORALL (p1:INT):
-      (FORALL (u1:INT):
-      ((Variant1 = ((2 + u1) - l1)) =>
-      (((1 <= l1) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u1))) AND
-       ((p1 > 0) => (t[p1] = v)))))) =>
-      ((l1 <= u1) =>
-      (FORALL (m1:INT): ((m1 = mean(l1, u1)) => ((l1 <= m1) AND (m1 <= u1)))))))))))))))))));
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      ((1 <= l) AND
+      ((u <= (array_length_INT(t) - 1)) AND
+      (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+      (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+      ((p > 0) => (t[p] = v))))))))))))))));
+POP;
 
-%% binary_search_po_2, Why obligation from file "bsearch.mlw", characters 606-615
+%% binary_search_po_2, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (t:(ARRAY INT OF INT)):
       (((array_length_INT(t) >= 1) AND
        sorted_array(t, 1, (array_length_INT(t) - 1))) =>
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (((1 <= l) AND
+       ((u <= (array_length_INT(t) - 1)) AND
+       (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+       (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+       ((p > 0) => (t[p] = v)))))) =>
       (FORALL (l0:INT):
-      ((l0 = 1) =>
-      (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
       (FORALL (p0:INT):
-      ((p0 = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (l1:INT):
-      (FORALL (p1:INT):
-      (FORALL (u1:INT):
-      ((Variant1 = ((2 + u1) - l1)) =>
-      (((1 <= l1) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u1))) AND
-       ((p1 > 0) => (t[p1] = v)))))) =>
-      ((l1 <= u1) =>
-      (FORALL (m1:INT):
-      ((m1 = mean(l1, u1)) =>
-      (((l1 <= m1) AND (m1 <= u1)) =>
-      ((0 <= m1) AND (m1 < array_length_INT(t)))))))))))))))))))));
+      (FORALL (u0:INT):
+      (((1 <= l0) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) =>
+      ((l0 <= u0) =>
+      (FORALL (m:INT): ((m = mean(l0, u0)) => ((l0 <= m) AND (m <= u0))))))))))))))))))));
+POP;
 
-%% binary_search_po_3, Why obligation from file "bsearch.mlw", characters 629-640
+%% binary_search_po_3, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (t:(ARRAY INT OF INT)):
       (((array_length_INT(t) >= 1) AND
        sorted_array(t, 1, (array_length_INT(t) - 1))) =>
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (((1 <= l) AND
+       ((u <= (array_length_INT(t) - 1)) AND
+       (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+       (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+       ((p > 0) => (t[p] = v)))))) =>
       (FORALL (l0:INT):
-      ((l0 = 1) =>
-      (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
       (FORALL (p0:INT):
-      ((p0 = 0) =>
-      (FORALL (Variant1:INT):
+      (FORALL (u0:INT):
+      (((1 <= l0) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) =>
+      ((l0 <= u0) =>
+      (FORALL (m:INT):
+      ((m = mean(l0, u0)) =>
+      (((l0 <= m) AND (m <= u0)) => ((0 <= m) AND (m < array_length_INT(t))))))))))))))))))))));
+POP;
+
+%% binary_search_po_4, Why obligation from file "", line 0, characters 0-0:
+PUSH;
+QUERY (FORALL (t:(ARRAY INT OF INT)):
+      (((array_length_INT(t) >= 1) AND
+       sorted_array(t, 1, (array_length_INT(t) - 1))) =>
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (((1 <= l) AND
+       ((u <= (array_length_INT(t) - 1)) AND
+       (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+       (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+       ((p > 0) => (t[p] = v)))))) =>
+      (FORALL (l0:INT):
+      (FORALL (p0:INT):
+      (FORALL (u0:INT):
+      (((1 <= l0) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) =>
+      ((l0 <= u0) =>
+      (FORALL (m:INT):
+      ((m = mean(l0, u0)) =>
+      (((l0 <= m) AND (m <= u0)) =>
+      (((0 <= m) AND (m < array_length_INT(t))) =>
+      (FORALL (result0:INT):
+      ((result0 = t[m]) =>
+      ((result0 < v) =>
       (FORALL (l1:INT):
-      (FORALL (p1:INT):
-      (FORALL (u1:INT):
-      ((Variant1 = ((2 + u1) - l1)) =>
+      ((l1 = (m + 1)) =>
       (((1 <= l1) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) AND
+      ((0 <= ((2 + u0) - l0)) AND (((2 + u0) - l1) < ((2 + u0) - l0)))))))))))))))))))))))))))));
+POP;
+
+%% binary_search_po_5, Why obligation from file "", line 0, characters 0-0:
+PUSH;
+QUERY (FORALL (t:(ARRAY INT OF INT)):
+      (((array_length_INT(t) >= 1) AND
+       sorted_array(t, 1, (array_length_INT(t) - 1))) =>
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (((1 <= l) AND
+       ((u <= (array_length_INT(t) - 1)) AND
+       (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+       (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+       ((p > 0) => (t[p] = v)))))) =>
+      (FORALL (l0:INT):
+      (FORALL (p0:INT):
+      (FORALL (u0:INT):
+      (((1 <= l0) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) =>
+      ((l0 <= u0) =>
+      (FORALL (m:INT):
+      ((m = mean(l0, u0)) =>
+      (((l0 <= m) AND (m <= u0)) =>
+      (((0 <= m) AND (m < array_length_INT(t))) =>
+      (FORALL (result0:INT):
+      ((result0 = t[m]) =>
+      ((result0 >= v) =>
+      (((0 <= m) AND (m < array_length_INT(t))) =>
+      (FORALL (result1:INT):
+      ((result1 = t[m]) =>
+      ((result1 > v) =>
+      (FORALL (u1:INT):
+      ((u1 = (m - 1)) =>
+      (((1 <= l0) AND
        ((u1 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u1))) AND
+       ((p0 > 0) => (t[p0] = v)))))) AND
+      ((0 <= ((2 + u0) - l0)) AND (((2 + u1) - l0) < ((2 + u0) - l0)))))))))))))))))))))))))))))))));
+POP;
+
+%% binary_search_po_6, Why obligation from file "", line 0, characters 0-0:
+PUSH;
+QUERY (FORALL (t:(ARRAY INT OF INT)):
+      (((array_length_INT(t) >= 1) AND
+       sorted_array(t, 1, (array_length_INT(t) - 1))) =>
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (((1 <= l) AND
+       ((u <= (array_length_INT(t) - 1)) AND
+       (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+       (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+       ((p > 0) => (t[p] = v)))))) =>
+      (FORALL (l0:INT):
+      (FORALL (p0:INT):
+      (FORALL (u0:INT):
+      (((1 <= l0) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) =>
+      ((l0 <= u0) =>
+      (FORALL (m:INT):
+      ((m = mean(l0, u0)) =>
+      (((l0 <= m) AND (m <= u0)) =>
+      (((0 <= m) AND (m < array_length_INT(t))) =>
+      (FORALL (result0:INT):
+      ((result0 = t[m]) =>
+      ((result0 >= v) =>
+      (((0 <= m) AND (m < array_length_INT(t))) =>
+      (FORALL (result1:INT):
+      ((result1 = t[m]) =>
+      ((result1 <= v) =>
+      (FORALL (p1:INT):
+      ((p1 = m) =>
+      (FORALL (l1:INT):
+      ((l1 = (u0 + 1)) =>
+      (((1 <= l1) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
        (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u1))) AND
-       ((p1 > 0) => (t[p1] = v)))))) =>
-      ((l1 <= u1) =>
-      (FORALL (m1:INT):
-      ((m1 = mean(l1, u1)) =>
-      (((l1 <= m1) AND (m1 <= u1)) =>
-      (((0 <= m1) AND (m1 < array_length_INT(t))) =>
-      ((t[m1] < v) =>
-      (FORALL (l2:INT):
-      ((l2 = (m1 + 1)) =>
-      (((1 <= l2) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l2, u1))) AND
+       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u0))) AND
        ((p1 > 0) => (t[p1] = v)))))) AND
-      ((0 <= ((2 + u1) - l1)) AND (((2 + u1) - l2) < ((2 + u1) - l1))))))))))))))))))))))))));
+      ((0 <= ((2 + u0) - l0)) AND (((2 + u0) - l1) < ((2 + u0) - l0)))))))))))))))))))))))))))))))))));
+POP;
 
-%% binary_search_po_4, Why obligation from file "bsearch.mlw", characters 678-689
+%% binary_search_po_7, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (t:(ARRAY INT OF INT)):
       (((array_length_INT(t) >= 1) AND
        sorted_array(t, 1, (array_length_INT(t) - 1))) =>
+      (FORALL (l:INT):
+      ((l = 1) =>
+      (FORALL (result:INT):
+      ((result = array_length_INT(t)) =>
+      (FORALL (u:INT):
+      ((u = (result - 1)) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (((1 <= l) AND
+       ((u <= (array_length_INT(t) - 1)) AND
+       (((0 <= p) AND (p <= (array_length_INT(t) - 1))) AND
+       (((p = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l, u))) AND
+       ((p > 0) => (t[p] = v)))))) =>
       (FORALL (l0:INT):
-      ((l0 = 1) =>
-      (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
       (FORALL (p0:INT):
-      ((p0 = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (l1:INT):
-      (FORALL (p1:INT):
-      (FORALL (u1:INT):
-      ((Variant1 = ((2 + u1) - l1)) =>
-      (((1 <= l1) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u1))) AND
-       ((p1 > 0) => (t[p1] = v)))))) =>
-      ((l1 <= u1) =>
-      (FORALL (m1:INT):
-      ((m1 = mean(l1, u1)) =>
-      (((l1 <= m1) AND (m1 <= u1)) =>
-      (((0 <= m1) AND (m1 < array_length_INT(t))) =>
-      ((t[m1] >= v) =>
-      (((0 <= m1) AND (m1 < array_length_INT(t))) =>
-      ((t[m1] > v) =>
-      (FORALL (u2:INT):
-      ((u2 = (m1 - 1)) =>
-      (((1 <= l1) AND
-       ((u2 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u2))) AND
-       ((p1 > 0) => (t[p1] = v)))))) AND
-      ((0 <= ((2 + u1) - l1)) AND (((2 + u2) - l1) < ((2 + u1) - l1))))))))))))))))))))))))))));
-
-%% binary_search_po_5, Why obligation from file "bsearch.mlw", characters 701-760
-QUERY (FORALL (t:(ARRAY INT OF INT)):
-      (((array_length_INT(t) >= 1) AND
-       sorted_array(t, 1, (array_length_INT(t) - 1))) =>
-      (FORALL (l0:INT):
-      ((l0 = 1) =>
       (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
-      (FORALL (p0:INT):
-      ((p0 = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (l1:INT):
-      (FORALL (p1:INT):
-      (FORALL (u1:INT):
-      ((Variant1 = ((2 + u1) - l1)) =>
-      (((1 <= l1) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u1))) AND
-       ((p1 > 0) => (t[p1] = v)))))) =>
-      ((l1 <= u1) =>
-      (FORALL (m1:INT):
-      ((m1 = mean(l1, u1)) =>
-      (((l1 <= m1) AND (m1 <= u1)) =>
-      (((0 <= m1) AND (m1 < array_length_INT(t))) =>
-      ((t[m1] >= v) =>
-      (((0 <= m1) AND (m1 < array_length_INT(t))) =>
-      ((t[m1] <= v) =>
-      (FORALL (p2:INT):
-      ((p2 = m1) =>
-      (FORALL (l2:INT):
-      ((l2 = (u1 + 1)) =>
-      (((1 <= l2) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p2) AND (p2 <= (array_length_INT(t) - 1))) AND
-       (((p2 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l2, u1))) AND
-       ((p2 > 0) => (t[p2] = v)))))) AND
-      ((0 <= ((2 + u1) - l1)) AND (((2 + u1) - l2) < ((2 + u1) - l1))))))))))))))))))))))))))))));
-
-%% binary_search_po_6, Why obligation from file "bsearch.mlw", characters 310-776
-QUERY (FORALL (t:(ARRAY INT OF INT)):
-      (((array_length_INT(t) >= 1) AND
-       sorted_array(t, 1, (array_length_INT(t) - 1))) =>
-      (FORALL (l0:INT):
-      ((l0 = 1) =>
-      (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
-      (FORALL (p0:INT):
-      ((p0 = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (l1:INT):
-      (FORALL (p1:INT):
-      (FORALL (u1:INT):
-      ((Variant1 = ((2 + u1) - l1)) =>
-      (((1 <= l1) AND
-       ((u1 <= (array_length_INT(t) - 1)) AND
-       (((0 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND
-       (((p1 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l1, u1))) AND
-       ((p1 > 0) => (t[p1] = v)))))) =>
-      ((l1 > u1) =>
-      ((((1 <= p1) AND (p1 <= (array_length_INT(t) - 1))) AND (t[p1] = v)) OR
-      ((p1 = 0) AND (NOT In(t, 1, (array_length_INT(t) - 1))))))))))))))))))));
-
-%% binary_search_po_7, Why obligation from file "bsearch.mlw", characters 350-511
-QUERY (FORALL (t:(ARRAY INT OF INT)):
-      (((array_length_INT(t) >= 1) AND
-       sorted_array(t, 1, (array_length_INT(t) - 1))) =>
-      (FORALL (l0:INT):
-      ((l0 = 1) =>
-      (FORALL (u0:INT):
-      ((u0 = (array_length_INT(t) - 1)) =>
-      (FORALL (p0:INT):
-      ((p0 = 0) =>
-      ((1 <= l0) AND
-      ((u0 <= (array_length_INT(t) - 1)) AND
-      (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
-      (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
-      ((p0 > 0) => (t[p0] = v))))))))))))));
+      (((1 <= l0) AND
+       ((u0 <= (array_length_INT(t) - 1)) AND
+       (((0 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND
+       (((p0 = 0) => (In(t, 1, (array_length_INT(t) - 1)) => In(t, l0, u0))) AND
+       ((p0 > 0) => (t[p0] = v)))))) =>
+      ((l0 > u0) =>
+      ((((1 <= p0) AND (p0 <= (array_length_INT(t) - 1))) AND (t[p0] = v)) OR
+      ((p0 = 0) AND (NOT In(t, 1, (array_length_INT(t) - 1)))))))))))))))))))));
+POP;
 

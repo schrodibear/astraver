@@ -303,6 +303,19 @@
 
 ;; search3_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
+(IMPLIES (<= 0 (array_length t)) (AND (<= 0 0) (<= 0 (array_length t)))))
+
+;; search3_po_2, Why obligation from file "", line 0, characters 0-0:
+(FORALL (t)
+(IMPLIES (<= 0 (array_length t))
+(IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(IMPLIES (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0)))
+(FORALL (k)
+(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0)))))))
+
+;; search3_po_3, Why obligation from file "", line 0, characters 0-0:
+(FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (i)
 (FORALL (t0)
@@ -313,7 +326,7 @@
 (FORALL (k)
 (IMPLIES (AND (<= i k) (< k (array_length t0))) (NEQ (select t0 k) 0)))))))))))
 
-;; search3_po_2, Why obligation from file "", line 0, characters 0-0:
+;; search3_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (i)
@@ -323,7 +336,7 @@
 (IMPLIES (EQ result (array_length t0))
 (IMPLIES (NEQ i result) (AND (<= 0 i) (< i (array_length t0)))))))))))
 
-;; search3_po_3, Why obligation from file "", line 0, characters 0-0:
+;; search3_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (i)
@@ -337,7 +350,7 @@
 (IMPLIES (EQ result0 (select t0 i))
 (IMPLIES (EQ result0 0) (EQ (select t0 i) 0)))))))))))))
 
-;; search3_po_4, Why obligation from file "", line 0, characters 0-0:
+;; search3_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (i)
@@ -353,7 +366,7 @@
 (AND (<= 0 (- (array_length t0) i))
 (< (- (array_length t0) (+ i 1)) (- (array_length t0) i)))))))))))))))
 
-;; search3_po_5, Why obligation from file "", line 0, characters 0-0:
+;; search3_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (i)
@@ -370,7 +383,7 @@
          (< (- (array_length t0) (+ i 1)) (- (array_length t0) i)))
 (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0))))))))))))))))
 
-;; search3_po_6, Why obligation from file "", line 0, characters 0-0:
+;; search3_po_8, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (FORALL (i)

@@ -287,18 +287,48 @@
 ;; mult2_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0)) (IMPLIES (EQ x 0) (EQ 0 (* x y))))))
+
+;; mult2_po_2, Why obligation from file "", line 0, characters 0-0:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(IMPLIES (NEQ x 0) (AND (<= 0 x) (< (- x 1) x))))))
+
+;; mult2_po_3, Why obligation from file "", line 0, characters 0-0:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(IMPLIES (NEQ x 0)
+(IMPLIES (AND (<= 0 x) (< (- x 1) x)) (AND (>= (- x 1) 0) (>= y 0)))))))
+
+;; mult2_po_4, Why obligation from file "", line 0, characters 0-0:
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(IMPLIES (NEQ x 0)
+(IMPLIES (AND (<= 0 x) (< (- x 1) x))
+(IMPLIES (AND (>= (- x 1) 0) (>= y 0))
+(FORALL (result)
+(IMPLIES (EQ result (* (- x 1) y))
+(IMPLIES (>= y 0)
+(FORALL (result0) (IMPLIES (EQ result0 (+ y result)) (EQ result0 (* x y)))))))))))))
+
+;; mult2_po_5, Why obligation from file "", line 0, characters 0-0:
+(FORALL (x)
+(FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
 (FORALL (a)
 (FORALL (b) (IMPLIES (>= a 0) (IMPLIES (EQ a 0) (EQ b (+ a b)))))))))
 
-;; mult2_po_2, Why obligation from file "", line 0, characters 0-0:
+;; mult2_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
 (FORALL (a)
 (IMPLIES (>= a 0) (IMPLIES (NEQ a 0) (AND (<= 0 a) (< (- a 1) a))))))))
 
-;; mult2_po_3, Why obligation from file "", line 0, characters 0-0:
+;; mult2_po_7, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -306,7 +336,7 @@
 (IMPLIES (>= a 0)
 (IMPLIES (NEQ a 0) (IMPLIES (AND (<= 0 a) (< (- a 1) a)) (>= (- a 1) 0))))))))
 
-;; mult2_po_4, Why obligation from file "", line 0, characters 0-0:
+;; mult2_po_8, Why obligation from file "", line 0, characters 0-0:
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

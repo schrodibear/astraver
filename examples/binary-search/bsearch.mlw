@@ -1,5 +1,5 @@
 
-external parameter v : int
+external logic v : int
 
 external parameter mean : int -> int -> int
 

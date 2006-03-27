@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.93 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.94 2006-03-27 09:49:56 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -246,8 +246,9 @@ and wp_desc info d q =
 	let w = pand_wp info w1 wapp in
 	AppRef (p'1, x, k), w
     | Lam (bl, p, e) ->
-	let e',w = wp_prog (p,e) None in
-	Lam (bl, p, e'), optasst_app (abstract_binders bl) w
+	let e',w = wp_prog (p, e) None in
+	let wf = optasst_app (abstract_binders bl) w in
+	Lam (bl, p, e'), pand_wp info (optpost_val q) wf
     | LetIn (x, _, _) | LetRef (x, _, _) when occur_post x q ->
         Report.raise_located info.t_loc
 	  (AnyMessage ("cannot compute wp due to capture variable;\n" ^
@@ -279,7 +280,7 @@ and wp_desc info d q =
 	  | Some {a_value=we} -> wpand wfr (abstract_binders bl we)
 	in
 	let w = Some (wp_named info.t_loc w) in
-	Rec (f, bl, v, var, p, e'), w
+	Rec (f, bl, v, var, p, e'), pand_wp info (optpost_val q) w
     | Loop (inv, var, e) ->
         (* wp = well_founded(R) /\ I /\ forall w. I => wp(e, I/\var<var@) *)
 	let wfr = well_founded_rel var in

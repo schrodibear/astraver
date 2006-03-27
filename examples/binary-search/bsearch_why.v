@@ -311,6 +311,7 @@ Save.
   ((p0 > 0 -> (access t p0) = v))) /\ (Zwf 0 (2 + u1 - l0) (2 + u0 - l0)).
 Proof.
 intuition.
+subst; apply In_left_side; intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -358,8 +359,9 @@ Save.
   ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u0)))) /\
   ((p1 > 0 -> (access t p1) = v))) /\ (Zwf 0 (2 + u0 - l1) (2 + u0 - l0)).
 Proof.
-intuition.
-subst; apply In_left_side; intuition.
+intuition; subst.
+absurd (mean l0 u0 = 0); omega.
+omega.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -389,12 +391,6 @@ Save.
   forall (HW_23: l0 > u0),
   (1 <= p0 /\ p0 <= ((array_length t) - 1)) /\ (access t p0) = v \/ p0 = 0 /\
   ~(In t 1 ((array_length t) - 1)).
-Proof.
-intuition; subst.
-absurd (mean l0 u0 = 0); omega.
-omega.
-Save.
-
 Proof.
 intuition; subst.
 assert (1 <= p0 \/ p0=0). omega. intuition.

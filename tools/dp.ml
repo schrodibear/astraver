@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.18 2006-03-22 11:31:53 dogguy Exp $ i*)
+(*i $Id: dp.ml,v 1.19 2006-03-27 09:49:56 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -92,7 +92,7 @@ let split f =
 
 let main () = 
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
-  printf "(. = valid * = invalid # = timeout/failure)\n"; flush stdout;
+  printf "(. = valid * = invalid # = timeout ! = failure)\n"; flush stdout;
   Queue.iter split files;
   let n = !nvalid + !ninvalid + !ntimeout in
   if n = 0 then exit 0;

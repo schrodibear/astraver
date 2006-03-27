@@ -222,11 +222,8 @@ Qed.
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x >= 0 /\ y >= 0),
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_2: a >= 0),
-  forall (HW_3: a = 0),
-  b = (a + b).
+  forall (HW_2: x = 0),
+  0 = (x * y).
 Proof.
 intros; subst; intuition.
 Save.
@@ -236,10 +233,8 @@ Save.
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x >= 0 /\ y >= 0),
-  forall (a: Z),
-  forall (HW_2: a >= 0),
-  forall (HW_4: a <> 0),
-  (Zwf 0 (a - 1) a).
+  forall (HW_3: x <> 0),
+  (Zwf 0 (x - 1) x).
 Proof.
 intuition; subst; ring.
 Save.
@@ -249,11 +244,9 @@ Save.
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x >= 0 /\ y >= 0),
-  forall (a: Z),
-  forall (HW_2: a >= 0),
-  forall (HW_4: a <> 0),
-  forall (HW_5: (Zwf 0 (a - 1) a)),
-  (a - 1) >= 0.
+  forall (HW_3: x <> 0),
+  forall (HW_4: (Zwf 0 (x - 1) x)),
+  (x - 1) >= 0 /\ y >= 0.
 Proof.
 unfold Zwf; intuition.
 Save.
@@ -263,14 +256,74 @@ Save.
   forall (x: Z),
   forall (y: Z),
   forall (HW_1: x >= 0 /\ y >= 0),
+  forall (HW_3: x <> 0),
+  forall (HW_4: (Zwf 0 (x - 1) x)),
+  forall (HW_5: (x - 1) >= 0 /\ y >= 0),
+  forall (result: Z),
+  forall (HW_6: result = ((x - 1) * y)),
+  forall (HW_7: y >= 0),
+  forall (result0: Z),
+  forall (HW_8: result0 = (y + result)),
+  result0 = (x * y).
+Proof.
+intuition.
+subst; ring.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma mult2_po_5 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: x >= 0 /\ y >= 0),
   forall (a: Z),
   forall (b: Z),
-  forall (HW_2: a >= 0),
-  forall (HW_4: a <> 0),
-  forall (HW_5: (Zwf 0 (a - 1) a)),
-  forall (HW_6: (a - 1) >= 0),
+  forall (HW_9: a >= 0),
+  forall (HW_10: a = 0),
+  b = (a + b).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma mult2_po_6 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (HW_9: a >= 0),
+  forall (HW_11: a <> 0),
+  (Zwf 0 (a - 1) a).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma mult2_po_7 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (HW_9: a >= 0),
+  forall (HW_11: a <> 0),
+  forall (HW_12: (Zwf 0 (a - 1) a)),
+  (a - 1) >= 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma mult2_po_8 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (HW_1: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (b: Z),
+  forall (HW_9: a >= 0),
+  forall (HW_11: a <> 0),
+  forall (HW_12: (Zwf 0 (a - 1) a)),
+  forall (HW_13: (a - 1) >= 0),
   forall (result: Z),
-  forall (HW_7: result = (a - 1 + (b + 1))),
+  forall (HW_14: result = (a - 1 + (b + 1))),
   result = (a + b).
 Proof.
 intuition.

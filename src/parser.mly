@@ -73,6 +73,21 @@
 
   let list_of_some = function None -> [] | Some x -> [x]
 
+  (*s ensures a postcondition for a function body *)
+
+  let force_function_post ?(warn=false) e = match e.pdesc with
+    | Spost _ -> 
+	e
+    | _ -> 
+       if warn then 
+	 Format.eprintf 
+	   "%ano postcondition for this function; true inserted@\n"
+	   Loc.report_position e.ploc; 
+       let q = 
+	 { pa_name = Anonymous; pa_value = mk_pp PPtrue; pa_loc = loc () }
+       in
+       { e with pdesc = Spost (e, (q, []), Transparent) }
+
 %}
 
 /* Tokens */ 
@@ -85,7 +100,7 @@
 %token BANG BAR BARBAR BEGIN 
 %token BIGARROW BOOL COLON COLONEQUAL COMMA DO DONE DOT ELSE END EOF EQUAL
 %token EXCEPTION EXISTS EXTERNAL FALSE FOR FORALL FPI FUN FUNCTION GE GOAL GT
-%token IF IN INT INVARIANT LABEL
+%token IF IN INT INVARIANT
 %token LE LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MINUS 
 %token NOT NOTEQ OF OR PARAMETER PERCENT PLUS PREDICATE PROP 
 %token QUOTE RAISE RAISES READS REAL REC REF RETURNS RIGHTB RIGHTBRIGHTB
@@ -152,7 +167,7 @@ decl:
 | LET ident EQUAL expr
    { Program ($2, $4) }
 | LET ident binders EQUAL list0_bracket_assertion expr
-   { Program ($2, locate (Slam ($3, $5, $6))) }
+   { Program ($2, locate (Slam ($3, $5, force_function_post $6))) }
 | LET REC recfun
    { Program (rec_name $3, locate $3) }
 | EXCEPTION ident
@@ -470,7 +485,10 @@ expr:
 | LET ident EQUAL REF expr IN expr
    { locate (Sletref ($2, $5, $7)) }
 | FUN binders ARROW list0_bracket_assertion expr %prec prec_fun
-   { locate (Slam ($2, $4, $5)) }
+   { locate (Slam ($2, $4, force_function_post $5)) }
+| LET ident binders EQUAL list0_bracket_assertion expr IN expr
+   { let b =  force_function_post ~warn:true $6 in
+     locate (Sletin ($2, locate (Slam ($3, $5, b)), $8)) }
 | LET REC recfun %prec prec_letrec
    { locate $3 }
 | LET REC recfun IN expr
@@ -567,19 +585,6 @@ opt_cast:
 | COLON type_v  { Some $2 }
 ;
 
-/****
-block:
-| block_statement                 { [$1] }
-| block_statement SEMICOLON block { $1 :: $3 }
-;
-
-block_statement:
-| LABEL IDENT                   { Slabel $2 }
-| ASSERT LEFTB assertion RIGHTB { Sassert $3 }
-| expr                          { Sstatement $1 }
-;
-****/
-
 invariant_variant:
 | /* epsilon */ { None, None }
 | LEFTB opt_invariant RIGHTB { $2, None }
@@ -594,7 +599,7 @@ opt_invariant:
 recfun:
 | ident binders COLON type_v opt_variant EQUAL 
   list0_bracket_assertion expr %prec prec_recfun
-   { Srec ($1, $2, $4, $5, $7, $8) }
+   { Srec ($1, $2, $4, $5, $7, force_function_post $8) }
 ;
 
 opt_variant:

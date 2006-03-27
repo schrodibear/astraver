@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{url}
 \usepackage{makeidx}
+\usepackage{verbatim}
 \input{./version.tex}
 
 \newcommand{\caml}{\textsf{Caml}}
@@ -75,7 +76,7 @@ Chapter~\ref{refman} is a reference manual.
 
 \subsection*{License}
 
-The \why\ certification tool is \copyright\ 2002 Laboratoire de
+The \why\ certification tool is \copyright\ 2002--2006 Laboratoire de
 Recherche en Informatique (\url{www.lri.fr}).
 It is open source and freely available under the terms of the GNU
 GENERAL PUBLIC LICENSE Version 2. See the files \texttt{COPYING} and
@@ -508,6 +509,32 @@ next section.
 
 \section{Tools}
 
+\subsection{Graphical user interface}
+\indextt{gwhy}\index{GUI}
+
+gwhy TODO
+
+\subsection{Calling decision procedures}
+\indextt{dp}
+
+dp TODO
+
+\subsection{Why obfuscator}
+\indextt{why-obfuscator}
+A tool is provided to obfuscate some \why\ files. It is invoked as
+follows:
+\begin{center}
+  \texttt{why-obfuscator} [\texttt{-o}
+  \textit{file}] ~ [\texttt{-prefix} \textit{p}]
+  files...
+\end{center}
+It produces a \why\ file equivalent to the set of \why\ files given as
+arguments, where all identifiers are renamed and all comments
+removed. The output is printed on the standard output unless
+redirected with option \texttt{-o}. The identifiers are renamed as
+\texttt{x1}, \texttt{x2}, ... unless a different name prefix is set
+with option \texttt{-prefix}.
+
 \subsection{Caml code generation}
 \label{ocamlcode}\index{Caml code generation}
 In order to run your \why\ code, true \caml\ code can be
@@ -561,8 +588,8 @@ otherwise the original file name is used.
 \section{Installation}
 \label{install}\index{Installation}
 
-To compile \why, you need both \textsf{Objective Caml} to be
-installed, in version at least 3.06. Both can 
+To compile \why, you need \textsf{Objective Caml} to be
+installed, in version at least 3.08. It can 
 be fetched from \url{http://caml.inria.fr}.
 Then 
 
@@ -571,15 +598,13 @@ Then
 
   The directory for binaries defaults to \texttt{/usr/local/bin}; you
   can specify another directory with the \texttt{-{}-bindir}
-  option. Similarly, you can change the directory for man pages with
-  \texttt{-{}-mandir}.
+  option. Similarly, you can change the directory for the library
+  with \texttt{-{}-libdir} and for
+  the man pages \texttt{-{}-mandir}.
 
-\item Compile with \texttt{make}
+\item Compile with \texttt{make}.
 
-\item Install with \texttt{make install}
-
-  (Alternatively, you can move/copy the \why\ executable
-  \texttt{bin/why.opt} anywhere, or make a symbolic link to it from anywhere.)
+\item Install with \texttt{make install}.
 \end{enumerate}
 
 
@@ -596,7 +621,7 @@ They are also available on the \why\ web site, at
 
 C and \java\ programs can be verified using other tools in combination
 with \why. C programs can be verified using \caduceus\ (see
-\url{why.lri.fr/caduceus/}) and \java\ programs using \krakatoa\ (see
+\url{caduceus.lri.fr/}) and \java\ programs using \krakatoa\ (see
 \url{krakatoa.lri.fr}). 
 
 
@@ -604,7 +629,7 @@ with \why. C programs can be verified using \caduceus\ (see
 \label{refman}
 
 
-\section{Command line options}
+\section{Command line}
 \label{usage}\index{Option, of the command line}
 
 \why\ is invoked as a batch compiler, given a list of input files:
@@ -612,176 +637,433 @@ with \why. C programs can be verified using \caduceus\ (see
   \texttt{why} [\textit{options}] \textit{file}$_1$ $\cdots$ \textit{file}$_n$
 \end{center}
 If no file is given, then standard input is processed and output is
-named \texttt{Output\_why}.
-Command line options are the following:
-\begin{description}
-  \item[Generic options:] ~\par
-  \item[\texttt{--help}]: ~\par    
-    Give usage and exit. 
-  \item[\texttt{--version}]: ~\par    
-    Give \why\ version number and exit. 
-  \item[\texttt{--verbose}]: ~\par 
-    Verbose mode. In this mode, \why\ prints on error output
-    information like the program being processed, the obligations
-    being erased or overwritten, etc.
-  \item[\texttt{--quiet}]: ~\par  
-    Quiet mode (default).
-  \item[\texttt{--werror}]: ~\par 
-    Turn warnings as errors. \why\ will stop on the first warning.
-  \item[\texttt{--debug}]: ~\par 
-    Debugging mode. In this mode, \why\ details everything it does,
-    printing a lot of material on error output. Not of use for the
-    casual user.
-  \item[\texttt{--where}]: ~\par 
-    Print \why\ library path and exit.
-
-  \item[Overall options:] ~\par
-  \item[\texttt{--parse-only}]: ~\par  
-    Stop after parsing.
-  \item[\texttt{--type-only}]:  ~\par  
-    Stop after typing.
-  \item[\texttt{--wp-only}]:    ~\par  
-    Stop after annotation.
-  \item[\texttt{--dir} \textit{dir}]: ~\par
-    Output files into directory \texttt{dir}.
-
-  \item[VCG options:] ~\par
-  \item[\texttt{--split}]: ~\par
-    Split verification conditions into (equi-provable but smaller)
-    pieces.
-  \item[\texttt{--all-vc}]: ~\par
-    Output \emph{all} verification conditions, that is no condition is
-    automatically discharged.
-
-  \item[Prover selection:] ~\par
-  \item[\texttt{--coq}, \texttt{--pvs}, \texttt{--mizar}, 
-        \texttt{--hol-light}, \texttt{--harvey}, \texttt{--simplify}]: ~\par 
-    Select the prover; it defaults to \coq.
-
-  \item[Coq-specific options:] ~\par
-  \item[\texttt{--valid}, \texttt{--no-valid}]: ~\par
-    Set/Unset the functional validation. Only meaningful with the
-    \coq\ prover. When set, \why\ outputs a functional interpretation
-    of each program (in a file \textit{f}\texttt{\_valid.v} for each
-    input file \textit{f}\texttt{.}\textit{xxx}). Default is
-    no validation.  
-  \item[\texttt{--coq-tactic}] \textit{tactic} : ~\par
-    Give a \coq\ tactic to be inserted as proof for new obligations.
-  \item[\texttt{--coq-preamble}] \textit{text} : ~\par
-    Give some \coq\ preamble to be substituted to \texttt{Require Why}
-    when generating a \emph{new} \coq\ file.
-
-  \item[PVS-specific options:] ~\par
-  \item[\texttt{--pvs-preamble}] \textit{text} : ~\par
-    Give some \pvs\ preamble to be substituted to \texttt{importing why@why}
-    when generating a \emph{new} \pvs\ file.
-
-  \item[Simplify-specific options:] ~\par
-  \item[\texttt{--no-simplify-prelude}]: ~\par
-    Suppress the \simplify\ prelude, that is the set of
-    \texttt{BG\_PUSH}s defining \why's predicates and functions symbols.
-
-  \item[Mizar-specific options:] ~\par
-  \item[\texttt{--mizar-environ}] \textit{text} : ~\par
-    Give the \mizar\ preamble to be used 
-    when generating a \emph{new} \mizar\ file.
-  \item[\texttt{--mizar-environ-from}] \textit{file} : ~\par
-    Extract the \mizar\ preamble from \textit{file}, to be used
-    when generating a \emph{new} \mizar\ file.
-
-  \item[Caml code generation options:] ~\par
-  \item[\texttt{--ocaml}]: ~\par 
-    Select the \caml\ code generation. The code is produced on
-    standard output, unless specified otherwise with option \texttt{--output}.
-  \item[\texttt{--output}] \textit{file} : ~\par 
-    Redirect the output to file \textit{file}.
-  \item[\texttt{--ocaml-annot}]: ~\par 
-    Decorate the \caml\ code with all annotations as comments. Default
-    is no annotation.
-  \item[\texttt{--ocaml-ext}]: ~\par 
-    Make parameters from \texttt{external parameter} declarations.
-    
-\end{description}
+named with the prefix \texttt{out\_why} (and a suffix depending of the
+selected prover).
+The full list of command line options can be obtained with
+\begin{verbatim}
+  why --help
+\end{verbatim}
 
 
-\section{Library}
-\label{library}\index{Library}
 
-\subsection{Logic}
-\label{lib:logic}
+\section{Syntax of input files}
+\label{syntax}
 
-\subsubsection{Predefined functions}
-\index{Function!predefined}
+\subsection{Lexical conventions}
 
-These are the functions predefined in \why:
-\begin{description}
-\item[\texttt{add\_int, sub\_int, mul\_int, div\_int, mod\_int :
-    int,int -> int}] ~\par
-  Correspond to the infix symbols
-  \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} and \texttt{\%}.
-\item[\texttt{neg\_int : int -> int}] ~\par
-  Corresponds to the prefix symbol \texttt{-}.
-\item[\texttt{add\_real, sub\_real, mul\_real, div\_real :
-    real,real -> real}] ~\par
-  Correspond to the infix symbols
-  \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
-\item[\texttt{neg\_real, sqrt\_real : real -> real}] ~\par
-  \texttt{neg\_real} corresponds to the prefix symbol \texttt{-}.
-\item[\texttt{real\_of\_int : int -> real}] ~\par
-  Conversion of an integer into a real number.
-\item[\texttt{array\_length : $\alpha$ array -> int}] ~\par
-  The size of an array.
-\end{description}
+Comments are opened with \texttt{(*}, closed
+with \texttt{*)} and can be nested.
 
-\subsubsection{Predefined predicates}
-\index{Predicate!predefined}
+Identifiers are made of letters, digits,
+the underscore character \texttt{\_} and the single quote \texttt{'},
+starting with a letter. Additionally, they can be qualified by a
+label (another identifier), using the \texttt{@} notation.
 
-These are the predicates predefined in \why:
-\begin{description}
-\item[\texttt{lt\_int, le\_int, gt\_int, ge\_int, eq\_int, neq\_int :
-    int, int -> prop}] ~\par
-  Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
-  \texttt{>=}, \texttt{=} and \texttt{<>}.
+\begin{center}
+\begin{tabular}{lrl}
+  \nt{identifier}\indexnt{identifier}
+    & $::=$ & \nt{letter} (\nt{letter} $|$ \te{0}..\te{9} $|$
+              \te{\_} $|$ \te{'})\etoile
+  \\[0.1em]
+  \nt{letter}
+    & $::=$ & \te{A}..\te{Z} $|$ \te{a}..\te{z}
+  \\[0.1em]
+  \nt{lab\_identifier}\indexnt{lab\_identifier}
+    & $::=$ & \nt{identifier} [ \te{@} \nt{identifier} ]
+\end{tabular}
+\end{center}
 
-\item[\texttt{lt\_real, le\_real, gt\_real, ge\_real, eq\_real,
-    neq\_real :}] ~\par
-  \texttt{real, real -> prop} ~\par
-  Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
-  \texttt{>=}, \texttt{=} and \texttt{<>}.
+Keywords are the following:
+\begin{center}
+{\tt\begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
+        absurd &
+	and &
+        array &
+	as &
+	assert \\
+	axiom &
+	begin &
+        bool &
+	do &
+	done \\
+        else &
+	end &
+	exception &
+	exists &
+	external \\
+        false &
+	for &
+	forall &
+	fun &
+	function \\
+	goal &
+	if &
+	in &
+	int &
+	invariant \\
+%	label &
+	let &
+	logic &
+	not &
+	of \\
+	or &
+	parameter &
+	predicate &
+	prop &
+	raise \\
+	raises &
+	reads &
+	real &
+	rec &
+	ref \\
+	returns &
+	then &
+	true &
+	try &
+	type \\
+	unit &
+	variant &
+	void &
+	while &
+	with \\
+        writes &
+\end{tabular}}
+\end{center}
 
-\item[\texttt{eq\_bool, neq\_bool : bool, bool -> prop}] ~\par
-  Correspond to the infix symbols \texttt{=} and \texttt{<>}.
+\subsection{Grammar}
 
-\item[\texttt{eq\_unit, neq\_unit : unit, unit -> prop}] ~\par
-  Correspond to the infix symbols \texttt{=} and \texttt{<>}.
+\subsubsection{Logic}
 
-\item[\texttt{sorted\_array : int array, int, int -> prop}] ~\par
-  \indextt{sorted\_array}
-  \texttt{sorted\_array($t$,$i$,$j$)} states that the sub-array
-  $t[i..j]$ is sorted (in increasing order).
+Syntax for terms is given Figure~\ref{fig:terms}.
+Arithmetical operations have usual precedences and are left associative.
+The conditional construct \texttt{if $t_1$ then $t_2$ else $t_3$} can
+also be written in prefix notation as \texttt{if\_then\_else($t_1$, $t_2$,
+  $t_3$)}. 
 
-\item[\texttt{exchange : int array, int array, int, int -> prop}] ~\par
-  \indextt{exchange}
-  \texttt{exchange($t_1$,$t_2$,$i$,$j$)} states that arrays $t_1$ and
-  $t_2$ differ only by the swapping of the two elements at indexes $i$
-  and $j$.
+Syntax for predicates is given Figure~\ref{fig:predicates}.
+Precedences are the following (from strongest to weakest): \te{not}, 
+\te{and}, \te{or}, implication, and \te{forall}. 
+Implication, conjunction and disjunction are right associative.
+Syntactic sugar: $t_1 ~ R_1 ~ t_2 ~ R_2 ~ t_3$ is equivalent to
+$t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$ for any relations
+$R_1$ and $R_2$. Example: \texttt{0 <= x < y} is \texttt{0 <= x and x
+  < y}.
 
-\item[\texttt{sub\_permut : int, int, int array, int array -> prop}] ~\par
-  \indextt{sub\_permut}
-  \texttt{sub\_permut($i$,$j$,$t_1$,$t_2$)} states that the sub-arrays
-  $t_1[i..j]$ and $t_2[i..j]$ are permutations of each other, the
-  other parts of these arrays being the same.
+Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
 
-\item[\texttt{permut : int array, int array -> prop}] ~\par
-  \indextt{permut}
-  \texttt{permut($t_1$,$t_2$)} states that the two arrays $t_1$ and
-  $t_2$ are permutations of each other.
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{term}\indexnt{term}
+    & $::=$ & \nt{constant} \\
+      & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
+      & $|$ & \te{-} \nt{term} \\
+      & $|$ & \nt{lab\_identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
+      & $|$ & \te{if} \nt{term} \te{then} \nt{term} \te{else} \nt{term} \\
+      & $|$ & \te{(} \nt{term} \te{)} \\
+  \\[0.1em]
 
-\item[\texttt{array\_id : int array, int array, int, int -> prop}] ~\par
-  \indextt{array\_id}
-  \texttt{array\_id($t_1$,$t_2$,i,j)} states that the two sub-arrays 
-  $t_1[i..j]$ and $t_2[i..j]$ are identical.
-\end{description}
+  \nt{constant}\indexnt{constant}
+    & $::=$ & \nt{integer-constant} \\
+      & $|$ & \nt{real-constant} \\
+      & $|$ & \te{true} \\
+      & $|$ & \te{false} \\
+      & $|$ & \te{void} \\
+  \\[0.1em]
+
+  \nt{arith\_op}\indexnt{arith\_op}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of terms}
+\label{fig:terms}
+\end{center}            
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{predicate}\indexnt{predicate}
+    & $::=$ & \te{true} \\
+      & $|$ & \te{false} \\
+      & $|$ & \nt{identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{term} \nt{relation} \nt{term} 
+              $[$ \nt{relation} \nt{term} $]$ \\
+      & $|$ & \nt{predicate} \te{->} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{<->} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
+      & $|$ & \te{not} \nt{predicate} \\
+      & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
+              \te{else} \nt{predicate} \\
+      & $|$ & \te{forall} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{primitive\_type}
+              \te{.} \nt{predicate} \\
+      & $|$ & \te{exists} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{primitive\_type}
+              \te{.} \nt{predicate} \\
+      & $|$ & \te{(} \nt{predicate} \te{)} \\
+      & $|$ & (\nt{identifier} $|$ \nt{string}) \te{:} \nt{predicate} \\
+  \\[0.1em]
+
+  \nt{primitive\_type}\indexnt{primitive\_type}
+    & $::=$ & \te{int} $|$ \te{bool} $|$ \te{real} $|$ 
+              \te{unit} $|$ \nt{identifier} $|$ \te{'} \nt{identifier} \\
+    & $|$ & \nt{primitive\_type} \nt{identifier} $|$ \te{(}
+    \nt{primitive\_type}\etoilesep{\te{,}} \te{)} \nt{identifier} \\
+  \\[0.1em]
+
+  \nt{relation}\indexnt{relation}
+    & $::=$ & \te{=} $|$ \te{<>} $|$ 
+              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of predicates}
+\label{fig:predicates}
+\end{center}            
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{l\_declaration}
+    & $::=$ & $[$ \te{external} $]$ \te{type} $[$ \nt{type\_parameters} $]$
+              \nt{identifier} \\\indextt{type} \indextt{external}
+      & $|$ & $[$ \te{external} $]$ \te{logic} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{logic\_type} \\\indextt{logic} \indextt{external}
+      & $|$ & \te{function} \nt{identifier}
+              \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
+              \te{)} \te{:} \nt{primitive\_type} \\
+          & & \te{=} \nt{term} \\ \indextt{function}
+      & $|$ & \te{predicate} \nt{identifier}
+              \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
+              \te{)} \te{=} \nt{predicate} \\ \indextt{predicate}
+      & $|$ & \te{axiom} \nt{identifier} \te{:} 
+              \nt{predicate} \\\indextt{axiom}
+      & $|$ & \te{goal} \nt{identifier} \te{:} 
+              \nt{predicate} \\\indextt{goal}
+   \\[0.1em]
+
+  \nt{logic\_type}
+    & $::=$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} \te{prop} 
+              \\ \indextt{prop}
+      & $|$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} 
+              \nt{primitive\_type} \\ \indextt{logic}
+   \\[0.1em]
+
+  \nt{logic\_arg\_type}
+    & $::=$ & \nt{primitive\_type} $|$ \nt{primitive\_type} \te{array} \\
+   \\[0.1em]
+
+   \nt{logic\_binder}
+    & $::=$ & \nt{identifier} \te{:} \nt{primitive\_type} \\
+   \\[0.1em]
+
+   \nt{type\_parameters}
+    & $::=$ & \te{'}\nt{identifier} $|$ 
+              \te{(} (\te{'}\nt{identifier})\plussep{\te{,}} \te{)}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of logic declarations}
+\label{fig:ldecl}
+\end{center}           
+\end{figure}
+
+\subsubsection{Programs}
+
+Syntax of types is given Figure~\ref{fig:types}.
+Syntax of annotated programs is given Figure~\ref{fig:caml}.
+Syntax of input files is given Figure~\ref{fig:input}.
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{simple\_value\_type}\indexnt{simple\_value\_type}
+    & $::=$ & \nt{primitive\_type} \\
+      & $|$ & \nt{primitive\_type} \te{ref} \\
+      & $|$ & \nt{primitive\_type} \te{array} \\
+      & $|$ & \te{(} \nt{value\_type} \te{)} \\
+  \\[0.1em]
+
+  \nt{value\_type}\indexnt{value\_type}
+    & $::=$ & \nt{simple\_value\_type} \\
+      & $|$ & \nt{simple\_value\_type} \te{->} \nt{computation\_type} \\
+      & $|$ & \nt{identifier} \te{:} \nt{simple\_value\_type} 
+              \te{->} \nt{computation\_type} \\
+  \\[0.1em]
+
+  \nt{computation\_type}\indexnt{computation\_type}
+    & $::=$ & \te{\{} $[$ \nt{precondition} $]$ \te{\}} \\
+      &     & $[$ \te{returns} \nt{identifier} \te{:} $]$ \nt{value\_type}
+              \nt{effects} \\
+      &     & \te{\{} $[$ \nt{postcondition} $]$ \te{\}} \\
+      & $|$ & \nt{value\_type} \\
+  \\[0.1em]
+
+  \nt{effects}
+    & $::=$ & $[$ \te{reads} \nt{identifier}\etoilesep{\te{,}} $]$
+              $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ 
+              $[$ \te{raises}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
+  \\[0.1em]
+
+  \nt{precondition}\indexnt{precondition}
+    & $::=$ & \nt{assertion} \\
+  \\[0.1em]
+
+  \nt{postcondition}\indexnt{postcondition}
+    & $::=$ & \nt{assertion} \nt{exn\_condition}\etoile \\
+  \\[0.1em]
+
+  \nt{exn\_condition} 
+    & $::=$ & \te{|} \nt{identifier} \te{=>} \nt{assertion} \\
+  \\[0.1em]
+
+  \nt{assertion} 
+    & $::=$ & \nt{predicate} $[$ \te{as} \nt{identifier} $]$ \\
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of types}
+\label{fig:types}
+\end{center}            
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{prog}\indexnt{prog}
+    & $::=$ & \nt{constant} \\
+      & $|$ & \nt{identifier} \\
+      & $|$ & \te{!} \nt{identifier} \\
+      & $|$ & \nt{identifier} \te{:=} \nt{prog} \\
+      & $|$ & \nt{identifier} \te{[} \nt{prog} \te{]} \\
+      & $|$ & \nt{identifier} \te{[} \nt{prog} \te{]} \te{:=} \nt{prog} \\
+      & $|$ & \nt{prog} \nt{infix} \nt{prog} \\
+      & $|$ & \nt{prefix} \nt{prog} \\
+      & $|$ & \te{let} \nt{identifier} \te{=} \nt{prog} 
+              \te{in} \nt{prog} \\
+      & $|$ & \te{let} \nt{identifier} \te{=} \te{ref} 
+              \nt{prog} \te{in} \nt{prog} \\
+      & $|$ & \te{if} \nt{prog} \te{then} \nt{prog}
+              $[$ \te{else} \nt{prog} $]$ \\
+      & $|$ & \te{while} \nt{prog} \te{do}
+              \nt{loop\_annot} \nt{prog} \te{done} \\
+      & $|$ & \nt{prog} \te{;} \nt{prog} \\
+      & $|$ & \nt{identifier} \te{:} \nt{prog} \\
+      & $|$ & \te{assert} (\te{\{} \nt{assertion} \te{\}})\plus\
+              \te{;} \nt{prog} \\
+      & $|$ & \nt{prog} \te{\{}\ \nt{postcondition} \te{\}} \\
+      & $|$ & \nt{prog} \te{\{\{}\ \nt{postcondition} \te{\}\}} \\
+      & $|$ & \te{fun} \nt{binders} \te{->} \nt{prog} \\
+      & $|$ & \te{let} \nt{identifier} \nt{binders} \te{=} \nt{prog} 
+              \te{in} \nt{prog} \\
+      & $|$ & \te{let} \te{rec} \nt{recfun} $[$ \te{in} \nt{prog} $]$ \\
+      & $|$ & \nt{prog} \nt{prog} \\
+      & $|$ & \te{raise} \nt{identifier} $[$ \te{:} \nt{value\_type} $]$ \\
+      & $|$ & \te{raise} \te{(} \nt{identifier} \nt{prog} \te{)}
+              $[$ \te{:} \nt{value\_type} $]$ \\
+      & $|$ & \te{try} \nt{prog} \te{with} 
+              \nt{handler}\plussep{\te{|}} \te{end} \\
+      & $|$ & \te{absurd} $[$ \te{:} \nt{value\_type} $]$ \\ \indextt{absurd}
+      & $|$ & \te{(} \nt{prog} \te{)} \\
+      & $|$ & \te{begin} \nt{prog} \te{end} \\
+  \\[0.1em]
+
+  \nt{infix}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} $|$ 
+              \te{=} $|$ \te{<>} $|$ 
+              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=} $|$
+              \te{||} $|$ \te{\&\&} \\
+  \nt{prefix}
+    & $::=$ & \te{-} $|$ \te{not} \\
+  \\[0.1em]
+
+  \nt{binders}\indexnt{binders}
+    & $::=$ & \te{(} \nt{identifier}\plussep{\te{,}} \te{:}
+              \nt{value\_type} \te{)}\plus \\
+  \\[0.1em]
+
+  \nt{recfun}
+    & $::=$ & \nt{identifier} \nt{binders} \te{:}
+              value\_type \\
+      &     & \te{\{} \te{variant} \nt{wf\_arg} \te{\}}
+              \te{=} \nt{prog} \\
+  \\[0.1em]
+
+  \nt{loop\_annot}
+    & $::=$ & \te{\{} \te{invariant} \nt{assertion} 
+              \te{variant} \nt{wf\_arg} \te{\}} \\
+  \\[0.1em]
+
+  \nt{wf\_arg} 
+    & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
+
+  \\[0.1em]
+
+  \nt{handler}\indexnt{handler}
+    & $::=$ & \nt{identifier} \te{->} \nt{prog} \\
+      & $|$ & \nt{identifier} \nt{identifier} \te{->} \nt{prog} \\
+  
+\end{tabular}\\
+\hrulefill\caption{Syntax of annotated programs}
+\label{fig:caml}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{file}
+    & $::=$ & \nt{declaration}\etoile\ \\
+  \\[0.1em]
+
+  \nt{declaration}
+    & $::=$ & \te{let} \nt{identifier} $[$ \nt{binders} $]$ \te{=} \nt{prog} \\
+      & $|$ & \te{let} \te{rec} \nt{recfun} \\
+      & $|$ & $[$ \te{external} $]$ 
+              \te{parameter} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{value\_type} \\ \indextt{parameter}\indextt{external}
+      & $|$ & \te{exception} \nt{identifier} 
+              $[$ \te{of} \nt{primitive\_type} $]$ \\ \indextt{exception}
+      & $|$ & \nt{l\_declaration}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of input files}
+\label{fig:input}
+\end{center}           
+\end{figure}
+
+\section{Semantics}
+
+
+\section{Prelude}
+\label{prelude}\index{Prelude}
+
+Apart from the type names \texttt{unit}, \texttt{bool}, \texttt{int},
+\texttt{real}, and the type constructor \texttt{ref}, nothing is
+built-in in the \why\ tool. But a prelude 
+file is read before considering the files given on the command
+line. The prelude file lies in \url{/usr/local/lib/why/prelude.why}
+(if your library path was not set differently).
+The interpretation of this prelude is prover-dependent. 
+It is possible not to load the prelude using the command-line option
+\texttt{--no-prelude}.
+The remaining of this section describes the contents of the prelude.
+
+{\small
+\verbatiminput{../lib/why/prelude.why}
+}
+
+\section{Provers specificities}
 
 \subsection{Coq}
 \label{lib:coq}\index{Coq library}
@@ -820,57 +1102,24 @@ Types are mapped as follows:
 \end{center}
 
 \paragraph{Arrays.} 
-Arrays are defined in module \texttt{WhyArrays}. Actually, they are
-mainly axiomatized; only the length is really represented.
-There are three axioms about arrays:
-\begin{displaymath}
-  \begin{array}{rl}
-    (\te{new\_def}) &
-    0 \le i < n \Rightarrow (\te{access} ~ (\te{new} ~ n ~ v_0) ~ i) = v_0 
-    \\[1em]
-    (\te{store\_def\_1}) &
-    0 \le i < (\te{array\_length} ~ t) \Rightarrow
-                    (\te{access} ~ (\te{store} ~ t ~ i ~ v) ~ i) = v
-    \\[1em]
-    (\te{store\_def\_2}) &
-    0 \le i < (\te{array\_length} ~ t) \Rightarrow
-    0 \le j < (\te{array\_length} ~ t) \Rightarrow \\ &
-                    i \not= j \Rightarrow
-                    (\te{access} ~ (\te{store} ~ t ~ i ~ v) ~ j) =
-                    (\te{access} ~ t ~ j)
-  \end{array}
-\end{displaymath}
-and one equality which is provable by convertibility:
-\begin{displaymath}
-  (\te{array\_length} ~ (\te{store} ~ t ~ i ~ v)) \equiv
-  (\te{array\_length} ~ t)
-\end{displaymath}
-
+Arrays are introduced in module \texttt{WhyArrays}. 
 Some tactics are provided to help the user simplifying array expressions
 in proof obligations:
 \begin{description}
-\item[\texttt{WhyArrays}] : repeatedly simplifies using
-  \texttt{store\_def\_1} and \texttt{array\_length}
-\item[\texttt{AccessSame}] : rewrites using \texttt{store\_def\_1},
-  simplifies with \texttt{WhyArrays} and attempts \texttt{Omega} on
+\item[\texttt{WhyArrays}] : repeatedly simplifies
+  \texttt{access}/\texttt{update}using combinations and
+  \texttt{array\_length} expressions
+\item[\texttt{AccessSame}] : rewrites
+  $\texttt{access}~(\mathtt{update}~t~i~v)~i$  into $v$,
+  simplifies with \texttt{WhyArrays} and attempts \texttt{omega} on
   every subgoal
-\item[\texttt{AccessOther}] : rewrites using \texttt{store\_def\_2},
-  simplifies with \texttt{WhyArrays} and attempts \texttt{Omega} on
+\item[\texttt{AccessOther}] : rewrites 
+    $\texttt{access}~(\mathtt{update}~t~i~v)~j$  into $\mathtt{access}~t~j$,
+  simplifies with \texttt{WhyArrays} and attempts \texttt{omega} on
   every subgoal
-\item[\texttt{ArraySubst} $t$] : similar to \texttt{Subst $t$}, with
+\item[\texttt{ArraySubst} $t$] : similar to \texttt{subst $t$}, with
   additional simplifications
 \end{description}
-
-The following table indicates in which \coq\ modules the predicates
-introduced in Section~\ref{lib:logic} are defined. See these modules
-to get the associated lemmas.
-\begin{center}
-  \begin{tabular}{rl}
-    \tt WhyPermut: & \tt exchange, sub\_permut, permut, array\_id \\
-    \tt WhySorted: & \tt sorted\_array
-  \end{tabular}
-\end{center}
-
 
 \subsection{PVS}
 \label{lib:pvs}\index{PVS library}
@@ -906,470 +1155,7 @@ indices to elements :
 \end{verbatim}
 Two other theories, \texttt{why\_int\_array\_pred} and
 \texttt{why\_array\_pred}, introduce the various predicates over
-arrays presented in Section~\ref{lib:logic}.
-
-
-\section{Logic syntax}
-\label{syntax:logic}\index{Logic!syntax}
-
-
-\subsection{Lexical conventions}
-\label{lexical:logic}\index{Lexical conventions!logic}
-
-Lexical conventions are the same as \caml's. 
-
-\paragraph{Comments.} Comments are opened with \texttt{(*}, closed
-with \texttt{*)} and can be nested.
-
-\paragraph{Identifiers.} Identifiers are made of letters, digits,
-the underscore character \texttt{\_} and the single quote \texttt{'},
-starting with a letter. Additionally, they can be qualified by a
-label (another identifier), using the \texttt{@} notation.
-
-\begin{center}
-\begin{tabular}{lrl}
-  \nt{identifier}\indexnt{identifier}
-    & $::=$ & \nt{letter} (\nt{letter} $|$ \te{0}..\te{9} $|$
-              \te{\_} $|$ \te{'})\etoile
-  \\[0.1em]
-  \nt{letter}
-    & $::=$ & \te{A}..\te{Z} $|$ \te{a}..\te{z}
-  \\[0.1em]
-  \nt{lab\_identifier}\indexnt{lab\_identifier}
-    & $::=$ & \nt{identifier} [ \te{@} \nt{identifier} ]
-\end{tabular}
-\end{center}
-
-
-\paragraph{Keywords.}
-
-Keywords of the logic are:
-\begin{center}
-{\tt\begin{tabular}{l@{\qquad}l@{\qquad}l}
-and & bool & else \\
-exists & false & real \\
-forall & if & int  \\
-not & or & then  \\
-true & unit & void
-\end{tabular}}
-\end{center}
-
-
-\subsection{Terms}
-\label{syntax:terms}\index{Term!syntax}
-
-Syntax of terms is given in Figure~\ref{fig:terms}.
-Arithmetical operations have usual precedences and are left associative.
-
-The conditional construct \texttt{if $t_1$ then $t_2$ else $t_3$} can
-be written in prefix notation as \texttt{if\_then\_else($t_1$, $t_2$,
-  $t_3$)}. $t_1$ must have type \texttt{bool}, and $t_2$ and $t_3$ must
-have the same type.
-
-\begin{figure}[htbp]
-\begin{center}
-\hrulefill\\
-\begin{tabular}{lrl}
-  \nt{term}\indexnt{term}
-    & $::=$ & \nt{constant} \\
-      & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
-      & $|$ & \te{-} \nt{term} \\
-      & $|$ & \nt{lab\_identifier} \\
-      & $|$ & \nt{lab\_identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
-      & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
-      & $|$ & \te{if} \nt{term} \te{then} \nt{term} \te{else} \nt{term} \\
-      & $|$ & \te{(} \nt{term} \te{)} \\
-  \\[0.1em]
-
-  \nt{constant}\indexnt{constant}
-    & $::=$ & \nt{integer-constant} \\
-      & $|$ & \nt{real-constant} \\
-      & $|$ & \te{true} \\
-      & $|$ & \te{false} \\
-      & $|$ & \te{void} \\
-  \\[0.1em]
-
-  \nt{arith\_op}\indexnt{arith\_op}
-    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%}
-\end{tabular}\\
-\hrulefill
-\caption{Syntax of terms}
-\label{fig:terms}
-\end{center}            
-\end{figure}
-
-
-\subsection{Predicates}
-\label{syntax:predicates}\index{Predicate!syntax}
-
-Syntax of predicates is given in Figure~\ref{fig:predicates}.
-It is a first-order quantifier-free syntax, independent from the \coq\
-and the \pvs\ ones.
-
-Precedences are the following (from strongest to weakest): \te{not}, 
-\te{and}, \te{or}, implication, and \te{forall}. 
-Implication, conjunction and disjunction are right associative.
-
-In the conditional construct \texttt{if $t$ then $p$ else $q$} the
-term $t$ must have type \texttt{bool}.
-
-Primitive types (non terminal \nt{primitive\_type}) are defined in
-Figure~\ref{fig:types}. 
-
-Syntactic sugar: $t_1 ~ R_1 ~ t_2 ~ R_2 ~ t_3$ is equivalent to
-$t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$ for any relations
-$R_1$ and $R_2$. Example: \texttt{0 <= x < y}.
-
-\begin{figure}[htbp]
-\begin{center}
-\hrulefill\\
-\begin{tabular}{lrl}
-  \nt{predicate}\indexnt{predicate}
-    & $::=$ & \te{true} \\
-      & $|$ & \te{false} \\
-      & $|$ & \nt{identifier} \\
-      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
-      & $|$ & \nt{term} \nt{relation} \nt{term} 
-              $[$ \nt{relation} \nt{term} $]$ \\
-      & $|$ & \nt{predicate} \te{->} \nt{predicate} \\
-      & $|$ & \nt{predicate} \te{<->} \nt{predicate} \\
-      & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
-      & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
-      & $|$ & \te{not} \nt{predicate} \\
-      & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
-              \te{else} \nt{predicate} \\
-      & $|$ & \te{forall} \nt{identifier} \te{:} \nt{primitive\_type}
-              \te{.} \nt{predicate} \\
-      & $|$ & \te{exists} \nt{identifier} \te{:} \nt{primitive\_type}
-              \te{.} \nt{predicate} \\
-      & $|$ & \te{(} \nt{predicate} \te{)} \\
-  \\[0.1em]
-
-  \nt{relation}\indexnt{relation}
-    & $::=$ & \te{=} $|$ \te{<>} $|$ 
-              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
-\end{tabular}\\
-\hrulefill
-\caption{Syntax of predicates}
-\label{fig:predicates}
-\end{center}            
-\end{figure}
-
-
-\section{Syntax}
-\label{syntax}\index{Program!syntax}
-
-\subsection{Lexical conventions}
-\label{lexical}\index{Lexical conventions}
-
-Lexical conventions are the same as for logic (see
-Section~\ref{lexical:logic} on page~\pageref{lexical:logic}).
-The set of keywords is now:
-\begin{center}
-{\tt\begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
-absurd & and & array & as & assert  \\
-begin & bool & do & done & else  \\
-end & exception & exists & external & false  \\
-real & for & forall & fun & if  \\
-in & int & invariant & label & let  \\
-logic & not & of & or & parameter \\
-prop & raise & raises & reads \\
-rec & ref & returns & then & true \\
-try & unit & variant & void & while \\
-with & writes
-\end{tabular}}
-\end{center}
-
-\subsection{Types}
-\label{syntax:types}\index{Type!syntax}
-
-Syntax of types is given in Figure~\ref{fig:types}.
-
-\begin{figure}[htbp]
-\begin{center}
-\hrulefill\\
-\begin{tabular}{lrl}
-  \nt{simple\_value\_type}\indexnt{simple\_value\_type}
-    & $::=$ & \nt{primitive\_type} \\
-      & $|$ & \nt{simple\_value\_type} \te{ref} \\
-      & $|$ & \nt{simple\_value\_type} \te{array} \\
-      & $|$ & \te{(} \nt{value\_type} \te{)} \\
-  \\[0.1em]
-
-  \nt{value\_type}\indexnt{value\_type}
-    & $::=$ & \nt{simple\_value\_type} \\
-      & $|$ & \nt{simple\_value\_type} \te{->} \nt{computation\_type} \\
-      & $|$ & \nt{identifier} \te{:} \nt{simple\_value\_type} 
-              \te{->} \nt{computation\_type} \\
-  \\[0.1em]
-
-  \nt{computation\_type}\indexnt{computation\_type}
-    & $::=$ & \te{\{} $[$ \nt{precondition} $]$ \te{\}} \\
-      &     & $[$ \te{returns} \nt{identifier} \te{:} $]$ \nt{value\_type}
-              \nt{effects} \\
-      &     & \te{\{} $[$ \nt{postcondition} $]$ \te{\}} \\
-      & $|$ & \nt{value\_type} \\
-  \\[0.1em]
-
-  \nt{effects}
-    & $::=$ & $[$ \te{reads} \nt{identifier}\etoilesep{\te{,}} $]$
-              $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ 
-              $[$ \te{raises}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
-  \\[0.1em]
-
-  \nt{primitive\_type}\indexnt{primitive\_type}
-    & $::=$ & \te{int} $|$ \te{bool} $|$ \te{real} $|$ 
-              \te{unit} $|$ \nt{identifier} $|$ \te{'} \nt{identifier} \\
-    & $|$ & \nt{primitive\_type} \nt{identifier} $|$ \te{(}
-    \nt{primitive\_type}\etoilesep{\te{,}} \te{)} \nt{identifier} \\
-  \\[0.1em]
-
-  \nt{precondition}\indexnt{precondition}
-    & $::=$ & \nt{assertion} \\
-  \\[0.1em]
-
-  \nt{postcondition}\indexnt{postcondition}
-    & $::=$ & \nt{assertion} \nt{exn\_condition}\etoile \\
-  \\[0.1em]
-
-  \nt{exn\_condition} 
-    & $::=$ & \te{|} \nt{identifier} \te{=>} \nt{assertion} \\
-  \\[0.1em]
-
-  \nt{assertion} 
-    & $::=$ & \nt{predicate} $[$ \te{as} \nt{identifier} $]$ \\
-\end{tabular}\\
-\hrulefill
-\caption{Syntax of types}
-\label{fig:types}
-\end{center}            
-\end{figure}
-
-
-\subsection{Expressions}
-\label{syntax:expr}\index{Expression!syntax}
-
-Syntax of annotated programs is given in Figure~\ref{fig:caml}.
-\begin{figure}[htbp]
-\begin{center}
-\hrulefill\\
-\begin{tabular}{lrl}
-  \nt{prog}\indexnt{prog}
-    & $::=$ & \te{\{} $[$ \nt{precondition} $]$ \te{\}}
-              \nt{prog} 
-              \te{\{} $[$ \nt{postcondition} $]$ \te{\}} \\
-      & $|$ & \nt{constant} \\
-      & $|$ & \nt{identifier} \\
-      & $|$ & \te{!} \nt{identifier} \\
-      & $|$ & \nt{identifier} \te{:=} \nt{prog} \\
-      & $|$ & \nt{identifier} \te{[} \nt{prog} \te{]} \\
-      & $|$ & \nt{identifier} \te{[} \nt{prog} \te{]} \te{:=} \nt{prog} \\
-      & $|$ & \nt{prog} \nt{infix} \nt{prog} \\
-      & $|$ & \nt{prefix} \nt{prog} \\
-      & $|$ & \te{let} \nt{identifier} \te{=} \te{ref} 
-              \nt{prog} \te{in} \nt{prog} \\
-      & $|$ & \te{if} \nt{prog} \te{then} \nt{prog}
-              $[$ \te{else} \nt{prog} $]$ \\
-      & $|$ & \te{while} \nt{prog} \te{do}
-              \nt{loop\_annot} \nt{block} \te{done} \\
-      & $|$ & \te{begin} \nt{block} \te{end} \\
-      & $|$ & \te{let} \nt{identifier} \te{=} \nt{prog} 
-              \te{in} \nt{prog} \\
-      & $|$ & \te{fun} \nt{binders} \te{->} \nt{prog} \\
-      & $|$ & \te{let} \te{rec} \nt{recfun} $[$ \te{in} \nt{prog} $]$ \\
-      & $|$ & \te{raise} \nt{identifier} $[$ \te{:} \nt{value\_type} $]$ \\
-      & $|$ & \te{raise} \te{(} \nt{identifier} \nt{prog} \te{)}
-              $[$ \te{:} \nt{value\_type} $]$ \\
-      & $|$ & \te{try} \nt{prog} \te{with} 
-              \nt{handler}\plussep{\te{|}} \te{end} \\
-      & $|$ & \te{absurd} $[$ \te{:} \nt{value\_type} $]$ \\ \indextt{absurd}
-      & $|$ & \te{(} \nt{prog}\plus\  \te{)} \\
-  \\[0.1em]
-
-  \nt{block}\indexnt{block}
-    & $::=$ & \nt{block\_statement}\plussep{\te{;}} \\
-  \\[0.1em]
-
-  \nt{block\_statement}
-    & $::=$ & \nt{prog} \\
-      & $|$ & \te{label} \nt{identifier} \\ \indextt{label}
-      & $|$ & \te{assert} \te{\{} \nt{assertion} \te{\}} \\ \indextt{assert}
-  \\[0.1em]
- 
-  \nt{infix}
-    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} $|$ 
-              \te{=} $|$ \te{<>} $|$ 
-              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=} $|$
-              \te{||} $|$ \te{\&\&} \\
-  \nt{prefix}
-    & $::=$ & \te{-} $|$ \te{not} \\
-  \\[0.1em]
-
-  \nt{binders}\indexnt{binders}
-    & $::=$ & \te{(} \nt{identifier}\plussep{\te{,}} \te{:}
-              \nt{value\_type} \te{)}\plus \\
-  \\[0.1em]
-
-  \nt{recfun}
-    & $::=$ & \nt{identifier} \nt{binders} \te{:}
-              value\_type \\
-      &     & \te{\{} \te{variant} \nt{wf\_arg} \te{\}}
-              \te{=} \nt{prog} \\
-  \\[0.1em]
-
-  \nt{loop\_annot}
-    & $::=$ & \te{\{} \te{invariant} \nt{assertion} 
-              \te{variant} \nt{wf\_arg} \te{\}} \\
-  \\[0.1em]
-
-  \nt{wf\_arg} 
-    & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
-
-  \\[0.1em]
-
-  \nt{handler}\indexnt{handler}
-    & $::=$ & \nt{identifier} \te{->} \nt{prog} \\
-      & $|$ & \nt{identifier} \nt{identifier} \te{->} \nt{prog} \\
-  
-\end{tabular}\\
-\hrulefill
-\caption{Syntax of annotated programs}
-\label{fig:caml}
-\end{center}
-\end{figure}
-
-
-\subsection{Files}
-\label{syntax:files}\index{File!syntax}
-
-Syntax of input files is given in Figure~\ref{fig:input}.
-
-\begin{figure}[htbp]
-\begin{center}
-\hrulefill\\
-\begin{tabular}{lrl}
-  \nt{file}
-    & $::=$ & \nt{declaration}\etoile\ \\
-  \\[0.1em]
-
-  \nt{declaration}
-    & $::=$ & \te{let} \nt{identifier} $[$ \nt{binders} $]$ \te{=} \nt{prog} \\
-      & $|$ & \te{let} \te{rec} \nt{recfun} \\
-      & $|$ & $[$ \te{external} $]$ 
-              \te{parameter} \nt{identifier}\plussep{\te{,}}
-              \te{:} \nt{value\_type} \\ \indextt{parameter}\indextt{external}
-      & $|$ & \te{exception} \nt{identifier} 
-              $[$ \te{of} \nt{primitive\_type} $]$ \\ \indextt{exception}
-      & $|$ & $[$ \te{external} $]$ \te{logic} \nt{identifier}\plussep{\te{,}}
-              \te{:} \nt{logic\_type} \\\indextt{logic} \indextt{external}
-      & $|$ & \te{axiom} \nt{identifier} \te{:} \nt{predicate} \\
-      & $|$ & \te{predicate} \nt{identifier}
-              \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
-              \te{)} \te{=} \nt{predicate} \\ \indextt{predicate}
-      & $|$ & \te{function} \nt{identifier}
-              \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
-              \te{)} \te{:} \nt{primitive\_type} 
-              \te{=} \nt{term} \\ \indextt{function}
-   \\[0.1em]
-
-  \nt{logic\_type}
-    & $::=$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} \te{prop} 
-              \\ \indextt{prop}
-      & $|$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} 
-              \nt{primitive\_type} \\ \indextt{logic}
-   \\[0.1em]
-
-  \nt{logic\_arg\_type}
-    & $::=$ & \nt{primitive\_type} $|$ \nt{primitive\_type} \te{array} \\
-   \\[0.1em]
-
-   \nt{logic\_binder}
-    & $::=$ & \nt{identifier} \te{:} \nt{primitive\_type} \\
-\end{tabular}\\
-\hrulefill
-\caption{Syntax of files}
-\label{fig:input}
-\end{center}           
-\end{figure}
-
-\section{Predefined functions}
-
-These are the functions predefined in \why:
-\begin{description}
-\item[\texttt{add\_int, sub\_int, mul\_int, div\_int, mod\_int : int
-    -> int -> int}] ~\par
-  Correspond to the infix symbols
-  \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} and \texttt{\%}.
-
-\item[\texttt{neg\_int : int -> int}] ~\par
-  Correponds to the prefix symbol \texttt{-}.
-
-\item[\texttt{add\_real, sub\_real, mul\_real, div\_real,
-    : real -> real -> real}] ~\par
-  Correspond to the infix symbols
-  \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
-
-\item[\texttt{neg\_real, sqrt\_real : real -> real}] ~\par
-  \texttt{neg\_real} correponds to the prefix symbol \texttt{-}.
-
-\item[\texttt{real\_of\_int : int -> real}]
-
-\item[\texttt{lt\_int : x:int -> y:int -> \{\} bool \{if result then x
-    < y else x >= y\}}] ~\par
-\item[\texttt{le\_int : x:int -> y:int -> \{\} bool \{if result then x
-    <= y else x > y\}}] ~\par
-\item[\texttt{gt\_int : x:int -> y:int -> \{\} bool \{if result then x
-    > y else x <= y\}}] ~\par
-\item[\texttt{ge\_int : x:int -> y:int -> \{\} bool \{if result then x
-    >= y else x < y\}}] ~\par
-\item[\texttt{eq\_int : x:int -> y:int -> \{\} bool \{if result then x
-    = y else x <> y\}}] ~\par
-\item[\texttt{neq\_int : x:int -> y:int -> \{\} bool \{if result then x
-    <> y else x = y\}}] ~\par
-  Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
-  \texttt{>=}, \texttt{=} and \texttt{<>}.
-
-\item[\texttt{lt\_real, le\_real, gt\_real, ge\_real, eq\_real,
-    neq\_real}] ~\par
-  As for integers.
-
-\item[\texttt{eq\_bool, neq\_bool, eq\_unit, neq\_unit}] ~\par
-  As for integers.
-
-\end{description}
-
-
-\section{Semantics}
-\label{semantics}\index{Program!semantics}
-
-Semantics of ML programs conforms to \caml's one.
-More precisely, it obeys the following rules:
-\begin{itemize}
-\item 
-  Logical connective \texttt{\&\&} and \texttt{||} are lazy and
-  evaluated from left to right: in $e_1$ \texttt{\&\&} $e_2$, $e_1$ is
-  evaluated first and, if \texttt{true}, then $e_2$ is evaluated; in
-  $e_1$ \texttt{||} $e_2$, $e_1$ is evaluated first and, if
-  \texttt{false}, then $e_2$ is evaluated.
-  Stated otherwise, the following identities hold:
-  \begin{displaymath}
-    \begin{array}{rcl}
-      e_1 ~ \te{\&\&} ~ e_2 & \approx & 
-      \te{if} ~ e_1 ~ \te{then} ~ e_2 ~ \te{else false} \\[0.5em]
-      e_1 ~ \te{||} ~ e_2 & \approx & 
-      \te{if} ~ e_1 ~ \te{then true else} ~ e_2
-    \end{array}
-  \end{displaymath}
-\item
-  In a function call, the argument is evaluated first, then the
-  function; consequently multiple arguments are evaluated from right
-  to left. This applies to all infix operators, except
-  \texttt{\&\&} and \texttt{||}.
-\item
-  In array assignment $t$\texttt{[}$e_2$\texttt{] :=} $e_1$,
-  expression $e_1$ is evaluated first, then expression $e_2$.
-\end{itemize}
-
+arrays presented in Section~\ref{prelude}.
 
 
 \nocite{*}

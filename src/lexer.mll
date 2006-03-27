@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: lexer.mll,v 1.4 2006-01-18 09:40:41 filliatr Exp $ *)
+(* $Id: lexer.mll,v 1.5 2006-03-27 09:49:56 filliatr Exp $ *)
 
 {
   open Lexing
@@ -49,7 +49,6 @@
 	"in", IN;
 	"int", INT;
 	"invariant", INVARIANT;
-	"label", LABEL;
 	"let", LET;
 	"logic", LOGIC;
 	"not", NOT;

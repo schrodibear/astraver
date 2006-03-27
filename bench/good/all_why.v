@@ -119,6 +119,14 @@ intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma c2_po_1 : 
+  forall (v1: bool),
+  (if v1 then True else True).
+Proof.
+destruct v1; intuition.
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma arr1_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
