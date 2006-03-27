@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.49 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.50 2006-03-27 14:22:05 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -77,6 +77,7 @@ val isabelle_base_theory : string
 
 val no_simplify_prelude : bool
 val no_harvey_prelude : bool
+val no_zenon_prelude : bool
 val no_cvcl_prelude : bool
 val simplify_typing : bool
 

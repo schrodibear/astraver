@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.59 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.60 2006-03-27 14:22:05 filliatr Exp $ i*)
 
 open Format
 
@@ -35,6 +35,7 @@ let no_simplify_prelude_ = ref false
 let no_cvcl_prelude_ = ref false
 let simplify_typing_ = ref false
 let no_harvey_prelude_ = ref false
+let no_zenon_prelude_ = ref false
 let werror_ = ref false
 let dir_ = ref ""
 let white_ = ref false
@@ -138,6 +139,7 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
+  --no-prelude       do not read the prelude file (prelude.why)
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
@@ -178,6 +180,10 @@ Simplify-specific options:
               suppress the Simplify prelude (BG_PUSHs for Why's symbols)
   --simplify-typing
               add typing constraints for each abstract type
+
+Zenon-specific options:
+  --no-zenon-prelude
+              suppress the Zenon prelude
 
 Mizar-specific options:
   --mizar-environ <text>
@@ -268,6 +274,8 @@ let files =
 	no_cvcl_prelude_ := true; parse args
     | ("--no-harvey-prelude" | "-no-harvey-prelude") :: args ->
 	no_harvey_prelude_ := true; parse args
+    | ("--no-zenon-prelude" | "-no-zenon-prelude") :: args ->
+	no_zenon_prelude_ := true; parse args
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
 	ocaml_annot_ := true; parse args
@@ -343,6 +351,7 @@ let no_simplify_prelude = !no_simplify_prelude_
 let no_cvcl_prelude = !no_cvcl_prelude_
 let simplify_typing = !simplify_typing_
 let no_harvey_prelude = !no_harvey_prelude_
+let no_zenon_prelude = !no_zenon_prelude_
 let wol = !wol_
 let werror = !werror_
 let dir = !dir_

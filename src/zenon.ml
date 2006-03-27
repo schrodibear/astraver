@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.12 2006-03-27 09:49:56 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.13 2006-03-27 14:22:05 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -334,7 +334,7 @@ let print_elem fmt = function
 
 let prelude_done = ref false
 let prelude fmt = 
-  if not !prelude_done then begin
+  if not !prelude_done && not no_zenon_prelude then begin
     prelude_done := true;
     fprintf fmt "
 ;; Zenon prelude
