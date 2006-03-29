@@ -34,11 +34,11 @@
   let create_default_config () = 
     if not (Sys.file_exists config_file) then begin
       let out_channel = open_out config_file in
-      output_string out_channel "prover = \"Simplify\"";
-      output_string out_channel "cache = \"true\"";
-      output_string out_channel "timeout = \"10\"";
-      output_string out_channel "hard_proof = \"true\"";
-      output_string out_channel "live_update = \"false\"";
+      output_string out_channel "prover = \"Simplify\"\n";
+      output_string out_channel "cache = \"true\"\n";
+      output_string out_channel "timeout = \"10\"\n";
+      output_string out_channel "hard_proof = \"true\"\n";
+      output_string out_channel "live_update = \"false\"\n";
       try close_out out_channel
       with Sys_error s -> prerr_string s
     end

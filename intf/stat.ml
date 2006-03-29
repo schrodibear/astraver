@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.29 2006-03-29 08:25:37 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.30 2006-03-29 08:38:42 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -130,7 +130,7 @@ let set_prover p = default_prover := p
 let print_prover p = p.Model.pr_name
 let get_prover s = 
   let rec next = function
-    | [] -> assert false; raise Not_found
+    | [] -> raise Not_found
     | p' :: r -> if p'.Model.pr_name = s then p' else next r
   in next Model.provers
 
@@ -824,6 +824,7 @@ let set_loaded_config () =
 (* Main *)
 let _ = 
   ignore (GtkMain.Main.init ());
+  Config.create_default_config ();
   Config.load ();
   set_loaded_config ();
   if not is_caduceus then Pprinter.desactivate ();

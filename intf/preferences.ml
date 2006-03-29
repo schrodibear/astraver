@@ -124,7 +124,6 @@ let color () =
 (* Main *)
 let show window_type () = 
   ignore (GtkMain.Main.init ());
-  Config.create_default_config ();
   (match window_type with
      | Preferences -> preferences ()
      | Color -> color ()
