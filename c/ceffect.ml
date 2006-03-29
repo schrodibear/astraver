@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.116 2006-02-23 12:49:32 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.117 2006-03-29 14:20:31 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -870,17 +870,24 @@ let rec invariant_for_constant loc t lvalue initializers =
 	  else
 	    let ts = (noattr loc c_int 
 			(NTconstant (IntConstant (Int64.to_string i)))) in
-	    let info = make_field ty in
-	    let info = declare_arrow_var info in
-	    let zone = find_zone_for_term lvalue in
+	    let shift = 
+	      noattr loc 
+		{ty with Ctypes.ctype_node = (Tpointer (false,ty)) }
+		(NTbinop (lvalue,Clogic.Badd, ts))
+	    in
+	    let e =
+	      match ty.Ctypes.ctype_node with
+		| Tstruct _ | Tunion _ -> shift
+		| _ ->
+		    let info = make_field ty in
+		    let info = declare_arrow_var info in
+		    let zone = find_zone_for_term lvalue in
+		    noattr loc ty 
+		      (NTarrow
+			 (shift, info.var_why_type,zone,info))
+	    in
 	    let (b,init') = 
-	       invariant_for_constant loc ty 
-		(noattr loc ty 
-		   (NTarrow 
-		      ((noattr loc 
-			 {ty with Ctypes.ctype_node = (Tpointer (false,ty)) }
-			 (NTbinop (lvalue,Clogic.Badd, ts))),
-		   info.var_why_type,zone,info))) init 
+	      invariant_for_constant loc ty e init 
 	    in
 	    init_cells (Int64.add i Int64.one) (npand (block,b),init')
 	in

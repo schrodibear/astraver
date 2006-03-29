@@ -10,10 +10,7 @@ Require Export invariants_spec_why.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -22,7 +19,7 @@ Require Export invariants_spec_why.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -44,10 +41,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -56,7 +50,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -80,10 +74,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -92,7 +83,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -116,10 +107,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -128,7 +116,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -150,10 +138,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -162,7 +147,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -180,10 +165,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -192,7 +174,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -210,10 +192,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -222,7 +201,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -240,10 +219,7 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: ((* File "invariants.c", line 11, characters 14-18 *) n >= 0 /\
                 (* File "invariants.c", line 9, characters 25-33 *)
@@ -252,7 +228,7 @@ Save.
                 (acc x_s_5 s) /\ (acc x_s_5 s) <= (acc y_s_5 s)) /\
                 (acc y_s_5 s) <= 100)) /\ (valid alloc s) /\
                 (constant_c intM_c_6 c alloc) /\ (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (constant_s y_s_5 x_s_5 s alloc)),
   forall (result: Z),
   forall (HW_2: result = (acc x_s_5 s)),
   forall (result0: Z),
@@ -269,14 +245,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
-                (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (valid_range alloc c 0 1) /\ (constant_s y_s_5 x_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -300,14 +272,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
-                (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (valid_range alloc c 0 1) /\ (constant_s y_s_5 x_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -330,14 +298,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
-                (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (valid_range alloc c 0 1) /\ (constant_s y_s_5 x_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),
@@ -360,14 +324,10 @@ Save.
   forall (c: ((pointer) c_6)),
   forall (intM_c_6: ((memory) Z c_6)),
   forall (s: ((pointer) s_5)),
-  forall (sPM_s_5: ((memory) ((pointer) sPM_7) s_5)),
-  forall (x_sPM_7: ((memory) Z sPM_7)),
   forall (x_s_5: ((memory) Z s_5)),
-  forall (y_sPM_7: ((memory) Z sPM_7)),
   forall (y_s_5: ((memory) Z s_5)),
   forall (HW_1: (valid alloc s) /\ (constant_c intM_c_6 c alloc) /\
-                (valid_range alloc c 0 1) /\
-                (constant_s y_sPM_7 x_sPM_7 sPM_s_5 s alloc)),
+                (valid_range alloc c 0 1) /\ (constant_s y_s_5 x_s_5 s alloc)),
   forall (x_s_5_0: ((memory) Z s_5)),
   forall (HW_2: x_s_5_0 = (upd x_s_5 s 0)),
   forall (y_s_5_0: ((memory) Z s_5)),

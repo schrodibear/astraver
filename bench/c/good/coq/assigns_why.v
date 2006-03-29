@@ -3,11 +3,11 @@ Require Export assigns_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_1 : 
-  forall (A734:Set),
-  forall (p: ((pointer) A734)),
+  forall (A751:Set),
+  forall (p: ((pointer) A751)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A734)),
+  forall (intM_p_2: ((memory) Z A751)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   (not_assigns alloc intM_p_2 intM_p_2
@@ -18,8 +18,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_2 : 
-  forall (A735:Set),
-  forall (p: ((pointer) A735)),
+  forall (A752:Set),
+  forall (p: ((pointer) A752)),
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
@@ -31,8 +31,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_3 : 
-  forall (A736:Set),
-  forall (p: ((pointer) A736)),
+  forall (A753:Set),
+  forall (p: ((pointer) A753)),
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
@@ -45,8 +45,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_4 : 
-  forall (A737:Set),
-  forall (p: ((pointer) A737)),
+  forall (A754:Set),
+  forall (p: ((pointer) A754)),
   forall (size: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
@@ -61,11 +61,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_5 : 
-  forall (A738:Set),
-  forall (p: ((pointer) A738)),
+  forall (A755:Set),
+  forall (p: ((pointer) A755)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A738)),
+  forall (intM_p_2: ((memory) Z A755)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -73,8 +73,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A738)),
-  forall (mutable_p: ((pointer) A738)),
+  forall (intM_p_2_0: ((memory) Z A755)),
+  forall (mutable_p: ((pointer) A755)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0
@@ -95,11 +95,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_6 : 
-  forall (A739:Set),
-  forall (p: ((pointer) A739)),
+  forall (A756:Set),
+  forall (p: ((pointer) A756)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A739)),
+  forall (intM_p_2: ((memory) Z A756)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -107,8 +107,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A739)),
-  forall (mutable_p: ((pointer) A739)),
+  forall (intM_p_2_0: ((memory) Z A756)),
+  forall (mutable_p: ((pointer) A756)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0
@@ -120,11 +120,11 @@ Save.
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   forall (HW_6: (valid alloc mutable_p)),
-  forall (intM_p_2_1: ((memory) Z A739)),
+  forall (intM_p_2_1: ((memory) Z A756)),
   forall (HW_7: intM_p_2_1 = (upd intM_p_2_0 mutable_p 0)),
-  forall (result: ((pointer) A739)),
+  forall (result: ((pointer) A756)),
   forall (HW_8: result = (shift mutable_p 1)),
-  forall (mutable_p0: ((pointer) A739)),
+  forall (mutable_p0: ((pointer) A756)),
   forall (HW_9: mutable_p0 = result),
   (not_assigns alloc intM_p_2 intM_p_2_1
    (pset_range (pset_singleton p) 0 (size - 1))).
@@ -141,11 +141,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_7 : 
-  forall (A740:Set),
-  forall (p: ((pointer) A740)),
+  forall (A757:Set),
+  forall (p: ((pointer) A757)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A740)),
+  forall (intM_p_2: ((memory) Z A757)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -153,8 +153,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A740)),
-  forall (mutable_p: ((pointer) A740)),
+  forall (intM_p_2_0: ((memory) Z A757)),
+  forall (mutable_p: ((pointer) A757)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0
@@ -166,11 +166,11 @@ Save.
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   forall (HW_6: (valid alloc mutable_p)),
-  forall (intM_p_2_1: ((memory) Z A740)),
+  forall (intM_p_2_1: ((memory) Z A757)),
   forall (HW_7: intM_p_2_1 = (upd intM_p_2_0 mutable_p 0)),
-  forall (result: ((pointer) A740)),
+  forall (result: ((pointer) A757)),
   forall (HW_8: result = (shift mutable_p 1)),
-  forall (mutable_p0: ((pointer) A740)),
+  forall (mutable_p0: ((pointer) A757)),
   forall (HW_9: mutable_p0 = result),
   0 <= mutable_size0.
 Proof.
@@ -179,11 +179,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_8 : 
-  forall (A741:Set),
-  forall (p: ((pointer) A741)),
+  forall (A758:Set),
+  forall (p: ((pointer) A758)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A741)),
+  forall (intM_p_2: ((memory) Z A758)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -191,8 +191,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A741)),
-  forall (mutable_p: ((pointer) A741)),
+  forall (intM_p_2_0: ((memory) Z A758)),
+  forall (mutable_p: ((pointer) A758)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0
@@ -204,11 +204,11 @@ Save.
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   forall (HW_6: (valid alloc mutable_p)),
-  forall (intM_p_2_1: ((memory) Z A741)),
+  forall (intM_p_2_1: ((memory) Z A758)),
   forall (HW_7: intM_p_2_1 = (upd intM_p_2_0 mutable_p 0)),
-  forall (result: ((pointer) A741)),
+  forall (result: ((pointer) A758)),
   forall (HW_8: result = (shift mutable_p 1)),
-  forall (mutable_p0: ((pointer) A741)),
+  forall (mutable_p0: ((pointer) A758)),
   forall (HW_9: mutable_p0 = result),
   mutable_size0 <= size.
 Proof.
@@ -217,11 +217,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_9 : 
-  forall (A742:Set),
-  forall (p: ((pointer) A742)),
+  forall (A759:Set),
+  forall (p: ((pointer) A759)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A742)),
+  forall (intM_p_2: ((memory) Z A759)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -229,8 +229,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A742)),
-  forall (mutable_p: ((pointer) A742)),
+  forall (intM_p_2_0: ((memory) Z A759)),
+  forall (mutable_p: ((pointer) A759)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0
@@ -242,11 +242,11 @@ Save.
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   forall (HW_6: (valid alloc mutable_p)),
-  forall (intM_p_2_1: ((memory) Z A742)),
+  forall (intM_p_2_1: ((memory) Z A759)),
   forall (HW_7: intM_p_2_1 = (upd intM_p_2_0 mutable_p 0)),
-  forall (result: ((pointer) A742)),
+  forall (result: ((pointer) A759)),
   forall (HW_8: result = (shift mutable_p 1)),
-  forall (mutable_p0: ((pointer) A742)),
+  forall (mutable_p0: ((pointer) A759)),
   forall (HW_9: mutable_p0 = result),
   mutable_p0 = (shift p (size - mutable_size0)).
 Proof.
@@ -262,11 +262,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_10 : 
-  forall (A743:Set),
-  forall (p: ((pointer) A743)),
+  forall (A760:Set),
+  forall (p: ((pointer) A760)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A743)),
+  forall (intM_p_2: ((memory) Z A760)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -274,8 +274,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A743)),
-  forall (mutable_p: ((pointer) A743)),
+  forall (intM_p_2_0: ((memory) Z A760)),
+  forall (mutable_p: ((pointer) A760)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0
@@ -287,11 +287,11 @@ Save.
   forall (HW_4: mutable_size0 = (mutable_size - 1)),
   forall (HW_5: mutable_size <> 0),
   forall (HW_6: (valid alloc mutable_p)),
-  forall (intM_p_2_1: ((memory) Z A743)),
+  forall (intM_p_2_1: ((memory) Z A760)),
   forall (HW_7: intM_p_2_1 = (upd intM_p_2_0 mutable_p 0)),
-  forall (result: ((pointer) A743)),
+  forall (result: ((pointer) A760)),
   forall (HW_8: result = (shift mutable_p 1)),
-  forall (mutable_p0: ((pointer) A743)),
+  forall (mutable_p0: ((pointer) A760)),
   forall (HW_9: mutable_p0 = result),
   (Zwf 0 mutable_size0 mutable_size).
 Proof.
@@ -300,11 +300,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma erase_impl_po_11 : 
-  forall (A744:Set),
-  forall (p: ((pointer) A744)),
+  forall (A761:Set),
+  forall (p: ((pointer) A761)),
   forall (size: Z),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A744)),
+  forall (intM_p_2: ((memory) Z A761)),
   forall (HW_1: (* File "assigns.c", line 4, characters 14-51 *) (size >=
                 0 /\ (valid_range alloc p 0 (size - 1)))),
   forall (HW_2: (alloc = alloc /\
@@ -312,8 +312,8 @@ Save.
                  (pset_range (pset_singleton p) 0 (size - 1)))) /\
                 (* File "assigns.c", line 8, characters 7-64 *) ((0 <=
                 size /\ size <= size) /\ p = (shift p (size - size)))),
-  forall (intM_p_2_0: ((memory) Z A744)),
-  forall (mutable_p: ((pointer) A744)),
+  forall (intM_p_2_0: ((memory) Z A761)),
+  forall (mutable_p: ((pointer) A761)),
   forall (mutable_size: Z),
   forall (HW_3: (alloc = alloc /\
                 (not_assigns alloc intM_p_2 intM_p_2_0

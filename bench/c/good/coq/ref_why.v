@@ -12,11 +12,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A741:Set),
+  forall (A761:Set), forall (A762:Set), forall (A763:Set), forall (A764:Set),
+  forall (A765:Set), forall (A766:Set), forall (A767:Set), forall (A768:Set),
   forall (alloc: alloc_table),
-  forall (intM_i_3: ((memory) Z A741)),
+  forall (intM_i_3: ((memory) Z A768)),
   forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) A741)),
+  forall (result: ((pointer) A768)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
@@ -25,7 +26,7 @@ Save.
                 (alloc_stack result alloc alloc0)),
   forall (HW_3: (* File "ref.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
-  forall (intM_i_3_0: ((memory) Z A741)),
+  forall (intM_i_3_0: ((memory) Z A768)),
   forall (HW_4: (* File "ref.c", line 6, characters 13-20 *)
                 (acc intM_i_3_0 result) = 1 /\
                 (not_assigns alloc0 intM_i_3 intM_i_3_0
@@ -40,11 +41,12 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
-  forall (A742:Set),
+  forall (A769:Set), forall (A770:Set), forall (A771:Set), forall (A772:Set),
+  forall (A773:Set), forall (A774:Set), forall (A775:Set), forall (A776:Set),
   forall (alloc: alloc_table),
-  forall (intM_i_3: ((memory) Z A742)),
+  forall (intM_i_3: ((memory) Z A776)),
   forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) A742)),
+  forall (result: ((pointer) A776)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
@@ -53,7 +55,7 @@ Save.
                 (alloc_stack result alloc alloc0)),
   forall (HW_3: (* File "ref.c", line 4, characters 14-23 *)
                 (valid alloc0 result)),
-  forall (intM_i_3_0: ((memory) Z A742)),
+  forall (intM_i_3_0: ((memory) Z A776)),
   forall (HW_4: (* File "ref.c", line 6, characters 13-20 *)
                 (acc intM_i_3_0 result) = 1 /\
                 (not_assigns alloc0 intM_i_3 intM_i_3_0
@@ -76,13 +78,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (A743:Set),
-  forall (p: ((pointer) A743)),
+  forall (A777:Set),
+  forall (p: ((pointer) A777)),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A743)),
+  forall (intM_p_2: ((memory) Z A777)),
   forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_p_2_0: ((memory) Z A743)),
+  forall (intM_p_2_0: ((memory) Z A777)),
   forall (HW_3: intM_p_2_0 = (upd intM_p_2 p 1)),
   (* File "ref.c", line 6, characters 13-20 *) (acc intM_p_2_0 p) = 1.
 Proof.
@@ -91,13 +93,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
-  forall (A744:Set),
-  forall (p: ((pointer) A744)),
+  forall (A778:Set),
+  forall (p: ((pointer) A778)),
   forall (alloc: alloc_table),
-  forall (intM_p_2: ((memory) Z A744)),
+  forall (intM_p_2: ((memory) Z A778)),
   forall (HW_1: (* File "ref.c", line 4, characters 14-23 *) (valid alloc p)),
   forall (HW_2: (valid alloc p)),
-  forall (intM_p_2_0: ((memory) Z A744)),
+  forall (intM_p_2_0: ((memory) Z A778)),
   forall (HW_3: intM_p_2_0 = (upd intM_p_2 p 1)),
   (not_assigns alloc intM_p_2 intM_p_2_0 (pset_singleton p)).
 Proof.

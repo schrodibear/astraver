@@ -5,30 +5,25 @@ Require Export separation3_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_1 : 
-  forall (LPM_l_12: ((memory) ((pointer) LPM_30) l_12)),
-  forall (SPM_p_3: ((memory) ((pointer) SPM_28) p_3)),
-  forall (a_SPM_28: ((memory) Z SPM_28)),
+  forall (a_p_3: ((memory) Z p_3)),
   forall (a_q_2: ((memory) Z q_2)),
   forall (alloc: alloc_table),
-  forall (b_SPM_28: ((memory) ((pointer) b_0) SPM_28)),
   forall (b_p_3: ((memory) ((pointer) b_0) p_3)),
   forall (b_q_2: ((memory) ((pointer) b_0) q_2)),
-  forall (c_SPM_28: ((memory) ((pointer) c_1) SPM_28)),
+  forall (c_p_3: ((memory) ((pointer) c_1) p_3)),
   forall (c_q_2: ((memory) ((pointer) c_1) q_2)),
   forall (intM_b_0: ((memory) Z b_0)),
   forall (intM_c_1: ((memory) Z c_1)),
   forall (intM_r_4: ((memory) Z r_4)),
   forall (l: ((pointer) l_12)),
-  forall (p_LPM_30: ((memory) ((pointer) p_3) LPM_30)),
   forall (p_l_12: ((memory) ((pointer) p_3) l_12)),
-  forall (q_LPM_30: ((memory) ((pointer) q_2) LPM_30)),
-  forall (r_LPM_30: ((memory) ((pointer) r_4) LPM_30)),
+  forall (q_l_12: ((memory) ((pointer) q_2) l_12)),
+  forall (r_l_12: ((memory) ((pointer) r_4) l_12)),
   forall (s0: ((pointer) p_3)),
-  forall (HW_1: (constant_l r_LPM_30 q_LPM_30 p_LPM_30 LPM_l_12 intM_r_4
-                 c_q_2 b_q_2 a_q_2 intM_c_1 intM_b_0 l alloc) /\
+  forall (HW_1: (constant_l r_l_12 q_l_12 p_l_12 intM_r_4 c_q_2 b_q_2 a_q_2
+                 intM_c_1 intM_b_0 l alloc) /\
                 (valid alloc l) /\ (valid alloc s0) /\
-                (constant_s0 c_SPM_28 b_SPM_28 a_SPM_28 SPM_p_3 intM_c_1
-                 intM_b_0 s0 alloc) /\
+                (constant_s0 c_p_3 b_p_3 a_p_3 intM_c_1 intM_b_0 s0 alloc) /\
                 (valid1 b_p_3) /\ (valid1_range b_p_3 5)),
   forall (result: ((pointer) b_0)),
   forall (HW_2: result = (acc b_p_3 s0)),
@@ -49,30 +44,25 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f2_impl_po_2 : 
-  forall (LPM_l_12: ((memory) ((pointer) LPM_30) l_12)),
-  forall (SPM_p_3: ((memory) ((pointer) SPM_28) p_3)),
-  forall (a_SPM_28: ((memory) Z SPM_28)),
+  forall (a_p_3: ((memory) Z p_3)),
   forall (a_q_2: ((memory) Z q_2)),
   forall (alloc: alloc_table),
-  forall (b_SPM_28: ((memory) ((pointer) b_0) SPM_28)),
   forall (b_p_3: ((memory) ((pointer) b_0) p_3)),
   forall (b_q_2: ((memory) ((pointer) b_0) q_2)),
-  forall (c_SPM_28: ((memory) ((pointer) c_1) SPM_28)),
+  forall (c_p_3: ((memory) ((pointer) c_1) p_3)),
   forall (c_q_2: ((memory) ((pointer) c_1) q_2)),
   forall (intM_b_0: ((memory) Z b_0)),
   forall (intM_c_1: ((memory) Z c_1)),
   forall (intM_r_4: ((memory) Z r_4)),
   forall (l: ((pointer) l_12)),
-  forall (p_LPM_30: ((memory) ((pointer) p_3) LPM_30)),
   forall (p_l_12: ((memory) ((pointer) p_3) l_12)),
-  forall (q_LPM_30: ((memory) ((pointer) q_2) LPM_30)),
-  forall (r_LPM_30: ((memory) ((pointer) r_4) LPM_30)),
+  forall (q_l_12: ((memory) ((pointer) q_2) l_12)),
+  forall (r_l_12: ((memory) ((pointer) r_4) l_12)),
   forall (s0: ((pointer) p_3)),
-  forall (HW_1: (constant_l r_LPM_30 q_LPM_30 p_LPM_30 LPM_l_12 intM_r_4
-                 c_q_2 b_q_2 a_q_2 intM_c_1 intM_b_0 l alloc) /\
+  forall (HW_1: (constant_l r_l_12 q_l_12 p_l_12 intM_r_4 c_q_2 b_q_2 a_q_2
+                 intM_c_1 intM_b_0 l alloc) /\
                 (valid alloc l) /\ (valid alloc s0) /\
-                (constant_s0 c_SPM_28 b_SPM_28 a_SPM_28 SPM_p_3 intM_c_1
-                 intM_b_0 s0 alloc) /\
+                (constant_s0 c_p_3 b_p_3 a_p_3 intM_c_1 intM_b_0 s0 alloc) /\
                 (valid1 b_p_3) /\ (valid1_range b_p_3 5)),
   forall (result: ((pointer) b_0)),
   forall (HW_2: result = (acc b_p_3 s0)),
@@ -123,30 +113,25 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f3_impl_po_1 : 
-  forall (LPM_l_12: ((memory) ((pointer) LPM_30) l_12)),
-  forall (SPM_p_3: ((memory) ((pointer) SPM_28) p_3)),
-  forall (a_SPM_28: ((memory) Z SPM_28)),
+  forall (a_p_3: ((memory) Z p_3)),
   forall (a_q_2: ((memory) Z q_2)),
   forall (alloc: alloc_table),
-  forall (b_SPM_28: ((memory) ((pointer) b_0) SPM_28)),
   forall (b_p_3: ((memory) ((pointer) b_0) p_3)),
   forall (b_q_2: ((memory) ((pointer) b_0) q_2)),
-  forall (c_SPM_28: ((memory) ((pointer) c_1) SPM_28)),
   forall (c_p_3: ((memory) ((pointer) c_1) p_3)),
   forall (c_q_2: ((memory) ((pointer) c_1) q_2)),
   forall (intM_b_0: ((memory) Z b_0)),
   forall (intM_c_1: ((memory) Z c_1)),
   forall (intM_r_4: ((memory) Z r_4)),
   forall (l: ((pointer) l_12)),
-  forall (p_LPM_30: ((memory) ((pointer) p_3) LPM_30)),
-  forall (q_LPM_30: ((memory) ((pointer) q_2) LPM_30)),
-  forall (r_LPM_30: ((memory) ((pointer) r_4) LPM_30)),
+  forall (p_l_12: ((memory) ((pointer) p_3) l_12)),
+  forall (q_l_12: ((memory) ((pointer) q_2) l_12)),
+  forall (r_l_12: ((memory) ((pointer) r_4) l_12)),
   forall (s0: ((pointer) p_3)),
-  forall (HW_1: (constant_l r_LPM_30 q_LPM_30 p_LPM_30 LPM_l_12 intM_r_4
-                 c_q_2 b_q_2 a_q_2 intM_c_1 intM_b_0 l alloc) /\
+  forall (HW_1: (constant_l r_l_12 q_l_12 p_l_12 intM_r_4 c_q_2 b_q_2 a_q_2
+                 intM_c_1 intM_b_0 l alloc) /\
                 (valid alloc l) /\ (valid alloc s0) /\
-                (constant_s0 c_SPM_28 b_SPM_28 a_SPM_28 SPM_p_3 intM_c_1
-                 intM_b_0 s0 alloc) /\
+                (constant_s0 c_p_3 b_p_3 a_p_3 intM_c_1 intM_b_0 s0 alloc) /\
                 (valid1 c_p_3) /\ (valid1 b_p_3) /\ (valid1_range c_p_3 5) /\
                 (valid1_range b_p_3 5)),
   forall (result: ((pointer) b_0)),
@@ -204,30 +189,25 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (LPM_l_12: ((memory) ((pointer) LPM_30) l_12)),
-  forall (SPM_p_3: ((memory) ((pointer) SPM_28) p_3)),
-  forall (a_SPM_28: ((memory) Z SPM_28)),
   forall (a_p_3: ((memory) Z p_3)),
   forall (a_q_2: ((memory) Z q_2)),
   forall (alloc: alloc_table),
-  forall (b_SPM_28: ((memory) ((pointer) b_0) SPM_28)),
+  forall (b_p_3: ((memory) ((pointer) b_0) p_3)),
   forall (b_q_2: ((memory) ((pointer) b_0) q_2)),
-  forall (c_SPM_28: ((memory) ((pointer) c_1) SPM_28)),
+  forall (c_p_3: ((memory) ((pointer) c_1) p_3)),
   forall (c_q_2: ((memory) ((pointer) c_1) q_2)),
   forall (intM_b_0: ((memory) Z b_0)),
   forall (intM_c_1: ((memory) Z c_1)),
   forall (intM_r_4: ((memory) Z r_4)),
   forall (l: ((pointer) l_12)),
-  forall (p_LPM_30: ((memory) ((pointer) p_3) LPM_30)),
-  forall (q_LPM_30: ((memory) ((pointer) q_2) LPM_30)),
+  forall (p_l_12: ((memory) ((pointer) p_3) l_12)),
   forall (q_l_12: ((memory) ((pointer) q_2) l_12)),
-  forall (r_LPM_30: ((memory) ((pointer) r_4) LPM_30)),
+  forall (r_l_12: ((memory) ((pointer) r_4) l_12)),
   forall (s0: ((pointer) p_3)),
-  forall (HW_1: (constant_l r_LPM_30 q_LPM_30 p_LPM_30 LPM_l_12 intM_r_4
-                 c_q_2 b_q_2 a_q_2 intM_c_1 intM_b_0 l alloc) /\
+  forall (HW_1: (constant_l r_l_12 q_l_12 p_l_12 intM_r_4 c_q_2 b_q_2 a_q_2
+                 intM_c_1 intM_b_0 l alloc) /\
                 (valid alloc l) /\ (valid alloc s0) /\
-                (constant_s0 c_SPM_28 b_SPM_28 a_SPM_28 SPM_p_3 intM_c_1
-                 intM_b_0 s0 alloc) /\
+                (constant_s0 c_p_3 b_p_3 a_p_3 intM_c_1 intM_b_0 s0 alloc) /\
                 (separation2 q_l_12 q_l_12) /\ (valid1 q_l_12)),
   forall (a_p_3_0: ((memory) Z p_3)),
   forall (HW_2: a_p_3_0 = (upd a_p_3 s0 1)),

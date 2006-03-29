@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.173 2006-03-23 08:49:43 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.174 2006-03-29 14:20:31 hubert Exp $ i*)
 
 
 open Format
@@ -1454,6 +1454,11 @@ let cinterp_logic_symbol id ls =
 	       Prod_type("",Base_type (Info.output_why_type ty),t))
 	    id.logic_heap_args local_type
 	in
+        let final_type = 
+          ZoneSet.fold 
+            (fun (z,_,ty) t ->
+               Prod_type("",Base_type (Info.output_why_type (Info.Memory(ty,z))),t))
+            id.logic_heap_zone final_type in
 	Logic(false,id.logic_name,final_type)
     | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
@@ -1468,10 +1473,15 @@ let cinterp_logic_symbol id ls =
 let interp_axiom p =
   let a = interp_predicate None "" p
   and e = Ceffect.predicate p in
-  HeapVarSet.fold
-    (fun arg t -> LForall
-       (heap_var_name arg,Info.output_why_type arg.var_why_type,t))
-    e.Ceffect.reads_var a
+  let a  =  
+    HeapVarSet.fold
+      (fun arg t -> LForall
+	 (heap_var_name arg,Info.output_why_type arg.var_why_type,t))
+      e.Ceffect.reads_var a in
+  ZoneSet.fold 
+    (fun (z,s,ty) t -> LForall
+       (s^"_"^z.name,Info.output_why_type (Info.Memory(ty,z)),t))
+    e.Ceffect.reads a 
 
 let interp_effects e =
   HeapVarSet.fold (fun var acc -> var::acc) e []

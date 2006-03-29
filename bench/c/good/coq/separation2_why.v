@@ -6,39 +6,35 @@ Require Export separation2_spec_why.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
+  forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
+  forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -47,24 +43,18 @@ Require Export separation2_spec_why.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -80,39 +70,35 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
+  forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
+  forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -121,24 +107,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -154,39 +134,35 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
+  forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
+  forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -195,24 +171,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -228,39 +198,35 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
+  forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
+  forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -269,24 +235,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -302,39 +262,35 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
+  forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
+  forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -343,24 +299,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -610,39 +560,35 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_6 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
+  forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
+  forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -651,24 +597,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -685,42 +625,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_7 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -729,24 +663,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -788,42 +716,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_8 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -832,24 +754,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -891,42 +807,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_9 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -935,24 +845,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -994,42 +898,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_10 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1038,24 +936,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1097,42 +989,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_11 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1141,24 +1027,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1200,42 +1080,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_12 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
+  forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
+  forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1244,24 +1118,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1303,44 +1171,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_13 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1349,24 +1209,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1433,44 +1287,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_14 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1479,24 +1325,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1563,44 +1403,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_15 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1609,24 +1441,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1693,44 +1519,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_16 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1739,24 +1557,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1823,44 +1635,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_17 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1869,24 +1673,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -1953,44 +1751,36 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_18 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
+  forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
+  forall (v2_w_25: ((memory) Z w_25)),
   forall (w: ((pointer) w_25)),
   forall (HW_1: (* File "separation2.c", line 43, characters 12-116 *)
                 ((((((valid alloc (acc pp1_u_21 u)) /\
@@ -1999,24 +1789,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -2083,43 +1867,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_19 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
   forall (v2_w_25: ((memory) Z w_25)),
@@ -2131,24 +1905,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -2240,43 +2008,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_20 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
   forall (v2_w_25: ((memory) Z w_25)),
@@ -2288,24 +2046,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -2397,43 +2149,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_21 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
   forall (v2_w_25: ((memory) Z w_25)),
@@ -2445,24 +2187,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -2554,43 +2290,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_22 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
   forall (v2_w_25: ((memory) Z w_25)),
@@ -2602,24 +2328,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -2711,43 +2431,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_23 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
   forall (v2_w_25: ((memory) Z w_25)),
@@ -2759,24 +2469,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -2868,43 +2572,33 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_24 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
+  forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
   forall (v2_w_25: ((memory) Z w_25)),
@@ -2916,24 +2610,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -3025,44 +2713,32 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_25 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
@@ -3075,24 +2751,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -3210,44 +2880,32 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_26 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
@@ -3260,24 +2918,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -3395,44 +3047,32 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_27 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
@@ -3445,24 +3085,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\
@@ -3580,44 +3214,32 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_28 : 
   forall (alloc: alloc_table),
-  forall (anonymous_0PM_m_27: ((memory) ((pointer) anonymous_0PM_47) m_27)),
-  forall (anonymous_0PM_u_21: ((memory) ((pointer) anonymous_0PM_47) u_21)),
-  forall (anonymous_0PM_v_23: ((memory) ((pointer) anonymous_0PM_47) v_23)),
-  forall (anonymous_0PM_w_25: ((memory) ((pointer) anonymous_0PM_47) w_25)),
-  forall (anonymous_1PM_u2_29: ((memory) ((pointer) anonymous_1PM_70) u2_29)),
-  forall (anonymous_1PM_v2_31: ((memory) ((pointer) anonymous_1PM_70) v2_31)),
   forall (intM_p1_0: ((memory) Z p1_0)),
   forall (intM_p2_1: ((memory) Z p2_1)),
   forall (intM_pp1_2: ((memory) Z pp1_2)),
   forall (m: ((pointer) m_27)),
-  forall (p1_anonymous_0PM_47: ((memory) ((pointer) p1_0) anonymous_0PM_47)),
   forall (p1_m_27: ((memory) ((pointer) p1_0) m_27)),
   forall (p1_u_21: ((memory) ((pointer) p1_0) u_21)),
   forall (p1_v_23: ((memory) ((pointer) p1_0) v_23)),
   forall (p1_w_25: ((memory) ((pointer) p1_0) w_25)),
-  forall (p2_anonymous_0PM_47: ((memory) ((pointer) p2_1) anonymous_0PM_47)),
   forall (p2_m_27: ((memory) ((pointer) p2_1) m_27)),
   forall (p2_u_21: ((memory) ((pointer) p2_1) u_21)),
   forall (p2_v_23: ((memory) ((pointer) p2_1) v_23)),
   forall (p2_w_25: ((memory) ((pointer) p2_1) w_25)),
-  forall (pp1_anonymous_0PM_47: ((memory) ((pointer) pp1_2) anonymous_0PM_47)),
   forall (pp1_m_27: ((memory) ((pointer) pp1_2) m_27)),
   forall (pp1_u_21: ((memory) ((pointer) pp1_2) u_21)),
   forall (pp1_v_23: ((memory) ((pointer) pp1_2) v_23)),
   forall (pp1_w_25: ((memory) ((pointer) pp1_2) w_25)),
-  forall (pp2_anonymous_1PM_70: ((memory) ((pointer) pp2_3) anonymous_1PM_70)),
   forall (pp2_u2_29: ((memory) ((pointer) pp2_3) u2_29)),
   forall (pp2_v2_31: ((memory) ((pointer) pp2_3) v2_31)),
   forall (u: ((pointer) u_21)),
   forall (u2: ((pointer) u2_29)),
   forall (v: ((pointer) v_23)),
-  forall (v1_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v1_m_27: ((memory) Z m_27)),
   forall (v1_u_21: ((memory) Z u_21)),
   forall (v1_v_23: ((memory) Z v_23)),
   forall (v1_w_25: ((memory) Z w_25)),
   forall (v2_0: ((pointer) v2_31)),
-  forall (v2_anonymous_0PM_47: ((memory) Z anonymous_0PM_47)),
   forall (v2_m_27: ((memory) Z m_27)),
   forall (v2_u_21: ((memory) Z u_21)),
   forall (v2_v_23: ((memory) Z v_23)),
@@ -3630,24 +3252,18 @@ Save.
                 (valid alloc (acc pp1_m_27 m))) /\
                 (valid alloc (acc pp2_u2_29 u2))) /\
                 (valid alloc (acc pp2_v2_31 v2_0))) /\
-                (constant_m v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_m_27 intM_p2_1 intM_p1_0 m alloc) /\
+                (constant_m v2_m_27 v1_m_27 pp1_m_27 p2_m_27 p1_m_27
+                 intM_p2_1 intM_p1_0 m alloc) /\
                 (valid alloc w) /\ (valid alloc v) /\ (valid alloc u) /\
-                (constant_u2 pp2_anonymous_1PM_70 anonymous_1PM_u2_29 u2
-                 alloc) /\
-                (valid alloc m) /\ (valid alloc v2_0) /\ (valid alloc u2) /\
-                (constant_v2 pp2_anonymous_1PM_70 anonymous_1PM_v2_31 v2_0
-                 alloc) /\
-                (constant_w v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_w_25 intM_p2_1 intM_p1_0 w alloc) /\
-                (constant_v v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_v_23 intM_p2_1 intM_p1_0 v alloc) /\
-                (constant_u v2_anonymous_0PM_47 v1_anonymous_0PM_47
-                 pp1_anonymous_0PM_47 p2_anonymous_0PM_47 p1_anonymous_0PM_47
-                 anonymous_0PM_u_21 intM_p2_1 intM_p1_0 u alloc) /\
+                (constant_u2 pp2_u2_29 u2 alloc) /\ (valid alloc m) /\
+                (valid alloc v2_0) /\ (valid alloc u2) /\
+                (constant_v2 pp2_v2_31 v2_0 alloc) /\
+                (constant_w v2_w_25 v1_w_25 pp1_w_25 p2_w_25 p1_w_25
+                 intM_p2_1 intM_p1_0 w alloc) /\
+                (constant_v v2_v_23 v1_v_23 pp1_v_23 p2_v_23 p1_v_23
+                 intM_p2_1 intM_p1_0 v alloc) /\
+                (constant_u v2_u_21 v1_u_21 pp1_u_21 p2_u_21 p1_u_21
+                 intM_p2_1 intM_p1_0 u alloc) /\
                 (valid1_range p2_u_21 5) /\ (valid1_range p2_v_23 5) /\
                 (valid1_range p2_w_25 5) /\ (valid1_range p2_m_27 5) /\
                 (valid1_range p1_u_21 5) /\ (valid1_range p1_v_23 5) /\

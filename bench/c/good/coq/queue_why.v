@@ -7,25 +7,17 @@ Require Export queue_spec_why.
 (*Why goal*) Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (intM_contents_0_0: ((memory) Z contents_0)),
   forall (HW_2: intM_contents_0_0 = (upd intM_contents_0 t 0)),
   forall (result: ((pointer) contents_0)),
@@ -66,25 +58,17 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (intM_contents_0_0: ((memory) Z contents_0)),
   forall (HW_2: intM_contents_0_0 = (upd intM_contents_0 t 0)),
   forall (result: ((pointer) contents_0)),
@@ -125,25 +109,17 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (intM_contents_0_0: ((memory) Z contents_0)),
   forall (HW_2: intM_contents_0_0 = (upd intM_contents_0 t 0)),
   forall (result: ((pointer) contents_0)),
@@ -184,25 +160,17 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (intM_contents_0_0: ((memory) Z contents_0)),
   forall (HW_2: intM_contents_0_0 = (upd intM_contents_0 t 0)),
   forall (result: ((pointer) contents_0)),
@@ -243,25 +211,17 @@ Save.
 (*Why goal*) Lemma invariants_initially_established_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (intM_contents_0_0: ((memory) Z contents_0)),
   forall (HW_2: intM_contents_0_0 = (upd intM_contents_0 t 0)),
   forall (result: ((pointer) contents_0)),
@@ -302,18 +262,12 @@ Save.
 (*Why goal*) Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -324,9 +278,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -345,20 +298,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -369,9 +315,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -410,20 +355,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -434,9 +372,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -474,20 +411,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -498,9 +428,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -537,20 +466,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -561,9 +483,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -606,20 +527,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -630,9 +544,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -675,20 +588,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -699,9 +605,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -744,20 +649,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -768,9 +666,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -807,20 +704,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -831,9 +721,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -871,20 +760,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -895,9 +777,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -935,20 +816,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -959,9 +833,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -999,20 +872,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_12 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1023,9 +889,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1063,20 +928,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_13 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1087,9 +945,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1127,20 +984,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_14 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1151,9 +1001,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1191,20 +1040,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_15 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1215,9 +1057,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1255,20 +1096,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_16 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1279,9 +1113,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1319,20 +1152,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_17 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1343,9 +1169,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1385,20 +1210,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_18 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1409,9 +1227,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1449,20 +1266,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_19 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1473,9 +1283,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1518,20 +1327,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_20 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1542,9 +1344,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1587,20 +1388,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_21 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1611,9 +1405,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1655,20 +1448,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_22 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1679,9 +1465,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1719,20 +1504,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_23 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1743,9 +1521,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1783,20 +1560,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_24 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1807,9 +1577,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1847,20 +1616,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_25 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1871,9 +1633,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1911,20 +1672,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_26 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1935,9 +1689,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -1975,20 +1728,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_27 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -1999,9 +1745,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2039,20 +1784,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_28 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2063,9 +1801,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2103,20 +1840,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_29 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2127,9 +1857,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2167,20 +1896,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_30 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2191,9 +1913,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2229,20 +1950,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_31 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2253,9 +1967,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2293,20 +2006,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_32 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2317,9 +2023,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2355,20 +2060,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_33 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2379,9 +2077,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2421,20 +2118,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_34 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2445,9 +2135,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2487,20 +2176,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_35 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2511,9 +2193,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2553,20 +2234,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_36 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2577,9 +2251,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2615,20 +2288,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_37 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2639,9 +2305,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2677,20 +2342,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_38 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2701,9 +2359,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2739,20 +2396,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_39 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2763,9 +2413,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2801,20 +2450,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_40 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2825,9 +2467,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2863,20 +2504,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_41 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2887,9 +2521,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2925,20 +2558,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_42 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -2949,9 +2575,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -2987,20 +2612,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_43 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3011,9 +2629,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3049,20 +2666,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_44 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3073,9 +2683,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3111,20 +2720,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_45 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3135,9 +2737,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3175,20 +2776,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_46 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3199,9 +2793,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3237,20 +2830,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_47 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3261,9 +2847,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3303,20 +2888,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_48 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3327,9 +2905,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3369,20 +2946,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_49 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3393,9 +2963,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3435,20 +3004,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_50 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3459,9 +3021,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3497,20 +3058,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_51 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3521,9 +3075,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3559,20 +3112,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_52 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3583,9 +3129,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3621,20 +3166,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_53 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3645,9 +3183,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3683,20 +3220,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_54 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3707,9 +3237,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3745,20 +3274,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_55 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3769,9 +3291,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3812,20 +3333,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_56 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3836,9 +3350,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3874,20 +3387,13 @@ Save.
 (*Why goal*) Lemma pop_impl_po_57 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 33, characters 14-22 *)
                  (acc empty_q_9 q) = 0 /\
@@ -3898,9 +3404,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3936,18 +3441,12 @@ Save.
 (*Why goal*) Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
+  forall (empty_q_9: ((memory) Z q_9)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -3958,9 +3457,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -3980,20 +3478,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4004,9 +3495,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4045,20 +3535,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4069,9 +3552,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4109,20 +3591,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4133,9 +3608,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4173,20 +3647,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4197,9 +3664,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4242,20 +3708,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4266,9 +3725,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4307,20 +3765,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4331,9 +3782,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4376,20 +3826,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4400,9 +3843,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4447,20 +3889,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4471,9 +3906,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4517,20 +3951,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4541,9 +3968,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4582,20 +4008,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4606,9 +4025,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4647,20 +4065,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4671,9 +4082,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4712,20 +4122,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4736,9 +4139,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4777,20 +4179,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4801,9 +4196,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4842,20 +4236,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4866,9 +4253,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4907,20 +4293,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4931,9 +4310,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -4972,20 +4350,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -4996,9 +4367,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5037,20 +4407,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5061,9 +4424,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5102,20 +4464,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5126,9 +4481,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5172,20 +4526,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5196,9 +4543,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5237,20 +4583,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5261,9 +4600,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5306,20 +4644,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5330,9 +4661,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5377,20 +4707,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5401,9 +4724,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5447,20 +4769,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5471,9 +4786,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5512,20 +4826,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5536,9 +4843,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5577,20 +4883,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5601,9 +4900,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5642,20 +4940,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5666,9 +4957,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5707,20 +4997,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5731,9 +5014,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5772,20 +5054,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5796,9 +5071,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5837,20 +5111,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5861,9 +5128,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5900,20 +5166,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5924,9 +5183,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -5963,20 +5221,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -5987,9 +5238,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6026,20 +5276,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6050,9 +5293,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6093,20 +5335,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6117,9 +5352,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6156,20 +5390,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6180,9 +5407,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6224,20 +5450,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6248,9 +5467,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6293,20 +5511,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6317,9 +5528,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6361,20 +5571,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6385,9 +5588,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6424,20 +5626,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6448,9 +5643,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6487,20 +5681,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6511,9 +5698,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6550,20 +5736,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6574,9 +5753,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6613,20 +5791,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6637,9 +5808,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6676,20 +5846,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6700,9 +5863,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6739,20 +5901,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6763,9 +5918,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6802,20 +5956,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6826,9 +5973,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6865,20 +6011,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6889,9 +6028,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6928,20 +6066,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -6952,9 +6083,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -6996,20 +6126,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7020,9 +6143,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7059,20 +6181,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7083,9 +6198,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7127,20 +6241,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7151,9 +6258,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7196,20 +6302,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7220,9 +6319,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7264,20 +6362,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7288,9 +6379,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7327,20 +6417,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7351,9 +6434,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7390,20 +6472,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7414,9 +6489,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7453,20 +6527,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7477,9 +6544,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7516,20 +6582,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7540,9 +6599,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7579,20 +6637,13 @@ Save.
   forall (c: Z),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 20, characters 14-21 *)
                  (acc full_q_9 q) = 0 /\
@@ -7603,9 +6654,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (result: ((pointer) contents_0)),
   forall (HW_2: result = (acc contents_q_9 q)),
   forall (result0: Z),
@@ -7646,18 +6696,12 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7668,9 +6712,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   (* File "queue.c", line 33, characters 14-22 *) (acc empty_q_9 q) = 0.
 Proof.
 intuition.
@@ -7681,18 +6724,12 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7703,9 +6740,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   (valid_range alloc (acc contents_q_9 q) 0 ((acc length_q_9 q) - 1)).
 Proof.
 intuition.
@@ -7716,18 +6752,12 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7738,9 +6768,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   0 <= (acc first_q_9 q).
 Proof.
 intuition.
@@ -7751,18 +6780,12 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7773,9 +6796,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   (acc first_q_9 q) < (acc length_q_9 q).
 Proof.
 intuition.
@@ -7787,18 +6809,12 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7809,9 +6825,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   0 <= (acc last_q_9 q).
 Proof.
 intuition.
@@ -7823,18 +6838,12 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
+  forall (full_q_9: ((memory) Z q_9)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7845,9 +6854,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   (acc last_q_9 q) < (acc length_q_9 q).
 Proof.
 intuition.
@@ -7859,20 +6867,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7883,9 +6884,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -7926,20 +6926,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -7950,9 +6943,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -7998,20 +6990,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -8022,9 +7007,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -8068,20 +7052,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -8092,9 +7069,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -8138,20 +7114,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -8162,9 +7131,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -8208,20 +7176,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -8232,9 +7193,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
@@ -8278,20 +7238,13 @@ Save.
   forall (q1: ((pointer) q_9)),
   forall (alloc: alloc_table),
   forall (contents_q_9: ((memory) ((pointer) contents_0) q_9)),
-  forall (contents_queuePM_12: ((memory) ((pointer) contents_0) queuePM_12)),
   forall (empty_q_9: ((memory) Z q_9)),
-  forall (empty_queuePM_12: ((memory) Z queuePM_12)),
   forall (first_q_9: ((memory) Z q_9)),
-  forall (first_queuePM_12: ((memory) Z queuePM_12)),
   forall (full_q_9: ((memory) Z q_9)),
-  forall (full_queuePM_12: ((memory) Z queuePM_12)),
   forall (intM_contents_0: ((memory) Z contents_0)),
   forall (last_q_9: ((memory) Z q_9)),
-  forall (last_queuePM_12: ((memory) Z queuePM_12)),
   forall (length_q_9: ((memory) Z q_9)),
-  forall (length_queuePM_12: ((memory) Z queuePM_12)),
   forall (q: ((pointer) q_9)),
-  forall (queuePM_q_9: ((memory) ((pointer) queuePM_12) q_9)),
   forall (t: ((pointer) contents_0)),
   forall (HW_1: ((* File "queue.c", line 45, characters 14-48 *)
                  (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty_q_9 q) = 0) /\
@@ -8302,9 +7255,8 @@ Save.
                 (acc length_q_9 q)) /\ 0 <= (acc last_q_9 q) /\
                 (acc last_q_9 q) < (acc length_q_9 q))) /\
                 (valid_range alloc t 0 4) /\ (valid alloc q) /\
-                (constant_q length_queuePM_12 last_queuePM_12 full_queuePM_12
-                 first_queuePM_12 empty_queuePM_12 contents_queuePM_12
-                 queuePM_q_9 q t alloc)),
+                (constant_q length_q_9 last_q_9 full_q_9 first_q_9 empty_q_9
+                 contents_q_9 q t alloc)),
   forall (HW_2: (* File "queue.c", line 33, characters 14-22 *)
                 (acc empty_q_9 q) = 0 /\
                 (* File "queue.c", line 14, characters 5-105 *)
