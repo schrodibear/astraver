@@ -17,7 +17,6 @@
 open Tags
 
 type window = 
-  | Preferences
   | Color
   | About
   | Help
@@ -40,6 +39,10 @@ let decomp_name =
       Str.matched_group 1 s, Str.matched_group 2 s
     else
       "goals", s
+
+let get_home () = 
+  try Sys.getenv "HOME"
+  with Not_found -> ""
 
 (*
  * Live update

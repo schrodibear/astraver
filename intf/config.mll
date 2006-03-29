@@ -21,11 +21,7 @@
   exception Lexical_error of string
   exception Eof 
 
-  let config_file = 
-    let home = 
-      try Sys.getenv "HOME"
-      with Not_found -> ""
-    in (Filename.concat home ".gwhyrc")
+  let config_file = Filename.concat (Tools.get_home ()) ".gwhyrc"
 
   let key = Buffer.create 128
   let string_buffer = Buffer.create 128
@@ -52,10 +48,28 @@
   let write_values cl = 
     let out_channel = open_out config_file in
     List.iter 
-      (fun (k,v) -> output_string out_channel (k^ " = \""^ v "\""))
+      (fun (k,v) -> output_string out_channel (k^ " = \""^ v ^ "\"\n"))
       cl;
-    try close_out out_channel
-    with Sys_error s -> prerr_string s
+    try close_out out_channel; None
+    with Sys_error s -> Some(s)
+
+  let save () = 
+    let l = 
+      [("prover", (Model.get_default_prover ()).Model.pr_name);
+       ("cache", string_of_bool (Cache.is_enabled ()));
+       ("timeout", string_of_int (Tools.get_timeout ()));
+       ("hard_proof", string_of_bool (Cache.try_proof ()));
+       ("live_update", string_of_bool (Tools.live_update ()))] in
+    let w = GWindow.message_dialog 
+      ~message:(match write_values l with 
+		  | Some s -> s 
+		  | _ -> "Operation done with success !") 
+      ~message_type:`INFO ~buttons:GWindow.Buttons.ok
+      ~title:"Saving preferences" ~allow_grow:false
+      ~modal:true ~resizable:false ()
+    in ignore(w#connect#response ~callback:(fun t -> w#destroy ()));
+    ignore(w#show ())
+    
 
   let get_value key = 
     try Hashtbl.find config key 

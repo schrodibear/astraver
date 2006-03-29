@@ -59,6 +59,23 @@ let cvcl = {
   
 let provers = [simplify; zenon; harvey; cvcl]
 let () = assert (List.length provers > 0)
+
+(*
+ * Default prover
+ *)
+let default_prover = ref (List.hd provers)
+let get_default_prover () = !default_prover
+let set_prover p = default_prover := p
+let print_prover p = p.pr_name
+let get_prover s = 
+  let rec next = function
+    | [] -> 
+	raise Not_found
+    | p' :: r -> 
+	if (String.lowercase p'.pr_name) = (String.lowercase s) 
+	then p' 
+	else next r
+  in next provers
   
 (* all obligations *)
 let obligs = Hashtbl.create 97

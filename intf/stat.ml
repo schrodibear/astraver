@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.30 2006-03-29 08:38:42 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.31 2006-03-29 14:31:39 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -57,6 +57,12 @@ let to_prove_lemma_font = ref !monospace_font
 let discharged_lemma_font = ref !monospace_font
 let display_info = ref (function s -> failwith "not ready")
 let flash_info = ref (function s -> failwith "not ready")
+
+let cache_check = ref (GButton.toggle_button ())
+let hard_proof_check = ref (GButton.toggle_button ())
+let pretty_printer_check = ref (GButton.toggle_button ())
+let live_update_check = ref (GButton.toggle_button ())
+let timeout_spin = ref (GEdit.spin_button ())
 
 let out_some = function None -> assert false | Some f -> f
 
@@ -121,19 +127,6 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view) (tv_s:GText.view) sel
 	   tv#scroll_to_mark ~use_align:true mark
 	 with Not_found -> ())
     selected_rows
-
-(*
- * Default prover
- *)
-let default_prover = ref (List.hd Model.provers)
-let set_prover p = default_prover := p
-let print_prover p = p.Model.pr_name
-let get_prover s = 
-  let rec next = function
-    | [] -> raise Not_found
-    | p' :: r -> if p'.Model.pr_name = s then p' else next r
-  in next Model.provers
-
 
 let prove fct = 
   ignore (Thread.create fct ())
@@ -338,7 +331,7 @@ let main () =
   let file_menu = factory#add_submenu "_File" in
   let file_factory = new GMenu.factory file_menu ~accel_group in
   let _ = 
-    file_factory#add_image_item ~stock:`REFRESH ~label:"_Refresh"
+    file_factory#add_image_item (*~stock:`REFRESH*) ~label:"_Refresh"
       ~key:GdkKeysyms._R () 
   in
   let _ = file_factory#add_separator () in
@@ -351,29 +344,33 @@ let main () =
   let configuration_factory = 
     new GMenu.factory configuration_menu ~accel_group 
   in
+  let save_settings () = 
+    !cache_check#set_active (Cache.is_enabled ());
+    !live_update_check#set_active (Tools.live_update ());
+    !hard_proof_check#set_active (Cache.try_proof ());
+    !timeout_spin#adjustment#set_value (float_of_int (Tools.get_timeout ()));
+    () 
+  in
+  let unit () = () in
   let _ =
-    configuration_factory#add_image_item ~label:"Preferences" 
-      ~stock:`PREFERENCES
-      ~callback:(fun () -> Preferences.show Tools.Preferences ()) () in
+    configuration_factory#add_item ~key:GdkKeysyms._S
+      ~callback:(fun () -> Config.save ()) "Save preferences" in
   let _ =
-    configuration_factory#add_image_item ~label:"Customize colors" 
-      ~stock:`SELECT_COLOR
-      ~callback:(fun () -> Preferences.show Tools.Color ()) () in
-  (*let _ = 
-   *  configuration_factory#add_image_item ~label:"Customize fonts" 
-   *  ~stock:`SELECT_FONT
-   * ~callback:(fun () -> !flash_info "Not implemented") () in
-   *)
+    configuration_factory#add_item 
+      ~callback:(fun () -> Preferences.show Tools.Color unit ()) "Customize colors" in
+  let ft = 
+    configuration_factory#add_item 
+      ~callback:(fun () -> !flash_info "Not implemented") "Customize fonts" in
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
-  let vp = GPack.paned `VERTICAL ~packing:hp#add () in
+  let vtable = GPack.table ~row_spacings:5 ~homogeneous:false ~packing:hp#add () in
+  let table = GPack.table ~col_spacings:15 ~homogeneous:false () in
+  let _ = vtable#attach ~left:0 ~top:0 table#coerce in
 
   let model = Model.create_model () in
 
   (* function list *)
-  (* est ce que c vraiment necessaire de faire List.rev ??? *)
-  let fct_l = List.rev (Queue.fold (fun t k -> k::t) [] Model.fq) in
   let files = List.map 
     (fun f -> 
        if Filename.is_relative f 
@@ -381,13 +378,17 @@ let main () =
        else f)
     Options.files 
   in
-  let fct_combo = GEdit.combo ~allow_empty:false ~popdown_strings:files 
-    ~value_in_list:true ~packing:vp#add1 () in
-  let _ = fct_combo#entry#set_editable false in
+  let label = GMisc.label ~text:"Opened files"  () in
+  table#attach ~left:0 ~top:0 label#coerce;
+  let files_combo = GEdit.combo ~allow_empty:false ~popdown_strings:(List.rev files)
+    ~value_in_list:true () in
+  table#attach ~left:1 ~top:0 ~expand:`BOTH files_combo#coerce;
+  let _ = files_combo#entry#set_editable false in
   
   (* left tree of proof obligations *)
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:350 ~packing:vp#add2 () in
+    ~width:400 () in
+  let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
@@ -432,8 +433,11 @@ let main () =
 		       with Not_found -> ()) () 
   in
   let _ = configuration_factory#add_separator ()  in
+  let cache = configuration_factory#add_check_item 
+    ~callback:(fun b -> Cache.set_active b) "Cache _enabled" in
+  let _ = cache#set_active (Cache.is_enabled ()) in
   let clear_cache_m = configuration_factory#add_image_item ~label:"Clear cache" 
-    (*~stock:`CLEAR*)
+    (*~stock:`CLEAR*) ~key:GdkKeysyms._K
     ~callback:(fun () -> 
 		 Cache.clear ();
 		 !flash_info "Cache cleared"
@@ -444,7 +448,7 @@ let main () =
   let proof_menu = factory#add_submenu "_Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 
   let _ = 
-    proof_factory#add_image_item ~label:"Start benchmark" 
+    proof_factory#add_image_item ~label:"Start _benchmark" 
       ~key:GdkKeysyms._B 
       ~callback:(fun () -> 
 		   List.iter
@@ -452,10 +456,10 @@ let main () =
 		     Model.provers) () 
   in
   let _ = 
-    proof_factory#add_image_item ~label:"Prove all obligations" 
+    proof_factory#add_image_item ~label:"Prove _all obligations" 
       ~key:GdkKeysyms._A 
       ~callback:(fun () -> 
-		   prove (run_prover_all !default_prover view model false)) () 
+		   prove (run_prover_all (Model.get_default_prover ()) view model false)) () 
   in
   let fct_callback () = 
     List.iter 
@@ -463,12 +467,12 @@ let main () =
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
-	   prove (run_prover_fct !default_prover view model s false)
+	   prove (run_prover_fct (Model.get_default_prover ()) view model s false)
 	 else let name = model#get ~row ~column:Model.parent in 
-	 prove (run_prover_fct !default_prover view model name false))
+	 prove (run_prover_fct (Model.get_default_prover ()) view model name false))
       view#selection#get_selected_rows in
   let _ = 
-    proof_factory#add_image_item ~label:"Prove selected function" 
+    proof_factory#add_image_item ~label:"Prove selected _function" 
       ~key:GdkKeysyms._F ~callback:fct_callback () 
   in
   let oblig_callback () =
@@ -479,55 +483,67 @@ let main () =
 	 (if model#iter_has_child row then
 	    let row = Queue.peek (Model.find_fobligs s) in
 	    let s = model#get ~row ~column:Model.fullname in
-	    prove (run_prover_oblig !default_prover view model s false true)
+	    prove (run_prover_oblig (Model.get_default_prover ()) view model s false true)
 	  else 
-	    prove (run_prover_oblig !default_prover view model s false true));
+	    prove (run_prover_oblig (Model.get_default_prover ()) view model s false true));
       )
       view#selection#get_selected_rows in
   let _ = 
-    proof_factory#add_image_item ~label:"Prove selected obligation" 
+    proof_factory#add_image_item ~label:"Prove selected _obligation" 
       ~key:GdkKeysyms._O ~callback:oblig_callback () 
   in
   (* menus for povers *)
   let _ = proof_factory#add_separator ()  in
-  let provers_m =
-    List.map
+  let select_prover p = 
+    (try !flash_info (p.Model.pr_name ^" selected for default mode !")
+    with _ -> ());
+    Model.set_prover p
+  in
+  let provers_m = 
+    let name = (Model.get_default_prover ()).Model.pr_name
+    and pp = List.hd Model.provers in
+    let fm = proof_factory#add_radio_item ~active:(name = pp.Model.pr_name) 
+      pp.Model.pr_name in
+    ignore(fm#connect#toggled  
+	     ~callback:(fun () -> select_prover pp));
+    let group = fm#group in
+    (pp, fm) :: List.map
       (fun p -> 
-	 p, 
-	 proof_factory#add_check_item ~active:true
-	   ~callback:(fun b -> default_prover := p) p.Model.pr_name)
-      Model.provers
-  in
-  let provers_cb = 
-    List.map
-      (fun (p,m) ->
-	 let callback ev =
-	   List.iter (fun (p',m') -> m'#set_active (p == p')) provers_m;
-	   set_prover p;
-	   !flash_info (p.Model.pr_name ^ " selected for default mode");
-	   true
-	 in
-	 m#event#connect#button_release ~callback;
-	 p, callback)
-    provers_m
-  in
-  let switch_next_prover () = 
-    let current_prover = !default_prover in
-    let p1,cb1 = List.hd provers_cb in
+	 let m = proof_factory#add_radio_item 
+	   ~active:(name = p.Model.pr_name) ~group p.Model.pr_name 
+	 in ignore(m#connect#toggled  
+		     ~callback:(fun () -> select_prover p));
+	 p,m)
+      (List.tl Model.provers)
+  in 
+  let switch_next_prover () =     
+    let current_prover = Model.get_default_prover () in
     let rec find_next = function
       | [] -> assert false
-      | [p',_] -> assert (current_prover == p'); cb1 ()
-      | (p',_) :: (_,cb'') :: _ when current_prover == p' -> cb'' ()
+      | [p',_] -> 
+	  assert (current_prover == p'); 
+	  let prems = (List.hd provers_m) in
+	  select_prover (fst prems);
+	  (snd prems)#set_active true
+      | (p',_) :: (p'',m) :: _ when current_prover == p' -> 
+	  select_prover p'';
+	  m#set_active true
       | _ :: r -> find_next r
     in
-    ignore (find_next provers_cb)
+    ignore (find_next provers_m)
   in 
   let _ = proof_factory#add_separator ()  in
   let _ = 
     proof_factory#add_image_item ~key:GdkKeysyms._N 
-      ~label:"Switch to next prover" ~callback:switch_next_prover () 
+      ~label:"_Switch to next prover" ~callback:switch_next_prover () 
   in
-
+  let _ = proof_factory#add_separator () in
+  let hardproof = proof_factory#add_check_item 
+    ~callback:(fun b -> Cache.set_try_proof b) "_Hard proof" in
+  let _ = hardproof#set_active (Cache.try_proof ()) in
+  let liveupd = proof_factory#add_check_item 
+    ~callback:(fun b -> Tools.set_live b) "_Live update" in
+  let _ = liveupd#set_active (Tools.live_update ()) in
 
   (* run provers on all proof obligations *)
   List.iter
@@ -581,33 +597,26 @@ let main () =
   let _ = tv1#set_editable false in
   let _ = tv1#set_wrap_mode `WORD in
  
-  (* status bar  *)
-  let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Pprinter.is_active ()) 
-    ~packing:hbox#pack() in
-  let _ = mypprint#connect#toggled 
-    ~callback:(fun () -> Pprinter.swap_active ();
-		 let list = view#selection#get_selected_rows in
-		 select_obligs model tv1 tv2 list
-	      ) in
-  (* cache *)
-  let liveupd = GButton.check_button ~label:"Live update   " ~active:(Tools.live_update ()) 
-    ~packing:hbox#pack() in
-  let _ = liveupd#connect#toggled ~callback:(fun () -> Tools.swap_live ()) in
-  let mycache = GButton.check_button ~label:"Cache   " ~active:(Cache.is_enabled ()) 
-    ~packing:hbox#pack() in
-  let _ = mycache#connect#toggled ~callback:(fun () -> Cache.swap_active ()) in
-  let myoblig = GButton.check_button ~label:"Hard Proof   " ~active:(Cache.try_proof ()) 
-    ~packing:hbox#pack() in
-  let _ = myoblig#connect#toggled ~callback:(fun () -> Cache.swap_try_proof ()) in
   (* timeout set *)
-  let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
+  let _ = GMisc.label ~text:" Timeout" ~xalign:0. ~packing:hbox#pack () in
   let timeout_b = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
+  timeout_spin := timeout_b;
   timeout_b#adjustment#set_bounds ~lower:1. ~upper:999. ~step_incr:1. ();
   timeout_b#adjustment#set_value (float_of_int (Tools.get_timeout ()));
   let _ = 
     timeout_b#connect#value_changed ~callback:
       (fun () -> Tools.set_timeout timeout_b#value_as_int)
   in
+  (* pretty printer  *)
+  let mypprint = GButton.check_button ~label:"Pretty Printer | " 
+    ~active:(Pprinter.is_active ()) ~packing:hbox#pack() in
+  let _ = mypprint#connect#toggled 
+    ~callback:(fun () -> Pprinter.swap_active ();
+		 let list = view#selection#get_selected_rows in
+		 if list = [] then 
+		   !flash_info "No row selected" 
+		 else select_obligs model tv1 tv2 list
+	      ) in
 
   (* status bar *)
   let status_bar = 
@@ -667,9 +676,9 @@ let main () =
    * function selection 
    *)
   let _ =
-    fct_combo#entry#event#connect#focus_in ~callback:
+    files_combo#entry#event#connect#focus_in ~callback:
       begin fun ev -> 
-	let s = fct_combo#entry#text in
+	let s = files_combo#entry#text in
 	let loc = {Tags.file=s; Tags.line="1"; Tags.sp="1"; Tags.ep="1"} in
 	Pprinter.move_to_source (Some(loc));
 	Pprinter.reset_last_file ();
@@ -688,9 +697,9 @@ let main () =
 		      let row = model#get_iter p in
 		      let s = model#get ~row ~column:Model.fullname in
 		      (if model#iter_has_child row then
-			prove (run_prover_fct !default_prover view model s false)
+			prove (run_prover_fct (Model.get_default_prover ()) view model s false)
 		      else 
-			prove (run_prover_oblig !default_prover view model s false true));
+			prove (run_prover_oblig (Model.get_default_prover ()) view model s false true));
 		   )
 		   view#selection#get_selected_rows;
 	       false
@@ -741,6 +750,7 @@ let main () =
 
   (* Setting special icons for prooved obligation in cache *)
   let _ = 
+    let cache_file = Filename.concat (Tools.get_home ()) "gwhy.cache" in
     load_cache "/tmp/gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
@@ -752,7 +762,7 @@ let main () =
 	       try 
 		 Queue.iter 
 		   (fun p -> 
-		      let zecol = get_prover p 
+		      let zecol = Model.get_prover p 
 		      and parent = model#get ~row ~column:Model.parent in
 		      let parent = Model.find_fct parent in
 		      let r = model#get ~row:parent ~column:zecol.Model.pr_result in
@@ -781,11 +791,6 @@ let main () =
     )
     Model.frows
   in
-
-  (* initialisation for check menus *)
-  List.iter
-    (fun (p,cb) -> if p == !default_prover then ignore (cb ())) provers_cb;
-
   w#add_accel_group accel_group;
   w#show ()
 
@@ -812,14 +817,13 @@ let set_loaded_config () =
 	 prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
 	 10 
        end);
-  set_prover 
-    (try (get_prover (Config.get_value "prover"))
+  Model.set_prover 
+    (try (Model.get_prover (Config.get_value "prover"))
     with Not_found -> 
       begin
 	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
 	List.hd Model.provers
-      end)
-       
+      end)       
 
 (* Main *)
 let _ = 
