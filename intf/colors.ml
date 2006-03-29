@@ -14,30 +14,46 @@
  * (enclosed in the file GPL).
  *)
 
+type color = {
+  key : string;
+  name : string;
+  fc : string;
+  bc : string;
+}
+
+let changed = ref false
+
+let colors = [
+  {key="title"; name="Title"; fc="brown"; bc="lightgreen"};
+  {key="comment"; name="Commentary"; fc="red"; bc="white"};
+  {key="keyword"; name="Keyword"; fc="darkgreen"; bc="white"};
+  {key="var"; name="Variable"; fc="darkgreen"; bc="white"};
+  {key="predicate"; name="Predicate"; fc="blue"; bc="white"};
+  {key="lpredicate"; name="Predicate (localised)"; fc="blue"; bc="lightyellow"};
+  {key="pr_hilight"; name="Predicate (Hilight)"; fc="red"; bc="lightgreen"};
+  {key="separator"; name="Separator"; fc="red"; bc="white"};
+  {key="hypothesis"; name="Hypothesis"; fc="orange"; bc="white"};
+  {key="conclusion"; name="Conclusion"; fc="blue"; bc="white"};
+  {key="hilight"; name="Hilight"; fc="black"; bc="yellow"};
+  {key="cc_type"; name="Type"; fc="darkgreen"; bc="white"}]
+
 let fcolors = Hashtbl.create 13
 let bcolors = Hashtbl.create 13
+let kcolors = Hashtbl.create 13
+
+let add_color item k fc bc = 
+  Hashtbl.add kcolors item k;
+  if fc <> "white" then begin 
+    Hashtbl.add fcolors item fc 
+  end;  
+  if bc <> "black" then begin 
+    Hashtbl.add bcolors item bc 
+  end  
 
 let _ = 
-  Hashtbl.add fcolors "title" "brown";
-  Hashtbl.add fcolors "comment" "red";
-  Hashtbl.add fcolors "keyword" "darkgreen";
-  Hashtbl.add fcolors "var" "darkgreen";
-  Hashtbl.add fcolors "predicate" "blue";
-  Hashtbl.add fcolors "lpredicate" "blue";
-  Hashtbl.add fcolors "information" "orange";
-  Hashtbl.add fcolors "separator" "red";
-  Hashtbl.add fcolors "hypothesis" "orange";
-  Hashtbl.add fcolors "conclusion" "blue";
-  Hashtbl.add fcolors "highlight" "black";
-  Hashtbl.add fcolors "cc_type" "darkgreen"
-
-let _ = 
-  Hashtbl.add bcolors "title" "lightgreen";
-  Hashtbl.add bcolors "lpredicate" "lightyellow";
-  Hashtbl.add bcolors "highlight" "yellow"
-
-let fc_hilight = "red"
-let bc_hilight = "lightgreen"
+  List.iter
+    (fun c -> add_color c.key c.name c.fc c.bc)
+    colors
 
 let get_fc ty = 
   (try Hashtbl.find fcolors ty with Not_found -> "black")
@@ -48,11 +64,24 @@ let get_bc ty =
 let get_color ty = 
   (get_fc ty) , (get_bc ty)
 
-let get_fc_predicate = 
-  (try Hashtbl.find fcolors "lpredicate" with Not_found -> "black")
+let get_fc_predicate () = 
+  get_fc "lpredicate"
 
-let get_bc_predicate = 
-  (try Hashtbl.find bcolors "lpredicate" with Not_found -> "white")
+let get_bc_predicate () = 
+  get_bc "lpredicate"
 
 let color_exists ty = 
   (Hashtbl.mem fcolors ty) or (Hashtbl.mem bcolors ty)
+
+let get_all_colors () = 
+  List.map 
+    (fun {key=k; name=n; fc=_; bc=_} -> 
+       {key=k; name=n; fc=(get_fc k); bc=(get_bc k)})
+    colors
+
+let replace_color k f b = 
+  changed := true;
+  Hashtbl.replace fcolors k f;
+  Hashtbl.replace bcolors k b
+
+let has_changed () = !changed

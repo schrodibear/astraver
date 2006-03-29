@@ -49,7 +49,7 @@ let get_gtktag index =
 let reset_last_colored () = 
   List.iter (fun tag ->
 	       tag#set_properties 
-		 [`BACKGROUND get_bc_predicate; `FOREGROUND get_fc_predicate];
+		 [`BACKGROUND (get_bc_predicate ()); `FOREGROUND (get_fc_predicate ())];
 	    )
     !last_colored;
   last_colored := [GText.tag ()]

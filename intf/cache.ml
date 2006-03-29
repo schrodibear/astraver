@@ -25,15 +25,17 @@ let max_size = ref 5000 (* maximum cache size *)
 let cache = ref (Hashtbl.create 97)
 let source_file = ref "/tmp/gwhy.cache"
 let active = ref true
-let obligs = ref true 
+let obligs = ref true
 let ok = ref true
 
 let enable () = active := true
 let disable () = active := false
+let set_active v = active := v
 let swap_active () = active := not !active
 let is_enabled () = !active
 
 let swap_try_proof () = obligs := not !obligs
+let set_try_proof v = obligs := v
 let try_proof () = !obligs
 
 let exists p o = 
@@ -138,3 +140,4 @@ let add (seq:Cc.sequent) (prover:string) =
       end
   end;
   save () (* actually, must be done when exiting gui *)
+

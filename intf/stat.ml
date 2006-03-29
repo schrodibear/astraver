@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.28 2006-03-22 15:25:30 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.29 2006-03-29 08:25:37 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -24,6 +24,9 @@ open Cache
 open Pprinter
 
 let _ = gui := true
+
+let is_caduceus = 
+  List.exists (fun f -> Filename.basename f = "caduceus.why") Options.files 
 
 let _ =
   try
@@ -71,146 +74,20 @@ let to_refresh reference e =
   not (Sys.file_exists n) ||
   ((Unix.stat reference).Unix.st_mtime > (Unix.stat n).Unix.st_mtime)
 
-let decomp_name =
-  let r = Str.regexp "\\(.*\\)_po_\\([0-9]+\\)" in
-  fun s ->
-    if Str.string_match r s 0 then
-      Str.matched_group 1 s, Str.matched_group 2 s
-    else
-      "goals", s
-
-module Model = struct
-
-  type prover = {
-    pr_name : string;
-    pr_result : string GTree.column;
-    pr_icon : GtkStock.id GTree.column;
-    pr_id : Dispatcher.prover;
-  }
-
-  open Gobject.Data
-      
-  let cols = new GTree.column_list
-  let name = cols#add string
-  let fullname = cols#add string
-  let parent = cols#add string
-  let total = cols#add int
-  let result = cols#add int
-
-  let first_row = ref None
-
-  let simplify = {
-    pr_name = "Simplify";
-    pr_result = cols#add string;
-    pr_icon = cols#add GtkStock.conv;
-    pr_id = Dispatcher.Simplify;
-  }
-  let zenon = {
-    pr_name = "Zenon";
-    pr_result = cols#add string;
-    pr_icon = cols#add GtkStock.conv;
-    pr_id = Dispatcher.Zenon;
-  }
-  let harvey = {
-    pr_name = "haRVey";
-    pr_result = cols#add string;
-    pr_icon = cols#add GtkStock.conv;
-    pr_id = Dispatcher.Harvey;
-  }
-  let cvcl = {
-    pr_name = "CVCL";
-    pr_result = cols#add string;
-    pr_icon = cols#add GtkStock.conv;
-    pr_id = Dispatcher.Cvcl;
-  }
-
-  let provers = [simplify; zenon; harvey; cvcl]
-  let () = assert (List.length provers > 0)
-
-  (* all obligations *)
-  let obligs = Hashtbl.create 97
-  let find_oblig = Hashtbl.find obligs
-
-  (* obligation name -> its model row *)
-  let orows = Hashtbl.create 97
-  (* obligation name -> its failure messages *)
-  let fwrows = Hashtbl.create 97
-  
-  (* function -> its model row *)
-  let frows = Hashtbl.create 17 
-  let find_fct = Hashtbl.find frows
-
-  (* function -> list of its obligations *)
-  let fobligs = Hashtbl.create 97
-  let find_fobligs = Hashtbl.find fobligs
-  let iter_fobligs fct f = Queue.iter f (Hashtbl.find fobligs fct)
-
-  (* functions *)
-  let fq = Queue.create ()
-    
-  let add_failure row (p:prover) (message:string) = 
-    try 
-      let messages = Hashtbl.find fwrows row in
-      if Hashtbl.mem messages p then
-	Hashtbl.replace messages p message
-      else Hashtbl.add messages p message
-    with Not_found -> begin
-      let h = Hashtbl.create 97 in
-      Hashtbl.add h p message;
-      Hashtbl.add fwrows row h
-    end
-
-  let create_model () =
-    let model = GTree.tree_store cols in
-    Dispatcher.iter
-      (fun ((_,s,_) as o) ->
-	 Hashtbl.add obligs s o;
-	 let f,n = decomp_name s in
-	 let row =
-	   try 
-	     Hashtbl.find frows f
-	   with Not_found ->
-	     let row = model#append () in
-	     Queue.add f fq;
-	     Hashtbl.add frows f row;
-	     Hashtbl.add fobligs f (Queue.create ());
-	     model#set ~row ~column:name f;
-	     model#set ~row ~column:fullname f;
-	     model#set ~row ~column:parent f;
-	     model#set ~row ~column:total 0;
-	     List.iter 
-	       (fun p -> model#set ~row ~column:p.pr_result "0") 
-	       provers;
-	     row
-	 in
-	 let row_n = model#append ~parent:row () in
-	 (match !first_row with None -> first_row := Some(row_n) | Some _ -> ());
-	 Hashtbl.add orows s row_n;
-	 Queue.add row_n (Hashtbl.find fobligs f);
-	 model#set ~row:row_n ~column:name n;
-	 model#set ~row:row_n ~column:fullname s;
-	 model#set ~row:row_n ~column:parent f;
-	 model#set ~row:row_n ~column:result 0;
-	 List.iter
-	   (fun p -> model#set ~row:row_n ~column:p.pr_icon `REMOVE)
-	   provers
-      );
-    model
-      
-end
-
 module View = struct
 
   open GtkTree
   open Model
 
+  let renderer = GTree.cell_renderer_text [`XALIGN 0.] 
+  let first_col = GTree.view_column ~title:"Proof obligations " 
+    ~renderer:(renderer, ["text", Model.name]) () 
+ 
+
   let add_columns ~(view : GTree.view) ~model =
     let renderer = GTree.cell_renderer_text [`XALIGN 0.] in
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
-    let _ = view#append_column
-      (GTree.view_column ~title:"Proof obligations " 
-	 ~renderer:(renderer, ["text", Model.name])
-	 ())
+    let _ = view#append_column first_col 
     in
     List.map
       (fun p ->
@@ -239,45 +116,38 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view) (tv_s:GText.view) sel
 	   let o = Model.find_oblig s in
 	   let buf = update_buffer tv in
 	   buf#set_text "";
-	   Pprinter.text_of_obligation tv tv_s o;
+	   Pprinter.text_of_obligation tv o;
 	   let mark = `MARK (tv#buffer#create_mark tv#buffer#end_iter) in
 	   tv#scroll_to_mark ~use_align:true mark
 	 with Not_found -> ())
     selected_rows
 
-(* 
- * Timeout 
- *)
-let timeout = ref 10
-let set_timeout v = timeout := v
-
 (*
  * Default prover
  *)
-let default_prover = ref Model.simplify
+let default_prover = ref (List.hd Model.provers)
 let set_prover p = default_prover := p
 let print_prover p = p.Model.pr_name
 let get_prover s = 
   let rec next = function
-    | [] -> assert false;
+    | [] -> assert false; raise Not_found
     | p' :: r -> if p'.Model.pr_name = s then p' else next r
   in next Model.provers
+
 
 let prove fct = 
   ignore (Thread.create fct ())
 
 let update_statistics p (model:GTree.tree_store) row result = 
-  let stat = string_of_int result in
-  model#set ~row ~column:p.Model.pr_result stat
+  model#set ~row ~column:p.Model.pr_result result
 
 let get_statistics (model:GTree.tree_store) row = 
   let sl = 
     List.map 
-      (fun p -> model#get ~row ~column:p.Model.pr_result) 
+      (fun p -> (string_of_int (model#get ~row ~column:p.Model.pr_result)))
       Model.provers 
   in
   "[" ^ String.concat "|" sl ^ "]"
-  
 
 let get_all_results f (model:GTree.tree_store) = 
   let mychildren = Model.find_fobligs f in
@@ -287,6 +157,37 @@ let get_all_results f (model:GTree.tree_store) =
        result + nb)
     0
     mychildren
+
+let build_statistics (model:GTree.tree_store) f = 
+  try
+    let row = Model.find_fct f
+    and children = ref 0 in
+    List.iter 
+      (fun p -> 
+	 model#set ~row ~column:p.Model.pr_result 0
+      ) 
+      Model.provers;
+    Model.iter_fobligs
+      f
+      (fun r -> 
+	 incr children;
+	 List.iter 
+	   (fun p -> 
+	      let r = model#get ~row:r ~column:p.Model.pr_result 
+	      and u = model#get ~row ~column:p.Model.pr_result in
+	      model#set ~row ~column:p.Model.pr_result (u+r)
+	   ) 
+	   Model.provers);
+    let statistics = get_statistics model row 
+    and total = string_of_int (get_all_results f model) 
+    and children = string_of_int !children in
+    model#set 
+      ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
+  with Not_found -> 
+    begin 
+      print_endline ("     [...] Error : function \""^f^"\" not found !"); 
+      flush stdout 
+    end  
 
 let collapse_row (view:GTree.view) path bench = 
   if not bench then begin
@@ -309,7 +210,7 @@ let try_proof oblig =
 (* 
  * run a prover on an obligation and update the model 
  *)
-let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench = 
+let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone = 
   let column_p = p.Model.pr_icon in
   let (_, oblig, seq) = o in
   if bench or (try_proof seq) then
@@ -317,7 +218,8 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench =
       let row = Hashtbl.find Model.orows oblig in
       model#set ~row ~column:column_p `EXECUTE;
       let r = 
-	Dispatcher.call_prover ~obligation:oblig ~timeout:!timeout p.Model.pr_id
+	Dispatcher.call_prover 
+	  ~obligation:oblig ~timeout:(Tools.get_timeout ())  p.Model.pr_id
       in
       let get_result = function
 	| Calldp.Valid -> 
@@ -342,8 +244,12 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench =
 	    end 
       in
       let result = get_result r in
+      model#set ~row ~column:p.Model.pr_result result;
       model#set ~row ~column:Model.result 
 	(max result (model#get ~row ~column:Model.result));
+      if alone or (Tools.live_update ())then begin 
+	build_statistics model (model#get ~row ~column:Model.parent)
+      end;
       result
     with Not_found -> begin
       print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
@@ -355,10 +261,10 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench =
     1
   end
 
-let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s bench () = 
+let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store) s bench alone () = 
   try 
     let oblig = Hashtbl.find Model.obligs s in
-    let _ = run_prover_child p view model oblig bench in
+    let _ = run_prover_child p view model oblig bench alone in
     ()
   with Not_found -> begin
     print_endline ("     [...] Error : obligation \""^s^"\" not found !"); 
@@ -381,7 +287,7 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () =
 	(fun nb row -> 
 	   let s = model#get ~row ~column:Model.fullname in
 	   let oblig = Model.find_oblig s in
-	   let result = run_prover_child p view model oblig bench in
+	   let result = run_prover_child p view model oblig bench false in
 	   result + nb)
 	0
 	mychildren 
@@ -398,14 +304,9 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () =
 	let path = model#get_path row in
 	expand_row view path bench
       end;
-    update_statistics p model row succeed;
-    let statistics = get_statistics model row 
-    and total = string_of_int (get_all_results f model) 
-    and children = string_of_int n in
-    !flash_info 
-      ("Function \""^f^"\" statistics : "^statistics^" / "^(string_of_int n));
-    model#set 
-      ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
+    if not (Tools.live_update ()) then begin 
+      build_statistics model f
+    end 
   with Not_found -> 
     begin 
       print_endline ("     [...] Error : function \""^f^"\" not found !"); 
@@ -434,48 +335,66 @@ let main () =
   let menubar = GMenu.menu_bar ~packing:vbox#pack () in
   let factory = new GMenu.factory menubar in
   let accel_group = factory#accel_group in
-  let file_menu = factory#add_submenu "File" in
+  let file_menu = factory#add_submenu "_File" in
   let file_factory = new GMenu.factory file_menu ~accel_group in
   let _ = 
-    file_factory#add_image_item ~stock:`REFRESH ~label:"Refresh"
+    file_factory#add_image_item ~stock:`REFRESH ~label:"_Refresh"
       ~key:GdkKeysyms._R () 
   in
   let _ = file_factory#add_separator () in
   let _ = 
-    file_factory#add_image_item ~key:GdkKeysyms._Q ~label:"Quit" 
+    file_factory#add_image_item ~key:GdkKeysyms._Q ~label:"_Quit" 
       ~callback:(fun () -> exit 0) () 
   in
   (* configuration menu *)
-  let configuration_menu = factory#add_submenu "Configuration" in
+  let configuration_menu = factory#add_submenu "_Configuration" in
   let configuration_factory = 
     new GMenu.factory configuration_menu ~accel_group 
   in
   let _ =
+    configuration_factory#add_image_item ~label:"Preferences" 
+      ~stock:`PREFERENCES
+      ~callback:(fun () -> Preferences.show Tools.Preferences ()) () in
+  let _ =
     configuration_factory#add_image_item ~label:"Customize colors" 
       ~stock:`SELECT_COLOR
-      ~callback:(fun () -> !flash_info "Not implemented") () in
-  let _ = 
-    configuration_factory#add_image_item ~label:"Customize fonts" 
-      ~stock:`SELECT_FONT
-      ~callback:(fun () -> !flash_info "Not implemented") () in
+      ~callback:(fun () -> Preferences.show Tools.Color ()) () in
+  (*let _ = 
+   *  configuration_factory#add_image_item ~label:"Customize fonts" 
+   *  ~stock:`SELECT_FONT
+   * ~callback:(fun () -> !flash_info "Not implemented") () in
+   *)
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
+  let vp = GPack.paned `VERTICAL ~packing:hp#add () in
 
-  (* left tree of proof obligations *)
   let model = Model.create_model () in
+
+  (* function list *)
+  (* est ce que c vraiment necessaire de faire List.rev ??? *)
+  let fct_l = List.rev (Queue.fold (fun t k -> k::t) [] Model.fq) in
+  let files = List.map 
+    (fun f -> 
+       if Filename.is_relative f 
+       then Filename.concat (Sys.getcwd ()) f
+       else f)
+    Options.files 
+  in
+  let fct_combo = GEdit.combo ~allow_empty:false ~popdown_strings:files 
+    ~value_in_list:true ~packing:vp#add1 () in
+  let _ = fct_combo#entry#set_editable false in
+  
+  (* left tree of proof obligations *)
   let scrollview = GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:380 ~packing:hp#add1 () in
+    ~width:350 ~packing:vp#add2 () in
   let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_provers = View.add_columns ~view ~model in
-  let _ = 
-    Hashtbl.iter 
-      (fun f row -> 
-	 let n = model#iter_n_children (Some(row)) in
-	 model#set ~row ~column:Model.name (f^" 0/"^(string_of_int n)^" [0|0|0]   "))
-      Model.frows in
+  let scrollview_width () = 
+    (List.fold_left (fun t (_,k) -> t + k#width) 10 vc_provers) + View.first_col#width
+  in
   (* cache and view menu *)
   let _ = configuration_factory#add_separator () in
   let _ = 
@@ -522,7 +441,7 @@ let main () =
   in 
   
   (* proof menu *)
-  let proof_menu = factory#add_submenu "Proof" in
+  let proof_menu = factory#add_submenu "_Proof" in
   let proof_factory = new GMenu.factory proof_menu ~accel_group in 
   let _ = 
     proof_factory#add_image_item ~label:"Start benchmark" 
@@ -545,7 +464,7 @@ let main () =
 	 let s = model#get ~row ~column:Model.fullname in 
 	 if model#iter_has_child row then
 	   prove (run_prover_fct !default_prover view model s false)
-	 else let name,_ = decomp_name s in 
+	 else let name = model#get ~row ~column:Model.parent in 
 	 prove (run_prover_fct !default_prover view model name false))
       view#selection#get_selected_rows in
   let _ = 
@@ -557,12 +476,13 @@ let main () =
       (fun p -> 
 	 let row = model#get_iter p in
 	 let s = model#get ~row ~column:Model.fullname in 
-	 if model#iter_has_child row then
-	   let row = Queue.peek (Model.find_fobligs s) in
-	   let s = model#get ~row ~column:Model.fullname in
-	   prove (run_prover_oblig !default_prover view model s false)
-	 else 
-	   prove (run_prover_oblig !default_prover view model s false))
+	 (if model#iter_has_child row then
+	    let row = Queue.peek (Model.find_fobligs s) in
+	    let s = model#get ~row ~column:Model.fullname in
+	    prove (run_prover_oblig !default_prover view model s false true)
+	  else 
+	    prove (run_prover_oblig !default_prover view model s false true));
+      )
       view#selection#get_selected_rows in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected obligation" 
@@ -652,6 +572,7 @@ let main () =
   let _ = tv2#misc#modify_font !lower_view_general_font in
   let _ = tv2#set_editable false in
   let _ = tv2#set_wrap_mode `WORD in
+  let _ = Pprinter.set_tvsource tv2 in
 
   (* upper text view: obligation *)
   let buf1 = GText.buffer () in 
@@ -661,7 +582,7 @@ let main () =
   let _ = tv1#set_wrap_mode `WORD in
  
   (* status bar  *)
-  let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Cache.is_enabled ()) 
+  let mypprint = GButton.check_button ~label:"Pretty Printer   " ~active:(Pprinter.is_active ()) 
     ~packing:hbox#pack() in
   let _ = mypprint#connect#toggled 
     ~callback:(fun () -> Pprinter.swap_active ();
@@ -669,6 +590,9 @@ let main () =
 		 select_obligs model tv1 tv2 list
 	      ) in
   (* cache *)
+  let liveupd = GButton.check_button ~label:"Live update   " ~active:(Tools.live_update ()) 
+    ~packing:hbox#pack() in
+  let _ = liveupd#connect#toggled ~callback:(fun () -> Tools.swap_live ()) in
   let mycache = GButton.check_button ~label:"Cache   " ~active:(Cache.is_enabled ()) 
     ~packing:hbox#pack() in
   let _ = mycache#connect#toggled ~callback:(fun () -> Cache.swap_active ()) in
@@ -677,12 +601,12 @@ let main () =
   let _ = myoblig#connect#toggled ~callback:(fun () -> Cache.swap_try_proof ()) in
   (* timeout set *)
   let _ = GMisc.label ~text:"Timeout" ~xalign:0. ~packing:hbox#pack () in
-  let timeout = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
-  timeout#adjustment#set_bounds ~lower:1. ~upper:999. ~step_incr:1. ();
-  timeout#adjustment#set_value 10.;
+  let timeout_b = GEdit.spin_button ~digits:0 ~packing:hbox#pack () in
+  timeout_b#adjustment#set_bounds ~lower:1. ~upper:999. ~step_incr:1. ();
+  timeout_b#adjustment#set_value (float_of_int (Tools.get_timeout ()));
   let _ = 
-    timeout#connect#value_changed ~callback:
-      (fun () -> set_timeout timeout#value_as_int)
+    timeout_b#connect#value_changed ~callback:
+      (fun () -> Tools.set_timeout timeout_b#value_as_int)
   in
 
   (* status bar *)
@@ -740,6 +664,20 @@ let main () =
   in
 
   (*
+   * function selection 
+   *)
+  let _ =
+    fct_combo#entry#event#connect#focus_in ~callback:
+      begin fun ev -> 
+	let s = fct_combo#entry#text in
+	let loc = {Tags.file=s; Tags.line="1"; Tags.sp="1"; Tags.ep="1"} in
+	Pprinter.move_to_source (Some(loc));
+	Pprinter.reset_last_file ();
+	false
+      end
+  in
+
+  (*
    * Running obligation 
    *)
   ignore (view#event#connect#button_release ~callback:
@@ -749,10 +687,10 @@ let main () =
 		   (fun p -> 
 		      let row = model#get_iter p in
 		      let s = model#get ~row ~column:Model.fullname in
-		      if model#iter_has_child row then
+		      (if model#iter_has_child row then
 			prove (run_prover_fct !default_prover view model s false)
 		      else 
-			prove (run_prover_oblig !default_prover view model s false)
+			prove (run_prover_oblig !default_prover view model s false true));
 		   )
 		   view#selection#get_selected_rows;
 	       false
@@ -786,11 +724,12 @@ let main () =
 			  Pprinter.reset_last_file ();
 			  Buffer.clear buffer
 			with Not_found -> ()); 
-	       true));
+	       false));
 
   (*
    * Startup configuration 
    *)
+  (* shows first obligation *)
   let _ = 
     match !Model.first_row with
       | None -> () 
@@ -813,9 +752,14 @@ let main () =
 	       try 
 		 Queue.iter 
 		   (fun p -> 
-		      let zecol = get_prover p in
+		      let zecol = get_prover p 
+		      and parent = model#get ~row ~column:Model.parent in
+		      let parent = Model.find_fct parent in
+		      let r = model#get ~row:parent ~column:zecol.Model.pr_result in
 		      model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
-		      model#set ~row ~column:Model.result 1
+		      model#set ~row ~column:zecol.Model.pr_result 1;
+		      model#set ~row ~column:Model.result 1;
+		      model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
 		   )
 		   (Cache.find cleaned)
 	       with Not_found -> 
@@ -845,8 +789,43 @@ let main () =
   w#add_accel_group accel_group;
   w#show ()
 
+(* config in .gwhyrc *)
+let set_loaded_config () = 
+  let l = [("cache", Cache.set_active) ; 
+	   ("hard_proof", Cache.set_try_proof) ; 
+	   ("live_update", Tools.set_live)] in
+  List.iter 
+    (fun (k,f) -> 
+       let v = 
+	 try bool_of_string (Config.get_value k)
+	 with _ -> begin
+	   prerr_endline ("     [...] .gwhyrc : invalid value for " ^ k); 
+	   true 
+	 end
+	 in
+       (f v))
+    l;
+  Tools.set_timeout 
+    (try (int_of_string (Config.get_value "timeout"))
+     with _ -> 
+       begin
+	 prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
+	 10 
+       end);
+  set_prover 
+    (try (get_prover (Config.get_value "prover"))
+    with Not_found -> 
+      begin
+	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
+	List.hd Model.provers
+      end)
+       
+
 (* Main *)
 let _ = 
   ignore (GtkMain.Main.init ());
+  Config.load ();
+  set_loaded_config ();
+  if not is_caduceus then Pprinter.desactivate ();
   main () ;
   GtkThread.main ()

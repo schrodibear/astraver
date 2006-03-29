@@ -14,14 +14,23 @@
  * (enclosed in the file GPL).
  *)
 
-val fc_hilight : string
-val bc_hilight : string
+type color = {
+  key : string;
+  name : string;
+  fc : string;
+  bc : string;
+}
 
 val get_fc : string -> string
 val get_bc : string -> string
 val get_color : string -> string * string
 
-val get_fc_predicate : string
-val get_bc_predicate : string
+val get_fc_predicate : unit -> string
+val get_bc_predicate : unit -> string
 
 val color_exists : string -> bool
+
+val get_all_colors : unit -> color list
+val replace_color : string -> string -> string -> unit
+
+val has_changed : unit -> bool

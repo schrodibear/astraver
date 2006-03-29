@@ -21,30 +21,7 @@ open Format
 open Misc
 open Pp
 open Tags
-
-let rec print_pure_type fmt = function
-  | PTint -> fprintf fmt "int"
-  | PTbool -> fprintf fmt "bool"
-  | PTunit -> fprintf fmt "void"
-  | PTreal -> fprintf fmt "float"
-  | PTexternal ([v], id) when id == farray -> 
-      fprintf fmt "@[(array %a)@]" print_pure_type v
-  | PTexternal([],id) -> Ident.print fmt id
-  | PTexternal([l],id) -> 
-      fprintf fmt "@[%a %a@]"
-	print_pure_type l
-	Ident.print id
-  | PTexternal(l,id) -> 
-      fprintf fmt "@[(%a) %a@]"
-	(print_list comma print_pure_type) l
-	Ident.print id
-  | PTvar { type_val = Some t} -> 
-      fprintf fmt "%a" print_pure_type t      
-  | PTvar v ->
-      fprintf fmt "A%d" v.tag
-
-let print_binder = Coq.print_binder_v8
-let print_binder_type = Coq.print_binder_type_v8
+open Astprinter
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -184,9 +161,3 @@ let print_predicate fmt p =
 	fprintf fmt "@[(%a)@]" print0 p
   in
   print0 fmt p
-
-let rec print_cc_type fmt = function
-  | TTpure pt -> 
-      print_pure_type fmt pt
-  | t -> Coq.print_cc_type_v8 fmt t
-

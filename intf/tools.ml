@@ -16,6 +16,12 @@
 
 open Tags
 
+type window = 
+  | Preferences
+  | Color
+  | About
+  | Help
+
 let grab_infos = 
   let r_loc = Str.regexp "File \"\\(.+\\)\", line \\([0-9]+\\), characters \\([0-9]+\\)-\\([0-9]+\\)" in
   fun s -> 
@@ -26,3 +32,26 @@ let grab_infos =
             sp=(Str.matched_group 3 s);
             ep=(Str.matched_group 4 s)})
     else None
+
+let decomp_name =
+  let r = Str.regexp "\\(.*\\)_po_\\([0-9]+\\)" in
+  fun s ->
+    if Str.string_match r s 0 then
+      Str.matched_group 1 s, Str.matched_group 2 s
+    else
+      "goals", s
+
+(*
+ * Live update
+ *)
+let live = ref true
+let swap_live () = live := not !live
+let set_live v = live := v
+let live_update () = !live
+
+(* 
+ * Timeout 
+ *)
+let timeout = ref 10
+let set_timeout v = timeout := v
+let get_timeout () = !timeout

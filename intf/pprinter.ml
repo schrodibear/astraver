@@ -40,6 +40,8 @@ let activate () = active := true
 let swap_active () = active := not !active
 let is_active () = !active
 
+let set_tvsource tvs = tv_source := tvs
+
 let reset_last_file () = 
   last_file := ""
 
@@ -159,7 +161,7 @@ let create_tag (tbuf:GText.buffer) t loc =
 	 else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
 	   Tags.refresh_last_colored [new_tag];
 	   new_tag#set_properties 
-	       [`BACKGROUND bc_hilight; `FOREGROUND fc_hilight]
+	       [`BACKGROUND (get_bc "pr_hilight"); `FOREGROUND (get_fc "pr_hilight")]
 	 end;
 	 false)
   );
@@ -171,8 +173,8 @@ let create_all_tags (tbuf:GText.buffer) =
 let print_oblig fmt (ctx,concl) = 
   let print_pure_type, print_predicate = 
     if is_active () 
-    then Astpprinter.print_pure_type, Astpprinter.print_predicate
-    else Astnprinter.print_pure_type, Astnprinter.print_predicate
+    then Astprinter.print_pure_type, Astpprinter.print_predicate
+    else Astprinter.print_pure_type, Astnprinter.print_predicate
   in 
   let ctx, concl = intros ctx concl in
   let rec print_list print = function
@@ -213,7 +215,7 @@ let print_all (tbuf:GText.buffer) s p =
   create_all_tags tbuf;
   split tbuf (Lexing.from_string str);
   let (_,concl) = p in
-  let mytag = tbuf#create_tag [`UNDERLINE `DOUBLE;`FOREGROUND (get_fc "separator")] in
+  let mytag = tbuf#create_tag [`UNDERLINE `DOUBLE;`FOREGROUND (get_fc "separator"); `BACKGROUND (get_bc "separator")] in
   tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
     "_                                                        _\n\n";
   let conclusion = 
@@ -228,6 +230,7 @@ let print_all (tbuf:GText.buffer) s p =
   split tbuf (Lexing.from_string conclusion)
 
 let unchanged s pprint = 
+  (not (Colors.has_changed ())) &&
   (is_buffer_saved s) 
   && (try 
 	(Hashtbl.find pprinter s) = pprint
@@ -288,8 +291,7 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
     with Not_found -> ()
   end
     
-let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) = 
-  tv_source := tv_s;
+let text_of_obligation (tv:GText.view) (o,s,p) = 
   last_fct := s;
   if (unchanged s (is_active ())) then 
     tv#set_buffer (get_buffer s)
@@ -300,7 +302,7 @@ let text_of_obligation (tv:GText.view) (tv_s:GText.view) (o,s,p) =
       tv#event#connect#button_release 
 	~callback:(fun ev -> 
 		     if GdkEvent.Button.button ev = 3 then
-		       show_definition tv tv_s; 
+		       show_definition tv !tv_source; 
 		     false)
     in
     print_all tbuf s p;
