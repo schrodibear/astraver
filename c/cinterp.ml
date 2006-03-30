@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.174 2006-03-29 14:20:31 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.175 2006-03-30 12:34:43 filliatr Exp $ i*)
 
 
 open Format
@@ -198,9 +198,9 @@ let rec interp_term label old_label t =
 		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
 		 v.logic_heap_args targs in
 	let targs = List.fold_right 
-	  (fun (z,s,_) l -> 
-	     if z.zone_is_var then LVar(zoned_name s (Pointer z))::l else l)
-	  reads targs in
+	  (fun (z,s,_) l -> LVar(zoned_name s (Pointer z))::l)
+	  reads targs 
+	in
 	LApp (v.logic_name,targs)
     | NTcast({ctype_node = Tpointer _}, 
 	    {nterm_node = NTconstant (IntConstant "0")}) ->
@@ -1464,7 +1464,8 @@ let cinterp_logic_symbol id ls =
 	let e = interp_term None "" e in
 	let ret_type = 
 	  match ret.Ctypes.ctype_node with
-	    | Tvar s -> [],s
+	    | Tvar s -> [], s
+	    | Tint _ -> [], "int"
 	    | _ -> assert false
 	in
 	let args = interp_predicate_args id args in

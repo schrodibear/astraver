@@ -416,6 +416,8 @@ intf/cache.cmo: src/options.cmi src/logic.cmi src/cc.cmi
 intf/cache.cmx: src/options.cmx src/logic.cmi src/cc.cmi 
 intf/colors.cmo: intf/colors.cmi 
 intf/colors.cmx: intf/colors.cmi 
+intf/config.cmo: intf/tools.cmo intf/model.cmo intf/cache.cmo 
+intf/config.cmx: intf/tools.cmx intf/model.cmx intf/cache.cmx 
 intf/hilight.cmo: intf/colors.cmi 
 intf/hilight.cmx: intf/colors.cmx 
 intf/model.cmo: intf/tools.cmo src/dispatcher.cmi 
@@ -432,10 +434,8 @@ intf/pprinter.cmx: intf/whyhilight.cmx src/vcg.cmx intf/tagsplit.cmx \
     src/ident.cmx intf/hilight.cmx intf/colors.cmx src/cc.cmi \
     intf/astprinter.cmx intf/astpprinter.cmx intf/astnprinter.cmx \
     intf/pprinter.cmi 
-intf/preferences.cmo: intf/tools.cmo intf/model.cmo intf/colors.cmi \
-    intf/cache.cmo 
-intf/preferences.cmx: intf/tools.cmx intf/model.cmx intf/colors.cmx \
-    intf/cache.cmx 
+intf/preferences.cmo: intf/tools.cmo intf/colors.cmi 
+intf/preferences.cmx: intf/tools.cmx intf/colors.cmx 
 intf/stat.cmo: intf/tools.cmo intf/tags.cmo src/report.cmi \
     intf/preferences.cmo intf/pprinter.cmi src/options.cmi intf/model.cmo \
     src/main.cmo src/env.cmi src/dispatcher.cmi intf/config.cmo \
