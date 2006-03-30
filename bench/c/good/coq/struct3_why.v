@@ -12,22 +12,21 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A760:Set), forall (A761:Set), forall (A762:Set), forall (A763:Set),
-  forall (A764:Set), forall (A765:Set), forall (A766:Set), forall (A767:Set),
+  forall (A743:Set),
   forall (alloc: alloc_table),
-  forall (x_a_3: ((memory) Z A767)),
-  forall (y_a_3: ((memory) Z A767)),
+  forall (x_a_3: ((memory) Z A743)),
+  forall (y_a_3: ((memory) Z A743)),
   forall (HW_1: 1 >= 1),
-  forall (result: ((pointer) A767)),
+  forall (result: ((pointer) A743)),
   forall (alloc0: alloc_table),
   forall (HW_2: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (x_a_3_0: ((memory) Z A767)),
+  forall (x_a_3_0: ((memory) Z A743)),
   forall (HW_3: x_a_3_0 = (upd x_a_3 result 1)),
-  forall (y_a_3_0: ((memory) Z A767)),
+  forall (y_a_3_0: ((memory) Z A743)),
   forall (HW_4: y_a_3_0 = (upd y_a_3 result 2)),
   forall (result0: Z),
   forall (HW_5: result0 = (acc y_a_3_0 result)),
@@ -40,8 +39,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_1 : 
-  forall (A768:Set),
-  forall (s_u_4: ((memory) ((pointer) s_1) A768)),
+  forall (A744:Set),
+  forall (s_u_4: ((memory) ((pointer) s_1) A744)),
   forall (HW_1: (valid1 s_u_4) /\ (separation2 s_u_4 s_u_4)),
   1 >= 1.
 Proof.
@@ -50,23 +49,22 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_impl_po_2 : 
-  forall (A769:Set), forall (A770:Set), forall (A771:Set), forall (A772:Set),
-  forall (A773:Set), forall (A774:Set), forall (A775:Set), forall (A776:Set),
+  forall (A745:Set),
   forall (alloc: alloc_table),
-  forall (s_u_4: ((memory) ((pointer) s_1) A776)),
+  forall (s_u_4: ((memory) ((pointer) s_1) A745)),
   forall (x_s_1: ((memory) Z s_1)),
   forall (y_s_1: ((memory) Z s_1)),
-  forall (z_u_4: ((memory) Z A776)),
+  forall (z_u_4: ((memory) Z A745)),
   forall (HW_1: (valid1 s_u_4) /\ (separation2 s_u_4 s_u_4)),
   forall (HW_2: 1 >= 1),
-  forall (result: ((pointer) A776)),
+  forall (result: ((pointer) A745)),
   forall (alloc0: alloc_table),
   forall (HW_3: (valid alloc0 result) /\ (offset result) = 0 /\
                 (block_length alloc0 result) = 1 /\
                 (valid_range alloc0 result 0 (1 - 1)) /\
                 (fresh alloc result) /\ (on_stack alloc0 result) /\
                 (alloc_stack result alloc alloc0)),
-  forall (z_u_4_0: ((memory) Z A776)),
+  forall (z_u_4_0: ((memory) Z A745)),
   forall (HW_4: z_u_4_0 = (upd z_u_4 result 1)),
   forall (result0: ((pointer) s_1)),
   forall (HW_5: result0 = (acc s_u_4 result)),

@@ -134,7 +134,7 @@ for f in $FILES; do
 	exit 1
     fi
 done
-../../../bin/dp.opt -timeout 20 simplify/*_why.sx.all 2>/dev/null || true
+../../../bin/dp.opt -timeout 20 simplify/*_why.sx 2>/dev/null || true
 
 
 for f in $FILES; do

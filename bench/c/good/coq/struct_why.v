@@ -5,14 +5,14 @@ Require Export struct_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_1 : 
-  forall (A807:Set),
-  forall (t2: ((pointer) A807)),
+  forall (A787:Set),
+  forall (t2: ((pointer) A787)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
-  forall (x_t2_10: ((memory) Z A807)),
+  forall (x_t2_10: ((memory) Z A787)),
   forall (x_t_2: ((memory) Z t_2)),
   forall (y_t_2: ((memory) Z t_2)),
   forall (z_s_12: ((memory) Z s_12)),
@@ -27,14 +27,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_2 : 
-  forall (A808:Set),
-  forall (t2: ((pointer) A808)),
+  forall (A788:Set),
+  forall (t2: ((pointer) A788)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
-  forall (x_t2_10: ((memory) Z A808)),
+  forall (x_t2_10: ((memory) Z A788)),
   forall (x_t_2: ((memory) Z t_2)),
   forall (y_t_2: ((memory) Z t_2)),
   forall (z_s_12: ((memory) Z s_12)),
@@ -45,12 +45,12 @@ Save.
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
-  forall (x_t2_10_0: ((memory) Z A808)),
+  forall (x_t2_10_0: ((memory) Z A788)),
   forall (HW_4: x_t2_10_0 = (upd x_t2_10 t2 (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
   forall (HW_6: result0 = (acc x_t2_10_0 t2)),
-  forall (x_t2_10_1: ((memory) Z A808)),
+  forall (x_t2_10_1: ((memory) Z A788)),
   forall (HW_7: x_t2_10_1 = (upd x_t2_10_0 t2 (1 + result0))),
   result0 = 1.
 Proof.
@@ -59,14 +59,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_3 : 
-  forall (A809:Set),
-  forall (t2: ((pointer) A809)),
+  forall (A789:Set),
+  forall (t2: ((pointer) A789)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
-  forall (x_t2_10: ((memory) Z A809)),
+  forall (x_t2_10: ((memory) Z A789)),
   forall (x_t_2: ((memory) Z t_2)),
   forall (y_t_2: ((memory) Z t_2)),
   forall (z_s_12: ((memory) Z s_12)),
@@ -77,12 +77,12 @@ Save.
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
-  forall (x_t2_10_0: ((memory) Z A809)),
+  forall (x_t2_10_0: ((memory) Z A789)),
   forall (HW_4: x_t2_10_0 = (upd x_t2_10 t2 (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
   forall (HW_6: result0 = (acc x_t2_10_0 t2)),
-  forall (x_t2_10_1: ((memory) Z A809)),
+  forall (x_t2_10_1: ((memory) Z A789)),
   forall (HW_7: x_t2_10_1 = (upd x_t2_10_0 t2 (1 + result0))),
   (acc x_t2_10_1 t2) = 2.
 Proof.
@@ -91,14 +91,14 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_4 : 
-  forall (A810:Set),
-  forall (t2: ((pointer) A810)),
+  forall (A790:Set),
+  forall (t2: ((pointer) A790)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
-  forall (x_t2_10: ((memory) Z A810)),
+  forall (x_t2_10: ((memory) Z A790)),
   forall (x_t_2: ((memory) Z t_2)),
   forall (y_t_2: ((memory) Z t_2)),
   forall (z_s_12: ((memory) Z s_12)),
@@ -109,12 +109,12 @@ Save.
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
-  forall (x_t2_10_0: ((memory) Z A810)),
+  forall (x_t2_10_0: ((memory) Z A790)),
   forall (HW_4: x_t2_10_0 = (upd x_t2_10 t2 (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
   forall (HW_6: result0 = (acc x_t2_10_0 t2)),
-  forall (x_t2_10_1: ((memory) Z A810)),
+  forall (x_t2_10_1: ((memory) Z A790)),
   forall (HW_7: x_t2_10_1 = (upd x_t2_10_0 t2 (1 + result0))),
   (not_assigns alloc x_t2_10 x_t2_10_1 (pset_singleton t2)).
 Proof.
@@ -128,16 +128,16 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma f_impl_po_5 : 
-  forall (A811:Set),
-  forall (t2: ((pointer) A811)),
+  forall (A791:Set),
+  forall (t2: ((pointer) A791)),
   forall (alloc: alloc_table),
   forall (pps: ((pointer) pps_14)),
   forall (ps: ((pointer) s_12)),
   forall (s: ((pointer) s_12)),
   forall (t_s_12: ((memory) ((pointer) t_2) s_12)),
-  forall (x_t2_10: ((memory) Z A811)),
+  forall (x_t2_10: ((memory) Z A791)),
   forall (x_t_2: ((memory) Z t_2)),
-  forall (y_t2_10: ((memory) Z A811)),
+  forall (y_t2_10: ((memory) Z A791)),
   forall (y_t_2: ((memory) Z t_2)),
   forall (z_s_12: ((memory) Z s_12)),
   forall (HW_1: (* File "struct.c", line 7, characters 14-38 *)
@@ -147,12 +147,12 @@ Save.
   forall (HW_2: (valid alloc t2)),
   forall (result: Z),
   forall (HW_3: result = (acc x_t2_10 t2)),
-  forall (x_t2_10_0: ((memory) Z A811)),
+  forall (x_t2_10_0: ((memory) Z A791)),
   forall (HW_4: x_t2_10_0 = (upd x_t2_10 t2 (result + 1))),
   forall (HW_5: (valid alloc t2)),
   forall (result0: Z),
   forall (HW_6: result0 = (acc x_t2_10_0 t2)),
-  forall (x_t2_10_1: ((memory) Z A811)),
+  forall (x_t2_10_1: ((memory) Z A791)),
   forall (HW_7: x_t2_10_1 = (upd x_t2_10_0 t2 (1 + result0))),
   (not_assigns alloc y_t2_10 y_t2_10 pset_empty).
 Proof.
