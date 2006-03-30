@@ -10,7 +10,7 @@ void test_f1() {
 }
 
 
-/* @ logic int f2(int t[], int x) { t[x] } */
+/*@ logic int f2(int t[], int x) { t[x] } */
 
 void test_f2() {
   int t[2];

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.98 2006-03-23 10:41:00 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.99 2006-03-30 12:39:39 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -244,7 +244,8 @@ let interp_decl ?(prelude=false) d =
       add_global_logic id t;
       let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
       let e,ty' = Ltyping.term lab env' e in
-      if ty <> ty' then Ltyping.expected_type loc (PureType ty);
+      if not (eq_pure_type ty ty') then 
+	Ltyping.expected_type loc (PureType ty);
       let f = generalize_function_def (pl,ty,e) in
       push_decl (Dfunction_def (loc, Ident.string id, f))
   | Axiom (loc, id, p) ->
