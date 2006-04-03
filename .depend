@@ -122,10 +122,10 @@ src/monad.cmo: src/util.cmi src/typing.cmi src/types.cmi src/rename.cmi \
 src/monad.cmx: src/util.cmx src/typing.cmx src/types.cmi src/rename.cmx \
     src/misc.cmx src/logic.cmi src/loc.cmx src/ident.cmx src/env.cmx \
     src/effect.cmx src/cc.cmi src/ast.cmi src/monad.cmi 
-src/monomorph.cmo: src/vcg.cmi src/misc.cmi src/logic.cmi src/ident.cmi \
-    src/env.cmi src/cc.cmi src/monomorph.cmi 
-src/monomorph.cmx: src/vcg.cmx src/misc.cmx src/logic.cmi src/ident.cmx \
-    src/env.cmx src/cc.cmi src/monomorph.cmi 
+src/monomorph.cmo: src/vcg.cmi src/pp.cmi src/misc.cmi src/logic_decl.cmi \
+    src/logic.cmi src/ident.cmi src/env.cmi src/cc.cmi src/monomorph.cmi 
+src/monomorph.cmx: src/vcg.cmx src/pp.cmx src/misc.cmx src/logic_decl.cmi \
+    src/logic.cmi src/ident.cmx src/env.cmx src/cc.cmi src/monomorph.cmi 
 src/ocaml.cmo: src/util.cmi src/types.cmi src/pp.cmi src/options.cmi \
     src/misc.cmi src/logic.cmi src/ident.cmi src/env.cmi src/ast.cmi \
     src/ocaml.cmi 
@@ -248,7 +248,7 @@ src/mlize.cmi: src/rename.cmi src/logic.cmi src/loc.cmi src/env.cmi \
     src/cc.cmi src/ast.cmi 
 src/monad.cmi: src/types.cmi src/rename.cmi src/logic.cmi src/loc.cmi \
     src/ident.cmi src/env.cmi src/cc.cmi src/ast.cmi 
-src/monomorph.cmi: src/vcg.cmi src/logic.cmi src/env.cmi src/cc.cmi 
+src/monomorph.cmi: src/logic_decl.cmi 
 src/ocaml.cmi: src/types.cmi src/ident.cmi src/env.cmi 
 src/parser.cmi: src/ptree.cmi 
 src/ptree.cmi: src/types.cmi src/logic.cmi src/loc.cmi src/ident.cmi 

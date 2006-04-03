@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.38 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.39 2006-04-03 08:26:57 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -90,11 +90,7 @@ let rec print_pure_type fmt = function
       fprintf fmt "(ARRAY INT OF %a)" print_pure_type pt
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i
-
-and instance fmt = function
-  | [] -> ()
-  | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
+  | PTexternal (i ,id) -> Monomorph.symbol fmt (id, i)
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -137,9 +133,9 @@ let rec print_term fmt = function
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
   | Tapp (id, [], i) ->
-      fprintf fmt "%a%a" Ident.print id instance i
+      fprintf fmt "%a" Monomorph.symbol (id, i)
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[%a%a(%a)@]" Ident.print id instance i print_terms tl
+      fprintf fmt "@[%a(%a)@]" Monomorph.symbol (id, i) print_terms tl
 
 and print_terms fmt tl = 
   print_list comma print_term fmt tl
@@ -169,7 +165,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[%a%a(%a)@]" Ident.print id instance i print_terms tl
+      fprintf fmt "@[%a(%a)@]" Monomorph.symbol (id, i) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(%a =>@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -226,56 +222,59 @@ let rec print_logic_type fmt = function
       fprintf fmt "((%a) -> %a)" 
 	(print_list comma print_pure_type) pl print_pure_type pt
 
-module Mono = struct
+(* we need to recognize array types after monomorphization *)
 
-  let declare_type fmt = function
-    | PTexternal ([_], id) when id == farray -> (* primitive *)
-	()
-    | pt -> 
-	fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt
+let is_array s = String.length s >= 6 && String.sub s 0 6 = "array_"
 
-  let print_logic_instance fmt id i t =
-    fprintf fmt "%%%% Why logic %s@\n" id;
-    fprintf fmt "@[%s%a: %a;@]@\n@\n" id instance i print_logic_type t
+let declare_type fmt id = 
+  if not (is_array id) then fprintf fmt "@[%s: TYPE;@]@\n@\n" id
 
-  let print_predicate_def_instance fmt id i (bl,p) =
-    fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
-    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
-      id instance i
-      print_logic_type (Predicate (List.map snd bl))
-      (print_list comma 
-	 (fun fmt (x,pt) -> 
-	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
-      print_predicate p
+let print_logic fmt id t =
+  fprintf fmt "%%%% Why logic %s@\n" id;
+  fprintf fmt "@[%s: %a;@]@\n@\n" id print_logic_type t
 
-  let print_function_def_instance fmt id i (bl,t,e) =
-    fprintf fmt "@[%%%% Why function %s@]@\n" id;
-    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
-      id instance i
-      print_logic_type (Function (List.map snd bl, t))
-      (print_list comma 
-	 (fun fmt (x,pt) -> 
-	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
-      print_term e
+let print_predicate_def fmt id (bl,p) =
+  fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
+  fprintf fmt "@[<hov 2>%s: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+    id 
+    print_logic_type (Predicate (List.map snd bl))
+    (print_list comma 
+       (fun fmt (x,pt) -> 
+	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
+    print_predicate p
+    
+let print_function_def fmt id (bl,t,e) =
+  fprintf fmt "@[%%%% Why function %s@]@\n" id;
+  fprintf fmt "@[<hov 2>%s: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+    id
+    print_logic_type (Function (List.map snd bl, t))
+    (print_list comma 
+       (fun fmt (x,pt) -> 
+	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
+    print_term e
 
-  let print_axiom_instance fmt id i p =
-    fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
-    fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
+let print_axiom fmt id p =
+  fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
+  fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
-  let print_obligation fmt (loc, o, s) = 
-    fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
-    fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
+let print_obligation fmt (loc, o, s) = 
+  fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
+  fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 
-end
+let push_decl d = Monomorph.push_decl d
 
-module Output = Monomorph.Make(Mono)
+let iter = Monomorph.iter
 
-let print_elem fmt = function
-  | Oblig o -> Output.print_obligation fmt o
-  | Axiom (id, p) -> Output.print_axiom fmt id p
-  | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
-  | FunctionDef (id, p) -> Output.print_function_def fmt id p
-  | Logic (id, t) -> Output.print_logic fmt id t
+let reset () = Monomorph.reset ()
+
+let output_elem fmt = function
+  | Dtype (loc, [], id) -> declare_type fmt id
+  | Dtype _ -> assert false
+  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Dgoal o -> print_obligation fmt o
 
 let prelude_done = ref false
 let prelude fmt = 
@@ -288,8 +287,6 @@ tt: UNIT;
 "
   end
 
-let reset () = Queue.clear queue; Output.reset ()
-
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
   let file = out_file (fwe ^ "_why.cvc") in
@@ -298,5 +295,5 @@ let output_file fwe =
     ~sep
     ~after:(fun fmt -> 
 	      (*if not no_cvcl_prelude then predefined_symbols fmt;*)
-	      Queue.iter (print_elem fmt) queue)
+	      iter (output_elem fmt))
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.13 2006-03-27 14:22:05 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.14 2006-04-03 08:26:57 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -31,23 +31,6 @@ open Pp
 open Ltyping
 open Env
 open Report
-
-type elem = 
-  | Logic of string * logic_type Env.scheme
-  | Oblig of obligation 
-  | Axiom of string * predicate Env.scheme
-  | PredicateDef of string * predicate_def Env.scheme
-  | FunctionDef of string * function_def Env.scheme
-
-let queue = Queue.create ()
-
-let push_decl = function
-  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) queue
-  | Dgoal o -> Queue.add (Oblig o) queue
-  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
-  | Dpredicate_def (_, id, p) -> Queue.add (PredicateDef (id, p)) queue
-  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
-  | Dtype _ -> ()
 
 (*s Pretty print *)
 
@@ -122,15 +105,9 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "BOOLEAN"
   | PTreal -> fprintf fmt "REAL"
   | PTunit -> fprintf fmt "UNIT"
-  | PTexternal ([pt], id) when id == farray -> 
-      fprintf fmt "ARRAY_%a" print_pure_type pt
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (i,id) -> fprintf fmt "%a%a" ident id instance i
-
-and instance fmt = function
-  | [] -> ()
-  | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
+  | PTexternal (i ,id) -> Monomorph.symbol fmt (id, i)
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -175,9 +152,9 @@ let rec print_term fmt = function
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a %a)@]" (infix id) print_term a print_term b
   | Tapp (id, [], i) ->
-      fprintf fmt "%a%a" ident id instance i
+      fprintf fmt "%a" Monomorph.symbol (id, i)
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[(%a%a %a)@]" ident id instance i print_terms tl
+      fprintf fmt "@[(%a %a)@]" Monomorph.symbol (id, i) print_terms tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -208,7 +185,8 @@ let rec print_predicate fmt = function
 	"@[(/\\ (why__le_int why__int_const_0 %a)@ (why__lt_int %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[(%a%a@ %a)@]" ident id instance i print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" 
+	Monomorph.symbol (id, i) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(=> %a@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -274,63 +252,65 @@ let rec print_logic_type fmt = function
       fprintf fmt "%a -> %a" 
 	(print_list comma print_pure_type) pl print_pure_type pt
 
-module Mono = struct
+let declare_type fmt id = 
+  fprintf fmt "@[;; type %s@]@\n@\n" id
+    
+let print_parameter fmt id c =
+  fprintf fmt 
+    "@[;; Why parameter %a@]@\n" idents id;
+  fprintf fmt 
+    "@[<hov 2>;;  %a: %a@]@\n@\n" idents id print_cc_type c
+    
+let print_logic fmt id t =
+  fprintf fmt ";; Why logic %a@\n@\n" idents id
+  (*
+  fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
+  *)
 
-  let declare_type fmt pt = 
-    fprintf fmt "@[;; type %a@]@\n@\n" print_pure_type pt
+let print_predicate_def fmt id (bl,p) =
+  fprintf fmt "@[;; Why predicate %a@]@\n" idents id;
+  fprintf fmt "@[<hov 2>\"%a\" " idents id;
+  List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
+  fprintf fmt "(<=> (%a %a)@ %a)" 
+    idents id
+    (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
+    print_predicate p;
+  List.iter (fun _ -> fprintf fmt "))") bl;
+  fprintf fmt "@]@\n@\n"
 
-  let print_parameter fmt id c =
-    fprintf fmt 
-      "@[;; Why parameter %a@]@\n" idents id;
-    fprintf fmt 
-      "@[<hov 2>;;  %a: %a@]@\n@\n" idents id print_cc_type c
+let print_function_def fmt id (bl,t,e) =
+  fprintf fmt "@[;; Why function %a@]@\n" idents id;
+  fprintf fmt "@[<hov 2>\"%a\" " idents id;
+  List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
+  fprintf fmt "(= (%a %a)@ %a)" 
+    idents id
+    (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
+    print_term e;
+  List.iter (fun _ -> fprintf fmt "))@]@\n") bl;
+  fprintf fmt "@]@\n"
 
-  let print_logic_instance fmt id i t =
-    fprintf fmt ";; Why logic %a@\n@\n" idents id
-    (*
-    fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
-    *)
+let print_axiom fmt id p =
+  fprintf fmt "@[;; Why axiom %s@]@\n" id;
+  fprintf fmt "@[<hov 2>\"%s\" %a@]@\n@\n" id print_predicate p
 
-  let print_predicate_def_instance fmt id i (bl,p) =
-    fprintf fmt "@[;; Why predicate %a@]@\n" idents id;
-    fprintf fmt "@[<hov 2>\"%a%a\" " idents id instance i;
-    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
-    fprintf fmt "(<=> (%a%a %a)@ %a)" 
-      idents id instance i
-      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
-      print_predicate p;
-    List.iter (fun _ -> fprintf fmt "))") bl;
-    fprintf fmt "@]@\n@\n"
+let print_obligation fmt (loc, o, s) = 
+  fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
+  fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
 
-  let print_function_def_instance fmt id i (bl,t,e) =
-    fprintf fmt "@[;; Why function %a@]@\n" idents id;
-    fprintf fmt "@[<hov 2>\"%a%a\" " idents id instance i;
-    List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
-    fprintf fmt "(= (%a%a %a)@ %a)" 
-      idents id instance i
-      (print_list space (fun fmt (x,_) -> fprintf fmt "%a" ident x)) bl
-      print_term e;
-    List.iter (fun _ -> fprintf fmt "))@]@\n") bl;
-    fprintf fmt "@]@\n"
+let push_decl d = Monomorph.push_decl d
 
-  let print_axiom_instance fmt id i p =
-    fprintf fmt "@[;; Why axiom %s@]@\n" id;
-    fprintf fmt "@[<hov 2>\"%s\" %a@]@\n@\n" id print_predicate p
+let iter = Monomorph.iter
 
-  let print_obligation fmt (loc, o, s) = 
-    fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
-    fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
+let reset () = Monomorph.reset ()
 
-end
-
-module Output = Monomorph.Make(Mono)
-
-let print_elem fmt = function
-  | Oblig o -> Output.print_obligation fmt o
-  | Axiom (id, p) -> Output.print_axiom fmt id p
-  | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
-  | FunctionDef (id, p) -> Output.print_function_def fmt id p
-  | Logic (id, t) -> Output.print_logic fmt id t
+let output_elem fmt = function
+  | Dtype (loc, [], id) -> declare_type fmt id
+  | Dtype _ -> assert false
+  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Dgoal o -> print_obligation fmt o
 
 let prelude_done = ref false
 let prelude fmt = 
@@ -350,13 +330,11 @@ let prelude fmt =
 "
   end
 
-let reset () = Queue.clear queue; Output.reset ()
-
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
   let file = out_file (fwe ^ "_why.znn") in
   do_not_edit_below ~file
     ~before:prelude
     ~sep
-    ~after:(fun fmt -> Queue.iter (print_elem fmt) queue)
+    ~after:(fun fmt -> iter (output_elem fmt))
 

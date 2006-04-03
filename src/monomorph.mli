@@ -14,38 +14,23 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.mli,v 1.4 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: monomorph.mli,v 1.5 2006-04-03 08:26:57 filliatr Exp $ i*)
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)
 
-open Logic
-open Cc
-open Vcg
-open Format
+(* input... *)
 
-module type S = sig
-  val declare_type : formatter -> pure_type -> unit
+val push_decl : Logic_decl.t -> unit
 
-  val print_logic_instance : 
-    formatter -> string -> instance -> logic_type -> unit
-  val print_predicate_def_instance : 
-    formatter -> string -> instance -> predicate_def -> unit
-  val print_function_def_instance : 
-    formatter -> string -> instance -> function_def -> unit
-  val print_axiom_instance :
-    formatter -> string -> instance -> predicate -> unit
-  val print_obligation : formatter -> obligation -> unit
-end
+(* ...and output *)
 
-module Make(X : S) : sig
-  val print_obligation : formatter -> obligation -> unit
-  val print_axiom : formatter -> string -> predicate Env.scheme -> unit
-  val print_logic : formatter -> string -> logic_type Env.scheme -> unit
-  val print_predicate_def : 
-    formatter -> string -> predicate_def Env.scheme -> unit
-  val print_function_def : 
-    formatter -> string -> function_def Env.scheme -> unit
+val iter : (Logic_decl.t -> unit) -> unit
 
-  val reset : unit -> unit
-end
+val reset : unit -> unit
+
+(* [symbol id i] prints the instance [i] of symbol [id] using the same 
+   conventions as in the monomorphization process *)
+
+val symbol : Format.formatter -> Ident.t * Logic.instance -> unit
+

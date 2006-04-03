@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.37 2006-03-23 10:41:00 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.38 2006-04-03 08:26:57 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -34,6 +34,8 @@ module Vset : Set.S with type elt = type_var
 module Vmap : Map.S with type key = type_var
 
 type 'a scheme = private { scheme_vars : Vset.t; scheme_type : 'a }
+
+val empty_scheme : 'a -> 'a scheme
 
 (*s AST for typed programs are decorated with local environments *)
 

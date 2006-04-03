@@ -14,30 +14,50 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.13 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.14 2006-04-03 08:26:57 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
 open Ident
 open Misc
 open Logic
+open Logic_decl
 open Cc
 open Vcg
 open Env
 open Format
+open Pp
 
-module type S = sig
-  val declare_type : formatter -> pure_type -> unit
-  val print_logic_instance : 
-    formatter -> string -> instance -> logic_type -> unit
-  val print_predicate_def_instance : 
-    formatter -> string -> instance -> predicate_def -> unit
-  val print_function_def_instance : 
-    formatter -> string -> instance -> function_def -> unit
-  val print_axiom_instance :
-    formatter -> string -> instance -> predicate -> unit
-  val print_obligation : formatter -> obligation -> unit
-end
+(* output queue *)
+let queue = Queue.create ()
+
+let push d = Queue.add d queue
+
+let iter f = Queue.iter f queue
+
+(* the name for a closed instance: name id [t1;...;tn] = id_t1_..._tn *)
+let rec print_pure_type fmt = function
+  | PTint -> fprintf fmt "int"
+  | PTbool -> fprintf fmt "bool"
+  | PTunit -> fprintf fmt "unit"
+  | PTreal -> fprintf fmt "real"
+  | PTexternal ([v], id) when id == farray -> 
+      fprintf fmt "array_%a" print_pure_type v
+  | PTexternal([], id) -> fprintf fmt "%s" (Ident.string id)
+  | PTexternal(i, id) -> fprintf fmt "%a%a" Ident.print id print_instance i
+  | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
+  | PTvar _ -> assert false
+
+and print_instance fmt = function
+  | [] -> ()
+  | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
+
+let name id i =
+  fprintf str_formatter "%s%a" id print_instance i;
+  flush_str_formatter ()
+
+let symbol fmt (id, i) =
+  fprintf fmt "%a%a" Ident.print id print_instance i
 
 (* iteration over instances (function [f]) and types (function [g]) *)
 module IterIT = struct
@@ -274,205 +294,214 @@ let unify_i = List.fold_left2 unify
 
 
 
-module Make(X : S) = struct
+(* main algorithm *)
 
-  (* declaration of abstract types *)
-  let declared_types = Htypes.create 97
-  let declare_type fmt = function
-    | PTexternal (i,x) as pt 
-	when is_closed_pure_type pt && not (Htypes.mem declared_types pt) ->
-	Htypes.add declared_types pt ();
-	X.declare_type fmt pt
-    | _ -> 
-	()
+(* declaration of abstract types *)
+let declared_types = Htypes.create 97
+let declare_type loc = function
+  | PTexternal (i,x) as pt 
+      when is_closed_pure_type pt && not (Htypes.mem declared_types pt) ->
+      Htypes.add declared_types pt ();
+      push (Dtype (loc, [], name (Ident.string x) i))
+  | _ -> 
+      ()
 
-  let print_logic_instance fmt id i t =
-    IterIT.logic_type (declare_type fmt) t;
-    X.print_logic_instance fmt id i t
+let push_logic_instance loc id i t =
+  IterIT.logic_type (declare_type loc) t;
+  push (Dlogic (loc, name id i, empty_scheme t))
 
-  (* logic symbols (functions and predicates) *)
+(* logic symbols (functions and predicates) *)
 
-  type logic_symbol = 
-    | Uninterp of logic_type scheme
-    | PredicateDef of predicate_def scheme
-    | FunctionDef of function_def scheme
-	
-  let logic_symbols = Hashtbl.create 97
+type logic_symbol = 
+  | Uninterp of logic_type scheme
+  | PredicateDef of predicate_def scheme
+  | FunctionDef of function_def scheme
+      
+let logic_symbols = Hashtbl.create 97
 			
-  let print_logic fmt id t = 
-    (*eprintf "print_logic %s@." id;*)
-    if Vset.is_empty t.scheme_vars then
-      print_logic_instance fmt id [] t.scheme_type
-    else
-      (* nothing to do until we encounter closed instances of [id] *)
-      (* we only remember the type of [id] *)
-      Hashtbl.add logic_symbols (Ident.create id) (Uninterp t)
+let push_logic loc id t = 
+  (*eprintf "print_logic %s@." id;*)
+  if Vset.is_empty t.scheme_vars then
+    push_logic_instance loc id [] t.scheme_type
+  else
+    (* nothing to do until we encounter closed instances of [id] *)
+    (* we only remember the type of [id] *)
+    Hashtbl.add logic_symbols (Ident.create id) (Uninterp t)
 	
-  module Hinstance = Hashtbl.Make(Instance)
-  let declared_logic = Hinstance.create 97
+module Hinstance = Hashtbl.Make(Instance)
+let declared_logic = Hinstance.create 97
+    
+let vset_elements s = Vset.fold (fun x l -> x :: l) s []
+  
+let rec declare_logic loc id i =
+  if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
+    Hinstance.add declared_logic (id,i) ();
+    (*eprintf "declare_logic %a@." Ident.print id;*)
+    assert (Hashtbl.mem logic_symbols id);
+    match Hashtbl.find logic_symbols id with
+      | Uninterp t ->
+	  assert (Vset.cardinal t.scheme_vars = List.length i);
+	  let s = 
+	    List.fold_right2 Vmap.add 
+	      (vset_elements t.scheme_vars) i Vmap.empty
+	  in
+	  let t = SubstV.logic_type s t.scheme_type in
+	  (*
+	    eprintf "Monomorph.declare_logic i=[%a] t=%a@."
+	    (Pp.print_list Pp.comma Util.print_pure_type) i
+	    Util.print_logic_type t;
+	  *)
+	  push_logic_instance loc (Ident.string id) i t
+      | PredicateDef p ->
+	  assert (Vset.cardinal p.scheme_vars = List.length i);
+	  let s = 
+	    List.fold_right2 Vmap.add 
+	      (vset_elements p.scheme_vars) i Vmap.empty
+	  in
+	  let p = SubstV.predicate_def s p.scheme_type in
+ 	  push_predicate_def_instance loc (Ident.string id) i p
+      | FunctionDef p ->
+	  assert (Vset.cardinal p.scheme_vars = List.length i);
+	  let s = 
+	    List.fold_right2 Vmap.add 
+	      (vset_elements p.scheme_vars) i Vmap.empty
+	  in
+	  let p = SubstV.function_def s p.scheme_type in
+ 	  push_function_def_instance loc (Ident.string id) i p
+  end
+    
+(* predicates definitions *)
 
-  let vset_elements s = Vset.fold (fun x l -> x :: l) s []
+and push_predicate_def_instance loc id i ((bl,p) as d) =
+  IterIT.predicate_def (declare_logic loc) (declare_type loc) d;
+  push (Dpredicate_def (loc, name id i, empty_scheme d))
 
-  let rec declare_logic fmt id i =
-    if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
-      Hinstance.add declared_logic (id,i) ();
-      (*eprintf "declare_logic %a@." Ident.print id;*)
-      assert (Hashtbl.mem logic_symbols id);
-      match Hashtbl.find logic_symbols id with
-	| Uninterp t ->
-	    assert (Vset.cardinal t.scheme_vars = List.length i);
-	    let s = 
-	      List.fold_right2 Vmap.add 
-		(vset_elements t.scheme_vars) i Vmap.empty
-	    in
-	    let t = SubstV.logic_type s t.scheme_type in
-	    (*
-	      eprintf "Monomorph.declare_logic i=[%a] t=%a@."
-	      (Pp.print_list Pp.comma Util.print_pure_type) i
-	      Util.print_logic_type t;
-	    *)
-	    print_logic_instance fmt (Ident.string id) i t
-	| PredicateDef p ->
-	    assert (Vset.cardinal p.scheme_vars = List.length i);
-	    let s = 
-	      List.fold_right2 Vmap.add 
-		(vset_elements p.scheme_vars) i Vmap.empty
-	    in
-	    let p = SubstV.predicate_def s p.scheme_type in
- 	    print_predicate_def_instance fmt (Ident.string id) i p
-	| FunctionDef p ->
-	    assert (Vset.cardinal p.scheme_vars = List.length i);
-	    let s = 
-	      List.fold_right2 Vmap.add 
-		(vset_elements p.scheme_vars) i Vmap.empty
-	    in
-	    let p = SubstV.function_def s p.scheme_type in
- 	    print_function_def_instance fmt (Ident.string id) i p
-    end
+and push_function_def_instance loc id i ((bl,t,e) as d) =
+  IterIT.function_def (declare_logic loc) (declare_type loc) d;
+  push (Dfunction_def (loc, name id i, empty_scheme d))
       
-  (* predicates definitions *)
+let push_predicate_def loc id p0 =
+  let (bl,_) = p0.scheme_type in
+  assert (bl <> []);
+  if Vset.is_empty p0.scheme_vars then
+    push_predicate_def_instance loc id [] p0.scheme_type
+  else 
+    Hashtbl.add logic_symbols (Ident.create id) (PredicateDef p0)
 
-  and print_predicate_def_instance fmt id i ((bl,p) as d) =
-    IterIT.predicate_def (declare_logic fmt) (declare_type fmt) d;
-    X.print_predicate_def_instance fmt id i d
-
-  and print_function_def_instance fmt id i ((bl,t,e) as d) =
-    IterIT.function_def (declare_logic fmt) (declare_type fmt) d;
-    X.print_function_def_instance fmt id i d
-      
-  let print_predicate_def fmt id p0 =
-    let (bl,_) = p0.scheme_type in
-    assert (bl <> []);
-    if Vset.is_empty p0.scheme_vars then
-      print_predicate_def_instance fmt id [] p0.scheme_type
-    else 
-      Hashtbl.add logic_symbols (Ident.create id) (PredicateDef p0)
-
-  let print_function_def fmt id p0 =
-    let (bl,_,_) = p0.scheme_type in
-    assert (bl <> []);
-    if Vset.is_empty p0.scheme_vars then
-      print_function_def_instance fmt id [] p0.scheme_type
-    else 
-      Hashtbl.add logic_symbols (Ident.create id) (FunctionDef p0)
+let push_function_def loc id p0 =
+  let (bl,_,_) = p0.scheme_type in
+  assert (bl <> []);
+  if Vset.is_empty p0.scheme_vars then
+    push_function_def_instance loc id [] p0.scheme_type
+  else 
+    Hashtbl.add logic_symbols (Ident.create id) (FunctionDef p0)
 
   (* axioms *)
 
-  let print_axiom_instance fmt id i p =
-    IterIT.predicate (declare_logic fmt) (declare_type fmt) p;
-    X.print_axiom_instance fmt id i p
+let push_axiom_instance loc id i p =
+  IterIT.predicate (declare_logic loc) (declare_type loc) p;
+  push (Daxiom (loc, name id i, empty_scheme p))
 
-  module Hsubst = Hashtbl.Make(SV)
+module Hsubst = Hashtbl.Make(SV)
 		    
-  type axiom = {
-    ax_pred : predicate scheme;
-    ax_symbols : Ident.set;
-    ax_symbols_i : SymbolsI.elt list;
-    mutable ax_symbols_instances : SymbolsI.t; (*already considered instances*)
-    ax_instances : unit Hsubst.t;
-  }
+type axiom = {
+  ax_pred : predicate scheme;
+  ax_symbols : Ident.set;
+  ax_symbols_i : SymbolsI.elt list;
+  mutable ax_symbols_instances : SymbolsI.t; (*already considered instances*)
+  ax_instances : unit Hsubst.t;
+}
 		 
-  let axioms = Hashtbl.create 97
+let axioms = Hashtbl.create 97
 		 
-  let print_axiom fmt id p =
-    if Vset.is_empty p.scheme_vars then
-      print_axiom_instance fmt id [] p.scheme_type
-    else
-      let oi = OpenInstances.predicate SymbolsI.empty p.scheme_type in
-      let os = SymbolsI.fold (fun (id,_) -> Idset.add id) oi Idset.empty in
-      let a = 
-	{ ax_pred = p; ax_symbols_i = SymbolsI.elements oi; 
-	  ax_symbols = os; ax_symbols_instances = SymbolsI.empty;
-	  ax_instances = Hsubst.create 97 } 
-      in
-      Hashtbl.add axioms id a
-
-  (* instantiating axioms may generate new instances, so we have to repeat it
-     again until the fixpint is reached *)
-	
-  let fixpoint = ref false
-		   
-  (* instantiate a polymorphic axiom according to new symbols instances *)
-  let instantiate_axiom fmt id a =
-    (* first pass: we look at all (closed) instances encountered so far
-       appearing in axiom [a] *)
-    let all_ci = 
-      Hinstance.fold
-	(fun ((id,_) as i) () s -> 
-	   if Idset.mem id a.ax_symbols then SymbolsI.add i s else s)
-	declared_logic SymbolsI.empty
+let push_axiom loc id p =
+  if Vset.is_empty p.scheme_vars then
+    push_axiom_instance loc id [] p.scheme_type
+  else
+    let oi = OpenInstances.predicate SymbolsI.empty p.scheme_type in
+    let os = SymbolsI.fold (fun (id,_) -> Idset.add id) oi Idset.empty in
+    let a = 
+      { ax_pred = p; ax_symbols_i = SymbolsI.elements oi; 
+	ax_symbols = os; ax_symbols_instances = SymbolsI.empty;
+	ax_instances = Hsubst.create 97 } 
     in
-    (* second pass: 
-       if this set has not been already considered we instantiate *)
-    if not (SymbolsI.subset all_ci a.ax_symbols_instances) then begin
-      a.ax_symbols_instances <- all_ci;
-      fixpoint := false;
-      let p = a.ax_pred in
-      let rec iter s = function
-	| [] ->
-	    if Vset.for_all 
-	      (fun x -> 
-		 try is_closed_pure_type (Vmap.find x s) 
-		 with Not_found -> false)
-	      p.scheme_vars 
-	    then
-	      if not (Hsubst.mem a.ax_instances s) then begin
-		Hsubst.add a.ax_instances s ();
-		let ps = SubstV.predicate s p.scheme_type in
-		let i = Vmap.fold (fun _ t acc -> t :: acc) s [] in
-		print_axiom_instance fmt id i ps
-	      end
-	| (x,oi) :: oil ->
-	    SymbolsI.iter 
-	      (fun (y,ci) -> 
-		 if x = y then
-		   try let s = unify_i s oi ci in iter s oil
-		   with Exit -> ()) 
-	      all_ci;
-	    iter s oil
-      in
-      iter Vmap.empty a.ax_symbols_i
-    end
+    Hashtbl.add axioms id a
 
-  let instantiate_axioms fmt = 
+(* instantiating axioms may generate new instances, so we have to repeat it
+   again until the fixpint is reached *)
+	
+let fixpoint = ref false
+		   
+(* instantiate a polymorphic axiom according to new symbols instances *)
+let instantiate_axiom loc id a =
+  (* first pass: we look at all (closed) instances encountered so far
+     appearing in axiom [a] *)
+  let all_ci = 
+    Hinstance.fold
+      (fun ((id,_) as i) () s -> 
+	 if Idset.mem id a.ax_symbols then SymbolsI.add i s else s)
+      declared_logic SymbolsI.empty
+  in
+  (* second pass: 
+     if this set has not been already considered we instantiate *)
+  if not (SymbolsI.subset all_ci a.ax_symbols_instances) then begin
+    a.ax_symbols_instances <- all_ci;
     fixpoint := false;
-    while not !fixpoint do
-      fixpoint := true;
-      Hashtbl.iter (instantiate_axiom fmt) axioms;
-    done
+    let p = a.ax_pred in
+    let rec iter s = function
+      | [] ->
+	  if Vset.for_all 
+	    (fun x -> 
+	       try is_closed_pure_type (Vmap.find x s) 
+	       with Not_found -> false)
+	    p.scheme_vars 
+	  then
+	    if not (Hsubst.mem a.ax_instances s) then begin
+	      Hsubst.add a.ax_instances s ();
+	      let ps = SubstV.predicate s p.scheme_type in
+	      let i = Vmap.fold (fun _ t acc -> t :: acc) s [] in
+	      push_axiom_instance loc id i ps
+	    end
+      | (x,oi) :: oil ->
+	  SymbolsI.iter 
+	    (fun (y,ci) -> 
+	       if x = y then
+		 try let s = unify_i s oi ci in iter s oil
+		 with Exit -> ()) 
+	    all_ci;
+	  iter s oil
+    in
+    iter Vmap.empty a.ax_symbols_i
+  end
 
-  (* Obligations *)
+let instantiate_axioms loc = 
+  fixpoint := false;
+  while not !fixpoint do
+    fixpoint := true;
+    Hashtbl.iter (instantiate_axiom loc) axioms;
+  done
+
+(* Obligations *)
     
-  let print_obligation fmt ((loc, o, s) as ob) = 
-    IterIT.sequent (declare_logic fmt) (declare_type fmt) s;
-    instantiate_axioms fmt;
-    X.print_obligation fmt ob
+let push_obligation ((loc, o, s) as ob) = 
+  IterIT.sequent (declare_logic loc) (declare_type loc) s;
+  instantiate_axioms loc;
+  push (Dgoal ob)
 
-  let reset () =
-    Htypes.clear declared_types;
-    Hinstance.clear declared_logic;
-    Hashtbl.clear logic_symbols;
-    Hashtbl.clear axioms
+let push_decl = function
+  | Dtype (loc, [], id) -> declare_type loc (PTexternal ([], Ident.create id))
+  | Dtype _ -> ()
+  | Dlogic (loc, x, t) -> push_logic loc x t
+  | Dpredicate_def (loc, x, d) -> push_predicate_def loc x d
+  | Dfunction_def (loc, x, d) -> push_function_def loc x d
+  | Daxiom (loc, x, p) -> push_axiom loc x p
+  | Dgoal o -> push_obligation o
 
-end
+let reset () =
+  Queue.clear queue;
+  Htypes.clear declared_types;
+  Hinstance.clear declared_logic;
+  Hashtbl.clear logic_symbols;
+  Hashtbl.clear axioms
+
 

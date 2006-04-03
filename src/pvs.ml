@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.70 2006-03-23 10:41:01 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.71 2006-04-03 08:26:57 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -23,6 +23,7 @@ open Cc
 open Misc
 open Util
 open Ident
+open Env
 open Format
 open Vcg
 open Pp
@@ -53,16 +54,11 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
-  | PTexternal ([v], id) when id == farray -> 
-      fprintf fmt "warray[%a]" print_pure_type v
-  | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
-  | PTexternal(i,id) -> fprintf fmt "%a%a" Ident.print id instance i
+  | PTexternal ([pt], id) when id == farray -> 
+      fprintf fmt "warray(%a)" print_pure_type pt
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> assert false
-
-and instance fmt = function
-  | [] -> ()
-  | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
+  | PTexternal (i ,id) -> Monomorph.symbol fmt (id, i)
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -116,10 +112,10 @@ let print_term fmt t =
     | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
-	fprintf fmt "%a%a" Ident.print id instance i
+	fprintf fmt "%a" Monomorph.symbol (id, i)
     | Tapp (id, tl, i) -> 
-	fprintf fmt "%a%a(@[%a@])" 
-	  Ident.print id instance i (print_list comma print0) tl
+	fprintf fmt "%a(@[%a@])" 
+	  Monomorph.symbol (id, i) (print_list comma print0) tl
   in
   print0 fmt t
 
@@ -181,7 +177,7 @@ let print_predicate fmt p =
     | Papp (id, [a;b], _) when is_neq id ->
 	fprintf fmt "%a /=@ %a" print_term a print_term b
     | Papp (id, l, i) -> 	
-	fprintf fmt "%a%a(@[" Ident.print id instance i;
+	fprintf fmt "%a(@[" Monomorph.symbol (id, i);
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> 
@@ -207,19 +203,6 @@ let print_predicate fmt p =
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p
-
-let rec print_cc_type fmt = function
-  | TTpure pt -> print_pure_type fmt pt
-  | TTarray v -> fprintf fmt "warray[%a]" print_cc_type v
-  | TTarrow ((_, CC_var_binder t1), t2) ->
-      fprintf fmt "[%a -> %a]" print_cc_type t1 print_cc_type t2
-  | TTterm t -> print_term fmt t
-  | TTSet
-  | TTtuple _ 
-  | TTpred _ 
-  | TTlambda _
-  | TTarrow _
-  | TTapp _ -> assert false
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
@@ -253,70 +236,46 @@ let print_logic_type fmt = function
       fprintf fmt "[%a -> %a]"
 	(print_list comma print_pure_type) pl print_pure_type t
 
-module Mono = struct
+let declare_type fmt id = 
+  fprintf fmt "  @[%s: NONEMPTY_TYPE;@]@\n@\n" id
 
-  let declare_type fmt pt = 
-    fprintf fmt "@[%a: NONEMPTY_TYPE;@]@\n@\n" print_pure_type pt
+let print_logic fmt id t = 
+  fprintf fmt "%%%% Why logic %s@\n" id;
+  fprintf fmt "  %s: @[%a@]@\n@\n" id print_logic_type t
+    
+let print_axiom fmt id p =
+  fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
+  fprintf fmt "  %s: AXIOM @[%a@]@\n@\n" id print_predicate p
+    
+let print_predicate_def fmt id (bl,p) =
+  fprintf fmt "  %s(@[%a@]) : bool = @[%a@]@\n@\n"
+    id (print_list comma print_logic_binder) bl print_predicate p
+    
+let print_function_def fmt id (bl,t,e) =
+  fprintf fmt "  %s(@[%a@]) : %a = @[%a@]@\n@\n"
+    id (print_list comma print_logic_binder) bl 
+    print_pure_type t print_term e
+    
+let print_obligation fmt (loc,id,s) =
+  fprintf fmt "@[%% %a @]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
+  print_sequent fmt s;
+  fprintf fmt "@]@\n@\n"
 
-  let print_logic_instance fmt id i t = 
-    fprintf fmt "%%%% Why logic %s@\n" id;
-    fprintf fmt "  %s%a: @[%a@]@\n@\n" id instance i print_logic_type t
+let push_decl d = Monomorph.push_decl d
 
-  let print_axiom_instance fmt id i p =
-    fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
-    fprintf fmt "  %s%a: AXIOM @[%a@]@\n@\n" id instance i print_predicate p
+let iter = Monomorph.iter
 
-  let print_predicate_def_instance fmt id i (bl,p) =
-    fprintf fmt "  %s%a(@[%a@]) : bool = @[%a@]@\n@\n"
-      id instance i (print_list comma print_logic_binder) bl print_predicate p
-
-  let print_function_def_instance fmt id i (bl,t,e) =
-    fprintf fmt "  %s%a(@[%a@]) : %a = @[%a@]@\n@\n"
-      id instance i (print_list comma print_logic_binder) bl 
-      print_pure_type t print_term e
-
-  let print_obligation fmt (loc,id,s) =
-    fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation_position loc;
-    fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
-    print_sequent fmt s;
-    fprintf fmt "@]@\n"
-
-  let print_parameter fmt id v =
-    fprintf fmt "  %s: @[%a@]@\n@\n" id print_cc_type v
-
-end
-
-module Output = Monomorph.Make(Mono)
-
-let print_obligations fmt ol = 
-  print_list (fun fmt () -> fprintf fmt "@\n") Output.print_obligation fmt ol;
-  if ol <> [] then fprintf fmt "@\n"
-
-type elem = 
-  | Obligations of obligation list
-  | Logic of string * logic_type Env.scheme
-  | Axiom of string * predicate Env.scheme
-  | PredicateDef of string * predicate_def Env.scheme
-  | FunctionDef of string * function_def Env.scheme
-
-let queue = Queue.create ()
-
-let reset () = Queue.clear queue
-
-let push_decl = function
-  | Dgoal o -> Queue.add (Obligations [o]) queue
-  | Dlogic (_, id, t) -> Queue.add (Logic (id,t)) queue
-  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
-  | Dpredicate_def (_, id, p) -> Queue.add (PredicateDef (id, p)) queue
-  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
-  | Dtype _ -> () (*TODO*)
+let reset () = Monomorph.reset ()
 
 let output_elem fmt = function
-  | Obligations ol -> print_obligations fmt ol
-  | Logic (id, t) -> Output.print_logic fmt id t
-  | Axiom (id, p) -> Output.print_axiom fmt id p
-  | PredicateDef (id, p) -> Output.print_predicate_def fmt id p
-  | FunctionDef (id, p) -> Output.print_function_def fmt id p
+  | Dtype (loc, [], id) -> declare_type fmt id
+  | Dtype _ -> assert false
+  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Dgoal o -> print_obligation fmt o
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in
@@ -327,5 +286,5 @@ let output_file fwe =
     ~sep
     ~after:(fun fmt ->
 	      (*predefined_symbols fmt;*)
-	      Queue.iter (output_elem fmt) queue;
+	      iter (output_elem fmt);
 	      end_theory fmt th)
