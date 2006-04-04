@@ -2,6 +2,7 @@ config.cache
 config.status
 Makefile
 export
+.depend
 .depend.coq
 tmp
 gmon.out
