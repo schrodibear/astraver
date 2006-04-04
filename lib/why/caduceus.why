@@ -439,6 +439,10 @@ logic fresh : alloc_table,'z pointer -> prop
 
 axiom fresh_not_valid :
   forall a:alloc_table. forall p:'z pointer. 
+    fresh(a,p) -> not(valid(a,p))
+
+axiom fresh_not_valid_shift :
+  forall a:alloc_table. forall p:'z pointer. 
     fresh(a,p) -> forall i:int. not(valid(a,shift(p,i)))
 
 (***
@@ -457,34 +461,40 @@ axiom alloc_heap_valid_range :
       valid_range(a1,p,i,j) -> valid_range(a2,p,i,j)
 ***)
 
-logic alloc_stack : 'z pointer, alloc_table, alloc_table -> prop
+logic alloc_extends : alloc_table, alloc_table -> prop
 
-axiom alloc_stack_p : 
-  forall p : 'z pointer. forall a1 : alloc_table. forall a2 : alloc_table.
-    alloc_stack(p, a1, a2) -> valid(a2, p)
+axiom alloc_extends_valid : 
+  forall a1:alloc_table. forall a2:alloc_table.
+    alloc_extends(a1,a2) -> forall q:'y pointer. valid(a1,q) -> valid(a2,q)
 
-axiom alloc_stack_valid : 
-  forall p:'z pointer. forall a1:alloc_table. forall a2:alloc_table.
-    alloc_stack(p,a1,a2) -> forall q:'y pointer. valid(a1,q) -> valid(a2,q)
-
-axiom alloc_stack_valid_index : 
-  forall p:'z pointer. forall a1:alloc_table. forall a2:alloc_table.
-    alloc_stack(p,a1,a2) -> 
+axiom alloc_extends_valid_index : 
+  forall a1:alloc_table. forall a2:alloc_table.
+    alloc_extends(a1,a2) -> 
     forall q:'y pointer. forall i:int.
       valid_index(a1,q,i) -> valid_index(a2,q,i)
 
-axiom alloc_stack_valid_range : 
-  forall p:'z pointer. forall a1:alloc_table. forall a2:alloc_table.
-    alloc_stack(p,a1,a2) -> 
+axiom alloc_extends_valid_range : 
+  forall a1:alloc_table. forall a2:alloc_table.
+    alloc_extends(a1,a2) -> 
     forall q:'y pointer. forall i:int. forall j:int.
       valid_range(a1,q,i,j) -> valid_range(a2,q,i,j)
 
+axiom alloc_extends_refl : forall a:alloc_table. alloc_extends(a,a) 
+
+axiom alloc_extends_trans : 
+  forall a1,a2,a3:alloc_table. 
+    alloc_extends(a1,a2) -> 
+    alloc_extends(a2,a3) -> 
+    alloc_extends(a1,a3) 
+
+(*
 logic free_heap : 'z pointer, alloc_table, alloc_table -> prop
 
 parameter free_block : p:'z pointer -> 
 	{ valid(alloc,p) and offset(p) = 0 and on_heap(alloc,p) }
 	unit writes alloc
 	{ free_heap(p, alloc@, alloc) }
+*)
 
 (*
 
@@ -516,7 +526,7 @@ parameter alloca_parameter : n:int ->
 	{ valid(alloc,result) and offset(result) = 0 and 	
 	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)
 	  and fresh(alloc@,result) and on_stack(alloc,result) 
-	  and alloc_stack (result,alloc@,alloc) }
+	  and alloc_extends (alloc@,alloc) }
 
 parameter malloc_parameter : n:int -> 
 	{ n >= 1 }
@@ -524,7 +534,7 @@ parameter malloc_parameter : n:int ->
 	{ valid(alloc,result) and offset(result) = 0 and 	
 	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)
 	  and fresh(alloc@,result) and on_heap(alloc,result)
-	  and alloc_stack (result,alloc@,alloc) }
+	  and alloc_extends (alloc@,alloc) }
 
 
 

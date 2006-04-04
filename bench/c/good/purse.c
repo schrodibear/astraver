@@ -35,20 +35,23 @@ int test1(purse *p1, purse *p2) {
 /*@ assigns \nothing
   @ ensures \fresh(\result) && purse_inv(\result) && \result->balance == 0
   @*/
-purse *new_purse();
+purse *new_purse() { 
+  purse* p = (purse*) malloc(1 * sizeof(purse));
+  p->balance = 0;
+  return p;
+}
 
 /*@ ensures \result == 150
   @*/
 int test2() {
   purse *p1 = new_purse();
-    purse *p2 = new_purse();
-    credit(p1,100);
-    credit(p2,200);
-    withdraw(p1,50);
-    withdraw(p2,100);
-    return p1->balance + p2->balance;
+  purse *p2 = new_purse();
+  credit(p1,100);
+  credit(p2,200);
+  withdraw(p1,50);
+  withdraw(p2,100);
+  return p1->balance + p2->balance;
 }
-
 
 /*
 void main() {

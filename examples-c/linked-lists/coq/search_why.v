@@ -11,7 +11,13 @@ Require Export LinkedLists.
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
                 (is_list tl_global alloc l)),
-  (well_founded length_order).
+  forall (HW_2: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc l)),
+  forall (p: ((pointer) global)),
+  forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
+                (is_list tl_global alloc p)),
+  forall (HW_4: ~(p = null)),
+  (valid alloc p).
 Proof.
 intuition.
 Save.
@@ -19,7 +25,9 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma search_impl_po_2 : 
   forall (l: ((pointer) global)),
+  forall (v: Z),
   forall (alloc: alloc_table),
+  forall (hd_global: ((memory) Z global)),
   forall (tl_global: ((memory) ((pointer) global) global)),
   forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
                 (is_list tl_global alloc l)),
@@ -29,7 +37,16 @@ Save.
   forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
                 (is_list tl_global alloc p)),
   forall (HW_4: ~(p = null)),
-  (valid alloc p).
+  forall (HW_5: (valid alloc p)),
+  forall (result: Z),
+  forall (HW_6: result = (acc hd_global p)),
+  forall (HW_7: result <> v),
+  forall (HW_8: (valid alloc p)),
+  forall (result0: ((pointer) global)),
+  forall (HW_9: result0 = (acc tl_global p)),
+  forall (p0: ((pointer) global)),
+  forall (HW_10: p0 = result0),
+  (is_list tl_global alloc p0).
 Proof.
 intuition.
 inversion Pre7; intuition.
@@ -54,15 +71,9 @@ Save.
   forall (HW_5: (valid alloc p)),
   forall (result: Z),
   forall (HW_6: result = (acc hd_global p)),
-  forall (HW_7: result <> v),
-  forall (HW_8: (valid alloc p)),
-  forall (result0: ((pointer) global)),
-  forall (HW_9: result0 = (acc tl_global p)),
-  forall (p0: ((pointer) global)),
-  forall (HW_10: p0 = result0),
-  (* File "search.c", line 9, characters 17-27 *)
-  (is_list tl_global alloc p0) /\
-  (length_order (length alloc p0) (length alloc p)).
+  forall (HW_11: result = v),
+  forall (HW_12: ~(p = null)),
+  (acc hd_global p) = v.
 Proof.
 destruct result1; intuition; subst; auto.
 inversion Pre7; intuition.
@@ -83,34 +94,13 @@ Save.
   forall (p: ((pointer) global)),
   forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
                 (is_list tl_global alloc p)),
-  forall (HW_4: ~(p = null)),
-  forall (HW_5: (valid alloc p)),
-  forall (result: Z),
-  forall (HW_6: result = (acc hd_global p)),
-  forall (HW_11: result = v),
-  forall (HW_12: ~(p = null)),
+  forall (HW_13: p = null),
+  forall (HW_14: ~(p = null)),
   (acc hd_global p) = v.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma search_impl_po_5 : 
-  forall (l: ((pointer) global)),
-  forall (v: Z),
-  forall (alloc: alloc_table),
-  forall (hd_global: ((memory) Z global)),
-  forall (tl_global: ((memory) ((pointer) global) global)),
-  forall (HW_1: (* File "search.c", line 4, characters 14-24 *)
-                (is_list tl_global alloc l)),
-  forall (HW_2: (* File "search.c", line 9, characters 17-27 *)
-                (is_list tl_global alloc l)),
-  forall (p: ((pointer) global)),
-  forall (HW_3: (* File "search.c", line 9, characters 17-27 *)
-                (is_list tl_global alloc p)),
-  forall (HW_13: p = null),
-  forall (HW_14: ~(p = null)),
-  (acc hd_global p) = v.
 Proof.
 intuition.
 subst; auto.

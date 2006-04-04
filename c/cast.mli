@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.64 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.65 2006-04-04 14:00:55 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -209,6 +209,7 @@ and texpr_node =
   | TEcond of texpr * texpr * texpr
   | TEcast of tctype * texpr
   | TEsizeof of tctype * int64
+  | TEmalloc of tctype * texpr
 
 and lvalue = texpr (* TODO: cf CIL *)
 
@@ -305,6 +306,7 @@ and nexpr_node =
   | NEcall of ncall
   | NEcond of nexpr * nexpr * nexpr
   | NEcast of nctype * nexpr
+  | NEmalloc of nctype * nexpr
 
 and nlvalue = nexpr (* TODO: cf CIL *)
 

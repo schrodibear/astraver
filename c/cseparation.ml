@@ -535,6 +535,7 @@ let rec calcul_zones expr =
 	  arg_types l
     | NEcond (e1,e2,e3)->  calcul_zones e1; calcul_zones e2; calcul_zones e3
     | NEcast (_,e) -> calcul_zones e
+    | NEmalloc (_,e) -> calcul_zones e
  
 let rec c_initializer ty tw init =
   match init with 

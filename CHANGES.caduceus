@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+ o limited support for malloc: only expressions like (t*)malloc(e*sizeof(t))
+   are supported (see section 2.4 in the manual)
  o new built-in logic function \offset
  o new behavior w.r.t termination: loop variants can now be omitted
  o partial evaluation (of expressions such as 1 == 1)

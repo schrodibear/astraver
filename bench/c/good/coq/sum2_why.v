@@ -69,8 +69,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_1 : 
-  forall (A765:Set),
-  forall (t: ((pointer) A765)),
+  forall (A744:Set),
+  forall (t: ((pointer) A744)),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
@@ -85,8 +85,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_2 : 
-  forall (A766:Set),
-  forall (t: ((pointer) A766)),
+  forall (A745:Set),
+  forall (t: ((pointer) A745)),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
@@ -101,11 +101,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_3 : 
-  forall (A767:Set),
-  forall (t: ((pointer) A767)),
+  forall (A746:Set),
+  forall (t: ((pointer) A746)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A767)),
+  forall (intM_t_8: ((memory) Z A746)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -118,11 +118,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_4 : 
-  forall (A768:Set),
-  forall (t: ((pointer) A768)),
+  forall (A747:Set),
+  forall (t: ((pointer) A747)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A768)),
+  forall (intM_t_8: ((memory) Z A747)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -134,7 +134,7 @@ Save.
   forall (HW_5: (* File "sum2.c", line 20, characters 17-47 *) ((0 <= i0 /\
                 i0 <= n) /\ s = (sum intM_t_8 alloc t 0 i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A768)),
+  forall (result: ((pointer) A747)),
   forall (HW_7: result = (shift t i0)),
   (valid alloc result).
 Proof.
@@ -149,11 +149,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_5 : 
-  forall (A769:Set),
-  forall (t: ((pointer) A769)),
+  forall (A748:Set),
+  forall (t: ((pointer) A748)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A769)),
+  forall (intM_t_8: ((memory) Z A748)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -165,7 +165,7 @@ Save.
   forall (HW_5: (* File "sum2.c", line 20, characters 17-47 *) ((0 <= i0 /\
                 i0 <= n) /\ s = (sum intM_t_8 alloc t 0 i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A769)),
+  forall (result: ((pointer) A748)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
@@ -182,11 +182,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_6 : 
-  forall (A770:Set),
-  forall (t: ((pointer) A770)),
+  forall (A749:Set),
+  forall (t: ((pointer) A749)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A770)),
+  forall (intM_t_8: ((memory) Z A749)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -198,7 +198,7 @@ Save.
   forall (HW_5: (* File "sum2.c", line 20, characters 17-47 *) ((0 <= i0 /\
                 i0 <= n) /\ s = (sum intM_t_8 alloc t 0 i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A770)),
+  forall (result: ((pointer) A749)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
@@ -215,11 +215,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_7 : 
-  forall (A771:Set),
-  forall (t: ((pointer) A771)),
+  forall (A750:Set),
+  forall (t: ((pointer) A750)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A771)),
+  forall (intM_t_8: ((memory) Z A750)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -231,7 +231,7 @@ Save.
   forall (HW_5: (* File "sum2.c", line 20, characters 17-47 *) ((0 <= i0 /\
                 i0 <= n) /\ s = (sum intM_t_8 alloc t 0 i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A771)),
+  forall (result: ((pointer) A750)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
@@ -248,11 +248,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_8 : 
-  forall (A772:Set),
-  forall (t: ((pointer) A772)),
+  forall (A751:Set),
+  forall (t: ((pointer) A751)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A772)),
+  forall (intM_t_8: ((memory) Z A751)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -264,7 +264,7 @@ Save.
   forall (HW_5: (* File "sum2.c", line 20, characters 17-47 *) ((0 <= i0 /\
                 i0 <= n) /\ s = (sum intM_t_8 alloc t 0 i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A772)),
+  forall (result: ((pointer) A751)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
@@ -281,11 +281,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test1_impl_po_9 : 
-  forall (A773:Set),
-  forall (t: ((pointer) A773)),
+  forall (A752:Set),
+  forall (t: ((pointer) A752)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A773)),
+  forall (intM_t_8: ((memory) Z A752)),
   forall (HW_1: (* File "sum2.c", line 14, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -305,8 +305,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_1 : 
-  forall (A774:Set),
-  forall (t: ((pointer) A774)),
+  forall (A753:Set),
+  forall (t: ((pointer) A753)),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
@@ -321,8 +321,8 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_2 : 
-  forall (A775:Set),
-  forall (t: ((pointer) A775)),
+  forall (A754:Set),
+  forall (t: ((pointer) A754)),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
@@ -337,11 +337,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_3 : 
-  forall (A776:Set),
-  forall (t: ((pointer) A776)),
+  forall (A755:Set),
+  forall (t: ((pointer) A755)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A776)),
+  forall (intM_t_8: ((memory) Z A755)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -354,11 +354,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_4 : 
-  forall (A777:Set),
-  forall (t: ((pointer) A777)),
+  forall (A756:Set),
+  forall (t: ((pointer) A756)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A777)),
+  forall (intM_t_8: ((memory) Z A756)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -367,12 +367,12 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A777)),
+  forall (intM_t_8_0: ((memory) Z A756)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A777)),
+  forall (result: ((pointer) A756)),
   forall (HW_7: result = (shift t i0)),
   (valid alloc result).
 Proof.
@@ -382,11 +382,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_5 : 
-  forall (A778:Set),
-  forall (t: ((pointer) A778)),
+  forall (A757:Set),
+  forall (t: ((pointer) A757)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A778)),
+  forall (intM_t_8: ((memory) Z A757)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -395,17 +395,17 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A778)),
+  forall (intM_t_8_0: ((memory) Z A757)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A778)),
+  forall (result: ((pointer) A757)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
   forall (HW_9: result0 = (acc intM_t_8_0 result)),
-  forall (intM_t_8_1: ((memory) Z A778)),
+  forall (intM_t_8_1: ((memory) Z A757)),
   forall (HW_10: intM_t_8_1 = (upd intM_t_8_0 result (result0 + 1))),
   forall (i1: Z),
   forall (HW_11: i1 = (i0 + 1)),
@@ -417,11 +417,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_6 : 
-  forall (A779:Set),
-  forall (t: ((pointer) A779)),
+  forall (A758:Set),
+  forall (t: ((pointer) A758)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A779)),
+  forall (intM_t_8: ((memory) Z A758)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -430,17 +430,17 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A779)),
+  forall (intM_t_8_0: ((memory) Z A758)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A779)),
+  forall (result: ((pointer) A758)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
   forall (HW_9: result0 = (acc intM_t_8_0 result)),
-  forall (intM_t_8_1: ((memory) Z A779)),
+  forall (intM_t_8_1: ((memory) Z A758)),
   forall (HW_10: intM_t_8_1 = (upd intM_t_8_0 result (result0 + 1))),
   forall (i1: Z),
   forall (HW_11: i1 = (i0 + 1)),
@@ -452,11 +452,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_7 : 
-  forall (A780:Set),
-  forall (t: ((pointer) A780)),
+  forall (A759:Set),
+  forall (t: ((pointer) A759)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A780)),
+  forall (intM_t_8: ((memory) Z A759)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -465,17 +465,17 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A780)),
+  forall (intM_t_8_0: ((memory) Z A759)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A780)),
+  forall (result: ((pointer) A759)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
   forall (HW_9: result0 = (acc intM_t_8_0 result)),
-  forall (intM_t_8_1: ((memory) Z A780)),
+  forall (intM_t_8_1: ((memory) Z A759)),
   forall (HW_10: intM_t_8_1 = (upd intM_t_8_0 result (result0 + 1))),
   forall (i1: Z),
   forall (HW_11: i1 = (i0 + 1)),
@@ -487,11 +487,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_8 : 
-  forall (A781:Set),
-  forall (t: ((pointer) A781)),
+  forall (A760:Set),
+  forall (t: ((pointer) A760)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A781)),
+  forall (intM_t_8: ((memory) Z A760)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -500,17 +500,17 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A781)),
+  forall (intM_t_8_0: ((memory) Z A760)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),
   forall (HW_6: i0 < n),
-  forall (result: ((pointer) A781)),
+  forall (result: ((pointer) A760)),
   forall (HW_7: result = (shift t i0)),
   forall (HW_8: (valid alloc result)),
   forall (result0: Z),
   forall (HW_9: result0 = (acc intM_t_8_0 result)),
-  forall (intM_t_8_1: ((memory) Z A781)),
+  forall (intM_t_8_1: ((memory) Z A760)),
   forall (HW_10: intM_t_8_1 = (upd intM_t_8_0 result (result0 + 1))),
   forall (i1: Z),
   forall (HW_11: i1 = (i0 + 1)),
@@ -522,11 +522,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_9 : 
-  forall (A782:Set),
-  forall (t: ((pointer) A782)),
+  forall (A761:Set),
+  forall (t: ((pointer) A761)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A782)),
+  forall (intM_t_8: ((memory) Z A761)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -535,7 +535,7 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A782)),
+  forall (intM_t_8_0: ((memory) Z A761)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),
@@ -549,11 +549,11 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test2_impl_po_10 : 
-  forall (A783:Set),
-  forall (t: ((pointer) A783)),
+  forall (A762:Set),
+  forall (t: ((pointer) A762)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t_8: ((memory) Z A783)),
+  forall (intM_t_8: ((memory) Z A762)),
   forall (HW_1: (* File "sum2.c", line 30, characters 14-33 *)
                 (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -562,7 +562,7 @@ Save.
                 i <= n) /\ (sum intM_t_8 alloc t 0 n) =
                 ((sum intM_t_8 alloc t 0 n) + i))),
   forall (i0: Z),
-  forall (intM_t_8_0: ((memory) Z A783)),
+  forall (intM_t_8_0: ((memory) Z A762)),
   forall (HW_5: (* File "sum2.c", line 37, characters 17-74 *) ((0 <= i0 /\
                 i0 <= n) /\ (sum intM_t_8_0 alloc t 0 n) =
                 ((sum intM_t_8_0 alloc t 0 n) + i0))),

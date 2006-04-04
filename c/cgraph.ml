@@ -19,7 +19,7 @@ let rec expr e =
     | TEcall (e, le) -> (expr e)@
 	(List.fold_left (fun acc x -> (expr x)@acc) [] le)
     | TEcond (e1, e2 ,e3) -> (expr e1)@(expr e2)@(expr e3)
-    | TEcast (_, e) -> expr e
+    | TEcast (_, e) | TEmalloc (_, e) -> expr e
     | TEsizeof _ -> []
 
 let rec statement s = 

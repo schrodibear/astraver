@@ -22,15 +22,34 @@ Save.
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma test_impl_po_1 : 
   forall (k: Z),
-  forall (j: Z),
   forall (i: Z),
-  forall (HW_1: i = (j + k)),
+  forall (j: Z),
+  forall (HW_1: (constant_j j) /\ (constant_i i)),
+  forall (i0: Z),
+  forall (HW_2: i0 = (j + k)),
   forall (l: Z),
-  forall (HW_2: l = (1 * j)),
+  forall (HW_3: l = (1 * j)),
   forall (j0: Z),
-  forall (HW_3: j0 = (j + (l + 10 * k + i + 12))),
-  (* File "arith.c", line 11, characters 13-63 *) (i = (j + k) /\ j0 =
-  (3 * j + 11 * k + 12)).
+  forall (HW_4: j0 = (j + (l + 10 * k + i0 + 12))),
+  i0 = (j + k).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma test_impl_po_2 : 
+  forall (k: Z),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_1: (constant_j j) /\ (constant_i i)),
+  forall (i0: Z),
+  forall (HW_2: i0 = (j + k)),
+  forall (l: Z),
+  forall (HW_3: l = (1 * j)),
+  forall (j0: Z),
+  forall (HW_4: j0 = (j + (l + 10 * k + i0 + 12))),
+  j0 = (3 * j + 11 * k + 12).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

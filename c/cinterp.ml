@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.176 2006-03-30 12:40:19 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.177 2006-04-04 14:00:55 filliatr Exp $ i*)
 
 
 open Format
@@ -580,6 +580,8 @@ let rec interp_expr e =
 	  | _ -> 
 	      unsupported e.nexpr_loc "cast"
 	end
+    | NEmalloc (_, e) ->
+	make_app "malloc_parameter" [interp_expr e]
 
 and interp_boolean_expr e =
   match e.nexpr_node with
@@ -756,7 +758,8 @@ and interp_statement_expr e =
     | NEarrow _
     | NEvar _
     | NEstring_literal _
-    | NEconstant _ -> 
+    | NEconstant _ 
+    | NEmalloc _ -> 
 	unsupported e.nexpr_loc "statement expression"
 
 and interp_call e1 args assoc = 
@@ -878,12 +881,16 @@ let rec make_union_loc = function
 let interp_assigns before assigns = function
   | Some locl ->
       let m = HeapVarSet.fold
-	(fun v m -> StringMap.add (heap_var_name v) (Reference false) m)
-	  assigns.Ceffect.reads_var StringMap.empty in
+	(fun v m -> 
+	   if Ceffect.is_alloc v then m 
+	   else StringMap.add (heap_var_name v) (Reference false) m)
+	assigns.Ceffect.reads_var StringMap.empty 
+      in
       let m = ZoneSet.fold
 	(fun (z,s,ty) m -> 
 	   StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
-	 assigns.Ceffect.reads m in
+	assigns.Ceffect.reads m 
+      in
       let l = 
 	List.fold_left (collect_locations before) m locl
       in
@@ -1034,6 +1041,11 @@ let strong_invariants_for hvs =
     Ceffect.strong_invariants  
     pred
 
+let alloc_extends = 
+  LPred ("alloc_extends", [LVar "alloc@"; LVar "alloc"])
+
+let alloc_extends_at label = 
+  LPred ("alloc_extends", [LVarAtLabel ("alloc", label); LVar "alloc"])
 
 let interp_spec add_inv effect s =
   let tpre_without = 
@@ -1049,10 +1061,13 @@ let interp_spec add_inv effect s =
      (interp_predicate_opt None "" s.ensures)
      (make_and 
 	(interp_assigns "" effect s.assigns)
-	(if add_inv then weak_invariants_for effect else LTrue))
+	(make_and
+	   (if add_inv then weak_invariants_for effect else LTrue)
+	   (if Ceffect.assigns_alloc effect then alloc_extends else LTrue)))
   in 
   (tpre_with,tpre_without,tpost)
 
+(***
 let alloc_on_stack loc v t =
   let form = 
     Cnorm.make_and 
@@ -1067,6 +1082,7 @@ let alloc_on_stack loc v t =
 			(LPred ("alloc_stack", 
 				[LVar "result"; LVar "alloc@"; LVar "alloc"])),
 		      None))
+***)
 
 let interp_decl d acc = 
   match d.node with 
@@ -1092,7 +1108,14 @@ let interp_invariant label effects annot =
     | None -> LTrue
     | Some inv -> interp_predicate None "init" inv
   in
-  let inv = make_and (interp_assigns label effects annot.loop_assigns) inv in
+  let inv = 
+    make_and 
+      (interp_assigns label effects annot.loop_assigns) 
+      (make_and 
+	 inv 
+	 (if Ceffect.assigns_alloc effects 
+	  then alloc_extends_at label else LTrue))
+  in
   let var = match annot.variant with
     | None -> None
     | Some (var,r) -> Some (interp_term None "init" var, r)
@@ -1519,8 +1542,11 @@ let interp_function_spec id sp ty pl =
   let pre_with,pre_without,post = 
     interp_spec 
       (id != Cinit.invariants_initially_established_info)
-      {Ceffect.ef_empty with Ceffect.reads = id.function_reads; 
-	 Ceffect.assigns = id.function_writes} sp 
+      { Ceffect.reads = id.function_reads; 
+	Ceffect.assigns = id.function_writes;
+	Ceffect.reads_var = id.function_reads_var; 
+	Ceffect.assigns_var = id.function_writes_var } 
+      sp 
   in
   let tpl = interp_fun_params id.function_reads pl in   
   let r = heap_var_unique_names id.function_reads_var in

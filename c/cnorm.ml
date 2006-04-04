@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.55 2006-03-29 14:20:31 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.56 2006-04-04 14:00:55 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -157,6 +157,7 @@ let rec type_why e =
     | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
 	rename_zone assoc (type_why e)
+    | NEmalloc _ -> Info.Pointer (make_zone false)
 	
 let find_zone e = 
   match type_why e with
@@ -336,7 +337,10 @@ and expr_node loc ty t =
 	  let info = default_var_info "null" in 
 	  Cenv.set_var_type (Var_info info) ty false;
 	  NEvar (Var_info info)    
-      | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
+      | TEcast (tctype ,texpr) -> 
+	  NEcast (tctype, expr texpr)
+      | TEmalloc (tctype, texpr) ->
+	  NEmalloc (tctype, expr texpr)
 
 let nt_arrow loc valid ty e tw z f =
   NTarrow ({nterm_node = e;

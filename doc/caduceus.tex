@@ -1327,6 +1327,29 @@ The following table summarizes the various pointer notions:
 
 %\input{invariants.tex}
 
+\section{Memory allocation}
+
+There is a limited support for the \texttt{malloc} function.
+Currently, only expressions of the shape
+\begin{center}
+  \begin{tabular}{l}
+  \texttt{(}$\tau$\texttt{*)malloc(}$e$\texttt{ * sizeof(}$\tau$\texttt{))} \\
+  \texttt{(}$\tau$\texttt{*)malloc(sizeof(}$\tau$\texttt{) * }$e$\texttt{)} \\
+  \texttt{(}$\tau$\texttt{*)malloc(sizeof(}$\tau$\texttt{))}
+  \end{tabular}
+\end{center}
+are supported, where $e$ is an integer expression and $\tau$ a type
+expression. When a function (resp. a loop) is allocating memory, some
+predicate is added to its postcondition (resp. to its loop invariant)
+to state that some memory was allocated and consequently that any
+valid pointer before the allocation is still valid after the allocation.
+Note that currently there is no way for the user to state this
+property manually in a specification.
+
+Example: see \texttt{bench/c/good/malloc.c} in the source distribution.
+
+There is no support for \texttt{free} currently.
+
 \section{Unsupported features}
 
 If a feature is not supported by \caduceus, it is reported on the
@@ -1347,7 +1370,7 @@ so in future versions of the tool:
 \item arithmetic overflow (currently all integers types are mapped to
   arbitrary precision integers on the prover side)
 \item \texttt{sizeof}
-\item standard library functions: \texttt{malloc}, \texttt{memcpy},
+\item standard library functions: \texttt{memcpy},
   \texttt{strcmp}, etc.
 \item more support for \verb|&| operator.
 \end{itemize}

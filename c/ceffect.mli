@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.24 2006-01-23 16:43:27 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.25 2006-04-04 14:00:55 filliatr Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -37,6 +37,10 @@ val ef_empty : effect
 val global_var :  Info.var_info list ref
 
 val intersect_only_alloc : effect -> effect -> bool
+
+val is_alloc : Info.var_info -> bool
+
+val assigns_alloc : effect -> bool
 
 (* all heap vars and their associated types *)
 val heap_vars : (string, Info.var_info) Hashtbl.t

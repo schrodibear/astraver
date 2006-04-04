@@ -6902,13 +6902,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\
@@ -6961,13 +6963,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\
@@ -7025,13 +7029,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\
@@ -7087,13 +7093,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\
@@ -7149,13 +7157,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\
@@ -7211,13 +7221,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\
@@ -7273,13 +7285,15 @@ Save.
                 ((acc full_q_9_0 q) = 0 /\ result =
                 (acc intM_contents_0
                  (shift (acc contents_q_9 q) (acc first_q_9 q)))) /\
-                (((((((not_assigns alloc contents_q_9 contents_q_9 pset_empty) /\
+                ((((((((not_assigns alloc contents_q_9 contents_q_9
+                        pset_empty) /\
                 (not_assigns alloc empty_q_9 empty_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc first_q_9 first_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc full_q_9 full_q_9_0 (pset_singleton q))) /\
                 (not_assigns alloc intM_contents_0 intM_contents_0 pset_empty)) /\
                 (not_assigns alloc last_q_9 last_q_9 pset_empty)) /\
                 (not_assigns alloc length_q_9 length_q_9 pset_empty)) /\
+                q = q) /\
                 (* File "queue.c", line 14, characters 5-105 *)
                 (((valid_range alloc (acc contents_q_9 q) 0
                    ((acc length_q_9 q) - 1)) /\

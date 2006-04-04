@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.117 2006-03-29 14:20:31 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.118 2006-04-04 14:00:55 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -78,7 +78,7 @@ let alloc =
     | Var_info v -> v
     | Fun_info _ -> assert false
 
-
+let is_alloc = (==) alloc
 
 let is_memory_var v = 
   if v == alloc then false
@@ -130,7 +130,6 @@ let add_var v (ty : Info.why_type) s =
 
   
 let add_alloc s = HeapVarSet.add alloc s
-
 
 let add_heap_var n z ty =
   let ty' = Memory(ty,z) in
@@ -191,13 +190,16 @@ let reads_add_alloc e = { e with reads_var = add_alloc e.reads_var }
 
 let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
 				 assigns_var = add_var v ty e.assigns_var }
+
 let assigns_add_field_var v ty e = 
   { e with reads = add_field_var v ty e.reads;
       assigns = add_field_var v ty e.assigns }
-(*let assigns_add_pointer_var ty e = 
-  { e with reads = add_pointer_var ty e.reads; 
-      assigns = add_pointer_var ty e.assigns }
-*)
+
+let assigns_add_alloc e = { e with reads_var = add_alloc e.reads_var;
+				 assigns_var = add_alloc e.assigns_var }
+
+let assigns_alloc e = HeapVarSet.mem alloc e.assigns_var
+
 let rec term t = match t.nterm_node with 
   | NTvar v -> 
       if v.var_is_static
@@ -493,6 +495,8 @@ let rec expr e = match e.nexpr_node with
       ef_union (ef_union (expr e1) (expr e2)) (expr e3)
   | NEcast (_, e) ->
       expr e
+  | NEmalloc (_, e) ->
+      assigns_add_alloc (expr e)
 
 (* effects for [e = ...] *)
 and assign_expr e = match e.nexpr_node with
@@ -796,6 +800,8 @@ let rec term_of_expr e =
   | NEstring_literal _
   | NEnop -> 
       not_a_constant_value e.nexpr_loc
+  | NEmalloc _ ->
+      error e.nexpr_loc "not a side-effects free expression"
 
 let noattr loc ty e =
   { nterm_node = e;

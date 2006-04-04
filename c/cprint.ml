@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.21 2006-02-10 14:46:04 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.22 2006-04-04 14:00:55 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -276,6 +276,8 @@ let rec nexpr fmt e = match e.nexpr_node with
       fprintf fmt "%a ? %a : %a" nexpr e1 nexpr e2 nexpr e3
   | NEcast (ty, e) ->
       fprintf fmt "(%a)%a" ctype ty nexpr_p e
+  | NEmalloc (ty, e) ->
+      fprintf fmt "(%a*)malloc(%a * sizeof(%a))" ctype ty nexpr_p e ctype ty
 
 and nexpr_p fmt e = match e.nexpr_node with
   | NEnop | NEconstant _ | NEstring_literal _ | NEvar _ -> nexpr fmt e

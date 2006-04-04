@@ -5,9 +5,9 @@ Require Export copy_spec_why.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_1 : 
-  forall (A747:Set), forall (A748:Set),
-  forall (t1: ((pointer) A748)),
-  forall (t2: ((pointer) A747)),
+  forall (A726:Set), forall (A727:Set),
+  forall (t1: ((pointer) A727)),
+  forall (t2: ((pointer) A726)),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
@@ -20,13 +20,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_2 : 
-  forall (A749:Set), forall (A750:Set),
-  forall (t1: ((pointer) A750)),
-  forall (t2: ((pointer) A749)),
+  forall (A728:Set), forall (A729:Set),
+  forall (t1: ((pointer) A729)),
+  forall (t2: ((pointer) A728)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A750)),
-  forall (intM_t2_5: ((memory) Z A749)),
+  forall (intM_t1_4: ((memory) Z A729)),
+  forall (intM_t2_5: ((memory) Z A728)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (k: Z),
@@ -39,13 +39,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_3 : 
-  forall (A751:Set), forall (A752:Set),
-  forall (t1: ((pointer) A752)),
-  forall (t2: ((pointer) A751)),
+  forall (A730:Set), forall (A731:Set),
+  forall (t1: ((pointer) A731)),
+  forall (t2: ((pointer) A730)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A752)),
-  forall (intM_t2_5: ((memory) Z A751)),
+  forall (intM_t1_4: ((memory) Z A731)),
+  forall (intM_t2_5: ((memory) Z A730)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (HW_3: (* File "copy.c", line 9, characters 17-70 *) (n <= n /\
@@ -53,7 +53,7 @@ Save.
                  (n <= k /\ k < n -> (acc intM_t2_5 (shift t2 k)) =
                   (acc intM_t1_4 (shift t1 k)))))),
   forall (i: Z),
-  forall (intM_t2_5_0: ((memory) Z A751)),
+  forall (intM_t2_5_0: ((memory) Z A730)),
   forall (HW_4: (* File "copy.c", line 9, characters 17-70 *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc intM_t2_5_0 (shift t2 k)) =
@@ -61,9 +61,9 @@ Save.
   forall (i0: Z),
   forall (HW_5: i0 = (i - 1)),
   forall (HW_6: i > 0),
-  forall (result: ((pointer) A751)),
+  forall (result: ((pointer) A730)),
   forall (HW_7: result = (shift t2 i0)),
-  forall (result0: ((pointer) A752)),
+  forall (result0: ((pointer) A731)),
   forall (HW_8: result0 = (shift t1 i0)),
   (valid alloc result0).
 Proof.
@@ -73,13 +73,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_4 : 
-  forall (A753:Set), forall (A754:Set),
-  forall (t1: ((pointer) A754)),
-  forall (t2: ((pointer) A753)),
+  forall (A732:Set), forall (A733:Set),
+  forall (t1: ((pointer) A733)),
+  forall (t2: ((pointer) A732)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A754)),
-  forall (intM_t2_5: ((memory) Z A753)),
+  forall (intM_t1_4: ((memory) Z A733)),
+  forall (intM_t2_5: ((memory) Z A732)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (HW_3: (* File "copy.c", line 9, characters 17-70 *) (n <= n /\
@@ -87,7 +87,7 @@ Save.
                  (n <= k /\ k < n -> (acc intM_t2_5 (shift t2 k)) =
                   (acc intM_t1_4 (shift t1 k)))))),
   forall (i: Z),
-  forall (intM_t2_5_0: ((memory) Z A753)),
+  forall (intM_t2_5_0: ((memory) Z A732)),
   forall (HW_4: (* File "copy.c", line 9, characters 17-70 *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc intM_t2_5_0 (shift t2 k)) =
@@ -95,9 +95,9 @@ Save.
   forall (i0: Z),
   forall (HW_5: i0 = (i - 1)),
   forall (HW_6: i > 0),
-  forall (result: ((pointer) A753)),
+  forall (result: ((pointer) A732)),
   forall (HW_7: result = (shift t2 i0)),
-  forall (result0: ((pointer) A754)),
+  forall (result0: ((pointer) A733)),
   forall (HW_8: result0 = (shift t1 i0)),
   forall (HW_9: (valid alloc result0)),
   forall (result1: Z),
@@ -110,13 +110,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_5 : 
-  forall (A755:Set), forall (A756:Set),
-  forall (t1: ((pointer) A756)),
-  forall (t2: ((pointer) A755)),
+  forall (A734:Set), forall (A735:Set),
+  forall (t1: ((pointer) A735)),
+  forall (t2: ((pointer) A734)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A756)),
-  forall (intM_t2_5: ((memory) Z A755)),
+  forall (intM_t1_4: ((memory) Z A735)),
+  forall (intM_t2_5: ((memory) Z A734)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (HW_3: (* File "copy.c", line 9, characters 17-70 *) (n <= n /\
@@ -124,7 +124,7 @@ Save.
                  (n <= k /\ k < n -> (acc intM_t2_5 (shift t2 k)) =
                   (acc intM_t1_4 (shift t1 k)))))),
   forall (i: Z),
-  forall (intM_t2_5_0: ((memory) Z A755)),
+  forall (intM_t2_5_0: ((memory) Z A734)),
   forall (HW_4: (* File "copy.c", line 9, characters 17-70 *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc intM_t2_5_0 (shift t2 k)) =
@@ -132,15 +132,15 @@ Save.
   forall (i0: Z),
   forall (HW_5: i0 = (i - 1)),
   forall (HW_6: i > 0),
-  forall (result: ((pointer) A755)),
+  forall (result: ((pointer) A734)),
   forall (HW_7: result = (shift t2 i0)),
-  forall (result0: ((pointer) A756)),
+  forall (result0: ((pointer) A735)),
   forall (HW_8: result0 = (shift t1 i0)),
   forall (HW_9: (valid alloc result0)),
   forall (result1: Z),
   forall (HW_10: result1 = (acc intM_t1_4 result0)),
   forall (HW_11: (valid alloc result)),
-  forall (intM_t2_5_1: ((memory) Z A755)),
+  forall (intM_t2_5_1: ((memory) Z A734)),
   forall (HW_12: intM_t2_5_1 = (upd intM_t2_5_0 result result1)),
   i0 <= n.
 Proof.
@@ -150,13 +150,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_6 : 
-  forall (A757:Set), forall (A758:Set),
-  forall (t1: ((pointer) A758)),
-  forall (t2: ((pointer) A757)),
+  forall (A736:Set), forall (A737:Set),
+  forall (t1: ((pointer) A737)),
+  forall (t2: ((pointer) A736)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A758)),
-  forall (intM_t2_5: ((memory) Z A757)),
+  forall (intM_t1_4: ((memory) Z A737)),
+  forall (intM_t2_5: ((memory) Z A736)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (HW_3: (* File "copy.c", line 9, characters 17-70 *) (n <= n /\
@@ -164,7 +164,7 @@ Save.
                  (n <= k /\ k < n -> (acc intM_t2_5 (shift t2 k)) =
                   (acc intM_t1_4 (shift t1 k)))))),
   forall (i: Z),
-  forall (intM_t2_5_0: ((memory) Z A757)),
+  forall (intM_t2_5_0: ((memory) Z A736)),
   forall (HW_4: (* File "copy.c", line 9, characters 17-70 *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc intM_t2_5_0 (shift t2 k)) =
@@ -172,15 +172,15 @@ Save.
   forall (i0: Z),
   forall (HW_5: i0 = (i - 1)),
   forall (HW_6: i > 0),
-  forall (result: ((pointer) A757)),
+  forall (result: ((pointer) A736)),
   forall (HW_7: result = (shift t2 i0)),
-  forall (result0: ((pointer) A758)),
+  forall (result0: ((pointer) A737)),
   forall (HW_8: result0 = (shift t1 i0)),
   forall (HW_9: (valid alloc result0)),
   forall (result1: Z),
   forall (HW_10: result1 = (acc intM_t1_4 result0)),
   forall (HW_11: (valid alloc result)),
-  forall (intM_t2_5_1: ((memory) Z A757)),
+  forall (intM_t2_5_1: ((memory) Z A736)),
   forall (HW_12: intM_t2_5_1 = (upd intM_t2_5_0 result result1)),
   forall (k: Z),
   forall (HW_13: i0 <= k /\ k < n),
@@ -202,13 +202,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_7 : 
-  forall (A759:Set), forall (A760:Set),
-  forall (t1: ((pointer) A760)),
-  forall (t2: ((pointer) A759)),
+  forall (A738:Set), forall (A739:Set),
+  forall (t1: ((pointer) A739)),
+  forall (t2: ((pointer) A738)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A760)),
-  forall (intM_t2_5: ((memory) Z A759)),
+  forall (intM_t1_4: ((memory) Z A739)),
+  forall (intM_t2_5: ((memory) Z A738)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (HW_3: (* File "copy.c", line 9, characters 17-70 *) (n <= n /\
@@ -216,7 +216,7 @@ Save.
                  (n <= k /\ k < n -> (acc intM_t2_5 (shift t2 k)) =
                   (acc intM_t1_4 (shift t1 k)))))),
   forall (i: Z),
-  forall (intM_t2_5_0: ((memory) Z A759)),
+  forall (intM_t2_5_0: ((memory) Z A738)),
   forall (HW_4: (* File "copy.c", line 9, characters 17-70 *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc intM_t2_5_0 (shift t2 k)) =
@@ -224,15 +224,15 @@ Save.
   forall (i0: Z),
   forall (HW_5: i0 = (i - 1)),
   forall (HW_6: i > 0),
-  forall (result: ((pointer) A759)),
+  forall (result: ((pointer) A738)),
   forall (HW_7: result = (shift t2 i0)),
-  forall (result0: ((pointer) A760)),
+  forall (result0: ((pointer) A739)),
   forall (HW_8: result0 = (shift t1 i0)),
   forall (HW_9: (valid alloc result0)),
   forall (result1: Z),
   forall (HW_10: result1 = (acc intM_t1_4 result0)),
   forall (HW_11: (valid alloc result)),
-  forall (intM_t2_5_1: ((memory) Z A759)),
+  forall (intM_t2_5_1: ((memory) Z A738)),
   forall (HW_12: intM_t2_5_1 = (upd intM_t2_5_0 result result1)),
   (Zwf 0 i0 i).
 Proof.
@@ -241,13 +241,13 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma copy_impl_po_8 : 
-  forall (A761:Set), forall (A762:Set),
-  forall (t1: ((pointer) A762)),
-  forall (t2: ((pointer) A761)),
+  forall (A740:Set), forall (A741:Set),
+  forall (t1: ((pointer) A741)),
+  forall (t2: ((pointer) A740)),
   forall (n: Z),
   forall (alloc: alloc_table),
-  forall (intM_t1_4: ((memory) Z A762)),
-  forall (intM_t2_5: ((memory) Z A761)),
+  forall (intM_t1_4: ((memory) Z A741)),
+  forall (intM_t2_5: ((memory) Z A740)),
   forall (HW_1: (* File "copy.c", line 4, characters 14-58 *)
                 ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n))),
   forall (HW_3: (* File "copy.c", line 9, characters 17-70 *) (n <= n /\
@@ -255,7 +255,7 @@ Save.
                  (n <= k /\ k < n -> (acc intM_t2_5 (shift t2 k)) =
                   (acc intM_t1_4 (shift t1 k)))))),
   forall (i: Z),
-  forall (intM_t2_5_0: ((memory) Z A761)),
+  forall (intM_t2_5_0: ((memory) Z A740)),
   forall (HW_4: (* File "copy.c", line 9, characters 17-70 *) (i <= n /\
                 (forall (k:Z),
                  (i <= k /\ k < n -> (acc intM_t2_5_0 (shift t2 k)) =

@@ -39,6 +39,8 @@ typedef struct struct_list {
 
 /*@ logic Length length(list l) reads l->tl */
 
+/*@ predicate length_order(Length l1, Length l2) */
+
 /*@ predicate lpath(list p1, plist l, list p2) reads p1->tl */
 
 /*@ axiom Path_null_ax : \forall list p; lpath(p,nil(),p) */
