@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.34 2006-04-05 11:38:53 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.35 2006-04-05 14:15:33 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -756,8 +756,7 @@ let main () =
 
   (* Setting special icons for prooved obligation in cache *)
   let _ = 
-    let _ = Filename.concat (Tools.get_home ()) "gwhy.cache" in
-    load_cache "/tmp/gwhy.cache";
+    load_cache "gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
 	(fun s (_,o,seq) -> 
