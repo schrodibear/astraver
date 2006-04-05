@@ -51,7 +51,8 @@ let print_loc = function
       let ff = if Filename.is_relative f then Filename.concat pwd f else f in
       ("file \""^ff^"\", line "^l^", characters "^s^" - "^e)
 
-let is_cfile f = Filename.check_suffix f ".c"
+let is_cfile f = 
+  Filename.check_suffix f ".c" or Filename.check_suffix f ".h"
   (* otherwise it's .why *)
 
 let read_file = function 

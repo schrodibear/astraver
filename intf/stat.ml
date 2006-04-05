@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.33 2006-04-05 08:58:55 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.34 2006-04-05 11:38:53 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -733,7 +733,9 @@ let main () =
 			  Hashtbl.iter
 			    (fun p m -> Buffer.add_string buffer (p.Model.pr_name ^ ": \n" ^ m ^" \n\n"))
 			    failed_with;
-			  tv2#buffer#set_text (Buffer.contents buffer);
+			  let tbuf = GText.buffer () in
+			  tv2#set_buffer tbuf;
+			  tbuf#set_text (Buffer.contents buffer);
 			  Pprinter.reset_last_file ();
 			  Buffer.clear buffer
 			with Not_found -> ()); 
