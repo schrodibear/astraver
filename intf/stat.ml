@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.32 2006-04-05 07:18:18 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.33 2006-04-05 08:58:55 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -103,7 +103,7 @@ module View = struct
  
 
   let add_columns ~(view : GTree.view) ~model =
-    let renderer = GTree.cell_renderer_text [`XALIGN 0.] in
+    (* let renderer = GTree.cell_renderer_text [`XALIGN 0.] in *)
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
     let _ = view#append_column first_col 
     in
@@ -399,9 +399,7 @@ let main () =
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_provers = View.add_columns ~view ~model in
-  let scrollview_width () = 
-    (List.fold_left (fun t (_,k) -> t + k#width) 10 vc_provers) + View.first_col#width
-  in
+  
   (* cache and view menu *)
   let _ = configuration_factory#add_separator () in
   let _ = 
@@ -442,7 +440,7 @@ let main () =
   let cache = configuration_factory#add_check_item 
     ~callback:(fun b -> Cache.set_active b) "Cache _enabled" in
   let _ = cache#set_active (Cache.is_enabled ()) in
-  let clear_cache_m = configuration_factory#add_image_item ~label:"Clear cache" 
+  let _ = configuration_factory#add_image_item ~label:"Clear cache" 
     (*~stock:`CLEAR*) ~key:GdkKeysyms._K
     ~callback:(fun () -> 
 		 Cache.clear ();
@@ -756,7 +754,7 @@ let main () =
 
   (* Setting special icons for prooved obligation in cache *)
   let _ = 
-    let cache_file = Filename.concat (Tools.get_home ()) "gwhy.cache" in
+    let _ = Filename.concat (Tools.get_home ()) "gwhy.cache" in
     load_cache "/tmp/gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
