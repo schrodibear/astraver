@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.35 2006-04-05 14:15:33 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.36 2006-04-05 14:30:46 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -459,25 +459,40 @@ let main () =
 		     (fun p -> prove (run_prover_all p view model true))
 		     Model.provers) () 
   in
+  let fct_callback bench () = 
+    List.iter 
+      (fun p -> 
+	 let row = model#get_iter p in
+	 let s = model#get ~row ~column:Model.fullname in 
+	 if model#iter_has_child row then
+	   prove (run_prover_fct (Model.get_default_prover ()) view model s bench)
+	 else let name = model#get ~row ~column:Model.parent in 
+	 prove (run_prover_fct (Model.get_default_prover ()) view model name bench))
+      view#selection#get_selected_rows 
+  in
+  let _ = 
+    proof_factory#add_image_item ~label:"Start benchmark _on selected function" 
+      ~key:GdkKeysyms._P 
+      ~callback:(fun () -> 
+		   let row = model#get_iter (List.hd view#selection#get_selected_rows) in
+		   let s = 
+		     if model#iter_has_child row 
+		     then model#get ~row ~column:Model.fullname 
+		     else model#get ~row ~column:Model.parent
+		   in
+		   List.iter
+		     (fun p -> prove (run_prover_fct p view model s true))
+		     Model.provers) ()
+  in
   let _ = 
     proof_factory#add_image_item ~label:"Prove _all obligations" 
       ~key:GdkKeysyms._A 
       ~callback:(fun () -> 
 		   prove (run_prover_all (Model.get_default_prover ()) view model false)) () 
   in
-  let fct_callback () = 
-    List.iter 
-      (fun p -> 
-	 let row = model#get_iter p in
-	 let s = model#get ~row ~column:Model.fullname in 
-	 if model#iter_has_child row then
-	   prove (run_prover_fct (Model.get_default_prover ()) view model s false)
-	 else let name = model#get ~row ~column:Model.parent in 
-	 prove (run_prover_fct (Model.get_default_prover ()) view model name false))
-      view#selection#get_selected_rows in
   let _ = 
     proof_factory#add_image_item ~label:"Prove selected _function" 
-      ~key:GdkKeysyms._F ~callback:fct_callback () 
+      ~key:GdkKeysyms._F ~callback:(fct_callback false) ()
   in
   let oblig_callback () =
     List.iter 
