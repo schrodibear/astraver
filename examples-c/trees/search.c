@@ -18,7 +18,23 @@ tree binary_search(tree t, int v) {
   if (t == NULL) return NULL;
   if (t->node == v) return t;
   if (v < t->node) 
-    return binary_search(t->left, v);
+    return binary_search(t->left,  v);
   else
     return binary_search(t->right, v);
+}
+
+
+/* @ requires valid_tree(t)
+   @ ensures \result <=> bst(t)
+   @ */
+//int is_bst(tree t);
+
+/*@ requires valid_tree(t)
+  @ ensures \result <=> heap(t)
+  @*/
+int is_heap(tree t) {
+  if (t == NULL) return 1;
+  if (t->left != NULL && t->left->node >= t->node) return 0;
+  if (t->right != NULL && t->right->node >= t->node) return 0;
+  return is_heap(t->left) && is_heap(t->right);
 }
