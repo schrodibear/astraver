@@ -78,6 +78,7 @@ unsigned int *current_word;
  *******************************************************
  */
 
+/*@ type clist  @*/
 /*@ logic clist cons(char c, clist l) @*/
 /*@ logic clist nil()                 @*/
 /*@ logic int length(clist l)         @*/
