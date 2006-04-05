@@ -91,6 +91,10 @@ intuition; subst.
 transitivity (gcd y y); auto.
 Save.
 
+(*Why*) Parameter gcd1_valid :
+  forall (a: Z), forall (b: Z), forall (_: a > 0 /\ b > 0),
+  (sig_1 Z (fun (result: Z)  => (result = (gcd a b)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma gcd2_po_1 : 
   forall (a: Z),
@@ -149,4 +153,8 @@ Proof.
 intuition; subst.
 transitivity (gcd x 0); auto.
 Save.
+
+(*Why*) Parameter gcd2_valid :
+  forall (a: Z), forall (b: Z), forall (_: a >= 0 /\ b >= 0),
+  (sig_1 Z (fun (result: Z)  => (result = (gcd a b)))).
 

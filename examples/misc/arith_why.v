@@ -145,3 +145,7 @@ transitivity (p + 0*b); auto.
 ring.
 Save.
 
+(*Why*) Parameter mult_valid :
+  forall (x: Z), forall (y: Z), forall (_: x >= 0 /\ y >= 0),
+  (sig_1 Z (fun (result: Z)  => (result = (x * y)))).
+

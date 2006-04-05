@@ -48,6 +48,10 @@ intuition.
 Qed.
 
 
+(*Why*) Parameter add1_valid :
+  forall (y: Z), forall (x: Z), forall (_: y >= 0),
+  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = (x + y)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma u1_po_1 : 
   7 >= 0.
@@ -65,6 +69,9 @@ Qed.
  intros; omega.
  Qed.
 
+
+(*Why*) Parameter u1_valid :
+  forall (_: unit), (sig_1 unit (fun (result: unit)  => (True))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma rec_add1_po_1 : 
@@ -122,6 +129,10 @@ intros; omega.
 Qed.
 
 
+(*Why*) Parameter rec_add1_valid :
+  forall (y: Z), forall (x: Z), forall (_: y >= 0),
+  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = (x + y)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma u11_po_1 : 
   7 >= 0.
@@ -139,6 +150,9 @@ Proof.
 intros; omega.
 Qed.
 
+
+(*Why*) Parameter u11_valid :
+  forall (_: unit), (sig_1 unit (fun (result: unit)  => (True))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult1_po_1 : 
@@ -199,6 +213,10 @@ intuition; subst.
 ring.
 Qed.
 
+(*Why*) Parameter mult1_valid :
+  forall (y: Z), forall (x: Z), forall (_: x >= 0 /\ y >= 0),
+  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = (x * y)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma u2_po_1 : 
   4 >= 0 /\ 6 >= 0.
@@ -216,6 +234,9 @@ Proof.
  intros; omega.
 Qed.
 
+
+(*Why*) Parameter u2_valid :
+  forall (_: unit), (sig_1 unit (fun (result: unit)  => (True))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma mult2_po_1 : 
@@ -328,4 +349,8 @@ Save.
 Proof.
 intuition.
 Save.
+
+(*Why*) Parameter mult2_valid :
+  forall (x: Z), forall (y: Z), forall (_: x >= 0 /\ y >= 0),
+  (sig_1 Z (fun (result: Z)  => (result = (x * y)))).
 

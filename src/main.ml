@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.99 2006-03-30 12:39:39 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.100 2006-04-05 08:35:30 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -163,8 +163,11 @@ let interp_program id p =
 	push_validation (ids ^ "_wp") (TTpred wp.a_value) (CC_hole pr)
   end;
 
+  if valid then
+    let ren = initial_renaming env in
+    let tt = Monad.trad_type_c ren env c in
+    Coq.push_parameter (ids ^ "_valid") tt;
   (*** TODO
-  let tt = Monad.trad_type_c ren env c in
   push_validation ids tt v;
   if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
   ***)

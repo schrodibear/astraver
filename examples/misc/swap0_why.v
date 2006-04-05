@@ -15,6 +15,10 @@ intuition.
 Qed.
 
 
+(*Why*) Parameter swap1_valid :
+  forall (_: unit), forall (x: Z), forall (y: Z),
+  (sig_3 Z Z unit (fun (x0: Z) (y0: Z) (result: unit)  => (x0 = y /\ y0 = x))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap2_po_1 : 
   forall (x: Z),
@@ -29,6 +33,10 @@ intuition.
 Qed.
 
 
+(*Why*) Parameter swap2_valid :
+  forall (_: unit), forall (x: Z), forall (y: Z),
+  (sig_3 Z Z unit (fun (x0: Z) (y0: Z) (result: unit)  => (x0 = y /\ y0 = x))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap3_po_1 : 
   forall (a: Z),
@@ -41,6 +49,17 @@ Qed.
 Proof.
 intuition.
 Qed.
+
+(*Why*) Parameter swap3_valid :
+  forall (a: Z), forall (b: Z),
+  (sig_3 Z Z unit (fun (a0: Z) (b0: Z) (result: unit)  => (a0 = b /\ b0 = a))).
+
+(*Why*) Parameter test_swap3_valid :
+  forall (_: unit), (sig_1 unit (fun (result: unit)  => (True))).
+
+(*Why*) Parameter call_swap3_x_y_valid :
+  forall (_: unit), forall (x: Z), forall (y: Z),
+  (sig_3 Z Z unit (fun (x0: Z) (y0: Z) (result: unit)  => (x0 = y /\ y0 = x))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma call_swap3_y_x_po_1 : 
@@ -55,6 +74,10 @@ Proof.
 intuition.
 Qed.
 
+
+(*Why*) Parameter call_swap3_y_x_valid :
+  forall (_: unit), forall (x: Z), forall (y: Z),
+  (sig_3 Z Z unit (fun (x0: Z) (y0: Z) (result: unit)  => (x0 = y /\ y0 = x))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap4_po_1 : 
@@ -72,6 +95,15 @@ intuition.
 Qed.
 
 
+(*Why*) Parameter swap4_valid :
+  forall (a: Z), forall (b: Z), forall (tmp: Z),
+  (sig_4 Z Z Z unit
+   (fun (a0: Z) (b0: Z) (tmp0: Z) (result: unit)  => (a0 = b /\ b0 = a))).
+
+(*Why*) Parameter test_swap4_valid :
+  forall (_: unit), forall (tmp: Z),
+  (sig_2 Z unit (fun (tmp0: Z) (result: unit)  => (True))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma call_swap4_x_y_po_1 : 
   forall (x: Z),
@@ -86,6 +118,12 @@ intuition.
 Qed.
 
 
+(*Why*) Parameter call_swap4_x_y_valid :
+  forall (_: unit), forall (tmp: Z), forall (x: Z), forall (y: Z),
+  forall (_: x = 3),
+  (sig_4 Z Z Z unit
+   (fun (tmp0: Z) (x0: Z) (y0: Z) (result: unit)  => (y0 = 3))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma call_swap4_y_x_po_1 : 
   forall (x: Z),
@@ -99,4 +137,10 @@ Proof.
 intuition.
 Qed.
 
+
+(*Why*) Parameter call_swap4_y_x_valid :
+  forall (_: unit), forall (tmp: Z), forall (x: Z), forall (y: Z),
+  forall (_: x = 3),
+  (sig_4 Z Z Z unit
+   (fun (tmp0: Z) (x0: Z) (y0: Z) (result: unit)  => (y0 = 3))).
 

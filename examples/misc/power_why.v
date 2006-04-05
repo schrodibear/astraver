@@ -220,3 +220,9 @@ omega.
 Qed.
 
 
+(*Why*) Parameter power1_valid :
+  forall (_: unit), forall (m: Z), forall (n: Z), forall (y: Z),
+  forall (_: n >= 0),
+  (sig_4 Z Z Z unit
+   (fun (m0: Z) (n0: Z) (y0: Z) (result: unit)  => (y0 = (Zpower x n)))).
+

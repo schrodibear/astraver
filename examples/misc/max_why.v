@@ -197,3 +197,16 @@ replace (access a0 x0) with (access a (l-1)); auto with *.
 replace (access a0 k) with (access a k); auto with *.
 symmetry; auto with *.
 Qed.
+
+(*Why*) Parameter pgm_max_end_valid :
+  forall (_: unit), forall (a: (array Z)), forall (x: Z), forall (y: Z),
+  forall (_: (array_length a) = l),
+  (sig_4 (array Z) Z Z unit
+   (fun (a0: (array Z)) (x0: Z) (y0: Z) (result: unit)  =>
+    ((forall (k:Z),
+      (0 <= k /\ k < (l - 1) -> (k <> x0 -> (access a0 k) = (access a k)))) /\
+    (access a0 x0) = (access a (l - 1)) /\ (access a0 (l - 1)) =
+    (access a x0) /\
+    (forall (k:Z),
+     (0 <= k /\ k < (l - 1) -> (access a0 k) <= (access a0 (l - 1))))))).
+

@@ -399,3 +399,9 @@ replace r with i.
  omega.
 Save.
 
+(*Why*) Parameter dutch_flag_valid :
+  forall (_: unit), forall (t: (array color)), forall (_: (array_length t) =
+  N),
+  (sig_2 (array color) unit
+   (fun (t0: (array color)) (result: unit)  => (True))).
+

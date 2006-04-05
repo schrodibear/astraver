@@ -120,14 +120,10 @@ let print_predicate fmt p =
     | Papp (id, [a;b], _) when is_int_comparison id ->
 	fprintf fmt "@[%a %s@ %a@]" 
 	  print_term a (Coq.infix_relation id) print_term b
-    | Papp (id, [a;b], _) when id == t_eq_real ->
-	fprintf fmt "(@[eq %a %a@])" print_term a print_term b
-    | Papp (id, [a;b], _) when id == t_neq_real ->
-	fprintf fmt "~(@[eq %a %a@])" print_term a print_term b
-    | Papp (id, [a;b], _) when is_eq id ->
-	fprintf fmt "@[%a = %a@]" print_term a print_term b
-    | Papp (id, [a;b], _) when is_neq id -> 
-	fprintf fmt "@[~(%a = %a)@]" print_term a print_term b
+    | Papp (id, [a;b], _) when id == t_eq_real || id == t_eq ->
+	fprintf fmt "(@[%a = %a@])" print_term a print_term b
+    | Papp (id, [a;b], _) when id == t_neq_real || id == t_neq ->
+	fprintf fmt "(@[%a <> %a@])" print_term a print_term b
     | Papp (id, [a;b], _) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(Coq.pprefix_id id) print_term a print_term b
@@ -135,7 +131,7 @@ let print_predicate fmt p =
 	fprintf fmt "@[(@[%a %a@])@]" Ident.print id
 	  (print_list space print_term) l
     | Pnot p -> 
-	fprintf fmt "~%a" print3 p
+	fprintf fmt "not %a" print3 p
     | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in

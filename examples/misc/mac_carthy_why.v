@@ -67,3 +67,9 @@ Proof.
 intuition.
 Save.
 
+(*Why*) Parameter f91_valid :
+  forall (n: Z),
+  (sig_1 Z
+   (fun (result: Z)  => (n <= 100 /\ result = 91 \/ n >= 101 /\ result =
+    (n - 10)))).
+

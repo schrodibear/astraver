@@ -38,3 +38,7 @@ Qed.
 Proof.
 intuition.
 Qed.
+(*Why*) Parameter p_valid :
+  forall (_: unit), forall (x: Z), forall (_: x >= 0),
+  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = 0))).
+

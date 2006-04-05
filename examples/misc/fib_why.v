@@ -89,6 +89,10 @@ intuition.
 subst; symmetry; auto with *.
 Save.
 
+(*Why*) Parameter fib1_valid :
+  forall (n: Z), forall (_: n >= 0),
+  (sig_1 Z (fun (result: Z)  => (result = (F n)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_aux_po_1 : 
   forall (n: Z),
@@ -141,6 +145,11 @@ assumption.
 subst; ring (x + 1 - 1)%Z; trivial.
 Save.
 
+(*Why*) Parameter fib2_aux_valid :
+  forall (n: Z), forall (x: Z), forall (fx: Z), forall (fx_1: Z),
+  forall (_: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
+  (sig_1 Z (fun (result: Z)  => (result = (F n)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib2_po_1 : 
   forall (n: Z),
@@ -161,6 +170,10 @@ Save.
 Proof.
 intuition.
 Save.
+
+(*Why*) Parameter fib2_valid :
+  forall (n: Z), forall (_: n >= 0),
+  (sig_1 Z (fun (result: Z)  => (result = (F n)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib3_po_1 : 
@@ -233,6 +246,10 @@ Proof.
 intuition.
 assert (n=0 \/ n=1). omega. intuition; subst; auto.
 Save.
+
+(*Why*) Parameter fib3_valid :
+  forall (n: Z), forall (_: n >= 0),
+  (sig_1 Z (fun (result: Z)  => (result = (F n)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma fib4_po_1 : 
@@ -480,4 +497,9 @@ Save.
 Proof.
 intuition; subst; intuition.
 Save.
+
+(*Why*) Parameter fib4_valid :
+  forall (n: Z), forall (t: (array Z)), forall (_: 0 <= n /\ n <
+  (array_length t)),
+  (sig_2 (array Z) Z (fun (t0: (array Z)) (result: Z)  => (result = (F n)))).
 
