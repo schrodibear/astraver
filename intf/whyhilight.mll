@@ -22,7 +22,8 @@
   
   let insert_text (tbuf:GText.buffer) ty s = 
     let it = tbuf#end_iter in
-    let new_tag = tbuf#create_tag [`FOREGROUND (get_fc ty)] in
+    let (fc, bc) = get_color ty in
+    let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
     tbuf#insert ~tags:[new_tag] ~iter:it s 
 
   let insert_string (tbuf:GText.buffer) s =

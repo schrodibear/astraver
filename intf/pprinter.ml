@@ -126,7 +126,7 @@ let move_to_source = function
       else 
 	begin 
 	  last_file := file;
-	  if (Hashtbl.mem files file) then 
+	  if (Hashtbl.mem files file) && (not (Colors.has_changed ())) then 
 	    !tv_source#set_buffer (Hashtbl.find files file)
 	  else  
 	    begin
@@ -198,8 +198,8 @@ let is_buffer_saved =
   Hashtbl.mem obligs
 
 let save_buffer s (tbuf:GText.buffer) pprint = 
-  Hashtbl.add obligs s tbuf;
-  Hashtbl.add pprinter s pprint
+  Hashtbl.replace obligs s tbuf;
+  Hashtbl.replace pprinter s pprint
 
 let get_buffer = 
   Hashtbl.find obligs

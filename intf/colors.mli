@@ -31,6 +31,7 @@ val get_bc_predicate : unit -> string
 val color_exists : string -> bool
 
 val get_all_colors : unit -> color list
+val set_all_colors : (string * string * string) list -> unit
 val replace_color : string -> string -> string -> unit
 
 val has_changed : unit -> bool

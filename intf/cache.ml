@@ -34,9 +34,9 @@ let set_active v = active := v
 let swap_active () = active := not !active
 let is_enabled () = !active
 
-let swap_try_proof () = obligs := not !obligs
-let set_try_proof v = obligs := v
-let try_proof () = !obligs
+let swap_hard_proof () = obligs := not !obligs
+let set_hard_proof v = obligs := v
+let hard_proof () = !obligs
 
 let exists p o = 
   try 

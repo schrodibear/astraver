@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.31 2006-03-29 14:31:39 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.32 2006-04-05 07:18:18 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -27,6 +27,18 @@ let _ = gui := true
 
 let is_caduceus = 
   List.exists (fun f -> Filename.basename f = "caduceus.why") Options.files 
+
+let get_files fl = 
+  let files = List.map (fun f -> Filename.chop_extension (Filename.basename f)) fl 
+  in
+  List.fold_left
+    (fun l f -> 
+       let file = (Filename.concat (Sys.getcwd ()) f) ^ ".c" in
+       if Sys.file_exists file 
+       then file :: l
+       else l)
+    fl
+    files
 
 let _ =
   try
@@ -46,8 +58,8 @@ let _ =
 let window_width = 1024
 let window_height = 700
 
-let monospace_font = ref (Pango.Font.from_string "Monospace 12")
-let general_font = ref (Pango.Font.from_string "Monospace 12")
+let monospace_font = ref (Pango.Font.from_string "Monospace 10")
+let general_font = ref (Pango.Font.from_string "Monospace 10")
 
 let lower_view_general_font = general_font
 let upper_view_general_font = general_font
@@ -196,7 +208,7 @@ let expand_row (view:GTree.view) path bench =
  * Should i proove this obligation again ?
  *)
 let try_proof oblig =
-  (Cache.try_proof ())
+  (Cache.hard_proof ())
   or not (Cache.is_enabled ())
   or (Cache.is_enabled () && not (in_cache (Cache.clean oblig))) 
 
@@ -344,13 +356,6 @@ let main () =
   let configuration_factory = 
     new GMenu.factory configuration_menu ~accel_group 
   in
-  let save_settings () = 
-    !cache_check#set_active (Cache.is_enabled ());
-    !live_update_check#set_active (Tools.live_update ());
-    !hard_proof_check#set_active (Cache.try_proof ());
-    !timeout_spin#adjustment#set_value (float_of_int (Tools.get_timeout ()));
-    () 
-  in
   let unit () = () in
   let _ =
     configuration_factory#add_item ~key:GdkKeysyms._S
@@ -358,9 +363,10 @@ let main () =
   let _ =
     configuration_factory#add_item 
       ~callback:(fun () -> Preferences.show Tools.Color unit ()) "Customize colors" in
-  let ft = 
-    configuration_factory#add_item 
-      ~callback:(fun () -> !flash_info "Not implemented") "Customize fonts" in
+  (*let ft = 
+   * configuration_factory#add_item 
+   *   ~callback:(fun () -> !flash_info "Not implemented") "Customize fonts" in
+   *)
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
@@ -378,9 +384,9 @@ let main () =
        else f)
     Options.files 
   in
-  let label = GMisc.label ~text:"Opened files"  () in
-  table#attach ~left:0 ~top:0 label#coerce;
-  let files_combo = GEdit.combo ~allow_empty:false ~popdown_strings:(List.rev files)
+  let files_label = GMisc.label ~text:"Opened files" () in
+  table#attach ~left:0 ~top:0 files_label#coerce;
+  let files_combo = GEdit.combo ~allow_empty:false ~popdown_strings:(get_files files)
     ~value_in_list:true () in
   table#attach ~left:1 ~top:0 ~expand:`BOTH files_combo#coerce;
   let _ = files_combo#entry#set_editable false in
@@ -539,8 +545,8 @@ let main () =
   in
   let _ = proof_factory#add_separator () in
   let hardproof = proof_factory#add_check_item 
-    ~callback:(fun b -> Cache.set_try_proof b) "_Hard proof" in
-  let _ = hardproof#set_active (Cache.try_proof ()) in
+    ~callback:(fun b -> Cache.set_hard_proof b) "_Hard proof" in
+  let _ = hardproof#set_active (Cache.hard_proof ()) in
   let liveupd = proof_factory#add_check_item 
     ~callback:(fun b -> Tools.set_live b) "_Live update" in
   let _ = liveupd#set_active (Tools.live_update ()) in
@@ -676,7 +682,7 @@ let main () =
    * function selection 
    *)
   let _ =
-    files_combo#entry#event#connect#focus_in ~callback:
+    files_combo#entry#event#connect#after#focus_in ~callback:
       begin fun ev -> 
 	let s = files_combo#entry#text in
 	let loc = {Tags.file=s; Tags.line="1"; Tags.sp="1"; Tags.ep="1"} in
@@ -797,7 +803,7 @@ let main () =
 (* config in .gwhyrc *)
 let set_loaded_config () = 
   let l = [("cache", Cache.set_active) ; 
-	   ("hard_proof", Cache.set_try_proof) ; 
+	   ("hard_proof", Cache.set_hard_proof) ; 
 	   ("live_update", Tools.set_live)] in
   List.iter 
     (fun (k,f) -> 
@@ -823,7 +829,8 @@ let set_loaded_config () =
       begin
 	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
 	List.hd Model.provers
-      end)       
+      end);
+  Colors.set_all_colors (Config.get_colors ())
 
 (* Main *)
 let _ = 

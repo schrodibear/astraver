@@ -41,13 +41,13 @@ let fcolors = Hashtbl.create 13
 let bcolors = Hashtbl.create 13
 let kcolors = Hashtbl.create 13
 
-let add_color item k fc bc = 
-  Hashtbl.add kcolors item k;
-  if fc <> "white" then begin 
-    Hashtbl.add fcolors item fc 
+let add_color k item fc bc = 
+  Hashtbl.add kcolors k item;
+  if fc <> "black" then begin 
+    Hashtbl.add fcolors k fc 
   end;  
-  if bc <> "black" then begin 
-    Hashtbl.add bcolors item bc 
+  if bc <> "white" then begin 
+    Hashtbl.add bcolors k bc 
   end  
 
 let _ = 
@@ -78,6 +78,13 @@ let get_all_colors () =
     (fun {key=k; name=n; fc=_; bc=_} -> 
        {key=k; name=n; fc=(get_fc k); bc=(get_bc k)})
     colors
+
+let set_all_colors l = 
+  List.iter 
+    (fun (k, f, b) -> 
+       Hashtbl.replace fcolors k f;
+       Hashtbl.replace bcolors k b)
+    l
 
 let replace_color k f b = 
   changed := true;
