@@ -23,11 +23,16 @@ tree binary_search(tree t, int v) {
     return binary_search(t->right, v);
 }
 
-
-/* @ requires valid_tree(t)
-   @ ensures \result <=> bst(t)
-   @ */
-//int is_bst(tree t);
+/*@ requires 
+  @   valid_tree(t)
+  @ ensures 
+  @   \result => (bst(t) && \forall int x; in_tree(x, t) => min <= x <= max)
+  @*/
+int is_bst(tree t, int min, int max) {
+  if (t == NULL) return 1;
+  if (t->node < min || t->node > max) return 0;
+  return (is_bst(t->left, min, t->node) && is_bst(t->right, t->node, max));
+}
 
 /*@ requires valid_tree(t)
   @ ensures \result <=> heap(t)

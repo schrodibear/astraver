@@ -81,7 +81,7 @@ typedef struct struct_tree* tree;
   @    (t->node == x || in_tree(x, t->left) || in_tree(x, t->right)))
   @*/
 
-/*@ axiom in_tree_path_equiv:
+/* @ axiom in_tree_path_equiv:
   @   \forall int x, tree t;
   @   in_tree(x, t) <=> (\exists tree p; path(t, p) && p->node == x)
   @*/
@@ -93,7 +93,7 @@ typedef struct struct_tree* tree;
   @   bst(t) <=>
   @    ( t == \null || 
   @      (bst(t->left) && bst(t->right) &&
-  @      (\forall int x; in_tree(x, t->left) => x <= t->node) &&
+  @      (\forall int x; in_tree(x, t->left)  => x <= t->node) &&
   @      (\forall int x; in_tree(x, t->right) => x >= t->node)))
   @*/
  
