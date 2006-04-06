@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cpp.mll,v 1.7 2005-11-07 15:13:29 hubert Exp $ i*)
+(*i $Id: cpp.mll,v 1.8 2006-04-06 07:19:56 filliatr Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -50,7 +50,7 @@ and after = parse
 {
 
   let rec local_temp_file basename suffix =
-    let i = Random.int max_int in
+    let i = Random.int 1073741824 in
     let f = basename ^ string_of_int i ^ suffix in
     if Sys.file_exists f then local_temp_file basename suffix else f
 
