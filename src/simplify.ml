@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.44 2006-03-21 15:37:41 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.45 2006-04-06 14:26:45 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -29,7 +29,7 @@ open Format
 open Pp
 
 type elem = 
-  | Oblig of obligation 
+  | Oblig of Loc.position * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
@@ -39,7 +39,7 @@ let queue = Queue.create ()
 let reset () = Queue.clear queue
 
 let push_decl = function
-  | Dgoal o -> Queue.add (Oblig o) queue
+  | Dgoal (loc, id, s) -> Queue.add (Oblig (loc, id, s)) queue
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) queue
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
@@ -248,9 +248,9 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq fmt hyps
 
-let print_obligation fmt (loc, o, s) = 
+let print_obligation fmt loc o s = 
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
-  fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s
+  fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s.Env.scheme_type
 
 let push_foralls p =
   let change = ref false in
@@ -299,7 +299,7 @@ let print_function fmt id p =
     print_term e
 
 let print_elem fmt = function
-  | Oblig o -> print_obligation fmt o
+  | Oblig (loc, id, s) -> print_obligation fmt loc id s
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
   | FunctionDef (id, f) -> print_function fmt id f

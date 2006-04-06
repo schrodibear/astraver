@@ -14,13 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.6 2006-03-07 11:12:49 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.7 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 open Cc
 
 val push_decl : Logic_decl.t -> unit
 
-val iter : (obligation -> unit) -> unit
+val iter : (Loc.position * string * sequent Env.scheme -> unit) -> unit
 
 type prover = Simplify | Harvey | Cvcl | Zenon
 

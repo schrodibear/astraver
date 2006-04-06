@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.100 2006-04-05 08:35:30 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.101 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -69,7 +69,9 @@ let push_decl d =
   | Gappa -> Gappa.push_decl d
   | Dispatcher -> Dispatcher.push_decl d
 
-let push_obligations = List.iter (fun o -> push_decl (Dgoal o)) 
+let push_obligations = 
+  List.iter 
+    (fun (loc,id,s) -> push_decl (Dgoal (loc, id, generalize_sequent s))) 
 
 let prover_is_coq = match prover () with Coq _ -> true | _ -> false
 
@@ -259,9 +261,8 @@ let interp_decl ?(prelude=false) d =
   | Goal (loc, id, p) ->
       let env = Env.empty_logic () in
       let p = Ltyping.predicate lab env p in
-      if not (Vset.is_empty (generalize_predicate p).scheme_vars) then 
-	raise_located loc PolymorphicGoal;
-      push_decl (Dgoal (loc, Ident.string id, ([], p)))
+      let s = generalize_sequent ([], p) in
+      push_decl (Dgoal (loc, Ident.string id, s))
   | TypeDecl (loc, ext, vl, id) ->
       Env.add_type loc vl id;
       let vl = List.map Ident.string vl in

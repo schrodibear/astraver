@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.15 2006-04-06 07:19:27 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.16 2006-04-06 14:26:45 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -483,10 +483,19 @@ let instantiate_axioms loc =
 
 (* Obligations *)
     
-let push_obligation ((loc, o, s) as ob) = 
+let new_type = let r = ref 0 in fun () -> incr r; "type_" ^ string_of_int !r
+
+let push_obligation loc o s = 
+  let vs, s = specialize_sequent s in
+  Vmap.iter
+    (fun _ tv -> 
+       let pt = new_type () in
+       push (Dtype (loc, [], pt));
+       tv.type_val <- Some (PTexternal ([], Ident.create pt)))
+      vs;
   IterIT.sequent (declare_logic loc) (declare_type loc) s;
   instantiate_axioms loc;
-  push (Dgoal ob)
+  push (Dgoal (loc, o, empty_scheme s))
 
 let push_decl = function
   | Dtype (loc, [], id) -> declare_type loc (PTexternal ([], Ident.create id))
@@ -495,7 +504,7 @@ let push_decl = function
   | Dpredicate_def (loc, x, d) -> push_predicate_def loc x d
   | Dfunction_def (loc, x, d) -> push_function_def loc x d
   | Daxiom (loc, x, p) -> push_axiom loc x p
-  | Dgoal o -> push_obligation o
+  | Dgoal (loc, x, s) -> push_obligation loc x s
 
 let reset () =
   Queue.clear queue;

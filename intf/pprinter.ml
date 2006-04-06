@@ -293,6 +293,7 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
   end
     
 let text_of_obligation (tv:GText.view) (o,s,p) = 
+  let p = p.Env.scheme_type in
   last_fct := s;
   if (unchanged s (is_active ())) then 
     tv#set_buffer (get_buffer s)

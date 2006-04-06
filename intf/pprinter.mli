@@ -12,4 +12,4 @@ val read_file : Tags.loc option -> unit
 val move_to_source : Tags.loc option -> unit
 
 val text_of_obligation :
-  GText.view -> 'a * string * (Cc.context_element list * Logic.predicate) -> unit
+  GText.view -> 'a * string * (Cc.context_element list * Logic.predicate) Env.scheme -> unit

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.14 2006-04-03 08:26:57 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.15 2006-04-06 14:26:45 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -293,7 +293,7 @@ let print_axiom fmt id p =
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>\"%s\" %a@]@\n@\n" id print_predicate p
 
-let print_obligation fmt (loc, o, s) = 
+let print_obligation fmt loc o s = 
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
   fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
 
@@ -310,7 +310,7 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal o -> print_obligation fmt o
+  | Dgoal (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 
 let prelude_done = ref false
 let prelude fmt = 

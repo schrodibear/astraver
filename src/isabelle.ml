@@ -242,12 +242,12 @@ let reprint_axiom fmt id p =
 let print_axiom fmt id p = 
   reprint_axiom fmt id p
 
-let reprint_obligation fmt (loc,id,s) =
+let reprint_obligation fmt loc id s =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "(*Why goal*) lemma %s: %a;@\n" id print_sequent s
 
-let print_obligation fmt o = 
-  reprint_obligation fmt o;
+let print_obligation fmt loc id s = 
+  reprint_obligation fmt loc id s;
   fprintf fmt "(* FILL PROOF HERE *)@\n@\n"
 
 let reprint_predicate fmt id p =
@@ -309,7 +309,7 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter _-> assert false
-      | Obligation o -> print_obligation fmt o
+      | Obligation (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
@@ -320,7 +320,7 @@ struct
       
   let reprint_element fmt = function
     | Parameter _ -> assert false
-    | Obligation o -> reprint_obligation fmt o
+    | Obligation (loc, id, s) -> reprint_obligation fmt loc id s.Env.scheme_type
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
@@ -346,7 +346,7 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal ((_,l,_) as o) -> Gen.add_elem (Oblig, l) (Obligation o)
+  | Dgoal (loc,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,l,s))
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
   | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.145 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.146 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -709,14 +709,14 @@ let print_sequent fmt s =
   print_scheme fmt l;
   print_sequent fmt s
 
-let _ = Vcg.log_print_function := print_sequent
+(*let _ = Vcg.log_print_function := print_sequent*)
       
-let reprint_obligation fmt (loc,id,s) =
+let reprint_obligation fmt loc id s =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
   fprintf fmt "@[<hov 2>(*Why goal*) Lemma %s : @\n%a.@]@\n" id print_sequent s
 
-let print_obligation fmt o = 
-  reprint_obligation fmt o;
+let print_obligation fmt loc id s = 
+  reprint_obligation fmt loc id s;
   fprintf fmt "Proof.@\n";
   option_iter (fun t -> fprintf fmt "%s.@\n" t) coq_tactic;
   fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
@@ -823,7 +823,7 @@ struct
   let print_element fmt e = 
     begin match e with
       | Parameter (id, c) -> print_parameter fmt id c
-      | Obligation o -> print_obligation fmt o
+      | Obligation (loc, id, s) -> print_obligation fmt loc id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
@@ -834,7 +834,7 @@ struct
       
   let reprint_element fmt = function
     | Parameter (id, c) -> reprint_parameter fmt id c
-    | Obligation o -> reprint_obligation fmt o
+    | Obligation (loc, id, s) -> reprint_obligation fmt loc id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
@@ -859,7 +859,7 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal ((_,l,_) as o) -> Gen.add_elem (Oblig, l) (Obligation o)
+  | Dgoal (loc,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,l,s))
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, id) (Axiom (id, p))
   | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, id) (Predicate (id, p))

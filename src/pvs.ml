@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.71 2006-04-03 08:26:57 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.72 2006-04-06 14:26:45 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -275,7 +275,7 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal o -> print_obligation fmt o
+  | Dgoal (loc, id, s) -> print_obligation fmt (loc, id, s.scheme_type)
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in

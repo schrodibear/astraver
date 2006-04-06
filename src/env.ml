@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.57 2006-03-23 10:41:00 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.58 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -270,15 +270,11 @@ let find_sequent_vars (h, p) =
   let l = List.fold_left find_hyp_vars Vset.empty h in
   find_predicate_vars l p
 
-let specialize_sequent s =
+let generalize_sequent s =
   let l = find_sequent_vars s in
-  if Vset.is_empty l then
-    Vmap.empty, s
-  else
-    let env = 
-      Vset.fold (fun x l -> Vmap.add x (new_type_var()) l) l Vmap.empty 
-    in 
-    (env, subst_sequent env s)
+  { scheme_vars = l; scheme_type = s }
+
+let specialize_sequent = specialize_scheme subst_sequent
 
 let rec find_cc_term_vars acc = function
   | CC_var _ ->

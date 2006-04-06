@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.39 2006-04-03 08:26:57 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.40 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -34,7 +34,7 @@ open Report
 
 type elem = 
   | Logic of string * logic_type Env.scheme
-  | Oblig of obligation 
+  | Oblig of Loc.position * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
   | PredicateDef of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
@@ -43,7 +43,7 @@ let queue = Queue.create ()
 
 let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) queue
-  | Dgoal o -> Queue.add (Oblig o) queue
+  | Dgoal (loc, id, s) -> Queue.add (Oblig (loc, id, s)) queue
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> Queue.add (PredicateDef (id, p)) queue
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
@@ -257,7 +257,7 @@ let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
-let print_obligation fmt (loc, o, s) = 
+let print_obligation fmt loc o s = 
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
   fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 
@@ -274,7 +274,7 @@ let output_elem fmt = function
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal o -> print_obligation fmt o
+  | Dgoal (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 
 let prelude_done = ref false
 let prelude fmt = 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.38 2006-04-03 08:26:57 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.39 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -24,6 +24,7 @@
    The most important functions, [is_in_env], [type_in_env] and [fold_all]
    first look in the local environment then in the global one. *)
 
+open Cc
 open Logic
 open Types
 open Ast
@@ -124,6 +125,7 @@ val generalize_type_v : type_v -> type_v scheme
 val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme
 val generalize_function_def : function_def -> function_def scheme
+val generalize_sequent : sequent -> sequent scheme
 
 val specialize_type_scheme : type_v scheme -> var_subst * type_v
 val specialize_logic_type : logic_type scheme -> var_subst * logic_type
@@ -132,8 +134,10 @@ val specialize_predicate_def :
   predicate_def scheme -> var_subst * predicate_def
 val specialize_function_def : 
   function_def scheme -> var_subst * function_def
+val specialize_sequent : sequent scheme -> var_subst * sequent
 
-val specialize_sequent : Cc.sequent -> var_subst * Cc.sequent
+val subst_sequent : var_subst -> sequent -> sequent
+
 val specialize_validation : 
   Cc.cc_type -> Cc.validation -> var_subst * Cc.cc_type * Cc.validation
 

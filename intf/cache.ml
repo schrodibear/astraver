@@ -60,8 +60,9 @@ let read_cache () =
     | _ -> 
 	print_endline ("     [...] error while loading cache !"); 
 	flush stdout
-let clean (seq:Cc.sequent):Cc.sequent = 
-  let (ctx, p) = seq in
+
+let clean seq =
+  let (ctx, p) = seq.Env.scheme_type in
   let rec clean0 = function 
     | Pvar _ | Papp (_, _, _) | Pfpi (_,_,_) | Ptrue | Pfalse as p -> p
     | Pimplies (i, p1, p2) -> 
@@ -87,7 +88,8 @@ let clean (seq:Cc.sequent):Cc.sequent =
   and clean1 = function 
     | Svar _ as c -> c
     | Spred (id, p) -> Spred (id, clean0 p)
-  in (List.map clean1 ctx, clean0 p)
+  in 
+  (List.map clean1 ctx, clean0 p)
 	  
 let fool () = Hashtbl.length !cache > !max_size 
   (* i mean fool ... cache doesn't want to do his job *)
@@ -123,7 +125,7 @@ let find x = Hashtbl.find !cache x
 let is_empty () = Hashtbl.length !cache = 0
 let o_in_cache o = let (_,_,seq) = o in in_cache seq
 
-let add (seq:Cc.sequent) (prover:string) = 
+let add (seq:Cc.sequent Env.scheme) (prover:string) = 
   let o = clean seq in
   if not !is_full then begin
     if in_cache o then

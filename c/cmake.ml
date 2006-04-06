@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.21 2006-03-20 13:44:40 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.22 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -91,7 +91,7 @@ let generic f targets =
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout 10 $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -no-cvcl-prelude -dir cvcl $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
        fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout 10 $^)@\n@\n";

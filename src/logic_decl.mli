@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic_decl.mli,v 1.1 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.2 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
     interfaces). *)
 
+open Cc
 open Logic
 
 type loc = Loc.position
@@ -31,4 +32,5 @@ type t =
   | Dpredicate_def of loc * string * predicate_def scheme
   | Dfunction_def of loc * string * function_def scheme
   | Daxiom of loc * string * predicate scheme
-  | Dgoal of Cc.obligation
+  | Dgoal of loc * string * sequent scheme
+

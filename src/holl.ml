@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.34 2006-03-23 10:41:00 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.35 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -42,7 +42,8 @@ let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
-  | Dgoal o -> Queue.add (Obligation o) elem_q
+  | Dgoal (loc,id,s) -> 
+      Queue.add (Obligation (loc,id,s.Env.scheme_type)) elem_q
   | Dfunction_def _ -> () (*TODO*)
   | Dtype _ -> () (*TODO*)
 

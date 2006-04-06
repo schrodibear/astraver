@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.11 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.12 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -43,7 +43,7 @@ let push_decl = function
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
   | Dfunction_def _ -> assert false (*TODO*)
-  | Dgoal o -> Queue.add (Obligation o) elem_q
+  | Dgoal (loc,id,s) -> Queue.add (Obligation (loc,id,s.Env.scheme_type)) elem_q
   | Dtype _ -> assert false (*TODO*)
 
 (*s Pretty print *)

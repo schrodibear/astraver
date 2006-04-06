@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.36 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.37 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -38,7 +38,7 @@ let oblig = Queue.create ()
 let reset () = Queue.clear theory; Queue.clear oblig
 
 let push_decl = function
-  | Dgoal o -> Queue.add o oblig
+  | Dgoal (loc,id,s) -> Queue.add (loc,id,s.Env.scheme_type) oblig
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory

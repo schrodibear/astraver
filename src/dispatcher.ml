@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.6 2006-03-07 11:12:49 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.7 2006-04-06 14:26:44 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -36,7 +36,7 @@ let add_oblig ((_,id,_) as o) =
   Hashtbl.add oblig_h id so
 
 let push_decl = function
-  | Dgoal o -> add_oblig o
+  | Dgoal (loc, id, s) -> add_oblig (loc, id, s)
   | d -> add_elem d
 
 let iter f = Queue.iter (fun (_,o) -> f o) oblig
@@ -53,11 +53,13 @@ let push_elem p e =
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
 
-let push_obligation p o = match p with
-  | Simplify -> Simplify.push_decl (Dgoal o)
-  | Harvey -> Harvey.push_decl (Dgoal o)
-  | Cvcl -> Cvcl.push_decl (Dgoal o)
-  | Zenon -> Zenon.push_decl (Dgoal o)
+let push_obligation p (loc, id, s) = 
+  let g = Dgoal (loc, id, s) in
+  match p with
+  | Simplify -> Simplify.push_decl g
+  | Harvey -> Harvey.push_decl g
+  | Cvcl -> Cvcl.push_decl g
+  | Zenon -> Zenon.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
 let output_file p (elems,o) =

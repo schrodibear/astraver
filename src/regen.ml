@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.15 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.16 2006-04-06 14:26:45 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -39,7 +39,7 @@ type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
-  | Obligation of obligation
+  | Obligation of Loc.position * string * sequent Env.scheme
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
