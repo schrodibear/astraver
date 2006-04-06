@@ -3,5 +3,5 @@ load_printer "ident.cmo"
 install_printer Ident.dbprint
 load_printer "effect.cmo"
 install_printer Effect.print
-set arguments --gappa --valid ../bench/test.mlw
+set arguments --cvcl ../bench/test.mlw
 

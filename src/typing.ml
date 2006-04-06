@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.119 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.120 2006-04-06 07:19:27 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -415,7 +415,15 @@ let rec typef lab env expr =
 	raise_located loc 
 	  (AnyMessage "a logic function cannot be partially applied");
       if is_pure_type_v v && not (is_rec id env) then 
-	make_node toplabel (Expression (Tvar id)) v ef
+	let t,v = 
+	  try 
+	    let lid = { pp_loc = loc; pp_desc = PPvar id } in
+	    let t,v = Ltyping.term lab env lid in
+	    t, PureType v
+	  with _ -> 
+	    Tvar id, v
+	in
+	make_node toplabel (Expression t) v ef
       else 
 	make_node toplabel (Var id) v ef
 

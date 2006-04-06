@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.14 2006-04-03 08:26:57 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.15 2006-04-06 07:19:27 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -43,7 +43,7 @@ let rec print_pure_type fmt = function
   | PTreal -> fprintf fmt "real"
   | PTexternal ([v], id) when id == farray -> 
       fprintf fmt "array_%a" print_pure_type v
-  | PTexternal([], id) -> fprintf fmt "%s" (Ident.string id)
+  | PTexternal([], id) -> fprintf fmt "%a" Ident.print id
   | PTexternal(i, id) -> fprintf fmt "%a%a" Ident.print id print_instance i
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> assert false

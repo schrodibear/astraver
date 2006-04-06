@@ -1,7 +1,8 @@
 
+  o fixed bugs with polymorphic logic constants used in programs
   o a missing function postcondition is now given the default value
     "true" (and a warning is emitted for local functions)
-  o Zenon output (--zenon option); see focal.inria.fr
+  o Zenon output (--zenon option); see focal.inria.fr/zenon
   o new option --split-user-conj to split user conjunctions in goals
     (resulting in more numerous proof obligations)
   o Mizar output updated for Mizar 7.6.01
