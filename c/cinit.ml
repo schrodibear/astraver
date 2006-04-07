@@ -116,25 +116,36 @@ let rec assigns decl =
 let invariants_initially_established_info =
   default_fun_info "invariants_initially_established"
 
+let rec reorder l =
+  match l with 
+    | { node = Tdecl _ }as e ::l  -> let decl,other = reorder l in
+      e::decl,other
+    | e::l -> let decl,other = reorder l in
+      decl,e::other
+    | [] -> [],[]
+
+let user_invariants = ref false
+
 let add_init l = 
   let (inv,decl) = split_decls l in
-  if inv = [] then l
-  else
-    let inv = combine_inv inv in
-    let init_fun =
-      Tfundef ({requires = None;
-		assigns = None;
-		ensures = Some inv; 
+  if inv = [] then user_invariants := false
+  else user_invariants := true;
+  let inv = combine_inv inv in
+  let init_fun =
+    Tfundef ({requires = None;
+	      assigns = None;
+	      ensures = Some inv; 
 		decreases = None},
-	       c_void,
-	       invariants_initially_established_info,
-	       {st_node = TSblock ([], assigns decl);
-		st_break = false;    
-		st_continue = false; 
-		st_return = false;   
+	     c_void,
+	     invariants_initially_established_info,
+	     {st_node = TSblock ([], assigns decl);
+	      st_break = false;    
+	      st_continue = false; 
+	      st_return = false;   
 		st_term = true;     
 		st_loc = Loc.dummy_position 
-	       })
-    in
-    { node = init_fun; loc = Loc.dummy_position } :: l
-    
+	     })
+  in
+  let decl,other = 
+    reorder ({ node = init_fun; loc = Loc.dummy_position } :: l) in
+  decl@other
