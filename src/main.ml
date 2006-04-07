@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.101 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.102 2006-04-07 14:29:09 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -36,7 +36,7 @@ open Logic_decl
 let reset () =
   Vcg.logs := []; 
   match prover () with
-  | Pvs -> Pvs.reset ()
+  | Pvs -> (*Pvs.reset*) ()
   | Coq _ -> Coq.reset ()
   | HolLight -> Holl.reset ()
   | Mizar -> Mizar.reset ()

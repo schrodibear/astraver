@@ -7,6 +7,9 @@ DIRS = misc binary-search bresenham quicksort edit-distance heapsort sqrt kmp \
 all: 
 	for d in $(DIRS); do make -C $$d; done
 
+simplify:
+	for d in $(DIRS); do make -C $$d simplify; done
+
 clean::
 	rm -f */*~ */*.vo
 

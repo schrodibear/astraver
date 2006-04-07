@@ -14,8 +14,8 @@
 
 (* specification *)
 
-external parameter N : int
-external parameter f : int
+external logic N : int
+external logic f : int
 
 external logic found : int farray -> prop
 external logic m_invariant : int,int farray -> prop

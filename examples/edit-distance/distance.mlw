@@ -16,8 +16,8 @@
 (*s Parameters. Input of the program is composed of two arrays
     of characters, [w1] of size [n1] and [w2] of size [n2]. *)
 
-parameter n1 : int
-parameter n2 : int
+logic n1 : int
+logic n2 : int
 
 external type A
 

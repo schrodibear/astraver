@@ -13,7 +13,7 @@ external parameter A_eq_bool : x:A -> y:A -> {} bool { if result then x=y else n
 
 (* The pattern p is an array of length M. *)
 
-parameter M : int
+logic M : int
 
 parameter p : A array
 
@@ -57,7 +57,7 @@ let initnext =
  * The function kmp returns an index i within 0..N-1 if there is an occurrence
  * at the position i and N otherwise. *)
   
-parameter N : int
+logic N : int
 
 parameter a : A array
 
