@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.107 2006-04-04 14:00:56 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.108 2006-04-10 13:41:08 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -964,11 +964,11 @@ let type_parameters loc env pl =
 	  error loc "`void' in parameter list must be the entire list";
 	pl
   
-let type_logic_parameters env pl = 
+let type_logic_parameters loc env pl = 
   List.fold_right
     (fun (ty,x) (pl,env) ->
        let info = default_var_info x in
-       let ty = type_logic_type env ty in 
+       let ty = type_logic_type loc env ty in 
        (info,ty) :: pl, Env.add x ty (Var_info info) env)
     pl 
     ([], env)
@@ -979,29 +979,29 @@ let type_spec_decl loc = function
   | LDinvariant (id, p) -> 
       Tinvariant (id, type_predicate (Env.empty ()) p)
   | LDlogic (id, ty, pl, ll) ->
-      let ty = type_logic_type (Env.empty ()) ty in
-      let pl,env' = type_logic_parameters (Env.empty ()) pl in
+      let ty = type_logic_type loc (Env.empty ()) ty in
+      let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
       id.logic_why_type <- type_type_why ty false;
       let ll = List.map (type_location env') ll in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
   | LDlogic_def (id, ty, pl, t) ->
-      let ty = type_logic_type (Env.empty ()) ty in
-      let pl,env' = type_logic_parameters (Env.empty ()) pl in
+      let ty = type_logic_type loc (Env.empty ()) ty in
+      let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
       id.logic_why_type <- type_type_why ty false;
       let t = type_term env' t in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function_def (pl, ty, t))
   | LDpredicate_reads (id, pl, ll) ->
-      let pl,env' = type_logic_parameters (Env.empty ()) pl in
+      let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
       let ll = List.map (type_location env') ll in
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_reads (pl, ll))
   | LDpredicate_def (id, pl, p) ->
-      let pl,env' = type_logic_parameters (Env.empty ()) pl in
+      let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
       let p = type_predicate env' p in
       Cenv.add_pred id.logic_name (List.map snd pl,id);

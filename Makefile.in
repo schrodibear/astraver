@@ -249,6 +249,7 @@ bench:: $(BINARY) $(WHYVO)
 
 bench-c:: $(CADUCEUS) $(WHYVO)
 	cd bench/c; sh ./bench
+	make -C examples-c bench
 
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs

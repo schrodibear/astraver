@@ -1,5 +1,6 @@
 Note: These are the changes for Caduceus.
 
+ o better error message when a logical type is undeclared
  o limited support for malloc: only expressions like (t*)malloc(e*sizeof(t))
    are supported (see section 2.4 in the manual)
  o new built-in logic function \offset

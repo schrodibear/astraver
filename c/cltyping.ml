@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.87 2006-02-13 16:16:26 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.88 2006-04-10 13:41:08 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -340,36 +340,31 @@ and type_type_node env = function
   | Tarray (valid,ty,t) -> Tarray (valid,type_type env ty,t)
   | _ -> assert false
 
-let rec type_logic_type env = function
+let rec type_logic_type loc env = function
   | LTvoid -> c_void
   | LTint -> c_int
   | LTfloat -> c_float
-  | LTarray ty -> c_array false (type_logic_type env ty)
-  | LTpointer ty -> c_pointer false (type_logic_type env ty)
+  | LTarray ty -> c_array false (type_logic_type loc env ty)
+  | LTpointer ty -> c_pointer false (type_logic_type loc env ty)
   | LTvar id ->  
-      noattr (try (find_typedef id).ctype_node with Not_found -> Tvar id)
-
-(** abandon provisoire 
-let rec type_logic_type env = function
-  | PTctype ct ->
-      PTctype (type_type env ct)
-  | PTvar {tag=n; type_val =t } -> 
-      PTvar { tag = n; type_val = option_app (type_logic_type env) t }
-  | PTexternal (tl, s) -> 
-      PTexternal (List.map (type_logic_type env) tl, s)
-**)
+      noattr 
+	(try 
+	   (find_typedef id).ctype_node 
+	 with Not_found -> 
+	   if not (Cenv.mem_type id) then error loc "unbound type"; 
+	   Tvar id )
 
 (*
 let type_quantifier env (ty, x) = (type_logic_type env ty, x)
 let type_quantifiers env = List.map (type_quantifier env)
 *)
 
-let add_quantifiers q env =
+let add_quantifiers loc q env =
   let (tq,env) =
     List.fold_left
       (fun (tq,env) (ty, x) -> 
 	 let i = Info.default_var_info x 
-	 and ty = type_logic_type env ty
+	 and ty = type_logic_type loc env ty
 	 in
 	 ((ty,i)::tq,Env.add x ty (Var_info i) env))
       ([],env) q
@@ -470,10 +465,10 @@ and type_predicate_node env p0 = match p0.lexpr_node with
       let t = type_int_term env t in
       Pif (t, type_predicate env p1, type_predicate env p2)
   | PLforall (q, p) -> 
-      let q, env' = add_quantifiers q env in
+      let q, env' = add_quantifiers p0.lexpr_loc q env in
       Pforall (q, type_predicate env' p)
   | PLexists (q, p) -> 
-      let q, env' = add_quantifiers q env in
+      let q, env' = add_quantifiers p0.lexpr_loc q env in
       Pexists (q, type_predicate env' p)
   | PLfresh (t) ->
       let tloc = t.lexpr_loc in
