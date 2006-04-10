@@ -1,4 +1,6 @@
 
+  o better naming of type variables in Coq output (A1, A2,
+    etc. instead of A718, etc.)
   o fixed bugs with polymorphic logic constants used in programs
   o a missing function postcondition is now given the default value
     "true" (and a warning is emitted for local functions)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.146 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.147 2006-04-10 14:15:37 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -697,11 +697,17 @@ let print_sequent = if v8 then print_sequent_v8 else print_sequent_v7
 let print_cc_type = if v8 then print_cc_type_v8 else print_cc_type_v7
 let print_cc_term = if v8 then print_cc_term_v8 else print_cc_term_v7
 
+(* while printing scheme, we rename type variables (for more stability 
+   of the Coq source); this is safe only because we throw away the types
+   as soon as they are printed *)
 let print_scheme fmt l =
+  let r = ref 0 in
   Env.Vmap.iter
     (fun _ x -> 
-       if v8 then fprintf fmt "forall (A%d:Set),@ " x.tag
-       else fprintf fmt "(A%d:Set)@ " x.tag)
+       incr r;
+       x.type_val <- Some (PTvar { tag = !r; type_val = None });
+       if v8 then fprintf fmt "forall (A%d:Set),@ " !r
+       else fprintf fmt "(A%d:Set)@ " !r)
     l
 
 let print_sequent fmt s =

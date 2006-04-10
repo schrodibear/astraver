@@ -18,3 +18,4 @@ caduceus_why.v
 caduceus_tactics.v
 test_why.v
 
+*_why.v
