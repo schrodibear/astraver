@@ -3,3 +3,4 @@ caduceus_why.v
 caduceus_spec_why.v
 caduceus_tactics.v
 
+*_spec_why.v

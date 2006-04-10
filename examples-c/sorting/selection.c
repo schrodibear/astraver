@@ -11,6 +11,8 @@ void swap(int t[],int i,int j) {
   t[j] = tmp;
 }
 
+//@ type intmset
+
 //@ logic intmset mset(int t[],int i,int j) reads t[..]
 
 /*@ predicate sorted(int t[],int i,int j) {

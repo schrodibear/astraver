@@ -3,43 +3,11 @@
 
 Require Export Caduceus.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(*Why type*) Definition Z0: Set.
+(*Why type*) Definition global: Set.
 Admitted.
 
-(*Why predicate*) Definition purse_inv  (alloc:alloc_table)
-  (p:((pointer) Z0))
+(*Why predicate*) Definition purse_inv  (balance_global:((memory) Z global))
+  (alloc:alloc_table) (p:((pointer) global))
   := (* File "purse.c", line 6, characters 37-65 *) ((valid alloc p) /\
-     (acc balance_Z0 p) >= 0).
+     (acc balance_global p) >= 0).
 

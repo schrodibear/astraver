@@ -11,5 +11,9 @@ all:
 		fi ; \
 	done
 
+bench:
+	make -C tutorial allcoq
+	for d in $(DIRS); do make -C $$d simplify; done
+
 clean:
 	for d in $(DIRS); do make -C $$d clean; done

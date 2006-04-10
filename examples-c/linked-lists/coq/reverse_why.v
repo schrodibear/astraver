@@ -135,7 +135,7 @@ Qed.
     (llist tl_global1 alloc r0 lr)) /\ (disjoint lp lr)) /\
     (forall (l:plist),
      ((llist tl_global1 alloc p0 l) -> (app (rev lr) lp) = (rev l))))) /\
-  (length_order (length alloc r0) (length alloc r)).
+  (length_order (length tl_global1 alloc r0) (length tl_global0 alloc r)).
 Proof.
 intros; subst; intuition.
 Qed.

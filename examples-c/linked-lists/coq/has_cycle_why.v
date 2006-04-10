@@ -260,8 +260,8 @@ Save.
   (* File "has_cycle.c", line 19, characters 17-117 *)
   ((exists pl1:plist, (lpath tl_global alloc l pl1 l1_0)) /\
   (exists pl12:plist, (lpath tl_global alloc l1_0 pl12 l2_1) /\ ~(pl12 = nil))) /\
-  (has_cycle_order (has_cycle_variant alloc l l1_0 l2_1)
-   (has_cycle_variant alloc l l1 l2_0)).
+  (has_cycle_order (has_cycle_variant tl_global alloc l l1_0 l2_1)
+   (has_cycle_variant tl_global alloc l l1 l2_0)).
 Proof.
 intuition.
 Save.

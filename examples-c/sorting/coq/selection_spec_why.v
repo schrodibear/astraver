@@ -7,20 +7,24 @@ Require Export MSet.
 
 
 
-(*Why type*) Parameter Z0: Set.
 
-(*Why type*) Parameter Z3: Set.
 
-(*Why type*) Parameter Z5: Set.
 
-(*Why logic*) Definition mset :
-  ((memory) Z Z5) -> alloc_table -> ((pointer) Z5) -> Z -> Z -> intmset.
+(*Why type*) Definition global: Set.
 Admitted.
 
-(*Why predicate*) Definition sorted  (int_Z5:((memory) Z Z5))
-  (alloc:alloc_table) (t:((pointer) Z5)) (i:Z) (j:Z)
-  := (* File \"selection.c\", line 17, characters 5-48:\n *)
+(*Why type*) Definition intmset: Set.
+Admitted.
+
+(*Why logic*) Definition mset :
+  ((memory) Z global) -> alloc_table -> ((pointer) global) -> Z
+  -> Z -> intmset.
+Admitted.
+
+(*Why predicate*) Definition sorted  (intM_global:((memory) Z global))
+  (alloc:alloc_table) (t:((pointer) global)) (i:Z) (j:Z)
+  := (* File "selection.c", line 19, characters 5-48 *)
      (forall (k:Z),
-      (i <= k /\ k < j -> (acc int_Z5 (shift t k)) <=
-       (acc int_Z5 (shift t (k + 1))))).
+      (i <= k /\ k < j -> (acc intM_global (shift t k)) <=
+       (acc intM_global (shift t (k + 1))))).
 

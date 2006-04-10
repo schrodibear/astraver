@@ -11,19 +11,19 @@ coq: $(FILES)
 
 allcoq:
 	for f in $(FILES); do \
-	  caduceus $$f.c; \
+	  $(EXECCADUCEUS) $$f.c; \
 	  make -f $$f.makefile coq; \
 	done
 
 simplify:
 	for f in $(FILES); do \
-	  caduceus $$f.c; \
+	  $(EXECCADUCEUS) $$f.c; \
 	  make -f $$f.makefile simplify; \
 	done
 
 cvcl:
 	for f in $(FILES); do \
-	  caduceus $$f.c; \
+	  $(EXECCADUCEUS) $$f.c; \
 	  make -f $$f.makefile cvcl; \
 	done
 
