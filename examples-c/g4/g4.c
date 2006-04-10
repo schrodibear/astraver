@@ -1,6 +1,8 @@
 
 /*@ logic int pow(int x, int n) */
 
+//@ type int3
+
 /*@ logic int3 prod3(int x1, int x2, int x3) */
 
 /*@ predicate reachable_(int base, int c2, int c1, int c0) */

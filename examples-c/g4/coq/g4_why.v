@@ -5,47 +5,21 @@ Require Export g4_spec_why.
 Require Export G4.
 Require Export G4z.
 
-(* Why obligation from file "why/g4.why", characters 323-1095 *)
-Lemma main_impl_po_1 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
-  forall (c0: Z),
-  forall (Post18: c0 = 2),
-  forall (base1: Z),
-  forall (Post1: base1 = 3),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_1 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
   (well_founded lex3).
 Proof.
 intros; apply lex3_well_founded.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 641-663 *)
-Lemma main_impl_po_2 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
-  forall (c0: Z),
-  forall (Post18: c0 = 2),
-  forall (base1: Z),
-  forall (Post1: base1 = 3),
-  forall (Variant1: int3),
-  forall (base2: Z),
-  forall (c0_1: Z),
-  forall (c1_1: Z),
-  forall (c2_1: Z),
-  forall (Pre3: Variant1 = (prod3 c2_1 c1_1 c0_1)),
-  forall (Pre2: (((0 <= c0_1 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <= base2) /\
-                (reachable_ base2 c2_1 c1_1 c0_1)),
-  forall (Test8: 1 <> 0),
-  forall (Test7: 0 < c0_1),
-  forall (c0_2: Z),
-  forall (Post13: c0_2 = (c0_1 - 1)),
-  (forall (base:Z),
-   (base = (base2 + 1) -> ((((0 <= c0_2 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <=
-    base) /\ (reachable_ base c2_1 c1_1 c0_2)) /\
-    (lex3 (prod3 c2_1 c1_1 c0_2) (prod3 c2_1 c1_1 c0_1)))).
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_2 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
+  (* File "g4.c", line 17, characters 17-94 *) ((((0 <= 2 /\ 0 <= 2) /\ 0 <=
+  2) /\ 0 <= base) /\ (reachable_ base 2 2 2)).
 Proof.
 intuition.
 subst; apply reachable_0; auto with *.
@@ -54,35 +28,28 @@ do 2 apply right_lex.
 unfold Zwf; omega.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 739-784 *)
-Lemma main_impl_po_3 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_3 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
+  forall (HW_3: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= 2 /\
+                0 <= 2) /\ 0 <= 2) /\ 0 <= base) /\ (reachable_ base 2 2 2))),
+  forall (base0: Z),
   forall (c0: Z),
-  forall (Post18: c0 = 2),
+  forall (c1: Z),
+  forall (c2: Z),
+  forall (HW_4: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0 /\
+                0 <= c1) /\ 0 <= c2) /\ 0 <= base0) /\
+                (reachable_ base0 c2 c1 c0))),
+  forall (HW_5: 1 <> 0),
+  forall (HW_6: 0 < c0),
+  forall (c0_0: Z),
+  forall (HW_7: c0_0 = (c0 - 1)),
   forall (base1: Z),
-  forall (Post1: base1 = 3),
-  forall (Variant1: int3),
-  forall (base2: Z),
-  forall (c0_1: Z),
-  forall (c1_1: Z),
-  forall (c2_1: Z),
-  forall (Pre3: Variant1 = (prod3 c2_1 c1_1 c0_1)),
-  forall (Pre2: (((0 <= c0_1 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <= base2) /\
-                (reachable_ base2 c2_1 c1_1 c0_1)),
-  forall (Test8: 1 <> 0),
-  forall (Test6: 0 >= c0_1),
-  forall (Test5: 0 < c1_1),
-  forall (c1_2: Z),
-  forall (Post10: c1_2 = (c1_1 - 1)),
-  forall (c0_2: Z),
-  forall (Post11: c0_2 = base2),
-  (forall (base:Z),
-   (base = (base2 + 1) -> ((((0 <= c0_2 /\ 0 <= c1_2) /\ 0 <= c2_1) /\ 0 <=
-    base) /\ (reachable_ base c2_1 c1_2 c0_2)) /\
-    (lex3 (prod3 c2_1 c1_2 c0_2) (prod3 c2_1 c1_1 c0_1)))).
+  forall (HW_8: base1 = (base0 + 1)),
+  (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0_0 /\ 0 <= c1) /\
+  0 <= c2) /\ 0 <= base1) /\ (reachable_ base1 c2 c1 c0_0)) /\
+  (lex3 (prod3 c2 c1 c0_0) (prod3 c2 c1 c0)).
 Proof.
 intuition.
 assert (c0_1=0). omega.
@@ -92,38 +59,31 @@ apply right_lex; apply left_lex.
 unfold Zwf; omega.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 956-981 *)
-Lemma main_impl_po_4 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_4 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
+  forall (HW_3: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= 2 /\
+                0 <= 2) /\ 0 <= 2) /\ 0 <= base) /\ (reachable_ base 2 2 2))),
+  forall (base0: Z),
   forall (c0: Z),
-  forall (Post18: c0 = 2),
+  forall (c1: Z),
+  forall (c2: Z),
+  forall (HW_4: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0 /\
+                0 <= c1) /\ 0 <= c2) /\ 0 <= base0) /\
+                (reachable_ base0 c2 c1 c0))),
+  forall (HW_5: 1 <> 0),
+  forall (HW_9: 0 >= c0),
+  forall (HW_10: 0 < c1),
+  forall (c1_0: Z),
+  forall (HW_11: c1_0 = (c1 - 1)),
+  forall (c0_0: Z),
+  forall (HW_12: c0_0 = base0),
   forall (base1: Z),
-  forall (Post1: base1 = 3),
-  forall (Variant1: int3),
-  forall (base2: Z),
-  forall (c0_1: Z),
-  forall (c1_1: Z),
-  forall (c2_1: Z),
-  forall (Pre3: Variant1 = (prod3 c2_1 c1_1 c0_1)),
-  forall (Pre2: (((0 <= c0_1 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <= base2) /\
-                (reachable_ base2 c2_1 c1_1 c0_1)),
-  forall (Test8: 1 <> 0),
-  forall (Test6: 0 >= c0_1),
-  forall (Test4: 0 >= c1_1),
-  forall (Test3: 0 < c2_1),
-  forall (c2_2: Z),
-  forall (Post4: c2_2 = (c2_1 - 1)),
-  forall (c1_2: Z),
-  forall (Post7: c1_2 = base2),
-  forall (result6: Z),
-  forall (Post8: result6 = c1_2),
-  (forall (base:Z),
-   (base = (base2 + 1) -> ((((0 <= result6 /\ 0 <= c1_2) /\ 0 <= c2_2) /\
-    0 <= base) /\ (reachable_ base c2_2 c1_2 result6)) /\
-    (lex3 (prod3 c2_2 c1_2 result6) (prod3 c2_1 c1_1 c0_1)))).
+  forall (HW_13: base1 = (base0 + 1)),
+  (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0_0 /\ 0 <= c1_0) /\
+  0 <= c2) /\ 0 <= base1) /\ (reachable_ base1 c2 c1_0 c0_0)) /\
+  (lex3 (prod3 c2 c1_0 c0_0) (prod3 c2 c1 c0)).
 Proof.
 intuition.
 assert (c0_1 = 0). omega.
@@ -134,33 +94,34 @@ apply left_lex.
 unfold Zwf; omega.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 1027-1033 *)
-Lemma main_impl_po_5 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_5 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
+  forall (HW_3: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= 2 /\
+                0 <= 2) /\ 0 <= 2) /\ 0 <= base) /\ (reachable_ base 2 2 2))),
+  forall (base0: Z),
   forall (c0: Z),
-  forall (Post18: c0 = 2),
+  forall (c1: Z),
+  forall (c2: Z),
+  forall (HW_4: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0 /\
+                0 <= c1) /\ 0 <= c2) /\ 0 <= base0) /\
+                (reachable_ base0 c2 c1 c0))),
+  forall (HW_5: 1 <> 0),
+  forall (HW_9: 0 >= c0),
+  forall (HW_14: 0 >= c1),
+  forall (HW_15: 0 < c2),
+  forall (c2_0: Z),
+  forall (HW_16: c2_0 = (c2 - 1)),
+  forall (c1_0: Z),
+  forall (HW_17: c1_0 = base0),
+  forall (c0_0: Z),
+  forall (HW_18: c0_0 = c1_0),
   forall (base1: Z),
-  forall (Post1: base1 = 3),
-  forall (Variant1: int3),
-  forall (base2: Z),
-  forall (c0_1: Z),
-  forall (c1_1: Z),
-  forall (c2_1: Z),
-  forall (Pre3: Variant1 = (prod3 c2_1 c1_1 c0_1)),
-  forall (Pre2: (((0 <= c0_1 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <= base2) /\
-                (reachable_ base2 c2_1 c1_1 c0_1)),
-  forall (Test8: 1 <> 0),
-  forall (Test6: 0 >= c0_1),
-  forall (Test4: 0 >= c1_1),
-  forall (Test2: 0 >= c2_1),
-  (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z),
-     (result = base2 -> result =
-      (3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1))))).
+  forall (HW_19: base1 = (base0 + 1)),
+  (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0_0 /\ 0 <= c1_0) /\
+  0 <= c2_0) /\ 0 <= base1) /\ (reachable_ base1 c2_0 c1_0 c0_0)) /\
+  (lex3 (prod3 c2_0 c1_0 c0_0) (prod3 c2 c1 c0)).
 Proof.
 intros.
 assert (c0_1 = 0). omega.
@@ -170,76 +131,48 @@ subst.
 apply reachable_end_; intuition.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 323-1095 *)
-Lemma main_impl_po_6 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_6 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
+  forall (HW_3: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= 2 /\
+                0 <= 2) /\ 0 <= 2) /\ 0 <= base) /\ (reachable_ base 2 2 2))),
+  forall (base0: Z),
   forall (c0: Z),
-  forall (Post18: c0 = 2),
-  forall (base1: Z),
-  forall (Post1: base1 = 3),
-  forall (Variant1: int3),
-  forall (base2: Z),
-  forall (c0_1: Z),
-  forall (c1_1: Z),
-  forall (c2_1: Z),
-  forall (Pre3: Variant1 = (prod3 c2_1 c1_1 c0_1)),
-  forall (Pre2: (((0 <= c0_1 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <= base2) /\
-                (reachable_ base2 c2_1 c1_1 c0_1)),
-  forall (Test8: 1 <> 0),
-  forall (base3: Z),
-  forall (c0_2: Z),
-  forall (c1_2: Z),
-  forall (c2_2: Z),
-  forall (Post21: ((((0 <= c0_2 /\ 0 <= c1_2) /\ 0 <= c2_2) /\ 0 <= base3) /\
-                  (reachable_ base3 c2_2 c1_2 c0_2)) /\
-                  (lex3 (prod3 c2_2 c1_2 c0_2) (prod3 c2_1 c1_1 c0_1))),
-  (lex3 (prod3 c2_2 c1_2 c0_2) Variant1).
+  forall (c1: Z),
+  forall (c2: Z),
+  forall (HW_4: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0 /\
+                0 <= c1) /\ 0 <= c2) /\ 0 <= base0) /\
+                (reachable_ base0 c2 c1 c0))),
+  forall (HW_5: 1 <> 0),
+  forall (HW_9: 0 >= c0),
+  forall (HW_14: 0 >= c1),
+  forall (HW_20: 0 >= c2),
+  base0 = (3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1).
 Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 323-1095 *)
-Lemma main_impl_po_7 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
+(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why goal*) Lemma main_impl_po_7 : 
+  forall (base: Z),
+  forall (HW_2: base = 3),
+  forall (HW_3: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= 2 /\
+                0 <= 2) /\ 0 <= 2) /\ 0 <= base) /\ (reachable_ base 2 2 2))),
+  forall (base0: Z),
   forall (c0: Z),
-  forall (Post18: c0 = 2),
-  forall (base1: Z),
-  forall (Post1: base1 = 3),
-  forall (Variant1: int3),
-  forall (base2: Z),
-  forall (c0_1: Z),
-  forall (c1_1: Z),
-  forall (c2_1: Z),
-  forall (Pre3: Variant1 = (prod3 c2_1 c1_1 c0_1)),
-  forall (Pre2: (((0 <= c0_1 /\ 0 <= c1_1) /\ 0 <= c2_1) /\ 0 <= base2) /\
-                (reachable_ base2 c2_1 c1_1 c0_1)),
-  forall (Test1: 1 = 0),
-  (forall (result:Z),
-   (result = base2 -> result =
-    (3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1))).
+  forall (c1: Z),
+  forall (c2: Z),
+  forall (HW_4: (* File "g4.c", line 17, characters 17-94 *) ((((0 <= c0 /\
+                0 <= c1) /\ 0 <= c2) /\ 0 <= base0) /\
+                (reachable_ base0 c2 c1 c0))),
+  forall (HW_21: 1 = 0),
+  base0 = (3 * (pow 2 (3 * (pow 2 (pow 3 3)) + (pow 3 3))) - 1).
 Proof.
 intros.
 absurd (1=0); omega.
 Save.
 
-(* Why obligation from file "why/g4.why", characters 390-534 *)
-Lemma main_impl_po_8 : 
-  forall (c2: Z),
-  forall (Post20: c2 = 2),
-  forall (c1: Z),
-  forall (Post19: c1 = 2),
-  forall (c0: Z),
-  forall (Post18: c0 = 2),
-  forall (base1: Z),
-  forall (Post1: base1 = 3),
-  (((0 <= c0 /\ 0 <= c1) /\ 0 <= c2) /\ 0 <= base1) /\
-  (reachable_ base1 c2 c1 c0).
 Proof.
 intuition.
 subst; apply reachable_3222.

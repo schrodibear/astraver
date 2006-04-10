@@ -2,73 +2,88 @@
 
 WHY=why 
 
-CADULIB=/users/demons/filliatr/local/soft/why/lib
+GWHY=gwhy 
+
+CADULIB=/users/homepc9-152/jcf/soft/why/examples-c/g4/../../lib
 
 COQTACTIC=intuition
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib
+COQDEP=coqdep -I `coqc -where`/user-contrib
+
+.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/g4_why.sx
 
 coq: coq/g4_why.vo
 
-coq/%_why.v: why/%_spec.why why/%.why
-	@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export $*_spec_why." -coq-tactic "$(COQTACTIC)" $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why
-
 coq/%_spec_why.v: why/%_spec.why
 	@echo 'why -coq-v8 [...] why/$*_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble "Require Export Caduceus." $(CADULIB)/why/caduceus.why why/$*_spec.why
+
+coq/%_why.v: why/g4_spec.why why/%.why
+	@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export g4_spec_why." -coq-tactic "$(COQTACTIC)" $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
 coq/%.vo: coq/%.v
 	coqc -I coq $<
 
 pvs: pvs/g4_why.pvs
 
-pvs/%_why.pvs: pvs/%_spec_why.pvs why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing $*_spec_why" $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why
-
-pvs/%_spec_why.pvs: pvs/caduceus_why.pvs why/%_spec.why
+pvs/%_spec_why.pvs: why/%_spec.why
 	$(WHY) -pvs -dir pvs -pvs-preamble "importing caduceus_why" $(CADULIB)/why/caduceus.why why/$*_spec.why
+
+pvs/%_why.pvs: pvs/g4_spec_why.pvs why/%.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "importing g4_spec_why" $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
 pvs/caduceus_why.pvs:
 	$(WHY) -pvs -dir pvs $(CADULIB)/why/caduceus.why
 
-simplify: simplify/g4_why.sx.all
+isabelle: isabelle/g4_why.thy isabelle/g4_spec_why.thy
+
+isabelle/%_spec_why.thy: why/%_spec.why
+	$(WHY) -isabelle -dir isabelle -isabelle-base-theory caduceus_why $(CADULIB)/why/caduceus.why why/$*_spec.why
+
+isabelle/%_why.thy: isabelle/g4_spec_why.thy why/%.why
+	$(WHY) -isabelle -dir isabelle -isabelle-base-theory g4_spec_why $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
+	cp -f /users/homepc9-152/jcf/soft/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
+
+simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)
 
-simplify/%_why.sx.all: simplify/%_why.sx
-	@cat simplify/caduceus_why.sx simplify/$*_spec_why.sx $< > $@
+simplify/%_why.sx: why/g4_spec.why why/%.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
-simplify/%_why.sx: why/%_spec.why why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why
-
-cvcl: cvcl/g4_why.cvc.all
+cvcl: cvcl/g4_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && (dp -timeout 10 $^)
 
-cvcl/%_why.cvc.all: cvcl/%_why.cvc
-	@cat cvcl/caduceus_why.cvc cvcl/$*_spec_why.cvc $< > $@
+cvcl/%_why.cvc: why/g4_spec.why why/%.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
-cvcl/%_why.cvc: why/%_spec.why why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -no-cvcl-prelude -dir cvcl $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why
-
-harvey: harvey/g4_why.all.rv
+harvey: harvey/g4_why.rv
 	@echo 'Running haRVey on proof obligations' && (dp -timeout 10 $^)
 
-harvey/%_why.all.rv: harvey/%_why.rv
-	@rv_merge harvey/caduceus_why.rv harvey/$*_spec_why.rv $< > $@
+harvey/%_why.rv: why/g4_spec.why why/%.why
+	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
-harvey/%_why.rv: why/%_spec.why why/%.why
-	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why
+zenon: zenon/g4_why.znn
+	@echo 'Running Zenon on proof obligations' && (dp -timeout 10 $^)
+
+zenon/%_why.znn: why/g4_spec.why why/%.why
+	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
 smtlib: smtlib/g4_why.smt
 
-smtlib/%_why.smt: why/%_spec.why why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/caduceus.why why/$*_spec.why why/$*.why
+smtlib/%_why.smt: why/g4_spec.why why/%.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
+
+gui stat: g4.stat
+
+%.stat: why/g4_spec.why why/%.why
+	@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
 include g4.depend
 
 depend g4.depend: coq/g4_spec_why.v coq/g4_why.v
-	-coqdep -I coq coq/*.v > g4.depend
+	-$(COQDEP) -I coq coq/g4*_why.v > g4.depend
 
 clean:
 	rm -f coq/*.vo
