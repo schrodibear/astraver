@@ -24,26 +24,22 @@ open Tags
 open Astprinter
 
 let print_term fmt t = 
-  let rec print0 fmt = function
-    | Tapp (id, [a;b], _) when is_relation id ->
-	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (Coq.prefix_id id)
-	print3 a print3 b
-    | t -> 
-	print1 fmt t
+  let rec print0 fmt t = 
+    print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b], _) when id == t_add_int ->
-	fprintf fmt "%a +@ %a" print1 a print2 b
-    | Tapp (id, [a;b], _) when id == t_sub_int ->
-	fprintf fmt "%a -@ %a" print1 a print2 b
+    | Tapp (id, [a;b], _) when id == t_add_int || id == t_add_real ->
+	fprintf fmt "@[%a +@ %a@]" print1 a print2 b
+    | Tapp (id, [a;b], _) when id == t_sub_int || id == t_sub_real ->
+	fprintf fmt "@[%a -@ %a@]" print1 a print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b], _) when id == t_mul_int ->
-	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a;b], _) when id == t_div_int ->
-	fprintf fmt "(@[int_div %a@ %a@])" print2 a print3 b
+    | Tapp (id, [a;b], _) when id == t_mul_int || id == t_mul_real ->
+	fprintf fmt "@[%a *@ %a@]" print2 a print3 b
+    | Tapp (id, [a;b], _) when id == t_div_int || id == t_div_real ->
+	fprintf fmt "@[%a /@ %a@]" print2 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
-	fprintf fmt "(@[int_mod %a@ %a@])" print2 a print3 b
+	fprintf fmt "@[%a %%@ %a@]" print2 a print3 b
     | t ->
 	print3 fmt t
   and print3 fmt = function
@@ -52,40 +48,45 @@ let print_term fmt t =
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
-	fprintf fmt "tt" 
+	fprintf fmt "void" 
     | Tconst (ConstFloat (i,f,e)) -> 
 	let f = if f = "0" then "" else f in
 	let e = (if e = "" then 0 else int_of_string e) - String.length f in
 	if e = 0 then
-	  fprintf fmt "(%s%s)%%R" i f
+	  fprintf fmt "%s%s" i f
 	else if e > 0 then
-	  fprintf fmt "(%s%s * 1%s)%%R" i f (String.make e '0')
+	  fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
 	else
-	  fprintf fmt "(%s%s / 1%s)%%R" i f (String.make (-e) '0')
+	  fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
     | Tvar id when id == implicit ->
-	fprintf fmt "?"
+	fprintf fmt "<?>" (* should not happen *)
     | Tvar id when id == t_zwf_zero ->
-	fprintf fmt "(Zwf Z0)"
+	fprintf fmt "<Zwf(0)>" (* should not happen *)
     | Tvar id | Tapp (id, [], _) -> 
 	Ident.print fmt id
     | Tderef _ ->
 	assert false
     | Tapp (id, [t], _) when id == t_neg_int ->
-	fprintf fmt "(Zopp %a)" print3 t
-    | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
+	fprintf fmt "-%a" print3 t
+    | Tapp (id, [_;_], _) as t when is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
-	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print0 a print0 b print0 c
-    | Tapp (id, tl, _) when id == t_zwf_zero -> 
-	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
-    | Tapp (id, tl, _) when is_relation id || is_arith id -> 
-	fprintf fmt "(@[%s %a@])" (Coq.prefix_id id) print_terms tl
+	fprintf fmt "(@[if %a then@ %a else@ %a@])" print0 a print0 b print0 c
     | Tapp (id, tl, _) -> 
-	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
+	fprintf fmt "@[%s(%a)@]" (Ident.string id) print_terms tl
   and print_terms fmt tl =
-    print_list space print3 fmt tl
+    print_list comma print3 fmt tl
   in
-  print3 fmt t
+  print1 fmt t
+
+let pprefix_id id =
+  if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
+  else if id == t_le || id == t_le_int || id == t_le_real then "<="
+  else if id == t_gt || id == t_gt_int || id == t_gt_real then ">"
+  else if id == t_ge || id == t_ge_int || id == t_ge_real then ">="
+  else if is_eq id then "="
+  else if is_neq id then "<>"
+  else assert false
 
 let print_predicate fmt p =
   let rec print0 fmt = function
@@ -93,9 +94,9 @@ let print_predicate fmt p =
 	fprintf fmt "(@[if %a@ then %a@ else %a@])"
 	  print_term a print0 b print0 c
     | Pimplies (_, a, b) -> 
-	fprintf fmt "(@[%a =>@ %a@])" print1 a print0 b
+	fprintf fmt "@[%a ->@ %a@]" print1 a print0 b
     | Piff (a, b) -> 
-	fprintf fmt "(@[%a <->@ %a@])" print1 a print0 b
+	fprintf fmt "@[%a <->@ %a@]" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
     | Por (a, b) -> fprintf fmt "@[%a or@ %a@]" print2 a print1 b
@@ -106,30 +107,23 @@ let print_predicate fmt p =
     | p -> print3 fmt p
   and print3 fmt = function
     | Ptrue -> 
-	fprintf fmt "True"
+	fprintf fmt "true"
     | Pvar id when id == Ident.default_post ->
-	fprintf fmt "True"
+	fprintf fmt "true"
     | Pfalse -> 
-	fprintf fmt "False"
+	fprintf fmt "false"
     | Pvar id -> 
 	Ident.print fmt id
     | Papp (id, [t], _) when id == well_founded ->
-	fprintf fmt "@[(well_founded %a)@]" print_term t
+	fprintf fmt "@[well_founded(%a)@]" print_term t
     | Papp (id, [a;b], _) when id == t_zwf_zero ->
-	fprintf fmt "(Zwf 0 %a %a)" print_term a print_term b
-    | Papp (id, [a;b], _) when is_int_comparison id ->
-	fprintf fmt "@[%a %s@ %a@]" 
-	  print_term a (Coq.infix_relation id) print_term b
-    | Papp (id, [a;b], _) when id == t_eq_real || id == t_eq ->
-	fprintf fmt "(@[%a = %a@])" print_term a print_term b
-    | Papp (id, [a;b], _) when id == t_neq_real || id == t_neq ->
-	fprintf fmt "(@[%a <> %a@])" print_term a print_term b
-    | Papp (id, [a;b], _) when is_real_comparison id ->
-	fprintf fmt "(@[%s %a %a@])" 
-	(Coq.pprefix_id id) print_term a print_term b
+	fprintf fmt "zwf(0, %a, %a)" print_term a print_term b
+    | Papp (id, [a;b], _) when is_relation id ->
+	fprintf fmt "@[%a %s %a@]" 
+	print_term a (pprefix_id id) print_term b
     | Papp (id, l, _) ->
-	fprintf fmt "@[(@[%a %a@])@]" Ident.print id
-	  (print_list space print_term) l
+	fprintf fmt "@[@[%a(%a@])@]" Ident.print id
+	  (print_list comma print_term) l
     | Pnot p -> 
 	fprintf fmt "not %a" print3 p
     | Forall (_,id,n,t,p) -> 
