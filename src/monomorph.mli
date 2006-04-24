@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.mli,v 1.5 2006-04-03 08:26:57 filliatr Exp $ i*)
+(*i $Id: monomorph.mli,v 1.6 2006-04-24 14:28:45 filliatr Exp $ i*)
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)
@@ -22,6 +22,8 @@
 (* input... *)
 
 val push_decl : Logic_decl.t -> unit
+
+val add_external : Ident.t -> unit
 
 (* ...and output *)
 

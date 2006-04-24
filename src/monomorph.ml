@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.16 2006-04-06 14:26:45 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.17 2006-04-24 14:28:45 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -56,8 +56,14 @@ let name id i =
   fprintf str_formatter "%s%a" id print_instance i;
   flush_str_formatter ()
 
+let external_logic = Hashtbl.create 97
+let add_external id = Hashtbl.add external_logic id ()
+
 let symbol fmt (id, i) =
-  fprintf fmt "%a%a" Ident.print id print_instance i
+  if Hashtbl.mem external_logic id then
+    Ident.print fmt id
+  else
+    fprintf fmt "%a%a" Ident.print id print_instance i
 
 (* iteration over instances (function [f]) and types (function [g]) *)
 module IterIT = struct
@@ -330,11 +336,14 @@ let push_logic loc id t =
 	
 module Hinstance = Hashtbl.Make(Instance)
 let declared_logic = Hinstance.create 97
-    
+
 let vset_elements s = Vset.fold (fun x l -> x :: l) s []
   
 let rec declare_logic loc id i =
-  if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
+  if not (Hashtbl.mem external_logic id) &&
+     i <> [] && 
+     not (Hinstance.mem declared_logic (id,i)) 
+  then begin
     Hinstance.add declared_logic (id,i) ();
     (*eprintf "declare_logic %a@." Ident.print id;*)
     assert (Hashtbl.mem logic_symbols id);

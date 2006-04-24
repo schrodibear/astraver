@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.102 2006-04-07 14:29:09 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.103 2006-04-24 14:28:45 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -225,7 +225,10 @@ let interp_decl ?(prelude=false) d =
 	let t = Ltyping.logic_type t in
 	let t = generalize_logic_type t in
 	add_global_logic id t;
-	if not ext then push_decl (Dlogic (loc, Ident.string id, t))
+	if ext then 
+	  Monomorph.add_external id
+	else
+	  push_decl (Dlogic (loc, Ident.string id, t))
       in
       List.iter add ids
   | Predicate_def (loc, id, pl, p) ->

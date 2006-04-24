@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPrelude.v,v 1.2 2005-11-03 14:11:35 filliatr Exp $ *)
+(* $Id: WhyPrelude.v,v 1.3 2006-04-24 14:28:45 filliatr Exp $ *)
 
 Require Export WhyCoqCompat.
 
@@ -57,3 +57,46 @@ Definition array_set :
 intros; exists (update t i v) tt; auto.
 Defined.
 Implicit Arguments array_set [A].
+
+(*Why logic*) Definition lt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition le_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition gt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition ge_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition eq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition neq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why axiom*) Lemma lt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((lt_int_bool x y) = true <-> x < y))).
+Admitted.
+
+(*Why axiom*) Lemma le_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((le_int_bool x y) = true <-> x <= y))).
+Admitted.
+
+(*Why axiom*) Lemma gt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((gt_int_bool x y) = true <-> x > y))).
+Admitted.
+
+(*Why axiom*) Lemma ge_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((ge_int_bool x y) = true <-> x >= y))).
+Admitted.
+
+(*Why axiom*) Lemma eq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((eq_int_bool x y) = true <-> x = y))).
+Admitted.
+
+(*Why axiom*) Lemma neq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((neq_int_bool x y) = true <-> x <> y))).
+Admitted.
+
