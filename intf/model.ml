@@ -85,8 +85,14 @@ let get_prover s =
 	else next r
   in next !provers_selected
 
+let update_prover_s () = 
+  List.iter 
+    (fun p -> Hashtbl.add provers_s p "")
+    !provers_selected
+
 let add_all_provers () = 
-  provers_selected := provers
+  provers_selected := provers;
+  update_prover_s ()
 
 let add_provers l = 
   assert (List.length l > 0);
@@ -97,20 +103,26 @@ let add_provers l =
       provers);
   if !provers_selected = [] then 
     begin 
-      add_all_provers ()
+      provers_selected := provers
     end;
   default_prover := List.hd !provers_selected;
   List.iter 
     (fun p -> Hashtbl.add provers_s p "")
     !provers_selected
 
+let affiche () = 
+  Hashtbl.iter
+    (fun p s -> print_endline p.pr_name)
+    provers_s
+
 let select_prover p = 
   if not (Hashtbl.mem provers_s p) then
-    Hashtbl.add provers_s p ""
+    Hashtbl.add provers_s p "";
+  affiche ()
 
 let deselect_prover p = 
-  if Hashtbl.mem provers_s p then
-    Hashtbl.remove provers_s p
+  Hashtbl.remove provers_s p;
+  affiche ()
 
 let get_provers_s () = 
   Hashtbl.fold 
