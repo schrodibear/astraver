@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.37 2006-05-03 13:35:12 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.38 2006-05-03 13:46:56 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -445,7 +445,10 @@ let main () =
 	   ~active:(List.mem p (Model.get_provers ())) p.Model.pr_name
 	 in 
 	 ignore(m#connect#toggled  
-		  ~callback:(fun () -> Model.select_prover p)))
+		  ~callback:(fun () -> 
+			       if m#active then 
+				 Model.select_prover p
+			       else Model.deselect_prover p)))
       Model.provers
   in 
   let _ = configuration_factory#add_separator ()  in
