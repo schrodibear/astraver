@@ -117,12 +117,10 @@ let affiche () =
 
 let select_prover p = 
   if not (Hashtbl.mem provers_s p) then
-    Hashtbl.add provers_s p "";
-  affiche ()
+    Hashtbl.add provers_s p ""
 
 let deselect_prover p = 
-  Hashtbl.remove provers_s p;
-  affiche ()
+  Hashtbl.remove provers_s p
 
 let get_provers_s () = 
   Hashtbl.fold 

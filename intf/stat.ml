@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.38 2006-05-03 13:46:56 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.39 2006-05-03 14:02:21 dogguy Exp $ i*)
 
 open Printf
 open Options
