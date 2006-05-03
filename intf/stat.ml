@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.36 2006-04-05 14:30:46 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.37 2006-05-03 13:35:12 dogguy Exp $ i*)
 
 open Printf
 open Options
@@ -116,7 +116,7 @@ module View = struct
 	 vc#set_clickable true;
 	 let _ = view#append_column vc in
 	 p, vc)
-      provers
+      (Model.get_provers ())
 
 end
 
@@ -150,7 +150,7 @@ let get_statistics (model:GTree.tree_store) row =
   let sl = 
     List.map 
       (fun p -> (string_of_int (model#get ~row ~column:p.Model.pr_result)))
-      Model.provers 
+      (Model.get_provers ())
   in
   "[" ^ String.concat "|" sl ^ "]"
 
@@ -171,7 +171,7 @@ let build_statistics (model:GTree.tree_store) f =
       (fun p -> 
 	 model#set ~row ~column:p.Model.pr_result 0
       ) 
-      Model.provers;
+      (Model.get_provers ());
     Model.iter_fobligs
       f
       (fun r -> 
@@ -182,7 +182,7 @@ let build_statistics (model:GTree.tree_store) f =
 	      and u = model#get ~row ~column:p.Model.pr_result in
 	      model#set ~row ~column:p.Model.pr_result (u+r)
 	   ) 
-	   Model.provers);
+	   (Model.get_provers ()));
     let statistics = get_statistics model row 
     and total = string_of_int (get_all_results f model) 
     and children = string_of_int !children in
@@ -436,6 +436,18 @@ let main () =
 			 view#collapse_row row
 		       with Not_found -> ()) () 
   in
+  (* menus for selected povers *)
+  let _ = configuration_factory#add_separator ()  in
+  let _ = 
+    List.iter
+      (fun p -> 
+	 let m = configuration_factory#add_check_item 
+	   ~active:(List.mem p (Model.get_provers ())) p.Model.pr_name
+	 in 
+	 ignore(m#connect#toggled  
+		  ~callback:(fun () -> Model.select_prover p)))
+      Model.provers
+  in 
   let _ = configuration_factory#add_separator ()  in
   let cache = configuration_factory#add_check_item 
     ~callback:(fun b -> Cache.set_active b) "Cache _enabled" in
@@ -457,7 +469,7 @@ let main () =
       ~callback:(fun () -> 
 		   List.iter
 		     (fun p -> prove (run_prover_all p view model true))
-		     Model.provers) () 
+		     (Model.get_provers ())) () 
   in
   let fct_callback bench () = 
     List.iter 
@@ -482,7 +494,7 @@ let main () =
 		   in
 		   List.iter
 		     (fun p -> prove (run_prover_fct p view model s true))
-		     Model.provers) ()
+		     (Model.get_provers())) ()
   in
   let _ = 
     proof_factory#add_image_item ~label:"Prove _all obligations" 
@@ -520,7 +532,7 @@ let main () =
   in
   let provers_m = 
     let name = (Model.get_default_prover ()).Model.pr_name
-    and pp = List.hd Model.provers in
+    and pp = List.hd (Model.get_provers ()) in
     let fm = proof_factory#add_radio_item ~active:(name = pp.Model.pr_name) 
       pp.Model.pr_name in
     ignore(fm#connect#toggled  
@@ -533,7 +545,7 @@ let main () =
 	 in ignore(m#connect#toggled  
 		     ~callback:(fun () -> select_prover p));
 	 p,m)
-      (List.tl Model.provers)
+      (List.tl (Model.get_provers ()))
   in 
   let switch_next_prover () =     
     let current_prover = Model.get_default_prover () in
@@ -782,14 +794,16 @@ let main () =
 	       try 
 		 Queue.iter 
 		   (fun p -> 
-		      let zecol = Model.get_prover p 
-		      and parent = model#get ~row ~column:Model.parent in
-		      let parent = Model.find_fct parent in
-		      let r = model#get ~row:parent ~column:zecol.Model.pr_result in
-		      model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
-		      model#set ~row ~column:zecol.Model.pr_result 1;
-		      model#set ~row ~column:Model.result 1;
-		      model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
+		      try 
+			let zecol = Model.get_prover p 
+			and parent = model#get ~row ~column:Model.parent in
+			let parent = Model.find_fct parent in
+			let r = model#get ~row:parent ~column:zecol.Model.pr_result in
+			model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
+			model#set ~row ~column:zecol.Model.pr_result 1;
+			model#set ~row ~column:Model.result 1;
+			model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
+		      with Model.No_such_prover -> ()
 		   )
 		   (Cache.find cleaned)
 	       with Not_found -> 
@@ -839,10 +853,10 @@ let set_loaded_config () =
        end);
   Model.set_prover 
     (try (Model.get_prover (Config.get_value "prover"))
-    with Not_found -> 
+    with Model.No_such_prover -> 
       begin
 	prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
-	List.hd Model.provers
+	List.hd (Model.get_provers ())
       end);
   Colors.set_all_colors (Config.get_colors ())
 

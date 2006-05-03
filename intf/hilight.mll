@@ -39,7 +39,7 @@
       [ "typedef" ; "for"; "if"; "else"; "while"; "and"; "do"; "not"; "real"; 
 	"var"; "begin"; "or"; "to"; "end"; "int"; "true"; "false";
 	"type"; "function"; "of"; "then"; "break"; "void"; "struct";
-	"return"];
+	"return"; "#include"];
     fun tbuf s -> 
       if Hashtbl.mem h s then
 	insert_text tbuf "keyword" s
@@ -68,6 +68,8 @@ rule token tbuf = parse
       { Buffer.add_string comment "/*"; comment1 tbuf lexbuf; token tbuf lexbuf }
   | ident  
       { id_or_keyword tbuf (lexeme lexbuf) }
+  | '\r' 
+         { token tbuf lexbuf }
   | digit+ 
   | float
   | _ as s 
@@ -80,6 +82,8 @@ and comment1 tbuf = parse
 	   let s = Buffer.contents comment in
 	   insert_text tbuf "comment" s; 
 	   Buffer.clear comment }
+  | '\r' 
+         { comment1 tbuf lexbuf }
   | _    { Buffer.add_string  comment (lexeme lexbuf); 
 	   comment1 tbuf lexbuf }
   | eof  { () }
@@ -90,6 +94,8 @@ and comment2 tbuf = parse
 	  let t = Buffer.contents comment in
 	  insert_text tbuf "predicate" t; 
 	  Buffer.clear comment }
+  | '\r' 
+        { comment2 tbuf lexbuf }
   | _   { Buffer.add_string  comment (lexeme lexbuf); 
 	  comment2 tbuf lexbuf }
   | eof { () }
@@ -99,6 +105,8 @@ and comment3 tbuf = parse
 	   let t = Buffer.contents comment in
 	   insert_text tbuf "predicate" t; 
 	   Buffer.clear comment }
+  | '\r' 
+         { comment3 tbuf lexbuf }
   | _    { Buffer.add_string  comment (lexeme lexbuf); 
 	   comment3 tbuf lexbuf}
   | eof  { () }
@@ -108,6 +116,8 @@ and comment4 tbuf = parse
 	   let t = Buffer.contents comment in
 	   insert_text tbuf "comment" t; 
 	   Buffer.clear comment }
+  | '\r' 
+         { comment4 tbuf lexbuf }
   | _    { Buffer.add_string  comment (lexeme lexbuf); 
 	   comment4 tbuf lexbuf}
   | eof  { () }

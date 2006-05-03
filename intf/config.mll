@@ -69,6 +69,12 @@
        ("timeout", string_of_int (Tools.get_timeout ()));
        ("hard_proof", string_of_bool (Cache.hard_proof ()));
        ("live_update", string_of_bool (Tools.live_update ()))];
+    output_string out_channel "\n# Selected provers : \"prover1\" \"prover2\" ...  \n";
+    output_string out_channel "# It must be contain at least one prover. Otherwise, all valid provers will be selected.\n";
+    output_string out_channel "provers = ";
+    List.iter 
+      (fun p -> output_string out_channel ("\""^p.Model.pr_name^"\" "))
+      (Model.get_provers_s ());
     output_string out_channel "\n\n# Colors : color_key = \"forecolor\" \"backcolor\" \n";
     output_string out_channel "# key = {title, comment, keyword, var, ";
     output_string out_channel " predicate, lpredicate, pr_hilight, separator, ";
@@ -100,7 +106,7 @@
     let h = Hashtbl.create 97 in
     List.iter 
       (fun s -> Hashtbl.add h s ())
-      [ "prover"; "cache"; "hard_proof"; "timeout"; "live_update"];
+      [ "provers" ; "prover"; "cache"; "hard_proof"; "timeout"; "live_update"];
     fun s -> 
       Hashtbl.mem h s
 
@@ -116,7 +122,6 @@
     | _ -> true
 }
 
-
 let space = [' ' '\010' '\013' '\009' '\012']
 let char = ['A'-'Z' 'a'-'z' '_' '0'-'9']
 let ident = char+
@@ -129,17 +134,28 @@ rule token = parse
   | ident as id
       { let ckey = Buffer.contents key in
 	(if ckey = "" then 
-	  Buffer.add_string key id
-	else if Queue.length vals = 1 then
-	  let p = Queue.pop vals in
-	  Hashtbl.add config ckey p
-	else if Queue.length vals = 2 then
-	  let fst = Queue.pop vals in
-	  let snd = Queue.pop vals in
-	  (match get_color ckey with 
-	    | Some s -> Hashtbl.add colors s (fst, snd)
-	    | None -> Format.eprintf ".gwhyrc : unknown color : %s@." ckey)
-	else Format.eprintf ".gwhyrc : invalid parameters for key (%s)@." ckey);
+	   () (* not needed : Buffer.add_string key id *)
+	 else if ckey = "provers" then
+	   if Queue.length vals = 0 then
+	     Model.add_all_provers () 
+	   else if Queue.length vals <> 0 then
+	     let provers = 
+	       Queue.fold 
+		 (fun prs pr -> pr::prs)
+		 []
+		 vals
+	     in Model.add_provers provers
+	   else raise (Lexical_error "no provers selected")
+	 else if Queue.length vals = 1 then
+	   let p = Queue.pop vals in
+	   Hashtbl.add config ckey p
+	 else if Queue.length vals = 2 then
+	   let fst = Queue.pop vals in
+	   let snd = Queue.pop vals in
+	   (match get_color ckey with 
+	      | Some s -> Hashtbl.add colors s (fst, snd)
+	      | None -> Format.eprintf ".gwhyrc : unknown color : %s@." ckey)
+	 else Format.eprintf ".gwhyrc : invalid parameters for key (%s)@." ckey);
 	Buffer.reset key;
 	Queue.clear vals;
 	if is_key id or is_color id then
@@ -159,7 +175,18 @@ rule token = parse
   | eof   
       { let ckey = Buffer.contents key in
 	(if ckey <> "" then 
-	   if Queue.length vals = 1 then
+	   if ckey = "provers" then
+	     if Queue.length vals = 0 then
+	       Model.add_all_provers () 
+	     else if Queue.length vals <> 0 then
+	       let provers = 
+		 Queue.fold 
+		   (fun prs pr -> pr::prs)
+		   []
+		   vals
+	       in Model.add_provers provers
+	     else raise (Lexical_error "no provers selected")
+	   else if Queue.length vals = 1 then
 	     let p = Queue.pop vals in
 	     Hashtbl.add config ckey p
 	   else if Queue.length vals = 2 then
@@ -201,7 +228,7 @@ and string = parse
 	  | Eof -> ()
 	  | Lexical_error s -> 
 	      let w = GWindow.message_dialog 
-		~message:"Invalid key in .gwhyrc file !"
+		~message:("Invalid parameters in .gwhyrc file ("^s^") !")
 		~message_type:`ERROR ~buttons:GWindow.Buttons.ok
 		~title:"Saving preferences" ~allow_grow:false
 		~modal:true ~resizable:false ()

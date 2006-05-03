@@ -122,7 +122,9 @@ let print_predicate fmt p =
     | Por (a, b) -> fprintf fmt "@[%a ||@ %a@]" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (_, _, a, b) | Forallb (_, a, b) -> 
+    | Pand (_, _, a, b) -> 
+	fprintf fmt "@[%a &&@ %a@]" print3 a print2 b
+    | Forallb (_, a, b) -> 
         fprintf fmt "@[%a &&@ %a@]" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function

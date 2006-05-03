@@ -16,6 +16,8 @@
 
 open Gobject.Data
 
+exception No_such_prover
+
 type prover = {
   pr_name : string;
   pr_result : int GTree.column;
@@ -58,24 +60,60 @@ let cvcl = {
 }
   
 let provers = [simplify; zenon; harvey; cvcl]
-let () = assert (List.length provers > 0)
+let provers_selected = ref provers
+let provers_s = Hashtbl.create 17
+let get_provers () = !provers_selected
+let _ = assert (List.length provers > 0)
+
 
 (*
  * Default prover
  *)
 let default_prover = ref (List.hd provers)
 let get_default_prover () = !default_prover
-let set_prover p = default_prover := p
+let set_prover p = 
+  if List.mem p !provers_selected 
+  then default_prover := p
 let print_prover p = p.pr_name
 let get_prover s = 
   let rec next = function
     | [] -> 
-	raise Not_found
+	raise No_such_prover
     | p' :: r -> 
 	if (String.lowercase p'.pr_name) = (String.lowercase s) 
 	then p' 
 	else next r
-  in next provers
+  in next !provers_selected
+
+let add_all_provers () = 
+  provers_selected := provers
+
+let add_provers l = 
+  assert (List.length l > 0);
+  provers_selected := 
+    List.rev (List.fold_left
+      (fun prs pr -> if List.mem pr.pr_name l then pr::prs else prs)
+      []
+      provers);
+  if !provers_selected = [] then 
+    begin 
+      add_all_provers ()
+    end;
+  default_prover := List.hd !provers_selected;
+  List.iter 
+    (fun p -> Hashtbl.add provers_s p "")
+    !provers_selected
+
+let select_prover p = 
+  if Hashtbl.mem provers_s p then
+    Hashtbl.remove provers_s p
+  else Hashtbl.add provers_s p ""
+
+let get_provers_s () = 
+  Hashtbl.fold 
+    (fun k v acc -> k::acc)
+    provers_s
+    []
   
 (* all obligations *)
 let obligs = Hashtbl.create 97
