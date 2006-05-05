@@ -1,6 +1,8 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
+(BG_PUSH (NEQ |@true| |@false|))
+
 (BG_PUSH
  ;; Why axiom lt_int_bool_axiom
  (FORALL (x) (FORALL (y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y)))))
@@ -26,13 +28,21 @@
  (FORALL (x) (FORALL (y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y)))))
 
 (BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x) (FORALL (y) (EQ (ite |@true| x y) x))))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
  (IFF (EQ (sorted_array t i j) |@true|)
  (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (select t k) (select t (+ k 1))))))))))
+ (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
 
 (BG_PUSH
  ;; Why axiom exchange_def
@@ -42,10 +52,10 @@
  (FORALL (j)
  (IFF (EQ (exchange t1 t2 i j) |@true|)
  (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (select t1 i) (select t2 j))
- (AND (EQ (select t2 i) (select t1 j))
+ (AND (EQ (access t1 i) (access t2 j))
+ (AND (EQ (access t2 i) (access t1 j))
  (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (select t1 k) (select t2 k)))))))))))))
+ (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -70,7 +80,7 @@
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
- (EQ (permut t (update (update t i (select t j)) j (select t i))) |@true|)))))
+ (EQ (permut t (update (update t i (access t j)) j (access t i))) |@true|)))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_refl
@@ -114,7 +124,7 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|)))))))
+ (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -123,7 +133,7 @@
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|))))))))
+ (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -217,7 +227,7 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (EQ result blue) (AND (<= 0 b) (< b (array_length t0))))))))))))))))
 
 ;; dutch_flag_po_4, Why obligation from file "", line 0, characters 0-0:
@@ -240,14 +250,14 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (EQ result blue)
 (IMPLIES (AND (<= 0 b) (< b (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 b))
+(IMPLIES (EQ result0 (access t0 b))
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result1)
-(IMPLIES (EQ result1 (select t0 i))
+(IMPLIES (EQ result1 (access t0 i))
 (IMPLIES (AND (<= 0 b) (< b (array_length t0)))
 (FORALL (t1)
 (IMPLIES (EQ t1 (update t0 b result1))
@@ -273,14 +283,14 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (EQ result blue)
 (IMPLIES (AND (<= 0 b) (< b (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 b))
+(IMPLIES (EQ result0 (access t0 b))
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result1)
-(IMPLIES (EQ result1 (select t0 i))
+(IMPLIES (EQ result1 (access t0 i))
 (IMPLIES (AND (<= 0 b) (< b (array_length t0)))
 (FORALL (t1)
 (IMPLIES (EQ t1 (update t0 b result1))
@@ -319,11 +329,11 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (NEQ result blue)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (EQ result0 white)
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
@@ -355,11 +365,11 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (NEQ result blue)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (NEQ result0 white)
 (FORALL (r0)
 (IMPLIES (EQ r0 (- r 1)) (AND (<= 0 r0) (< r0 (array_length t0))))))))))))))))))))))
@@ -384,20 +394,20 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (NEQ result blue)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (NEQ result0 white)
 (FORALL (r0)
 (IMPLIES (EQ r0 (- r 1))
 (IMPLIES (AND (<= 0 r0) (< r0 (array_length t0)))
 (FORALL (result1)
-(IMPLIES (EQ result1 (select t0 r0))
+(IMPLIES (EQ result1 (access t0 r0))
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result2)
-(IMPLIES (EQ result2 (select t0 i))
+(IMPLIES (EQ result2 (access t0 i))
 (IMPLIES (AND (<= 0 r0) (< r0 (array_length t0)))
 (FORALL (t1)
 (IMPLIES (EQ t1 (update t0 r0 result2))
@@ -423,20 +433,20 @@
 (IMPLIES (< i r)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result)
-(IMPLIES (EQ result (select t0 i))
+(IMPLIES (EQ result (access t0 i))
 (IMPLIES (NEQ result blue)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (NEQ result0 white)
 (FORALL (r0)
 (IMPLIES (EQ r0 (- r 1))
 (IMPLIES (AND (<= 0 r0) (< r0 (array_length t0)))
 (FORALL (result1)
-(IMPLIES (EQ result1 (select t0 r0))
+(IMPLIES (EQ result1 (access t0 r0))
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result2)
-(IMPLIES (EQ result2 (select t0 i))
+(IMPLIES (EQ result2 (access t0 i))
 (IMPLIES (AND (<= 0 r0) (< r0 (array_length t0)))
 (FORALL (t1)
 (IMPLIES (EQ t1 (update t0 r0 result2))

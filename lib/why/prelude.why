@@ -98,6 +98,13 @@ logic neq_unit : unit,unit -> prop
 parameter eq_unit_ : x:unit -> y:unit -> {} bool {if result then x=y else x<>y}
 parameter neq_unit_: x:unit -> y:unit -> {} bool {if result then x<>y else x=y}
 
+(* if-then-else function symbol *)
+
+logic ite : bool,'a,'a -> 'a
+
+axiom ite_true : forall x, y : 'a. ite(true, x, y) = x
+axiom ite_false : forall x, y : 'a. ite(false, x, y) = y
+
 (* References. := is syntactic sugar for ref_set: *)
 
 parameter ref_set : x:'a ref -> v:'a -> {} unit writes x { x = v }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.15 2006-04-06 14:26:45 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.16 2006-05-05 14:42:56 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -137,14 +137,13 @@ let rec print_term fmt = function
       fprintf fmt "@[(%a %a)@]" ident id print_term a
   | Tapp (id, [a], _) when id == t_real_of_int ->
       fprintf fmt "@[(%a %a)@]" ident id print_term a
-  | Tapp (id, [a; b; c], _) when id == if_then_else ->
-      fprintf fmt "@[(ITE %a@ %a@ %a)@]" 
-	print_term a print_term b print_term c
+(**
   | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "@[(access@ %a@ %a)@]" print_term a print_term b
   | Tapp (id, [a; b; c], _) when id == store ->
       fprintf fmt "@[(update@ %a@ %a@ %a)@]" 
 	print_term a print_term b print_term c
+**)
   | Tapp (id, [t], _) when id == t_neg_int ->
       fprintf fmt "@[(why__sub_int why__int_const_0 %a)@]" print_term t
   | Tapp (id, [t], _) when id == t_neg_real ->

@@ -96,13 +96,21 @@
  (FORALL (x) (FORALL (y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y)))))
 
 (BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x) (FORALL (y) (EQ (ite |@true| x y) x))))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
  (IFF (EQ (sorted_array t i j) |@true|)
  (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (select t k) (select t (+ k 1))))))))))
+ (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
 
 (BG_PUSH
  ;; Why axiom exchange_def
@@ -112,10 +120,10 @@
  (FORALL (j)
  (IFF (EQ (exchange t1 t2 i j) |@true|)
  (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (select t1 i) (select t2 j))
- (AND (EQ (select t2 i) (select t1 j))
+ (AND (EQ (access t1 i) (access t2 j))
+ (AND (EQ (access t2 i) (access t1 j))
  (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (select t1 k) (select t2 k)))))))))))))
+ (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -140,7 +148,7 @@
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
- (EQ (permut t (update (update t i (select t j)) j (select t i))) |@true|)))))
+ (EQ (permut t (update (update t i (access t j)) j (access t i))) |@true|)))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_refl
@@ -184,7 +192,7 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|)))))))
+ (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -193,7 +201,7 @@
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|))))))))
+ (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -247,10 +255,10 @@
          (AND (<= 0 j) (< j (array_length t))))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t i))
+(IMPLIES (EQ result (access t i))
 (IMPLIES (AND (<= 0 j) (< j (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t j))
+(IMPLIES (EQ result0 (access t j))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t i result0)) (AND (<= 0 j) (< j (array_length t0))))))))))))))))
@@ -263,10 +271,10 @@
          (AND (<= 0 j) (< j (array_length t))))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t i))
+(IMPLIES (EQ result (access t i))
 (IMPLIES (AND (<= 0 j) (< j (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t j))
+(IMPLIES (EQ result0 (access t j))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t i result0))
@@ -282,9 +290,9 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (EQ k 0)
-(AND (AND (<= 0 i) (<= i n)) (EQ (Maximize t n (select t i) 0) |@true|))))))))
+(AND (AND (<= 0 i) (<= i n)) (EQ (Maximize t n (access t i) 0) |@true|))))))))
 
 ;; maximum_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -294,7 +302,7 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (NEQ k 0) (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))))))))
 
 ;; maximum_po_3, Why obligation from file "", line 0, characters 0-0:
@@ -305,11 +313,11 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (NEQ k 0)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t (- k 1)))
+(IMPLIES (EQ result (access t (- k 1)))
 (AND (<= 0 i) (< i (array_length t))))))))))))
 
 ;; maximum_po_4, Why obligation from file "", line 0, characters 0-0:
@@ -320,14 +328,14 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (NEQ k 0)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t (- k 1)))
+(IMPLIES (EQ result (access t (- k 1)))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
+(IMPLIES (EQ result0 (access t i))
 (IMPLIES (> result result0) (AND (<= 0 k) (< (- k 1) k)))))))))))))))
 
 ;; maximum_po_5, Why obligation from file "", line 0, characters 0-0:
@@ -338,20 +346,20 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (NEQ k 0)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t (- k 1)))
+(IMPLIES (EQ result (access t (- k 1)))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
+(IMPLIES (EQ result0 (access t i))
 (IMPLIES (> result result0)
 (IMPLIES (AND (<= 0 k) (< (- k 1) k))
 (AND (AND (<= 0 (- k 1)) (<= (- k 1) (- k 1)))
 (AND (<= (- k 1) n)
 (AND (< n (array_length t))
-(EQ (Maximize t n (select t (- k 1)) (- k 1)) |@true|))))))))))))))))))
+(EQ (Maximize t n (access t (- k 1)) (- k 1)) |@true|))))))))))))))))))
 
 ;; maximum_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -361,14 +369,14 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (NEQ k 0)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t (- k 1)))
+(IMPLIES (EQ result (access t (- k 1)))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
+(IMPLIES (EQ result0 (access t i))
 (IMPLIES (<= result result0) (AND (<= 0 k) (< (- k 1) k)))))))))))))))
 
 ;; maximum_po_7, Why obligation from file "", line 0, characters 0-0:
@@ -379,19 +387,19 @@
 (IMPLIES (AND (AND (<= 0 k) (<= k i))
          (AND (<= i n)
          (AND (< n (array_length t))
-         (EQ (Maximize t n (select t i) k) |@true|))))
+         (EQ (Maximize t n (access t i) k) |@true|))))
 (IMPLIES (NEQ k 0)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t)))
 (FORALL (result)
-(IMPLIES (EQ result (select t (- k 1)))
+(IMPLIES (EQ result (access t (- k 1)))
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
+(IMPLIES (EQ result0 (access t i))
 (IMPLIES (<= result result0)
 (IMPLIES (AND (<= 0 k) (< (- k 1) k))
 (AND (AND (<= 0 (- k 1)) (<= (- k 1) i))
 (AND (<= i n)
-(AND (< n (array_length t)) (EQ (Maximize t n (select t i) (- k 1)) |@true|))))))))))))))))))
+(AND (< n (array_length t)) (EQ (Maximize t n (access t i) (- k 1)) |@true|))))))))))))))))))
 
 ;; maxisort_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -402,7 +410,7 @@
 (AND (EQ (sorted_array t (+ (- result 1) 1) (- (array_length t) 1)) |@true|)
 (AND (EQ (permut t t) |@true|)
 (IMPLIES (< (+ (- result 1) 1) (array_length t))
-(EQ (Maximize t (- result 1) (select t (+ (- result 1) 1)) 0) |@true|)))))))))
+(EQ (Maximize t (- result 1) (access t (+ (- result 1) 1)) 0) |@true|)))))))))
 
 ;; maxisort_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -417,7 +425,7 @@
          (- (array_length t) 1)) |@true|)
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (select t (+ (- result 1) 1))
+         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
          0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
@@ -425,11 +433,11 @@
          (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
-         (EQ (Maximize t0 i (select t0 (+ i 1)) 0) |@true|)))))
+         (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
 (IMPLIES (>= i 0)
 (AND (AND (<= 0 i) (<= i i))
 (AND (<= i i)
-(AND (< i (array_length t0)) (EQ (Maximize t0 i (select t0 i) i) |@true|)))))))))))))
+(AND (< i (array_length t0)) (EQ (Maximize t0 i (access t0 i) i) |@true|)))))))))))))
 
 ;; maxisort_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -444,7 +452,7 @@
          (- (array_length t) 1)) |@true|)
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (select t (+ (- result 1) 1))
+         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
          0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
@@ -452,15 +460,15 @@
          (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
-         (EQ (Maximize t0 i (select t0 (+ i 1)) 0) |@true|)))))
+         (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
 (IMPLIES (>= i 0)
 (IMPLIES (AND (AND (<= 0 i) (<= i i))
          (AND (<= i i)
          (AND (< i (array_length t0))
-         (EQ (Maximize t0 i (select t0 i) i) |@true|))))
+         (EQ (Maximize t0 i (access t0 i) i) |@true|))))
 (FORALL (result0)
 (IMPLIES (AND (AND (<= 0 result0) (<= result0 i))
-         (EQ (Maximize t0 i (select t0 result0) 0) |@true|))
+         (EQ (Maximize t0 i (access t0 result0) 0) |@true|))
 (AND (AND (<= 0 i) (< i (array_length t0)))
 (AND (<= 0 result0) (< result0 (array_length t0))))))))))))))))
 
@@ -477,7 +485,7 @@
          (- (array_length t) 1)) |@true|)
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (select t (+ (- result 1) 1))
+         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
          0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
@@ -485,15 +493,15 @@
          (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
-         (EQ (Maximize t0 i (select t0 (+ i 1)) 0) |@true|)))))
+         (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
 (IMPLIES (>= i 0)
 (IMPLIES (AND (AND (<= 0 i) (<= i i))
          (AND (<= i i)
          (AND (< i (array_length t0))
-         (EQ (Maximize t0 i (select t0 i) i) |@true|))))
+         (EQ (Maximize t0 i (access t0 i) i) |@true|))))
 (FORALL (result0)
 (IMPLIES (AND (AND (<= 0 result0) (<= result0 i))
-         (EQ (Maximize t0 i (select t0 result0) 0) |@true|))
+         (EQ (Maximize t0 i (access t0 result0) 0) |@true|))
 (IMPLIES (AND (AND (<= 0 i) (< i (array_length t0)))
          (AND (<= 0 result0) (< result0 (array_length t0))))
 (FORALL (t1)
@@ -505,7 +513,7 @@
 (AND (EQ (sorted_array t1 (+ i0 1) (- (array_length t1) 1)) |@true|)
 (AND (EQ (permut t1 t) |@true|)
 (IMPLIES (< (+ i0 1) (array_length t1))
-(EQ (Maximize t1 i0 (select t1 (+ i0 1)) 0) |@true|)))))
+(EQ (Maximize t1 i0 (access t1 (+ i0 1)) 0) |@true|)))))
 (AND (<= 0 (+ i 1)) (< (+ i0 1) (+ i 1)))))))))))))))))))))
 
 ;; maxisort_po_5, Why obligation from file "", line 0, characters 0-0:
@@ -521,7 +529,7 @@
          (- (array_length t) 1)) |@true|)
          (AND (EQ (permut t t) |@true|)
          (IMPLIES (< (+ (- result 1) 1) (array_length t))
-         (EQ (Maximize t (- result 1) (select t (+ (- result 1) 1))
+         (EQ (Maximize t (- result 1) (access t (+ (- result 1) 1))
          0) |@true|)))))
 (FORALL (i)
 (FORALL (t0)
@@ -529,7 +537,7 @@
          (AND (EQ (sorted_array t0 (+ i 1) (- (array_length t0) 1)) |@true|)
          (AND (EQ (permut t0 t) |@true|)
          (IMPLIES (< (+ i 1) (array_length t0))
-         (EQ (Maximize t0 i (select t0 (+ i 1)) 0) |@true|)))))
+         (EQ (Maximize t0 i (access t0 (+ i 1)) 0) |@true|)))))
 (IMPLIES (< i 0)
 (AND (EQ (sorted_array t0 0 (- (array_length t0) 1)) |@true|)
 (EQ (permut t0 t) |@true|)))))))))))

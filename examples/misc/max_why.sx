@@ -1,6 +1,8 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
+(BG_PUSH (NEQ |@true| |@false|))
+
 (BG_PUSH
  ;; Why axiom lt_int_bool_axiom
  (FORALL (x) (FORALL (y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y)))))
@@ -26,13 +28,21 @@
  (FORALL (x) (FORALL (y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y)))))
 
 (BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x) (FORALL (y) (EQ (ite |@true| x y) x))))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
  (IFF (EQ (sorted_array t i j) |@true|)
  (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (select t k) (select t (+ k 1))))))))))
+ (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
 
 (BG_PUSH
  ;; Why axiom exchange_def
@@ -42,10 +52,10 @@
  (FORALL (j)
  (IFF (EQ (exchange t1 t2 i j) |@true|)
  (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (select t1 i) (select t2 j))
- (AND (EQ (select t2 i) (select t1 j))
+ (AND (EQ (access t1 i) (access t2 j))
+ (AND (EQ (access t2 i) (access t1 j))
  (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (select t1 k) (select t2 k)))))))))))))
+ (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -70,7 +80,7 @@
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
- (EQ (permut t (update (update t i (select t j)) j (select t i))) |@true|)))))
+ (EQ (permut t (update (update t i (access t j)) j (access t i))) |@true|)))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_refl
@@ -114,7 +124,7 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|)))))))
+ (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -123,7 +133,7 @@
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|))))))))
+ (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -178,7 +188,7 @@
 (IMPLIES (EQ y 1)
 (AND (AND (<= 0 y) (<= y l))
 (AND (AND (<= 0 x) (< x l))
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))))))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))))))))
 
 ;; pgm_max_end_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
@@ -190,13 +200,13 @@
 (IMPLIES (AND (AND (<= 0 y) (<= y l))
          (AND (AND (<= 0 x) (< x l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
          (AND (AND (<= 0 x0) (< x0 l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (< y0 l) (AND (<= 0 y0) (< y0 (array_length a))))))))))))))
 
 ;; pgm_max_end_po_3, Why obligation from file "", line 0, characters 0-0:
@@ -209,17 +219,17 @@
 (IMPLIES (AND (AND (<= 0 y) (<= y l))
          (AND (AND (<= 0 x) (< x l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
          (AND (AND (<= 0 x0) (< x0 l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (< y0 l)
 (IMPLIES (AND (<= 0 y0) (< y0 (array_length a)))
 (FORALL (result)
-(IMPLIES (EQ result (select a y0)) (AND (<= 0 x0) (< x0 (array_length a)))))))))))))))))
+(IMPLIES (EQ result (access a y0)) (AND (<= 0 x0) (< x0 (array_length a)))))))))))))))))
 
 ;; pgm_max_end_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
@@ -231,20 +241,20 @@
 (IMPLIES (AND (AND (<= 0 y) (<= y l))
          (AND (AND (<= 0 x) (< x l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
          (AND (AND (<= 0 x0) (< x0 l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (< y0 l)
 (IMPLIES (AND (<= 0 y0) (< y0 (array_length a)))
 (FORALL (result)
-(IMPLIES (EQ result (select a y0))
+(IMPLIES (EQ result (access a y0))
 (IMPLIES (AND (<= 0 x0) (< x0 (array_length a)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select a x0))
+(IMPLIES (EQ result0 (access a x0))
 (IMPLIES (> result result0)
 (FORALL (x1)
 (IMPLIES (EQ x1 y0)
@@ -254,7 +264,7 @@
 (AND (AND (<= 0 y1) (<= y1 l))
 (AND (AND (<= 0 x1) (< x1 l))
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x1))))))
+(IMPLIES (AND (<= 0 k) (< k y1)) (<= (access a k) (access a x1))))))
 (AND (<= 0 (- l y0)) (< (- l y1) (- l y0))))))))))))))))))))))))))
 
 ;; pgm_max_end_po_5, Why obligation from file "", line 0, characters 0-0:
@@ -267,20 +277,20 @@
 (IMPLIES (AND (AND (<= 0 y) (<= y l))
          (AND (AND (<= 0 x) (< x l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
          (AND (AND (<= 0 x0) (< x0 l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (< y0 l)
 (IMPLIES (AND (<= 0 y0) (< y0 (array_length a)))
 (FORALL (result)
-(IMPLIES (EQ result (select a y0))
+(IMPLIES (EQ result (access a y0))
 (IMPLIES (AND (<= 0 x0) (< x0 (array_length a)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select a x0))
+(IMPLIES (EQ result0 (access a x0))
 (IMPLIES (<= result result0)
 (FORALL (y1)
 (IMPLIES (EQ y1 (+ y0 1))
@@ -288,7 +298,7 @@
 (AND (AND (<= 0 y1) (<= y1 l))
 (AND (AND (<= 0 x0) (< x0 l))
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x0))))))
+(IMPLIES (AND (<= 0 k) (< k y1)) (<= (access a k) (access a x0))))))
 (AND (<= 0 (- l y0)) (< (- l y1) (- l y0))))))))))))))))))))))))
 
 ;; pgm_max_end_po_6, Why obligation from file "", line 0, characters 0-0:
@@ -301,29 +311,29 @@
 (IMPLIES (AND (AND (<= 0 y) (<= y l))
          (AND (AND (<= 0 x) (< x l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x))))))
+         (IMPLIES (AND (<= 0 k) (< k y)) (<= (access a k) (access a x))))))
 (FORALL (x0)
 (FORALL (y0)
 (IMPLIES (AND (AND (<= 0 y0) (<= y0 l))
          (AND (AND (<= 0 x0) (< x0 l))
          (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))
+         (IMPLIES (AND (<= 0 k) (< k y0)) (<= (access a k) (access a x0))))))
 (IMPLIES (>= y0 l)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (a0)
 (IMPLIES (AND (EQ (array_length a0) l)
-         (AND (EQ (select a0 x0) (select a (- l 1)))
-         (AND (EQ (select a0 (- l 1)) (select a x0))
+         (AND (EQ (access a0 x0) (access a (- l 1)))
+         (AND (EQ (access a0 (- l 1)) (access a x0))
          (FORALL (k)
          (IMPLIES (AND (<= 0 k) (< k l))
          (IMPLIES (NEQ k x0)
-         (IMPLIES (NEQ k (- l 1)) (EQ (select a0 k) (select a k)))))))))
+         (IMPLIES (NEQ k (- l 1)) (EQ (access a0 k) (access a k)))))))))
 (AND
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k (- l 1)))
-(IMPLIES (NEQ k x0) (EQ (select a0 k) (select a k)))))
-(AND (EQ (select a0 x0) (select a (- l 1)))
-(AND (EQ (select a0 (- l 1)) (select a x0))
+(IMPLIES (NEQ k x0) (EQ (access a0 k) (access a k)))))
+(AND (EQ (access a0 x0) (access a (- l 1)))
+(AND (EQ (access a0 (- l 1)) (access a x0))
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (- l 1))) (<= (select a0 k) (select a0 (- l 1))))))))))))))))))))))
+(IMPLIES (AND (<= 0 k) (< k (- l 1))) (<= (access a0 k) (access a0 (- l 1))))))))))))))))))))))
 

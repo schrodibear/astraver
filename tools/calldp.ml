@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.9 2006-03-22 11:31:53 dogguy Exp $ i*)
+(*i $Id: calldp.ml,v 1.10 2006-05-05 14:42:56 filliatr Exp $ i*)
 
 open Printf
 
@@ -102,7 +102,7 @@ let harvey ?(timeout=10) ?(eclauses=2000) ~filename:f () =
       let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
       if Sys.file_exists fi then begin
 	let out = 
-	  Sys.command (sprintf "timeout %d rv -e\"-T %d\" %s > out 2>&1" 
+	  Sys.command (sprintf "timeout %d rv -d -e\"-T %d\" %s > out 2>&1" 
 			 timeout eclauses fi) 
 	in
 	if out <> 0 then 

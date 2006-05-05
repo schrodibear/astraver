@@ -37,6 +37,7 @@ c-pvs:
 
 harvey:
 	../bin/why.opt --harvey -d -V test.mlw
+	rm -f *.baf
 	../bin/dp.opt test_why.rv
 
 simplify:

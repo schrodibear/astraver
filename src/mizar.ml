@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.34 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.35 2006-05-05 14:42:55 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -151,9 +151,6 @@ let rec print_term fmt t =
 	fprintf fmt "(@[-%a@])" print3 a
     | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "(@[%a@])" print0 t
-    | Tapp (id, [a; b; c], _) when id == if_then_else -> 
-	fprintf fmt "@[if-then-else(@[%a,@ %a,@ %a@])@]" 
-	print0 a print0 b print0 c
     (* arrays *)
     | Tapp (id, [a; b], _) when id == access ->
 	fprintf fmt "(@[%a.%a@])" print0 a print0 b

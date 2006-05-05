@@ -1,6 +1,8 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
+(BG_PUSH (NEQ |@true| |@false|))
+
 (BG_PUSH
  ;; Why axiom lt_int_bool_axiom
  (FORALL (x) (FORALL (y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y)))))
@@ -26,13 +28,21 @@
  (FORALL (x) (FORALL (y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y)))))
 
 (BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x) (FORALL (y) (EQ (ite |@true| x y) x))))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
  (IFF (EQ (sorted_array t i j) |@true|)
  (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (select t k) (select t (+ k 1))))))))))
+ (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
 
 (BG_PUSH
  ;; Why axiom exchange_def
@@ -42,10 +52,10 @@
  (FORALL (j)
  (IFF (EQ (exchange t1 t2 i j) |@true|)
  (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (select t1 i) (select t2 j))
- (AND (EQ (select t2 i) (select t1 j))
+ (AND (EQ (access t1 i) (access t2 j))
+ (AND (EQ (access t2 i) (access t1 j))
  (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (select t1 k) (select t2 k)))))))))))))
+ (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -70,7 +80,7 @@
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
- (EQ (permut t (update (update t i (select t j)) j (select t i))) |@true|)))))
+ (EQ (permut t (update (update t i (access t j)) j (access t i))) |@true|)))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_refl
@@ -114,7 +124,7 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|)))))))
+ (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -123,7 +133,7 @@
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|))))))))
+ (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -326,7 +336,7 @@
 (IMPLIES (EQ t1 (update t0 1 1))
 (AND (AND (<= 2 2) (<= 2 (+ n 1)))
 (AND (EQ (array_length t1) (array_length t))
-(FORALL (i) (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))))))))))))
+(FORALL (i) (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))))))))))))
 
 ;; fib4_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n)
@@ -342,13 +352,13 @@
 (IMPLIES (AND (AND (<= 2 2) (<= 2 (+ n 1)))
          (AND (EQ (array_length t1) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))
 (FORALL (k)
 (FORALL (t2)
 (IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (select t2 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (<= k n) (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2))))))))))))))))))
 
 ;; fib4_po_6, Why obligation from file "", line 0, characters 0-0:
@@ -365,17 +375,17 @@
 (IMPLIES (AND (AND (<= 2 2) (<= 2 (+ n 1)))
          (AND (EQ (array_length t1) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))
 (FORALL (k)
 (FORALL (t2)
 (IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (select t2 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (<= k n)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
 (FORALL (result)
-(IMPLIES (EQ result (select t2 (- k 1)))
+(IMPLIES (EQ result (access t2 (- k 1)))
 (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))))))))))))))))))))
 
 ;; fib4_po_7, Why obligation from file "", line 0, characters 0-0:
@@ -392,20 +402,20 @@
 (IMPLIES (AND (AND (<= 2 2) (<= 2 (+ n 1)))
          (AND (EQ (array_length t1) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))
 (FORALL (k)
 (FORALL (t2)
 (IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (select t2 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (<= k n)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
 (FORALL (result)
-(IMPLIES (EQ result (select t2 (- k 1)))
+(IMPLIES (EQ result (access t2 (- k 1)))
 (IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t2 (- k 2)))
+(IMPLIES (EQ result0 (access t2 (- k 2)))
 (AND (<= 0 k) (< k (array_length t2))))))))))))))))))))))))
 
 ;; fib4_po_8, Why obligation from file "", line 0, characters 0-0:
@@ -422,20 +432,20 @@
 (IMPLIES (AND (AND (<= 2 2) (<= 2 (+ n 1)))
          (AND (EQ (array_length t1) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))
 (FORALL (k)
 (FORALL (t2)
 (IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (select t2 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (<= k n)
 (IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
 (FORALL (result)
-(IMPLIES (EQ result (select t2 (- k 1)))
+(IMPLIES (EQ result (access t2 (- k 1)))
 (IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t2 (- k 2)))
+(IMPLIES (EQ result0 (access t2 (- k 2)))
 (IMPLIES (AND (<= 0 k) (< k (array_length t2)))
 (FORALL (t3)
 (IMPLIES (EQ t3 (update t2 k (+ result result0)))
@@ -444,7 +454,7 @@
 (AND
 (AND (AND (<= 2 k0) (<= k0 (+ n 1)))
 (AND (EQ (array_length t3) (array_length t))
-(FORALL (i) (IMPLIES (AND (<= 0 i) (< i k0)) (EQ (select t3 i) (F i))))))
+(FORALL (i) (IMPLIES (AND (<= 0 i) (< i k0)) (EQ (access t3 i) (F i))))))
 (AND (<= 0 (- (+ n 1) k)) (< (- (+ n 1) k0) (- (+ n 1) k))))))))))))))))))))))))))))))
 
 ;; fib4_po_9, Why obligation from file "", line 0, characters 0-0:
@@ -461,13 +471,13 @@
 (IMPLIES (AND (AND (<= 2 2) (<= 2 (+ n 1)))
          (AND (EQ (array_length t1) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))
 (FORALL (k)
 (FORALL (t2)
 (IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (select t2 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (> k n) (AND (<= 0 n) (< n (array_length t2))))))))))))))))))
 
 ;; fib4_po_10, Why obligation from file "", line 0, characters 0-0:
@@ -484,14 +494,14 @@
 (IMPLIES (AND (AND (<= 2 2) (<= 2 (+ n 1)))
          (AND (EQ (array_length t1) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (select t1 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))
 (FORALL (k)
 (FORALL (t2)
 (IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (select t2 i) (F i))))))
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
 (IMPLIES (> k n)
 (IMPLIES (AND (<= 0 n) (< n (array_length t2)))
-(FORALL (result) (IMPLIES (EQ result (select t2 n)) (EQ result (F n))))))))))))))))))))
+(FORALL (result) (IMPLIES (EQ result (access t2 n)) (EQ result (F n))))))))))))))))))))
 

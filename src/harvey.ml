@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.37 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.38 2006-05-05 14:42:55 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -89,10 +89,15 @@ let is_harvey_ident s =
     | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_' -> true 
     | _ -> false
   in
-  try 
-    String.iter (fun c -> if not (is_harvey_char c) then raise Exit) s; true
-  with Exit ->
-    false
+  let is_harvey_first_char = function
+    | 'a'..'z' | 'A'..'Z' | '0'..'9' -> true 
+    | _ -> false
+  in
+  String.length s > 0 && is_harvey_first_char s.[0] &&
+  (try 
+     String.iter (fun c -> if not (is_harvey_char c) then raise Exit) s; true
+   with Exit ->
+     false)
 
 let renamings = Hashtbl.create 17
 let fresh_name = 
@@ -129,7 +134,7 @@ let rec print_term fmt = function
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
-      fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
+      fprintf fmt "@[(why__ite@ %a@ %a@ %a)@]" print_term a print_term b
 	print_term c
   | Tapp (id, [a], _) when id == t_neg_int ->
       fprintf fmt "@[(- 0 %a)@]" print_term a

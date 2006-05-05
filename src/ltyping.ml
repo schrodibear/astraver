@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.45 2006-03-23 10:41:00 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.46 2006-05-05 14:42:55 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -203,8 +203,9 @@ and desc_predicate loc lab env = function
   | PPprefix (PPnot, a) ->
       Pnot (predicate lab env a)
   | PPif (a, b, c) ->
-      (match term lab env a with
-	 | ta, PTbool -> 
+      let ta,tya = term lab env a in
+      (match normalize_pure_type tya with
+	 | PTbool -> 
 	     Pif (ta, predicate lab env b, predicate lab env c)
 	 | _ -> 
 	     raise_located a.pp_loc ShouldBeBoolean)
@@ -249,10 +250,8 @@ and term lab env t =
 and desc_term loc lab env = function
   | PPvar x | PPapp (x, []) ->
       type_tvar loc lab env x
-  | PPapp (id, [a; b; c]) when id == if_then_else ->
-      type_if lab env a b c
   | PPif (a, b, c) ->
-      type_if lab env a b c
+      term lab env { pp_loc = loc; pp_desc = PPapp (if_then_else, [a;b;c]) }
   | PPapp (x, tl) ->
       let tl = List.map (term lab env) tl in
       let ty, i = type_tapp loc env x tl in

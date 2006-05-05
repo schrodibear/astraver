@@ -1,6 +1,8 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
+(BG_PUSH (NEQ |@true| |@false|))
+
 (BG_PUSH
  ;; Why axiom lt_int_bool_axiom
  (FORALL (x) (FORALL (y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y)))))
@@ -26,13 +28,21 @@
  (FORALL (x) (FORALL (y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y)))))
 
 (BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x) (FORALL (y) (EQ (ite |@true| x y) x))))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
  (IFF (EQ (sorted_array t i j) |@true|)
  (FORALL (k)
- (IMPLIES (AND (<= i k) (< k j)) (<= (select t k) (select t (+ k 1))))))))))
+ (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))))))
 
 (BG_PUSH
  ;; Why axiom exchange_def
@@ -42,10 +52,10 @@
  (FORALL (j)
  (IFF (EQ (exchange t1 t2 i j) |@true|)
  (AND (EQ (array_length t1) (array_length t2))
- (AND (EQ (select t1 i) (select t2 j))
- (AND (EQ (select t2 i) (select t1 j))
+ (AND (EQ (access t1 i) (access t2 j))
+ (AND (EQ (access t2 i) (access t1 j))
  (FORALL (k)
- (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (select t1 k) (select t2 k)))))))))))))
+ (IMPLIES (AND (NEQ k i) (NEQ k j)) (EQ (access t1 k) (access t2 k)))))))))))))
 
 (BG_PUSH
  ;; Why axiom permut_refl
@@ -70,7 +80,7 @@
  (FORALL (t)
  (FORALL (i)
  (FORALL (j)
- (EQ (permut t (update (update t i (select t j)) j (select t i))) |@true|)))))
+ (EQ (permut t (update (update t i (access t j)) j (access t i))) |@true|)))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_refl
@@ -114,7 +124,7 @@
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|)))))))
+ (update (update t i (access t j)) j (access t i))) |@true|)))))))
 
  (FORALL (g)
  (FORALL (d)
@@ -123,7 +133,7 @@
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
  (FORALL (t)
  (EQ (sub_permut g d t
- (update (update t i (select t j)) j (select t i))) |@true|))))))))
+ (update (update t i (access t j)) j (access t i))) |@true|))))))))
 
 (BG_PUSH
  ;; Why axiom sub_permut_exchange_2
@@ -172,15 +182,15 @@
 ;; search1_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (AND (<= 0 0)
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0)))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0)))))
 
 ;; search1_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (< i result) (AND (<= 0 i) (< i (array_length t))))))))))
@@ -188,65 +198,65 @@
 ;; search1_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (< i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
-(IMPLIES (EQ result0 0) (EQ (select t i) 0))))))))))))
+(IMPLIES (EQ result0 (access t i))
+(IMPLIES (EQ result0 0) (EQ (access t i) 0))))))))))))
 
 ;; search1_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (< i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
+(IMPLIES (EQ result0 (access t i))
 (IMPLIES (NEQ result0 0)
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
 (AND
 (AND (<= 0 i0)
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (select t k) 0))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (access t k) 0))))
 (AND (<= 0 (- (array_length t) i))
 (< (- (array_length t) i0) (- (array_length t) i)))))))))))))))))
 
 ;; search1_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (>= i result)
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0))))))))))
+(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (access t k) 0))))))))))
 
 ;; search2_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (AND (<= 0 0)
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0)))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0)))))
 
 ;; search2_po_2, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (< i result) (AND (<= 0 i) (< i (array_length t))))))))))
@@ -254,52 +264,52 @@
 ;; search2_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (< i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
-(IMPLIES (EQ result0 0) (EQ (select t i) 0))))))))))))
+(IMPLIES (EQ result0 (access t i))
+(IMPLIES (EQ result0 0) (EQ (access t i) 0))))))))))))
 
 ;; search2_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (< i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t i))
+(IMPLIES (EQ result0 (access t i))
 (IMPLIES (NEQ result0 0)
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
 (AND
 (AND (<= 0 i0)
-(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (select t k) 0))))
+(FORALL (k) (IMPLIES (AND (<= 0 k) (< k i0)) (NEQ (access t k) 0))))
 (AND (<= 0 (- (array_length t) i))
 (< (- (array_length t) i0) (- (array_length t) i)))))))))))))))))
 
 ;; search2_po_5, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
 (IMPLIES (AND (<= 0 0)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k 0)) (NEQ (access t k) 0))))
 (FORALL (i)
 (IMPLIES (AND (<= 0 i)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (access t k) 0))))
 (FORALL (result)
 (IMPLIES (EQ result (array_length t))
 (IMPLIES (>= i result)
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0))))))))))
+(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (access t k) 0))))))))))
 
 ;; search3_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -310,9 +320,9 @@
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
 (IMPLIES (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0)))
+         (IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (access t k) 0)))
 (FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0)))))))
+(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (access t k) 0)))))))
 
 ;; search3_po_3, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -324,7 +334,7 @@
 (IMPLIES (EQ result (array_length t0))
 (IMPLIES (EQ i result)
 (FORALL (k)
-(IMPLIES (AND (<= i k) (< k (array_length t0))) (NEQ (select t0 k) 0)))))))))))
+(IMPLIES (AND (<= i k) (< k (array_length t0))) (NEQ (access t0 k) 0)))))))))))
 
 ;; search3_po_4, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -347,8 +357,8 @@
 (IMPLIES (NEQ i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
-(IMPLIES (EQ result0 0) (EQ (select t0 i) 0)))))))))))))
+(IMPLIES (EQ result0 (access t0 i))
+(IMPLIES (EQ result0 0) (EQ (access t0 i) 0)))))))))))))
 
 ;; search3_po_6, Why obligation from file "", line 0, characters 0-0:
 (FORALL (t)
@@ -361,7 +371,7 @@
 (IMPLIES (NEQ i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (NEQ result0 0)
 (AND (<= 0 (- (array_length t0) i))
 (< (- (array_length t0) (+ i 1)) (- (array_length t0) i)))))))))))))))
@@ -377,7 +387,7 @@
 (IMPLIES (NEQ i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (NEQ result0 0)
 (IMPLIES (AND (<= 0 (- (array_length t0) i))
          (< (- (array_length t0) (+ i 1)) (- (array_length t0) i)))
@@ -394,14 +404,14 @@
 (IMPLIES (NEQ i result)
 (IMPLIES (AND (<= 0 i) (< i (array_length t0)))
 (FORALL (result0)
-(IMPLIES (EQ result0 (select t0 i))
+(IMPLIES (EQ result0 (access t0 i))
 (IMPLIES (NEQ result0 0)
 (IMPLIES (AND (<= 0 (- (array_length t0) i))
          (< (- (array_length t0) (+ i 1)) (- (array_length t0) i)))
 (IMPLIES (AND (<= 0 (+ i 1)) (<= (+ i 1) (array_length t0)))
 (IMPLIES (FORALL (k)
          (IMPLIES (AND (<= (+ i 1) k) (< k (array_length t0)))
-         (NEQ (select t0 k) 0)))
+         (NEQ (access t0 k) 0)))
 (FORALL (k)
-(IMPLIES (AND (<= i k) (< k (array_length t0))) (NEQ (select t0 k) 0))))))))))))))))))
+(IMPLIES (AND (<= i k) (< k (array_length t0))) (NEQ (access t0 k) 0))))))))))))))))))
 

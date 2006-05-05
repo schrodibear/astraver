@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.45 2006-04-06 14:26:45 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.46 2006-05-05 14:42:56 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -119,16 +119,13 @@ let rec print_term fmt = function
 	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
-  | Tapp (id, [a; b; c], _) when id == if_then_else ->
-      assert false; (* SUPPORTED IN SIMPLIFY? *)
-      (*
-      fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
-	print_term c *)
+(**
   | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "@[(select@ %a@ %a)@]" print_term a print_term b
   | Tapp (id, [a; b; c], _) when id == store ->
       fprintf fmt "@[(store@ %a@ %a@ %a)@]" 
 	print_term a print_term b print_term c
+**)
   | Tapp (id, [t], _) when id == t_neg_int ->
       fprintf fmt "@[(- 0 %a)@]" print_term t
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
@@ -344,6 +341,7 @@ let output_file fwe =
     ~before:(fun fmt -> ())
     ~sep
     ~after:(fun fmt -> 
+	      fprintf fmt "(BG_PUSH (NEQ |@@true| |@@false|))@\n@\n";
 	      if simplify_typing then logic_typing fmt; 
 	      Queue.iter (print_elem fmt) queue)
 

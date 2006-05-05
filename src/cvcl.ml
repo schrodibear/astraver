@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.40 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.41 2006-05-05 14:42:55 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -120,14 +120,13 @@ let rec print_term fmt = function
       fprintf fmt "@[%a(%a)@]" Ident.print id print_term a
   | Tapp (id, [a], _) when id == t_real_of_int ->
       fprintf fmt "@[%a@]" print_term a
-  | Tapp (id, [a; b; c], _) when id == if_then_else ->
-      fprintf fmt "@[(IF %a THEN@ %a ELSE@ %a)@]" 
-	print_term a print_term b print_term c
+(**
   | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "@[%a[%a]@]" print_term a print_term b
   | Tapp (id, [a; b; c], _) when id == store ->
       fprintf fmt "@[(%a WITH@ [%a] := %a)@]" 
 	print_term a print_term b print_term c
+**)
   | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
       fprintf fmt "@[(-%a)@]" print_term t
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
