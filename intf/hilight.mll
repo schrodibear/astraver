@@ -39,7 +39,7 @@
       [ "typedef" ; "for"; "if"; "else"; "while"; "and"; "do"; "not"; "real"; 
 	"var"; "begin"; "or"; "to"; "end"; "int"; "true"; "false";
 	"type"; "function"; "of"; "then"; "break"; "void"; "struct";
-	"return"; "#include"];
+	"return"; "include"];
     fun tbuf s -> 
       if Hashtbl.mem h s then
 	insert_text tbuf "keyword" s
