@@ -62,6 +62,8 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
+(BG_PUSH (NEQ |@true| |@false|))
+
 (BG_PUSH
  ;; Why axiom lt_int_bool_axiom
  (FORALL (x) (FORALL (y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y)))))

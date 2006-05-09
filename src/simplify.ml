@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.46 2006-05-05 14:42:56 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.47 2006-05-09 12:13:25 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -87,6 +87,7 @@ let is_simplify_ident s =
     | _ -> false
   in
   try 
+    if String.length s >= 2 && s.[0] = '_' && s.[1] = '_' then raise Exit;
     String.iter (fun c -> if not (is_simplify_char c) then raise Exit) s; true
   with Exit ->
     false
