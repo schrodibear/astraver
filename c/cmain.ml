@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.63 2006-05-15 14:06:32 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.64 2006-05-15 14:08:41 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -174,15 +174,13 @@ let rec explain_exception fmt = function
 
 (* for debugging *)
 
-
-let () = main (); exit 1
-
 (*
+let () = main (); exit 1
+*)
+
 let () =
   try
     main ()
   with e ->
     eprintf "%a@." explain_exception e;
     exit 1
-
-*)

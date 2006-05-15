@@ -650,9 +650,17 @@ let rec statement twf st =
 	statement twf st 
 	
 
+module Hzone = Hashtbl.Make(struct
+			      type t = zone
+			      let equal z1 z2 = z1.number == z2.number
+			      let hash z = z.number 
+			    end)
+
 let rec add_zone ty l =
+  (*Format.eprintf "add_zone ty=%s@." (snd (output_why_type ty));*)
   match ty with
     | Pointer z -> 
+	if List.mem z l then l else
 	begin match z.repr with 
 	  | None ->
 	      begin 
