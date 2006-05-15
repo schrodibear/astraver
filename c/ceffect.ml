@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.119 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.120 2006-05-15 13:36:29 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -465,8 +465,6 @@ let rec expr e = match e.nexpr_node with
   | NEcall {ncall_fun = e; ncall_args = el; ncall_zones_assoc = assoc} ->
       let ef = match e.nexpr_node with
 	| NEvar (Fun_info f) ->
-	    eprintf "call to %s : " f.fun_name; 
-	      List.iter (fun (z1,z2) -> eprintf "zone = %s -> %s  @." z1.name z2.name) assoc; 
 	    let reads = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
