@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.178 2006-04-07 08:57:52 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.179 2006-05-15 13:25:10 hubert Exp $ i*)
 
 
 open Format
@@ -170,7 +170,7 @@ let rec interp_term label old_label t =
 	interp_term (Some l) old_label t
     | NTif (_, _, _) -> 
 	unsupported t.nterm_loc "logic if-then-else"
-    | NTarrow (t,tw,z, field) -> 
+    | NTarrow (t,z, field) -> 
 	let te = f t in
 	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t) 
 	in
@@ -230,7 +230,7 @@ and interp_term_address  label old_label e = match e.nterm_node with
       end
   | NTunop (Ustar, e1) -> 
       interp_term  label old_label e1
-  | NTarrow (e1,tw,z, f) ->
+  | NTarrow (e1,z, f) ->
       begin match e.nterm_type.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_term  label old_label e1
@@ -532,7 +532,7 @@ let rec interp_expr e =
 	If(interp_boolean_expr e1, interp_expr e2, interp_expr e3)
     | NEstring_literal s -> 
 	unsupported e.nexpr_loc "string literal"
-    | NEarrow (e,tw,z,s) ->
+    | NEarrow (e,z,s) ->
 	let te = interp_expr e in
 	let var = zoned_name s.var_unique_name (Cnorm.type_why e) in
 	let valid = 
@@ -656,7 +656,7 @@ and interp_lvalue e =
     | NEvar (Var_info v) -> LocalRef(v)
     | NEvar (Fun_info v) -> assert false
     | NEunary(Ustar,e1) -> assert false
-    | NEarrow (e1,_,_,f) ->
+    | NEarrow (e1,_,f) ->
 	let valid =
 	  match e1.nexpr_type.Ctypes.ctype_node with
 	    | Tpointer(v,_) | Tarray(v,_,_) -> v
@@ -678,7 +678,7 @@ and interp_address e = match e.nexpr_node with
        end
   | NEvar (Fun_info v) -> unsupported e.nexpr_loc "& operator on functions"
   | NEunary (Ustar, _) -> assert false
-  | NEarrow (e1,_,_, f) ->
+  | NEarrow (e1,_, f) ->
       begin match e.nexpr_type.Ctypes.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_expr e1
@@ -795,7 +795,7 @@ let collect_locations before acc loc =
   (* term_loc t interprets t either as Term t' with t' a Why term of type 
      pointer, or as Pset s with s a Why term of type pset *)
   let rec term_or_pset t = match t.nterm_node with
-    | NTarrow (e,_,_, f) ->
+    | NTarrow (e,_, f) ->
 	let m = 
 	  interp_var (Some before) 
 	    (zoned_name f.var_unique_name (Cnorm.type_why_for_term e)) in
@@ -831,7 +831,7 @@ let collect_locations before acc loc =
     | Term t -> LApp ("pset_singleton", [t])
   in
   let var,iloc = match loc.nterm_node with
-    | NTarrow(e,_,_,f) ->
+    | NTarrow(e,_,f) ->
 	zoned_name f.var_unique_name (Cnorm.type_why_for_term e), Some (pset e)
     | NTvar v ->
 	v.var_unique_name, None
@@ -1186,7 +1186,8 @@ let make_switch_condition_default tmp l used_cases=
 
 let in_struct v1 v = 
   let zone = Cnorm.find_zone v1 in
-  { nexpr_node = NEarrow (v1,v.var_why_type,zone,  v); 
+  let () = Cnorm.type_why_new_zone zone v in
+  { nexpr_node = NEarrow (v1,zone,  v); 
     nexpr_loc = v1.nexpr_loc;
     nexpr_type = v.var_type }
 

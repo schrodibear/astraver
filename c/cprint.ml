@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.22 2006-04-04 14:00:55 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.23 2006-05-15 13:25:10 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -63,7 +63,7 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "*%a" nterm_p t*)
   | NTbinop (t1, op, t2) ->
       fprintf fmt "%a %s %a" nterm_p t1 (term_binop op) nterm_p t2
-  | NTarrow (t,_,_, vi) ->
+  | NTarrow (t,_, vi) ->
       fprintf fmt "%a->%s" nterm_p t vi.var_unique_name
   | NTif (t1, t2, t3) ->
       fprintf fmt "%a ? %a : %a" nterm_p t1 nterm_p t2 nterm_p t3
@@ -252,7 +252,7 @@ let rec nexpr fmt e = match e.nexpr_node with
       fprintf fmt "%s" x.var_unique_name
   | NEvar (Fun_info x) ->
       fprintf fmt "%s" x.fun_name
-  | NEarrow (e,_,_,x) ->
+  | NEarrow (e,_,x) ->
       fprintf fmt "%a->%s" nexpr_p e x.var_unique_name
 (*  | NEstar e ->
       fprintf fmt "*%a" nexpr_p e*)

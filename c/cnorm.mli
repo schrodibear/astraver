@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.10 2006-02-01 09:54:27 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.11 2006-05-15 13:25:10 hubert Exp $ i*)
 
 open Cast
 
@@ -34,6 +34,11 @@ val file : tdecl located list -> ndecl located list
 val make_field : Ctypes.ctype -> Info.var_info
 
 val declare_arrow_var : Info.var_info -> Info.var_info
+
+val type_why_table : 
+  (Info.zone,(Info.var_info, Info.why_type) Hashtbl.t) Hashtbl.t  
+
+val type_why_new_zone : Info.zone -> Info.var_info -> unit
 
 val find_zone : nexpr -> Info.zone
 

@@ -17,7 +17,8 @@ let indirection loc ty t =
   let info = make_field ty in
   let info = declare_arrow_var info  in
   let zone = find_zone_for_term t in
-  { nterm_node = NTarrow (t, info.var_why_type, zone, info); 
+  let () = type_why_new_zone zone info in
+  { nterm_node = NTarrow (t, zone, info); 
     nterm_loc = loc; 	   
     nterm_type = ty;}
 
@@ -276,7 +277,8 @@ let separation_first mark diag v1 v2 =
     | Tarray (_,ty1, Some s1),  Tarray(_,ty2, Some s2) ->
 	let make_sub_term p ty v = 
 	  let zone = find_zone_for_term p in
-	  noattr_term ty (NTarrow (p,v.var_why_type, zone,v)) in
+	  let () = type_why_new_zone zone v in
+	  noattr_term ty (NTarrow (p, zone,v)) in
 	if mark then
 	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in

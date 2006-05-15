@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.56 2006-04-04 14:00:55 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.57 2006-05-15 13:25:10 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -65,29 +65,12 @@ let var_is_referenced_or_struct_or_union v =
 
 open Cast
 
-let ne_arrow loc valid ty e tw z f =
-  NEarrow (    {nexpr_node = e;
-		nexpr_type = noattr (Tpointer (valid,ty));
-		nexpr_loc = loc},tw,z,f)
 
 let noattr2 loc ty e =
   { nexpr_node = e;
     nexpr_type = ty;
     nexpr_loc  = loc
   }
-(*
-let ne_arrow e f =
-  match e.nexpr_node with
-    | NEstar(x) -> NEarrow (x, f)
-    | _ -> NEarrow (e, f)
-
-
-let ne_star loc valid ty e =
-  NEstar
-    {nexpr_node = e;
-     nexpr_type = noattr (Tpointer (valid,ty));
-     nexpr_loc = loc}
-*)
 
 let arrow_vars = Hashtbl.create 97
   
@@ -133,6 +116,8 @@ let rename_zone assoc ty =
 	end
     | _ -> ty
 
+(* table qui a tout couple zone champ associe le type why des elements pointers par p->champ ou p est un pointeur sur zone*)
+let type_why_table = Hashtbl.create 97 
 
 let rec type_why e =
   match e.nexpr_node with
@@ -141,7 +126,16 @@ let rec type_why e =
 	  | Var_info v -> v.var_why_type
 	  | Fun_info f -> f.type_why_fun
 	end
-    | NEarrow (_,ty,_,_) -> ty
+    | NEarrow (_,z,f) -> 
+	begin
+	  try
+	    let z = repr z in
+	    let t = Hashtbl.find type_why_table z  in
+	    Hashtbl.find t f
+	  with Not_found -> 
+	    Format.eprintf "no  why type for %a@\n" Cprint.nexpr e;
+	    assert false
+	end
     | NEnop -> Unit
     | NEconstant (IntConstant _) -> Info.Int    
     | NEconstant (FloatConstant _) -> Info.Float
@@ -185,7 +179,14 @@ let rec type_why_for_term t =
 	    | ty,_ -> ty
 	end
     | NTbinop (t1,_,_) -> type_why_for_term t1
-    | NTarrow (t,ty,z,v) -> ty
+    | NTarrow (_,z,f) ->
+	begin
+	  let z = repr z in
+	  try
+	    let t = Hashtbl.find type_why_table z  in
+	    Hashtbl.find t f
+	  with Not_found -> assert false
+	end
     | NTif (_,_,t) -> type_why_for_term t
     | NTold t -> type_why_for_term t
     | NTat (t,_) -> type_why_for_term t
@@ -207,6 +208,38 @@ let find_zone_for_term e =
 	Format.eprintf "type of term %a : %s@." Cprint.nterm e n; 
 	assert false 
 
+let type_why_new_zone zone field_info =
+  let t =
+    try
+      Hashtbl.find type_why_table zone 
+    with Not_found ->
+      let t = Hashtbl.create 5 in
+      Hashtbl.add type_why_table zone t; t
+  in
+  try
+    let _ = Hashtbl.find t field_info in
+    ()
+  with Not_found ->
+    let tw =  
+      match field_info.var_why_type with 
+	| Pointer z -> 
+	    Pointer (make_zone ~name:z.name zone.zone_is_var)
+	| tw -> tw
+    in
+(*    let l,n = output_why_type tw in
+    Format.eprintf "adding in type_why_table :(%s,%s) -> %s@." 
+      zone.name field_info.var_name n;*)
+    Hashtbl.add t field_info tw 
+
+	
+
+let ne_arrow loc valid ty e z f =
+  let () = type_why_new_zone z f in 
+  NEarrow (    {nexpr_node = e;
+		nexpr_type = noattr (Tpointer (valid,ty));
+		nexpr_loc = loc},z,f)
+
+	
 	  
 let rec expr t =
   let ty = t.texpr_type in
@@ -232,7 +265,7 @@ and expr_node loc ty t =
 		       | Pointer z -> z
 		       | _ -> assert false 
 		   in
-		  ne_arrow loc true ty t' info.var_why_type zone info)
+		   ne_arrow loc true ty t' zone info)
 		else t'
 	    | Fun_info _  -> NEvar env_info)
       | TEdot (lvalue,var_info) -> 
@@ -242,22 +275,24 @@ and expr_node loc ty t =
 	      | _ -> expr lvalue
 	  in
 	  let zone = find_zone t' in
-	  let t' = NEarrow (t', var_info.var_why_type, zone, var_info) in
+	  let () = type_why_new_zone zone var_info in 
+	  let t' = NEarrow (t', zone, var_info) in
 	  if var_requires_indirection var_info then
 	    let info = make_field ty in
 	    let info = declare_arrow_var info in
 	    let zone = find_zone (noattr2 loc ty t') in
-	    ne_arrow loc true ty t' info.var_why_type zone info
+	    ne_arrow loc true ty t' zone info
 	  else t'
       | TEarrow (lvalue,var_info) ->
 	  let expr = expr lvalue in
 	  let zone = find_zone expr in
-	  let t' = NEarrow (expr, var_info.var_why_type, zone, var_info) in
+	  let () = type_why_new_zone zone var_info in
+	  let t' = NEarrow (expr, zone, var_info) in
 	  if var_requires_indirection var_info then
 	    let info = make_field ty in
 	    let info = declare_arrow_var info in
 	    let zone = find_zone (noattr2 loc ty t') in
-	    ne_arrow loc true ty t' info.var_why_type zone info
+	    ne_arrow loc true ty t' zone info
 	  else t'
       | TEarrget (lvalue,texpr) -> 
 	  (* t[e] -> *(t+e) *)
@@ -279,13 +314,14 @@ and expr_node loc ty t =
 	  let zone = find_zone nexpr in
 	  let ty = { ty with Ctypes.ctype_node = Tpointer (is_valid,ty); 
 		       ctype_ghost = lvalue.texpr_type.ctype_ghost } in
+	  let () = type_why_new_zone zone info in
 	  NEarrow ( 
 	    {
 	      nexpr_node = NEbinary(nexpr, Badd_pointer_int, expr texpr);
 	      nexpr_type = ty ;
 	      nexpr_loc = loc;
 	    },
-	    info.var_why_type, zone, info)
+	    zone, info)
       | TEseq (texpr1,texpr2) -> NEseq ((expr texpr1) , (expr texpr2))
       | TEassign (lvalue ,texpr) -> 
 	  NEassign ((expr lvalue) , (expr texpr))
@@ -296,7 +332,8 @@ and expr_node loc ty t =
 	  let info = declare_arrow_var info in
 	  let expr = expr texpr in
 	  let zone = find_zone expr in
-	  NEarrow (expr, info.var_why_type, zone, info)
+	  let () = type_why_new_zone zone info in
+	  NEarrow (expr, zone, info)
       | TEunary (Uamp ,texpr) ->
 	  (match texpr.texpr_node with
 	     | TEvar v -> NEvar v
@@ -308,11 +345,13 @@ and expr_node loc ty t =
 		      | _ -> expr lvalue
 		  in
 		  let zone = find_zone t' in
-		  NEarrow (t', var_info.var_why_type, zone, var_info)
+		  let () = type_why_new_zone zone var_info in
+		  NEarrow (t', zone, var_info)
 	     | TEarrow(lvalue,var_info) ->
 		 let t' = expr lvalue in
 		 let zone = find_zone t' in
-		 NEarrow (t', var_info.var_why_type, zone, var_info)
+		 let () = type_why_new_zone zone var_info in
+		 NEarrow (t', zone, var_info)
 	     | TEarrget (lvalue,t) ->
 		 NEbinary(expr lvalue, Badd_pointer_int, expr t)
 	     | _ -> 
@@ -342,10 +381,11 @@ and expr_node loc ty t =
       | TEmalloc (tctype, texpr) ->
 	  NEmalloc (tctype, expr texpr)
 
-let nt_arrow loc valid ty e tw z f =
+let nt_arrow loc valid ty e z f =
+  let () = type_why_new_zone z f in
   NTarrow ({nterm_node = e;
 	    nterm_type = ty;
-	    nterm_loc = loc},tw,z,f)
+	    nterm_loc = loc},z,f)
       
 
 let rec term_node loc t ty =
@@ -361,7 +401,7 @@ let rec term_node loc t ty =
 	    | Pointer z -> z
 	    | _ -> assert false 
 	in
-	nt_arrow loc true var_info.var_type t' info.var_why_type zone info
+	nt_arrow loc true var_info.var_type t' zone info
       else
 	t'
   | Tapp (logic_info ,l) -> NTapp  {napp_pred = logic_info; 
@@ -374,7 +414,8 @@ let rec term_node loc t ty =
 	| Tarrow(t,f) -> 
 	    let t = term t in
 	    let zone = find_zone_for_term t in
-	    NTarrow (t, f.var_why_type, zone,  f) 
+	    let () = type_why_new_zone zone f in
+	    NTarrow (t, zone,  f) 
 	| Tdot(t,f) ->  
 	    let t =
 	      match t.term_node with
@@ -382,7 +423,8 @@ let rec term_node loc t ty =
 		| _ -> term t
 	    in
 	    let zone = find_zone_for_term t in
-	    NTarrow (t, f.var_why_type, zone, f)
+	    let () = type_why_new_zone zone f in
+	    NTarrow (t, zone, f)
 	| _ -> 
 	    unsupported loc "cannot handle this & operator"
 	    (* NTunop(Clogic.Uamp,term t)    *)
@@ -392,7 +434,8 @@ let rec term_node loc t ty =
       let info = declare_arrow_var info in
       let t = term t in
       let zone = find_zone_for_term t in
-      NTarrow (t, info.var_why_type, zone, info)
+      let () = type_why_new_zone zone info in
+      NTarrow (t, zone, info)
   | Tunop (unop,t) -> NTunop(unop,term t)
   | Tbinop (t1, binop, t2) -> NTbinop (term t1, binop, term t2)
   | Tdot (t', var_info) ->
@@ -402,7 +445,8 @@ let rec term_node loc t ty =
 	  | _ -> term t'
       in
       let zone = find_zone_for_term t' in
-      let t' = NTarrow (t', var_info.var_why_type, zone, var_info) in
+      let () = type_why_new_zone zone var_info in
+      let t' = NTarrow (t', zone, var_info) in
       if var_requires_indirection var_info then
 	let info = make_field ty in
 	let info = declare_arrow_var info in
@@ -410,13 +454,14 @@ let rec term_node loc t ty =
 				       nterm_loc = loc;
 				       nterm_type =  var_info.var_type}  
 	in
-	nt_arrow loc true var_info.var_type t' info.var_why_type zone info
+	nt_arrow loc true var_info.var_type t' zone info
       else
 	t'
   | Tarrow (t', var_info) ->
 	  let t' = term t' in
 	  let zone = find_zone_for_term t' in
-	  let t' = NTarrow (t', var_info.var_why_type, zone, var_info) in
+	  let () = type_why_new_zone zone var_info in
+	  let t' = NTarrow (t', zone, var_info) in
 	  if var_requires_indirection var_info then
 	    let info = make_field ty in
 	    let info = declare_arrow_var info in
@@ -424,7 +469,7 @@ let rec term_node loc t ty =
 					   nterm_loc = loc;
 					   nterm_node= t'}
 	    in
-	    nt_arrow loc true ty t' info.var_why_type zone info
+	    nt_arrow loc true ty t' zone info
 	  else t'
   | Tarrget (t1, t2) ->
 	  let info = make_field ty in
@@ -433,13 +478,14 @@ let rec term_node loc t ty =
 	  let zone = find_zone_for_term t1' in
 	  let ty = { ty with Ctypes.ctype_node = Tpointer (true,ty); 
 		       ctype_ghost = t1.term_type.ctype_ghost } in
+	  let () = type_why_new_zone zone info in
 	  NTarrow ( 
 	    {
 	      nterm_node = NTbinop(t1', Clogic.Badd, term t2);
 	      nterm_type = ty ;
 	      nterm_loc = loc;
 	    },
-	    info.var_why_type, zone, info)
+	    zone, info)
   | Tif (t1, t2, t3) -> NTif (term t1, term t2 , term t3)
   | Told t1 -> NTold (term t1)
   | Tat (t1, s) -> NTat (term t1, s)
@@ -453,9 +499,12 @@ let rec term_node loc t ty =
       NTvar info
   | Tcast (ty, t) -> NTcast (ty, term t)
   | Trange (t1, t2, t3) -> 
+      let t1 = term t1 in
       let info = make_field ty in
       let info = declare_arrow_var info in
-      NTrange (term t1, term_option t2, term_option t3, info)
+      let zone = find_zone_for_term t1 in 
+      let () = type_why_new_zone zone info in
+      NTrange (t1, term_option t2, term_option t3, info)
 
 and term t = 
 { 
@@ -793,7 +842,7 @@ let rec expr_of_term (t : nterm) : nexpr =
 		     "this operation can't be used with ghost variables"
 	       end,
 	       t2)
-	| NTarrow (t,tw,z,v) -> NEarrow (expr_of_term t,tw,z,v)
+	| NTarrow (t,z,v) -> NEarrow (expr_of_term t,z,v)
 	| NTif (t1,t2,t3)-> NEcond 
 	      (expr_of_term t1,expr_of_term t2,expr_of_term t3)
 	| NTold t -> error t.nterm_loc 

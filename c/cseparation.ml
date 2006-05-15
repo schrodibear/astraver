@@ -51,7 +51,8 @@ let indirection loc ty t =
   let info = make_field ty in
   let info = declare_arrow_var info in
   let zone = find_zone_for_term t in
-  { nterm_node =   NTarrow (t, info.var_why_type, zone, info);
+  let () = type_why_new_zone zone info in
+  { nterm_node =   NTarrow (t, zone, info);
     nterm_loc = loc; 	   
     nterm_type = ty;}
     
@@ -87,8 +88,9 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	  List.fold_right 
 	    (fun f acc -> 
 	       let zone = find_zone_for_term t in
+	       let () = type_why_new_zone zone f in
 	       let tf = 
-		 { nterm_node = NTarrow (t, f.var_why_type, zone, f); 
+		 { nterm_node = NTarrow (t, zone, f); 
 		   nterm_loc = loc;
 		   nterm_type = f.var_type} 
 	       in
@@ -151,7 +153,8 @@ let in_struct v1 v =
     | NTarrow(x,ty,_,_) ->
     | _ -> *)
   let zone = find_zone_for_term v1 in
-  { nterm_node = NTarrow (v1,v.var_why_type, zone, v); 
+  let () = type_why_new_zone zone v in
+  { nterm_node = NTarrow (v1, zone, v); 
     nterm_loc = v1.nterm_loc;
     nterm_type = v.var_type}
 
@@ -350,9 +353,33 @@ let fullseparation loc v1 v2 =
     v2.var_name (var_to_term loc v2)
 
 
-
-
-let rec unifier_type_why tw1 tw2 =
+let rec rehash z1 z2 =
+  let t =
+  (try 
+    let t2 = Hashtbl.find type_why_table z2 in
+    (try 
+       let t1 = Hashtbl.find type_why_table z1 in
+       Hashtbl.iter 
+	 (fun a1 tw2 ->
+	    try 
+	      begin 
+		let tw1 = Hashtbl.find t1 a1 in
+		unifier_type_why tw1 tw2
+	      end
+	    with Not_found -> Hashtbl.add t1 a1 tw2
+	 )
+	 t2;
+       t1
+     with Not_found -> t2)
+   with Not_found -> 
+     try 
+       Hashtbl.find type_why_table z1
+     with Not_found -> Hashtbl.create 5) 
+  in
+  Hashtbl.add type_why_table z1 t;
+  Hashtbl.add type_why_table z2 t
+    
+and unifier_type_why tw1 tw2 =
   match tw1,tw2 with
     | Pointer z1 , Pointer z2 ->
 	unifier_zone z1 z2     
@@ -380,7 +407,7 @@ and unifier_zone z1 z2 =
   if z1' == z2' then ()
   else
     begin
-(*      unifier_type_why z1'.type_why_zone z2'.type_why_zone;*)
+      rehash z1' z2'; 
       match z1'.repr, z2'.repr with
 	| None, None -> 
 	    if z1'.zone_is_var then z1'.repr <- Some z2' else 
@@ -421,7 +448,7 @@ let rec term tyf t =
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
-  | NTarrow (t,_,_,v) -> term tyf t
+  | NTarrow (t,_,v) -> term tyf t
   | NTif (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NTold t 
   | NTat (t,_) 
@@ -490,8 +517,7 @@ let rec calcul_zones expr =
     | NEconstant _ 
     | NEstring_literal _ 
     | NEvar _ -> ()
-    | NEarrow (e,_,_,_) 
-(*    | NEstar e*) -> calcul_zones e
+    | NEarrow (e,_,_) -> calcul_zones e
     | NEseq (e1,e2) -> calcul_zones e1; calcul_zones e2
     | NEassign_op (lv,_,e) 
     | NEassign (lv,e) -> calcul_zones lv; calcul_zones e;
@@ -624,11 +650,18 @@ let rec statement twf st =
 	statement twf st 
 	
 
-let add_zone ty l =
+let rec add_zone ty l =
   match ty with
     | Pointer z -> 
 	begin match z.repr with 
-	  | None -> z::l
+	  | None ->
+	      begin 
+		try 
+		  let t =  Hashtbl.find type_why_table z in
+		  Hashtbl.fold (fun _ tw  l ->
+				  add_zone tw l) t (z::l)
+		with Not_found -> z::l
+	      end
 	  | Some _ -> l
 	end
     | _ -> l
@@ -646,28 +679,12 @@ let global_decl e =
   match e with 
     | Naxiom (_,sp) | Ninvariant (_,sp) | Ninvariant_strong (_,sp) ->
 	predicate Unit sp
-    | Nlogic (f, NPredicate_def (_,p)) -> predicate Unit p;
-	f.logic_args_zones <- 
-	  List.fold_left  
-	  (fun l v ->
-	     match v.var_why_type with 
-	     | Pointer z -> 
-		 begin match z.repr with 
-		   | None -> z::l
-		   | Some _ -> l
-		 end
-	     | _ -> l) [] f.logic_args
-    | Nlogic (f, NFunction_def (_,_,t)) -> term Unit t;
-	f.logic_args_zones <- 
-	  List.fold_left  
-	  (fun l v ->
-	     match v.var_why_type with 
-	     | Pointer z -> 
-		 begin match z.repr with 
-		   | None -> z::l
-		   | Some _ -> l
-		 end
-	     | _ -> l) [] f.logic_args
+    | Nlogic (f, NPredicate_def (_,p)) -> 
+	predicate Unit p;
+	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
+    | Nlogic (f, NFunction_def (_,_,t)) -> 
+	term Unit t;
+	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
     | Nlogic _ -> ()
     | Nfunspec (sp,_,f) -> 
 	spec f.type_why_fun sp;

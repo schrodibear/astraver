@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.65 2006-04-04 14:00:55 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.66 2006-05-15 13:25:10 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -295,8 +295,7 @@ and nexpr_node =
   | NEconstant of constant
   | NEstring_literal of string
   | NEvar of Info.env_info
-  | NEarrow of nlvalue * Info.why_type * Info.zone * Info.var_info
-(*  | NEstar of nlvalue *)
+  | NEarrow of nlvalue * Info.zone * Info.var_info
   | NEseq of nexpr * nexpr
   | NEassign of nlvalue * nexpr
   | NEassign_op of nlvalue * binary_operator * nexpr

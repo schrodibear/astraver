@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.118 2006-04-04 14:00:55 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.119 2006-05-15 13:25:10 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -145,7 +145,20 @@ let add_field_var v ty s =
   match ty with
     | Pointer z ->
 	let z = repr z in
-	let ty' = v.var_why_type in
+	let ty' = 
+	  try
+	    let table = 
+	      try
+		Hashtbl.find type_why_table z 
+	      with Not_found -> 
+		Format.eprintf "no why type table for zone %s@\n" z.name;
+		assert false
+	    in
+	    Hashtbl.find  table v 
+	  with Not_found -> 
+	    Format.eprintf "no  why type for field %s@\n" v.var_name;
+	    assert false
+	in
 	let n = v.var_unique_name in
 	if not z.zone_is_var then add_heap_var n z ty';
 	ZoneSet.add (z,n,ty') s
@@ -153,18 +166,6 @@ let add_field_var v ty s =
     | Info.Int -> assert false
     | _ -> assert false
 	
-
-(*let add_pointer_var (ty : Info.why_type) s =
-  match ty with 
-    | Pointer z ->
-	let z = repr z in
-	let n = memorycell_name z.type_why_zone in
-	let ty' = z.type_why_zone in
-	if not z.zone_is_var then
-	  add_heap_var n z ty' s;
-	ZoneSet.add (z,n,ty') s
-    | _ -> assert false
-*)  
 
 type effect =
     {
@@ -205,10 +206,9 @@ let rec term t = match t.nterm_node with
       if v.var_is_static
       then reads_add_var v v.var_why_type ef_empty
       else ef_empty
-  | NTarrow (t1,tw,z,f) -> 
-      reads_add_alloc (reads_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
-(*  | NTstar t ->
-      reads_add_alloc (reads_add_pointer_var (Cseparation.type_why_for_term t) (term t))*)
+  | NTarrow (t1,z,f) -> 
+      assert (Cnorm.type_why_for_term t1 = Pointer z);
+      reads_add_alloc (reads_add_field_var f (Pointer z) (term t1))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
@@ -257,12 +257,9 @@ let rec assign_location t = match t.nterm_node with
       if v.var_is_static
       then { ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty }
       else ef_empty
-  | NTarrow (t1,ty,z,f) -> 
+  | NTarrow (t1,z,f) -> 
       reads_add_alloc 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
-(*  | NTstar t1 ->
-      reads_add_alloc 
-	(assigns_add_pointer_var (Cseparation.type_why_for_term t1) (term t1))*)
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
@@ -451,17 +448,15 @@ let rec expr e = match e.nexpr_node with
       else ef_empty
   | NEvar (Fun_info v) ->
       ef_empty
-  | NEarrow (e1,ty,z, f) ->	
-      reads_add_alloc (reads_add_field_var f (type_why e1) (expr e1))
+  | NEarrow (e1,z, f) ->
+      assert (same_why_type (type_why e1)  (Pointer z));
+      reads_add_alloc (reads_add_field_var f (Pointer z) (expr e1))
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr e1) (expr e2)
   | NEassign (lv, e) | NEassign_op (lv, _, e) ->
       ef_union (assign_expr lv) (expr e)
-(*  | NEstar e ->
-      reads_add_alloc (reads_add_pointer_var (type_why e) (expr e))*)
   | NEunary (Ustar , _ ) -> assert false
-  | NEunary (Uamp, e) ->
-      address_expr e
+  | NEunary (Uamp, e) -> assert false (* address_expr e *)
   | NEunary 
       ((Uplus | Uminus | Unot | Utilde | Ufloat_of_int | Uint_of_float), e) ->
       expr e
@@ -470,6 +465,8 @@ let rec expr e = match e.nexpr_node with
   | NEcall {ncall_fun = e; ncall_args = el; ncall_zones_assoc = assoc} ->
       let ef = match e.nexpr_node with
 	| NEvar (Fun_info f) ->
+	    eprintf "call to %s : " f.fun_name; 
+	      List.iter (fun (z1,z2) -> eprintf "zone = %s -> %s  @." z1.name z2.name) assoc; 
 	    let reads = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
@@ -506,10 +503,8 @@ and assign_expr e = match e.nexpr_node with
       else ef_empty
   | NEvar (Fun_info _) ->
       ef_empty
-(*  | NEstar e ->
-      reads_add_alloc (assigns_add_pointer_var (type_why e) (expr e))*)
   | NEunary (Ustar,_) -> assert false
-  | NEarrow (e1,tw,z, f) ->
+  | NEarrow (e1,z, f) ->
       reads_add_alloc (assigns_add_field_var f (type_why e1) (expr e1))
   | NEcast (_, e1) ->
       assign_expr e1
@@ -517,15 +512,14 @@ and assign_expr e = match e.nexpr_node with
       assert false (* not a left value *)
 
 (* effects for [&e] *)
+(*
 and address_expr e = match e.nexpr_node with
   | NEvar v -> 
       begin match e.nexpr_type.Ctypes.ctype_node with
 	| Tstruct _ | Tunion _ -> assert false (* ef_empty *)
 	| _ -> ef_empty (* unsupported "& operator" *)
       end
-(*  | NEstar  e1 ->
-      expr e1*)
-  | NEarrow (e1,tw,z, f) ->
+  | NEarrow (e1,z, f) ->
       begin match e1.nexpr_type.Ctypes.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> expr e1
 	| _ -> reads_add_field_var f (type_why e1) (expr e1)
@@ -534,6 +528,7 @@ and address_expr e = match e.nexpr_node with
       address_expr e1*)
   | _ -> 
       assert false (* not a left value *)
+*)
 
 let rec statement s = match s.nst_node with
   | NSnop
@@ -703,8 +698,8 @@ let rec term_of_expr e =
   match e.nexpr_node with 
   | NEconstant e -> make (NTconstant e)
   | NEvar (Var_info info) -> make (NTvar info)
-  | NEarrow (nlvalue,tw,z,var_info) -> 
-      make (NTarrow (term_of_expr nlvalue,tw,z, var_info))
+  | NEarrow (nlvalue,z,var_info) -> 
+      make (NTarrow (term_of_expr nlvalue,z, var_info))
 (*  | NEstar (nlvalue) -> 
       make (NTstar (term_of_expr nlvalue))*)
   | NEunary (Uplus, nexpr) -> 
@@ -861,10 +856,11 @@ let rec invariant_for_constant loc t lvalue initializers =
 	begin match tag_type_definition n with
 	  | TTStructUnion (Tstruct (_), f::_) ->
 	      let zone = Cnorm.find_zone_for_term lvalue in
+	      let () = type_why_new_zone zone f in
 	      let block, init' =
 		 invariant_for_constant loc f.var_type 
 		  (noattr loc f.var_type 
-		     (NTarrow(lvalue,f.var_why_type,zone, f)))
+		     (NTarrow(lvalue,zone, f)))
 		  initializers
 	      in (block,init')
 	  | _ ->
@@ -888,9 +884,10 @@ let rec invariant_for_constant loc t lvalue initializers =
 		    let info = make_field ty in
 		    let info = declare_arrow_var info in
 		    let zone = find_zone_for_term lvalue in
+		    let () = type_why_new_zone zone info in
 		    noattr loc ty 
 		      (NTarrow
-			 (shift, info.var_why_type,zone,info))
+			 (shift, zone,info))
 	    in
 	    let (b,init') = 
 	      invariant_for_constant loc ty e init 
