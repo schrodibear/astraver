@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.57 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.58 2006-05-17 12:14:15 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -155,7 +155,7 @@ let rec type_why e =
 	
 let find_zone e = 
   match type_why e with
-    | Pointer z -> z
+    | Pointer z -> repr z
     | _ -> assert false
 
 let rec type_why_for_term t = 
@@ -202,7 +202,7 @@ let rec type_why_for_term t =
 	
 let find_zone_for_term e = 
   match type_why_for_term e with
-    | Pointer z -> z
+    | Pointer z -> repr z
     | ty -> 
 	let l,n = output_why_type ty in
 	Format.eprintf "type of term %a : %s@." Cprint.nterm e n; 
@@ -349,7 +349,7 @@ and expr_node loc ty t =
 		  NEarrow (t', zone, var_info)
 	     | TEarrow(lvalue,var_info) ->
 		 let t' = expr lvalue in
-		 let zone = find_zone t' in
+		 let zone = find_zone t' in 
 		 let () = type_why_new_zone zone var_info in
 		 NEarrow (t', zone, var_info)
 	     | TEarrget (lvalue,t) ->
@@ -1049,9 +1049,12 @@ let global_decl e1 =
 	end
       else Ndecl(t,v,c_initializer_option c)
   | Tfunspec (s, t, f) -> 
-      set_var_type (Fun_info f) (f.fun_type) true;
-      List.iter (fun arg -> 
-		   set_var_type (Var_info arg) (arg.var_type) true) f.args;
+      if not f.has_body then
+	begin
+	  set_var_type (Fun_info f) (f.fun_type) true;
+	  List.iter (fun arg -> 
+		       set_var_type (Var_info arg) (arg.var_type) true) f.args
+	end;
       Nfunspec (spec s,t,f)
 
   | Tfundef (s, t, f, st) ->

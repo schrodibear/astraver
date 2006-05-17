@@ -657,21 +657,22 @@ module Hzone = Hashtbl.Make(struct
 			    end)
 
 let rec add_zone ty l =
-  (*Format.eprintf "add_zone ty=%s@." (snd (output_why_type ty));*)
+(*  Format.eprintf "add_zone ty=%s@." (snd (output_why_type ty));*)
   match ty with
-    | Pointer z -> 
+    | Pointer z ->
+	let z = repr z in
 	if List.mem z l then l else
-	begin match z.repr with 
-	  | None ->
-	      begin 
-		try 
-		  let t =  Hashtbl.find type_why_table z in
-		  Hashtbl.fold (fun _ tw  l ->
-				  add_zone tw l) t (z::l)
-		with Not_found -> z::l
+	  begin match z.repr with 
+	    | None ->
+		begin
+		  try 
+		    let t =  Hashtbl.find type_why_table z in
+		    Hashtbl.fold (fun _ tw  l ->
+				    add_zone tw l) t (z::l)
+		  with Not_found -> z::l
 	      end
-	  | Some _ -> l
-	end
+	    | Some _ -> l
+	  end
     | _ -> l
       
 let collect_zones args ret_type =	

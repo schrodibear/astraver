@@ -35,7 +35,7 @@ let rec pop_initializer loc t i =
   match i with 
     | [] ->{ texpr_node = 
 	       (match t.ctype_node with
-		  | Tint _ -> TEconstant(IntConstant "0")
+		  | Tint _ | Tenum _-> TEconstant(IntConstant "0")
 		  | Tfloat _ -> TEconstant(FloatConstant "0.0")
 		  | Tpointer _ -> TEcast (t,Ctyping.tezero)
 		  | _ -> assert false);
@@ -96,7 +96,7 @@ let rec init_expr loc t lvalue initializers =
     | Tarray (_,ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
-    | Tvoid -> assert false
+    | Tvoid -> [],initializers
 
 
 let rec assigns decl =

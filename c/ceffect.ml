@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.120 2006-05-15 13:36:29 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.121 2006-05-17 12:14:15 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -449,6 +449,7 @@ let rec expr e = match e.nexpr_node with
   | NEvar (Fun_info v) ->
       ef_empty
   | NEarrow (e1,z, f) ->
+      let z = repr z in
       assert (same_why_type (type_why e1)  (Pointer z));
       reads_add_alloc (reads_add_field_var f (Pointer z) (expr e1))
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
@@ -896,7 +897,7 @@ let rec invariant_for_constant loc t lvalue initializers =
     | Tarray (_,ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
-    | Tvoid -> assert false  
+    | Tvoid -> nptrue,initializers 
 
 let rec has_constant_values ty = match ty.Ctypes.ctype_node with
   | Tvoid | Tint _ | Tfloat _ | Tenum _ | Tpointer _ ->

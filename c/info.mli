@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.26 2006-02-03 13:24:35 marche Exp $ i*)
+(*i $Id: info.mli,v 1.27 2006-05-17 12:14:15 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -111,6 +111,7 @@ type fun_info =
       mutable args_zones : zone list;
       mutable graph : fun_info list;
       mutable type_why_fun : why_type;
+      mutable has_body : bool;
     }
 
 val default_fun_info : string -> fun_info

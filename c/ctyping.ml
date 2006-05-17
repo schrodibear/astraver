@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.108 2006-04-10 13:41:08 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.109 2006-05-17 12:14:15 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -375,7 +375,7 @@ and type_expr_node loc env = function
 	try Env.find x env with Not_found -> 
 	  try find_sym x with Not_found -> 
 	    error loc (x ^ " undeclared")
-      in
+      in 
       (TEvar var,var_type var)
   | CEdot (e, x) ->
       let te = type_expr env e in
@@ -1131,6 +1131,7 @@ let type_decl d = match d.node with
 	  | Var_info v -> assert false
 	  | Fun_info f -> if f.args = [] then f.args <- List.map snd pl; f
       in
+      info.has_body <- true;
       let env =
 	List.fold_right 
 	  (fun v env -> Env.add v.var_name v.var_type (Var_info v) env)

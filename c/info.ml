@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.30 2006-02-03 13:24:35 marche Exp $ i*)
+(*i $Id: info.ml,v 1.31 2006-05-17 12:14:15 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -200,6 +200,7 @@ type fun_info =
       mutable args_zones : zone list;
       mutable graph : fun_info list;
       mutable type_why_fun : why_type;
+      mutable has_body : bool;
     }
 
 let default_fun_info x =
@@ -215,6 +216,7 @@ let default_fun_info x =
     args_zones = [];
     graph = [];
     type_why_fun = Int;
+    has_body = false;
   }
 
 
