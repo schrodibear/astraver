@@ -114,27 +114,39 @@ done
 echo "C interp (good)"
 cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
-parsing="../../../bin/caduceus.opt -separation -why-opt -split-user-conj"
 
-rm -f why/*.why
-rm -f simplify/*_why.sx
-for f in $FILES; do
-    echo -n "  Generating simplify VCG for $f.c... "
-    if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
-        if $make -f $f.makefile simplify/${f}_why.sx > /tmp/caduceus.tmp 2>&1 ; then
-	    echo "ok"
+bench_c_good () {
+    options="$1 -why-opt -split-user-conj"
+    echo "-------------------------------------------------------------------"
+    echo "Bench Caduceus+Simplify avec options: $options"
+    parsing="../../../bin/caduceus.opt $options"
+
+    rm -f why/*.why
+    rm -f simplify/*_why.sx
+    for f in $FILES; do
+	echo -n "  Generating simplify VCG for $f.c... "
+	if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
+	    if $make -f $f.makefile simplify/${f}_why.sx > /tmp/caduceus.tmp 2>&1 ; then
+		echo "ok"
+	    else
+		echo "why FAILED :"
+		cat /tmp/caduceus.tmp
+		exit 1
+	    fi
 	else
-	   echo "why FAILED :"
-	   cat /tmp/caduceus.tmp
-	   exit 1
+	    echo "caduceus FAILED (rejected a good file) :"
+	    cat /tmp/caduceus.tmp
+	    exit 1
 	fi
-    else
-	echo "caduceus FAILED (rejected a good file) :"
-	cat /tmp/caduceus.tmp
-	exit 1
-    fi
-done
-../../../bin/dp.opt -timeout 20 simplify/*_why.sx 2>/dev/null || true
+    done
+    ../../../bin/dp.opt -timeout 20 simplify/*_why.sx 2>/dev/null || true
+}
+
+bench_c_good
+bench_c_good -separation
+
+cd ../../../examples-c
+make bench
 
 # Coq proofs
 # for f in $FILES; do

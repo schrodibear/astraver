@@ -1,10 +1,7 @@
 # Why version
-VERSION=1.99
+VERSION=2.00
 # Caduceus version
-CVERSION=0.99
-
-
-
+CVERSION=1.00
 
 
 

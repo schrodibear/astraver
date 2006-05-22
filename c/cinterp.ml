@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.179 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.180 2006-05-22 13:34:23 filliatr Exp $ i*)
 
 
 open Format
@@ -496,9 +496,10 @@ let rec interp_expr e =
 	    | HeapRef(valid,var,e1) ->
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
-		Let(tmp1, e1,
+		let upd = if valid then "safe_upd_" else "upd_" in
+	        Let(tmp1, e1,
 		    Let(tmp2, interp_expr e2,
-			append (build_complex_app (Var "safe_upd_")
+			append (build_complex_app (Var upd)
 				  [Var var; Var tmp1; Var tmp2])
 			  (Var tmp2)))
 	end 

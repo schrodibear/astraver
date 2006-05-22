@@ -86,3 +86,7 @@ gwhy:
 zenon:
 	../bin/why.opt -d -V --zenon test.mlw
 	zenon test_why.znn
+
+rv-sat:
+	../bin/why.opt -d -V --smtlib test.mlw
+	rv-sat test_why.smt

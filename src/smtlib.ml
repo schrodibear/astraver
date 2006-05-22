@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.10 2006-04-06 14:26:45 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.11 2006-05-22 13:34:23 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -24,28 +24,10 @@ open Misc
 open Error
 open Logic
 open Logic_decl
+open Env
 open Cc
 open Format
 open Pp
-
-type elem = 
-  | Axiom of string * predicate Env.scheme
-  | Predicate of string * predicate_def Env.scheme
-
-let theory = Queue.create ()
-let oblig = Queue.create ()
-
-let reset () = Queue.clear theory; Queue.clear oblig
-
-let push_decl = function
-  | Dgoal (loc, id, s) -> Queue.add (loc, id, s.Env.scheme_type) oblig
-  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
-  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
-  | Dfunction_def _ -> assert false (*TODO*)
-  | Dtype _ -> assert false (*TODO*)
-  | Dlogic _ -> assert false (*TODO*)
-
-let defpred = Hashtbl.create 97
 
 (*s Pretty print *)
 
@@ -78,9 +60,11 @@ let prefix id =
     Report.raise_unlocated (AnyMessage "haRVey does not support reals")
   else assert false
 
+let print_bvar fmt id = fprintf fmt "?%a" Ident.print id
+
 let rec print_term fmt = function
   | Tvar id -> 
-      fprintf fmt "%a" Ident.print id
+      print_bvar fmt id
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
@@ -96,9 +80,9 @@ let rec print_term fmt = function
 	print_term c
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
-  | Tapp (id, tl, _) ->
+  | Tapp (id, tl, i) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	Ident.print id (print_list space print_term) tl
+	Monomorph.symbol (id, i) (print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -111,7 +95,7 @@ let rec print_pure_type fmt = function
   | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i
+  | PTexternal (i,id) -> Monomorph.symbol fmt (id, i)
 
 and instance fmt = function
   | [] -> ()
@@ -136,8 +120,8 @@ let rec print_predicate fmt = function
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl, _) -> 
-      fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
+  | Papp (id, tl, i) -> 
+      fprintf fmt "@[(%a@ %a)@]" Monomorph.symbol (id, i) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
@@ -155,11 +139,12 @@ let rec print_predicate fmt = function
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall (%a %a) %a)@]" 
-	Ident.print id' print_pure_type t print_predicate p'
+	print_bvar id' print_pure_type t print_predicate p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(exists (%a %a) %a)@]" Ident.print id' print_pure_type t print_predicate p'
+      fprintf fmt "@[(exists (%a %a) %a)@]" 
+	print_bvar id' print_pure_type t print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported with haRVey"
   | Pnamed (_, p) -> (* TODO: print name *)
@@ -167,45 +152,26 @@ let rec print_predicate fmt = function
 
 let print_axiom fmt id p =
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
-  let p = p.Env.scheme_type in
-  fprintf fmt " @[<hov 2>%a@]" print_predicate p;
+  fprintf fmt " @[<hov 2>:assumption@ %a@]" print_predicate p;
   fprintf fmt "@]@\n@\n" 
 
-let print_predicate_def fmt id p =
-  let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[(forall %a (iff (%s %a)@ @[%a@]))@]@\n@\n" 
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl id
+let print_quantifiers =
+  let print_quantifier fmt (x,t) = 
+    fprintf fmt "(%a %a)" print_bvar x print_pure_type t
+  in
+  print_list space print_quantifier 
+
+let print_predicate_def fmt id (bl,p) =
+  fprintf fmt "@[:assumption@ (forall %a (iff (%s %a)@ @[%a@]))@]@\n@\n" 
+    print_quantifiers bl id
     (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
-    print_predicate p;
-  Hashtbl.add defpred (Ident.create id) ()
+    print_predicate p
 
-let print_elem fmt = function
-  | Axiom (id, p) -> print_axiom fmt id p
-  | Predicate (id, p) -> print_predicate_def fmt id p
-
-let output_theory fmt =
-  fprintf fmt "(@\n@[";
-  Queue.iter (print_elem fmt) theory;
-  fprintf fmt "@]@\n) ;; END THEORY@\n"
-
-let external_type = function
-  | PTexternal _ -> true
-  | _ -> false
-
-let cc_external_type = function
-  | Cc.TTpure ty -> external_type ty
-  | Cc.TTarray (Cc.TTpure (PTexternal _)) -> true
-  | _ -> false
-
-let rec print_cc_type fmt = function
-  | Cc.TTpure pt -> 
-      print_pure_type fmt pt
-  | Cc.TTarray v -> 
-      fprintf fmt "@[Array@]" 
-  | Cc.TTarrow ((_,Cc.CC_var_binder t1), t2) -> 
-      fprintf fmt "[%a ->@ %a]" print_cc_type t1 print_cc_type t2
-  | _ -> 
-      assert false
+let print_function_def fmt id (bl,_,e) =
+  fprintf fmt "@[:assumption@ (forall %a (= (%s %a)@ @[%a@]))@]@\n@\n" 
+    print_quantifiers bl id
+    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    print_term e
 
 let output_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
@@ -219,39 +185,50 @@ let output_sequent fmt (hyps,concl) =
   in
   print_seq fmt hyps
 
+let print_obligation fmt loc o s = 
+  fprintf fmt "@[:formula@\n"; 
+  fprintf fmt "  @[;; %a@]@\n" Loc.report_obligation_position loc;
+  output_sequent fmt s;
+  fprintf fmt "@]@\n@\n" 
 
-(*s First-order checks *)
+let push_decl d = Monomorph.push_decl d
 
+let iter = Monomorph.iter
 
-let rec filter_context = function
-  | [] -> []
-  | Svar (id, _) :: ctx -> filter_context ctx
-  | Spred (_, p) :: ctx -> p :: filter_context ctx
+let reset () = Monomorph.reset ()
 
-exception NotFirstOrder
+let declare_type fmt id =
+  fprintf fmt ":extrasorts (%s)@\n" id
 
-let output_obligation fmt (loc, o, s) = 
-  try
-    fprintf fmt "\n  :formula"; 
-    fprintf fmt "@[;; %a@]@\n" Loc.report_obligation_position loc;
-    output_sequent fmt s;
-    fprintf fmt "\n\n" 
-  with NotFirstOrder ->
-    unlocated_wprintf "obligation %s is not first-order@\n" o
+let print_logic fmt id t =
+  fprintf fmt ";;;; Why logic %s@\n" id;
+  let pure_type_list = print_list space print_pure_type in
+  match t with
+    | Predicate tl ->
+	fprintf fmt "@[:extrapreds ((%s %a))@]@\n@\n" id pure_type_list tl
+    | Function (tl, pt) ->
+	fprintf fmt "@[:extrafuns ((%s %a %a))@]@\n@\n" id pure_type_list tl
+	  print_pure_type pt
+	
+let output_elem fmt = function
+  | Dtype (loc, [], id) -> declare_type fmt id
+  | Dtype _ -> assert false
+  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Dgoal (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 
 let output_file f = 
   let fname = f ^ "_why.smt" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
-
-  fprintf fmt "(benchmark %s\n" f;
-  fprintf fmt "  :source { Generated by the Caduceus tool ... \n";
-  fprintf fmt "            MORE ON Caduceus AND Why...       }\n";
-  fprintf fmt "  :status unknown\n";
-  fprintf fmt "  :logic  caduceus_logic\n";
-
-  Queue.iter (output_obligation fmt) oblig;
-  fprintf fmt "\n)\n";
+  fprintf fmt "(benchmark %s@\n" f;
+  fprintf fmt "  :source { Generated by the Why tool }@\n";
+  fprintf fmt "  :status unknown@\n";
+  (*fprintf fmt "  :logic  caduceus_logic\n";*)
+  iter (output_elem fmt);
+  fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();
   close_out cout
 

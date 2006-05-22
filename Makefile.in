@@ -207,6 +207,9 @@ bin/why-obfuscator.byte: $(OBFCMO)
 bin/why-obfuscator.opt: $(OBFCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
+bin/cadlog.opt: c/cversion.cmx tools/cadlog.cmx
+	$(OCAMLOPT) unix.cmxa -o $@ $^
+
 static:: $(STATICBINARY)
 
 coq-no:
@@ -247,9 +250,11 @@ bench:: $(BINARY) $(WHYVO)
 	make -C examples simplify
 	cd bench/provers; sh ./bench "../../$(BINARY)"
 
-bench-c:: $(CADUCEUS) $(WHYVO)
-	cd bench/c; sh ./bench
-	make -C examples-c bench
+BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
+
+bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
+	cp -f c/cversion.ml $(BENCHLOG)
+	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
 
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs

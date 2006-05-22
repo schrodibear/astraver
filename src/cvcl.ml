@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.41 2006-05-05 14:42:55 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.42 2006-05-22 13:34:23 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -31,23 +31,6 @@ open Pp
 open Ltyping
 open Env
 open Report
-
-type elem = 
-  | Logic of string * logic_type Env.scheme
-  | Oblig of Loc.position * string * sequent Env.scheme
-  | Axiom of string * predicate Env.scheme
-  | PredicateDef of string * predicate_def Env.scheme
-  | FunctionDef of string * function_def Env.scheme
-
-let queue = Queue.create ()
-
-let push_decl = function
-  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) queue
-  | Dgoal (loc, id, s) -> Queue.add (Oblig (loc, id, s)) queue
-  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
-  | Dpredicate_def (_, id, p) -> Queue.add (PredicateDef (id, p)) queue
-  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
-  | Dtype _ -> () (*TODO*)
 
 (*s Pretty print *)
 
