@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.121 2006-05-17 12:14:15 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.122 2006-05-22 12:59:25 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -207,7 +207,8 @@ let rec term t = match t.nterm_node with
       then reads_add_var v v.var_why_type ef_empty
       else ef_empty
   | NTarrow (t1,z,f) -> 
-      assert (Cnorm.type_why_for_term t1 = Pointer z);
+      let z = repr z in
+      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
       reads_add_alloc (reads_add_field_var f (Pointer z) (term t1))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t

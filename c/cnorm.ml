@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.58 2006-05-17 12:14:15 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.59 2006-05-22 12:59:25 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -151,7 +151,7 @@ let rec type_why e =
     | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
 	rename_zone assoc (type_why e)
-    | NEmalloc _ -> Info.Pointer (make_zone false)
+    | NEmalloc _ -> Info.Pointer (make_zone true)
 	
 let find_zone e = 
   match type_why e with
@@ -855,11 +855,6 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "offset can't be used here"
 	| NTblock_length t -> error t.nterm_loc 
 	      "block_length can't be used here"
-(*
-	| NTresult -> error t.nterm_loc 
-	      "result can't be used here"
-	| NTnull -> NEconstant (IntConstant "0")
-*)
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
 	| NTrange _ -> 
 	    error t.nterm_loc "range cannot by used here"
