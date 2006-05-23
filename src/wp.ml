@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.94 2006-03-27 09:49:56 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.95 2006-05-23 12:19:58 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -342,8 +342,12 @@ and wp_desc info d q =
 	Assertion (l, e'), add_to_wp info.t_loc l w
     | Absurd ->
 	Absurd, Some (anonymous info.t_loc Pfalse)
-    | Any _ as d ->
-	d, None
+    | Any k as d ->
+	let q' = optpost_app (post_named info.t_loc) k.c_post in
+	let w = opaque_wp q' q info in
+	let pre = List.map (pre_named info.t_loc) k.c_pre in
+	let w = add_to_wp info.t_loc pre w in
+	d, w
     | Proof _ ->
 	assert false
     | Post (e, qe, Transparent) ->

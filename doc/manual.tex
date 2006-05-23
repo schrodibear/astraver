@@ -302,6 +302,8 @@ void flag(int t[], int n) {
 }
 \end{verbatim}
 
+\indextt{type}\indextt{logic}\indextt{axiom}
+
 We are going to show how to verify this algorithm---the
 \emph{algorithm}, not the C code---using \why. 
 First we introduce an abstract type \texttt{color} for the colors
@@ -471,7 +473,8 @@ as the invariance of the array length (which is obvious since we only performs
 property) and the permutation w.r.t. the initial array.
 The termination is trivially ensured since \texttt{r-i} decreases at
 each loop step and is bound by 0.
-Finally, the loop is annotated as follows:
+Finally, the loop is annotated as follows: 
+\index{Loop invariant}%
 \begin{verbatim}
   ...
   init:
@@ -573,7 +576,7 @@ flag example.
     color_array, color_array, int, int -> prop
 \end{verbatim}
 
-\item\textbf{Primitive arrays:}
+\item\textbf{Primitive arrays:} \index{Arrays}
   The \why\ tool actually provides a datatype of
   arrays, exactly in the way we have done it above i.e. an array is a
   reference on a purely applicative array.
@@ -702,190 +705,24 @@ context is indeed absurd, which corresponds to the proof obligation
 \texttt{false}. 
 
 \subsection{Non-deterministic programs}
+\index{Non-deterministic expression}
 
-- any 
-
-\subsection{Annotations}
-\label{annotations}\index{Annotation}
-
-Annotations are inserted into the program to give its specification.
-Annotations are written in a first-order predicate calculus syntax
-which is not related to any particular prover. Its syntax is given in
-Section~\ref{syntax}. 
-
-Annotations are predicates over the values of the variables
-visible at the corresponding program point.
-Any annotation may refer to the value of a variable.  For a mutable
-variable \texttt{x} (i.e. a reference or an array), \texttt{x} always 
-denotes the \emph{current} value of \texttt{x}.
-
-\subsubsection{Pre/postconditions}\index{Precondition}\index{Postcondition}
-Pre- and postconditions are written using the traditional Hoare logic
-syntax 
-\begin{center}
-  \texttt{\{} \textsl{predicate} \texttt{\}} 
-  \textsl{expression}
-  \texttt{\{} \textsl{predicate} \texttt{\}} 
-\end{center}
-Any subexpression may be a Hoare triple. Within a triple, the pre- or
-the postcondition may be omitted.
-Within a postcondition, the value of a reference \texttt{x} before the
-evaluation (i.e. at the precondition point) is referred to as \texttt{x@}.
-Examples:
+A non-deterministic program expression is a place-holder for a program
+expression that is not given but only specified. Such a construct is
+a program specification (a type, an effect and possibly some
+pre/postconditions) written between square brackets. For instance
 \begin{verbatim}
-     { } begin x := !x + 1 end { x > x@ }
-     { x > 0 } begin x := 2 * !x; x := !x - 1 end { x > 0 }
+  [ {} int { even(result) } ]
 \end{verbatim}
-In the postcondition, the result of the expression is bound to the
-variable \texttt{result}. \indextt{result} 
-Examples:
+stands for any program expression of type \texttt{int} that has the
+property of being even. Thus we can prove correct the following code:
 \begin{verbatim}
-     { } 1 + 2 { result = 3 }
-     { } begin x := !x + 1; !x end { result <> x@ }
+  (1 + [ {} int { even(result) } ]) { odd(result) }
 \end{verbatim}
-
-
-\caveat
-In the outermost triple of a program (or a function body) the
-precondition is an \emph{assumption}. In the declaration
-\begin{verbatim}
-     let f (u:unit) = { x = 0 } x := x + 1 { x = 1 }
-\end{verbatim}
-the precondition \texttt{x = 0} is an hypothesis. (The user will be
-asked to prove \texttt{x = 0} when \texttt{f} is called.)
-But preconditions of inner triples are \emph{obligations} to be
-proved. In the declaration 
-\begin{verbatim}
-     let f (u:unit) = 
-       {} begin x := 0; { x = 0 } x := x + 1 {} end { x = 1 }
-\end{verbatim}
-the precondition \texttt{x = 0} has to be established at the
-corresponding program point.
-Note that such an obligation can be given to the outermost expression
-too, using parentheses:
-\begin{verbatim}
-     let f (u:unit) = { x = 0 } ({ odd(x) } x := x / 2 {}) {}
-\end{verbatim}
-Here \texttt{x = 0} is an assumption and \texttt{odd(x)} is an obligation.
-
-
-\subsubsection{Assertions}
-\index{Assertion}\indextt{assert}
-
-\subsubsection{Loops annotations}
-\index{Loop}\index{Invariant}\index{Variant}
-\indextt{while}\indextt{invariant}\indextt{variant}
-Loops can (and usually must) be given invariants and must always be
-given variants. Both are introduced as a single annotation following
-the \texttt{do} keyword:
-\begin{center}
-  \texttt{while} \textsl{expression} \texttt{do \{ invariant}
-  \emph{predicate} \texttt{variant} 
-  \textsl{term} \texttt{\}} \textsl{sequence} \texttt{done}
-\end{center}
-Examples:
-\begin{verbatim}
-     while !x > 0 do { invariant x >= 0 variant x } x := !x - 1 done
-
-     while !x < 10 do { invariant x <= 10 variant 10-x } x := !x + 1 done
-\end{verbatim}
-Variants can be of any type and can be associated to any order
-relation (see syntax in Section~\ref{syntax}). When not specified,
-the type \texttt{int} and the usual order relation over non negative
-integers are assumed.
-
-
-\subsubsection{Exceptions}
-\label{exception}\index{Exception}
-
-Exceptions are raised with the construct \texttt{raise}:
-\begin{verbatim}
-     raise E
-     raise (F 1)
-\end{verbatim}
-and caught with the construct \texttt{try \dots\ with \dots\ end}:
-\begin{verbatim}
-     try (f 0) with E -> 1 end 
-     try (f 0) with F x -> x end
-\end{verbatim}
-It is not possible to catch an exception which is not possibly raised
-by the expression following the \texttt{try}.
-
-Postconditions are extended to specify the behavior in case of
-uncaught exceptions:
-\begin{verbatim}
-     { } raise E { false | E => true }
-     { } raise (F 1) { false | F => result = 1 }
-\end{verbatim}
-In a postcondition regarding an exception, \texttt{result} refers to
-the value carried by the exception (if any).
-In postconditions, it is not possible to mention exceptions which
-are not possibly raised by the program.
-
-
-\subsection{Types with effect}
-\label{types}\index{Type}
-
-Program expressions are given types including side-effects and
-specification. Such a type is either inferred by \why\ (for each
-\texttt{let} declaration), or given by the user (in a
-\texttt{parameter} declaration).
-
-Types syntax follows ML types syntax, with additional information for
-side-effects and pre/postconditions. Here are examples of simple types,
-i.e. without annotations:
-\begin{verbatim}
-     int
-     int -> int
-     int -> int ref -> unit
-\end{verbatim}
-Pre/postconditions are added with a syntax similar to the one of
-programs annotations, and arguments may be given names when needed:
-\begin{verbatim}
-     x:int -> y:int -> { } int { result = x + y }
-\end{verbatim}
-Side effects must be explicited beside the result type:
-\indextt{reads}\indextt{writes}\indextt{raises}%
-\begin{verbatim}
-     unit -> { x >= 0 } unit writes x { x < x@ }
-     a:int ref -> b:int ref -> { } unit reads b writes a { a = a@ + b }
-     n:int -> { } int raises Negative { result = sqrt(n) | Negative => n<0 }
-\end{verbatim}
-Finally, the result may be given a name other than \texttt{result},
-with the following syntax:
-\begin{verbatim}
-     x:int -> y:int -> { } returns z:int { z = x + y }
-\end{verbatim}
-Section~\ref{syntax} gives the syntax of types.
-
-
-\subsection{Weakest preconditions}
-\label{wp}\index{Weakest precondition}
-To achieve completeness, annotations are propagated inside
-subexpressions using a calculus of weakest preconditions.
-However, this mechanism does not propagate an annotation inside an
-expression if it already has a postcondition. Instead, it propagates
-inside the expression its own postcondition. As a result, an
-expression with a postcondition appears as a \emph{black box} from the
-outside. 
-
-Example: in the following program
-\begin{verbatim}
-     {} begin x := 1; {} x := !x + 1 { x = 2 }; x := !x + 1 end { x = 3 }
-\end{verbatim}
-the final postcondition \texttt{x = 3} is propagated through the third
-assignment, but then stops at the postcondition \texttt{x = 2};
-instead \texttt{x = 2} is propagated through the second
-assignment. So we get two proof obligations, which are
-\begin{displaymath}
-  x=1 \Rightarrow x+1=2 
-  \qquad\mbox{and}\qquad
-  x=2 \Rightarrow x+1=3
-\end{displaymath}
-Any program establishing \texttt{x = 2} can be substituted to the
-second assignment without changing the second obligation.
-
-
+This construct can be used to proceed by successive \emph{refinements}
+or to write incomplete programs where only the meaningful parts are
+coded. With respect to verification, a non-deterministic program
+expression behaves like a call to a function parameter.
 
 \section{Tools}\label{tools}
 
@@ -999,6 +836,7 @@ external \caml\ code. However, it is possible to make them arguments
 of the functor too, with command line option \texttt{--ocaml-ext}.
 
 \subsection{Why to HTML converter (\texttt{why2html})}
+\indextt{why2html}
 A tool to convert \why\ input files to HTML is provided. Its usage is
 immediate:
 \begin{verbatim}
@@ -1034,7 +872,7 @@ Then
 
 
 \section{Examples}
-\label{examples}\index{Example}
+\label{examples}\index{Examples}
 
 Many examples are delivered with \why\ in the
 subdirectory \texttt{examples/} of the distribution.
