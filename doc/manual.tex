@@ -107,7 +107,7 @@ Bug reports can be sent to \url{filliatr@lri.fr}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Tutorial}
+\chapter{Quick tutorial}
 \label{tutorial}
 
 \section{Principles}
@@ -192,110 +192,518 @@ following:
   \label{fig:provers}
 \end{figure}
 
-We first introduce the logic in Section~\ref{logic} and then program
-verification in Section~\ref{programs}.
 
-\section{First-order logic}\label{logic}
+\section{A trivial example}
 
-\why\ implements a polymorphic first-order logic. The typing rules and
-semantics of this logic are given in Section~\ref{semantics:logic}.
+Here is a small example of \why\ input code:
+\begin{verbatim}
+  logic min: int, int -> int
+  parameter r: int ref
+  let f (n:int) = r := min !r n { r <= r@ }
+\end{verbatim}
+This code declares a function symbol \texttt{min} and gives its
+arity. Whatever the status of this function is on the prover side
+(primitive, user-defined, axiomatized, etc.), it simply needs to be
+declared in order to be used in the following of the code. The next
+line declares a parameter, that is a value that is not defined but
+simply \emph{assumed} to exist i.e. to belong to the environment. Here
+the parameter has name \texttt{r} and is an integer reference (\why's
+concrete syntax is very close to Ocaml's syntax). The third line
+defines a function \texttt{f} taking a integer \texttt{n} as argument
+(the type has to be given since there is no type inference in \why)
+and assigning to \texttt{r} the value of \texttt{min !r n}.
+The function \texttt{f} has no precondition and a postcondition
+expressing that the final value of \texttt{r} is smaller than its
+initial value. The current value of a reference \texttt{x} is directly
+denoted by \texttt{x} within annotations (not \texttt{!x}) and within
+postconditions \texttt{x@} is the notation for the value of \texttt{x}
+in the prestate (i.e. at the precondition point).
 
-TODO
+Let us assume the three lines code above to be in file
+\texttt{test.why}. Then we can produce the proof obligations for this
+program, to be verified with \coq, using the following command line:
+\begin{verbatim}
+  why --coq test.why
+\end{verbatim}
+A \coq\ file \texttt{test\_why.v} is produced which contains the
+statement of a single proof obligation, which looks like
+\begin{verbatim}
+  Lemma f_po_1 : 
+    forall (n: Z),
+    forall (r: Z),
+    forall (r0: Z),
+    forall (HW_1: r0 = (min r n)),
+    r0 <= r.
+  Proof.
+  (* FILL PROOF HERE *)
+  Save.
+\end{verbatim}
+The proof itself has to be filled in by the user. If the \why\ input
+code is modified and \why\ run again, only the statement of the proof
+obligation will be updated and the remaining of the file (including
+the proof) will be left unmodified.
+Assuming that \texttt{min} is adequately defined in \coq, the proof
+above is trivial.
 
-\section{Verifying programs}\label{programs}
+Trying an automatic decision procedure instead of \coq\ is as easy as
+running \why\ with a different command line option. For instance, to
+use Simplify~\cite{Simplify}, we type in
+\begin{verbatim}
+  why --simplify test.why
+\end{verbatim}
+A Simplify input file \texttt{test\_why.sx} is produced. But Simplify
+is not able to discharge the proof obligation, since the meaning of
+\texttt{min} is unknown for Simplify:
+\begin{verbatim}
+  Simplify test_why.sx
+  ...
+  1: Invalid
+\end{verbatim}
+The user can edit the header of \texttt{test\_why.sx} to insert an
+axiom for \texttt{min}. Alternatively, this axiom can be inserted
+directly in the \why\ input code:
+\begin{verbatim}
+  logic min: int, int -> int
+  axiom min_ax: forall x,y:int. min(x,y) <= x
+  parameter r: int ref
+  let f (n:int) = {} r := min !r n { r <= r@ }
+\end{verbatim}
+This way this axiom will be replicated in any prover selected by the
+user. When using \coq, it is even possible to prove this axiom, though
+it is not mandatory. With the addition of this axiom,
+Simplify is now able to discharge the proof obligation:
+\begin{verbatim}
+  why --simplify test.why
+  Simplify test_why.sx
+  1: Valid.
+\end{verbatim}
 
-TODO: À REFAIRE COMPLÈTEMENT
+\section{A less trivial example: Dijkstra's Dutch flag}
 
-\subsection{Input files}
+Dijkstra's Dutch flag is a classical algorithm which sorts an array
+where elements can have only three different values. Assuming that
+these values are the three colors blue, white and red, the algorithm
+restores the Dutch (or French :-) national flag within the array.
+This algorithm can be coded with a few lines of C, as follows:
+\begin{verbatim}
+typedef enum { BLUE, WHITE, RED } color;
 
-The input file contains the following kinds of declaration:
+void swap(int t[], int i, int j) { color c = t[i]; t[i] = t[j]; t[j] = c;}
+
+void flag(int t[], int n) {
+  int b = 0, i = 0, r = n;
+  while (i < r) {
+    switch (t[i]) {
+    case BLUE: swap(t, b++, i++); break;        
+    case WHITE: i++; break;
+    case RED: swap(t, --r, i); break;
+    }
+  }
+}
+\end{verbatim}
+
+We are going to show how to verify this algorithm---the
+\emph{algorithm}, not the C code---using \why. 
+First we introduce an abstract type \texttt{color} for the colors
+together with three values \texttt{blue}, \texttt{white} and \texttt{red}:
+\begin{verbatim}
+  type color
+
+  logic blue : color
+  logic white : color
+  logic red : color
+\end{verbatim}
+Such a new type is necessarily an \emph{immutable} datatype. The only
+mutable values in \why\ are references (and they only contain
+immutable values).
+
+Then we introduce another type \texttt{color\_array} for
+purely applicative arrays containing colors: 
+\begin{verbatim}
+  type color_array
+
+  logic acc : color_array, int -> color
+  logic upd : color_array, int, color -> color_array
+\end{verbatim}
+To get the usual theory of applicative arrays, we can add the
+necessary axioms: 
+\begin{verbatim}
+  axiom acc_upd_eq : 
+    forall t:color_array. forall i:int. forall c:color.
+      acc(upd(t,i,c),i) = c
+  axiom acc_upd_neq : 
+    forall t:color_array. forall i:int. forall j:int. forall c:color.
+      j<>i -> acc(upd(t,i,c),j) = acc(t,j)
+\end{verbatim}
+
+The program arrays will be references containing values of type
+\texttt{color\_array}. In order to constraint accesses and updates to
+be performed within arrays bounds, we add a notion of array length and
+two ``programs'' \texttt{get} and \texttt{set} with adequate preconditions:
+\begin{verbatim}
+  logic length : color_array -> int
+
+  axiom length_upd : 
+    forall t:color_array. forall i:int. forall c:color.  
+    length(upd(t,i,v)) = length(t)
+
+  parameter get : 
+    t:color_array ref -> i:int -> 
+      { 0<=i<length(t) } color reads t { result=acc(t,i) }
+
+  parameter set : 
+    t:color_array ref -> i:int -> c:color -> 
+      { 0<=i<length(t) } unit writes t { t=upd(t@,i,c) }
+\end{verbatim}
+These two programs need not being defined (they are only here to
+insert assertions automatically), so we declare them as
+parameters. 
+As illustrated above, a function type has named arguments, a pre- and
+a postcondition, a result type and an explicit declaration of its
+side-effects: the \texttt{reads} and \texttt{writes} keywords
+respectively declare the set of references possibly
+accessed and modified.
+
+We are now in position to define the \texttt{swap} function:
+\begin{verbatim}
+  let swap (t:color_array ref) (i:int) (j:int) =
+    { 0 <= i < length(t) and 0 <= j < length(t) }
+    let c = get t i in
+    set t i (get t j);
+    set t j c
+    { t = upd(upd(t@,i,acc(t@,j)), j, acc(t@,i)) }
+\end{verbatim}
+The precondition for \texttt{swap} states that the two indices
+\texttt{i} and \texttt{j} must lie within the array bounds and
+the postcondition is simply a rephrasing of the code on the model
+level i.e. on purely applicative arrays. Verifying the \texttt{swap}
+function is immediate.
+
+Next we need to give the main function a specification. First, we need
+to express that the array only contains one of the three values
+\texttt{blue}, \texttt{white} and \texttt{red}. Indeed, nothing
+prevents the type \texttt{color} to be inhabitated with other values
+(there is no notion of inductive type in \why\ logic, since it is
+intended to be a common fragment of many tools, including many with no
+primitive notion of inductive types). So we define the following predicate
+\texttt{is\_color}:
+\begin{verbatim}
+  predicate is_color(c:color) = c=blue or c=white or c=red
+\end{verbatim}
+Note that this predicate is given a \emph{definition} in \why. 
+
+Second, we need to express the main function postcondition that is,
+for the final contents of the array,
+the property of being ``sorted'' but also the property of being a
+permutation of the initial contents of the array (a property usually
+neglected but clearly as important as the former). For this purpose,
+we introduce a predicate \texttt{monochrome} expressing that a set of 
+successive elements is monochrome:
+\begin{verbatim}
+  predicate monochrome(t:color_array, i:int, j:int, c:color) =
+    forall k:int. i<=k<j -> acc(t,k)=c
+\end{verbatim}
+For the permutation property, we simply \emph{declare} a predicate
+\texttt{permutation}:
+\begin{verbatim}
+  logic permutation : color_array, color_array, int, int -> prop
+\end{verbatim}
+The intended meaning of \texttt{permutation($t_1$,$t_2$,$l$,$r$)} is
+``the (multi-)sets of the elements of the sub-arrays $t_1[l..r]$ and
+$t_2[l..r]$ are the same''. 
+
+To be able to write down the code, we still need to translate the
+\texttt{switch} statement into successive tests, and for this purpose
+we need to be able to decide equality of the type \texttt{color}.
+We can declare this ability with the following parameter:
+\begin{verbatim}
+  parameter eq_color  : 
+    c1:color -> c2:color -> {} bool { if result then c1=c2 else c1<>c2 }
+\end{verbatim}
+Note that the meaning of \texttt{=} within annotations has nothing to
+do with a boolean function deciding equality that we could use in
+our programs.
+
+We can now write the \why\ code for the main function:
+\begin{verbatim}
+let dutch_flag (t:color_array ref) (n:int) = 
+  { length(t) = n and forall k:int. 0 <= k < n -> is_color(acc(t,k)) }
+  let b = ref 0 in
+  let i = ref 0 in
+  let r = ref n in
+  while !i < !r do
+     if (eq_color (get t !i) blue) then begin
+       swap t !b !i;
+       b := !b + 1;
+       i := !i + 1
+     end else if (eq_color (get t !i) white) then
+       i := !i + 1
+     else begin
+       r := !r - 1;
+       swap t !r !i
+     end
+  done
+  { (exists b:int. exists r:int. 
+       monochrome(t,0,b,blue) and 
+       monochrome(t,b,r,white) and 
+       monochrome(t,r,n,red)) 
+    and permutation(t,t@,0,n-1) }
+\end{verbatim}
+As given above, the code cannot be proved correct, since a loop
+invariant is missing, and so is a termination argument. The loop
+invariant must maintain the current situation, which can be depicted as
+\begin{center}
+  \begin{tabular}{|l|l|l|l|l}
+    \multicolumn{1}{l}{0} & 
+    \multicolumn{1}{l}{\texttt{b}} & 
+    \multicolumn{1}{l}{\texttt{i}} & 
+    \multicolumn{1}{l}{\texttt{r}} & 
+    \multicolumn{1}{l}{\texttt{n}} \\\cline{1-4}
+    \quad\texttt{BLUE}\quad~ & 
+    \quad\texttt{WHITE}\quad~ & 
+    \dots to do\dots & 
+    \quad\texttt{RED}\quad~ \\\cline{1-4}
+  \end{tabular}
+\end{center}
+But the loop invariant must also maintain less obvious properties such
+as the invariance of the array length (which is obvious since we only performs
+\texttt{upd} operations over the array, but we need not to loose this
+property) and the permutation w.r.t. the initial array.
+The termination is trivially ensured since \texttt{r-i} decreases at
+each loop step and is bound by 0.
+Finally, the loop is annotated as follows:
+\begin{verbatim}
+  ...
+  init:
+  while !i < !r do
+     { invariant 0 <= b <= i and i <= r <= n and
+                 monochrome(t,0,b,blue) and 
+                 monochrome(t,b,i,white) and 
+                 monochrome(t,r,n,red) and
+                 length(t) = n and
+                 (forall k:int. 0 <= k < n -> is_color(acc(t,k))) and
+                 permutation(t,t@init,0,n-1)
+       variant r - i }
+  ...
+\end{verbatim}
+A label \texttt{init} has been introduced right before the loop in
+order to relate the current value of the array inside the loop
+(denoted \texttt{t}) to its value right before the loop (denoted as
+\texttt{t@init}) in the loop invariant.
+
+To be able to perform the proof, we need to ``define'' the
+\texttt{permutation} predicate.  The simplest way to do is to
+axiomatize it as an equivalence relation containing the transpositions
+within $[l..r]$:
+\begin{verbatim}
+  axiom permut_refl : forall t: color_array. forall l,r:int.
+    permutation(t,t,l,r)
+
+  axiom permut_swap : forall t:color_array. forall l,r,i,j:int.
+    l <= i <= r -> l <= j <= r ->
+    permutation(t, upd(upd(t,i,acc(t,j)), j, acc(t,i)), l, r)
+
+  axiom permut_sym : forall t1,t2:color_array. forall l,r:int.
+    permutation(t1,t2,l,r) -> permutation(t2,t1,l,r)
+
+  axiom permut_trans : forall t1,t2,t3: color_array. forall l,r:int.
+    permutation(t1,t2,l,r) -> permutation(t2,t3,l,r) -> 
+    permutation(t1,t3,l,r)
+\end{verbatim}
+We have no way to state that this is the \emph{smallest} such relation
+(this is not a first-order property) but this is not needed to show
+the correctness of the program. Note: the loop invariant part related
+to \texttt{is\_color} seems redundant since we should be able to
+deduce it from the permutation property. But it would also require
+induction, and thus it is simpler to add this property to the loop invariant.
+
+We can now proceed to the verification of the program with
+Simplify. We first produce the verification conditions in Simplify
+syntax: 
+\begin{verbatim}
+  why --simplify flag.why
+\end{verbatim}
+Then we run Simplify on these obligations, using the tool \texttt{dp}
+(distributed with \why; see~\ref{tool:dp}) that displays the results
+of the automatic decision procedures in a nice way:
+\begin{verbatim}
+  dp flag_why.sx
+
+(. = valid * = invalid # = timeout ! = failure)
+flag_ax_why.sx: .......... (10/0/0)
+total           :  10
+valid           :  10 (100%)
+invalid         :   0 (  0%)
+timeout/failure :   0 (  0%)
+\end{verbatim}
+As we see, the 10 verification conditions are discharged by Simplify.
+The source code of this example is part of the \why\ distribution, in
+\texttt{examples/misc/flag\_ax.mlw}. 
+
+\paragraph{Variants.} We describe here two variations around the Dutch
+flag example.
 \begin{itemize}
-  \item\indextt{let}
-    \texttt{let} $x$ \texttt{=} \textsl{annotated-program} \par
-    Declares a program expression, with name $x$.
-    The program is typed, added to the context and proof obligations
-    are generated. 
-    Examples:
+\item\textbf{Definition vs. axiomatization:} \indextt{external}
+  Instead of axiomatizing some logical elements (such as
+  the type \texttt{color} or the predicate \texttt{permutation} above), we
+  can alternatively \emph{define} them on the prover side and simply
+  \emph{declare} them in the \why\ source file. If we are using the
+  \coq\ proof assistant, for instance, we could prefer defining the
+  \texttt{color} type as an inductive data type, as follows:
 \begin{verbatim}
-     let c = 1+2
-     let f = fun (x:int ref) -> x := !x + c
+  Inductive color : Set := blue : color | white : color | red : color.
 \end{verbatim}
-    Such programs cannot be of mutable types (i.e. references or arrays).
-
-  \item\indextt{parameter}
-    \te{parameter} $x_1,\dots,x_n: \tau$ \par
-    Declares some parameters for the whole development. They will be
-    turned into axioms on the prover part (when not mutable).
-    Examples:
+  Then we can declare these external elements in the \why\ source file
+  as follows:
 \begin{verbatim}
-     parameter x,y : int ref
-     parameter N : int
-     parameter t : int array
+  external type color
+  external logic blue, white, red : color
 \end{verbatim}
-    (Types are detailed in Section~\ref{types} and their syntax is
-    given in Section~\ref{syntax}.)
+  The \texttt{external} modifier indicates that nothing must be
+  produced in the prover file for these declarations. Then we do not
+  the \texttt{is\_color} property anymore, since we are able to prove
+  (once on the \coq\ side) that there is no other value in the
+  \texttt{color} type than \texttt{blue}, \texttt{white} and \texttt{red}.
 
-    The prefix \te{external}\indextt{external} indicates that
-    $x_1,\dots,x_n$ are already defined on the prover side (and thus
-    nothing is produced). Examples:
+  Similarly, we could define the \texttt{permutation} predicate as a
+  \coq\ inductive predicate, and declare it in the \why\ source file
+  as follows:
 \begin{verbatim}
-     external parameter mean : int -> int -> int
-     external parameter diff : a:int -> b:int -> 
-                               { b >= 0 } int { a = b + result }
-\end{verbatim}
-    External values cannot be mutable.
-
-  \item\indextt{exception}
-    \te{exception} $E$ $[$ \te{of} $\tau$ $]$
-
-    Declares a new exception $E$, possibly with an argument of type $\tau$.
-
-  \item\indextt{logic}\indextt{prop}
-    \te{logic} $x_1,\dots,x_n$ \te{:} $\tau_1,\dots,\tau_m$ \te{->} $\tau$
-
-    Introduces symbols $x_1,\dots,x_n$ belonging to the logic. 
-    The $x_i$ are either
-    predicates (when $\tau$ is \te{prop}), constants (when $m=0$) or
-    function symbols. 
-    Examples:
-\begin{verbatim}
-     logic max : int,int -> int
-     logic is_int : real -> prop
+  external logic permutation : 
+    color_array, color_array, int, int -> prop
 \end{verbatim}
 
-    Similarly to \te{parameter}, the prefix
-    \te{external}\indextt{external} indicates that 
-    $x_1,\dots,x_n$ are already defined on the prover side (and thus
-    nothing is produced).
-
-  \item\indextt{predicate}
-    \te{predicate} $p$\te{(} $x_1:\tau_1$, \dots, $x_n:\tau_n$
-    \te{) =} \textsl{predicate}
-
-    Defines a predicate $p$. Examples:
-\begin{verbatim}
-     predicate ge0(x:int, y:int) = x >= y >= 0
-\end{verbatim}
-
-  \item\indextt{function}
-    \te{function} $f$\te{(} $x_1:\tau_1$, \dots, $x_n:\tau_n$
-    \te{) :} $\tau$ \te{=} \textsl{term}
-
-    Defines a logic function $f$. Example:
-\begin{verbatim}
-     function f(x:int, y:int) : int = x + y
-\end{verbatim}
-
-  \item\indextt{axiom} 
-    \te{axiom} $x$ \te{:} \textsl{predicate}
-
-    Declares an axiom of name $x$. Example:
-\begin{verbatim}
-     axiom max_1 : forall x:int. forall y:int. max(x,y) >= x
-\end{verbatim}
+\item\textbf{Primitive arrays:}
+  The \why\ tool actually provides a datatype of
+  arrays, exactly in the way we have done it above i.e. an array is a
+  reference on a purely applicative array.
+  There is even a nice syntax for array operations:
+  $t[e]$ stands for $(\mathtt{array\_get}~t~e)$
+  and $t[e_1]:=e_2$ stands for $(\mathtt{array\_set}~t~e_1~e_2)$.
+  This is part of the \why\ prelude, which is described on
+  page~\pageref{prelude}. 
 
 \end{itemize}
 
+\section{Other features}
+
+This section quickly describes additional features that were not
+present in the example above.
+
+\subsection{Assertions}\index{Assertion}\indextt{assert}
+Assertions to be verified can be placed at any place inside code using the
+\texttt{assert} construct. Example:
+\begin{verbatim}
+  begin 
+    x := 2 * !x;
+    assert { even(x) };
+    x := !x - 1
+  end
+\end{verbatim}
+An assertion can also be placed right \texttt{after} some program
+expression using the postcondition construct:
+\begin{verbatim}
+  let x = (fib 4) { even(result) } in x+x
+\end{verbatim}
+
+Such assertions (before an expression with \texttt{assert} and after
+with the brackets notation) can be used to introduce \emph{proof
+  cuts}: first, they result in proof obligations at the corresponding
+program point and then they are available in the context of the
+following verification conditions. They are \emph{transparent}
+i.e. they do not modify the information already available in the other
+verification conditions.
+
+There is also an \emph{opaque} variant of the postcondition construct,
+which is written with double brackets:
+\begin{verbatim}
+  let x = (fib 4) {{ even(result) }} in x+x
+\end{verbatim}
+In that case, we still need to prove the property
+\texttt{even(fib(4))} but, in the remaining of the program, we do not
+know that \texttt{x=fib(4)} anymore. Only the property
+\texttt{even(x)} is available.
+
+\subsection{Recursive functions}
+\index{Recursive function}
+Recursive functions are introduced with the \texttt{let rec}
+construct. They are annotated with a result type (there is no type
+inference) and a variant to ensure termination.
+For instance, the famous Mac Carthy's 91 function can be written as follows:
+\begin{verbatim}
+  let rec f91 (n:int) : int { variant max(0,101-n) } =
+    if n <= 100 then
+      (f91 (f91 (n + 11)))
+    else
+      n - 10
+    { (n <= 100 and result = 91) or (n >= 101 and result = n - 10) }
+\end{verbatim}
+
+\subsection{Exceptions}
+\index{Exception}\indextt{exception}\indextt{raises}
+
+New exceptions are declared with the \texttt{exception} declaration and
+may have arguments:
+\begin{verbatim}
+  exception E
+  exception F of int
+\end{verbatim}
+Exceptions are raised with the construct \texttt{raise}:
+\begin{verbatim}
+     raise E
+     raise (F 1)
+\end{verbatim}
+and caught with the construct \texttt{try \dots\ with \dots\ end}:
+\begin{verbatim}
+     try f 0 with E -> 1 end 
+     try f 0 with F x -> x end
+\end{verbatim}
+It is not possible to catch an exception which is not possibly raised
+by the expression following the \texttt{try}.
+
+Postconditions are extended to specify the behavior in case of
+uncaught exceptions:
+\begin{verbatim}
+     raise E { false | E => true }
+     raise (F 1) { false | F => result = 1 }
+\end{verbatim}
+In a postcondition regarding an exception, \texttt{result} refers to
+the value carried by the exception (if any).
+In postconditions, it is not possible to mention exceptions which
+are not possibly raised by the program.
+
+In a function type, the exceptions possibly raised by the function
+must be given as part of its side-effects, using the \texttt{raises}
+keyword. For instance
+\begin{verbatim}
+  parameter f : x:int -> {} int raises E { P(x,result) | E => Q(x) }
+\end{verbatim}
+declares a function \texttt{f} taking an integer \texttt{x} as
+argument, returning an integer and possibly raising the exception
+\texttt{E}. In the latter case, \texttt{Q(x)} holds.
+
+\subsection{Unreachable code}
+\label{absurd}\indextt{absurd}
+
+The \texttt{absurd} construct can be used to denote an unreachable
+point in the code. Example:
+\begin{verbatim}
+     { 0 <= x <= 1 }
+     if x = 0 then 
+       ...
+     else if x = 1 then 
+       ...
+     else 
+       absurd
+     { ... }
+\end{verbatim}
+At such program points, the user will be asked to prove that the
+context is indeed absurd, which corresponds to the proof obligation
+\texttt{false}. 
+
+\subsection{Non-deterministic programs}
+
+- any 
 
 \subsection{Annotations}
 \label{annotations}\index{Annotation}
@@ -363,17 +771,6 @@ Here \texttt{x = 0} is an assumption and \texttt{odd(x)} is an obligation.
 
 \subsubsection{Assertions}
 \index{Assertion}\indextt{assert}
-Within sequences, a simpler way to insert obligations is to use the
-\texttt{assert} construct. Example:
-\begin{verbatim}
-     begin 
-       x := 2 * !x;
-       assert { even(x) };
-       x := !x - 1
-     end
-\end{verbatim}
-Note that such assertions can be used to introduce \emph{proof cuts},
-to ease the discharge of the forthcoming obligations.
 
 \subsubsection{Loops annotations}
 \index{Loop}\index{Invariant}\index{Variant}
@@ -396,44 +793,6 @@ Variants can be of any type and can be associated to any order
 relation (see syntax in Section~\ref{syntax}). When not specified,
 the type \texttt{int} and the usual order relation over non negative
 integers are assumed.
-
-
-\subsubsection{Recursive functions}
-\index{Recursive function}
-Recursive functions are annotated with the result type and a variant.
-For instance, the famous Mac Carthy's 91 function is written:
-\begin{verbatim}
-     let rec f91 (n:int) : int { variant max(0,101-n) } =
-       { }
-       if n <= 100 then
-         (f91 (f91 (n + 11)))
-       else
-         n - 10
-       { (n <= 100 and result = 91) or (n >= 101 and result = n - 10) }
-\end{verbatim}
-Variants are similar to the ones for loops.
-
-\subsubsection{Labels}
-\index{Label}
-Labels may be inserted within sequences using the 
-\te{label} keyword and the value of a reference \texttt{x} at the
-program point labelled \texttt{L} is then referred to as \texttt{x@L}.
-Example:
-\begin{verbatim}
-     begin 
-       x := y;
-       label L; 
-       { } begin x := !x + 1 end { x > x@L }
-     end
-\end{verbatim}
-The visibility of a label is the same as a local variable's one. In
-the code above, label \texttt{L} is not visible outside of the
-outermost sequence.
-
-Labels provide an alternative to the traditional use of
-\emph{auxiliary variables}\index{Auxiliary variable}. Indeed, they
-allow you to relate the values of references at any points of the
-program. 
 
 
 \subsubsection{Exceptions}
@@ -463,24 +822,6 @@ the value carried by the exception (if any).
 In postconditions, it is not possible to mention exceptions which
 are not possibly raised by the program.
 
-
-\subsubsection{Unreachable code}
-\label{absurd}\indextt{absurd}
-
-The construct \texttt{absurd} can be used to denote an unreachable
-point in the code. Example:
-\begin{verbatim}
-     { 0 <= x <= 1 }
-     if x = 0 then 
-       ...
-     else if x = 1 then 
-       ...
-     else 
-       absurd
-     { ... }
-\end{verbatim}
-At such program points, the user will be asked to prove that the
-context is indeed absurd, which corresponds to the obligation \texttt{false}.
 
 \subsection{Types with effect}
 \label{types}\index{Type}
@@ -583,7 +924,7 @@ Note that you need the Unix \texttt{timeout} command to be installed
 on your system before running \texttt{gwhy}.
 
 \subsection{Calling decision procedures (\texttt{dp})}
-\indextt{dp}
+\label{tool:dp}\indextt{dp}
 
 A small tool is provided to call the decision procedures (\simplify,
 \harvey, \zenon\ and \cvclite) on files containing several goals, with
