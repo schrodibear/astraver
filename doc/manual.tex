@@ -1571,17 +1571,323 @@ Then we have the following deduction rule for arithmetic:
 
 \subsection{Programs}\label{semantics:programs}
 
+\newcommand{\void}{\kw{void}}
+\newcommand{\pget}[1]{\ensuremath{\texttt{!}#1}}
+\newcommand{\pset}[2]{\ensuremath{#1~\texttt{:=}~#2}}
+\newcommand{\pref}[1]{\ensuremath{\kw{ref}~#1}}
+
+\newcommand{\taccess}[2]{\ensuremath{#1\texttt{[}#2\texttt{]}}}
+\newcommand{\tassign}[3]{\ensuremath{#1\texttt{[}#2\texttt{]}~\texttt{:=}~#3}}
+\newcommand{\faccess}[2]{\ensuremath{(\mathit{access}~#1~#2)}}
+\newcommand{\fupdate}[3]{\ensuremath{(\mathit{update}~#1~#2~#3)}}
+
+\newcommand{\pblock}[1]{\ensuremath{\kw{begin}~#1~\kw{end}}}
+\newcommand{\pseq}[2]{\ensuremath{#1\texttt{;}~#2}}
+\newcommand{\plabel}[2]{\ensuremath{#1\texttt{:}#2}}
+\newcommand{\ppre}[2]{\ensuremath{\{#1\}~#2}}
+\newcommand{\passert}[2]{\ensuremath{\kw{assert}~\{#1\};~#2}}
+\newcommand{\passume}[2]{\ensuremath{\{\kw{assume}~#1\}~#2}}
+\newcommand{\ppost}[2]{\ensuremath{#1~\{#2\}}}
+\newcommand{\popost}[2]{\ensuremath{#1~\{\{#2\}\}}}
+\newcommand{\prefine}[4]{\ensuremath{\langle\{#1\}~#2~#3~\{#4\}\rangle}}
+\newcommand{\ploop}[2]{\ensuremath{\kw{loop}~#1~\{\kw{variant}~#2\}}}
+\newcommand{\ploopI}[3]{\ensuremath{\kw{loop}~#1~\{\kw{invariant}~#2~\kw{variant}~#3\}}}
+\newcommand{\pwhile}[3]{\ensuremath{\kw{while}~#1~\kw{do}~#2~\{\kw{variant}~#3\}}}
+\newcommand{\pwhileI}[4]{\ensuremath{\kw{while}~#1~\kw{do}~#2~\{\kw{invariant}~#3~\kw{variant}~#4\}}}
+\newcommand{\pite}[3]{\ensuremath{\kw{if}~#1~\kw{then}~#2~\kw{else}~#3}}
+\newcommand{\pfun}[4]{\ensuremath{\kw{fun}~(#1:#2)\rightarrow\{#3\}~#4}}
+\newcommand{\tapp}[2]{\ensuremath{#1\texttt{(}#2\texttt{)}}}
+\newcommand{\papp}[2]{\ensuremath{#1~#2}}
+\newcommand{\precfun}[5]{\ensuremath{\kw{rec}~#1:#2~\{\kw{variant}~#3\}=\{#4\}~#5}}
+\newcommand{\closure}[3]{\ensuremath{\kw{rec}~#1~#2=#3}}
+\newcommand{\pletin}[3]{\ensuremath{\kw{let}~#1~\texttt{=}~#2~\kw{in}~#3}}
+\newcommand{\pletref}[3]{\ensuremath{\kw{let}~#1~\texttt{=}~\kw{ref}~#2~\kw{in}~#3}}
+\newcommand{\praisex}[3]{\ensuremath{\kw{raise}~({#1}~{#2}):#3}}
+\newcommand{\exn}[2]{\ensuremath{\kw{exception}~#1~\kw{of}~#2}}
+\newcommand{\Exit}{\ensuremath{\mathit{Exit}}}
+\newcommand{\ptrywith}[4]{\ensuremath{\kw{try}~#1~\kw{with}~#2~#3\rightarrow#4~\kw{end}}}
+\newcommand{\pcoerce}[2]{\ensuremath{(#1:#2)}}
+
+\newcommand{\unit}{\kw{unit}}
+\newcommand{\tint}{\kw{int}}
+\newcommand{\tref}[1]{\ensuremath{#1~\mathsf{ref}}}
+\newcommand{\tarray}[1]{\ensuremath{#1~\kw{array}}}
+\newcommand{\tfun}[3]{\ensuremath{#1:#2\rightarrow#3}}
+
+\newcommand{\prepost}[3]{\ensuremath{\{#1\}\,#2\,\{#3\}}}
+\newcommand{\prepostE}[4]{\ensuremath{\{#1\}\,#2\,\{#3 ~|~ E \Rightarrow #4\}}}
+\newcommand{\result}{\ensuremath{\mathit{result}}}
+
+\newcommand{\ptrue}{\ensuremath{\top}}
+\newcommand{\pfalse}{\ensuremath{\kw{false}}}
+\newcommand{\pnot}[1]{\ensuremath{\kw{not}~#1}}
+\newcommand{\pand}[2]{\ensuremath{#1~\kw{and}~#2}}
+\newcommand{\por}[2]{\ensuremath{#1~\kw{or}~#2}}
+\newcommand{\pimplies}[2]{\ensuremath{#1~\kw{->}~#2}}
+\newcommand{\pif}[3]{\ensuremath{\kw{if}~#1~\kw{then}~#2~\kw{else}~#3}}
+\newcommand{\pforall}[2]{\ensuremath{\kw{forall}~#1\texttt{.}~#2}}
+\newcommand{\pexists}[2]{\ensuremath{\kw{exists}~#1\texttt{.}~#2}}
+\newcommand{\eqdef}{\equiv}
+
+Program types ($\theta$) and specifications ($\kappa$) 
+are classified as follows:
+\begin{displaymath}
+  \begin{array}{rrl}
+    \theta & ~::=~ & \tau ~|~ \tref{\tau} ~|~ (x:\theta) \rightarrow\kappa \\
+    \kappa &~::=~& \prepost{p}{\theta~\epsilon}{q} \\
+    q &~::=~& p;E\Rightarrow p;\dots;E\Rightarrow p \\
+    \epsilon &~::=~&
+    \kw{reads}~x,\dots,x~\kw{writes}~x,\dots,x ~ \kw{raises}~E,\dots,E 
+  \end{array}
+\end{displaymath}
+A value of type $\theta$ is either an immutable variable of a
+pure type ($\tau$), a reference containing a value of a pure type
+($\tref{\tau}$) or a function of type
+$(x:\theta)\rightarrow\prepost{p}{\theta'~\epsilon}{q}$ 
+mapping the formal parameter $x$ to the specification of its body, that
+is a precondition $p$, the type $\theta'$ for the returned value,
+an effect $\epsilon$ and a postcondition $q$. An effect
+is made of tree lists of variables: the references possibly accessed
+(\texttt{reads}), the references possibly modified (\texttt{writes})
+and the exceptions possibly raised (\texttt{raises}). A postcondition
+$q$ is made of several parts: one 
+for the normal termination and one for each possibly raised exception
+($E$ stands for an exception name).
+
+When a function specification $\prepost{p}{\theta~\epsilon}{q}$ has no
+precondition and no postcondition (both being \ptrue) and no effect
+($\epsilon$ is made of three empty lists) it can be shortened to
+$\theta$. In particular,
+$(x_1:\theta_1)\rightarrow\cdots\rightarrow(x_n:\theta_n)\rightarrow\kappa$
+denotes the type of a function with $n$ arguments that has no effect
+as long as it not applied to $n$ arguments. Note that functions can be
+partially applied.
+
+The syntax for program expressions is given in Figure~\ref{fig:prog:expr}.
+In particular, programs contain \emph{pure terms} ($t$) made of
+constants, variables, dereferences (written $\pget{x}$) and application
+of function symbols from the logic to pure terms. 
+$\ploopI{e}{p}{t}$ is an infinite loop of body $e$, invariant $p$ and
+which termination is ensured by the variant $t$. 
+
+\begin{figure}[htbp]
+  %\centering
+  \begin{displaymath}
+    \begin{array}{rrl}
+      t & ~::=~ & x ~|~ \pget{x} ~|~ \tapp{f}{t,\dots,t} \\
+      e & ~::=~ & t \\
+        &  |~ & \pletin{x}{e}{e} \\
+        &  |~ & \pletref{x}{e}{e} \\
+        &  |~ & \pite{e}{e}{e} \\
+        &  |~ & \ploopI{e}{p}{t} \\
+        &  |~ & \plabel{L}{e} \\
+        &  |~ & \praisex{E}{e}{\tau} \\
+        &  |~ & \ptrywith{e}{E}{x}{e} \\
+        &  |~ & \passert{p}{e} \\
+        &  |~ & \ppost{e}{q} \\
+        &  |~ & \popost{e}{q} \\
+        &  |~ & \pfun{x}{\tau}{p}{e} \\
+        &  |~ & \precfun{x~(x:\tau)\dots(x:\tau)}{\tau}{t}{p}{e} \\
+        &  |~ & \papp{e}{e}
+    \end{array}
+  \end{displaymath}
+  \caption{Abstract syntax of program expressions}
+  \label{fig:prog:expr}
+\end{figure}
+
+\paragraph{Syntactic sugar.}
+The traditional sequence construct is only syntactic sugar for a
+\texttt{let-in} binder where the variable does not occur in $e_2$: 
+\begin{displaymath}
+\pseq{e_1}{e_2} ~\eqdef~ \pletin{\_}{e_1}{e_2}
+\end{displaymath}
+The assignment construct is syntactic sugar for the application of the
+function \texttt{ref\_set} from \why's prelude (see~\ref{prelude}):
+\begin{displaymath}
+  \pset{x}{e} ~\eqdef~ \mathtt{ref\_set}~x~e
+\end{displaymath}
+We also simplify the \texttt{raise} construct whenever both the exception
+contents and the whole \texttt{raise} expression have type \texttt{unit}:
+\begin{displaymath}
+  \kw{raise}~E ~\eqdef~ \praisex{E}{\void}{\unit}
+\end{displaymath}
+The traditional \texttt{while} loop is also syntactic sugar for a
+combination of an infinite loop and the use of an exception $\Exit$ to
+exit the loop:
+\begin{displaymath}
+  \begin{array}{ll}
+    \pwhileI{e_1}{e_2}{p}{t} ~\equiv \\
+    \quad \kw{try} \\
+    \quad \quad \kw{loop} ~ \pite{e_1}{e_2}{\kw{raise}~\Exit} \\
+    \quad \quad \{\kw{invariant} ~ p ~ \kw{variant} ~ t\} \\
+    \quad \kw{with} ~ \Exit~\_ ~ \texttt{->} ~ \void ~ \kw{end}
+  \end{array}
+\end{displaymath}
+
 \subsubsection{Typing}
 
-TODO
+The typing of program expressions is straightforward, with
+polymorphism but no type inference.
+
+% TODO: give typing rules
 
 \subsubsection{Operational semantics}
 
-TODO
+The language is strict (all arguments always evaluated before the
+function call), with a left-to-right evaluation order.
 
-\subsubsection{Weakest preconditions}
+% TODO: give operation semantics rules
 
-TODO
+\subsubsection{Weakest preconditions}\label{wp}
+\index{Weakest preconditions}
+
+\newcommand{\wpre}[2]{\ensuremath{\mathit{wp}(#1,#2)}}
+\newcommand{\wprx}[3]{\ensuremath{\mathit{wp}(#1,#2;#3)}}
+\newcommand{\unref}[1]{#1}
+\newcommand{\old}[1]{\ensuremath{\mathtt{old}(#1)}}
+\newcommand{\at}[2]{\ensuremath{\mathtt{at}(#1,#2)}}
+
+Programs correctness is defined using a calculus of weakest
+preconditions. We note $\wprx{e}{q}{r}$ the weakest precondition for a
+program expression $e$ and a postcondition $q;r$ where $q$ is the
+property to hold when terminating normally and $r = E_1\Rightarrow
+q_1; \dots; E_n\Rightarrow q_n$ is the set of properties to hold for
+each possibly uncaught exception.
+Expressing the correctness of a program $e$ is simply a matter of
+computing $\wpre{e}{\textsf{True}}$.
+
+The rules for the basic constructs are the following:
+\begin{displaymath}
+  \begin{array}{rl}
+    \wprx{t}{q}{r} & = 
+       q[\result \leftarrow \unref{t}] \\
+%    \wprx{\pset{x}{e}}{q}{r} & = 
+%       \wprx{e}{q[\result\leftarrow\void; x\leftarrow\result]}{r} \\
+    \wprx{\pletin{x}{e_1}{e_2}}{q}{r} & =
+       \wprx{e_1}{\wprx{e_2}{q}{r}[x\leftarrow\result]}{r} \\
+    \wprx{\pletref{x}{e_1}{e_2}}{q}{r} & =
+       \wprx{e_1}{\wprx{e_2}{q}{r}[x\leftarrow\result]}{r} \\
+    \wprx{\pite{e_1}{e_2}{e_3}}{q}{r} & =
+       \wprx{e_1}{\pite{\result}{\wprx{e_2}{q}{r}}{\wprx{e_3}{q}{r}}}{r} \\
+    \wprx{\plabel{L}{e}}{q}{r} & =
+       \wprx{e}{q}{r}[\at{x}{L}\leftarrow x] \\
+  \end{array}
+\end{displaymath}
+On the case of an exception free sequence, we retrieve the usual rule:
+\begin{displaymath}
+  \wpre{\pseq{e_1}{e_2}}{q} = \wpre{e_1}{\wpre{e_2}{q}}
+\end{displaymath}
+The cases of exceptions and annotations are also straightforward:
+\begin{displaymath}
+  \begin{array}{rl}
+    \wprx{\praisex{E}{e}{\tau}}{q}{r} & = 
+       \wprx{e}{r(E)}{r} \\
+    \wprx{\ptrywith{e_1}{E}{x}{e_2}}{q}{r} & = 
+       \wprx{e_1}{q}{E\Rightarrow\wprx{e_2}{q}{r}[x\leftarrow\result];r} \\
+       % FAUX \wprx{e_1}{q}{\wprx{e_2}{q}{r}[v\leftarrow\result]} \\
+    \wprx{\passert{p}{e}}{q}{r} & =
+       p \land \wprx{e}{q}{r} \\ 
+    \wprx{\ppost{e}{q';r'}}{q}{r} & =
+       \wprx{e}{q' \land q}{r'\land r} \\ 
+    \wprx{\popost{e}{q';r'}}{q}{r} & =
+       \wprx{e}{q'}{r'} \land
+       \forall\omega.\forall\result.q'\Rightarrow q\land r'\Rightarrow r \\ 
+  \end{array}
+\end{displaymath}
+The last implication $r'\Rightarrow r$ is actually an abuse for the 
+conjunction of all implications for each postcondition part.
+The case of an infinite loop is more subtle:
+\begin{displaymath}
+  \begin{array}{rl}
+    \wprx{\ploopI{e}{p}{t}}{q}{r} & = 
+       p ~\land~ \forall\omega. ~ 
+       p \Rightarrow \wprx{\plabel{L}{e}}{p\land t<\at{t}{L}}{r} \\
+  \end{array}
+\end{displaymath}
+where $\omega$ stands for the set of references possibly modified by
+the loop body (the \texttt{writes} part of $e$'s effect).
+Here the weakest precondition expresses that the invariant must hold
+initially and that for each turn in the loop (represented by
+$\omega$), either
+$p$ is preserved by $e$ and $e$ decreases the value of $t$ (to ensure
+termination), or $e$ raises an exception and thus must establish $r$
+directly. 
+
+By combining this rule and the rule for the conditional, we can retrieve
+the rule for the usual while loop:
+\begin{displaymath}
+  \begin{array}{ll}
+    & \wprx{\pwhileI{e_1}{e_2}{p}{t}}{q}{r} \\
+   =& p ~\land~ \forall\omega. ~ p \Rightarrow \\
+    &    \mathit{wp}(\plabel{L}{\pite{e_1}{e_2}}{\kw{raise}~E},
+         p\land t<\at{t}{L},E\Rightarrow q;r) \\
+   =&p ~\land~ \forall\omega. ~ p \Rightarrow \\
+    & \mathit{wp}(e_1,\pite{\result}{\wpre{e_2}{p\land t<\at{t}{L}}}{q},r)%
+      [\at{x}{L}\leftarrow x]
+  \end{array}
+\end{displaymath}
+
+Finally, we give the rules for functions and function calls.
+Since a function cannot be mentioned within the postcondition, the
+weakest preconditions for function constructs \texttt{fun} and
+\texttt{rec} are only expressing the correctness of the function body:
+\begin{displaymath}
+  \begin{array}{rl}
+    \wprx{\pfun{x}{\tau}{p}{e}}{q}{r} 
+    & = q ~\land~ \forall x.\forall\rho. p \Rightarrow\wpre{e}{\textsf{True}}
+  \end{array}
+\end{displaymath}
+\begin{displaymath}
+  \begin{array}{l}
+    \wprx{\precfun{f~(x_1:\tau_1)\dots(x_n:\tau_n)}{\tau}{t}{p}{e}}{q}{r}
+    \\ = q ~\land~ \forall x_1.\dots\forall x_n.\forall\rho. 
+    p \Rightarrow\wpre{\plabel{L}{e}}{\textsf{True}}
+  \end{array}
+\end{displaymath}
+where $\rho$ stands for the set of references possibly accessed by
+the loop body (the \texttt{reads} part of $e$'s effect).
+In the case of a recursive function,
+$\wpre{\plabel{L}{e}}{\textsf{True}}$ must be computed within an
+environment where $f$ is assumed to have type
+$(x_1:\tau_1)\rightarrow\cdots\rightarrow(x_n:\tau_n)\rightarrow\prepost{p\land
+  t<\at{t}{L}}{\tau~\epsilon}{q}$
+i.e. where the decreasing of the variant $t$ has been added to the
+precondition of $f$.
+
+The case of a function call $\papp{e1}{e2}$ can be simplified to the
+case of an application $\papp{x_1}{x_2}$ of one variable to another,
+using the following transformation if needed:
+\begin{displaymath}
+    \papp{e_1}{e_2} \equiv 
+      \pletin{x_1}{e_1}{\pletin{x_2}{e_2}{\papp{x_1}{x_2}}}
+\end{displaymath}
+Then assuming that $x_1$ has type
+$(x:\tau)\rightarrow\prepost{p'}{\tau'~\epsilon}{q'}$, we define
+\begin{displaymath}
+  \wpre{x_1~x_2}{q} = p'[x\leftarrow x_2] ~\land~
+  \forall\omega. \forall\result. 
+    (q'[x\leftarrow x_2] \Rightarrow q)[\old{t}\leftarrow t]
+\end{displaymath}
+that is (1) the precondition of the function must hold and (2) its
+postcondition must imply the expected property $q$ whatever the
+values of the modified references and of the result are.
+Note that $q$ and $q'$ may contain exceptional parts and thus the
+implication is again an abuse for the conjunction of all implications for
+each postcondition part.
+
+In the case of an assignment $\pset{x}{e}$ the rules above combined
+with the specification of \texttt{ref\_set} give
+(assuming that $\result$ does not occur in $q$):
+\begin{displaymath}
+  \wprx{\pset{x}{e}}{q}{r} = \wprx{e}{x=\result \Rightarrow q}{r} 
+\end{displaymath}
+And in the case of the assigment of a side-effect free expression $t$,
+it simplifies to
+\begin{displaymath}
+  \wpre{\pset{x}{t}}{q} = (x=t \Rightarrow q)
+\end{displaymath}
+which is equivalent to the usual rule $\wpre{\pset{x}{t}}{q} =
+q[x\leftarrow t]$.
 
 \section{Prelude}
 \label{prelude}\index{Prelude}
