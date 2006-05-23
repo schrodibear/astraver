@@ -1681,13 +1681,13 @@ which termination is ensured by the variant $t$.
         &  |~ & \pite{e}{e}{e} \\
         &  |~ & \ploopI{e}{p}{t} \\
         &  |~ & \plabel{L}{e} \\
-        &  |~ & \praisex{E}{e}{\tau} \\
+        &  |~ & \praisex{E}{e}{\theta} \\
         &  |~ & \ptrywith{e}{E}{x}{e} \\
         &  |~ & \passert{p}{e} \\
         &  |~ & \ppost{e}{q} \\
         &  |~ & \popost{e}{q} \\
-        &  |~ & \pfun{x}{\tau}{p}{e} \\
-        &  |~ & \precfun{x~(x:\tau)\dots(x:\tau)}{\tau}{t}{p}{e} \\
+        &  |~ & \pfun{x}{\theta}{p}{e} \\
+        &  |~ & \precfun{x~(x:\theta)\dots(x:\theta)}{\theta}{t}{p}{e} \\
         &  |~ & \papp{e}{e}
     \end{array}
   \end{displaymath}
@@ -1780,7 +1780,7 @@ On the case of an exception free sequence, we retrieve the usual rule:
 The cases of exceptions and annotations are also straightforward:
 \begin{displaymath}
   \begin{array}{rl}
-    \wprx{\praisex{E}{e}{\tau}}{q}{r} & = 
+    \wprx{\praisex{E}{e}{\theta}}{q}{r} & = 
        \wprx{e}{r(E)}{r} \\
     \wprx{\ptrywith{e_1}{E}{x}{e_2}}{q}{r} & = 
        \wprx{e_1}{q}{E\Rightarrow\wprx{e_2}{q}{r}[x\leftarrow\result];r} \\
@@ -1833,13 +1833,13 @@ weakest preconditions for function constructs \texttt{fun} and
 \texttt{rec} are only expressing the correctness of the function body:
 \begin{displaymath}
   \begin{array}{rl}
-    \wprx{\pfun{x}{\tau}{p}{e}}{q}{r} 
+    \wprx{\pfun{x}{\theta}{p}{e}}{q}{r} 
     & = q ~\land~ \forall x.\forall\rho. p \Rightarrow\wpre{e}{\textsf{True}}
   \end{array}
 \end{displaymath}
 \begin{displaymath}
   \begin{array}{l}
-    \wprx{\precfun{f~(x_1:\tau_1)\dots(x_n:\tau_n)}{\tau}{t}{p}{e}}{q}{r}
+    \wprx{\precfun{f~(x_1:\theta_1)\dots(x_n:\theta_n)}{\theta}{t}{p}{e}}{q}{r}
     \\ = q ~\land~ \forall x_1.\dots\forall x_n.\forall\rho. 
     p \Rightarrow\wpre{\plabel{L}{e}}{\textsf{True}}
   \end{array}
@@ -1849,8 +1849,8 @@ the loop body (the \texttt{reads} part of $e$'s effect).
 In the case of a recursive function,
 $\wpre{\plabel{L}{e}}{\textsf{True}}$ must be computed within an
 environment where $f$ is assumed to have type
-$(x_1:\tau_1)\rightarrow\cdots\rightarrow(x_n:\tau_n)\rightarrow\prepost{p\land
-  t<\at{t}{L}}{\tau~\epsilon}{q}$
+$(x_1:\theta_1)\rightarrow\cdots\rightarrow(x_n:\theta_n)\rightarrow\prepost{p\land
+  t<\at{t}{L}}{\theta~\epsilon}{q}$
 i.e. where the decreasing of the variant $t$ has been added to the
 precondition of $f$.
 
@@ -1862,7 +1862,7 @@ using the following transformation if needed:
       \pletin{x_1}{e_1}{\pletin{x_2}{e_2}{\papp{x_1}{x_2}}}
 \end{displaymath}
 Then assuming that $x_1$ has type
-$(x:\tau)\rightarrow\prepost{p'}{\tau'~\epsilon}{q'}$, we define
+$(x:\theta)\rightarrow\prepost{p'}{\theta'~\epsilon}{q'}$, we define
 \begin{displaymath}
   \wpre{x_1~x_2}{q} = p'[x\leftarrow x_2] ~\land~
   \forall\omega. \forall\result. 
