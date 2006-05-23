@@ -3,9 +3,7 @@
 
 external type color
 
-external logic blue : color
-external logic white : color
-external logic red : color
+external logic blue, white, red : color
 
 external parameter eq_blue  : c:color -> {} bool { if result then c=blue else c<>blue }
 external parameter eq_white : c:color -> {} bool { if result then c=white else c<>white }

@@ -41,6 +41,21 @@ parameter set :
 predicate monochrome(t:color_array, i:int, j:int, c:color) =
   forall k:int. i<=k<j -> acc(t,k)=c
 
+logic permutation : color_array, color_array, int, int -> prop
+
+axiom permut_refl : forall t: color_array. forall l,r:int.
+  permutation(t,t,l,r)
+
+axiom permut_swap : forall t:color_array. forall l,r,i,j:int.
+  l <= i <= r -> l <= j <= r ->
+  permutation(t, upd(upd(t,i,acc(t,j)), j, acc(t,i)), l, r)
+
+axiom permut_sym : forall t1,t2:color_array. forall l,r:int.
+  permutation(t1,t2,l,r) -> permutation(t2,t1,l,r)
+
+axiom permut_trans : forall t1,t2,t3: color_array. forall l,r:int.
+  permutation(t1,t2,l,r) -> permutation(t2,t3,l,r) -> permutation(t1,t3,l,r)
+
 let swap (t:color_array ref) (i:int) (j:int) =
   { 0 <= i < length(t) and 0 <= j < length(t) }
   let u = get t i in
@@ -54,13 +69,15 @@ let dutch_flag (t:color_array ref) (n:int) =
   let b = ref 0 in
   let i = ref 0 in
   let r = ref n in
+  init:
   while !i < !r do
      { invariant 0 <= b <= i and i <= r <= n and
 	         monochrome(t,0,b,blue) and 
 	         monochrome(t,b,i,white) and 
 	         monochrome(t,r,n,red) and
 		 length(t) = n and
-                 forall k:int. 0 <= k < n -> is_color(acc(t,k))
+                 (forall k:int. 0 <= k < n -> is_color(acc(t,k))) and
+	         permutation(t,t@init,0,n-1)
        variant r - i }
      if eq_color (get t !i) blue then begin
        swap t !b !i;
@@ -73,7 +90,8 @@ let dutch_flag (t:color_array ref) (n:int) =
        swap t !r !i
      end
   done
-  { exists b:int. exists r:int.	
+  { (exists b:int. exists r:int.	
       monochrome(t,0,b,blue) and 
       monochrome(t,b,r,white) and 
-      monochrome(t,r,n,red) }
+      monochrome(t,r,n,red))
+    and permutation(t,t@,0,n-1) }

@@ -13,8 +13,6 @@ Require Import ZArith.
  Require Import Omega.
 Require Import ZArithRing.
 
-(*Why*) Parameter x2 : Z.
-(*Why*) Parameter y2 : Z.
 
 Axiom first_octant : (0 <= y2 <= x2)%Z.
 
@@ -66,6 +64,12 @@ omega.
 Qed.
 
 (*s Program correctness. *)
+
+(*Why logic*) Definition x2 : Z.
+Admitted.
+
+(*Why logic*) Definition y2 : Z.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma bresenham_po_1 : 
@@ -162,4 +166,8 @@ replace (2 * (x0 + 1 + 1) * y2 - (2 * (y0 + 1) + 1) * x2)%Z with
  [ omega' | ring ].
 omega'.
 Save.
+
+(*Why*) Parameter bresenham_valid :
+  forall (_: unit), forall (e: Z), forall (x: Z), forall (y: Z),
+  (sig_4 Z Z Z unit (fun (e0: Z) (x0: Z) (y0: Z) (result: unit)  => (True))).
 
