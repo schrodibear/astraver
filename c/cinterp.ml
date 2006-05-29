@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.180 2006-05-22 13:34:23 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.181 2006-05-29 15:20:18 hubert Exp $ i*)
 
 
 open Format
@@ -172,7 +172,7 @@ let rec interp_term label old_label t =
 	unsupported t.nterm_loc "logic if-then-else"
     | NTarrow (t,z, field) -> 
 	let te = f t in
-	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t) 
+	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t)
 	in
 	LApp("acc",[interp_var label var;te])
     | NTunop (Utilde, t) -> 
@@ -769,13 +769,14 @@ and interp_call e1 args assoc =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ((try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	     (z,(try List.assoc z assoc with Not_found -> z),s,ty)::acc)
 	  v.function_reads [] 
 	in
 	let targs = List.map interp_expr args in
 	let targs = List.fold_right 
-	  (fun (z,s,_) l -> 
-	     if z.zone_is_var then
+	  (fun (z0,z1,s,_) l -> 
+	     let z = repr z1 in
+	     if z0.zone_is_var then
 	       Var(zoned_name s (Pointer z))::l
 	     else l)
 	  reads targs 

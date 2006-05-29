@@ -417,16 +417,32 @@ and unifier_zone z1 z2 =
 	| _ -> assert false
     end
 
+let assoctype  ty assoc = 
+  match ty with 
+    |  Pointer z ->
+	 let z = repr z in
+	 let z  = try List.assoc z assoc with Not_found -> z in
+	 Pointer z 
+    | _ -> ty
+
+let copyhash z za assoc =
+  try let t = Hashtbl.copy (Hashtbl.find type_why_table z) in
+  Hashtbl.iter (fun x y -> Hashtbl.replace t x (assoctype y assoc) ) t;
+  Hashtbl.add type_why_table za t
+  with Not_found -> () 
 
 let rec term tyf t =
   match t.nterm_node with
     | NTconstant _ -> () 
     | NTvar v -> 
 	if v.var_name = "result" then unifier_type_why v.var_why_type tyf
-    | NTapp ({napp_pred = f;napp_args = l} as call) -> 
+    | NTapp ({napp_pred = f;napp_args = l} as call) ->
       List.iter (term tyf) l;
       let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
       call.napp_zones_assoc <- assoc;
+      List.iter (fun (x,y) ->
+		   let x = repr x  in
+		   copyhash x y assoc) assoc ;
       let li =  
 	List.map 
 	  (fun v ->
@@ -444,7 +460,7 @@ let rec term tyf t =
       assert (List.length li = List.length l || 
 	  (Format.eprintf " wrong arguments for %s : expected %d, got %d\n" 
 	     f.logic_name (List.length li) (List.length l); false));
-            List.iter2 
+      List.iter2 
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
@@ -469,6 +485,9 @@ let rec predicate tyf p =
       List.iter (term tyf) l;
       let assoc = List.map (fun z -> (z,make_zone true)) f.logic_args_zones in
       call.napp_zones_assoc <- assoc;
+      List.iter (fun (x,y) ->
+		   let x = repr x  in
+		   copyhash x y assoc) assoc ;
       let li =  
 	List.map 
 	  (fun v ->
@@ -509,8 +528,6 @@ let rec predicate tyf p =
   | NPnamed (_,p) -> predicate tyf p
 
 
-    
-		    
 let rec calcul_zones expr =
   match expr.nexpr_node with 
     | NEnop -> ()
@@ -542,6 +559,9 @@ let rec calcul_zones expr =
 	in
 	let assoc = List.map (fun z ->(z,make_zone true)) f.args_zones in
 	call.ncall_zones_assoc <- assoc;
+	List.iter (fun (x,y) ->
+		     let x = repr x  in
+		     copyhash x y assoc) assoc ;
 	let arg_types =
 	  List.map 
 	    (fun v ->
@@ -607,7 +627,8 @@ let spec tyf sp =
   begin
   match sp.requires with
     | None -> ()
-    | Some p -> predicate tyf p
+    | Some p -> 
+	predicate tyf p
   end;
   begin
   match sp.assigns with
@@ -691,10 +712,11 @@ let global_decl e =
     | Nlogic (f, NPredicate_def (_,p)) -> 
 	predicate Unit p;
 	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
-    | Nlogic (f, NFunction_def (_,_,t)) -> 
+    | Nlogic (f, NFunction_def (_,_,t)) ->
 	term Unit t;
 	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
-    | Nlogic _ -> ()
+    | Nlogic (f, (NPredicate_reads _ | NFunction _)) -> 
+	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
     | Nfunspec (sp,_,f) -> 
 	spec f.type_why_fun sp;
 	f.args_zones <- collect_zones f.args f.type_why_fun

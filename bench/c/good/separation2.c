@@ -27,7 +27,7 @@ las2 u2, v2;
 /*@
   requires \valid(p) && \valid(p->p1) && \valid(p->p2) && \valid(p->pp1)
   && \valid_range(p->p1,0,4) && \valid_range(p->p2,0,4)
-  assigns p->p1[0 .. 5],p->p2[0 .. 5], p->v1, p->v2, *p->pp1
+  assigns p->p1[0 .. 5] ,p->p2[0 .. 5], p->v1, p->v2, *p->pp1 
   ensures p->p1[1] <= p->v1
 */
 void g(las * p);
@@ -40,9 +40,9 @@ void g(las * p);
 void g2(las2 * p);
 
 /*@
-  requires \valid(u.pp1) && \valid(v.pp1) 
-  && \valid(w.pp1) && \valid(m.pp1) 
-  && \valid(u2.pp2) && \valid(v2.pp2)
+  requires (*\valid(u.pp1) && \valid(v.pp1) 
+  && \valid(w.pp1) &&*) \valid(m.pp1)(* 
+  && \valid(u2.pp2) && \valid(v2.pp2)*)
   
 (*
   assigns u.v1,u.v2,u.p1[0 .. 5],u.p2[0 .. 5],*u.pp1
@@ -55,13 +55,14 @@ void g2(las2 * p);
    (\exists int i; u.p1[i] <= u.v1) &&
    (\exists int i; v.p1[i] <= v.v1) &&
    (\exists int i; w.p1[i] <= w.v1) &&
-   (\exists int i; m.p1[i] <= m.v1) 
+   ((*\exists int i;*) m.p1[1] <= m.v1) 
 */
 void f()
-{ g(&u);
- g(&v);
- g(&w);
- g(&m);
- //g2(&u2); en commentaire pour simplifier !
- //g2(&v2); en commentaire pour simplifier !
+{ 
+  g(&u);
+  g(&v);
+  g(&w);
+  g(&m);
+  //g2(&u2); en commentaire pour simplifier !
+  //g2(&v2); en commentaire pour simplifier !
 }
