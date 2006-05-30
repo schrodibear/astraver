@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.181 2006-05-29 15:20:18 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.182 2006-05-30 08:25:30 hubert Exp $ i*)
 
 
 open Format
@@ -1508,8 +1508,9 @@ let interp_axiom p =
 	 (heap_var_name arg,Info.output_why_type arg.var_why_type,t))
       e.Ceffect.reads_var a in
   ZoneSet.fold 
-    (fun (z,s,ty) t -> LForall
-       (s^"_"^z.name,Info.output_why_type (Info.Memory(ty,z)),t))
+    (fun (z,s,ty) t -> 
+       let z = repr z in
+       LForall (s^"_"^z.name,Info.output_why_type (Info.Memory(ty,z)),t))
     e.Ceffect.reads a 
 
 let interp_effects e =
