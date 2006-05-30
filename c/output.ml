@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.29 2006-02-03 13:11:27 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.30 2006-05-30 11:53:07 filliatr Exp $ i*)
 
 open Format;;
 
@@ -328,6 +328,8 @@ let fprint_logic_type = fprint_logic_type ""
 
 type variant = term * string option
 
+type opaque = bool
+
 type expr =
   | Cte of constant
   | Var of string
@@ -351,7 +353,8 @@ type expr =
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list * 
       assertion * expr * assertion * ((string * assertion) option)
-  | Triple of assertion * expr * assertion * ((string * assertion) option)
+  | Triple of opaque * 
+      assertion * expr * assertion * ((string * assertion) option)
   | Assert of assertion * expr
   | Label of string * expr
   | BlackBox of why_type
@@ -400,7 +403,7 @@ let make_label label e = Label (label, e)
 *)
 ;;
 
-let make_pre pre e =  Triple(pre,e,LTrue,None)
+let make_pre pre e =  Triple(false,pre,e,LTrue,None)
 
 let append e1 e2 =
   match e1,e2 with
@@ -441,7 +444,7 @@ let rec iter_expr f e =
 	iter_expr f body;
 	iter_assertion f post;
 	option_iter (fun (_,a) -> iter_assertion f a) signals
-    | Triple(pre,e,post,exceps) ->
+    | Triple(_,pre,e,post,exceps) ->
 	iter_assertion f pre;
 	iter_expr f e;
 	iter_assertion f post;
@@ -528,25 +531,25 @@ let rec fprintf_expr form e =
 		  fprintf_assertion r
 	end		    
 
-    | Triple(pre,e,LTrue,None) ->
+    | Triple(_,pre,e,LTrue,None) ->
 	fprintf form "@[<hv 0>(assert { %a };@ (%a))@]" 
 	  fprintf_assertion pre
 	  fprintf_expr e
-    | Triple(pre,e,post,exceps) ->
+    | Triple(o,pre,e,post,exceps) ->
 	fprintf form "@[<hv 0>(assert { %a };@ (%a)@ " 
 	  fprintf_assertion pre
 	  fprintf_expr e;
 	begin
 	  match exceps with
 	    | None -> 
-		fprintf form "{ %a }" 
+		(if o then fprintf form "{{ %a }}" else fprintf form "{ %a }")
 		  fprintf_assertion post
 	    | Some(e,r) ->
-		fprintf form 
-		  "@[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]" 
-		  fprintf_assertion post
-		  e 
-		  fprintf_assertion r
+		(if o then 
+		   fprintf form "@[<hv 2>{{ %a@ | @[<hv 2>%s =>@ %a@] }}@]" 
+		 else
+		   fprintf form "@[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]" )
+		fprintf_assertion post e fprintf_assertion r
 	end;
 	fprintf form ")@]"
     | Assert(p, e) ->

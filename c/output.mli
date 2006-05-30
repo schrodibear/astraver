@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.16 2006-02-03 13:11:27 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.17 2006-05-30 11:53:07 filliatr Exp $ i*)
 
 type constant =
   | Prim_int of int64
@@ -76,6 +76,8 @@ val base_type : string -> why_type
 
 type variant = term * string option
 
+type opaque = bool
+
 type expr =
   | Cte of constant
   | Var of string
@@ -99,7 +101,8 @@ type expr =
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list * 
       assertion * expr * assertion * ((string * assertion) option)
-  | Triple of assertion * expr * assertion * ((string * assertion) option)
+  | Triple of opaque * 
+      assertion * expr * assertion * ((string * assertion) option)
   | Assert of assertion * expr
   | Label of string * expr
   | BlackBox of why_type

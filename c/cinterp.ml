@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.182 2006-05-30 08:25:30 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.183 2006-05-30 11:53:07 filliatr Exp $ i*)
 
 
 open Format
@@ -1297,7 +1297,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
       let pre,_,post = interp_spec false eff spec in
-      Triple(pre,interp_statement ab may_break s,post,None)
+      Triple(true,pre,interp_statement ab may_break s,post,None)
   | NSdecl(ctype,v,init,rem) -> 
       lprintf 
 	"translating local declaration of %s@." v.var_unique_name;
