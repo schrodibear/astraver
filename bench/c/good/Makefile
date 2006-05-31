@@ -2,7 +2,7 @@
 CADUCEUS=../../../bin/caduceus.opt 
 CADUCEUSLIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
-EXECCADUCEUS=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm -separation -why-opt -split-user-conj
+EXECCADUCEUS=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm -why-opt -split-user-conj
 
 CFILES=$(shell ls *.c)
 WFILES=$(addprefix why/, $(CFILES:.c=.why))
