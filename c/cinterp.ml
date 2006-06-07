@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.183 2006-05-30 11:53:07 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.184 2006-06-07 14:22:17 hubert Exp $ i*)
 
 
 open Format
@@ -411,7 +411,7 @@ let interp_incr_op ty op = match ty.Ctypes.ctype_node, op with
 
 type interp_lvalue =
   | LocalRef of Info.var_info
-  | HeapRef of bool * string * Output.expr
+  | HeapRef of valid * string * Output.expr
 
 let tempvar_count = ref 0;;
 let reset_tmp_var () = tempvar_count := 0
@@ -462,6 +462,8 @@ let bin_op op t1 t2 = match op, t1, t2 with
   | _ ->
       build_minimal_app (Var (interp_bin_op op)) [t1; t2]
 
+
+
 let rec interp_expr e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
@@ -487,26 +489,41 @@ let rec interp_expr e =
 	end
     | NEbinary(e1,op,e2) ->
 	bin_op op (interp_expr e1) (interp_expr e2)
-    | NEassign (e1,e2) ->
+    | NEassign (e,e2) ->
 	begin
-	  match interp_lvalue e1 with
+	  match interp_lvalue e with
 	    | LocalRef(v) ->
 		let n = v.var_unique_name in
 		append (Assign(n,interp_expr e2)) (Deref n)
 	    | HeapRef(valid,var,e1) ->
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
-		let upd = if valid then "safe_upd_" else "upd_" in
-	        Let(tmp1, e1,
-		    Let(tmp2, interp_expr e2,
-			append (build_complex_app (Var upd)
-				  [Var var; Var tmp1; Var tmp2])
-			  (Var tmp2)))
+		match valid with 
+		  | Valid ->  
+		      Let(tmp1, e1,
+			  Let(tmp2, interp_expr e2,
+			      append (build_complex_app (Var "safe_upd_")
+					[Var var; Var tmp1; Var tmp2])
+				(Var tmp2))) 
+		  | Not_valid -> 
+		      Let(tmp1, e1,
+			  Let(tmp2, interp_expr e2,
+			      append (build_complex_app (Var "upd_")
+					[Var var; Var tmp1; Var tmp2])
+				(Var tmp2)))
+		  | Tab n -> 
+		      Let(tmp1, e1,
+			  Let(tmp2, interp_expr e2,
+			      append (build_complex_app (Var "upd_offset")
+					[Var var; Var tmp1; Var tmp2;
+					 valid_acc_offset e; 
+					 Var (Int64.to_string n)])
+				(Var tmp2)))
 	end 
     | NEincr(op,e) -> 
 	interp_incr_expr op e
-    | NEassign_op(e1,op,e2) ->
-	begin match interp_lvalue e1 with
+    | NEassign_op(e,op,e2) ->
+	begin match interp_lvalue e with
 	  | LocalRef(v) ->
 	      let n = v.var_unique_name in
 	      append
@@ -515,15 +532,40 @@ let rec interp_expr e =
 	  | HeapRef(valid,var,e1) -> 
 	      let tmp1 = tmp_var () in
 	      let tmp2 = tmp_var () in
-	      let acc = if valid then "safe_acc_" else "acc_" in
-	      Let(tmp1, e1,
-		  Let(tmp2, 
-		      bin_op op
-			(make_app acc [Var var; Var tmp1]) (interp_expr e2),
-		      append
-			(build_complex_app (Var "safe_upd_") 
-			   [Var var; Var tmp1; Var tmp2])
-			(Var tmp2)))
+	      match valid with 
+		| Valid -> 	  
+		    Let(tmp1, e1,
+			Let(tmp2, 
+			    bin_op op
+			      (make_app "safe_acc_" [Var var; Var tmp1]) 
+			      (interp_expr e2),
+			    append
+			      (build_complex_app (Var "safe_upd_") 
+				 [Var var; Var tmp1; Var tmp2])
+			      (Var tmp2))) 
+		| Not_valid ->  
+		    Let(tmp1, e1,
+			Let(tmp2, 
+			    bin_op op
+			      (make_app "acc_" [Var var; Var tmp1]) 
+			      (interp_expr e2),
+			    append
+			      (build_complex_app (Var "safe_upd_") 
+				 [Var var; Var tmp1; Var tmp2])
+			      (Var tmp2))) 
+		| Tab n ->  
+		    Let(tmp1, e1,
+			Let(tmp2, 
+			    bin_op op
+			      (make_app "acc_offset" 
+				 [Var var; Var tmp1; 
+				  valid_acc_offset e; 
+				  Var (Int64.to_string n)]) 
+			      (interp_expr e2),
+			    append
+			      (build_complex_app (Var "safe_upd_") 
+				 [Var var; Var tmp1; Var tmp2])
+			      (Var tmp2)))
 	end 
     | NEseq(e1,e2) ->
 	append (interp_statement_expr e1) (interp_expr e2)
@@ -540,11 +582,17 @@ let rec interp_expr e =
 	  match e.nexpr_type.Ctypes.ctype_node with
 	    | Tpointer (valid,_)  
 	    | Tarray (valid,_,_) -> valid
-	    | Tstruct _ -> true 
+	    | Tstruct _ -> Valid 
 	    | _ -> assert false
 	in
-	let acc = if valid then "safe_acc_" else "acc_" in
-	Output.make_app acc [Var(var);te]
+	begin 
+	  match valid with 
+	    | Valid ->  Output.make_app "safe_acc_" [Var(var);te] 
+	    | Not_valid -> Output.make_app "acc_" [Var(var);te] 
+	    | Tab n -> Output.make_app "acc_offset" [Var(var);te;
+						     valid_acc_offset e;
+						     Var (Int64.to_string n)] 
+	end
     | NEunary (Ustar, e) -> assert false
     | NEunary (Uplus, e) ->
 	interp_expr e
@@ -630,12 +678,18 @@ and interp_incr_expr op e =
 	end
     | HeapRef(valid,var,e') ->
 	begin
-	  let acc = if valid then "safe_acc_" else "acc_" in
+	  let acc = match valid with 
+	    | Valid ->  make_app "safe_acc_" [Var var;Var "caduceus1"] 
+	    | Not_valid -> make_app "acc_" [Var var;Var "caduceus1"] 
+	    | Tab n -> make_app "acc_offset" [Var var;Var "caduceus1";
+					      valid_acc_offset e;
+					      Var (Int64.to_string n)] 
+	  in
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
 		Let("caduceus1",e',
 		    Let("caduceus2",
-			(make_app acc [Var var;Var "caduceus1"]),
+			acc,
 			append
 			  (make_app "safe_upd_" 
 			     [Var var;Var "caduceus1";
@@ -645,7 +699,7 @@ and interp_incr_expr op e =
 		Let("caduceus1",e',
 		    Let("caduceus2",
 			make_app top
-			  [make_app acc [Var var;Var "caduceus1"];one],
+			  [acc;one],
 			append
 			  (make_app "safe_upd_" 
 			     [Var var;Var "caduceus1";Var "caduceus2"])
@@ -661,7 +715,7 @@ and interp_lvalue e =
 	let valid =
 	  match e1.nexpr_type.Ctypes.ctype_node with
 	    | Tpointer(v,_) | Tarray(v,_,_) -> v
-	    | Tstruct _ -> true
+	    | Tstruct _ -> Valid
 	    | _ -> assert false
 	in 
 	HeapRef(valid,
@@ -689,12 +743,19 @@ and interp_address e = match e.nexpr_node with
 	      match e1.nexpr_type.Ctypes.ctype_node with
 		| Tpointer (valid,_)  
 		| Tarray (valid,_,_) -> valid
-		| Tstruct _ -> true 
+		| Tstruct _ -> Valid 
 		| _ -> assert false
 	    in
-	    let acc = if valid then "safe_acc_" else "acc_" in
-            build_complex_app (Var acc) 
-	    [Var var; interp_expr e1]
+	    begin 
+	      match valid with 
+		| Valid -> build_complex_app (Var "safe_acc_")
+		    [Var var; interp_expr e1]
+		| Not_valid ->build_complex_app (Var "acc_")
+		    [Var var; interp_expr e1]
+		| Tab n-> build_complex_app (Var "acc_offset")
+		    [Var var; interp_expr e1; valid_acc_offset e1;
+		     Var (Int64.to_string n)]
+	    end
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
       end
   | _ -> 
@@ -712,9 +773,17 @@ and interp_statement_expr e =
 	    | LocalRef(v) ->
 		Assign(v.var_unique_name,interp_expr e)
 	    | HeapRef(valid,var,e1) ->
-		let upd = if valid then "safe_upd_" else "upd_" in
-		(build_complex_app (Var upd)
-		   [Var var;e1; interp_expr e])
+		begin
+		  match valid with 
+		    | Valid -> (build_complex_app (Var "safe_upd_")
+				  [Var var;e1; interp_expr e])
+		    | Not_valid -> (build_complex_app (Var "upd_" )
+				      [Var var;e1; interp_expr e])
+		    | Tab n-> (build_complex_app (Var "upd_offset")
+				 [Var var;e1; interp_expr e; 
+				  valid_acc_offset l;
+				  Var (Int64.to_string n)])
+		end
 	end 
     | NEincr(op,e) ->
 	let top,one = interp_incr_op e.nexpr_type op in
@@ -724,10 +793,16 @@ and interp_statement_expr e =
 		Assign(v.var_unique_name,
 		       make_app top [Deref(v.var_unique_name); one])
 	    | HeapRef(valid,var,e1) -> 
-		let acc = if valid then "safe_acc_" else "acc_" in
+		let acc = match valid with 
+		  | Valid -> make_app "safe_acc_" [Var var; Var "caduceus1"]
+		  | Not_valid ->  make_app "acc_"[Var var; Var "caduceus1"]
+		  | Tab n -> make_app  "acc_offset" [Var var; Var "caduceus1";
+						   valid_acc_offset e;
+						   Var (Int64.to_string n)]
+		in
 		Let("caduceus1",e1,
 		    Let("caduceus2",
-			make_app acc [Var var; Var "caduceus1"],
+			acc,
 			make_app "safe_upd_"
 			  [Var var; Var "caduceus1"; 
 			   make_app top [Var "caduceus2"; one]]))
@@ -745,9 +820,15 @@ and interp_statement_expr e =
 		let n = v.var_unique_name in
 		Assign(n, bin_op op (Deref n) (interp_expr e))
 	    | HeapRef(valid,var,e1) -> 
-		let acc = if valid then "safe_acc_" else "acc_" in
+		let acc = match valid with 
+		  | Valid -> make_app "safe_acc_" [Var var;Var "caduceus1"]
+		  | Not_valid -> make_app "acc_"[Var var;Var "caduceus1"]
+		  | Tab n-> make_app "acc_offset"[Var var;Var "caduceus1";
+						 valid_acc_offset l;
+						 Var (Int64.to_string n)]
+		in
 		Let("caduceus1",e1,
-		    Let("caduceus2",make_app acc [Var var;Var "caduceus1"],
+		    Let("caduceus2",acc ,
 			make_app "safe_upd_"
 			  [Var var; Var "caduceus1"; 
 			   bin_op op (Var "caduceus2") (interp_expr e)]))
@@ -785,6 +866,26 @@ and interp_call e1 args assoc =
 	  targs
     | _ -> 
 	unsupported e1.nexpr_loc "call of a non-variable function"
+
+and valid_acc_offset e =
+  match e.nexpr_node with 
+    | NEnop -> assert false
+    | NEconstant _ -> assert false
+    | NEstring_literal _ -> assert false
+    | NEvar _ -> assert false
+    | NEarrow (e,_,_)  -> valid_acc_offset e
+    | NEseq _ -> assert false
+    | NEassign _ -> assert false
+    | NEassign_op _ -> assert false
+    | NEunary _ -> assert false
+    | NEincr _ -> assert false
+    | NEbinary (_,Badd_pointer_int,i) -> interp_expr i    
+    | NEbinary (_,_,_) -> assert false
+    | NEcall _ -> assert false
+    | NEcond _ -> assert false
+    | NEcast _ -> assert false
+    | NEmalloc _ -> assert false
+ 
  
 
 module StringMap = Map.Make(String)

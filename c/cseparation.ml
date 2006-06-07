@@ -110,7 +110,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
     | Tarray (_, ty, None) ->
 	error loc ("array size missing in `" ^ name ^ "'")
     | Tarray (valid, ty, Some s) ->
-	assert valid;
+	assert (valid = Valid);
 	let vrange = make_valid_range_from_0 t s in
 	let valid_form =
 	  make_and

@@ -1,5 +1,5 @@
 
-CADUCEUS=../../bin/caduceus.opt
+CADUCEUS=../../bin/caduceus.opt 
 CADUCEUSLIB=$(shell pwd)/../../lib
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 

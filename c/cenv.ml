@@ -497,7 +497,7 @@ let update_fields_type () =
 	 begin
 	   Coptions.lprintf "field %s is now a pointer@." x.var_name;
 	   set_var_type (Var_info x) 
-	     (noattr (Tarray(true,x.var_type,Some Int64.one))) false
+	     (noattr (Tarray(Valid,x.var_type,Some Int64.one))) false
 	 end)
     fields_t
 

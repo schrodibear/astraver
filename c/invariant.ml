@@ -284,7 +284,7 @@ let separation_first mark diag v1 v2 =
 	  let info = Info.default_logic_info (pre) in
 	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
-	  let ty = noattr_type (Tpointer (false,noattr_type (Tvoid))) in
+	  let ty = noattr_type (Tpointer (Not_valid,noattr_type (Tvoid))) in
 	  let var = default_var_info (fresh_index()) in
 	  set_var_type (Var_info var) ty false;
 	  let term = noattr_term ty (NTvar var) in
@@ -305,7 +305,7 @@ let separation_first mark diag v1 v2 =
 	  let info = Info.default_logic_info (pre) in
 	  info.logic_heap_args <- HeapVarSet.add v1 (HeapVarSet.singleton v2); 
 	  Cenv.add_pred (pre)  ([], info);
-	  let ty = noattr_type (Tpointer (false,noattr_type (Tvoid))) in
+	  let ty = noattr_type (Tpointer (Not_valid,noattr_type (Tvoid))) in
 	  let var1 = default_var_info (fresh_index()) in
 	  let var2 = default_var_info (fresh_index()) in
 	  set_var_type (Var_info var1) ty false;
@@ -392,7 +392,7 @@ let rec separation_intern n =
 					(fun t i -> 
 					    separation_intern2 n1 
 					      (noattr_term 
-						 (noattr_type (Tpointer (false,ty))) 
+						 (noattr_type (Tpointer (Not_valid,ty))) 
 						 (NTbinop (t,Badd,i)))))))::[]
 	      | _ -> []
 	  end
@@ -459,7 +459,7 @@ let add_predicates l =
 				 Loc.dummy_position 
 				 (var_to_term Loc.dummy_position f) s 
 				 (fun t i -> predicate_for f.var_name 
-				     (noattr_term (noattr_type (Tpointer (false,ty))) 
+				     (noattr_term (noattr_type (Tpointer (Not_valid,ty))) 
 					(NTbinop (t,Badd,i))))))]
 		       | _ -> []
 		   end

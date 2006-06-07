@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.88 2006-04-10 13:41:08 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.89 2006-06-07 14:22:17 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -126,7 +126,7 @@ and type_term_node loc env = function
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
       set_referenced t;
-      Tunop (Uamp, t), noattr (Tpointer(true, t.term_type)) 
+      Tunop (Uamp, t), noattr (Tpointer(Valid, t.term_type)) 
   | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
@@ -248,8 +248,8 @@ and type_term_node loc env = function
        with Not_found -> error loc "\\result meaningless")
   | PLnull ->
       let info = default_var_info "null" in 
-      Cenv.set_var_type (Var_info info) (c_void_star false) true;
-      Clogic.Tvar info, (c_void_star false)
+      Cenv.set_var_type (Var_info info) (c_void_star Not_valid) true;
+      Clogic.Tvar info, (c_void_star Not_valid)
   | PLcast (ty, t) ->
       let t = type_term env t in
       let tt = t.term_type in
@@ -344,8 +344,8 @@ let rec type_logic_type loc env = function
   | LTvoid -> c_void
   | LTint -> c_int
   | LTfloat -> c_float
-  | LTarray ty -> c_array false (type_logic_type loc env ty)
-  | LTpointer ty -> c_pointer false (type_logic_type loc env ty)
+  | LTarray ty -> c_array Not_valid (type_logic_type loc env ty)
+  | LTpointer ty -> c_pointer Not_valid (type_logic_type loc env ty)
   | LTvar id ->  
       noattr 
 	(try 

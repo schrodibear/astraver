@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.14 2006-01-26 17:01:55 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.15 2006-06-07 14:22:18 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -29,13 +29,15 @@ type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
 
 type cfloat = Float | Double | LongDouble
 
+type valid = Valid | Not_valid | Tab of int64
+
 type ctype_node =
   | Tvoid
   | Tint of sign * cinteger
   | Tfloat of cfloat
   | Tvar of string
-  | Tarray of bool * ctype * int64 option
-  | Tpointer of bool * ctype
+  | Tarray of valid * ctype * int64 option
+  | Tpointer of valid * ctype
   | Tstruct of string 
   | Tunion of string 
   | Tenum of string 
@@ -48,8 +50,6 @@ and ctype = {
   ctype_volatile : bool;
   ctype_ghost : bool;
 }
-
-
 
 let noattr tyn = { ctype_node = tyn; 
 		   ctype_storage = No_storage;

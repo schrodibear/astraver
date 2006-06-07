@@ -159,6 +159,11 @@ parameter acc_ : m: ('a,'z) memory ref -> p:'z pointer ->
   { valid(alloc,p) }
   'a reads alloc,m
   { result = acc(m,p) }
+parameter acc_offset : m: ('a,'z) memory ref -> p:'z pointer -> 
+	i : int -> n : int ->
+  { 0 <= i < n }
+  'a reads alloc,m
+  { result = acc(m,p) }
 parameter safe_acc_ : m: ('a,'z) memory ref -> p:'z pointer -> 
   { }
   'a reads alloc,m
@@ -168,6 +173,11 @@ parameter safe_acc_ : m: ('a,'z) memory ref -> p:'z pointer ->
 logic upd: ('a,'z) memory, 'z pointer, 'a -> ('a,'z) memory
 parameter upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> 
   { valid(alloc,p) }
+  unit reads alloc,m writes m
+  { m = upd(m@,p,v) }
+parameter upd_offset : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> i:int ->
+	size:int -> 
+  { 0<= i < size }
   unit reads alloc,m writes m
   { m = upd(m@,p,v) }
 parameter safe_upd_ : m:('a,'z) memory ref -> p:'z pointer -> v:'a -> 

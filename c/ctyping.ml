@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.109 2006-05-17 12:14:15 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.110 2006-06-07 14:22:18 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -261,16 +261,17 @@ let set_referenced e = match e.texpr_node with
 
 let make_shift e1 e2 valid ty n =
   let is_valid =
-    valid && 
-      match n with
-	| Some n ->
+      match valid, n with
+	| (Valid | Tab _), Some n ->
 	    begin
 	      try
 		let i = eval_const_expr_noerror e2 in
-		Int64.zero <= i && i < n
-	      with Invalid_argument _ -> false
+		if (Int64.zero <= i && i < n)
+		then Valid
+		else Tab n
+	      with Invalid_argument _ -> Tab n
 	    end
-	| _ -> false
+	| _, _ -> Not_valid
   in
   let ty1 = e1.texpr_type in
   TEbinary (e1, Badd_pointer_int, e2), 
@@ -295,12 +296,12 @@ and type_type_node loc env = function
       (* TODO: les attributs sont perdus *)
       (try (find_typedef x).ctype_node with Not_found -> assert false)
   | CTarray (tyn, None) ->
-      Tarray (false,type_type loc env tyn, None)
+      Tarray (Not_valid,type_type loc env tyn, None)
   | CTarray (tyn, Some e) -> 
-      Tarray (true,type_type loc env tyn , 
+      Tarray (Valid,type_type loc env tyn , 
 	      Some (eval_const_expr  (type_int_expr env e)))
   | CTpointer tyn -> 
-      Tpointer (false,type_type loc env tyn)
+      Tpointer (Not_valid,type_type loc env tyn)
   | CTstruct (x,Tag) -> Env.find_tag_type loc env (Tstruct x)  
   | CTunion (x,Tag)  -> Env.find_tag_type loc env (Tunion x)
   | CTenum (x,Tag)  -> Env.find_tag_type loc env (Tenum x)
@@ -369,7 +370,7 @@ and type_expr_node loc env = function
   | CEconstant (FloatConstant _ as c) ->
       TEconstant c, c_float
   | CEstring_literal s ->
-      TEstring_literal s, c_string true
+      TEstring_literal s, c_string Valid
   | CEvar x ->
       let var =
 	try Env.find x env with Not_found -> 
@@ -458,7 +459,7 @@ and type_expr_node loc env = function
             TEincr (op, e), e.texpr_type
 	| Tpointer (_,ty) -> 
             TEincr (op, e), 
-	    { e.texpr_type with ctype_node = Tpointer(false,ty) }
+	    { e.texpr_type with ctype_node = Tpointer(Not_valid,ty) }
 	| _ -> error loc "wrong type to {de,in}crement"
       end
   | CEunary (Unot, e) ->
@@ -478,7 +479,7 @@ and type_expr_node loc env = function
       if ty.ctype_storage = Register then 
 	warning loc "address of register requested";
       set_referenced e;
-      TEunary (Uamp, e), noattr (Tpointer (true,ty))
+      TEunary (Uamp, e), noattr (Tpointer (Valid,ty))
   | CEunary (Ustar, e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
@@ -602,7 +603,7 @@ and type_expr_node loc env = function
 	      | _ -> { node = CEconstant (IntConstant "1"); loc = loc }
 	    in
 	    let e = type_int_expr env e in
-	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (true, ty) }
+	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (Valid, ty) }
 	| _ -> 
 	    error loc "incompatible types"
       end
@@ -788,7 +789,7 @@ let type_initializer_option loc env ty = function
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
   | Tarray (_,ety, None), Some (Ilist l) -> 
       let s = of_int (List.length l) in
-      { ty with ctype_node = Tarray (true,ety, Some s) }
+      { ty with ctype_node = Tarray (Valid,ety, Some s) }
 
   | Tarray (_,ety, None), None -> error loc "array size missing"  
       	

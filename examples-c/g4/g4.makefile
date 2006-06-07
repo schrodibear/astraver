@@ -4,7 +4,7 @@ WHY=why
 
 GWHY=gwhy 
 
-CADULIB=/users/homepc9-152/jcf/soft/why/examples-c/g4/../../lib
+CADULIB=/home/hubert/why/examples-c/g4/../../lib
 
 COQTACTIC=intuition
 
@@ -43,7 +43,7 @@ isabelle/%_spec_why.thy: why/%_spec.why
 
 isabelle/%_why.thy: isabelle/g4_spec_why.thy why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory g4_spec_why $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
-	cp -f /users/homepc9-152/jcf/soft/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
+	cp -f /home/hubert/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
 
 simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)

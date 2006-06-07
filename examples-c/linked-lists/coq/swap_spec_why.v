@@ -3,26 +3,14 @@
 
 Require Export Caduceus.
 
-Admitted.
 
-Admitted.
 
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
 
 (*Why type*) Definition global: Set.
 Admitted.
 
 (*Why type*) Definition plist: Set.
-exact (plist Z21).
-Defined.
+Admitted.
 
 (*Why type*) Definition Length: Set.
 Admitted.
@@ -30,12 +18,10 @@ Admitted.
 (*Why logic*) Definition lpath :
   ((memory) ((pointer) global) global) -> alloc_table -> ((pointer) global)
   -> plist -> ((pointer) global) -> Prop.
-exact (fun m a => lpath _ a (acc m)).
-Defined.
+Admitted.
 
 (*Why logic*) Definition cons : ((pointer) global) -> plist -> plist.
-exact (fun p => cons p).
-Defined.
+Admitted.
 
 (*Why axiom*) Lemma Path_cons_inv :
   (forall (tl_global:((memory) ((pointer) global) global)),
@@ -50,8 +36,7 @@ Defined.
 Admitted.
 
 (*Why logic*) Definition nil : plist.
-exact nil.
-Defined.
+Admitted.
 
 (*Why axiom*) Lemma Path_null_ax :
   (forall (tl_global:((memory) ((pointer) global) global)),
@@ -69,8 +54,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition app : plist -> plist -> plist.
-exact (fun p => app p) .
-Defined.
+Admitted.
 
 (*Why axiom*) Lemma app_nil_1_ax :
   (* File "list.h", line 25, characters 26-60 *)
@@ -133,8 +117,7 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition list_length : plist -> Z.
-exact (fun p => Z_of_nat (List.length p)).
-Defined.
+Admitted.
 
 (*Why axiom*) Lemma llist_function_ax :
   (forall (tl_global:((memory) ((pointer) global) global)),

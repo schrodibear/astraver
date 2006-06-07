@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.10 2006-01-26 17:01:55 hubert Exp $ i*)
+(*i $Id: ctypes.mli,v 1.11 2006-06-07 14:22:18 hubert Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -29,13 +29,15 @@ type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
 
 type cfloat = Float | Double | LongDouble
 
+type valid = Valid | Not_valid | Tab of int64
+
 type ctype_node =
   | Tvoid
   | Tint of sign * cinteger
   | Tfloat of cfloat
   | Tvar of string
-  | Tarray of bool * ctype * int64 option 
-  | Tpointer of bool * ctype
+  | Tarray of valid * ctype * int64 option 
+  | Tpointer of valid * ctype
   | Tstruct of string 
   | Tunion of string 
   | Tenum of string 
@@ -49,16 +51,15 @@ and ctype = {
   ctype_ghost : bool;
 }
 
-
 val noattr : ctype_node -> ctype
 val c_void : ctype
 val c_int : ctype
 val c_float : ctype
-val c_string : bool -> ctype
-val c_array :  bool -> ctype ->  ctype
-val c_array_size : bool ->  ctype -> int64 ->  ctype
-val c_pointer :  bool -> ctype ->  ctype
-val c_void_star : bool -> ctype
+val c_string : valid -> ctype
+val c_array :  valid -> ctype ->  ctype
+val c_array_size : valid ->  ctype -> int64 ->  ctype
+val c_pointer :  valid -> ctype ->  ctype
+val c_void_star : valid -> ctype
 val c_addr : ctype
 
 val add : string -> unit

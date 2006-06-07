@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.122 2006-05-22 12:59:25 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.123 2006-06-07 14:22:17 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -874,7 +874,7 @@ let rec invariant_for_constant loc t lvalue initializers =
 			(NTconstant (IntConstant (Int64.to_string i)))) in
 	    let shift = 
 	      noattr loc 
-		{ty with Ctypes.ctype_node = (Tpointer (false,ty)) }
+		{ty with Ctypes.ctype_node = (Tpointer (Not_valid,ty)) }
 		(NTbinop (lvalue,Clogic.Badd, ts))
 	    in
 	    let e =

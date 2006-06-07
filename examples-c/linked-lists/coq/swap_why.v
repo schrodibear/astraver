@@ -18,7 +18,8 @@ Require Export swap_spec_why.
 Proof.
 intuition.
 inversion_clear HW_1; intuition.
-inversion H0; intuition.
+red in H0.
+
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

@@ -63,6 +63,6 @@ void f()
   g(&v);
   g(&w);
   g(&m);
-  //g2(&u2); en commentaire pour simplifier !
-  //g2(&v2); en commentaire pour simplifier !
+  g2(&u2); 
+  g2(&v2); 
 }

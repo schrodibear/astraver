@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.59 2006-05-22 12:59:25 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.60 2006-06-07 14:22:17 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -265,7 +265,7 @@ and expr_node loc ty t =
 		       | Pointer z -> z
 		       | _ -> assert false 
 		   in
-		   ne_arrow loc true ty t' zone info)
+		   ne_arrow loc Valid ty t' zone info)
 		else t'
 	    | Fun_info _  -> NEvar env_info)
       | TEdot (lvalue,var_info) -> 
@@ -281,7 +281,7 @@ and expr_node loc ty t =
 	    let info = make_field ty in
 	    let info = declare_arrow_var info in
 	    let zone = find_zone (noattr2 loc ty t') in
-	    ne_arrow loc true ty t' zone info
+	    ne_arrow loc Valid ty t' zone info
 	  else t'
       | TEarrow (lvalue,var_info) ->
 	  let expr = expr lvalue in
@@ -292,21 +292,22 @@ and expr_node loc ty t =
 	    let info = make_field ty in
 	    let info = declare_arrow_var info in
 	    let zone = find_zone (noattr2 loc ty t') in
-	    ne_arrow loc true ty t' zone info
+	    ne_arrow loc Valid ty t' zone info
 	  else t'
       | TEarrget (lvalue,texpr) -> 
 	  (* t[e] -> *(t+e) *)
 	  let is_valid =
 	    match lvalue.texpr_type.Ctypes.ctype_node with
-	      | Tarray(valid,_,Some n) ->
-		  valid &&
-		    begin
-		      try
-			let i = Ctyping.eval_const_expr_noerror texpr in
-			Int64.zero <= i && i < n
-		      with Invalid_argument _ -> false
-		    end
-	      | _ -> false
+	      | Tarray(Valid,_,Some n) ->
+		  begin
+		    try
+		      let i = Ctyping.eval_const_expr_noerror texpr in
+		      if (Int64.zero <= i && i < n) then Valid else Tab n
+		    with Invalid_argument _ -> Tab n
+		  end
+	      | Tarray(Tab n1, _, Some n2) ->  assert (n1=n2);
+		  Tab n2
+	      | _ -> Not_valid
 	  in
 	  let info = make_field ty in
 	  let info = declare_arrow_var info in
@@ -476,7 +477,7 @@ let rec term_node loc t ty =
 	  let info = declare_arrow_var info in
 	  let t1' = term t1 in
 	  let zone = find_zone_for_term t1' in
-	  let ty = { ty with Ctypes.ctype_node = Tpointer (true,ty); 
+	  let ty = { ty with Ctypes.ctype_node = Tpointer (Valid,ty); 
 		       ctype_ghost = t1.term_type.ctype_ghost } in
 	  let () = type_why_new_zone zone info in
 	  NTarrow ( 
@@ -712,13 +713,13 @@ let alloca loc n =
 	     (noattr3(
 		Tfun ([noattr3
 			 (Tint(Signed,Ctypes.Int))], 
-		      noattr3 (Tpointer (true,noattr3 Tvoid))))) 
+		      noattr3 (Tpointer (Valid,noattr3 Tvoid))))) 
 	     (NEvar  (Fun_info (default_fun_info "alloca"))));
        ncall_args = [{ nexpr_node = NEconstant  (IntConstant n);
 		       nexpr_type =  noattr3 (Tint (Signed,Ctypes.Int));
 		       nexpr_loc  = loc }];
        ncall_zones_assoc = []};
-   nexpr_type = noattr3 (Tpointer (true,noattr3 Tvoid));
+   nexpr_type = noattr3 (Tpointer (Valid,noattr3 Tvoid));
    nexpr_loc  = loc
   }	  
 
@@ -985,7 +986,7 @@ and local_decl s l l2 =
     | [] -> NSblock (List.map statement l2)
     | {node = Tdecl (t,v,init); loc = l}::decl -> 
 	if var_is_referenced_or_struct_or_union v then
-	  set_var_type (Var_info v) (c_array_size true v.var_type Int64.one) true;
+	  set_var_type (Var_info v) (c_array_size Valid v.var_type Int64.one) true;
 	begin match init with
 	  | None ->
 	      let declar = local_decl s decl l2 in
@@ -1039,7 +1040,7 @@ let global_decl e1 =
       if var_is_referenced_or_struct_or_union v
       then
 	begin
-	  set_var_type (Var_info v) (c_array_size true v.var_type Int64.one) false;
+	  set_var_type (Var_info v) (c_array_size Valid v.var_type Int64.one) false;
 	  Ndecl(v.var_type,v,ilist (c_initializer_option c))
 	end
       else Ndecl(t,v,c_initializer_option c)
