@@ -11,7 +11,4 @@ Proof.
 intuition.
 Abort.
 
-(*Why*) Parameter p_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = 1))).
 
