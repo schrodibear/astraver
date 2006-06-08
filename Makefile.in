@@ -97,8 +97,9 @@ CMO = src/lib.cmo \
 	   src/parser.cmo src/lexer.cmo src/report.cmo \
            src/env.cmo src/rename.cmo src/util.cmo 	\
            src/ltyping.cmo src/typing.cmo src/wp.cmo \
-           src/monad.cmo      \
-	   src/mlize.cmo src/red.cmo src/vcg.cmo \
+           src/monad.cmo src/mlize.cmo src/red.cmo src/vcg.cmo \
+	   src/encoding_rec.cmo src/encoding_pred.cmo src/encoding_strat.cmo \
+	   src/encoding.cmo \
 	   src/monomorph.cmo src/pvs.cmo src/hol4.cmo src/gappa.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \

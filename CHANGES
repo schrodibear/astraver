@@ -1,4 +1,7 @@
-
+  o new encodings of Why logic into first-order monosorted logic for
+    untyped provers (like Simplify or Zenon) : there are three
+    possible encodings that can be selected through the command
+    line --encoding option    
   o better naming of type variables in Coq output (A1, A2,
     etc. instead of A718, etc.)
   o fixed bugs with polymorphic logic constants used in programs
