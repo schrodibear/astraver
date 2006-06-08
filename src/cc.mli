@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.16 2006-03-21 15:37:40 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.17 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -89,5 +89,3 @@ type context_element =
 type sequent = context_element list * predicate
 
 type obligation = Loc.position * string * sequent
-
-

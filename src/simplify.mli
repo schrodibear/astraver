@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.mli,v 1.7 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: simplify.mli,v 1.8 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 open Cc
 
@@ -23,4 +23,3 @@ val reset : unit -> unit
 val push_decl : Logic_decl.t -> unit
 
 val output_file : string -> unit
-

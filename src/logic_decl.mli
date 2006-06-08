@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic_decl.mli,v 1.2 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.3 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
@@ -26,7 +26,7 @@ open Logic
 type loc = Loc.position
 type 'a scheme = 'a Env.scheme
 
-type t = 
+type t =
   | Dtype of loc * string list * string
   | Dlogic of loc * string * logic_type scheme
   | Dpredicate_def of loc * string * predicate_def scheme

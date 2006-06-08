@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.46 2006-05-05 14:42:55 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.47 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -298,7 +298,7 @@ and type_tvar loc lab env x =
     let t = find_logic xu env in Tvar x, t
   with Not_found -> try
     match find_global_logic xu with
-      | vars, Function ([], t) -> Tapp (x, [], instance x vars), t
+      | vars, Function ([], t) -> Tapp (x, [], instance x vars), t 
       | _ -> raise_located loc MustBePure
   with Not_found -> 
     raise_located loc (UnboundVariable xu)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.58 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.59 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 open Ident
 open Misc
@@ -133,6 +133,8 @@ let new_type_var =
   fun () -> 
     incr c; 
     let v = { tag = !c; type_val = None } in 
+(*     Printf.printf "New type variable created : %d\n" !c;  *)
+(*     flush stdout; *)
     (*at_exit (fun () -> !dump_type_var v); *)
     v
 
@@ -191,7 +193,7 @@ and subst_type_c s c =
 let specialize_scheme subst s =
   let env =
     Vset.fold
-      (fun x s -> Vmap.add x (new_type_var()) s) 
+      (fun x s -> Vmap.add x (new_type_var()) s)
       s.scheme_vars Vmap.empty
   in 
   (env, subst env s.scheme_type)

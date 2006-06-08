@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.60 2006-03-27 14:22:05 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.61 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 open Format
 
@@ -33,7 +33,6 @@ let mizar_environ_ = ref None
 let isabelle_base_theory_ = ref "Main"
 let no_simplify_prelude_ = ref false
 let no_cvcl_prelude_ = ref false
-let simplify_typing_ = ref false
 let no_harvey_prelude_ = ref false
 let no_zenon_prelude_ = ref false
 let werror_ = ref false
@@ -46,6 +45,9 @@ let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
 let gappa_rnd_ = ref "float < ieee_64, ne >"
+
+type encoding = NoEncoding | Predicates | Stratified | Recursive
+let types_encoding_ = ref NoEncoding
 
 type termination = UseVariant | Partial | Total
 let termination_ = ref UseVariant
@@ -143,11 +145,17 @@ Typing/Annotations/VCG options:
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
-  --split-user-conj  split also user conjunctions in goals 
-  --split n          split conditions into several pieces up to n levels
+  --split-user-conj  splits also user conjunctions in goals 
+  --split n          splits conditions into several pieces up to n levels
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
+
+Encoding for types in untyped logic:
+  --encoding none    does not encode types into terms for untyped provers
+  --encoding pred    encodes types with predicates
+  --encoding strat   encodes types into terms           
+  --encoding rec     encodes types with typing axioms
 
 Prover selection:
   --coq       selects COQ prover (default)
@@ -178,8 +186,6 @@ PVS-specific options:
 Simplify-specific options:
   --no-simplify-prelude
               suppress the Simplify prelude (BG_PUSHs for Why's symbols)
-  --simplify-typing
-              add typing constraints for each abstract type
 
 Zenon-specific options:
   --no-zenon-prelude
@@ -268,8 +274,6 @@ let files =
 	usage (); exit 1
     | ("--no-simplify-prelude" | "-no-simplify-prelude") :: args ->
 	no_simplify_prelude_ := true; parse args
-    | ("--simplify-typing" | "-simplify-typing") :: args ->
-	simplify_typing_ := true; parse args
     | ("--no-cvcl-prelude" | "-no-cvcl-prelude") :: args ->
 	no_cvcl_prelude_ := true; parse args
     | ("--no-harvey-prelude" | "-no-harvey-prelude") :: args ->
@@ -318,6 +322,14 @@ let files =
 	termination_ := Partial; parse args
     | ("-total" | "--total") :: args ->
 	termination_ := Total; parse args
+    | ("-encoding" | "--encoding") :: s :: args ->
+	(match s with 
+	  "none" -> types_encoding_ := NoEncoding 
+	| "pred" -> types_encoding_ := Predicates
+	| "strat" -> types_encoding_ := Stratified
+	| "rec" -> types_encoding_ := Recursive
+	| _ -> usage (); exit 1);
+	parse args
     | f :: args -> 
 	filesq := f :: !filesq; parse args
   in
@@ -349,7 +361,6 @@ let mizar_environ = !mizar_environ_
 let isabelle_base_theory = !isabelle_base_theory_
 let no_simplify_prelude = !no_simplify_prelude_
 let no_cvcl_prelude = !no_cvcl_prelude_
-let simplify_typing = !simplify_typing_
 let no_harvey_prelude = !no_harvey_prelude_
 let no_zenon_prelude = !no_zenon_prelude_
 let wol = !wol_
@@ -363,6 +374,7 @@ let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
+let types_encoding = !types_encoding_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 

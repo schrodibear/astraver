@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.55 2006-05-05 14:42:55 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.56 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -23,7 +23,6 @@ let hashcons =
   fun id -> try Hashtbl.find h id with Not_found -> Hashtbl.add h id id; id 
 
 let create s = hashcons { stamp = 0; name = s; label = None }
-
 let string s = s.name
 
 module I = struct type t_ = t type t = t_ let compare = compare end
@@ -286,3 +285,6 @@ let is_real_arith id =
 
 let is_arith id =
   is_int_arith id || is_real_arith id || id == t_real_of_int
+
+let is_simplify_arith id =
+  is_int_arith id || id == t_lt_int || id == t_le_int || id == t_gt_int || id == t_ge_int

@@ -14,13 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.112 2006-03-23 08:49:44 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.113 2006-06-08 09:14:22 lescuyer Exp $ i*)
 
 open Logic
 open Ident
 open Misc
 open Types
 open Cc
+open Logic_decl
 open Ast
 open Env
 open Rename
@@ -821,6 +822,36 @@ let print_decl fmt = function
       fprintf fmt "%atype %a" print_external e Ident.print id
 
 let print_pfile = print_list newline print_decl
+
+let print_decl fmt = function
+    Dtype (_, sl, s) -> 
+      fprintf fmt "type %s" s
+  | Dlogic (_, s, log_type_sch) -> 
+      fprintf fmt "logic %a" print_logic_type log_type_sch.Env.scheme_type
+  | Dpredicate_def (_, s, pred_def_sch) ->
+      let (args, pred) = pred_def_sch.Env.scheme_type in
+      fprintf fmt "defpred %s (%a) = %a" s
+	(print_list comma (fun fmt t -> print_pure_type fmt (snd t))) args
+	print_predicate pred
+  | Dfunction_def (_, s, fun_def_sch) ->
+      let (args, rt, exp) = fun_def_sch.Env.scheme_type in
+      fprintf fmt "deffun %s (%a) : %a = %a" s
+	(print_list comma (fun fmt t -> print_pure_type fmt (snd t))) args
+	print_pure_type rt
+	print_term exp
+  | Daxiom (_, s, pred_sch) ->
+      fprintf fmt "axiom %s : %a" s 
+	print_predicate pred_sch.Env.scheme_type
+  | Dgoal (_, s, seq_sch) -> 
+      let (cel, pred) = seq_sch.Env.scheme_type in
+      fprintf fmt "goal %s (%a) : %a" s
+	(print_list comma 
+	   (fun fmt t -> match t with 
+	     Cc.Svar (id, pt) -> 
+	       fprintf fmt "%a : %a" Ident.print id print_pure_type pt
+	   | Cc.Spred (id, pred) -> 
+	       fprintf fmt "%a <=> %a" Ident.print id print_predicate pred)) cel
+	print_predicate pred
 
 (* debug *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.39 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.40 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -35,7 +35,6 @@ module Vset : Set.S with type elt = type_var
 module Vmap : Map.S with type key = type_var
 
 type 'a scheme = private { scheme_vars : Vset.t; scheme_type : 'a }
-
 val empty_scheme : 'a -> 'a scheme
 
 (*s AST for typed programs are decorated with local environments *)
@@ -98,6 +97,7 @@ val empty_logic : unit -> local_env
 
 val add : Ident.t -> type_v -> local_env -> local_env
 val is_local : local_env -> Ident.t -> bool
+
 val find_type_var : Ident.t -> local_env -> type_var
 
 (*s access in env (local then global) *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.50 2006-03-27 14:22:05 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.51 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 (*s General options *)
 
@@ -52,6 +52,9 @@ val split_user_conj : bool
 val lvlmax : int
 val all_vc : bool
 
+type encoding = NoEncoding | Predicates | Stratified | Recursive
+val types_encoding : encoding
+
 type termination = UseVariant | Partial | Total
 val termination : termination
 
@@ -79,7 +82,6 @@ val no_simplify_prelude : bool
 val no_harvey_prelude : bool
 val no_zenon_prelude : bool
 val no_cvcl_prelude : bool
-val simplify_typing : bool
 
 val gappa_rnd : string
 

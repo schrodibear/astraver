@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.47 2005-11-04 10:39:55 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.48 2006-06-08 09:14:21 lescuyer Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -198,3 +198,5 @@ val is_real_arith : t -> bool
 val is_arith_binop : t -> bool
 
 val is_arith : t -> bool
+
+val is_simplify_arith : t -> bool

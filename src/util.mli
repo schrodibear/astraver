@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.48 2006-02-08 07:16:01 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.49 2006-06-08 09:14:22 lescuyer Exp $ i*)
 
 open Logic
 open Misc
@@ -159,3 +159,4 @@ val print_env : formatter -> local_env -> unit
 val print_ptree : formatter -> Ptree.parsed_program -> unit
 val print_pfile : formatter -> Ptree.decl list -> unit
 
+val print_decl : formatter -> Logic_decl.t -> unit
