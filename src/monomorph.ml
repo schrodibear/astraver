@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.17 2006-04-24 14:28:45 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.18 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -80,8 +80,9 @@ module IterIT = struct
     | Pimplies (_, a, b) -> predicate f g a; predicate f g b
     | Pif (a, b, c) -> term f a; predicate f g b; predicate f g c
     | Pnot a -> predicate f g a
-    | Exists (_, _, v, p)
-    | Forall (_, _, _, v, p) -> g v; predicate f g p
+    | Exists (_, _, v, p) -> g v; predicate f g p
+    | Forall (_, _, _, v, tl, p) -> 
+	g v; List.iter (List.iter (term f)) tl; predicate f g p
     | Pnamed (_, a) -> predicate f g a
     | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
     | Papp (id, tl, i) -> f id i; List.iter (term f) tl
@@ -183,8 +184,9 @@ module GenSubst(S : Substitution) = struct
     | Por (a, b) -> Por (predicate s a, predicate s b)
     | Piff (a, b) -> Piff (predicate s a, predicate s b)
     | Pnot a -> Pnot (predicate s a)
-    | Forall (w, id, b, v, p) -> 
-	Forall (w, id, b, pure_type s v, predicate s p)
+    | Forall (w, id, b, v, tl, p) -> 
+	let tl' = List.map (List.map (term s)) tl in
+	Forall (w, id, b, pure_type s v, tl', predicate s p)
     | Exists (id, b, v, p) -> 
 	Exists (id, b, pure_type s v, predicate s p)
     | Forallb (w, a, b) -> Forallb (w, predicate s a, predicate s b)
@@ -254,6 +256,9 @@ module OpenInstances = struct
   let rec term s = function
     | Tvar _ | Tderef _ | Tconst _ -> s
     | Tapp (id, l, i) -> List.fold_left term (add (id,i) s) l
+
+  let trigger = List.fold_left term
+  let triggers = List.fold_left trigger
 	
   let rec predicate s = function
     | Pvar _ | Ptrue | Pfalse -> s
@@ -262,7 +267,7 @@ module OpenInstances = struct
     | Forallb (_, a, b) -> predicate (predicate s a) b
     | Pif (a, b, c) -> predicate (predicate (term s a) b) c
     | Pnot a -> predicate s a
-    | Forall (_, _, _, _, p) -> predicate s p
+    | Forall (_, _, _, _, tl, p) -> triggers (predicate s p) tl
     | Exists (_, _, _, p) -> predicate s p
     | Pnamed (_, p) -> predicate s p
     | Pfpi (t, _, _) -> term s t

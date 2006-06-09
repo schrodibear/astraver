@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.147 2006-04-10 14:15:37 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.148 2006-06-09 13:40:00 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -231,7 +231,7 @@ let print_predicate_v7 fmt p =
 	  (print_list space print_term_v7) l
     | Pnot p -> 
 	fprintf fmt "~%a" print3 p
-    | Forall (_,id,n,t,p) -> 
+    | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
@@ -513,7 +513,7 @@ let print_predicate_v8 fmt p =
 	  (print_list space print_term_v8) l
     | Pnot p -> 
 	fprintf fmt "~%a" print3 p
-    | Forall (_,id,n,t,p) -> 
+    | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[forall (%s:%a),@ %a@])" (Ident.string id')

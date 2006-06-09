@@ -1,3 +1,6 @@
+  o quantifiers triggers can be given with the following syntax
+       forall x,y:int [f(x),g(y) | h(x,y)]. p(x,y)
+    currently, the triggers are only meaningful for the Simplify prover
   o new encodings of Why logic into first-order monosorted logic for
     untyped provers (like Simplify or Zenon) : there are three
     possible encodings that can be selected through the command

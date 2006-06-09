@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.59 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: env.ml,v 1.60 2006-06-09 13:40:00 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -81,6 +81,8 @@ let rec find_term_vars acc = function
       List.fold_left find_term_vars 
 	(List.fold_left find_pure_type_vars acc i) tl
 
+let find_trigger_vars = List.fold_left find_term_vars
+
 let rec find_predicate_vars acc p =
   match p with
     | Pvar _
@@ -98,7 +100,9 @@ let rec find_predicate_vars acc p =
     | Por (p1,p2) ->
 	find_predicate_vars (find_predicate_vars acc p1) p2
     | Pnot p -> find_predicate_vars acc p
-    | Forall (_,_,_,t,p) 
+    | Forall (_,_,_,t,tl,p) ->
+	List.fold_left find_trigger_vars
+	  (find_predicate_vars (find_pure_type_vars acc t) p) tl
     | Exists (_,_,t,p) ->
 	find_predicate_vars (find_pure_type_vars acc t) p
     | Forallb (_,p1,p2) ->
@@ -160,6 +164,9 @@ let rec subst_term s = function
   | Tconst _ | Tvar _ | Tderef _ as t -> 
       t
 
+let subst_trigger s = List.map (subst_term s)
+let subst_triggers s = List.map (subst_trigger s)
+
 let rec subst_predicate s p =
   let f = subst_predicate s in
   match p with
@@ -169,7 +176,8 @@ let rec subst_predicate s p =
   | Por (a, b) -> Por (f a, f b)
   | Piff (a, b) -> Piff (f a, f b)
   | Pnot a -> Pnot (f a)
-  | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
+  | Forall (w, id, b, v, tl, p) -> 
+      Forall (w, id, b, subst_pure_type s v, subst_triggers s tl, f p)
   | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Papp (id, tl, i) -> 

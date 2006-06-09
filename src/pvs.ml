@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.72 2006-04-06 14:26:45 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.73 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -182,7 +182,7 @@ let print_predicate fmt p =
 	fprintf fmt "@])"
     | Pnot p -> 
 	fprintf fmt "NOT "; print3 fmt p
-    | Forall (_,id,n,t,p) -> 
+    | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "@[(FORALL (%s: " (Ident.string id');

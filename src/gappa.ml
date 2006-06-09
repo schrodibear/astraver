@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: gappa.ml,v 1.6 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.7 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -176,7 +176,7 @@ let add_ctx_vars =
     (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
 
 let rec intros ctx = function
-  | Forall (true, id, n, t, p) ->
+  | Forall (true, id, n, t, _, p) ->
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in

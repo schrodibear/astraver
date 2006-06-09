@@ -86,7 +86,7 @@ let plunge fv term pt =
 	  let s = string_of_int var.tag in
 	  (print_endline ("unknown vartype : "^s); s) in
 	Tapp (Ident.create t, [], [])
-    | PTvar ({type_val = Some pt} as var) -> leftt pt
+    | PTvar {type_val = Some pt} -> leftt pt
     | PTexternal (ptl, id) -> Tapp (id, List.map (fun pt -> leftt pt) ptl, [])
   in
   Tapp (Ident.create (prefix^"sort"),
@@ -129,7 +129,8 @@ let rec translate_term fv lv = function
 (* Generalizing a predicate scheme with foralls *)
 let rec lifted  l p =
   match l with [] -> p
-  | (_, s)::q -> lifted q (Forall(false, Ident.create s, Ident.create s, ut, p))
+  | (_, s)::q -> 
+      lifted q (Forall(false, Ident.create s, Ident.create s, ut, [], p))
 
 let rec lifted_ctxt l cel =
   (List.map (fun (_,s) -> Svar(Ident.create s, ut)) l)@cel
@@ -153,8 +154,10 @@ let rec translate_pred fv lv = function
       Piff (translate_pred fv lv p1, translate_pred fv lv p2)
   | Pnot p ->
       Pnot (translate_pred fv lv p)
-  | Forall (iswp, id, n, pt, p) ->
-      Forall (iswp, id, n, ut, translate_pred fv ((n,pt)::lv) p)
+  | Forall (iswp, id, n, pt, tl, p) ->
+      let lv' = (n,pt)::lv in
+      let tl' = List.map (List.map (translate_term fv lv')) tl in
+      Forall (iswp, id, n, ut, tl', translate_pred fv lv' p)
   | Forallb (iswp, p1, p2) ->
       Forallb (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
   | Exists (id, n, pt, p) ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.16 2006-05-05 14:42:56 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.17 2006-06-09 13:40:02 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -200,7 +200,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(\\/ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(-.@ %a)@]" print_predicate a
-  | Forall (_,id,n,t,p) -> 
+  | Forall (_,id,n,t,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(A. ((%a \"%a\")@ %a))@]" 

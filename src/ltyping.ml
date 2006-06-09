@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.47 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: ltyping.ml,v 1.48 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -209,9 +209,11 @@ and desc_predicate loc lab env = function
 	     Pif (ta, predicate lab env b, predicate lab env c)
 	 | _ -> 
 	     raise_located a.pp_loc ShouldBeBoolean)
-  | PPforall (id, pt, a) ->
+  | PPforall (id, pt, tl, a) ->
       let v = pure_type env pt in
-      forall id (PureType v) (predicate lab (Env.add_logic id v env) a)
+      let env' = Env.add_logic id v env in
+      let tl' = triggers lab env' tl in
+      forall id (PureType v) ~triggers:tl' (predicate lab env' a)
   | PPexists (id, pt, a) ->
       let v = pure_type env pt in
       exists id (PureType v) (predicate lab (Env.add_logic id v env) a)
@@ -336,6 +338,7 @@ and type_const = function
   | ConstUnit -> PTunit
   | ConstFloat _ -> PTreal
 
+and triggers lab env = List.map (List.map (fun t -> fst (term lab env t)))
 
 (*s Checking types *)
 

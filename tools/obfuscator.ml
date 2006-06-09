@@ -161,10 +161,10 @@ let rec lexpr m fmt p =
       fprintf fmt "(not %a)" lexprm a
   | PPprefix (PPneg, a) ->
       fprintf fmt "(-(%a))" lexprm a
-  | PPforall (id,v,p) ->
+  | PPforall (id,v,tl,p) ->
       let m = rename m id in
-      fprintf fmt "@[<hov 2>(forall %a:%a.@ %a)@]" 
-	(ident m) id ppure_type v (lexpr m) p
+      fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]" 
+	(ident m) id ppure_type v (triggers m) tl (lexpr m) p
   | PPexists (id,v,p) ->
       let m = rename m id in
       fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
@@ -174,6 +174,12 @@ let rec lexpr m fmt p =
 	lexprm t i1 f1 e1 i2 f2 e2
   | PPnamed (_, p) ->
       lexprm fmt p
+
+and triggers m fmt = function
+  | [] -> ()
+  | tl -> fprintf fmt " [%a]" (print_list alt (trigger m)) tl
+
+and trigger m = print_list space (lexpr m)
 
 let assertion m fmt a = lexpr m fmt a.pa_value
 

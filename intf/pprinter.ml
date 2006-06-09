@@ -139,7 +139,7 @@ let move_to_source = function
 	end
 
 let rec intros ctx = function 
-  | Forall (true, id, n, t, p) ->
+  | Forall (true, id, n, t, _, p) ->
       let id' = Ident.next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       let ctx', concl' = intros (Svar (id', t) :: ctx) p' in

@@ -135,7 +135,7 @@ let rec push d =
 	    Papp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []) in
 	  let rec lifted  l p =
 	    match l with [] -> p
-	    | a::q -> lifted q (Forall(false, a, a, ut, p)) in
+	    | a::q -> lifted q (Forall(false, a, a, ut, [], p)) in
 	  let ax = Env.empty_scheme 
 	      (lifted 
 		 ((fst (List.split args))@(List.map (fun i -> Ident.create i) (snd (List.split fv))))
@@ -166,7 +166,7 @@ let rec push d =
 	      rt in
 	  let rec lifted  l p =
 	    match l with [] -> p
-	    | a::q -> lifted q (Forall(false, a, a, ut, p)) in
+	    | a::q -> lifted q (Forall(false, a, a, ut, [], p)) in
 	  let ax = Env.empty_scheme 
 	      (lifted 
 		 ((fst (List.split args))@(List.map (fun i -> Ident.create i) (snd (List.split fv))))
@@ -181,7 +181,7 @@ let rec push d =
       let p = pred_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with [] -> p
-	| (a,t)::q -> lifted_t q (Forall(false, a, a, t, p)) in
+	| (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) in
       push (Dlogic (loc, ident, 
 		    (Env.generalize_logic_type (Predicate (snd (List.split (fst p)))))));
       push (Daxiom (loc, def ident,
@@ -194,7 +194,7 @@ let rec push d =
       let f = fun_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with [] -> p
-	| (a,t)::q -> lifted_t q (Forall(false, a, a, t, p)) in
+	| (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) in
       let (ptl, rt, t) = f in
       push (Dlogic (loc, ident, 
 		    (Env.generalize_logic_type (Function (snd (List.split ptl), rt)))));
@@ -227,8 +227,10 @@ let rec push d =
 	    Piff (translate_eq lv p1, translate_eq lv p2)
 	| Pnot p ->
 	    Pnot (translate_eq lv p)
-	| Forall (iswp, id, n, pt, p) ->
-	    Forall (iswp, id, n, ut, translate_eq ((n,pt)::lv) p)
+	| Forall (iswp, id, n, pt, tl, p) ->
+	    let lv' = (n,pt)::lv in
+	    let tl' = List.map (List.map (translate_term lv')) tl in
+	    Forall (iswp, id, n, ut, tl', translate_eq lv' p)
 	| Forallb (iswp, p1, p2) ->
 	    Forallb (iswp, translate_eq lv p1, translate_eq lv p2)
 	| Exists (id, n, pt, p) ->
@@ -256,7 +258,9 @@ let rec push d =
 	| _ as t -> t in
       let rec lifted  l p =
 	match l with [] -> p
-	| (_,a)::q -> lifted q (Forall(false, Ident.create a, Ident.create a, ut, p)) in
+	| (_,a)::q -> 
+	    lifted q (Forall(false, Ident.create a, Ident.create a, ut, [], p))
+      in
       Queue.add (Daxiom (loc, ident,
 			 Env.empty_scheme 
  			   (lifted fv (translate_eq [] pred_sch.Env.scheme_type)))) queue
@@ -290,8 +294,10 @@ let rec push d =
 	    Piff (translate_eq lv p1, translate_eq lv p2)
 	| Pnot p ->
 	    Pnot (translate_eq lv p)
-	| Forall (iswp, id, n, pt, p) ->
-	    Forall (iswp, id, n, ut, translate_eq ((n,pt)::lv) p)
+	| Forall (iswp, id, n, pt, tl, p) ->
+	    let lv' = (n,pt)::lv in
+	    let tl' = List.map (List.map (translate_term lv')) tl in
+	    Forall (iswp, id, n, ut, tl', translate_eq lv' p)
 	| Forallb (iswp, p1, p2) ->
 	    Forallb (iswp, translate_eq lv p1, translate_eq lv p2)
 	| Exists (id, n, pt, p) ->
@@ -323,7 +329,9 @@ let rec push d =
 	| _ as t -> t in
       let rec lifted  l p =
 	match l with [] -> p
-	| (_,a)::q -> lifted q (Forall(false, Ident.create a, Ident.create a, ut, p)) in
+	| (_,a)::q -> 
+	    lifted q (Forall(false, Ident.create a, Ident.create a, ut, [], p))
+      in
       Queue.add (Dgoal 
 		   (loc, ident,
 		    Env.empty_scheme 

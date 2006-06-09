@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.104 2006-03-15 16:03:51 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.105 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -267,7 +267,7 @@ let rec collect_pred s = function
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
   | Pnot a -> collect_pred s a
-  | Forall (_, _, _, _, p) -> collect_pred s p
+  | Forall (_, _, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
   | Pfpi (t, _, _) -> collect_term s t
   | Pnamed (_, p) -> collect_pred s p
@@ -306,7 +306,7 @@ let rec map_predicate f = function
   | Por (a, b) -> Por (f a, f b)
   | Piff (a, b) -> Piff (f a, f b)
   | Pnot a -> Pnot (f a)
-  | Forall (w, id, b, v, p) -> Forall (w, id, b, v, f p)
+  | Forall (w, id, b, v, tl, p) -> Forall (w, id, b, v, tl, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Pnamed (n, a) -> Pnamed (n, f a)
@@ -568,7 +568,7 @@ module Size = struct
     | Pimplies (_, p1, p2) -> 1 + predicate p1 + predicate p2
     | Pif (t, p1, p2) -> 1 + term t + predicate p1 + predicate p2
     | Pnot p -> 1 + predicate p
-    | Forall (_,_,_,_,p) -> 1 + predicate p
+    | Forall (_,_,_,_,_,p) -> 1 + predicate p
     | Exists (_,_,_,p) -> 1 + predicate p
     | Forallb (_,p1,p2) -> 1+ predicate p1 + predicate p2
     | Pnamed (_,p) -> predicate p

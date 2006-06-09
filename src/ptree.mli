@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.31 2006-02-03 13:11:28 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.32 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -53,7 +53,7 @@ and pp_desc =
   | PPinfix of lexpr * pp_infix * lexpr
   | PPprefix of pp_prefix * lexpr
   | PPif of lexpr * lexpr * lexpr
-  | PPforall of Ident.t * ppure_type * lexpr
+  | PPforall of Ident.t * ppure_type * lexpr list list * lexpr
   | PPexists of Ident.t * ppure_type * lexpr
   | PPfpi of lexpr * real_constant * real_constant
   | PPnamed of string * lexpr

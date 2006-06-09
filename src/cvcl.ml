@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.42 2006-05-22 13:34:23 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.43 2006-06-09 13:40:00 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -162,7 +162,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(%a OR@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" print_predicate a
-  | Forall (_,id,n,t,p) -> 
+  | Forall (_,id,n,t,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a:%a):@ %a)@]" 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.48 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.49 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -147,6 +147,16 @@ let rec print_term fmt = function
 and print_terms fmt tl = 
   print_list space print_term fmt tl
 
+let trigger fmt = function
+  | [] -> ()
+  | [Tvar _ as t] -> fprintf fmt "(MPAT %a)" print_term t
+  | [t] -> print_term fmt t
+  | tl -> fprintf fmt "(MPAT %a)" print_terms tl
+
+let triggers fmt = function
+  | [] -> ()
+  | tl -> fprintf fmt "@ (PATS %a)" (print_list space trigger) tl
+
 let external_type = function
   | PTexternal _ -> true
   | _ -> false
@@ -217,11 +227,12 @@ let rec print_predicate pos trig fmt p =
 (*       let p' = subst_in_predicate (subst_onev n id') p in *)
 (*       fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" *)
 (* 	ident id' (has_type ty) id' pp p' *)
-  | Forall (_,id,n,_,p) -> 
+  | Forall (_,id,n,_,tl,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' 
-	(print_predicate pos (match trig with Some _ -> Some true | _ -> None)) p'
+      fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl
+	(print_predicate pos 
+	   None(*(match trig with Some _ -> Some true | _ -> None)*)) p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
@@ -275,14 +286,16 @@ let push_foralls p =
   let split vars p =
     let vars_p = predicate_vars p in
     List.fold_left 
-      (fun (in_p, out_p) ((_,_,b,_) as v) -> 
+      (fun (in_p, out_p) ((_,_,b,_,_) as v) -> 
 	 if Idset.mem b vars_p then v :: in_p, out_p else in_p, v :: out_p)
       ([],[]) vars
   in
-  let quantify = List.fold_right (fun (w,id,b,v) p -> Forall (w,id,b,v,p)) in
+  let quantify = 
+    List.fold_right (fun (w,id,b,v,tl) p -> Forall (w,id,b,v,tl,p)) 
+  in
   let rec push vars = function
-    | Forall (w, id, b, v, p) -> 
-	push ((w,id,b,v) :: vars) p
+    | Forall (w, id, b, v, tl, p) -> 
+	push ((w,id,b,v,tl) :: vars) p
     | Pimplies (w, p1, p2) -> 
 	let in_p1, out_p1 = split vars p1 in 
 	if out_p1 <> [] then change := true;

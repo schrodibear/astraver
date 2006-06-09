@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: hol4.ml,v 1.12 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.13 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -191,7 +191,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(%a \\/@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[~(%a)@]" print_predicate a
-  | Forall (_,id,n,t,p) -> 
+  | Forall (_,id,n,t,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "(@[!%s:%a.@ %a@])" (Ident.string id')

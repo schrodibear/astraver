@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.38 2006-05-05 14:42:55 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.39 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -180,7 +180,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(<->@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
-  | Forall (_,id,n,_,p) -> 
+  | Forall (_,id,n,_,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall %a@ %a)@]" ident id' print_predicate p'

@@ -126,7 +126,7 @@ let print_predicate fmt p =
 	  (print_list comma print_term) l
     | Pnot p -> 
 	fprintf fmt "not %a" print3 p
-    | Forall (_,id,n,t,p) -> 
+    | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[forall %s:%a.@ %a@])" (Ident.string id')

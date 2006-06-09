@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.113 2006-06-08 09:14:22 lescuyer Exp $ i*)
+(*i $Id: util.ml,v 1.114 2006-06-09 13:40:02 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -197,6 +197,9 @@ let rec occur_term id = function
   | Tapp (_, l, _) -> List.exists (occur_term id) l
   | Tconst _ -> false
 
+let occur_trigger id = List.exists (occur_term id)
+let occur_triggers id = List.exists (occur_trigger id)
+
 let rec occur_predicate id = function
   | Pvar _ | Ptrue | Pfalse -> false
   | Papp (_, l, _) -> List.exists (occur_term id) l
@@ -208,7 +211,7 @@ let rec occur_predicate id = function
   | Piff (a, b) 
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
   | Pnot a -> occur_predicate id a
-  | Forall (_,_,_,_,a) -> occur_predicate id a
+  | Forall (_,_,_,_,tl,a) -> occur_triggers id tl || occur_predicate id a
   | Exists (_,_,_,a) -> occur_predicate id a
   | Pfpi (t,_,_) -> occur_term id t
   | Pnamed (_, a) -> occur_predicate id a
@@ -240,7 +243,7 @@ and occur_arrow id bl c = match bl with
   | (id', v) :: bl' -> 
       occur_type_v id v || (id <> id' && occur_arrow id bl' c)
 
-let forall ?(is_wp=false) x v p = match v with
+let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
 (***
   | PureType PTbool ->
@@ -257,7 +260,7 @@ let forall ?(is_wp=false) x v p = match v with
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
-      Forall (is_wp, x, n, mlize_type v, p)
+      Forall (is_wp, x, n, mlize_type v, triggers, p)
 
 let foralls ?(is_wp=false) =
   List.fold_right
@@ -437,6 +440,12 @@ let rec print_term fmt = function
 	(Ident.string id) (print_list comma print_term) tl
 	(print_list comma print_pure_type) i
 
+let print_trigger = print_list comma print_term
+
+let print_triggers fmt = function
+  | [] -> ()
+  | tl -> fprintf fmt " [%a]" (print_list alt print_trigger) tl
+
 let relation_string id =
   if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
   else if id == t_le || id == t_le_int || id == t_le_real then "<="
@@ -479,10 +488,10 @@ let rec print_predicate fmt = function
       fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "(not %a)" print_predicate a
-  | Forall (_,_,b,v,p) ->
-      fprintf fmt "@[<hov 2>(forall %a:%a.@ %a)@]" 
+  | Forall (_,_,b,v,tl,p) ->
+      fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]" 
 	(if debug then Ident.dbprint else Ident.print) b 
-	print_pure_type v print_predicate p
+	print_pure_type v print_triggers tl print_predicate p
   | Exists (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
 	(if debug then Ident.dbprint else Ident.print) b print_predicate p

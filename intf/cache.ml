@@ -77,8 +77,8 @@ let clean seq =
 	Piff (clean0 p1, clean0 p2)
     | Pnot p ->
 	Pnot (clean0 p)
-    | Forall (wp, id1, id2, pt, p) ->
-	Forall (wp, id1, id2, pt, clean0 p)
+    | Forall (wp, id1, id2, pt, tl, p) ->
+	Forall (wp, id1, id2, pt, tl, clean0 p)
     | Forallb (wp, p1, p2) ->
 	Forallb (wp, clean0 p1, clean0 p2)
     | Exists (id1, id2, pt, p) ->

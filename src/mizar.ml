@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.35 2006-05-05 14:42:55 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.36 2006-06-09 13:40:01 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -221,7 +221,7 @@ let print_predicate fmt p =
 	fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
     | Pnot a ->
 	fprintf fmt "@[not %a@]" print3 a
-    | Forall (_,id,n,t,p) -> 
+    | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[for %s@ being %a holds@ %a@])" (Ident.string id')

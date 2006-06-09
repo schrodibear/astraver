@@ -397,8 +397,14 @@ lexpr:
    { mk_pp (PPapp (Ident.access, [mk_pp_i 1 (PPvar $1); $3])) }
 | IF lexpr THEN lexpr ELSE lexpr %prec prec_if 
    { mk_pp (PPif ($2, $4, $6)) }
-| FORALL list1_ident_sep_comma COLON primitive_type DOT lexpr %prec prec_forall
-   { List.fold_right (fun id p -> mk_pp (PPforall (id, $4, p))) $2 $6 }
+| FORALL list1_ident_sep_comma COLON primitive_type triggers 
+  DOT lexpr %prec prec_forall
+   { let rec mk = function
+       | [] -> assert false
+       | [id] -> mk_pp (PPforall (id, $4, $5, $7))
+       | id :: l -> mk_pp (PPforall (id, $4, [], mk l))
+     in
+     mk $2 }
 | EXISTS ident COLON primitive_type DOT lexpr %prec prec_exists
    { mk_pp (PPexists ($2, $4, $6)) }
 | FPI LEFTPAR lexpr COMMA FLOAT COMMA FLOAT RIGHTPAR
@@ -420,6 +426,20 @@ lexpr:
    { $2 }
 | ident_or_string COLON lexpr %prec prec_named
    { mk_pp (PPnamed ($1, $3)) }
+;
+
+triggers:
+| /* epsilon */ { [] }
+| LEFTSQ list1_trigger_sep_bar RIGHTSQ { $2 }
+;
+
+list1_trigger_sep_bar:
+| trigger { [$1] }
+| trigger BAR list1_trigger_sep_bar { $1 :: $3 }
+;
+
+trigger:
+  list1_lexpr_sep_comma { $1 }
 ;
 
 list1_lexpr_sep_comma:

@@ -188,7 +188,7 @@ let rec unif_pred u = function
       unif_pred u (a, a')
   | Pfpi (t, a, b), Pfpi (t', a', b') when a = a' && b = b' ->
       unif_term u (t, t')
-  | Forall (_, _, n, _, p), Forall (_, _, n', _, p') 
+  | Forall (_, _, n, _, _, p), Forall (_, _, n', _, _, p') 
   | Exists (_, n, _, p), Exists (_, n', _, p') ->
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
       unif_pred u (p, p'n)
@@ -224,7 +224,7 @@ let lookup_instance id bvars p q hpx p' =
       bvars ([], [], Idmap.empty)
   in
   List.fold_right
-    (fun (x, n, ty) p -> Forall (true, x, n, ty, p))
+    (fun (x, n, ty) p -> Forall (true, x, n, ty, [], p))
     bvars' (simplify (tsubst_in_predicate s q)),
   cc_lam 
     (List.map (fun (x, _, ty) -> x, CC_var_binder (TTpure ty)) bvars')
@@ -262,7 +262,7 @@ let boolean_wp_lemma = Ident.create "why_boolean_wp"
 
 (* [qe_forall (forall x1...forall xn. p) = [x1;...;xn],p] *)
 let rec qe_forall = function
-  | Forall (_, id, n, ty, p) -> 
+  | Forall (_, id, n, ty, _, p) -> 
       let vl, p = qe_forall p in (id, n, ty) :: vl, p
   | Forallb (_, ptrue, pfalse) -> 
       let id = fresh_var () in
@@ -280,7 +280,7 @@ let add_ctx_vars =
    return the new goal (context-conclusion), together with a proof-term
    modifier to apply to the proof-term found for the new goal. *)
 let rec intros ctx = function
-  | Forall (_, id, n, t, p) ->
+  | Forall (_, id, n, t, _, p) ->
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
       let p' = subst_in_predicate (subst_onev n id') p in
@@ -358,7 +358,7 @@ let linear ctx concl =
 			       CC_var id, CC_hole (search ctx')))
 	end
     (* forall-elimination *)
-    | Spred (id, (Forall (true,_,_,_,_) | Forallb (true,_,_) as a)) 
+    | Spred (id, (Forall (true,_,_,_,_,_) | Forallb (true,_,_) as a)) 
       :: ctx -> 
 	let id = make_forall_proof id a in
 	begin try
@@ -387,7 +387,8 @@ let linear ctx concl =
 		let h2 = fresh_hyp () in
 		let qpi pi =
 		  List.fold_right
-		    (fun (x, n, ty) p -> Forall (true, x, n, ty, p)) bvars pi
+		    (fun (x, n, ty) p -> Forall (true, x, n, ty, [], p)) 
+		    bvars pi
 		in
 		let qp1 = qpi p1 in
 		let qp2 = qpi p2 in
@@ -630,7 +631,7 @@ let rec split lvl ctx = function
 	   (cc_applist (cc_var asym_conj) 
 	      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
   | Pimplies (wp, _, _)
-  | Forall (wp, _, _, _,_) as concl 
+  | Forall (wp, _, _, _, _, _) as concl 
       when (wp || Options.split_user_conj) && lvl < lvlmax ->
       let ctx',concl',pr_intros = intros ctx concl in
       let ol,prl = split (succ lvl) ctx' concl' in
