@@ -1074,6 +1074,12 @@ Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
       & $|$ & \te{(} \nt{predicate} \te{)} \\
       & $|$ & (\nt{identifier} $|$ \nt{string}) \te{:} \nt{predicate} \\
   \\[0.1em]
+ 
+  \nt{triggers}
+    & $::=$ & \te{[} \nt{trigger}\plussep{\te{|}} \te{]} \\
+  \nt{trigger}
+    & $::=$ & \nt{term}\plussep{\te{,}} \\
+  \\[0.1em]
 
   \nt{primitive\_type}\indexnt{primitive\_type}
     & $::=$ & \te{int} $|$ \te{bool} $|$ \te{real} $|$ 
