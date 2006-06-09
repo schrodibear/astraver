@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.49 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.50 2006-06-09 14:52:41 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -229,8 +229,10 @@ let rec print_predicate pos trig fmt p =
 (* 	ident id' (has_type ty) id' pp p' *)
   | Forall (_,id,n,_,tl,p) -> 
       let id' = next_away id (predicate_vars p) in
-      let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl
+      let s = subst_onev n id' in
+      let p' = subst_in_predicate s p in
+      let tl' = List.map (List.map (subst_in_term s)) tl in
+      fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl'
 	(print_predicate pos 
 	   None(*(match trig with Some _ -> Some true | _ -> None)*)) p'
   | Exists (id,n,t,p) -> 
