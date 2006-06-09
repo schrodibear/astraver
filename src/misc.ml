@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.105 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.106 2006-06-09 15:03:25 lescuyer Exp $ i*)
 
 open Options
 open Ident
@@ -318,6 +318,9 @@ let rec tsubst_in_predicate s = function
 			  tsubst_in_predicate s b, 
 			  tsubst_in_predicate s c)
   | Pfpi (t, f1, f2) -> Pfpi (tsubst_in_term s t, f1, f2)
+  | Forall (w, id, b, v, tl, p) -> 
+      Forall (w, id, b, v, List.map (List.map (tsubst_in_term s)) tl, 
+	      tsubst_in_predicate s p)
   | p -> map_predicate (tsubst_in_predicate s) p
 
 let subst_in_term s = 
@@ -659,3 +662,4 @@ let do_not_edit_above ~file ~before ~sep ~after =
       close_out cout
   end
 
+      

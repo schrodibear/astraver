@@ -33,18 +33,6 @@ let prelude =
 	   Env.empty_scheme (Function ([], ut))))::
   (Dlogic (loc, prefix^"ref", 
 	   Env.empty_scheme (Function ([ut], ut))))::
-(*   (Dlogic (loc, "equal"^suffix, *)
-(* 	   Env.empty_scheme (Predicate ([ut; ut])))):: *)
-(*   (Daxiom (loc, axiom "equal", *)
-(* 	   Env.empty_scheme *)
-(* 	     (Forall (false, Ident.create "t", Ident.create "t", ut, *)
-(* 	      Forall (false, Ident.create "x", Ident.create "x", ut, *)
-(* 	      Forall (false, Ident.create "y", Ident.create "y", ut, *)
-(* 	      Piff (Papp (Ident.create ("equal"^suffix), *)
-(* 			  [Tapp (Ident.create (prefix^"sort"), [Tvar (Ident.create "t"); Tvar (Ident.create "x")], []); *)
-(* 			   Tapp (Ident.create (prefix^"sort"), [Tvar (Ident.create "t"); Tvar (Ident.create "y")], [])], *)
-(* 			  []), *)
-(* 		    Papp(Ident.t_eq, [Tvar (Ident.create "x"); Tvar (Ident.create "y")], [])))))))):: *)
   []
 
 (* Special axioms for arithmetic *)
@@ -95,8 +83,6 @@ let plunge fv term pt =
 
 (* Ground instanciation of an arity (to be plunged under) *)
 let instantiate_arity id inst =
-(*   Format.eprintf "instance %a[@[%a@]]@." *)
-(*     Ident.print id (Pp.print_list Pp.comma Util.print_pure_type) inst; *)
   let arity = 
     try List.assoc (Ident.string id)!arities
     with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
@@ -123,14 +109,16 @@ let rec translate_term fv lv = function
   | Tconst (ConstInt _) as t -> plunge [] t PTint
   | Tconst (ConstBool _) as t -> plunge [] t PTbool
   | Tconst (ConstUnit) as t -> plunge [] t PTunit
-  | Tconst (ConstFloat _) as t -> plunge [] t PTreal
+  | Tconst (ConstFloat f) as t -> plunge [] t PTreal
   | Tderef id as t -> print_endline ("id in Tderef : "^(Ident.string id)); t
 	
-(* Generalizing a predicate scheme with foralls *)
-let rec lifted  l p =
+(* Generalizing a predicate scheme with foralls (can add a trigger) *)
+let rec lifted  l p t =
   match l with [] -> p
+  | (_, s)::[] ->
+      Forall(false, Ident.create s, Ident.create s, ut, t, p)
   | (_, s)::q -> 
-      lifted q (Forall(false, Ident.create s, Ident.create s, ut, [], p))
+      Forall(false, Ident.create s, Ident.create s, ut, [], lifted q p t)
 
 let rec lifted_ctxt l cel =
   (List.map (fun (_,s) -> Svar(Ident.create s, ut)) l)@cel
@@ -218,12 +206,15 @@ let rec push d =
 	      ptl in
 	  let terml = 
 	    Papp (Ident.create (ident^suffix),
-		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args,
-		  [])
+		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args, [])
+	  and pattern =
+	    Tapp (Ident.create (ident^suffix),
+		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args, [])
 	  and termr =
 	    Papp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []) in
-	  let ax = Env.empty_scheme (lifted ((List.map (fun (id,_) -> (0, Ident.string id)) args)@fv)
-				       (Piff (terml, termr))) in
+	  let ax = Env.empty_scheme 
+	      (lifted ((List.map (fun (id,_) -> (0, Ident.string id)) args)@fv)
+		 (Piff (terml, termr)) [[pattern]]) in
 	  (Queue.add (Dlogic (loc, ident^suffix,
 			      Env.empty_scheme (Predicate (unify ptl)))) queue;
 	   Queue.add (Dlogic (loc, ident,
@@ -237,8 +228,7 @@ let rec push d =
 	      ptl in
 	  let terml = 
 	    Tapp (Ident.create (ident^suffix),
-		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args,
-		  []) 
+		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args, []) 
 	  and termr =
 	    plunge fv 
 	      (Tapp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []))
@@ -246,7 +236,7 @@ let rec push d =
 	  let ax = Env.empty_scheme 
 	      (lifted 
 		 ((List.map (fun (id,_) -> (0,Ident.string id)) args)@fv)
-		 (Papp (Ident.t_eq, [terml;termr], []))) in
+		 (Papp (Ident.t_eq, [terml;termr], [])) [[terml]]) in
 	  (Queue.add (Dlogic (loc, ident^suffix,
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Dlogic (loc, ident,
@@ -273,7 +263,7 @@ let rec push d =
       let new_pred_def =
 	Env.empty_scheme
 	  ((List.map (fun (id, _) -> (id, ut)) argl),
-	   (lifted fv (translate_pred fv argl pred))) in
+	   (lifted fv (translate_pred fv argl pred) [])) in
       Queue.add (Dpredicate_def (loc, ident, new_pred_def)) queue
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) ->
@@ -296,7 +286,7 @@ let rec push d =
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
 	  (pred_sch.Env.scheme_vars) [] in
       let new_axiom =
-	Env.empty_scheme (lifted fv (translate_pred fv [] pred_sch.Env.scheme_type)) in
+	Env.empty_scheme (lifted fv (translate_pred fv [] pred_sch.Env.scheme_type) []) in
       Queue.add (Daxiom (loc, ident, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
   | Dgoal (loc, ident, s_sch) ->

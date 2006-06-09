@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.50 2006-06-09 14:52:41 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.51 2006-06-09 15:03:25 lescuyer Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -33,7 +33,6 @@ type elem =
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
-  | PredDef of string * pure_type list
 
 let queue = Queue.create ()
 
@@ -44,11 +43,7 @@ let decl_to_elem = function
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) queue
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
-  | Dtype _ -> ()
-  | Dlogic (_, id, logic_scheme) -> 
-      (match logic_scheme.Env.scheme_type with
-	Function (_,_) -> ()
-      | Logic.Predicate args -> (* Queue.add (PredDef (id, args)) queue *) ())
+  | _ -> ()
 
 let push_decl = 
   Encoding.push
@@ -109,7 +104,7 @@ let sortp fmt id = idents fmt ("IS" ^ Ident.string id)
 let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" ident id
-  | Tconst (ConstInt n) -> 
+  | Tconst (ConstInt n) ->
       fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
       fprintf fmt "|@@%b|" b
@@ -170,8 +165,8 @@ let has_type ty fmt id = match ty with
 | _ -> 
     assert false
 
-let rec print_predicate pos trig fmt p = 
-  let pp = print_predicate pos None in
+let rec print_predicate pos fmt p = 
+  let pp = print_predicate pos in
   match p with
   | Ptrue ->
       fprintf fmt "TRUE"
@@ -185,9 +180,6 @@ let rec print_predicate pos trig fmt p =
       ident fmt id
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE ; was well_founded@\n"
-  | Papp (id, [a; b], _) when is_eq id && trig = Some true ->
-      fprintf fmt "@[(PATS %a)@]@\n@[(EQ %a@ %a)@]"
-	print_term a print_term a print_term b
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(EQ %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->
@@ -203,13 +195,7 @@ let rec print_predicate pos trig fmt p =
       fprintf fmt "@[(EQ (%a@ %a) |@@true|)@]" ident id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(IMPLIES@ %a@ %a)@]" 
-	(print_predicate (not pos) None) a pp b
-  | Piff (a, b) when trig = Some true ->
-      (match a with Papp (id, tl, _) ->
-	fprintf fmt "@[(PATS (%a %a))@]@\n@[(IFF@ %a@ %a)@]"
-	  ident id print_terms tl pp a pp b
-      | _ ->  fprintf fmt "@[(IFF@ %a@ %a)@]"
-	    (print_predicate (not pos) None) a pp b)
+	(print_predicate (not pos)) a pp b
   | Piff (a, b) ->
       fprintf fmt "@[(IFF@ %a@ %a)@]" pp a pp b
   | Pif (a, b, c) ->
@@ -222,19 +208,12 @@ let rec print_predicate pos trig fmt p =
       fprintf fmt "@[(OR@ %a@ %a)@]" pp a pp b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" pp a
-(*   | Forall (_, id, n, ty, p) when simplify_typing && external_type ty -> *)
-(*       let id' = next_away id (predicate_vars p) in *)
-(*       let p' = subst_in_predicate (subst_onev n id') p in *)
-(*       fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" *)
-(* 	ident id' (has_type ty) id' pp p' *)
   | Forall (_,id,n,_,tl,p) -> 
       let id' = next_away id (predicate_vars p) in
       let s = subst_onev n id' in
       let p' = subst_in_predicate s p in
       let tl' = List.map (List.map (subst_in_term s)) tl in
-      fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl'
-	(print_predicate pos 
-	   None(*(match trig with Some _ -> Some true | _ -> None)*)) p'
+      fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl' pp p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
@@ -267,15 +246,12 @@ let cc_has_type ty fmt id = match ty with
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
-	print_predicate false None fmt concl
-(*     | Svar (id, ty) :: hyps when simplify_typing && external_type ty ->  *)
-(* 	fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]"  *)
-(* 	  ident id (has_type ty) id print_seq hyps *)
+	print_predicate false fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id print_seq hyps
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(IMPLIES %a@ %a)@]" 
-	  (print_predicate true None) p print_seq hyps
+	  (print_predicate true) p print_seq hyps
   in
   print_seq fmt hyps
 
@@ -308,32 +284,19 @@ let push_foralls p =
   push [] p, !change
 
 let print_axiom fmt id p =
-  let trigger = 
-    let reg = Str.regexp ".*_to_.*_c" in
-    if Str.string_match reg id 0 then Some false else None in
   fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@\n" id;
   let p = p.Env.scheme_type in
-  fprintf fmt " @[<hov 2>%a@]" (print_predicate true trigger) p;
+  fprintf fmt " @[<hov 2>%a@]" (print_predicate true) p;
   let p,c = push_foralls p in
-  if c then fprintf fmt "@\n@\n @[<hov 2>%a@]" (print_predicate true trigger) p;
+  if c then fprintf fmt "@\n@\n @[<hov 2>%a@]" (print_predicate true) p;
   fprintf fmt ")@]@\n@\n" 
 
 let print_predicate fmt id p =
   let (bl,p) = p.Env.scheme_type in
   fprintf fmt "@[(DEFPRED (%a %a) @[%a@])@]@\n@\n" idents id
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl
-    (print_predicate false None) p;
+    (print_predicate false) p;
   Hashtbl.add defpred (Ident.create id) ()
-
-let print_preddef fmt id args =
-  if args = [] then ()
-  else
-    let cpt = ref 0 in
-    fprintf fmt "@[(DEFPRED (%a %a))@]@\n@\n" idents id
-      (print_list space 
-	 (fun fmt _ -> ident fmt (Ident.create ("x"^(string_of_int !cpt))); cpt := !cpt + 1))
-      args;
-    Hashtbl.add defpred (Ident.create id) ()
 
 let idents_plus_prefix fmt s  =
   match Ident.create s with
@@ -365,40 +328,6 @@ let print_elem fmt = function
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
   | FunctionDef (id, f) -> print_function fmt id f
-  | PredDef (id, args) -> print_preddef fmt id args
-
-(* (\* for each function symbol [f : t1,...,tn -> t] where [t] is an abstract type *)
-(*    we generate an axiom  *)
-(*    [FORALL (x1 ... xn) (IMPLIES (AND (ISti xi)) (ISt (f x1 ... xn)))] *\) *)
-(* let logic_typing fmt = *)
-(*   Env.iter_global_logic *)
-(*     (fun f s -> match s.Env.scheme_type with *)
-(*        | Function ([], PTexternal (_,ty)) -> *)
-(* 	   fprintf fmt *)
-(* 	     "@[(BG_PUSH (EQ (%a %a) |@@true|))@]@\n@\n"  *)
-(* 	     sortp ty ident f  *)
-(*        | Function (pl, PTexternal (_,ty)) -> *)
-(* 	   let n = ref 0 in *)
-(* 	   let pl = List.map (fun pt -> incr n; "x"^string_of_int !n, pt) pl in *)
-(* 	   let epl =  *)
-(* 	     List.fold_right  *)
-(* 	       (fun p acc -> match p with *)
-(* 		  | (x, PTexternal(_,t)) -> (x, Ident.string t) :: acc *)
-(* 		  | _ -> acc) pl [] *)
-(* 	   in *)
-(* 	   fprintf fmt *)
-(*              "@[(BG_PUSH (FORALL (%a)@\n;; @[(PATS (%a (%a %a)))@]@\n(IMPLIES (AND %a) *)
-(*                (EQ (IS%a (%a %a)) |@@true|))))@]@\n@\n" *)
-(* 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl *)
-(* 	     sortp ty ident f  *)
-(* 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl *)
-(* 	     (print_list space  *)
-(* 		(fun fmt (x,t) ->  *)
-(* 		   fprintf fmt "(EQ (%a %s) |@@true|)" idents t x)) *)
-(* 	     epl *)
-(*              Ident.print ty ident f  *)
-(* 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl *)
-(*        | Function _ | Logic.Predicate _ -> ()) *)
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in

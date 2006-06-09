@@ -50,9 +50,13 @@ let plunge fv term pt =
     | PTvar {type_val = Some pt} -> leftt pt
     | PTexternal (ptl, id) -> Tapp (id, List.map (fun pt -> leftt pt) ptl, [])
   in
-  Papp (Ident.create (prefix^"sort"),
-	[leftt pt; term],
-	[])
+  Papp (Ident.create (prefix^"sort"), [leftt pt; term], [])
+
+(* Generalizing a predicate scheme with foralls (can add a trigger) *)
+let rec lifted  l p t =
+  match l with [] -> p
+  | a::[] -> Forall(false, a, a, ut, t, p)
+  | a::q -> Forall(false, a, a, ut, [], lifted q p t)
 
 (* The core *)
 
@@ -78,38 +82,8 @@ let rec push d =
 	  (arity.Env.scheme_vars) [] in
       (match arity.Env.scheme_type with 
       | Predicate ptl ->
-(*
-	  let args = 
-	    List.map
-	      (fun t -> 
-		Ident.create (let _ = cpt := !cpt + 1 in var^(string_of_int !cpt)), t)
-	      ptl in
-*)
-	  let rec mult_conjunct l p =
-	    match l with [] -> p
-	    | a::q -> mult_conjunct q (Pand(false, false, a, p)) in
-(*
-	  let terml = 
-	    mult_conjunct 
-	      (List.map (fun (id, t) -> plunge fv (Tvar id) t) args)
-	      (Papp (Ident.create ident, List.map (fun (id, t) -> (Tvar id)) args, []))
-	  and termr =
-	    Papp (Ident.create (ident^suffix), List.map (fun (t, _) -> Tvar t) args, []) in
-*)
-	  let rec lifted  l p =
-	    match l with [] -> p
-	    | a::q -> lifted q (Forall(false, a, a, ut, [], p)) in
-(*
-	  let ax = Env.empty_scheme 
-	      (lifted 
-		 ((fst (List.split args))@(List.map (fun i -> Ident.create i) (snd (List.split fv))))
-		 (Piff (terml, termr))) in
-*)
-(* 	  (Queue.add (Dlogic (loc, ident^suffix, *)
-(* 			      Env.empty_scheme (Predicate (unify ptl)))) queue; *)
-	   Queue.add (Dlogic (loc, ident,
-			      Env.empty_scheme (Predicate (unify ptl)))) queue(* ; *)
-(* 	   Queue.add (Daxiom (loc, axiom ident, ax)) queue) *)
+	  Queue.add (Dlogic (loc, ident,
+			     Env.empty_scheme (Predicate (unify ptl)))) queue
       | Function (ptl, rt) -> 
 	  let args = 
 	    List.map
@@ -120,18 +94,13 @@ let rec push d =
 	    match l with [] -> p
 	    | a::q -> mult_conjunct q (Pand(false, false, a, p)) in
 	  let prem = 
-	    mult_conjunct (List.map (fun (id,t) -> plunge fv (Tvar id) t) args) Ptrue
-	  and ccl =
-	    plunge fv 
-	      (Tapp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []))
-	      rt in
-	  let rec lifted  l p =
-	    match l with [] -> p
-	    | a::q -> lifted q (Forall(false, a, a, ut, [], p)) in
+	    mult_conjunct (List.map (fun (id,t) -> plunge fv (Tvar id) t) args) Ptrue in
+	  let pattern = (Tapp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, [])) in
+	  let ccl = plunge fv pattern rt in
 	  let ax = Env.empty_scheme 
 	      (lifted 
 		 ((fst (List.split args))@(List.map (fun i -> Ident.create i) (snd (List.split fv))))
-		 (Pimplies (false, prem, ccl))) in
+		 (Pimplies (false, prem, ccl)) []) in
 	  (Queue.add (Dlogic (loc, ident,
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Daxiom (loc, axiom ident, ax)) queue))
@@ -206,14 +175,6 @@ let rec push d =
       let fv = Env.Vset.fold
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
 	  (s_sch.Env.scheme_vars) [] in
-(*
-      let lookup id =
-	let rec aux = function
-	  | [] -> raise Not_found
-	  | (Svar (i, pt))::q when id = i -> pt
-	  | (Spred (_, _))::q | (Svar (_,_))::q -> aux q in
-	aux cel in
-*)
       let rec translate_eq = function
 	| Pimplies (iswp, p1, p2) ->
 	    Pimplies (iswp, translate_eq p1, translate_eq p2)
