@@ -1,5 +1,9 @@
+
 Note: These are the changes for Caduceus.
 
+version 1.00, June 12th, 2006
+=============================
+ o new option -separation to turn on deep memory separation analysis.
  o better error message when a logical type is undeclared
  o limited support for malloc: only expressions like (t*)malloc(e*sizeof(t))
    are supported (see section 2.4 in the manual)

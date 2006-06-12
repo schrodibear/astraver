@@ -208,6 +208,7 @@ manually on the file \texttt{simplify/max\_why.sx.all}.
 It may help discovering missing pre-conditions for instance.
 
 \subsection*{Other provers}
+
 \subsubsection*{\textsf{CVC Lite}}
 The use of \textsf{CVC Lite} is very similar to the use of
 \simplify. Simply run
@@ -226,6 +227,15 @@ To use the \pvs\ proof assistant, first run
 It generates a bunch of files within the \texttt{pvs/}
 subdirectory. Proof obligations are contained in the
 \url{pvs/max_why.pvs} file. 
+
+\subsubsection*{\Why{} GUI}
+
+The \Why{} Graphical User Interface, described in the \Why{} manual,
+may be used for C program, by running
+\begin{verbatim}
+> make -f max.makefile gui
+\end{verbatim}
+Inside this interface, a C-like pretty-printer for formulas is active.
 
 \section{Pointer access and modification}
 
@@ -565,25 +575,25 @@ unfold purse_inv; intuition.
 After the same tactic, the second obligation for \verb|credit| results
 into two subgoals:
 \begin{verbatim}
-2 subgoals
-p : pointer
+p : pointer global
 s : Z
-alloc : alloc
-balance : memory Z
-Pre3 : valid alloc p
+alloc : alloc_table
+balance_global : memory Z global
+HW_2 : valid alloc p
 H0 : s >= 0
 H1 : valid alloc p
-H2 : p # balance >= 0
-caduceus_1 : Z
-Post2 : caduceus_1 = p # balance
-balance0 : memory Z
-H : balance0 = upd balance p (caduceus_1 + s)
+H2 : p # balance_global >= 0
+result : Z
+HW_3 : result = p # balance_global
+HW_4 : valid alloc p
+balance_global0 : memory Z global
+HW_5 : balance_global0 = upd balance_global p (result + s)
 ______________________________________(1/2)
-p # balance0 >= 0
+p # balance_global0 >= 0
 
 
 ______________________________________(2/2)
-p # balance0 = p # balance + s
+p # balance_global0 = p # balance_global + s
 \end{verbatim}
 We meet again the notation $p~\#~s$ where $s$ is now \verb|balance| or
 \verb|balance0|: these are also memory states with integer memory
@@ -635,17 +645,14 @@ subst.
 \end{verbatim}
 we have to prove
 \begin{verbatim}
-p1 : pointer
-p2 : pointer
-alloc : alloc
-balance : memory Z
-Pre9 : valid alloc p1
-H1 : valid alloc p1
-H2 : p1 # balance >= 0
-H : valid alloc p2
-H3 : p2 # balance >= 0
+p1 : pointer global
+p2 : pointer global
+alloc : alloc_table
+balance_global : memory Z global
+H3 : p1 # balance_global >= 0
+H4 : p2 # balance_global >= 0
 ______________________________________(1/1)
-p2 # (upd balance p1 0) >= 0
+p2 # (upd balance_global p1 0) >= 0
 \end{verbatim}
 but the \verb|caduceus| tactic does not solve the goal this time,
 because indeed the tactic needs to find whether \verb|p1| is equal to
@@ -705,31 +712,31 @@ Let's now go back to function \verb|test1|: the three obligations are
 now solved by Simplify, and for the Coq proof of the third obligation,
 after \verb|unfold purse_inv; intuition|, we have to solve
 \begin{verbatim}
-p1 : pointer
-p2 : pointer
-alloc : alloc
-balance : memory Z
-Pre9 : valid alloc p1
+p1 : pointer global
+p2 : pointer global
+alloc : alloc_table
+balance_global : memory Z global
+HW_2 : valid alloc p1
 H0 : p1 = p2 -> False
 H : valid alloc p1
-H3 : p1 # balance >= 0
+H3 : p1 # balance_global >= 0
 H1 : valid alloc p2
-H4 : p2 # balance >= 0
-balance0 : memory Z
-Post2 : balance0 = upd balance p1 0
+H4 : p2 # balance_global >= 0
+balance_global0 : memory Z global
+HW_3 : balance_global0 = upd balance_global p1 0
 H5 : 100 >= 0
 H6 : valid alloc p2
-H7 : p2 # balance0 >= 0
-balance1 : memory Z
-Pre7 : valid alloc p1
-H8 : not_assigns alloc balance0 balance1 (pset_singleton p2)
-H10 : p2 # balance1 = p2 # balance0 + 100
+H7 : p2 # balance_global0 >= 0
+balance_global1 : memory Z global
+HW_6 : valid alloc p1
+H8 : not_assigns alloc balance_global0 balance_global1 (pset_singleton p2)
+H10 : p2 # balance_global1 = p2 # balance_global0 + 100
 H2 : valid alloc p2
-H11 : p2 # balance1 >= 0
-result1 : Z
-Post7 : result1 = p1 # balance1
+H11 : p2 # balance_global1 >= 0
+result : Z
+HW_7 : result = p1 # balance_global1
 ______________________________________(1/1)
-result1 = 0
+result = 0
 \end{verbatim}
 Now the important hypothesis we have is \verb|H8|: it specifies that
 between memory states \verb|balance0| and \verb|balance1|, the only
@@ -738,14 +745,14 @@ memory location that has been assigned is the one pointed by
 (\verb|H0|), we should have \verb|p1 # balance1 = p1 # balance0|. We proceed
 by tactics
 \begin{verbatim}
-subst result1.
+subst result.
 rewrite H8; intuition.
 \end{verbatim}
 resulting in subgoal
 \begin{verbatim}
 ...
 ______________________________________(1/1)
-p1 # balance0 = 0
+p1 # balance_global0 = 0
 \end{verbatim}
 which is proved by \verb|subst; caduceus|.
 
