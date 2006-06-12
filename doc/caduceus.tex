@@ -228,9 +228,9 @@ It generates a bunch of files within the \texttt{pvs/}
 subdirectory. Proof obligations are contained in the
 \url{pvs/max_why.pvs} file. 
 
-\subsubsection*{\Why{} GUI}
+\subsubsection*{\why GUI}
 
-The \Why{} Graphical User Interface, described in the \Why{} manual,
+The \why{} Graphical User Interface, described in the \why{} manual,
 may be used for C program, by running
 \begin{verbatim}
 > make -f max.makefile gui
@@ -700,7 +700,7 @@ int test1(purse *p1, purse *p2) \{
 \}
 \end{code}
 The \emph{assigns} clause \verb|assigns p->balance| is very similar to
-the ones of ESC/Java~\cite{?} and JML~\cite{JML}: it specifies that no
+the one of ESC/Java~\cite{ESCJava2} and JML~\cite{JML}: it specifies that no
 other memory locations than \verb|p->balance| may be modified by the
 function.  Of course, that modification requires to make again the
 verification of function \verb|credit|: the second obligation is a bit
