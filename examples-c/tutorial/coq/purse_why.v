@@ -111,7 +111,8 @@ Save.
   ((purse_inv balance_global0 alloc p2) /\ 100 >= 0).
 Proof.
 unfold purse_inv; intuition.
-subst; caduceus.
+subst.
+caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
@@ -140,9 +141,9 @@ Save.
   result = 0.
 Proof.
 unfold purse_inv; intuition.
-subst; caduceus.
+subst result.
 rewrite H8; intuition.
-caduceus.
+subst; caduceus.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
