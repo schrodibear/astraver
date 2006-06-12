@@ -1,3 +1,6 @@
+
+version 2.00, June 12th, 2006
+=============================
   o quantifiers triggers can be given with the following syntax
        forall x,y:int [f(x),g(y) | h(x,y)]. p(x,y)
     currently, the triggers are only meaningful for the Simplify prover
