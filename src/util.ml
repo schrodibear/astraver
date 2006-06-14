@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.114 2006-06-09 13:40:02 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.115 2006-06-14 13:28:00 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -259,7 +259,9 @@ let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
       Pand (true, true, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
-      let p = subst_in_predicate (subst_onev x n) p in
+      let s = subst_onev x n in
+      let p = subst_in_predicate s p in
+      let triggers = List.map (List.map (subst_in_term s)) triggers in
       Forall (is_wp, x, n, mlize_type v, triggers, p)
 
 let foralls ?(is_wp=false) =
