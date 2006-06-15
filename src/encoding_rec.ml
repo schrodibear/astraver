@@ -229,7 +229,7 @@ let rec push d =
 	    Pnot (translate_eq lv p)
 	| Forall (iswp, id, n, pt, tl, p) ->
 	    let lv' = (n,pt)::lv in
-	    let tl' = List.map (List.map (translate_term lv')) tl in
+	    let tl' = List.map (List.map (translate_pattern lv')) tl in
 	    Forall (iswp, id, n, ut, tl', translate_eq lv' p)
 	| Forallb (iswp, p1, p2) ->
 	    Forallb (iswp, translate_eq lv p1, translate_eq lv p2)
@@ -239,6 +239,9 @@ let rec push d =
 	    Pnamed (s, translate_eq lv p)
 	| _ as d ->
 	    d
+      and translate_pattern lv = function
+	| TPat t -> TPat (translate_term lv t)
+	| PPat p -> PPat (translate_eq lv p)
       and translate_term lv = function
 	| Tvar id -> plunge fv (Tvar id) (List.assoc id lv)
 	| Tapp (id, tl, inst) when List.mem (Ident.string id) !poly_consts ->
@@ -296,7 +299,7 @@ let rec push d =
 	    Pnot (translate_eq lv p)
 	| Forall (iswp, id, n, pt, tl, p) ->
 	    let lv' = (n,pt)::lv in
-	    let tl' = List.map (List.map (translate_term lv')) tl in
+	    let tl' = List.map (List.map (translate_pattern lv')) tl in
 	    Forall (iswp, id, n, ut, tl', translate_eq lv' p)
 	| Forallb (iswp, p1, p2) ->
 	    Forallb (iswp, translate_eq lv p1, translate_eq lv p2)
@@ -306,6 +309,9 @@ let rec push d =
 	    Pnamed (s, translate_eq lv p)
 	| _ as d ->
 	    d 
+      and translate_pattern lv = function
+	| TPat t -> TPat (translate_term lv t)
+	| PPat p -> PPat (translate_eq lv p)
       and translate_term lv = function
 	| Tvar id -> 
 	    (try 

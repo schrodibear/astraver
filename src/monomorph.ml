@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.18 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.19 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 (* monomorphic output *)
 
@@ -82,10 +82,14 @@ module IterIT = struct
     | Pnot a -> predicate f g a
     | Exists (_, _, v, p) -> g v; predicate f g p
     | Forall (_, _, _, v, tl, p) -> 
-	g v; List.iter (List.iter (term f)) tl; predicate f g p
+	g v; List.iter (List.iter (pattern f g)) tl; predicate f g p
     | Pnamed (_, a) -> predicate f g a
     | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
     | Papp (id, tl, i) -> f id i; List.iter (term f) tl
+
+  and pattern f g = function
+    | TPat t -> term f t
+    | PPat p -> predicate f g p
 
   let predicate_def f g (bl,p) =
     List.iter (fun (_,pt) -> g pt) bl;
@@ -185,7 +189,7 @@ module GenSubst(S : Substitution) = struct
     | Piff (a, b) -> Piff (predicate s a, predicate s b)
     | Pnot a -> Pnot (predicate s a)
     | Forall (w, id, b, v, tl, p) -> 
-	let tl' = List.map (List.map (term s)) tl in
+	let tl' = List.map (List.map (pattern s)) tl in
 	Forall (w, id, b, pure_type s v, tl', predicate s p)
     | Exists (id, b, v, p) -> 
 	Exists (id, b, pure_type s v, predicate s p)
@@ -193,6 +197,10 @@ module GenSubst(S : Substitution) = struct
     | Pfpi (t, a, b) -> Pfpi (term s t, a, b)
     | Pnamed (n, a) -> Pnamed (n, predicate s a)
     | Ptrue | Pfalse | Pvar _ as p -> p
+
+  and pattern s = function
+    | TPat t -> TPat (term s t)
+    | PPat p -> PPat (predicate s p)
 
   let predicate_def s (bl,p) = 
     List.map (fun (x,pt) -> (x, pure_type s pt)) bl, predicate s p
@@ -257,21 +265,24 @@ module OpenInstances = struct
     | Tvar _ | Tderef _ | Tconst _ -> s
     | Tapp (id, l, i) -> List.fold_left term (add (id,i) s) l
 
-  let trigger = List.fold_left term
-  let triggers = List.fold_left trigger
-	
-  let rec predicate s = function
+  let rec pattern s = function
+    | TPat t -> term s t
+    | PPat p -> predicate s p
+
+(*   and triggers = List.fold_left (List.fold_left pattern) *)
+      
+  and predicate s = function
     | Pvar _ | Ptrue | Pfalse -> s
     | Papp (id, l, i) -> List.fold_left term (add (id,i) s) l
     | Pimplies (_, a, b) | Pand (_, _, a, b) | Por (a, b) | Piff (a, b)
     | Forallb (_, a, b) -> predicate (predicate s a) b
     | Pif (a, b, c) -> predicate (predicate (term s a) b) c
     | Pnot a -> predicate s a
-    | Forall (_, _, _, _, tl, p) -> triggers (predicate s p) tl
+    | Forall (_, _, _, _, tl, p) -> List.fold_left (List.fold_left pattern) (predicate s p) tl
     | Exists (_, _, _, p) -> predicate s p
     | Pnamed (_, p) -> predicate s p
     | Pfpi (t, _, _) -> term s t
-	
+	  
 end
 
 (* unification of an open instance [t1] with a closed instance [t2];

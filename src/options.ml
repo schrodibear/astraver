@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.63 2006-06-12 14:19:21 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.64 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 open Format
 
@@ -47,7 +47,7 @@ let prelude_ = ref true
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive
-let types_encoding_ = ref NoEncoding
+let types_encoding_ = ref Stratified
 
 type termination = UseVariant | Partial | Total
 let termination_ = ref UseVariant

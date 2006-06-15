@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.60 2006-06-09 13:40:00 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.61 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 open Ident
 open Misc
@@ -81,9 +81,11 @@ let rec find_term_vars acc = function
       List.fold_left find_term_vars 
 	(List.fold_left find_pure_type_vars acc i) tl
 
-let find_trigger_vars = List.fold_left find_term_vars
+let rec find_pattern_vars acc = function
+  | TPat t -> find_term_vars acc t
+  | PPat p -> find_predicate_vars acc p
 
-let rec find_predicate_vars acc p =
+and find_predicate_vars acc p =
   match p with
     | Pvar _
     | Pfpi _
@@ -101,7 +103,7 @@ let rec find_predicate_vars acc p =
 	find_predicate_vars (find_predicate_vars acc p1) p2
     | Pnot p -> find_predicate_vars acc p
     | Forall (_,_,_,t,tl,p) ->
-	List.fold_left find_trigger_vars
+	List.fold_left (List.fold_left find_pattern_vars)
 	  (find_predicate_vars (find_pure_type_vars acc t) p) tl
     | Exists (_,_,t,p) ->
 	find_predicate_vars (find_pure_type_vars acc t) p
@@ -164,10 +166,15 @@ let rec subst_term s = function
   | Tconst _ | Tvar _ | Tderef _ as t -> 
       t
 
-let subst_trigger s = List.map (subst_term s)
-let subst_triggers s = List.map (subst_trigger s)
+let rec subst_pattern s = function
+  | TPat t -> TPat (subst_term s t)
+  | PPat p -> PPat (subst_predicate s p)
 
-let rec subst_predicate s p =
+and subst_trigger s = List.map (subst_pattern s)
+
+and subst_triggers s = List.map (subst_trigger s)
+
+and subst_predicate s p =
   let f = subst_predicate s in
   match p with
   | Pimplies (w, a, b) -> Pimplies (w, f a, f b)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.13 2006-01-19 14:17:04 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.14 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 open Ident
 open Logic
@@ -145,6 +145,8 @@ let report fmt = function
       fprintf fmt "A global declaration cannot have effects@]"
   | CannotGeneralize ->
       fprintf fmt "Cannot generalize"
+  | IllformedPattern ->
+      fprintf fmt "Ill-formed pattern found in trigger : predicates pattern should be atoms"
 
 let is_mutable = function Ref _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

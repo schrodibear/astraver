@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.34 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.35 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 (*s Logic. *)
 
@@ -54,9 +54,6 @@ type var_substitution = Ident.t Ident.map
 type is_wp = bool
 type is_sym = bool
 
-type trigger = term list
-type triggers = trigger list
-
 type predicate =
   | Pvar of Ident.t
   | Papp of Ident.t * term list * instance
@@ -73,6 +70,10 @@ type predicate =
   | Exists of Ident.t * Ident.t * pure_type * predicate
   | Pfpi of term * real_constant * real_constant
   | Pnamed of string * predicate
+and pattern = TPat of term | PPat of predicate
+and trigger = pattern list
+and triggers = trigger list
+
 
 type logic_type =
   | Predicate of pure_type list

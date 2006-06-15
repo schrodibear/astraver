@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.51 2006-06-09 15:03:25 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.52 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -142,11 +142,18 @@ let rec print_term fmt = function
 and print_terms fmt tl = 
   print_list space print_term fmt tl
 
+let rec print_pattern fmt = function
+  | TPat t -> print_term fmt t
+  | PPat (Papp (id, tl, inst)) -> print_term fmt (Tapp (id, tl, inst))
+  | PPat _ -> Report.raise_unlocated Error.IllformedPattern
+and print_patterns fmt pl =
+  print_list space print_pattern fmt pl
+
 let trigger fmt = function
   | [] -> ()
-  | [Tvar _ as t] -> fprintf fmt "(MPAT %a)" print_term t
-  | [t] -> print_term fmt t
-  | tl -> fprintf fmt "(MPAT %a)" print_terms tl
+  | [TPat (Tvar _ as t)] -> fprintf fmt "(MPAT %a)" print_term t
+  | [t] -> print_pattern fmt t
+  | tl -> fprintf fmt "(MPAT %a)" print_patterns tl
 
 let triggers fmt = function
   | [] -> ()
@@ -212,7 +219,7 @@ let rec print_predicate pos fmt p =
       let id' = next_away id (predicate_vars p) in
       let s = subst_onev n id' in
       let p' = subst_in_predicate s p in
-      let tl' = List.map (List.map (subst_in_term s)) tl in
+      let tl' = List.map (List.map (subst_in_pattern s)) tl in
       fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl' pp p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in

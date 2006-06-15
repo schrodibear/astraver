@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.106 2006-06-09 15:03:25 lescuyer Exp $ i*)
+(*i $Id: misc.ml,v 1.107 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 open Options
 open Ident
@@ -319,15 +319,22 @@ let rec tsubst_in_predicate s = function
 			  tsubst_in_predicate s c)
   | Pfpi (t, f1, f2) -> Pfpi (tsubst_in_term s t, f1, f2)
   | Forall (w, id, b, v, tl, p) -> 
-      Forall (w, id, b, v, List.map (List.map (tsubst_in_term s)) tl, 
+      Forall (w, id, b, v, List.map (List.map (tsubst_in_pattern s)) tl,
 	      tsubst_in_predicate s p)
   | p -> map_predicate (tsubst_in_predicate s) p
+
+and tsubst_in_pattern s = function
+  | TPat t -> TPat (tsubst_in_term s t)
+  | PPat p -> PPat (tsubst_in_predicate s p)
 
 let subst_in_term s = 
   tsubst_in_term (Idmap.map (fun id -> Tvar id) s)
 
 let subst_in_predicate s = 
   tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
+
+let subst_in_pattern s =
+  tsubst_in_pattern (Idmap.map (fun id -> Tvar id) s)
 
 let subst_in_assertion s = asst_app (subst_in_predicate s)
 

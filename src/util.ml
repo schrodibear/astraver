@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.115 2006-06-14 13:28:00 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.116 2006-06-15 09:58:31 lescuyer Exp $ i*)
 
 open Logic
 open Ident
@@ -197,10 +197,14 @@ let rec occur_term id = function
   | Tapp (_, l, _) -> List.exists (occur_term id) l
   | Tconst _ -> false
 
-let occur_trigger id = List.exists (occur_term id)
-let occur_triggers id = List.exists (occur_trigger id)
+let rec occur_pattern id = function
+  | TPat t -> occur_term id t
+  | PPat p -> occur_predicate id p
 
-let rec occur_predicate id = function
+and occur_trigger id = List.exists (occur_pattern id)
+and occur_triggers id = List.exists (occur_trigger id)
+
+and occur_predicate id = function
   | Pvar _ | Ptrue | Pfalse -> false
   | Papp (_, l, _) -> List.exists (occur_term id) l
   | Pif (a, b, c) -> 
@@ -261,7 +265,10 @@ let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
       let n = Ident.bound x in
       let s = subst_onev x n in
       let p = subst_in_predicate s p in
-      let triggers = List.map (List.map (subst_in_term s)) triggers in
+      let subst_in_pattern s = function
+	| TPat t -> TPat (subst_in_term s t)
+	| PPat p -> PPat (subst_in_predicate s p) in
+      let triggers = List.map (List.map (subst_in_pattern s)) triggers in
       Forall (is_wp, x, n, mlize_type v, triggers, p)
 
 let foralls ?(is_wp=false) =
@@ -442,12 +449,6 @@ let rec print_term fmt = function
 	(Ident.string id) (print_list comma print_term) tl
 	(print_list comma print_pure_type) i
 
-let print_trigger = print_list comma print_term
-
-let print_triggers fmt = function
-  | [] -> ()
-  | tl -> fprintf fmt " [%a]" (print_list alt print_trigger) tl
-
 let relation_string id =
   if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
   else if id == t_le || id == t_le_int || id == t_le_real then "<="
@@ -457,7 +458,16 @@ let relation_string id =
   else if is_neq id then "<>"
   else assert false
 
-let rec print_predicate fmt = function
+
+let rec print_pattern fmt = function
+  | TPat t -> print_term fmt t
+  | PPat p -> print_predicate fmt p
+
+and print_triggers fmt = function
+  | [] -> ()
+  | tl -> fprintf fmt " [%a]" (print_list alt (print_list comma print_pattern))tl
+
+and print_predicate fmt = function
   | Pvar id -> 
       (if debug then Ident.dbprint else Ident.print) fmt id
 (*
@@ -491,7 +501,7 @@ let rec print_predicate fmt = function
   | Pnot a ->
       fprintf fmt "(not %a)" print_predicate a
   | Forall (_,_,b,v,tl,p) ->
-      fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]" 
+      fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]"
 	(if debug then Ident.dbprint else Ident.print) b 
 	print_pure_type v print_triggers tl print_predicate p
   | Exists (_,b,_,p) ->

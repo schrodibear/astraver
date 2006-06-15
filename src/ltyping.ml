@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.48 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.49 2006-06-15 09:58:30 lescuyer Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -338,7 +338,20 @@ and type_const = function
   | ConstUnit -> PTunit
   | ConstFloat _ -> PTreal
 
-and triggers lab env = List.map (List.map (fun t -> fst (term lab env t)))
+and pattern lab env t =
+  match t.pp_desc with
+  | PPapp (x, _) ->
+      (try match find_global_logic x with
+      | _, Function (_, _) -> 
+	  TPat (fst (term lab env t))
+      | _ -> 
+	  PPat (predicate lab env t)
+      with Not_found -> 
+	raise_located t.pp_loc (UnboundVariable x))
+  | PPvar x -> TPat (fst (term lab env t))
+  | _ -> Report.raise_located t.pp_loc Error.IllformedPattern
+  
+and triggers lab env = List.map (List.map (pattern lab env))
 
 (*s Checking types *)
 

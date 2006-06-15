@@ -97,9 +97,15 @@ let instantiate_arity id inst =
 (* Translation of a term *)
 let rec translate_term fv lv = function
   | Tvar id -> 
+(*       let pp id = let s = match id.Ident.label with *)
+(* 	None -> "<None>" | Some s -> "<Some "^s^">" in *)
+(*       (string_of_int id.Ident.stamp) ^ id.Ident.name ^ s in *)
       plunge fv (Tvar id)
 	(try List.assoc id lv
-	with e -> (print_endline ("unknown variable :"^(Ident.string id)); raise e))
+	with e -> (* (print_endline ("unknown variable :"^(pp id));  *)
+(* 		   print_endline "=== in ==="; *)
+(* 		   ignore (List.iter (fun (n, _) -> print_endline (pp n)) lv); *)
+	  raise e)
   | Tapp (id, tl, inst) when Ident.is_simplify_arith id ->
       Tapp(Ident.create (Ident.string id ^ suffix),
 	   List.map (translate_term fv lv) tl, [])
@@ -144,7 +150,9 @@ let rec translate_pred fv lv = function
       Pnot (translate_pred fv lv p)
   | Forall (iswp, id, n, pt, tl, p) ->
       let lv' = (n,pt)::lv in
-      let tl' = List.map (List.map (translate_term fv lv')) tl in
+(*       print_endline "----"; *)
+(*       ignore (List.iter (fun (n, _) -> print_endline (Ident.string n)) lv'); *)
+      let tl' = List.map (List.map (translate_pattern fv lv')) tl in
       Forall (iswp, id, n, ut, tl', translate_pred fv lv' p)
   | Forallb (iswp, p1, p2) ->
       Forallb (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
@@ -153,6 +161,10 @@ let rec translate_pred fv lv = function
   | Pnamed (s, p) ->
       Pnamed (s, translate_pred fv lv p)
   | _ as d -> d 
+
+and translate_pattern fv lv = function
+  | TPat t -> TPat (translate_term fv lv t)
+  | PPat p -> PPat (translate_pred fv lv p)
 
 (* Identity for now (Could translate built-in equality into customized equality) *)
 let rec translate_eq = (fun d -> d) (* function *)
@@ -207,14 +219,11 @@ let rec push d =
 	  let terml = 
 	    Papp (Ident.create (ident^suffix),
 		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args, [])
-	  and pattern =
-	    Tapp (Ident.create (ident^suffix),
-		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args, [])
 	  and termr =
 	    Papp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []) in
 	  let ax = Env.empty_scheme 
 	      (lifted ((List.map (fun (id,_) -> (0, Ident.string id)) args)@fv)
-		 (Piff (terml, termr)) [[pattern]]) in
+		 (Piff (terml, termr)) [[PPat terml]]) in
 	  (Queue.add (Dlogic (loc, ident^suffix,
 			      Env.empty_scheme (Predicate (unify ptl)))) queue;
 	   Queue.add (Dlogic (loc, ident,
@@ -236,7 +245,7 @@ let rec push d =
 	  let ax = Env.empty_scheme 
 	      (lifted 
 		 ((List.map (fun (id,_) -> (0,Ident.string id)) args)@fv)
-		 (Papp (Ident.t_eq, [terml;termr], [])) [[terml]]) in
+		 (Papp (Ident.t_eq, [terml;termr], [])) [[TPat terml]]) in
 	  (Queue.add (Dlogic (loc, ident^suffix,
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Dlogic (loc, ident,
