@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.22 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.23 2006-06-19 12:25:28 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -33,6 +33,7 @@ let cvcl fmt f = fprintf fmt "cvcl/%s_why.cvc" f
 let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
 let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
+let why_goals fmt f = fprintf fmt "why/%s_why.why" f
 let isabelle fmt f = 
   fprintf fmt "isabelle/%s_why.thy isabelle/%s_spec_why.thy" f f
 
@@ -87,6 +88,10 @@ let generic f targets =
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       
+       fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
+       fprintf fmt "why/%%_why.why: why/%s_spec.why why/%%.why@\n" f;
+       fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout 10 $^)@\n@\n";

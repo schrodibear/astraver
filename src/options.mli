@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.51 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: options.mli,v 1.52 2006-06-19 12:25:29 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -64,7 +64,7 @@ type coq_version = V7 | V8
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | Dispatcher
 
 val prover : unit -> prover
 

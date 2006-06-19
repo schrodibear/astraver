@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.103 2006-04-24 14:28:45 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.104 2006-06-19 12:25:28 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -42,7 +42,8 @@ let reset () =
   | Mizar -> Mizar.reset ()
   | Isabelle -> Isabelle.reset ()
   | Hol4 -> Hol4.reset ()
-  | Harvey | Simplify | Zenon | CVCLite | SmtLib | Gappa | Dispatcher -> ()
+  | Harvey | Simplify | Zenon | CVCLite | SmtLib | Gappa 
+  | Why | Dispatcher -> ()
 
 let add_loc = function
   | Dtype (loc, _, s)
@@ -68,6 +69,7 @@ let push_decl d =
   | Hol4 -> Hol4.push_decl d
   | Gappa -> Gappa.push_decl d
   | Dispatcher -> Dispatcher.push_decl d
+  | Why -> Pretty.push_decl d
 
 let push_obligations = 
   List.iter 
@@ -85,7 +87,7 @@ let push_parameter id v tv = match prover () with
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
   | Harvey | Simplify | Zenon | SmtLib | Gappa 
-  | CVCLite | Dispatcher -> 
+  | CVCLite | Why | Dispatcher -> 
       ()
 
 let output fwe = 
@@ -109,6 +111,7 @@ let output fwe =
     | Hol4 -> Hol4.output_file fwe
     | Gappa -> Gappa.output_file fwe
     | Dispatcher -> ()
+    | Why -> Pretty.output_file fwe
   end
 
 (*s Processing of a single declaration [let id = p]. *)
@@ -306,7 +309,8 @@ let deal_channel parsef cin =
   if not parse_only then List.iter interp_decl p
 
 let single_file () = match prover () with
-  | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher | SmtLib -> true
+  | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher 
+  | SmtLib | Why -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
 let deal_file f =

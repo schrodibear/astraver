@@ -104,7 +104,7 @@ CMO = src/lib.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
 	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo src/dispatcher.cmo \
-           src/isabelle.cmo src/ocaml.cmo src/main.cmo
+           src/pretty.cmo src/isabelle.cmo src/ocaml.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 

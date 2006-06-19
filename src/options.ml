@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.65 2006-06-15 14:38:56 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.66 2006-06-19 12:25:28 filliatr Exp $ i*)
 
 open Format
 
@@ -65,7 +65,7 @@ let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Dispatcher
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | Dispatcher
 
 let prover_ = ref (Coq coq_version)
 
@@ -171,6 +171,8 @@ Prover selection:
   --zenon     selects the Zenon prover
   --gappa     selects the Gappa prover
 
+  --why       selects the Why pretty-printer
+
 Coq-specific options:
   --valid, 
   --no-valid  set/unset the functional validation (default is no)
@@ -232,6 +234,7 @@ let files =
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
     | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
+    | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
