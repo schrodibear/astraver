@@ -54,7 +54,7 @@
 %token <string> IDENTIFIER STRING_LITERAL TYPENAME
 %token <Clogic.constant> CONSTANT
 %token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP
-%token INT FLOAT LT GT LE GE EQ NE COMMA ARROW EQUAL
+%token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL
 %token FORALL EXISTS IFF IMPLIES AND OR NOT 
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR OFFSET
 %token SEPARATED FULLSEPARATED VALID VALID_INDEX VALID_RANGE FRESH THEN AT
@@ -179,8 +179,9 @@ logic_type_not_id:
 | UNSIGNED LONG LONG { LTint }  /** [unsigned long long] 
                                 (or [unsigned _int64] on Microsoft Visual C) */
 | FLOAT       { LTfloat }
-| DOUBLE      { LTfloat }
-| LONG DOUBLE { LTfloat }
+| DOUBLE      { LTdouble }
+| LONG DOUBLE { LTlongdouble }
+| REAL        { LTreal }
 /***
 | STRUCT IDENTIFIER { LTstruct $2 }
 | ENUM IDENTIFIER { LTenum $2 }

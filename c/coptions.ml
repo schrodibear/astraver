@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.21 2006-02-03 13:24:35 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.22 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -67,6 +67,23 @@ let why_opt = ref ""
 let coq_tactic = ref "intuition"
 let separate = ref false
 let closed_program = ref false
+let floats = ref true
+
+type fp_rounding_mode = 
+  | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
+  | RM_dynamic
+let fp_rounding_mode = ref RM_nearest_even
+let set_fp_rounding_mode = function
+  | "nearest_even" -> fp_rounding_mode := RM_nearest_even
+  | "to_zero" -> fp_rounding_mode := RM_to_zero
+  | "up" -> fp_rounding_mode := RM_up
+  | "down" -> fp_rounding_mode := RM_down
+  | "nearest_away" -> fp_rounding_mode := RM_nearest_away
+  | _ -> 
+      Printf.eprintf "rounding mode should be nearest_even, to_zero, up, down, or nearest_away"; exit 1
+let fp_overflow_check = ref false
+
+let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -120,7 +137,7 @@ let _ =
 	  "  stops after pre-processing and dump pre-processed file";
 	"-d", Arg.Set debug,
           "  debugging mode";
-        "-why-opt", Arg.String ((:=) why_opt),
+        "-why-opt", Arg.String add_why_opt,
 	  " <why options>  passes options to Why";
 	"-coq-tactic", Arg.String ((:=) coq_tactic),
 	  " <coq tactic>  Coq tactic for new goals";
@@ -143,6 +160,12 @@ let _ =
 	"-separation", 
 	  Arg.Unit(fun () -> zones := true; closed_program := true),
 	  "  separates pointers into several zones (implies -closed)";
+	"--no-fp", Arg.Clear floats,
+	  "  do not use floating-point arithmetic";
+	"--fp-rounding-mode", Arg.String set_fp_rounding_mode,
+	  "  set the default FP rounding mode";
+	"--fp-overflow", Arg.Set fp_overflow_check,
+	  "  check for FP overflows";
       ]
       add_file "caduceus [options] file..."
 
@@ -157,10 +180,13 @@ let werror = !werror
 let with_cpp = !with_cpp
 let cpp_command = !cpp_command
 let cpp_dump = !cpp_dump
-let why_opt = !why_opt
 let coq_tactic = !coq_tactic
 let separate = !separate
 let closed_program = !closed_program
+let floats = !floats
+let fp_overflow_check = !fp_overflow_check
+
+let why_opt = if floats then "--fp " ^ !why_opt else !why_opt
 
 let verify f = match !verification with
   | All -> true

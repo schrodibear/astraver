@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.15 2006-06-07 14:22:18 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.16 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -27,7 +27,7 @@ type sign = Signed | Unsigned
 
 type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
 
-type cfloat = Float | Double | LongDouble
+type cfloat = Float | Double | LongDouble | Real
 
 type valid = Valid | Not_valid | Tab of int64
 
@@ -60,12 +60,13 @@ let noattr tyn = { ctype_node = tyn;
 let c_void = noattr Tvoid
 let c_int = noattr (Tint (Signed, Int))
 let c_char = noattr (Tint (Unsigned, Char))
-let c_float = noattr (Tfloat Float)
+let c_float fk = noattr (Tfloat fk)
 let c_string valid = noattr (Tpointer(valid, c_char))
 let c_array valid ty = noattr (Tarray (valid,ty,None))
 let c_array_size valid ty n = noattr (Tarray (valid,ty,Some n))
 let c_pointer valid ty = noattr (Tpointer(valid, ty))
 let c_void_star valid = c_pointer valid c_void
+let c_real = noattr (Tfloat Real)
 let c_addr = noattr (Tvar "addr")
 
 

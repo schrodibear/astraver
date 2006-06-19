@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.11 2006-06-07 14:22:18 hubert Exp $ i*)
+(*i $Id: ctypes.mli,v 1.12 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -27,7 +27,7 @@ type sign = Signed | Unsigned
 
 type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
 
-type cfloat = Float | Double | LongDouble
+type cfloat = Float | Double | LongDouble | Real
 
 type valid = Valid | Not_valid | Tab of int64
 
@@ -54,12 +54,13 @@ and ctype = {
 val noattr : ctype_node -> ctype
 val c_void : ctype
 val c_int : ctype
-val c_float : ctype
+val c_float : cfloat -> ctype
 val c_string : valid -> ctype
 val c_array :  valid -> ctype ->  ctype
 val c_array_size : valid ->  ctype -> int64 ->  ctype
 val c_pointer :  valid -> ctype ->  ctype
 val c_void_star : valid -> ctype
+val c_real : ctype
 val c_addr : ctype
 
 val add : string -> unit

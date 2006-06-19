@@ -57,7 +57,7 @@ let type_vars t =
   let rec aux acc t =
     match t with
     | PTvar ({type_val = None} as var) -> var::acc
-    | PTvar ({type_val = Some pt} as var) -> aux acc pt
+    | PTvar {type_val = Some pt} -> aux acc pt
     | PTexternal (ptl, id) -> List.fold_left aux acc ptl
     | _ -> [] in
   aux [] t
@@ -90,7 +90,7 @@ let plunge fv term pt =
 	  (print_endline ("unknown vartype : "^s); s)
 	in
 	Tapp (Ident.create t, [], [])
-    | PTvar ({type_val = Some pt} as var) -> leftt pt
+    | PTvar {type_val = Some pt} -> leftt pt
     | PTexternal (ptl, id) -> Tapp (id, List.map (fun pt -> leftt pt) ptl, [])
   in
   Tapp (Ident.create (prefix^"sort"),
@@ -177,7 +177,7 @@ let rec push d =
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Daxiom (loc, axiom ident, ax)) queue))
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (loc, ident, pred_def_sch) as d->
+  | Dpredicate_def (loc, ident, pred_def_sch) ->
       let p = pred_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with [] -> p
@@ -190,7 +190,7 @@ let rec push d =
 			  (Piff ((Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) (fst p), [])),
 			         (snd p)))))))
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dfunction_def (loc, ident, fun_def_sch) as d -> 
+  | Dfunction_def (loc, ident, fun_def_sch) -> 
       let f = fun_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with [] -> p
@@ -204,7 +204,7 @@ let rec push d =
 			  (Papp (Ident.t_eq,
 				 [(Tapp (Ident.create ident, List.map (fun (i,_) -> Tvar i) ptl, []));
 				  t], []))))))
-  | Daxiom (loc, ident, pred_sch) as d -> 
+  | Daxiom (loc, ident, pred_sch) -> 
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
@@ -267,7 +267,7 @@ let rec push d =
       Queue.add (Daxiom (loc, ident,
 			 Env.empty_scheme 
  			   (lifted fv (translate_eq [] pred_sch.Env.scheme_type)))) queue
-  | Dgoal (loc, ident, s_sch) as d ->
+  | Dgoal (loc, ident, s_sch) ->
       let cpt = ref 0 in
       let (cel, pred) = s_sch.Env.scheme_type in
       let fv = Env.Vset.fold

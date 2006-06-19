@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.20 2006-02-08 07:16:00 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.21 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -142,9 +142,9 @@ rule token = parse
   | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (FloatConstant (lexeme lexbuf)) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
+  | rD+ rE rFS?             { CONSTANT (RealConstant (lexeme lexbuf)) }
+  | rD* "." rD+ (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
+  | rD+ "." rD* (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
 
   | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 

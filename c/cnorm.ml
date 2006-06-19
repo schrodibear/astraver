@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.60 2006-06-07 14:22:17 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.61 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -138,7 +138,8 @@ let rec type_why e =
 	end
     | NEnop -> Unit
     | NEconstant (IntConstant _) -> Info.Int    
-    | NEconstant (FloatConstant _) -> Info.Float
+    | NEconstant (RealConstant x) -> 
+	let _,fk = Ctyping.float_constant_type x in Info.Float fk
     | NEstring_literal _ -> assert false
     | NEseq (e1,e2) -> type_why e2 
     | NEassign (l,e) -> type_why e
@@ -161,14 +162,24 @@ let find_zone e =
 let rec type_why_for_term t = 
   match t.nterm_node with
     | NTconstant (IntConstant _) -> Info.Int     
-    | NTconstant (FloatConstant _) -> Info.Float 
+    | NTconstant (RealConstant x) -> 
+	let _,fk = Ctyping.float_constant_type x in Info.Float fk
     | NTvar v -> v.var_why_type
     | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
 	rename_zone assoc f.logic_why_type
     | NTunop (Clogic.Uminus,t) | NTunop (Clogic.Utilde,t) -> 
 	type_why_for_term t
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
-    | NTunop (Clogic.Ufloat_of_int,_) -> Info.Float
+    | NTunop ((Clogic.Ufloat_of_int | Clogic.Ufloat_conversion),_) -> 
+	Info.Why_Logic 
+	  (if Coptions.floats then match t.nterm_type.Ctypes.ctype_node with
+	     | Tfloat Float -> "single"
+	     | Tfloat Double -> "double"
+	     | Tfloat LongDouble -> "quad"
+	     | Tfloat Real -> "real"
+	     | _ -> assert false
+	   else
+	     "real")
     | NTunop (Clogic.Uint_of_float,_) -> Info.Int
     | NTbinop (t1,Clogic.Bsub,t2) -> 
 	begin
@@ -815,6 +826,7 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      | Clogic.Uamp -> assert false
 	      | Clogic.Ufloat_of_int -> Ufloat_of_int
 	      | Clogic.Uint_of_float -> Uint_of_float
+	      | Clogic.Ufloat_conversion -> Ufloat_conversion
 	    end,
 	    (expr_of_term term))
 	      
@@ -827,14 +839,14 @@ let rec expr_of_term (t : nterm) : nexpr =
 	       begin match b,t1.nexpr_type.Ctypes.ctype_node,
 	       t2.nexpr_type.Ctypes.ctype_node with
 		 | Clogic.Badd,Tint _ , Tint _ -> Badd_int
-		 | Clogic.Badd,Tfloat _ , Tfloat _ -> Badd_float
+		 | Clogic.Badd,Tfloat fk , Tfloat _ -> Badd_float fk
 		 | Clogic.Badd,Tpointer _ , Tint _ -> Badd_pointer_int
 		 | Clogic.Bsub,Tint _ , Tint _ -> Bsub_int
-		 | Clogic.Bsub,Tfloat _ , Tfloat _ -> Bsub_float
+		 | Clogic.Bsub,Tfloat fk , Tfloat _ -> Bsub_float fk
 		 | Clogic.Bsub,Tpointer _ , Tint _ -> Bsub_pointer
-		 | Clogic.Bmul,Tfloat _ , Tfloat _ -> Bmul_float
+		 | Clogic.Bmul,Tfloat fk , Tfloat _ -> Bmul_float fk
 		 | Clogic.Bmul,Tint _ , Tint _ -> Bmul_int
-		 | Clogic.Bdiv,Tfloat _ , Tfloat _ -> Bdiv_float
+		 | Clogic.Bdiv,Tfloat fk , Tfloat _ -> Bdiv_float fk
 		 | Clogic.Bdiv,Tint _ , Tint _ -> Bdiv_int
 		 | Clogic.Bmod,Tint _ ,Tint _ -> Bmod_int
 		 | Clogic.Badd,Tarray _ , Tint _ -> Badd_pointer_int

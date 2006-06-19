@@ -14,11 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.17 2006-05-30 11:53:07 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.18 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 type constant =
   | Prim_int of int64
-  | Prim_float of string
+  | Prim_real of string
   | Prim_bool of bool
 ;;
 
@@ -69,7 +69,6 @@ type why_type =
 ;;
 
 val int_type : why_type
-val float_type : why_type
 val bool_type : why_type
 val unit_type : why_type
 val base_type : string -> why_type
@@ -120,6 +119,7 @@ val make_and_expr : expr -> expr -> expr
 *)
 
 val make_app : string -> expr list -> expr
+val make_app_e : expr -> expr list -> expr
 
 (*
 

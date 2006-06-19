@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.25 2006-04-04 14:00:55 filliatr Exp $ i*)
+(*i $Id: ceffect.mli,v 1.26 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -55,7 +55,7 @@ val print_heap_vars : Format.formatter -> unit -> unit
 (*
 val heap_var_type : var_info -> Info.why_type
 *)
-val memorycell_name : Info.why_type -> string
+(*val memorycell_name : Info.why_type -> string*)
 
 val is_memory_var : var_info -> bool
 

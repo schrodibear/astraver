@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.53 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.54 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -22,16 +22,24 @@ type logic_type =
   | LTvoid
   | LTint
   | LTfloat
+  | LTdouble
+  | LTlongdouble
+  | LTreal
   | LTarray of logic_type
   | LTpointer of logic_type
   | LTvar of string
 
 (* parsed terms and predicates *)
 
-type constant = IntConstant of string | FloatConstant of string
+type constant = 
+  | IntConstant of string 
+  | RealConstant of string
 
 type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
-type term_unop = Uminus | Utilde | Ustar | Uamp | Ufloat_of_int | Uint_of_float
+type term_unop = 
+  | Uminus | Utilde | Ustar | Uamp 
+  (* introduced during typing *)
+  | Ufloat_of_int | Uint_of_float | Ufloat_conversion
 
 type 'ctype quantifiers = ('ctype * string) list
 type 'ctype typed_quantifiers = ('ctype * Info.var_info) list

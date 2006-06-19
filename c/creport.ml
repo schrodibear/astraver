@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.17 2006-01-26 17:01:55 hubert Exp $ i*)
+(*i $Id: creport.ml,v 1.18 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -55,6 +55,7 @@ and print_float fmt = function
   | Float -> fprintf fmt "float"
   | Double -> fprintf fmt "double"
   | LongDouble -> fprintf fmt "long double"
+  | Real -> fprintf fmt "real"
 
 and print_fields fmt = function
   | [] -> ()

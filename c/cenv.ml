@@ -197,6 +197,7 @@ let unique_name ?local_names n =
 
 let types = Hashtbl.create 17
 let add_type x = Hashtbl.add types x ()
+(*let () = add_type "real"*)
 let mem_type = Hashtbl.mem types
 let find_type = Hashtbl.find types
 let iter_types f = Hashtbl.iter (fun s _ -> f s) types
@@ -242,7 +243,7 @@ let make_zone ?name is_var =
 let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
     | Tint _ | Tenum _ -> Int
-    | Tfloat _ -> Float	
+    | Tfloat fk -> Float fk
     | Tarray (_,ty,_)  
     | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 

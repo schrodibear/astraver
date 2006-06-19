@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.104 2006-06-19 12:25:28 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.105 2006-06-19 14:37:53 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -276,12 +276,16 @@ let interp_decl ?(prelude=false) d =
 
 (*s Prelude *)
 
+let load_file ?(prelude=false) f =
+  let c = open_in f in
+  let p = Lexer.parse_file (Lexing.from_channel c) in
+  List.iter (interp_decl ~prelude) p;
+  close_in c
+
 let load_prelude () =
   try
-    let c = open_in prelude_file in
-    let p = Lexer.parse_file (Lexing.from_channel c) in
-    List.iter (interp_decl ~prelude:true) p;
-    close_in c;
+    load_file ~prelude:true prelude_file;
+    if floats then load_file floats_file;
     (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
       | Pvs ->

@@ -35,9 +35,9 @@ let rec pop_initializer loc t i =
   match i with 
     | [] ->{ texpr_node = 
 	       (match t.ctype_node with
-		  | Tint _ | Tenum _-> TEconstant(IntConstant "0")
-		  | Tfloat _ -> TEconstant(FloatConstant "0.0")
-		  | Tpointer _ -> TEcast (t,Ctyping.tezero)
+		  | Tint _ | Tenum _-> TEconstant (IntConstant "0")
+		  | Tfloat _ -> TEconstant (RealConstant "0.0")
+		  | Tpointer _ -> TEcast (t, Ctyping.tezero)
 		  | _ -> assert false);
 	     texpr_type = t;
 	     texpr_loc  = loc

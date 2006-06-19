@@ -14,8 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.89 2006-06-07 14:22:17 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.90 2006-06-19 14:37:52 filliatr Exp $ i*)
 
+open Coptions
+open Format
 open Cast
 open Clogic
 open Creport
@@ -24,6 +26,23 @@ open Cenv
 open Ctypes
 
 let option_app f = function Some x -> Some (f x) | None -> None
+
+let rec type_logic_type loc env = function
+  | LTvoid -> c_void
+  | LTint -> c_int
+  | LTfloat -> c_float Ctypes.Float
+  | LTdouble -> c_float Ctypes.Double
+  | LTlongdouble -> c_float Ctypes.LongDouble
+  | LTreal -> c_real
+  | LTarray ty -> c_array Not_valid (type_logic_type loc env ty)
+  | LTpointer ty -> c_pointer Not_valid (type_logic_type loc env ty)
+  | LTvar id ->  
+      noattr 
+	(try 
+	   (find_typedef id).ctype_node 
+	 with Not_found -> 
+	   if not (Cenv.mem_type id) then error loc "unbound type"; 
+	   Tvar id )
 
 (* Typing terms *)
 
@@ -55,7 +74,7 @@ let expected_num loc t = match t.term_type.ctype_node with
   | _ -> error loc "invalid operand (expected integer or float)"
 
 let expected_num_pointer loc t = match t.term_type.ctype_node with
-  | Tenum _ | Tint _ | Tfloat _ 
+  | Tenum _ | Tint _ | Tfloat _
   | Tarray _ | Tpointer _ -> ()
   | _ -> 
       Format.eprintf "type = %a@." print_type t.term_type;
@@ -65,12 +84,35 @@ let expected_int loc t = match t.term_type.ctype_node with
   | Tint _ -> ()
   | _ -> error loc "invalid operand (expected integer)"
 
-let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
-  | Tint _, Tint _ -> c_int
-  | Tint _, Tfloat _
-  | Tfloat _, Tint _
-  | Tfloat _, Tfloat _ -> c_float
-  | _ -> assert false
+let coerce ty e = match e.term_type.ctype_node, ty.ctype_node with
+  | (Tint _ | Tenum _), Tfloat _ -> 
+      { e with term_node = Tunop (Ufloat_of_int, e); term_type = ty }
+  | Tfloat _, (Tint _ | Tenum _) ->
+      { e with term_node = Tunop (Uint_of_float, e); term_type = ty }
+  | Tfloat fk1, Tfloat fk2 when fk1 <> fk2 ->
+      { e with term_node = Tunop (Ufloat_conversion, e); term_type = ty }
+  | ty1, ty2 when eq_type_node ty1 ty2 ->
+      e
+  | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
+      e
+  | _ ->
+      if verbose || debug then eprintf 
+	"expected %a, found %a@." print_type ty print_type e.term_type;
+      error e.term_loc "incompatible type"
+
+(* convert [t1] and [t2] to the same arithmetic type *)
+let arith_conversion t1 t2 =
+  let ty1 = t1.term_type in
+  let ty2 = t2.term_type in
+  match ty1.ctype_node, ty2.ctype_node with
+    | (Tint _ | Tenum _), (Tint _ | Tenum _) -> 
+	t1, t2, ty1
+    | Tfloat _, (Tint _ | Tenum _) 
+    | (Tint _ | Tenum _), Tfloat _ 
+    | Tfloat _, Tfloat _ ->
+	coerce c_real t1, coerce c_real t2, c_real
+    | _ -> 
+	assert false
 
 (* Typing terms *)
 
@@ -89,8 +131,8 @@ let rec type_term env t =
 and type_term_node loc env = function
   | PLconstant (IntConstant _ as c) -> 
       Tconstant c, c_int
-  | PLconstant (FloatConstant _ as c) ->
-      Tconstant c, c_float
+  | PLconstant (RealConstant _ as c) ->
+      Tconstant c, c_real
   | PLvar x ->
       let info = 
 	try Env.find x.var_name env with Not_found -> 
@@ -127,7 +169,7 @@ and type_term_node loc env = function
       let t = type_term env t in
       set_referenced t;
       Tunop (Uamp, t), noattr (Tpointer(Valid, t.term_type)) 
-  | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
+  | PLunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
       let t1 = type_term env t1 in
@@ -136,7 +178,8 @@ and type_term_node loc env = function
       let ty2 = t2.term_type in
       begin match ty1.ctype_node, ty2.ctype_node with
 	| (Tenum _ | Tint _ | Tfloat _), (Tenum _ | Tint _ | Tfloat _) ->
-	    Tbinop (t1, Badd, t2), max_type ty1 ty2
+	    let t1,t2,ty = arith_conversion t1 t2 in
+	    Tbinop (t1, Badd, t2), ty
 	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    Tbinop (t1, Badd, t2), ty1
 	| (Tenum _ | Tint _), (Tpointer _ | Tarray _) ->
@@ -151,7 +194,8 @@ and type_term_node loc env = function
       let ty2 = t2.term_type in
       begin match ty1.ctype_node, ty2.ctype_node with
 	| (Tenum _ | Tint _ | Tfloat _), (Tenum _ | Tint _ | Tfloat _) ->
-	    Tbinop (t1, Bsub, t2), max_type ty1 ty2
+	    let t1,t2,ty = arith_conversion t1 t2 in
+	    Tbinop (t1, Bsub, t2),ty
 	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    let mt2 = { term_node = Tunop (Uminus, t2); 
 			term_loc = t2.term_loc;
@@ -164,7 +208,8 @@ and type_term_node loc env = function
   | PLbinop (t1, (Bmul | Bdiv as op), t2) ->
       let t1 = type_num_term env t1 in
       let t2 = type_num_term env t2 in
-      Tbinop (t1, op, t2), max_type t1.term_type t2.term_type
+      let t1,t2,ty = arith_conversion t1 t2 in
+      Tbinop (t1, op, t2), ty
   | PLbinop (t1, Bmod, t2) ->
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
@@ -254,12 +299,14 @@ and type_term_node loc env = function
       let t = type_term env t in
       let tt = t.term_type in
       begin match ty, tt.ctype_node with
-	| LTvoid, Tvoid
-	| LTint, Tint _ 
-	| LTfloat, Tfloat _ -> t.term_node, tt
-	| LTfloat, Tint _ -> Tunop (Ufloat_of_int, t), c_float
-	| LTint, Tfloat _ -> Tunop (Uint_of_float, t), c_int
-	| _ -> warning loc "ignored cast in annotation"; t.term_node, tt
+	| LTvoid, Tvoid -> 
+	    t.term_node, tt
+	| (LTint | LTfloat | LTdouble | LTlongdouble | LTreal), 
+	  (Tint _ | Tfloat _) -> 
+	    let t = coerce (type_logic_type loc env ty) t in
+	    t.term_node, t.term_type
+	| _ -> 
+	    warning loc "ignored cast in annotation"; t.term_node, tt
       end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ | PLseparated _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _ | PLfalse
@@ -340,19 +387,6 @@ and type_type_node env = function
   | Tarray (valid,ty,t) -> Tarray (valid,type_type env ty,t)
   | _ -> assert false
 
-let rec type_logic_type loc env = function
-  | LTvoid -> c_void
-  | LTint -> c_int
-  | LTfloat -> c_float
-  | LTarray ty -> c_array Not_valid (type_logic_type loc env ty)
-  | LTpointer ty -> c_pointer Not_valid (type_logic_type loc env ty)
-  | LTvar id ->  
-      noattr 
-	(try 
-	   (find_typedef id).ctype_node 
-	 with Not_found -> 
-	   if not (Cenv.mem_type id) then error loc "unbound type"; 
-	   Tvar id )
 
 (*
 let type_quantifier env (ty, x) = (type_logic_type env ty, x)
@@ -408,6 +442,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
       let t2 = type_num_pointer_term env t2 in
        begin match t1.term_type.ctype_node, t2.term_type.ctype_node with
 	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
+	    let t1,t2,_ = arith_conversion t1 t2 in
 	    Prel (t1, r, t2)
 	| (Tpointer (_,ty1)  | Tarray (_,ty1,_)), 
 	  (Tpointer (_,ty2) | Tarray (_,ty2,_)) ->
@@ -427,6 +462,7 @@ and type_predicate_node env p0 = match p0.lexpr_node with
       let t2 = type_term env t2 in
        begin match t1.term_type.ctype_node, t2.term_type.ctype_node with
 	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
+	    let t1,t2,_ = arith_conversion t1 t2 in
 	    Prel (t1, r, t2)
 	| (Tpointer (_,ty1)  | Tarray (_,ty1,_)), 
 	  (Tpointer (_,ty2) | Tarray (_,ty2,_)) ->

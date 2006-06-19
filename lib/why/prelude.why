@@ -58,6 +58,7 @@ logic sub_real : real,real -> real (* - *)
 logic mul_real : real,real -> real (* * *)
 logic div_real : real,real -> real (* / *)
 logic neg_real : real -> real      (* prefix - *)
+logic abs_real : real -> real
 
 (* / in programs: *)
 parameter div_real_ : x:real -> y:real -> { y<>0.0 } real { result = x / y }

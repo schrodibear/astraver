@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.184 2006-06-07 14:22:17 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.185 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 
 open Format
@@ -70,10 +70,8 @@ let interp_pointer_rel = function
   | Eq -> "eq"
   | Neq -> "neq"
 
-open Ctypes
-
-let float_of_int (t : nctype nterm) = 
-  { nterm_type = c_float; 
+let real_of_int (t : nctype nterm) = 
+  { nterm_type = c_real; 
     nterm_loc = Loc.dummy_position;
     nterm_node = NTunop (Ufloat_of_int, t);
   }
@@ -82,12 +80,12 @@ let interp_rel (t1 : nctype nterm) t2 r =
   match t1.nterm_type.ctype_node, t2.nterm_type.ctype_node with
   | (Tenum _ | Tint _), (Tenum _ | Tint _) -> 
       t1, interp_int_rel r, t2
-  | Tfloat _, Tfloat _ -> 
+  | (Tfloat Real), (Tfloat Real) -> 
       t1, interp_real_rel r, t2
-  | (Tenum _ | Tint _), Tfloat _ -> 
-      float_of_int t1, interp_real_rel r, t2
-  | Tfloat _, (Tenum _ | Tint _) -> 
-      t1, interp_real_rel r, float_of_int t2
+  | (Tenum _ | Tint _), (Tfloat Real) -> 
+      real_of_int t1, interp_real_rel r, t2
+  | (Tfloat Real), (Tenum _ | Tint _) -> 
+      t1, interp_real_rel r, real_of_int t2
   | (Tarray _|Tpointer _), (Tarray _|Tpointer _) -> 
       t1, interp_pointer_rel r, t2
   | _ ->
@@ -105,7 +103,8 @@ let interp_term_bin_op ty1 ty2 op =
   | Tfloat _, _, Bmul -> "mul_real"
   | Tfloat _, _, Bdiv -> "div_real"
   | (Tpointer _ | Tarray _), _, Badd -> "shift"
-  | (Tpointer _ | Tarray _), (Tenum _ | Tint _), Bsub -> assert false (* normalized at typing *)
+  | (Tpointer _ | Tarray _), (Tenum _ | Tint _), Bsub -> 
+      assert false (* normalized at typing *)
   | (Tpointer _ | Tarray _), (Tpointer _ | Tarray _), Bsub -> "sub_pointer"
   | (Tpointer _ | Tarray _), _, Bsub -> assert false
   | Tfloat _, _, Bmod -> assert false
@@ -139,19 +138,18 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Pointer z -> f ^ "_" ^ (found_repr ~quote_var:false z)
     | Addr _ 
     | Info.Int -> assert false
-    | Info.Float -> assert false
+    | Info.Float _ -> assert false
     | Unit -> assert false
     | Why_Logic s ->  assert false
     | Memory(t,z) -> assert false
   
-
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
     | NTconstant (IntConstant c) ->
 	LConst(Prim_int (Cconst.int t.nterm_loc c))
-    | NTconstant (FloatConstant c) ->
-	LConst(Prim_float c)
+    | NTconstant (RealConstant c) ->
+	LConst(Prim_real c)
     | NTvar id ->
 	let n = id.var_unique_name in
 	if id.var_is_assigned && not id.var_is_a_formal_param then
@@ -184,9 +182,19 @@ let rec interp_term label old_label t =
     | NTunop (Uminus, t1) -> 
 	LApp(interp_term_un_op t1.nterm_type Uminus, [f t1])
     | NTunop (Ufloat_of_int, t1) ->
-	LApp("real_of_int", [f t1])
+	assert (t.nterm_type.ctype_node = Tfloat Real);
+	LApp ("real_of_int", [f t1])
     | NTunop (Uint_of_float, t1) ->
-	LApp("int_of_real", [f t1])
+	assert (t1.nterm_type.ctype_node = Tfloat Real);
+	LApp ("int_of_real", [f t1])
+    | NTunop (Ufloat_conversion, t1) ->
+	begin match t1.nterm_type.ctype_node, t.nterm_type.ctype_node with
+	  | Tfloat Float, Tfloat Real -> LApp ("s_to_r", [f t1])
+	  | Tfloat Double, Tfloat Real -> LApp ("d_to_r", [f t1])
+	  | Tfloat LongDouble, Tfloat Real -> LApp ("q_to_r", [f t1])
+	  | Tfloat fk1, Tfloat fk2 when fk1 = fk2 -> f t1
+	  | _ -> assert false
+	end
     | NTapp {napp_pred = v; napp_args = tl; napp_zones_assoc = assoc} ->
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
@@ -354,59 +362,163 @@ let interp_predicate_opt label old_label pred =
 
 open Cast
 
+let rounding_mode () = match !fp_rounding_mode with
+  | RM_dynamic -> Deref "rounding_mode"
+  | RM_nearest_even -> Var "nearest_even"
+  | RM_to_zero -> Var "to_zero"
+  | RM_up -> Var "up"
+  | RM_down -> Var "down"
+  | RM_nearest_away -> Var "nearest_away"
+
+let interp_float_of_int ft e =
+  let e = make_app "real_of_int" [e] in
+  if floats then match ft.Ctypes.ctype_node with
+    | Tfloat Float -> make_app "r_to_s" [rounding_mode (); e]
+    | Tfloat Double -> make_app "r_to_d" [rounding_mode (); e]
+    | Tfloat LongDouble -> make_app "r_to_q" [rounding_mode (); e]
+    | Tfloat Real -> e
+    | _ -> assert false
+  else
+    e
+
+let interp_int_of_float ft e =
+  let e = 
+    if floats then match ft.Ctypes.ctype_node with
+      | Tfloat Float -> make_app "s_to_r" [e]
+      | Tfloat Double -> make_app "d_to_r" [e]
+      | Tfloat LongDouble -> make_app "q_to_r" [e]
+      | Tfloat Real -> e
+      | _ -> assert false
+    else
+      e
+  in
+  make_app "int_of_real" [e]
+
+(* float conversion ty1 -> ty2 *)
+let interp_float_conversion ty1 ty2 e = 
+  if not floats then e else
+  match ty1.Ctypes.ctype_node, ty2.Ctypes.ctype_node with
+    | Tfloat Real, Tfloat Float -> make_app "r_to_s" [rounding_mode (); e]
+    | Tfloat Real, Tfloat Double -> make_app "r_to_d" [rounding_mode (); e]
+    | Tfloat Real, Tfloat LongDouble -> make_app "r_to_q" [rounding_mode (); e]
+    | Tfloat Float, Tfloat Double -> 
+	make_app "double_of_single" [e]
+    | Tfloat Double, Tfloat Float -> 
+	make_app "single_of_double" [rounding_mode (); e ]
+    | Tfloat Float, Tfloat LongDouble -> 
+	make_app "quad_of_single" [e]
+    | Tfloat LongDouble, Tfloat Float -> 
+	make_app "single_of_quad" [rounding_mode (); e ]
+    | Tfloat Double, Tfloat LongDouble -> 
+	make_app "quad_of_double" [e]
+    | Tfloat LongDouble, Tfloat Double -> 
+	make_app "double_of_quad" [rounding_mode (); e ]
+    | Tfloat fk1, Tfloat fk2 when fk1 = fk2 ->
+	e
+    | _ -> 
+	assert false
+
+let float_op fk opr ops opd opq =
+  if floats then
+    let op = match fk with 
+      | Float -> ops
+      | Double -> opd
+      | LongDouble -> opq
+      | Real -> opr
+    in
+    let m = rounding_mode () in
+    App (Var (if fp_overflow_check then op ^ "_" else op), m)
+  else
+    Var opr
+
 let interp_bin_op = function
-  | Badd_int -> "add_int"
-  | Bsub_int -> "sub_int"
-  | Bmul_int -> "mul_int"
-  | Bdiv_int -> "div_int_"
-  | Bmod_int -> "mod_int_"
-  | Blt_int -> "lt_int_"
-  | Bgt_int -> "gt_int_"
-  | Ble_int -> "le_int_"
-  | Bge_int -> "ge_int_"
-  | Beq_int -> "eq_int_"
-  | Bneq_int -> "neq_int_" 
-  | Badd_float -> "add_real"
-  | Bsub_float -> "sub_real"
-  | Bmul_float -> "mul_real"
-  | Bdiv_float -> "div_real_"
-  | Blt_float -> "lt_real_"
-  | Bgt_float -> "gt_real_"
-  | Ble_float -> "le_real_"
-  | Bge_float -> "ge_real_"
-  | Beq_float -> "eq_real_"
-  | Bneq_float -> "neq_real_" 
-  | Blt_pointer -> "lt_pointer_"
-  | Bgt_pointer -> "gt_pointer_"
-  | Ble_pointer -> "le_pointer_"
-  | Bge_pointer -> "ge_pointer_"
-  | Beq_pointer -> "eq_pointer"
-  | Bneq_pointer -> "neq_pointer" 
-  | Badd_pointer_int -> "shift_"
-  | Bsub_pointer -> "sub_pointer_"
-  | Bbw_and -> "bw_and"
-  | Bbw_xor -> "bw_xor"
-  | Bbw_or -> "bw_or"
-  | Bshift_left -> "lsl"
-  | Bshift_right -> "lsr"
+  | Badd_int -> Var "add_int"
+  | Bsub_int -> Var "sub_int"
+  | Bmul_int -> Var "mul_int"
+  | Bdiv_int -> Var "div_int_"
+  | Bmod_int -> Var "mod_int_"
+  | Blt_int -> Var "lt_int_"
+  | Bgt_int -> Var "gt_int_"
+  | Ble_int -> Var "le_int_"
+  | Bge_int -> Var "ge_int_"
+  | Beq_int -> Var "eq_int_"
+  | Bneq_int -> Var "neq_int_" 
+  | Badd_float fk -> 
+      float_op fk "add_real" "add_single" "add_double" "add_quad"
+  | Bsub_float fk -> 
+      float_op fk "sub_real" "sub_single" "sub_double" "sub_quad"
+  | Bmul_float fk -> 
+      float_op fk "mul_real" "mul_single" "mul_double" "mul_quad"
+  | Bdiv_float fk -> 
+      float_op fk "div_real_" "div_single" "div_double" "div_quad"
+  | Blt_float fk -> 
+      float_op fk "lt_real_" "lt_single_" "lt_double_" "lt_quad_"
+  | Bgt_float fk -> 
+      float_op fk "gt_real_" "gt_single_" "gt_double_" "gt_quad_"
+  | Ble_float fk -> 
+      float_op fk "le_real_" "le_single_" "le_double_" "le_quad_"
+  | Bge_float fk -> 
+      float_op fk "ge_real_" "ge_single_" "ge_double_" "ge_quad_"
+  | Beq_float fk -> 
+      float_op fk "eq_real_" "eq_single_" "eq_double_" "eq_quad_"
+  | Bneq_float fk ->
+       float_op fk "neq_real_" "neq_single_" "neq_double_" "neq_quad_"
+  | Blt_pointer -> Var "lt_pointer_"
+  | Bgt_pointer -> Var "gt_pointer_"
+  | Ble_pointer -> Var "le_pointer_"
+  | Bge_pointer -> Var "ge_pointer_"
+  | Beq_pointer -> Var "eq_pointer"
+  | Bneq_pointer -> Var "neq_pointer" 
+  | Badd_pointer_int -> Var "shift_"
+  | Bsub_pointer -> Var "sub_pointer_"
+  | Bbw_and -> Var "bw_and"
+  | Bbw_xor -> Var "bw_xor"
+  | Bbw_or -> Var "bw_or"
+  | Bshift_left -> Var "lsl"
+  | Bshift_right -> Var "lsr"
   (* should not happen *)
   | Badd | Bsub | Bmul | Bdiv | Bmod 
   | Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor ->
       assert false
 
+let any_float fk = 
+  if floats then match fk with
+    | Float -> "any_single"
+    | Double -> "any_double"
+    | LongDouble -> "any_quad"
+    | Real -> "any_real"
+  else 
+    "any_real"
+
 let int_one = Cte(Prim_int Int64.one)
 let int_minus_one = Cte(Prim_int Int64.minus_one)
-let float_one = Cte(Prim_float "1.0")
+
+let float_of_real r fk = 
+  if floats then match fk with
+    | Float -> App (App (Var "r_to_s", rounding_mode ()), r)
+    | Double  -> App (App (Var "r_to_d", rounding_mode ()), r)
+    | LongDouble  -> App (App (Var "r_to_q", rounding_mode ()), r)
+    | Real -> r
+  else
+    r
+
+let real_zero = Cte(Prim_real "0.0")
+let float_zero = float_of_real real_zero
+
+let real_one = Cte(Prim_real "1.0")
+let float_one = float_of_real real_one
 
 let interp_incr_op ty op = match ty.Ctypes.ctype_node, op with
-  | (Tenum _ | Tint _), (Upostfix_inc | Uprefix_inc) -> "add_int", int_one
-  | (Tenum _ | Tint _), (Upostfix_dec | Uprefix_dec) -> "sub_int", int_one
-  | Tfloat _, (Upostfix_inc | Uprefix_inc) -> "add_real", float_one
-  | Tfloat _, (Upostfix_dec | Uprefix_dec) -> "sub_real", float_one
+  | (Tenum _ | Tint _), (Upostfix_inc | Uprefix_inc) -> Var "add_int", int_one
+  | (Tenum _ | Tint _), (Upostfix_dec | Uprefix_dec) -> Var "sub_int", int_one
+  | Tfloat fk, (Upostfix_inc | Uprefix_inc) -> 
+      interp_bin_op (Badd_float fk), float_one fk
+  | Tfloat fk, (Upostfix_dec | Uprefix_dec) -> 
+      interp_bin_op (Bsub_float fk), float_one fk
   | (Tpointer _ | Tarray _), 
-    (Upostfix_inc | Uprefix_inc) -> "shift_", int_one
+    (Upostfix_inc | Uprefix_inc) -> Var "shift_", int_one
   | (Tpointer _ | Tarray _), 
-    (Upostfix_dec | Uprefix_dec) -> "shift_", int_minus_one
+    (Upostfix_dec | Uprefix_dec) -> Var "shift_", int_minus_one
   | _ -> assert false
 
 type interp_lvalue =
@@ -460,7 +572,7 @@ let bin_op op t1 t2 = match op, t1, t2 with
   | Beq_int, Cte (Prim_int n1), Cte (Prim_int n2) ->
       Cte (Prim_bool (n1 = n2))
   | _ ->
-      build_minimal_app (Var (interp_bin_op op)) [t1; t2]
+      build_minimal_app (interp_bin_op op) [t1; t2]
 
 
 
@@ -468,16 +580,16 @@ let rec interp_expr e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
 	Cte (Prim_int (Cconst.int e.nexpr_loc c))
-    | NEconstant (FloatConstant c) ->
-	Cte(Prim_float c)
+    | NEconstant (RealConstant c) ->
+	Cte(Prim_real c)
     | NEvar(Var_info v) -> 
 	let n = heap_var_name v in
 	if v.var_is_assigned then Deref n else Var n
     | NEvar(Fun_info v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | NEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
-		 |Blt_float | Bgt_float | Ble_float | Bge_float 
-		 |Beq_float | Bneq_float 
+		 |Blt_float _ | Bgt_float _ | Ble_float _ | Bge_float _
+		 |Beq_float _ | Bneq_float _
 		 |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
 		 |Beq_pointer | Bneq_pointer 
 		 |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
@@ -602,10 +714,12 @@ let rec interp_expr e =
 	  | Tfloat _ -> make_app "neg_real" [interp_expr e]
 	  | _ -> assert false
 	end
-    | NEunary (Uint_of_float, e) ->
-	make_app "int_of_real" [interp_expr e]
-    | NEunary (Ufloat_of_int, e) ->
-	make_app "real_of_int" [interp_expr e]
+    | NEunary (Uint_of_float, e1) ->
+	interp_int_of_float e1.nexpr_type (interp_expr e1)
+    | NEunary (Ufloat_of_int, e1) ->
+	interp_float_of_int e.nexpr_type (interp_expr e1)
+    | NEunary (Ufloat_conversion, e1) ->
+	interp_float_conversion e1.nexpr_type e.nexpr_type (interp_expr e1)
     | NEunary (Utilde, e) ->
 	make_app "bw_compl" [interp_expr e]
     | NEunary (Uamp, e) ->
@@ -635,8 +749,8 @@ let rec interp_expr e =
 and interp_boolean_expr e =
   match e.nexpr_node with
     | NEbinary(e1, (Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
-		   |Blt_float | Bgt_float | Ble_float | Bge_float 
-		   |Beq_float | Bneq_float 
+		   |Blt_float _ | Bgt_float _ | Ble_float _ | Bge_float _ 
+		   |Beq_float _ | Bneq_float _
 		   |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
 		   |Beq_pointer | Bneq_pointer 
 		   |Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
@@ -651,7 +765,7 @@ and interp_boolean_expr e =
     | _ -> 
 	let cmp,zero = match e.nexpr_type.Ctypes.ctype_node with
 	  | Tenum _ | Tint _ -> "neq_int_", Cte (Prim_int Int64.zero)
-	  | Tfloat _ -> "neq_real_", Cte (Prim_float "0.0")
+	  | Tfloat fk -> "neq_real_", Cte (Prim_real "0.0")
 	  | Tarray _ | Tpointer _ -> "neq_pointer", Var "null"
 	  | _ -> assert false
 	in
@@ -667,13 +781,13 @@ and interp_incr_expr op e =
 		Let("caduceus",Deref(v.var_unique_name),
 		    append 
 		      (Assign(v.var_unique_name,
-			      make_app top [Var "caduceus";one]))
+			      make_app_e top [Var "caduceus";one]))
 		      (Var "caduceus"))
 	    | Uprefix_dec | Uprefix_inc ->
 		let n = v.var_unique_name in
 		append 
 		  (Assign(n,
-			  App(App(Var top, Deref n), one)))
+			  App(App(top, Deref n), one)))
 		  (Deref n)
 	end
     | HeapRef(valid,var,e') ->
@@ -693,12 +807,12 @@ and interp_incr_expr op e =
 			append
 			  (make_app "safe_upd_" 
 			     [Var var;Var "caduceus1";
-			      make_app top [one;Var "caduceus2"]])
+			      make_app_e top [one;Var "caduceus2"]])
 			  (Var "caduceus2")))
 	    | Uprefix_dec | Uprefix_inc ->
 		Let("caduceus1",e',
 		    Let("caduceus2",
-			make_app top
+			make_app_e top
 			  [acc;one],
 			append
 			  (make_app "safe_upd_" 
@@ -791,7 +905,7 @@ and interp_statement_expr e =
 	  match interp_lvalue e with
 	    | LocalRef v ->
 		Assign(v.var_unique_name,
-		       make_app top [Deref(v.var_unique_name); one])
+		       make_app_e top [Deref(v.var_unique_name); one])
 	    | HeapRef(valid,var,e1) -> 
 		let acc = match valid with 
 		  | Valid -> make_app "safe_acc_" [Var var; Var "caduceus1"]
@@ -805,7 +919,7 @@ and interp_statement_expr e =
 			acc,
 			make_app "safe_upd_"
 			  [Var var; Var "caduceus1"; 
-			   make_app top [Var "caduceus2"; one]]))
+			   make_app_e top [Var "caduceus2"; one]]))
 	end
     | NEcall {ncall_fun = e1;ncall_args =  args;ncall_zones_assoc = assoc} -> 
 	let app = interp_call e1 args assoc in
@@ -1235,7 +1349,10 @@ let continue b e = if b then try_with_void "Continue" e else e
 
 let return_exn ty = match ty.Ctypes.ctype_node with
   | Tenum _ | Tint _ -> "Return_int"
-  | Tfloat _ -> "Return_real"
+  | Tfloat _ when not floats -> "Return_real"
+  | Tfloat Float -> "Return_single"
+  | Tfloat Double -> "Return_double"
+  | Tfloat LongDouble -> "Return_quad"
   | _ -> "Return_pointer"
 
 (* [abrupt_return] contains the exception used for last abrupt return if any *)
@@ -1406,7 +1523,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
 	      | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
-	      | Tfloat _ -> App(Var("any_real"),Var("void"))
+	      | Tfloat fk -> App(Var (any_float fk),Var("void"))
 	      | Tarray (_,_, None) | Tpointer _ -> 
 		  App(Var "any_pointer", Var "void")
 	      | Tarray (_,_, Some n) ->

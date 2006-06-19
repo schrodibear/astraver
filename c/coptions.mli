@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.15 2006-01-27 14:55:17 marche Exp $ i*)
+(*i $Id: coptions.mli,v 1.16 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -39,13 +39,20 @@ val coq_tactic : string
 val separate : bool
 val closed_program : bool
 
+val floats : bool
+type fp_rounding_mode = 
+  | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
+  | RM_dynamic
+val fp_rounding_mode : fp_rounding_mode ref
+val fp_overflow_check : bool
+
 val files : unit -> string list 
 
 val verify : string -> bool
 
 (*s The log file *)
 
-val log : Format.formatter;;
+val log : Format.formatter
 val lprintf : ('a, Format.formatter, unit) format -> 'a
-val close_log : unit -> unit;;
+val close_log : unit -> unit
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.123 2006-06-07 14:22:17 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.124 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -112,7 +112,7 @@ let union = ZoneSet.union
 
 (* static variables *)
 
-
+(**
 let memorycell_name (ty : Info.why_type) =
   match ty with
     | Pointer z -> "pointer"
@@ -122,7 +122,7 @@ let memorycell_name (ty : Info.why_type) =
     | Unit -> assert false
     | Why_Logic s ->  s
     | Memory(t,z) -> assert false
-
+**)
 
 let add_var v (ty : Info.why_type) s =
   let info = declare_heap_var v v.var_unique_name in
@@ -214,7 +214,7 @@ let rec term t = match t.nterm_node with
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
   | NTunop (Utilde, t) -> term t
-  | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
+  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), t) -> term t
   | NTbase_addr t -> term t
   | NToffset t -> term t
   | NTblock_length t -> reads_add_alloc (term t)
@@ -265,7 +265,7 @@ let rec assign_location t = match t.nterm_node with
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
   | NTunop (Utilde, _)  
-  | NTunop ((Ufloat_of_int | Uint_of_float), _)  
+  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), _)  
   | NTbase_addr _  
   | NToffset _  
   | NTblock_length _  
@@ -460,7 +460,8 @@ let rec expr e = match e.nexpr_node with
   | NEunary (Ustar , _ ) -> assert false
   | NEunary (Uamp, e) -> assert false (* address_expr e *)
   | NEunary 
-      ((Uplus | Uminus | Unot | Utilde | Ufloat_of_int | Uint_of_float), e) ->
+      ((Uplus | Uminus | Unot | Utilde 
+       | Ufloat_of_int | Uint_of_float | Ufloat_conversion), e) ->
       expr e
   | NEincr (_, e) ->
       assign_expr e
@@ -688,6 +689,7 @@ let unop = function
   | Utilde -> Clogic.Utilde
   | Ufloat_of_int -> Clogic.Ufloat_of_int
   | Uint_of_float -> Clogic.Uint_of_float
+  | Ufloat_conversion -> Clogic.Ufloat_conversion
   | Uminus -> Clogic.Uminus
   | Uplus | Unot -> assert false
 
@@ -713,74 +715,74 @@ let rec term_of_expr e =
   | NEbinary (e1, op, e2) ->
       begin
 	match e1.nexpr_node, e2.nexpr_node, op with
-	  | _, _, Badd | _, _, Badd_int | _, _, Badd_float 
+	  | _, _, Badd | _, _, Badd_int | _, _, Badd_float _
 	  | _, _, Badd_pointer_int ->
 	      make (NTbinop(term_of_expr e1, Clogic.Badd, term_of_expr e2))
-	  | _, _, Bsub | _, _, Bsub_int | _, _, Bsub_float 
+	  | _, _, Bsub | _, _, Bsub_int | _, _, Bsub_float _
 	  | _, _, Bsub_pointer -> 
 	      make (NTbinop(term_of_expr e1, Clogic.Bsub, term_of_expr e2))
-	  | _, _, Bmul | _, _, Bmul_int | _, _, Bmul_float -> 
+	  | _, _, Bmul | _, _, Bmul_int | _, _, Bmul_float _ -> 
 	      make (NTbinop(term_of_expr e1, Clogic.Bmul, term_of_expr e2))
-	  | _, _, Bdiv | _, _, Bdiv_int | _, _, Bdiv_float -> 
+	  | _, _, Bdiv | _, _, Bdiv_int | _, _, Bdiv_float _ -> 
 	      make (NTbinop(term_of_expr e1, Clogic.Bdiv, term_of_expr e2))
 	  | _, _, Bmod | _, _, Bmod_int ->  
 	      make (NTbinop(term_of_expr e1, Clogic.Bmod, term_of_expr e2))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_int 
-	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
-	    Beq_float 
+	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 
+	    Beq_float _
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
 	    Beq_pointer  ->
 	      if e1 = e2 then make (NTconstant (IntConstant "0"))
 	      else make (NTconstant (IntConstant "1"))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bneq_int 
-	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
-	    Bneq_float 
+	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 
+	    Bneq_float _
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
 	    Bneq_pointer  ->
 	      if e1 = e2 then make (NTconstant (IntConstant "1"))
 	      else make (NTconstant (IntConstant "0"))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Blt_int 
-	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
-	    Blt_float 
+	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 
+	    Blt_float _
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
 	    Blt_pointer  ->
 	      if e1 < e2 then make (NTconstant (IntConstant "0"))
 	      else make (NTconstant (IntConstant "1"))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bgt_int 
-	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
-	    Bgt_float 
+	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 
+	    Bgt_float _
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
 	    Bgt_pointer  ->
 	      if e1 > e2 then make (NTconstant (IntConstant "0"))
 	      else make (NTconstant (IntConstant "1"))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Ble_int 
-	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
-	    Ble_float 
+	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 
+	    Ble_float _
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
 	    Ble_pointer  ->
 	      if e1 <= e2 then make (NTconstant (IntConstant "0"))
 	      else make (NTconstant (IntConstant "1"))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bge_int 
-	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
-	    Bge_float 
+	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 
+	    Bge_float _
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
 	    Bge_pointer  ->
 	      if e1 >= e2 then make (NTconstant (IntConstant "0"))
 	      else make (NTconstant (IntConstant "1"))
-	  | _, _, Beq | _, _, Beq_int | _, _, Beq_float | _, _, Beq_pointer 
-	  |  _, _, Blt |  _, _, Blt_int |  _, _, Blt_float |  _, _, Blt_pointer
-	  |  _, _, Bgt |  _, _, Bgt_int |  _, _, Bgt_float |  _, _, Bgt_pointer
-	  |  _, _, Ble |  _, _, Ble_int |  _, _, Ble_float |  _, _, Ble_pointer
-	  |  _, _, Bge |  _, _, Bge_int |  _, _, Bge_float |  _, _, Bge_pointer
-	  |  _, _, Bneq |  _, _, Bneq_int |  _, _, Bneq_float 
-	  |  _, _, Bneq_pointer
-	  |  _, _, Bbw_and
-	  |  _, _, Bbw_xor
-	  |  _, _, Bbw_or
-	  |  _, _, Band
-	  |  _, _, Bor
-	  |  _, _, Bshift_left
-	  |  _, _, Bshift_right -> error e.nexpr_loc "not a constant value"
+	  | _, _, Beq | _, _, Beq_int | _, _, Beq_float _ | _, _, Beq_pointer 
+	  | _, _, Blt | _, _, Blt_int | _, _, Blt_float _ | _, _, Blt_pointer
+	  | _, _, Bgt | _, _, Bgt_int | _, _, Bgt_float _ | _, _, Bgt_pointer
+	  | _, _, Ble | _, _, Ble_int | _, _, Ble_float _ | _, _, Ble_pointer
+	  | _, _, Bge | _, _, Bge_int | _, _, Bge_float _ | _, _, Bge_pointer
+	  | _, _, Bneq | _, _, Bneq_int | _, _, Bneq_float _
+	  | _, _, Bneq_pointer
+	  | _, _, Bbw_and
+	  | _, _, Bbw_xor
+	  | _, _, Bbw_or
+	  | _, _, Band
+	  | _, _, Bor
+	  | _, _, Bshift_left
+	  | _, _, Bshift_right -> error e.nexpr_loc "not a constant value"
       end
   | NEcond (e1, e2, e3) ->
       make (NTif (term_of_expr e1, term_of_expr e2, term_of_expr e3))
@@ -809,7 +811,7 @@ let rec pop_initializer loc t i =
     | [] ->{ nterm_node = 
 	       (match t.Ctypes.ctype_node with
 		  | Tint _ | Tenum _ -> NTconstant(IntConstant "0")
-		  | Tfloat _ -> NTconstant(FloatConstant "0.0")
+		  | Tfloat _ -> NTconstant(RealConstant "0.0")
 		  | Tpointer _ -> 
 		      NTcast (t,
 			      {nterm_node = NTconstant (IntConstant "0");
@@ -826,13 +828,18 @@ let rec pop_initializer loc t i =
 	let e,r = pop_initializer loc t l in e,r@l'
 
 let rec invariant_for_constant loc t lvalue initializers =
- match t.Ctypes.ctype_node with
+  match t.Ctypes.ctype_node with
     | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
 	let x,l = pop_initializer loc t initializers in
-	nprel ( lvalue,Eq,x), l
+	let x = match t.Ctypes.ctype_node with 
+	  | Tfloat _ -> { nterm_node = NTunop (Clogic.Ufloat_conversion, x);
+			  nterm_loc = x.nterm_loc; nterm_type = t }
+	  | _ -> x
+	in
+	nprel (lvalue, Eq, x), l
     | Tstruct n ->
 	begin match tag_type_definition n with
-	  | TTStructUnion (Tstruct (_), fl) ->
+	  | TTStructUnion (Tstruct _, fl) ->
 	      List.fold_left 
 		(fun (acc,init) f -> 
 		   let tyf = f.var_type in

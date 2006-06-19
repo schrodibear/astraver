@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.110 2006-06-07 14:22:18 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.111 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -64,6 +64,7 @@ let rec sizeof loc =
     | Tfloat Float -> of_int 4
     | Tfloat Double -> of_int 8
     | Tfloat LongDouble -> of_int 12
+    | Tfloat Real -> assert false
     | Tvar x -> assert false (* should be expansed *)
     | Tarray (_,ty, Some e) -> 
 	mul e (sizeof ty)
@@ -145,17 +146,17 @@ let int_op = function
   | Bneq -> Bneq_int
   | _ -> assert false
 
-let float_op = function
-  | Badd -> Badd_float
-  | Bsub -> Bsub_float
-  | Bmul -> Bmul_float
-  | Bdiv -> Bdiv_float
-  | Blt -> Blt_float
-  | Ble -> Ble_float
-  | Bgt -> Bgt_float
-  | Bge -> Bge_float
-  | Beq -> Beq_float
-  | Bneq -> Bneq_float
+let float_op fk = function
+  | Badd -> Badd_float fk
+  | Bsub -> Bsub_float fk
+  | Bmul -> Bmul_float fk
+  | Bdiv -> Bdiv_float fk
+  | Blt -> Blt_float fk
+  | Ble -> Ble_float fk
+  | Bgt -> Bgt_float fk
+  | Bge -> Bge_float fk
+  | Beq -> Beq_float fk
+  | Bneq -> Bneq_float fk
   | _ -> assert false
 
 let pointer_op = function
@@ -169,7 +170,7 @@ let pointer_op = function
 
 let type_op op ty = match ty.ctype_node with 
   | Tint _ | Tenum _ -> int_op op 
-  | Tfloat _ -> float_op op 
+  | Tfloat fk -> float_op fk op 
   | Tpointer _ | Tarray _ -> pointer_op op
   | _ -> assert false 
 
@@ -215,6 +216,13 @@ let is_null e =
     | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
     | _ -> false
 
+let float_constant_type s =
+  let n = String.length s in
+  assert (n >= 1);
+  match s.[n-1] with
+    | 'f' | 'F' -> String.sub s 0 (n-1), Float
+    | 'l' | 'L' -> String.sub s 0 (n-1), LongDouble
+    | _ -> s, Double
 
 (* type the assignment of [e2] into a left value of type [ty1] *)
 let type_assignment loc ty1 e2 =
@@ -367,8 +375,12 @@ and type_expr_node loc env = function
       TEnop, c_void
   | CEconstant (IntConstant _ as c) ->
       TEconstant c, c_int
-  | CEconstant (FloatConstant _ as c) ->
-      TEconstant c, c_float
+  | CEconstant (RealConstant s) ->
+      let s,fk = float_constant_type s in
+      TEunary (Ufloat_conversion,
+	       { texpr_node = TEconstant (RealConstant s);
+		 texpr_loc = loc; texpr_type = c_real }), 
+      c_float fk
   | CEstring_literal s ->
       TEstring_literal s, c_string Valid
   | CEvar x ->
@@ -490,7 +502,7 @@ and type_expr_node loc env = function
       let e = type_int_expr env e in
       TEunary (Utilde, e), e.texpr_type
   (* these other unops cannot be built by the parser *)
-  | CEunary ((Uint_of_float | Ufloat_of_int), _) ->
+  | CEunary ((Uint_of_float | Ufloat_of_int | Ufloat_conversion), _) ->
       assert false
   | CEbinary (e1, (Bmul | Bdiv as op), e2) ->
       let e1 = type_arith_expr env e1 in
@@ -576,11 +588,12 @@ and type_expr_node loc env = function
       let e2 = type_int_expr env e2 in
       TEbinary (e1, op, e2), e1.texpr_type
   (* these other binops cannot be built by the parser *)
-  | CEbinary (_, (Bdiv_float|Bmul_float|Bsub_float|Badd_float
+  | CEbinary (_, (Bdiv_float _|Bmul_float _|Bsub_float _|Badd_float _
 		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int
 		 |Blt_pointer|Bgt_pointer|Ble_pointer|Bge_pointer
 		 |Bneq_pointer|Beq_pointer
-		 |Bneq_float|Beq_float|Bge_float|Ble_float|Bgt_float|Blt_float
+		 |Bneq_float _|Beq_float _|Bge_float _|Ble_float _
+		 |Bgt_float _|Blt_float _
 		 |Bneq_int|Beq_int|Bge_int|Ble_int|Bgt_int|Blt_int
 		 |Bsub_pointer|Badd_pointer_int), _) ->
       assert false

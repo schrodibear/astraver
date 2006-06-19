@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.66 2006-06-19 12:25:28 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.67 2006-06-19 14:37:53 filliatr Exp $ i*)
 
 open Format
 
@@ -44,6 +44,7 @@ let split_user_conj_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
+let floats_ = ref false
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive
@@ -150,6 +151,7 @@ Typing/Annotations/VCG options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
+  --fp               use floating-point arithmetic
 
 Encoding for types in untyped logic:
   --encoding none    does not encode types into terms for untyped provers
@@ -180,6 +182,8 @@ Coq-specific options:
               gives a default tactic for new proof obligations
   --coq-preamble <text>
               gives some Coq preamble to be substituted to \"Require Why\"
+  --coq-fp-model <Module>
+              sets the Coq model for floating-point arithmetic
 
 PVS-specific options:
   --pvs-preamble <text>
@@ -236,6 +240,7 @@ let files =
     | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
+    | ("-fp" | "--fp") :: args -> floats_ := true; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args
@@ -379,6 +384,8 @@ let termination = !termination_
 let gappa_rnd = !gappa_rnd_
 let types_encoding = !types_encoding_
 
+let floats = !floats_
+
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 
 let ocaml = !ocaml_
@@ -409,11 +416,14 @@ end
 
 let prelude = !prelude_
 
-let prelude_file =
+let lib_file f =
   try
-    Filename.concat (Sys.getenv "WHYLIB") "prelude.why"
+    Filename.concat (Sys.getenv "WHYLIB") f
   with Not_found ->
-    Filename.concat Version.libdir "prelude.why"
+    Filename.concat Version.libdir f
+
+let prelude_file = lib_file "prelude.why"
+let floats_file = lib_file "floats.why"
 
 let () = 
   if prelude && not (Sys.file_exists prelude_file) then begin

@@ -14,13 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.30 2006-05-30 11:53:07 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.31 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 open Format;;
 
 type constant =
   | Prim_int of int64
-  | Prim_float of string
+  | Prim_real of string
   | Prim_bool of bool
 ;;
 
@@ -28,7 +28,7 @@ let fprintf_constant form e =
   match e with
     | Prim_int(n) when Int64.compare n Int64.zero < 0 -> fprintf form "(%Ld)" n
     | Prim_int(n) -> fprintf form "%Ld" n
-    | Prim_float(f) -> fprintf form "%s" f
+    | Prim_real(f) -> fprintf form "%s" f
     | Prim_bool(b) -> fprintf form "%b" b
 ;;
 
@@ -218,7 +218,6 @@ type why_type =
 let base_type s = Base_type([],s);;
 let int_type = base_type "int";;
 let bool_type = base_type "bool";;
-let float_type = base_type "real";;
 let unit_type = base_type "unit";;
 
 let option_iter f x =
@@ -383,7 +382,9 @@ let rec make_app_rec accu l =
     | e::r -> make_app_rec (App(accu,e)) r
 ;;
 
-let make_app id l = make_app_rec (Var(id)) l
+let make_app id l = make_app_rec (Var id) l
+
+let make_app_e = make_app_rec
 
 let make_while cond inv var e =
   let body = 

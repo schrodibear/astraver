@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.66 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.67 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -62,7 +62,7 @@ type incr_operator =
 type unary_operator = 
   | Uplus | Uminus | Unot | Ustar | Uamp | Utilde
   (* these are introduced during typing *)
-  | Ufloat_of_int | Uint_of_float
+  | Ufloat_of_int | Uint_of_float | Ufloat_conversion
 
 type binary_operator =
   | Badd | Bsub | Bmul | Bdiv | Bmod 
@@ -72,8 +72,10 @@ type binary_operator =
   (* these are introduced during typing *)
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int 
   | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
-  | Badd_float | Bsub_float | Bmul_float | Bdiv_float 
-  | Blt_float | Bgt_float | Ble_float | Bge_float | Beq_float | Bneq_float 
+  | Badd_float of cfloat | Bsub_float of cfloat 
+  | Bmul_float of cfloat | Bdiv_float of cfloat
+  | Blt_float of cfloat | Bgt_float of cfloat | Ble_float of cfloat 
+  | Bge_float of cfloat | Beq_float of cfloat | Bneq_float of cfloat
   | Badd_pointer_int (* pointer + int *) 
   | Bsub_pointer     (* pointer - pointer *)
   | Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 

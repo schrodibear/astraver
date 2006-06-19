@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.31 2006-05-17 12:14:15 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.32 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 open Ctypes
 open Creport
@@ -24,7 +24,7 @@ type why_type =
   | Pointer of zone
   | Addr of zone
   | Int
-  | Float
+  | Float of Ctypes.cfloat
   | Unit
   | Why_Logic of string
 
@@ -58,12 +58,12 @@ let rec same_why_type wt1 wt2 =
   match wt1, wt2 with
     | Pointer z1 , Pointer z2 ->
 	same_zone z1 z2 
-    | Memory(a1,z1),Memory(a2,z2) ->
+    | Memory(a1,z1), Memory(a2,z2) ->
 	same_zone z1 z2 && same_why_type a1 a2
-    | Int,Int -> true
-    | Float,Float -> true
-    | Unit,Unit -> true
-    | Why_Logic s1,Why_Logic s2 -> s1=s2
+    | Int, Int -> true
+    | Float fk1, Float fk2 -> fk1 = fk2
+    | Unit, Unit -> true
+    | Why_Logic s1, Why_Logic s2 -> s1=s2
     | _, _ -> false
 
 let rec same_why_type_no_zone wt1 wt2 =
@@ -72,7 +72,7 @@ let rec same_why_type_no_zone wt1 wt2 =
     | Memory(a1,z1),Memory(a2,z2) ->
 	same_why_type_no_zone a1 a2
     | Int,Int -> true
-    | Float,Float -> true
+    | Float fk1, Float fk2 -> fk1 = fk2
     | Unit,Unit -> true
     | Why_Logic s1,Why_Logic s2 -> s1=s2
     | _, _ -> false
@@ -85,7 +85,11 @@ let found_repr ?(quote_var=true) z =
 let rec output_why_type ty =
     match ty with
     | Int -> [], "int"
-    | Float -> [], "real"
+    | Float _ when not Coptions.floats -> [], "real"
+    | Float Ctypes.Float -> [], "single"
+    | Float Ctypes.Double -> [], "double"
+    | Float Ctypes.LongDouble -> [], "quad"
+    | Float Ctypes.Real -> [], "real"
     | Pointer z -> [] , found_repr z ^ " pointer"    
     | Addr z -> [] , found_repr z ^ " addr"
     | Memory(t,z) -> (snd (output_why_type t))::[found_repr z], " memory"

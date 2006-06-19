@@ -386,9 +386,9 @@ and unifier_type_why tw1 tw2 =
     | Addr z1 , Addr z2 ->
 	unifier_zone z1 z2
     | Info.Int, Info.Int -> ()
-    | Info.Float, Info.Float -> ()
-    | Info.Int, Info.Float -> ()
-    | Info.Float, Info.Int -> ()
+    | Info.Float _, Info.Float _ -> ()
+    | Info.Int, Info.Float _ -> ()
+    | Info.Float _, Info.Int -> ()
     | Unit, Unit -> ()
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false

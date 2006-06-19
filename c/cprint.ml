@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.23 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.24 2006-06-19 14:37:52 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -42,6 +42,7 @@ let term_unop = function
   | Clogic.Uamp -> "&"
   | Clogic.Ufloat_of_int -> "float_of_int"
   | Clogic.Uint_of_float -> "int_of_float"
+  | Clogic.Ufloat_conversion -> "float_conversion"
 
 let term_binop = function
   | Clogic.Badd -> "+"
@@ -51,7 +52,7 @@ let term_binop = function
   | Clogic.Bmod -> "%"
  
 let rec nterm fmt t = match t.nterm_node with
-  | NTconstant (IntConstant s | FloatConstant s) ->
+  | NTconstant (IntConstant s | RealConstant s) ->
       fprintf fmt "%s" s
   | NTvar x ->
       fprintf fmt "%s" x.var_unique_name
@@ -210,17 +211,17 @@ let loop_annot fmt = function
 	(print_option variant) a.variant
 
 let binop fmt = function
-  | Badd | Badd_int | Badd_float | Badd_pointer_int -> fprintf fmt "+" 
-  | Bsub | Bsub_int | Bsub_float | Bsub_pointer -> fprintf fmt "-"
-  | Bmul | Bmul_int | Bmul_float -> fprintf fmt "*"
-  | Bdiv | Bdiv_int | Bdiv_float -> fprintf fmt "/"
+  | Badd | Badd_int | Badd_float _ | Badd_pointer_int -> fprintf fmt "+" 
+  | Bsub | Bsub_int | Bsub_float _ | Bsub_pointer -> fprintf fmt "-"
+  | Bmul | Bmul_int | Bmul_float _ -> fprintf fmt "*"
+  | Bdiv | Bdiv_int | Bdiv_float _ -> fprintf fmt "/"
   | Bmod | Bmod_int -> fprintf fmt "%%" 
-  | Blt | Blt_int | Blt_float | Blt_pointer -> fprintf fmt "<"
-  | Bgt | Bgt_int | Bgt_float | Bgt_pointer -> fprintf fmt ">"
-  | Ble | Ble_int | Ble_float | Ble_pointer -> fprintf fmt "<="
-  | Bge | Bge_int | Bge_float | Bge_pointer -> fprintf fmt ">="
-  | Beq | Beq_int | Beq_float | Beq_pointer -> fprintf fmt "=="
-  | Bneq | Bneq_int | Bneq_float | Bneq_pointer -> fprintf fmt "!=" 
+  | Blt | Blt_int | Blt_float _ | Blt_pointer -> fprintf fmt "<"
+  | Bgt | Bgt_int | Bgt_float _ | Bgt_pointer -> fprintf fmt ">"
+  | Ble | Ble_int | Ble_float _ | Ble_pointer -> fprintf fmt "<="
+  | Bge | Bge_int | Bge_float _ | Bge_pointer -> fprintf fmt ">="
+  | Beq | Beq_int | Beq_float _ | Beq_pointer -> fprintf fmt "=="
+  | Bneq | Bneq_int | Bneq_float _ | Bneq_pointer -> fprintf fmt "!=" 
   | Bbw_and -> fprintf fmt "&"
   | Bbw_xor -> fprintf fmt "^"
   | Bbw_or -> fprintf fmt "|"
@@ -240,11 +241,12 @@ let unop fmt = function
   (* these are introduced during typing *)
   | Ufloat_of_int -> fprintf fmt "float_of_int"
   | Uint_of_float -> fprintf fmt "int_of_float"
+  | Ufloat_conversion -> fprintf fmt "float_conversion"
 
 let rec nexpr fmt e = match e.nexpr_node with
   | NEnop ->
       ()
-  | NEconstant (IntConstant s | FloatConstant s) ->
+  | NEconstant (IntConstant s | RealConstant s) ->
       fprintf fmt "%s" s
   | NEstring_literal s ->
       fprintf fmt "\"%S\"" s

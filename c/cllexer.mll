@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.36 2006-02-10 14:46:04 moy Exp $ i*)
+(*i $Id: cllexer.mll,v 1.37 2006-06-19 14:37:51 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -61,6 +61,7 @@
 	"short", SHORT;
 	"long", LONG;
 	"double", DOUBLE;
+	"real", REAL;
 	"struct", STRUCT;
 	"enum", ENUM;
 	"union", UNION;
@@ -124,9 +125,9 @@ rule token = parse
   | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (FloatConstant (lexeme lexbuf)) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
+  | rD+ rE rFS?             { CONSTANT (RealConstant (lexeme lexbuf)) }
+  | rD* "." rD+ (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
+  | rD+ "." rD* (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
   | 'L'? '"' [^ '"']* '"'   { STRING_LITERAL (lexeme lexbuf) }
 
   | "@"                     { AT }

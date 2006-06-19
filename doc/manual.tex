@@ -1825,7 +1825,7 @@ the rule for the usual while loop:
   \begin{array}{ll}
     & \wprx{\pwhileI{e_1}{e_2}{p}{t}}{q}{r} \\
    =& p ~\land~ \forall\omega. ~ p \Rightarrow \\
-    &    \mathit{wp}(\plabel{L}{\pite{e_1}{e_2}}{\kw{raise}~E},
+    &    \mathit{wp}(\plabel{L}{\pite{e_1}{e_2}{\kw{raise}~E}},
          p\land t<\at{t}{L},E\Rightarrow q;r) \\
    =&p ~\land~ \forall\omega. ~ p \Rightarrow \\
     & \mathit{wp}(e_1,\pite{\result}{\wpre{e_2}{p\land t<\at{t}{L}}}{q},r)%
