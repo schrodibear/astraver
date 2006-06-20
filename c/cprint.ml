@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.24 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.25 2006-06-20 07:16:43 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -43,6 +43,8 @@ let term_unop = function
   | Clogic.Ufloat_of_int -> "float_of_int"
   | Clogic.Uint_of_float -> "int_of_float"
   | Clogic.Ufloat_conversion -> "float_conversion"
+  | Clogic.Uabs_real -> "abs_real"
+  | Clogic.Usqrt_real -> "sqrt_real"
 
 let term_binop = function
   | Clogic.Badd -> "+"

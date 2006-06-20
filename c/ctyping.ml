@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.111 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.112 2006-06-20 07:16:43 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -188,17 +188,24 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       { e with texpr_node = TEunary (Ufloat_of_int, e); texpr_type = ty }
   | Tfloat _, (Tint _ | Tenum _) ->
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
+  | Tfloat fk1, Tfloat fk2 when fk1 <> fk2 ->
+      { e with texpr_node = TEunary (Ufloat_conversion, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
   | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
       e
   | _ ->
       if verbose || debug then eprintf 
-	"expected %a, found %a@." print_type ty print_type e.texpr_type;
-      error e.texpr_loc "incompatible type"
+	"expected %a, found %a@." print_type ty print_type e.texpr_type;      error e.texpr_loc "incompatible type"
 
 let compat_pointers ty1 ty2 = 
   (ty1.ctype_node = Tvoid) || (ty2.ctype_node = Tvoid) || eq_type ty1 ty2
+
+let max_float = function
+  | Float, Float -> Float
+  | (Float | Double), (Float | Double) -> Double
+  | (Float | Double | LongDouble), (Float | Double | LongDouble) -> LongDouble
+  | _ -> assert false
 
 (* convert [e1] and [e2] to the same arithmetic type *)
 let conversion e1 e2 =
@@ -208,7 +215,9 @@ let conversion e1 e2 =
     | (Tint _ | Tenum _), (Tint _ | Tenum _) -> e1, e2, ty1
     | Tfloat _, (Tint _ | Tenum _) -> e1, coerce ty1 e2, ty1
     | (Tint _ | Tenum _), Tfloat _ -> coerce ty2 e1, e2, ty2
-    | Tfloat _, Tfloat _ -> e1, e2, ty1
+    | Tfloat fk1, Tfloat fk2 -> 
+	let ty = noattr (Tfloat (max_float (fk1, fk2))) in
+	coerce ty e1, coerce ty e2, ty
     | _ -> assert false
 
 let is_null e = 

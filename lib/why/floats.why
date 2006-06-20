@@ -80,9 +80,150 @@ parameter neq_single :
 
 type double
 
+logic add_double : mode,double,double -> double (* + *)
+logic sub_double : mode,double,double -> double (* - *)
+logic mul_double : mode,double,double -> double (* * *)
+logic div_double : mode,double,double -> double (* / *)
+logic neg_double : mode,double -> double        (* prefix - *)
+logic abs_double : mode,double -> double
+logic sqrt_double : mode,double -> double
+
+logic d_to_r, d_to_r1, d_to_r2 : double -> real
+logic r_to_d : mode,real -> double
+
+logic double_rnd_error, double_total_error : double -> real
+logic double_set_1, double_set_2 : double,real -> double
+
+(* overflow checks *)
+
+logic max_double : mode -> real
+
+parameter add_double_ : 
+  m:mode -> x:double -> y:double -> 
+  { abs_real(d_to_r(x) + d_to_r(y)) <= max_double(m) } 
+  double
+  { result = add_double(m,x,y) }
+
+parameter sub_double_ : 
+  m:mode -> x:double -> y:double -> 
+  { abs_real(d_to_r(x) - d_to_r(y)) <= max_double(m) } 
+  double
+  { result = sub_double(m,x,y) }
+
+parameter mul_double_ : 
+  m:mode -> x:double -> y:double -> 
+  { abs_real(d_to_r(x) * d_to_r(y)) <= max_double(m) } 
+  double
+  { result = mul_double(m,x,y) }
+
+parameter div_double_ : 
+  m:mode -> x:double -> y:double -> 
+  { d_to_r(y) <> 0.0 and abs_real(d_to_r(x) / d_to_r(y)) <= max_double(m) } 
+  double
+  { result = div_double(m,x,y) }
+
+parameter sqrt_double_ :
+  m:mode -> x:double -> 
+  { d_to_r(x) >= 0.0 } double { result = sqrt_double(m,x) }
+
+parameter lt_double :
+  x:double -> y:double -> 
+  {} bool { if result then d_to_r(x) < d_to_r(y) else d_to_r(x) >= d_to_r(y) }
+parameter le_double :
+  x:double -> y:double -> 
+  {} bool { if result then d_to_r(x) <= d_to_r(y) else d_to_r(x) > d_to_r(y) }
+parameter gt_double :
+  x:double -> y:double -> 
+  {} bool { if result then d_to_r(x) > d_to_r(y) else d_to_r(x) <= d_to_r(y) }
+parameter ge_double :
+  x:double -> y:double -> 
+  {} bool { if result then d_to_r(x) >= d_to_r(y) else d_to_r(x) < d_to_r(y) }
+parameter eq_double :
+  x:double -> y:double -> 
+  {} bool { if result then d_to_r(x) = d_to_r(y) else d_to_r(x) <> d_to_r(y) }
+parameter neq_double :
+  x:double -> y:double -> 
+  {} bool { if result then d_to_r(x) <> d_to_r(y) else d_to_r(x) = d_to_r(y) }
+
 (* quad precision *)
 
 type quad
+
+logic add_quad : mode,quad,quad -> quad (* + *)
+logic sub_quad : mode,quad,quad -> quad (* - *)
+logic mul_quad : mode,quad,quad -> quad (* * *)
+logic div_quad : mode,quad,quad -> quad (* / *)
+logic neg_quad : mode,quad -> quad        (* prefix - *)
+logic abs_quad : mode,quad -> quad
+logic sqrt_quad : mode,quad -> quad
+
+logic q_to_r, q_to_r1, q_to_r2 : quad -> real
+logic r_to_q : mode,real -> quad
+
+logic quad_rnd_error, quad_total_error : quad -> real
+logic quad_set_1, quad_set_2 : quad,real -> quad
+
+(* overflow checks *)
+
+logic max_quad : mode -> real
+
+parameter add_quad_ : 
+  m:mode -> x:quad -> y:quad -> 
+  { abs_real(q_to_r(x) + q_to_r(y)) <= max_quad(m) } 
+  quad
+  { result = add_quad(m,x,y) }
+
+parameter sub_quad_ : 
+  m:mode -> x:quad -> y:quad -> 
+  { abs_real(q_to_r(x) - q_to_r(y)) <= max_quad(m) } 
+  quad
+  { result = sub_quad(m,x,y) }
+
+parameter mul_quad_ : 
+  m:mode -> x:quad -> y:quad -> 
+  { abs_real(q_to_r(x) * q_to_r(y)) <= max_quad(m) } 
+  quad
+  { result = mul_quad(m,x,y) }
+
+parameter div_quad_ : 
+  m:mode -> x:quad -> y:quad -> 
+  { q_to_r(y) <> 0.0 and abs_real(q_to_r(x) / q_to_r(y)) <= max_quad(m) } 
+  quad
+  { result = div_quad(m,x,y) }
+
+parameter sqrt_quad_ :
+  m:mode -> x:quad -> 
+  { q_to_r(x) >= 0.0 } quad { result = sqrt_quad(m,x) }
+
+parameter lt_quad :
+  x:quad -> y:quad -> 
+  {} bool { if result then q_to_r(x) < q_to_r(y) else q_to_r(x) >= q_to_r(y) }
+parameter le_quad :
+  x:quad -> y:quad -> 
+  {} bool { if result then q_to_r(x) <= q_to_r(y) else q_to_r(x) > q_to_r(y) }
+parameter gt_quad :
+  x:quad -> y:quad -> 
+  {} bool { if result then q_to_r(x) > q_to_r(y) else q_to_r(x) <= q_to_r(y) }
+parameter ge_quad :
+  x:quad -> y:quad -> 
+  {} bool { if result then q_to_r(x) >= q_to_r(y) else q_to_r(x) < q_to_r(y) }
+parameter eq_quad :
+  x:quad -> y:quad -> 
+  {} bool { if result then q_to_r(x) = q_to_r(y) else q_to_r(x) <> q_to_r(y) }
+parameter neq_quad :
+  x:quad -> y:quad -> 
+  {} bool { if result then q_to_r(x) <> q_to_r(y) else q_to_r(x) = q_to_r(y) }
+
+(* conversions *)
+
+logic double_of_single : single -> double
+logic single_of_double : mode, double -> single
+
+logic quad_of_single : single -> quad
+logic single_of_quad : mode, quad -> single
+
+logic quad_of_double : double -> quad
+logic double_of_quad : mode, quad -> double
 
 (* Caduceus-specific *)
 

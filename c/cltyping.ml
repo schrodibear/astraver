@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.90 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.91 2006-06-20 07:16:43 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -145,6 +145,9 @@ and type_term_node loc env = function
 	| Fun_info f -> 
             error loc ("variable " ^ f.fun_name ^ " is a function")
       end
+  | PLapp (f, [t]) when f.logic_name = "sqrt" ->
+      let t = type_real_term env t in
+      Tunop (Usqrt_real, t), c_real
   | PLapp (f, tl) ->
       (try 
 	 let pl, ty, info = find_fun f.logic_name in
@@ -158,6 +161,9 @@ and type_term_node loc env = function
   | PLunop (Uminus, t) -> 
       let t = type_num_term env t in
       Tunop (Uminus, t), t.term_type
+  | PLunop (Uabs_real | Usqrt_real as op, t) -> 
+      let t = type_real_term env t in
+      Tunop (op, t), c_real
   | PLunop (Ustar, t) -> 
       let t = type_term env t in
       begin match t.term_type.ctype_node with
@@ -317,6 +323,10 @@ and type_int_term env t =
   let tt = type_term env t in
   expected_int t.lexpr_loc tt;
   tt
+
+and type_real_term env t = 
+  let tt = type_num_term env t in
+  coerce c_real tt
 
 and type_int_term_option env = function
   | None -> None 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.124 2006-06-19 14:37:51 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.125 2006-06-20 07:16:42 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -214,7 +214,8 @@ let rec term t = match t.nterm_node with
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
   | NTunop (Utilde, t) -> term t
-  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), t) -> term t
+  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion 
+	    |Uabs_real | Usqrt_real), t) -> term t
   | NTbase_addr t -> term t
   | NToffset t -> term t
   | NTblock_length t -> reads_add_alloc (term t)
@@ -265,7 +266,8 @@ let rec assign_location t = match t.nterm_node with
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
   | NTunop (Utilde, _)  
-  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), _)  
+  | NTunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion
+	    |Uabs_real | Usqrt_real), _)  
   | NTbase_addr _  
   | NToffset _  
   | NTblock_length _  

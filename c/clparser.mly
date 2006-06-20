@@ -55,7 +55,7 @@
 %token <Clogic.constant> CONSTANT
 %token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP
 %token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL
-%token FORALL EXISTS IFF IMPLIES AND OR NOT 
+%token FORALL EXISTS IFF IMPLIES AND OR NOT BAR
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR OFFSET
 %token SEPARATED FULLSEPARATED VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
@@ -122,6 +122,7 @@ lexpr:
 | lexpr LSQUARE lexpr_option DOTDOT lexpr_option RSQUARE    
    { info (PLrange ($1, $3, $5)) }
 | MINUS lexpr %prec prec_uminus { info (PLunop (Uminus, $2)) }
+| BAR lexpr BAR { info (PLunop (Uabs_real, $2)) }
 | PLUS lexpr %prec prec_uminus { $2 }
 | STAR lexpr { info (PLunop (Ustar, $2)) }
 | AMP lexpr { info (PLunop (Uamp, $2)) }

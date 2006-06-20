@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.61 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.62 2006-06-20 07:16:43 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -159,11 +159,22 @@ let find_zone e =
     | Pointer z -> repr z
     | _ -> assert false
 
+let why_type_for_float t =
+  if Coptions.floats then match t.Ctypes.ctype_node with
+    | Tfloat Float -> "single"
+    | Tfloat Double -> "double"
+    | Tfloat LongDouble -> "quad"
+    | Tfloat Real -> "real"
+    | _ -> assert false
+  else
+    "real"
+
 let rec type_why_for_term t = 
   match t.nterm_node with
     | NTconstant (IntConstant _) -> Info.Int     
-    | NTconstant (RealConstant x) -> 
-	let _,fk = Ctyping.float_constant_type x in Info.Float fk
+    | NTconstant (RealConstant _)
+    | NTunop ((Clogic.Usqrt_real | Clogic.Uabs_real), _) -> 
+	Info.Why_Logic "real"
     | NTvar v -> v.var_why_type
     | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
 	rename_zone assoc f.logic_why_type
@@ -171,15 +182,7 @@ let rec type_why_for_term t =
 	type_why_for_term t
     | NTunop (Clogic.Ustar,_) | NTunop (Clogic.Uamp,_) -> assert false
     | NTunop ((Clogic.Ufloat_of_int | Clogic.Ufloat_conversion),_) -> 
-	Info.Why_Logic 
-	  (if Coptions.floats then match t.nterm_type.Ctypes.ctype_node with
-	     | Tfloat Float -> "single"
-	     | Tfloat Double -> "double"
-	     | Tfloat LongDouble -> "quad"
-	     | Tfloat Real -> "real"
-	     | _ -> assert false
-	   else
-	     "real")
+	Info.Why_Logic (why_type_for_float t.nterm_type)
     | NTunop (Clogic.Uint_of_float,_) -> Info.Int
     | NTbinop (t1,Clogic.Bsub,t2) -> 
 	begin
@@ -827,6 +830,8 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      | Clogic.Ufloat_of_int -> Ufloat_of_int
 	      | Clogic.Uint_of_float -> Uint_of_float
 	      | Clogic.Ufloat_conversion -> Ufloat_conversion
+	      | Clogic.Usqrt_real -> assert false (*TODO*)
+	      | Clogic.Uabs_real -> assert false (*TODO*)
 	    end,
 	    (expr_of_term term))
 	      

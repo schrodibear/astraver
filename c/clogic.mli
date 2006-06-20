@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.54 2006-06-19 14:37:51 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.55 2006-06-20 07:16:42 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -37,7 +37,8 @@ type constant =
 
 type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
 type term_unop = 
-  | Uminus | Utilde | Ustar | Uamp 
+  | Uminus | Utilde | Ustar | Uamp
+  | Uabs_real | Usqrt_real
   (* introduced during typing *)
   | Ufloat_of_int | Uint_of_float | Ufloat_conversion
 

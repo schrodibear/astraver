@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.185 2006-06-19 14:37:51 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.186 2006-06-20 07:16:42 filliatr Exp $ i*)
 
 
 open Format
@@ -126,6 +126,8 @@ let term_bin_op ty1 ty2 op t1 t2 =
 let interp_term_un_op ty op = match ty.ctype_node, op with
   | (Tenum _ | Tint _), Uminus -> "neg_int"
   | Tfloat _, Uminus -> "neg_real"
+  | _, Uabs_real -> "abs_real"
+  | _, Usqrt_real -> "sqrt_real"
   | _ -> assert false
 
 let interp_var label v =
@@ -179,8 +181,8 @@ let rec interp_term label old_label t =
 	assert false
     | NTunop (Uamp, t1) -> 
 	interp_term_address label old_label t1
-    | NTunop (Uminus, t1) -> 
-	LApp(interp_term_un_op t1.nterm_type Uminus, [f t1])
+    | NTunop (Uminus | Uabs_real | Usqrt_real as op, t1) -> 
+	LApp(interp_term_un_op t1.nterm_type op, [f t1])
     | NTunop (Ufloat_of_int, t1) ->
 	assert (t.nterm_type.ctype_node = Tfloat Real);
 	LApp ("real_of_int", [f t1])
