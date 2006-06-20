@@ -27,29 +27,29 @@ logic single_set_model : single,real -> single
 
 (* overflow checks *)
 
-logic max_single : mode -> real
+logic max_single : real
 
 parameter add_single_ : 
   m:mode -> x:single -> y:single -> 
-  { abs_real(s_to_r(x) + s_to_r(y)) <= max_single(m) } 
+  { abs_real(add_single(m,x,y)) <= max_single } 
   single
   { result = add_single(m,x,y) }
 
 parameter sub_single_ : 
   m:mode -> x:single -> y:single -> 
-  { abs_real(s_to_r(x) - s_to_r(y)) <= max_single(m) } 
+  { abs_real(sub_single(m,x,y)) <= max_single } 
   single
   { result = sub_single(m,x,y) }
 
 parameter mul_single_ : 
   m:mode -> x:single -> y:single -> 
-  { abs_real(s_to_r(x) * s_to_r(y)) <= max_single(m) } 
+  { abs_real(mul_single(m,x,y)) <= max_single } 
   single
   { result = mul_single(m,x,y) }
 
 parameter div_single_ : 
   m:mode -> x:single -> y:single -> 
-  { s_to_r(y) <> 0.0 and abs_real(s_to_r(x) / s_to_r(y)) <= max_single(m) } 
+  { s_to_r(y) <> 0.0 and abs_real(div_single(m,x,y)) <= max_single } 
   single
   { result = div_single(m,x,y) }
 
@@ -100,25 +100,25 @@ logic max_double : mode -> real
 
 parameter add_double_ : 
   m:mode -> x:double -> y:double -> 
-  { abs_real(d_to_r(x) + d_to_r(y)) <= max_double(m) } 
+  { abs_real(add_double(m,x,y)) <= max_double } 
   double
   { result = add_double(m,x,y) }
 
 parameter sub_double_ : 
   m:mode -> x:double -> y:double -> 
-  { abs_real(d_to_r(x) - d_to_r(y)) <= max_double(m) } 
+  { abs_real(sub_double(m,x,y)) <= max_double } 
   double
   { result = sub_double(m,x,y) }
 
 parameter mul_double_ : 
   m:mode -> x:double -> y:double -> 
-  { abs_real(d_to_r(x) * d_to_r(y)) <= max_double(m) } 
+  { abs_real(mul_double(m,x,y)) <= max_double } 
   double
   { result = mul_double(m,x,y) }
 
 parameter div_double_ : 
   m:mode -> x:double -> y:double -> 
-  { d_to_r(y) <> 0.0 and abs_real(d_to_r(x) / d_to_r(y)) <= max_double(m) } 
+  { d_to_r(y) <> 0.0 and abs_real(div_double(m,x,y)) <= max_double } 
   double
   { result = div_double(m,x,y) }
 
@@ -169,25 +169,25 @@ logic max_quad : mode -> real
 
 parameter add_quad_ : 
   m:mode -> x:quad -> y:quad -> 
-  { abs_real(q_to_r(x) + q_to_r(y)) <= max_quad(m) } 
+  { abs_real(add_quad(m,x,y)) <= max_quad } 
   quad
   { result = add_quad(m,x,y) }
 
 parameter sub_quad_ : 
   m:mode -> x:quad -> y:quad -> 
-  { abs_real(q_to_r(x) - q_to_r(y)) <= max_quad(m) } 
+  { abs_real(sub_quad(m,x,y)) <= max_quad } 
   quad
   { result = sub_quad(m,x,y) }
 
 parameter mul_quad_ : 
   m:mode -> x:quad -> y:quad -> 
-  { abs_real(q_to_r(x) * q_to_r(y)) <= max_quad(m) } 
+  { abs_real(mul_quad(m,x,y)) <= max_quad } 
   quad
   { result = mul_quad(m,x,y) }
 
 parameter div_quad_ : 
   m:mode -> x:quad -> y:quad -> 
-  { q_to_r(y) <> 0.0 and abs_real(q_to_r(x) / q_to_r(y)) <= max_quad(m) } 
+  { q_to_r(y) <> 0.0 and abs_real(div_quad(m,x,y)) <= max_quad } 
   quad
   { result = div_quad(m,x,y) }
 
