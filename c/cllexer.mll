@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.38 2006-06-20 07:16:42 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.39 2006-06-20 09:50:29 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -118,6 +118,12 @@ rule token = parse
   | "\\valid_range" { VALID_RANGE }
   | "\\nothing"   { NOTHING }
   | "\\null" { NULL }
+  | "\\abs" { ABS }
+  | "\\sqrt" { SQRT }
+  | "\\round_error" { ROUNDERROR }
+  | "\\total_error" { TOTALERROR }
+  | "\\exact" { EXACT }
+  | "\\model" { MODEL }
  
   | rL (rL | rD)*       { let s = lexeme lexbuf in identifier s }
 
@@ -159,6 +165,7 @@ rule token = parse
   | ("["|"<:")              { LSQUARE }
   | ("]"|":>")              { RSQUARE }
   | "="                     { EQUAL }
+  | "^^"                    { HATHAT }
 
   | eof { EOF }
   | '\\' rL (rL | rD)* 

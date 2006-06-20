@@ -55,7 +55,7 @@
 %token <Clogic.constant> CONSTANT
 %token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP
 %token INT FLOAT REAL LT GT LE GE EQ NE COMMA ARROW EQUAL
-%token FORALL EXISTS IFF IMPLIES AND OR NOT BAR
+%token FORALL EXISTS IFF IMPLIES AND OR NOT BAR ABS SQRT HATHAT
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR OFFSET
 %token SEPARATED FULLSEPARATED VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
@@ -63,6 +63,7 @@
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION TYPE
+%token ROUNDERROR TOTALERROR EXACT MODEL
 
 %right prec_named
 %nonassoc prec_forall prec_exists
@@ -75,6 +76,7 @@
 %left prec_relation LT GT LE GE EQ NE
 %left PLUS MINUS
 %left STAR SLASH PERCENT AMP
+%right HATHAT
 %right prec_uminus 
 %right prec_cast
 %left DOT ARROW LSQUARE
@@ -123,6 +125,13 @@ lexpr:
    { info (PLrange ($1, $3, $5)) }
 | MINUS lexpr %prec prec_uminus { info (PLunop (Uminus, $2)) }
 | BAR lexpr BAR { info (PLunop (Uabs_real, $2)) }
+| ABS LPAR lexpr RPAR { info (PLunop (Uabs_real, $3)) }
+| SQRT LPAR lexpr RPAR { info (PLunop (Usqrt_real, $3)) }
+| ROUNDERROR LPAR lexpr RPAR { info (PLunop (Uround_error, $3)) }
+| TOTALERROR LPAR lexpr RPAR { info (PLunop (Utotal_error, $3)) }
+| EXACT LPAR lexpr RPAR { info (PLunop (Uexact, $3)) }
+| MODEL LPAR lexpr RPAR { info (PLunop (Umodel, $3)) }
+| lexpr HATHAT lexpr { info (PLbinop ($1, Bpow_real, $3)) }
 | PLUS lexpr %prec prec_uminus { $2 }
 | STAR lexpr { info (PLunop (Ustar, $2)) }
 | AMP lexpr { info (PLunop (Uamp, $2)) }

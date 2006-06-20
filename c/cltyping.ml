@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.91 2006-06-20 07:16:43 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.92 2006-06-20 09:50:30 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -175,6 +175,9 @@ and type_term_node loc env = function
       let t = type_term env t in
       set_referenced t;
       Tunop (Uamp, t), noattr (Tpointer(Valid, t.term_type)) 
+  | PLunop (Uround_error | Utotal_error | Uexact | Umodel as op, t) ->
+      let t = type_float_term env t in
+      Tunop (op, t), c_real
   | PLunop ((Ufloat_of_int | Uint_of_float | Ufloat_conversion), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
@@ -220,6 +223,10 @@ and type_term_node loc env = function
       let t1 = type_int_term env t1 in
       let t2 = type_int_term env t2 in
       Tbinop (t1, Bmod, t2), c_int
+  | PLbinop (t1, Bpow_real, t2) ->
+      let t1 = type_real_term env t1 in
+      let t2 = type_real_term env t2 in
+      Tbinop (t1, Bpow_real, t2), c_real
   | PLdot (t, x) ->
       let t = type_term env t in
       let x = type_of_field loc x t.term_type in
@@ -327,6 +334,12 @@ and type_int_term env t =
 and type_real_term env t = 
   let tt = type_num_term env t in
   coerce c_real tt
+
+and type_float_term env t = 
+  let tt = type_num_term env t in
+  match tt.term_type.ctype_node with
+    | Tfloat (Ctypes.Float | Double | LongDouble) -> tt
+    | _ -> error t.lexpr_loc "illegal operand (expected float)"
 
 and type_int_term_option env = function
   | None -> None 

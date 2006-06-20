@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.62 2006-06-20 07:16:43 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.63 2006-06-20 09:50:30 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -173,7 +173,9 @@ let rec type_why_for_term t =
   match t.nterm_node with
     | NTconstant (IntConstant _) -> Info.Int     
     | NTconstant (RealConstant _)
-    | NTunop ((Clogic.Usqrt_real | Clogic.Uabs_real), _) -> 
+    | NTunop ((Clogic.Usqrt_real | Clogic.Uabs_real 
+	      |Clogic.Uround_error | Clogic.Utotal_error
+	      |Clogic.Uexact | Clogic.Umodel), _) ->
 	Info.Why_Logic "real"
     | NTvar v -> v.var_why_type
     | NTapp {napp_pred = f; napp_zones_assoc = assoc } -> 
@@ -830,8 +832,12 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      | Clogic.Ufloat_of_int -> Ufloat_of_int
 	      | Clogic.Uint_of_float -> Uint_of_float
 	      | Clogic.Ufloat_conversion -> Ufloat_conversion
-	      | Clogic.Usqrt_real -> assert false (*TODO*)
-	      | Clogic.Uabs_real -> assert false (*TODO*)
+	      | Clogic.Usqrt_real
+	      | Clogic.Uabs_real
+	      | Clogic.Uround_error
+	      | Clogic.Utotal_error
+	      | Clogic.Uexact
+	      | Clogic.Umodel -> assert false
 	    end,
 	    (expr_of_term term))
 	      

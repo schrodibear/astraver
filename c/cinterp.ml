@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.186 2006-06-20 07:16:42 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.187 2006-06-20 09:50:29 filliatr Exp $ i*)
 
 
 open Format
@@ -102,6 +102,7 @@ let interp_term_bin_op ty1 ty2 op =
   | Tfloat _, _, Bsub -> "sub_real"
   | Tfloat _, _, Bmul -> "mul_real"
   | Tfloat _, _, Bdiv -> "div_real"
+  | _, _, Bpow_real -> "pow_real"
   | (Tpointer _ | Tarray _), _, Badd -> "shift"
   | (Tpointer _ | Tarray _), (Tenum _ | Tint _), Bsub -> 
       assert false (* normalized at typing *)
@@ -195,6 +196,34 @@ let rec interp_term label old_label t =
 	  | Tfloat Double, Tfloat Real -> LApp ("d_to_r", [f t1])
 	  | Tfloat LongDouble, Tfloat Real -> LApp ("q_to_r", [f t1])
 	  | Tfloat fk1, Tfloat fk2 when fk1 = fk2 -> f t1
+	  | _ -> assert false
+	end
+    | NTunop (Uround_error, t1) ->
+	begin match t1.nterm_type.ctype_node with
+	  | Tfloat Float -> LApp ("single_round_error", [f t1])
+	  | Tfloat Double -> LApp ("double_round_error", [f t1])
+	  | Tfloat LongDouble -> LApp ("quad_round_error", [f t1])
+	  | _ -> assert false
+	end
+    | NTunop (Utotal_error, t1) ->
+	begin match t1.nterm_type.ctype_node with
+	  | Tfloat Float -> LApp ("single_total_error", [f t1])
+	  | Tfloat Double -> LApp ("double_total_error", [f t1])
+	  | Tfloat LongDouble -> LApp ("quad_total_error", [f t1])
+	  | _ -> assert false
+	end
+    | NTunop (Uexact, t1) ->
+	begin match t1.nterm_type.ctype_node with
+	  | Tfloat Float -> LApp ("s_to_exact", [f t1])
+	  | Tfloat Double -> LApp ("d_to_exact", [f t1])
+	  | Tfloat LongDouble -> LApp ("q_to_exact", [f t1])
+	  | _ -> assert false
+	end
+    | NTunop (Umodel, t1) ->
+	begin match t1.nterm_type.ctype_node with
+	  | Tfloat Float -> LApp ("s_to_model", [f t1])
+	  | Tfloat Double -> LApp ("d_to_model", [f t1])
+	  | Tfloat LongDouble -> LApp ("q_to_model", [f t1])
 	  | _ -> assert false
 	end
     | NTapp {napp_pred = v; napp_args = tl; napp_zones_assoc = assoc} ->

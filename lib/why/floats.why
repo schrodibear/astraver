@@ -19,11 +19,11 @@ logic neg_single : mode,single -> single        (* prefix - *)
 logic abs_single : mode,single -> single
 logic sqrt_single : mode,single -> single
 
-logic s_to_r, s_to_r1, s_to_r2 : single -> real
+logic s_to_r, s_to_exact, s_to_model : single -> real
 logic r_to_s : mode,real -> single
 
-logic single_rnd_error, single_total_error : single -> real
-logic single_set_1, single_set_2 : single,real -> single
+logic single_round_error, single_total_error : single -> real
+logic single_set_model : single,real -> single
 
 (* overflow checks *)
 
@@ -88,11 +88,11 @@ logic neg_double : mode,double -> double        (* prefix - *)
 logic abs_double : mode,double -> double
 logic sqrt_double : mode,double -> double
 
-logic d_to_r, d_to_r1, d_to_r2 : double -> real
+logic d_to_r, d_to_exact, d_to_model : double -> real
 logic r_to_d : mode,real -> double
 
-logic double_rnd_error, double_total_error : double -> real
-logic double_set_1, double_set_2 : double,real -> double
+logic double_round_error, double_total_error : double -> real
+logic double_set_model : double,real -> double
 
 (* overflow checks *)
 
@@ -157,11 +157,11 @@ logic neg_quad : mode,quad -> quad        (* prefix - *)
 logic abs_quad : mode,quad -> quad
 logic sqrt_quad : mode,quad -> quad
 
-logic q_to_r, q_to_r1, q_to_r2 : quad -> real
+logic q_to_r, q_to_exact, q_to_model : quad -> real
 logic r_to_q : mode,real -> quad
 
-logic quad_rnd_error, quad_total_error : quad -> real
-logic quad_set_1, quad_set_2 : quad,real -> quad
+logic quad_round_error, quad_total_error : quad -> real
+logic quad_set_model : quad,real -> quad
 
 (* overflow checks *)
 

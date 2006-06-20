@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.25 2006-06-20 07:16:43 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.26 2006-06-20 09:50:30 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -45,6 +45,10 @@ let term_unop = function
   | Clogic.Ufloat_conversion -> "float_conversion"
   | Clogic.Uabs_real -> "abs_real"
   | Clogic.Usqrt_real -> "sqrt_real"
+  | Clogic.Uround_error -> "round_error"
+  | Clogic.Utotal_error -> "total_error"
+  | Clogic.Uexact -> "exact"
+  | Clogic.Umodel -> "model"
 
 let term_binop = function
   | Clogic.Badd -> "+"
@@ -52,6 +56,7 @@ let term_binop = function
   | Clogic.Bmul -> "*"
   | Clogic.Bdiv -> "/"
   | Clogic.Bmod -> "%"
+  | Clogic.Bpow_real -> "^^"
  
 let rec nterm fmt t = match t.nterm_node with
   | NTconstant (IntConstant s | RealConstant s) ->
