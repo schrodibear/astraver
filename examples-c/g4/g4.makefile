@@ -4,7 +4,7 @@ WHY=why --fp
 
 GWHY=gwhy --fp 
 
-CADULIB=/users/homepc9-152/jcf/soft/why/examples-c/g4/../../lib
+CADULIB=/users/homepc9-152/jcf/soft/why-flottants/examples-c/g4/../../lib
 
 COQTACTIC=intuition
 
@@ -43,13 +43,18 @@ isabelle/%_spec_why.thy: why/%_spec.why
 
 isabelle/%_why.thy: isabelle/g4_spec_why.thy why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory g4_spec_why $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
-	cp -f /users/homepc9-152/jcf/soft/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
+	cp -f /users/homepc9-152/jcf/soft/why-flottants/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
 
 simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)
 
 simplify/%_why.sx: why/g4_spec.why why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
+
+goals: why/g4_why.why
+
+why/%_why.why: why/g4_spec.why why/%.why
+	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(CADULIB)/why/caduceus.why why/g4_spec.why why/$*.why
 
 cvcl: cvcl/g4_why.cvc
 

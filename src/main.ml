@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.105 2006-06-19 14:37:53 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.106 2006-06-20 12:27:05 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -285,7 +285,7 @@ let load_file ?(prelude=false) f =
 let load_prelude () =
   try
     load_file ~prelude:true prelude_file;
-    if floats then load_file floats_file;
+    if floats then load_file ~prelude:true floats_file;
     (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
       | Pvs ->
