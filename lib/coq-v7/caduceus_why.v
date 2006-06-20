@@ -2,7 +2,7 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Why.
-Require WhyFloat.
+Require WhyReal.
 
 (*Why logic*) Definition bw_compl : Z -> Z.
 Admitted.
@@ -26,13 +26,7 @@ Admitted.
 
 
 
-<<<<<<< caduceus_why.v
-
-
-
 (*Why type*) Definition pointer: Set ->Set.
-=======
->>>>>>> 1.38
 
 
 
@@ -297,11 +291,7 @@ Admitted.
 
 
 
-<<<<<<< caduceus_why.v
-
 (*Why type*) Definition memory: Set -> Set ->Set.
-=======
->>>>>>> 1.38
 
 
 

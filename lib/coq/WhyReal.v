@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyFloat.v,v 1.9 2004-05-25 12:33:03 filliatr Exp $ *)
+(* $Id: WhyReal.v,v 1.1 2006-06-20 12:11:30 filliatr Exp $ *)
 
 Require Why.
 Require Export Rbase.

@@ -2,7 +2,7 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Export Why.
-Require Export WhyFloat.
+Require Export WhyReal.
 
 (*Why logic*) Definition bw_compl : Z -> Z.
 Admitted.
