@@ -96,7 +96,7 @@ logic double_set_model : double,real -> double
 
 (* overflow checks *)
 
-logic max_double : mode -> real
+logic max_double : real
 
 parameter add_double_ : 
   m:mode -> x:double -> y:double -> 
@@ -165,7 +165,7 @@ logic quad_set_model : quad,real -> quad
 
 (* overflow checks *)
 
-logic max_quad : mode -> real
+logic max_quad : real
 
 parameter add_quad_ : 
   m:mode -> x:quad -> y:quad -> 
