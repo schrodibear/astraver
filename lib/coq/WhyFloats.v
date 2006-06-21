@@ -3,9 +3,8 @@
    Implements the file lib/why/floats.why *)
 
 Require Export Reals.
-Add LoadPath "/users/demons/sboldo/Recherche/PFF/V8.0".
 Require Export AllFloat.
-Require Export "Others/RND".
+Require Export RND.
 
 Let radix := 2%Z.
 
@@ -82,14 +81,14 @@ unfold bsingle; apply make_pGivesBound.
 Qed.
 
 Record single : Set := mk_single {
-   s_float    : float;
-   s_canonic  : Fcanonic radix bsingle s_float;
+   sf         : float;
+   Hcansf     : Fcanonic radix bsingle sf;
    s_to_exact : R;
    s_to_model : R
  }.
 
 
-Definition s_to_r (f:single) := FtoRradix (s_float f).
+Definition s_to_r (f:single) := FtoRradix (sf f).
 
 Definition single_round_error (f:single):= 
     (Rabs ((s_to_exact f) - (s_to_r f))).
@@ -98,9 +97,7 @@ Definition single_total_error (f:single):=
     (Rabs ((s_to_model f) - (s_to_r f))).
 
 Definition single_set_model (f:single) (r:R) :=
-      mk_single (s_float f) (s_canonic f) (s_to_exact f) r.
-
-
+      mk_single (sf f) (Hcansf f) (s_to_exact f) r.
 
 
 
@@ -132,88 +129,132 @@ Definition r_to_s (m:mode) (r:R) := r_to_s_aux m r r r.
    
 
 Definition add_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (s_float f1+s_float f2) 
+     r_to_s_aux m (sf f1+sf f2) 
                   (s_to_exact f1+s_to_exact f2) (s_to_model f1+s_to_model f2).
 
 Definition sub_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (s_float f1-s_float f2) 
+     r_to_s_aux m (sf f1-sf f2) 
                   (s_to_exact f1-s_to_exact f2) (s_to_model f1-s_to_model f2).
 
 Definition mul_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (s_float f1*s_float f2) 
+     r_to_s_aux m (sf f1*sf f2) 
                   (s_to_exact f1*s_to_exact f2) (s_to_model f1*s_to_model f2).
 
 Definition div_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (s_float f1/s_float f2) 
+     r_to_s_aux m (sf f1/sf f2) 
                   (s_to_exact f1/s_to_exact f2) (s_to_model f1/s_to_model f2).
 
 Definition sqrt_single (m:mode) (f:single) :=
-     r_to_s_aux m (sqrt (s_float f))
+     r_to_s_aux m (sqrt (sf f))
                   (sqrt(s_to_exact f)) (sqrt(s_to_model f)).
 
 Definition neg_single (m:mode) (f:single) :=
-   mk_single (Fopp (s_float f)) 
-         (FcanonicFopp radix bsingle (s_float f) (s_canonic f))
+   mk_single (Fopp (sf f)) 
+         (FcanonicFopp radix bsingle (sf f) (Hcansf f))
          (-(s_to_exact f)) (-(s_to_model f)).
 
 Definition abs_single (m:mode) (f:single) :=
-   mk_single (Fabs (s_float f)) 
-         (FcanonicFabs radix radixGreaterOne bsingle (s_float f) (s_canonic f))
+   mk_single (Fabs (sf f)) 
+         (FcanonicFabs radix radixGreaterOne bsingle (sf f) (Hcansf f))
          (Rabs (s_to_exact f)) (Rabs (s_to_model f)).
 
-Definition max_single : R.
-Admitted.
+Definition max_single := ((2-powerRZ radix (-23))*powerRZ radix 127)%R.
+
+
+(** Double precision *)
 
 Let bdouble := make_bound 53 1074.
 
+Lemma pdGreaterThanOne: 1 < 53.
+auto with arith.
+Qed.
 
-Definition double: Set.
-Admitted.
+Lemma pdGivesBound: Zpos (vNum bdouble) = Zpower_nat radix 53.
+unfold bdouble; apply make_pGivesBound.
+Qed.
 
-Definition add_double : mode -> double -> double -> double.
-Admitted.
+Record double : Set := mk_double {
+   df         : float;
+   Hcandf     : Fcanonic radix bdouble df;
+   d_to_exact : R;
+   d_to_model : R
+ }.
 
-Definition sub_double : mode -> double -> double -> double.
-Admitted.
 
-Definition mul_double : mode -> double -> double -> double.
-Admitted.
+Definition d_to_r (f:double) := FtoRradix (df f).
 
-Definition div_double : mode -> double -> double -> double.
-Admitted.
+Definition double_round_error (f:double):= 
+    (Rabs ((d_to_exact f) - (d_to_r f))).
 
-Definition neg_double : mode -> double -> double.
-Admitted.
+Definition double_total_error (f:double):= 
+    (Rabs ((d_to_model f) - (d_to_r f))).
 
-Definition abs_double : mode -> double -> double.
-Admitted.
+Definition double_set_model (f:double) (r:R) :=
+      mk_double (df f) (Hcandf f) (d_to_exact f) r.
 
-Definition sqrt_double : mode -> double -> double.
-Admitted.
 
-Definition d_to_r : double -> R.
-Admitted.
 
-Definition d_to_exact : double -> R.
-Admitted.
+Definition r_to_d_aux (m:mode) (r r1 r2:R) := match m with
+  |  nearest_even => mk_double (RND_EvenClosest bdouble radix 53 r) 
+                     (RND_EvenClosest_canonic bdouble radix 53 
+                         radixGreaterOne pdGreaterThanOne pdGivesBound r)
+                     r1 r2
+  |  to_zero      => mk_double (RND_Zero bdouble radix 53 r) 
+                     (RND_Zero_canonic bdouble radix 53 
+                         radixGreaterOne pdGreaterThanOne pdGivesBound r)
+                     r1 r2
+  |  up           => mk_double (RND_Min bdouble radix 53 r) 
+                     (RND_Min_canonic bdouble radix 53 
+                         radixGreaterOne pdGreaterThanOne pdGivesBound r)
+                     r1 r2
+  |  down         => mk_double (RND_Max bdouble radix 53 r) 
+                     (RND_Max_canonic bdouble radix 53 
+                         radixGreaterOne pdGreaterThanOne pdGivesBound r)
+                     r1 r2
+  |  nearest_away => mk_double (RND_ClosestUp bdouble radix 53 r) 
+                     (RND_ClosestUp_canonic bdouble radix 53 
+                         radixGreaterOne pdGreaterThanOne pdGivesBound r)
+                     r1 r2
+  end.
 
-Definition d_to_model : double -> R.
-Admitted.
+   
+Definition r_to_d (m:mode) (r:R) := r_to_d_aux m r r r.
+   
 
-Definition r_to_d : mode -> R -> double.
-Admitted.
+Definition add_double (m:mode) (f1 f2:double) :=
+     r_to_d_aux m (df f1+df f2) 
+                  (d_to_exact f1+d_to_exact f2) (d_to_model f1+d_to_model f2).
 
-Definition double_round_error : double -> R.
-Admitted.
+Definition sub_double (m:mode) (f1 f2:double) :=
+     r_to_d_aux m (df f1-df f2) 
+                  (d_to_exact f1-d_to_exact f2) (d_to_model f1-d_to_model f2).
 
-Definition double_total_error : double -> R.
-Admitted.
+Definition mul_double (m:mode) (f1 f2:double) :=
+     r_to_d_aux m (df f1*df f2) 
+                  (d_to_exact f1*d_to_exact f2) (d_to_model f1*d_to_model f2).
 
-Definition double_set_model : double -> R -> double.
-Admitted.
+Definition div_double (m:mode) (f1 f2:double) :=
+     r_to_d_aux m (df f1/df f2) 
+                  (d_to_exact f1/d_to_exact f2) (d_to_model f1/d_to_model f2).
 
-Definition max_double : R.
-Admitted.
+Definition sqrt_double (m:mode) (f:double) :=
+     r_to_d_aux m (sqrt (df f))
+                  (sqrt(d_to_exact f)) (sqrt(d_to_model f)).
+
+Definition neg_double (m:mode) (f:double) :=
+   mk_double (Fopp (df f)) 
+         (FcanonicFopp radix bdouble (df f) (Hcandf f))
+         (-(d_to_exact f)) (-(d_to_model f)).
+
+Definition abs_double (m:mode) (f:double) :=
+   mk_double (Fabs (df f)) 
+         (FcanonicFabs radix radixGreaterOne bdouble (df f) (Hcandf f))
+         (Rabs (d_to_exact f)) (Rabs (d_to_model f)).
+
+Definition max_double := ((2-powerRZ radix (-52))*powerRZ radix 1023)%R.
+
+
+(** Quad precision *)
 
 Definition quad: Set.
 Admitted.
@@ -263,11 +304,29 @@ Admitted.
 Definition max_quad : R.
 Admitted.
 
-Definition double_of_single : single -> double.
-Admitted.
 
-Definition single_of_double : mode -> double -> single.
-Admitted.
+(** Jumping from one format to another *)
+
+Lemma double_of_single_aux: forall f:single, 
+   Fcanonic radix bdouble (Fnormalize radix bdouble 53 (sf f)).
+intros; apply FnormalizeCanonic;[auto with zarith|auto with zarith|
+       apply pdGivesBound|idtac].
+destruct f; simpl.
+assert (Fbounded bsingle sf0);[apply FcanonicBound with radix; auto|idtac].
+elim H; intros; split.
+rewrite psGivesBound in H0; rewrite pdGivesBound; auto with zarith.
+apply Zlt_le_trans with (1:=H0); auto with zarith.
+unfold bsingle in H1; unfold bdouble.
+rewrite make_EGivesEmin in H1; rewrite make_EGivesEmin; auto with zarith.
+apply Zle_trans with (2:=H1); auto with zarith.
+Qed.
+
+Definition double_of_single (f:single) :=
+   mk_double (Fnormalize radix bdouble 53 (sf f)) 
+         (double_of_single_aux f)
+         (s_to_exact f) (s_to_model f).
+
+Definition single_of_double (m:mode) (d:double) := r_to_s m (df d).
 
 Definition quad_of_single : single -> quad.
 Admitted.
@@ -281,3 +340,5 @@ Admitted.
 Definition double_of_quad : mode -> quad -> double.
 Admitted.
 
+
+Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix).
