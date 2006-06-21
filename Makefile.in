@@ -92,10 +92,13 @@ byte : bin/why.byte bin/caduceus.byte
 
 .PHONY: check
 
+PRELUDE=lib/why/prelude.why lib/why/floats.why lib/why/marith.why
+
 # sanity check: the prelude files do typecheck
-check: $(BINARY) lib/why/prelude.why lib/why/floats.why
+check: $(BINARY) $(PRELUDE)
 	$(BINARY) --no-prelude -tc lib/why/prelude.why
 	$(BINARY) -tc lib/why/floats.why
+	$(BINARY) -tc lib/why/marith.why
 
 # why
 CMO = src/lib.cmo \
@@ -306,7 +309,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE) gwhy-@LABLGTK
 
 install-lib: 
 	mkdir -p $(LIBDIR)/why
-	cp -f lib/why/prelude.why lib/why/floats.why $(LIBDIR)/why
+	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/caduceus/coq

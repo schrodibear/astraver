@@ -1,0 +1,100 @@
+
+(* machine arithmetic *)
+
+(* all virtual integer types have the shape {s,u}<size>
+   where s is for "signed" and u is for "unsigned"
+   and <size> is the size in bits *)
+
+(* signed integer over 8 bits (typically signed char) *)
+
+parameter add_s8 : 
+  x:int -> y:int -> { -128 <= x+y <= 127 } int { result = x+y }
+parameter sub_s8 : 
+  x:int -> y:int -> { -128 <= x-y <= 127 } int { result = x-y }
+parameter mul_s8 : 
+  x:int -> y:int -> { -128 <= x*y <= 127 } int { result = x*y }
+parameter div_s8 : 
+  x:int -> y:int -> { -128 <= x/y <= 127 and y<>0 } int { result = x/y }
+parameter mod_s8 : 
+  x:int -> y:int -> { -128 <= x/y <= 127 and y<>0 } int { result = x%y }
+parameter neg_s8 : 
+  x:int -> { -128 <= -x <= 127 } int { result = -x }
+
+(* unsigned integer over 8 bits (typically unsigned char) *)
+
+parameter add_u8 : 
+  x:int -> y:int -> { 0 <= x+y <= 255 } int { result = x+y }
+parameter sub_u8 : 
+  x:int -> y:int -> { 0 <= x-y <= 255 } int { result = x-y }
+parameter mul_u8 : 
+  x:int -> y:int -> { 0 <= x*y <= 255 } int { result = x*y }
+parameter div_u8 : 
+  x:int -> y:int -> { 0 <= x/y <= 255 and y<>0 } int { result = x/y }
+parameter mod_u8 : 
+  x:int -> y:int -> { 0 <= x/y <= 255 and y<>0 } int { result = x%y }
+parameter neg_u8 : 
+  x:int -> { 0 <= -x <= 255 } int { result = -x }
+
+(* signed integer over 16 bits (typically signed short) *)
+
+parameter add_s16 : 
+  x:int -> y:int -> { -32768 <= x+y <= 32767 } int { result = x+y }
+parameter sub_s16 : 
+  x:int -> y:int -> { -32768 <= x-y <= 32767 } int { result = x-y }
+parameter mul_s16 : 
+  x:int -> y:int -> { -32768 <= x*y <= 32767 } int { result = x*y }
+parameter div_s16 : 
+  x:int -> y:int -> { -32768 <= x/y <= 32767 and y<>0 } int { result = x/y }
+parameter mod_s16 : 
+  x:int -> y:int -> { -32768 <= x/y <= 32767 and y<>0 } int { result = x%y }
+parameter neg_s16 : 
+  x:int -> { -32768 <= -x <= 32767 } int { result = -x }
+
+(* unsigned integer over 16 bits (typically unsigned short) *)
+
+parameter add_u16 : 
+  x:int -> y:int -> { 0 <= x+y <= 65535 } int { result = x+y }
+parameter sub_u16 : 
+  x:int -> y:int -> { 0 <= x-y <= 65535 } int { result = x-y }
+parameter mul_u16 : 
+  x:int -> y:int -> { 0 <= x*y <= 65535 } int { result = x*y }
+parameter div_u16 : 
+  x:int -> y:int -> { 0 <= x/y <= 65535 and y<>0 } int { result = x/y }
+parameter mod_u16 : 
+  x:int -> y:int -> { 0 <= x/y <= 65535 and y<>0 } int { result = x%y }
+parameter neg_u16 : 
+  x:int -> { 0 <= -x <= 65535 } int { result = -x }
+
+(* signed integer over 32 bits (typically signed int) *)
+
+parameter add_s32 : 
+  x:int -> y:int -> { -2147483648 <= x+y <= 2147483647 } int { result = x+y }
+parameter sub_s32 : 
+  x:int -> y:int -> { -2147483648 <= x-y <= 2147483647 } int { result = x-y }
+parameter mul_s32 : 
+  x:int -> y:int -> { -2147483648 <= x*y <= 2147483647 } int { result = x*y }
+parameter div_s32 : 
+  x:int -> y:int -> 
+    { -2147483648 <= x/y <= 2147483647 and y<>0 } int { result = x/y }
+parameter mod_s32 : 
+  x:int -> y:int -> 
+    { -2147483648 <= x/y <= 2147483647 and y<>0 } int { result = x%y }
+parameter neg_s32 : 
+  x:int -> { -2147483648 <= -x <= 2147483647 } int { result = -x }
+
+(* unsigned integer over 32 bits (typically unsigned int) *)
+
+parameter add_u32 : 
+  x:int -> y:int -> { 0 <= x+y <= 4294967295 } int { result = x+y }
+parameter sub_u32 : 
+  x:int -> y:int -> { 0 <= x-y <= 4294967295 } int { result = x-y }
+parameter mul_u32 : 
+  x:int -> y:int -> { 0 <= x*y <= 4294967295 } int { result = x*y }
+parameter div_u32 : 
+  x:int -> y:int -> { 0 <= x/y <= 4294967295 and y<>0 } int { result = x/y }
+parameter mod_u32 : 
+  x:int -> y:int -> { 0 <= x/y <= 4294967295 and y<>0 } int { result = x%y }
+parameter neg_u32 : 
+  x:int -> { 0 <= -x <= 4294967295 } int { result = -x }
+
+

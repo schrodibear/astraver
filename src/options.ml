@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.68 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.69 2006-06-21 14:53:12 filliatr Exp $ i*)
 
 open Format
 
@@ -46,6 +46,7 @@ let all_vc_ = ref false
 let prelude_ = ref true
 let floats_ = ref false
 let gappa_rnd_ = ref "float < ieee_64, ne >"
+let lib_files_to_load_ = ref []
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
@@ -142,7 +143,6 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
-  --no-prelude       do not read the prelude file (prelude.why)
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
@@ -151,7 +151,11 @@ Typing/Annotations/VCG options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
-  --fp               use floating-point arithmetic
+
+Prelude files:
+  --no-prelude   do not read the prelude file (prelude.why)
+  --fp           use floating-point arithmetic (same as --lib-file floats.why)
+  --lib-file f   load file f from the library
 
 Encoding for types in untyped logic:
   --encoding none    does not encode types into terms for untyped provers
@@ -241,6 +245,9 @@ let files =
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-fp" | "--fp") :: args -> floats_ := true; parse args
+    | ("-lib-file" | "--lib-file") :: f :: args -> 
+	lib_files_to_load_ := f :: !lib_files_to_load_; parse args
+    | ("-lib-file" | "--lib-file") :: [] -> usage (); exit 1
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args
@@ -426,6 +433,7 @@ let lib_file f =
 
 let prelude_file = lib_file "prelude.why"
 let floats_file = lib_file "floats.why"
+let lib_files_to_load = List.rev_map lib_file !lib_files_to_load_
 
 let () = 
   if prelude && not (Sys.file_exists prelude_file) then begin

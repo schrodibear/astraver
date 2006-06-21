@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.23 2006-06-21 13:02:01 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.24 2006-06-21 14:53:12 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -82,6 +82,15 @@ let set_fp_rounding_mode = function
   | _ -> 
       Printf.eprintf "rounding mode should be nearest_even, to_zero, up, down, or nearest_away"; exit 1
 let fp_overflow_check = ref false
+
+let int_overflow_check = ref false
+let char_size_ = ref 8
+let short_size_ = ref 16
+let int_size_ = ref 32
+
+let set_integer_size r = function
+  | 8 | 16 | 32 as n -> r := n
+  | n -> Format.eprintf "unsupported integer size: %d@." n; exit 1
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -166,6 +175,10 @@ let _ =
 	  "  set the default FP rounding mode";
 	"--fp-overflow", Arg.Set fp_overflow_check,
 	  "  check for FP overflows";
+	"--int-overflow", Arg.Set int_overflow_check,
+	  "  check for integer overflows";
+	"--char-size", Arg.Int (set_integer_size char_size_),
+	  "  set the size for type `char' (default is 8)";
       ]
       add_file "caduceus [options] file..."
 
@@ -185,11 +198,14 @@ let separate = !separate
 let closed_program = !closed_program
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check
+let int_overflow_check = !int_overflow_check
 
 let use_floats = ref false
 
 let why_opt () = 
-  if floats && !use_floats then "--fp " ^ !why_opt else !why_opt
+  let o = !why_opt in
+  let o = if int_overflow_check then o ^ " --lib-file marith.why" else o in
+  if floats && !use_floats then o ^ " --fp" else o
 
 let verify f = match !verification with
   | All -> true

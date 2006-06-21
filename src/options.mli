@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.54 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.55 2006-06-21 14:53:12 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -108,4 +108,6 @@ val prelude : bool
 val prelude_file : string
 
 val floats_file : string
+
+val lib_files_to_load : string list
 
