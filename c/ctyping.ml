@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.112 2006-06-20 07:16:43 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.113 2006-06-21 13:02:01 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -306,7 +306,8 @@ let rec type_type loc env ty =
 
 and type_type_node loc env = function
   | CTvoid -> Tvoid
-  | CTfloat x -> Tfloat x
+  | CTfloat x -> 
+      begin match x with Real -> () | _ -> use_floats := true end; Tfloat x
   | CTint (s,i) ->
       Tint (s, type_integer loc env i)
   | CTvar x -> 
@@ -385,6 +386,7 @@ and type_expr_node loc env = function
   | CEconstant (IntConstant _ as c) ->
       TEconstant c, c_int
   | CEconstant (RealConstant s) ->
+      use_floats := true;
       let s,fk = float_constant_type s in
       TEunary (Ufloat_conversion,
 	       { texpr_node = TEconstant (RealConstant s);

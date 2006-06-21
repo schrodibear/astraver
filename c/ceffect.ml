@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.126 2006-06-20 09:50:29 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.127 2006-06-21 13:02:01 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -811,20 +811,20 @@ let noattr loc ty e =
   }
 
 let rec pop_initializer loc t i =
+  let mk node ty = { nterm_node = node; nterm_type = ty; nterm_loc = loc } in
   match i with 
-    | [] ->{ nterm_node = 
+    | [] -> { nterm_node = 
 	       (match t.Ctypes.ctype_node with
-		  | Tint _ | Tenum _ -> NTconstant(IntConstant "0")
-		  | Tfloat _ -> NTconstant(RealConstant "0.0")
+		  | Tint _ | Tenum _ -> 
+		      NTconstant(IntConstant "0")
+		  | Tfloat _ -> 
+		      NTconstant(RealConstant "0.0")
 		  | Tpointer _ -> 
-		      NTcast (t,
-			      {nterm_node = NTconstant (IntConstant "0");
-			       nterm_type = c_int;
-			       nterm_loc  = loc;})
-		  | _ -> assert false);
-	     nterm_type = t;
-	     nterm_loc  = loc;
-
+		      NTcast (t, mk (NTconstant (IntConstant "0")) c_int)
+		  | _ -> 
+		      assert false);
+	      nterm_type = t;
+	      nterm_loc  = loc;
 	    },[]
     | (Iexpr e)::l -> term_of_expr e,l
     | (Ilist [])::l -> pop_initializer loc t l
@@ -835,10 +835,11 @@ let rec invariant_for_constant loc t lvalue initializers =
   match t.Ctypes.ctype_node with
     | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
 	let x,l = pop_initializer loc t initializers in
-	let x = match t.Ctypes.ctype_node with 
-	  | Tfloat _ -> { nterm_node = NTunop (Clogic.Ufloat_conversion, x);
-			  nterm_loc = x.nterm_loc; nterm_type = t }
-	  | _ -> x
+	let lvalue = match t.Ctypes.ctype_node with 
+	  | Tfloat _ -> 
+	      { nterm_node = NTunop (Clogic.Ufloat_conversion, lvalue);
+		nterm_loc = lvalue.nterm_loc; nterm_type = c_real }
+	  | _ -> lvalue
 	in
 	nprel (lvalue, Eq, x), l
     | Tstruct n ->

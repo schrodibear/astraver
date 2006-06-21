@@ -1,4 +1,8 @@
 
+/* The following functions are not intended to be correct;
+   this is only a test file for the syntax and the typing of floating-point
+   annotations */
+   
 float f;
 double d;
 long double l;
@@ -17,5 +21,12 @@ void f1() {
   @*/
 double my_exp(double x) {
   return 1 + x + x*x/2;
+}
+
+/*@ requires \model(x) == 0.0
+  @ ensures \total_error(\result) <= 0.1
+  @*/
+double f2(double x) {
+  return x + 1.0f + 2 * 3.14 / 3.6l;
 }
 

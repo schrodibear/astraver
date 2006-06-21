@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.22 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.23 2006-06-21 13:02:01 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -186,7 +186,10 @@ let closed_program = !closed_program
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check
 
-let why_opt = if floats then "--fp " ^ !why_opt else !why_opt
+let use_floats = ref false
+
+let why_opt () = 
+  if floats && !use_floats then "--fp " ^ !why_opt else !why_opt
 
 let verify f = match !verification with
   | All -> true

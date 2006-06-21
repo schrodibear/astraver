@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.16 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.17 2006-06-21 13:02:01 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -34,11 +34,12 @@ val werror : bool
 val with_cpp : bool
 val cpp_command : string
 val cpp_dump : bool
-val why_opt : string
+val why_opt : unit -> string
 val coq_tactic : string
 val separate : bool
 val closed_program : bool
 
+val use_floats : bool ref
 val floats : bool
 type fp_rounding_mode = 
   | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.92 2006-06-20 09:50:30 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.93 2006-06-21 13:02:01 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -30,9 +30,9 @@ let option_app f = function Some x -> Some (f x) | None -> None
 let rec type_logic_type loc env = function
   | LTvoid -> c_void
   | LTint -> c_int
-  | LTfloat -> c_float Ctypes.Float
-  | LTdouble -> c_float Ctypes.Double
-  | LTlongdouble -> c_float Ctypes.LongDouble
+  | LTfloat -> use_floats := true; c_float Ctypes.Float
+  | LTdouble -> use_floats := true; c_float Ctypes.Double
+  | LTlongdouble -> use_floats := true; c_float Ctypes.LongDouble
   | LTreal -> c_real
   | LTarray ty -> c_array Not_valid (type_logic_type loc env ty)
   | LTpointer ty -> c_pointer Not_valid (type_logic_type loc env ty)
@@ -132,6 +132,7 @@ and type_term_node loc env = function
   | PLconstant (IntConstant _ as c) -> 
       Tconstant c, c_int
   | PLconstant (RealConstant _ as c) ->
+      use_floats := true;
       Tconstant c, c_real
   | PLvar x ->
       let info = 
