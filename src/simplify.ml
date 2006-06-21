@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.52 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.53 2006-06-21 09:19:46 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -45,8 +45,7 @@ let decl_to_elem = function
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
   | _ -> ()
 
-let push_decl = 
-  Encoding.push
+let push_decl = Encoding.push
 
 let defpred = Hashtbl.create 97
 

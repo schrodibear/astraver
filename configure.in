@@ -166,6 +166,8 @@ AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 #  	fi
 #  fi
 
+WHYFLOATS=
+
 # Coq
 AC_CHECK_PROG(COQC,coqc,coqc,no)
 if test "$COQC" = no ; then
@@ -202,7 +204,14 @@ else
 	COQC8=$COQC
 	COQVER=v8
 	WHYLIBCOQ=lib/coq
-	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
+	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
+	AC_MSG_CHECKING(Coq floating-point library)
+	if test -f $COQLIB/user-contrib/AllFloat.vo; then
+	  AC_MSG_RESULT(yes)
+	  WHYFLOATS=lib/coq/WhyFloats.vo
+	else
+	  AC_MSG_RESULT(no)
+	fi;;
     *)
 	COQ=no
 	AC_MSG_WARN(You need Coq 7.4 or later; Coq discarded);;
@@ -264,6 +273,7 @@ AC_SUBST(COQDEP)
 AC_SUBST(COQLIB)
 AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
+AC_SUBST(WHYFLOATS)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)

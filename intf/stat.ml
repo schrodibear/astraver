@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.39 2006-05-03 14:02:21 dogguy Exp $ i*)
+(*i $Id: stat.ml,v 1.40 2006-06-21 09:19:45 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -224,6 +224,7 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
       model#set ~row ~column:column_p `EXECUTE;
       let r = 
 	Dispatcher.call_prover 
+	  ~debug:Options.debug ~encoding:p.Model.pr_enc
 	  ~obligation:oblig ~timeout:(Tools.get_timeout ())  p.Model.pr_id
       in
       let get_result = function

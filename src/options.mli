@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.53 2006-06-19 14:37:53 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.54 2006-06-21 09:19:45 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -53,7 +53,8 @@ val lvlmax : int
 val all_vc : bool
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive
-val types_encoding : encoding
+val get_types_encoding : unit -> encoding
+val set_types_encoding : encoding -> unit
 
 type termination = UseVariant | Partial | Total
 val termination : termination

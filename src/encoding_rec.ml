@@ -1,3 +1,22 @@
+(*
+ * The Why certification tool
+ * Copyright (C) 2002 Jean-Christophe FILLIATRE
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
+
+(*i $Id: encoding_rec.ml,v 1.5 2006-06-21 09:19:45 filliatr Exp $ i*)
+
+open Options
 open Cc
 open Logic
 open Logic_decl
@@ -87,7 +106,7 @@ let plunge fv term pt =
 	let t = try (List.assoc var.tag fv) 
 	with _ -> 
 	  let s = string_of_int var.tag in 
-	  (print_endline ("unknown vartype : "^s); s)
+	  (if debug then print_endline ("unknown vartype : "^s); s)
 	in
 	Tapp (Ident.create t, [], [])
     | PTvar {type_val = Some pt} -> leftt pt
@@ -148,7 +167,8 @@ let rec push d =
       | Function (ptl, rt) -> 
 	  let _ =
 	    if is_poly_cons ptl rt then
-	      (print_endline ("Constante polymorphe détectée : "^ident);
+	      (if debug then
+		 print_endline ("Constante polymorphe détectée : "^ident);
 	       poly_consts := ident :: !poly_consts)
 	    else () in
 	  let args = 

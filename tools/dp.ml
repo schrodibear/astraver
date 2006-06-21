@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.19 2006-03-27 09:49:56 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.20 2006-06-21 09:19:46 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -37,8 +37,7 @@ let () = Arg.parse spec (fun s -> Queue.push s files) usage
 let () = 
   Cvcl_split.debug := !debug; 
   Simplify_split.debug := !debug;
-  Zenon_split.debug := !debug;
-  Calldp.debug := !debug
+  Zenon_split.debug := !debug
 
 (* stats *)
 let nvalid = ref 0
@@ -59,14 +58,15 @@ let wrapper r =
   flush stdout
 
 let call_cvcl f = 
-  wrapper (Calldp.cvcl ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.cvcl ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_simplify f = 
-  wrapper (Calldp.simplify ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.simplify ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_zenon f = 
-  wrapper (Calldp.zenon ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.zenon ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_harvey f = 
   List.iter wrapper 
-    (Calldp.harvey ~timeout:!timeout ~eclauses:!eclauses ~filename:f ())
+    (Calldp.harvey ~debug:!debug ~timeout:!timeout 
+       ~eclauses:!eclauses ~filename:f ())
 
 let split f =
   printf "%s: " f; flush stdout;

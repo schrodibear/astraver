@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.7 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.8 2006-06-21 09:19:45 filliatr Exp $ i*)
 
 open Cc
 
@@ -25,4 +25,5 @@ val iter : (Loc.position * string * sequent Env.scheme -> unit) -> unit
 type prover = Simplify | Harvey | Cvcl | Zenon
 
 val call_prover : 
-  obligation:string -> ?timeout:int -> prover -> Calldp.prover_result
+  ?debug:bool -> ?timeout:int -> ?encoding:Options.encoding ->
+  obligation:string -> prover -> Calldp.prover_result

@@ -15,6 +15,7 @@
  *)
 
 open Gobject.Data
+open Options
 
 exception No_such_prover
 
@@ -23,6 +24,7 @@ type prover = {
   pr_result : int GTree.column;
   pr_icon : GtkStock.id GTree.column;
   pr_id : Dispatcher.prover;
+  pr_enc : Options.encoding;
 }
   
 let cols = new GTree.column_list
@@ -39,27 +41,75 @@ let simplify = {
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Simplify;
+  pr_enc = NoEncoding;
+  }
+let simplify_pred = {
+  pr_name = "Simplify(P)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Simplify;
+  pr_enc = Predicates;
+  }
+let simplify_strat = {
+  pr_name = "Simplify(S)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Simplify;
+  pr_enc = Stratified;
+  }
+let simplify_rec = {
+  pr_name = "Simplify(R)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Simplify;
+  pr_enc = Recursive;
   }
 let zenon = {
   pr_name = "Zenon";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Zenon;
+  pr_enc = NoEncoding;
+}
+let zenon_pred = {
+  pr_name = "Zenon(P)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Zenon;
+  pr_enc = Predicates;
+}
+let zenon_strat = {
+  pr_name = "Zenon(S)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Zenon;
+  pr_enc = Stratified;
+}
+let zenon_rec = {
+  pr_name = "Zenon(R)";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Zenon;
+  pr_enc = Recursive;
 }
 let harvey = {
   pr_name = "haRVey";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Harvey;
+  pr_enc = NoEncoding;
 }
 let cvcl = {
   pr_name = "CVCL";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Cvcl;
+  pr_enc = NoEncoding;
 }
   
-let provers = [simplify; zenon; harvey; cvcl]
+let provers = [simplify; (*simplify_pred;*) simplify_strat; (*simplify_rec;*)
+	       zenon; zenon_pred; zenon_strat; zenon_rec;
+	       harvey; cvcl]
 let provers_selected = ref provers
 let provers_s = Hashtbl.create 17
 let get_provers () = !provers_selected

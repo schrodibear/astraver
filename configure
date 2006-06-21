@@ -272,7 +272,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
 ac_unique_file="src/monad.mli"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ PVS PVSLIB MIZAR MIZARLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1722,6 +1722,8 @@ fi
 #  	fi
 #  fi
 
+WHYFLOATS=
+
 # Coq
 # Extract the first word of "coqc", so it can be a program name with args.
 set dummy coqc; ac_word=$2
@@ -1834,7 +1836,17 @@ echo "${ECHO_T}$COQVERSION" >&6
 	COQC8=$COQC
 	COQVER=v8
 	WHYLIBCOQ=lib/coq
-	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
+	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
+	echo "$as_me:$LINENO: checking Coq floating-point library" >&5
+echo $ECHO_N "checking Coq floating-point library... $ECHO_C" >&6
+	if test -f $COQLIB/user-contrib/AllFloat.vo; then
+	  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	  WHYFLOATS=lib/coq/WhyFloats.vo
+	else
+	  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+	fi;;
     *)
 	COQ=no
 	{ echo "$as_me:$LINENO: WARNING: You need Coq 7.4 or later; Coq discarded" >&5
@@ -1966,6 +1978,7 @@ fi
 
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
+
 
 
 
@@ -2645,6 +2658,7 @@ s,@COQC8@,$COQC8,;t t
 s,@COQLIB@,$COQLIB,;t t
 s,@COQVER@,$COQVER,;t t
 s,@WHYLIBCOQ@,$WHYLIBCOQ,;t t
+s,@WHYFLOATS@,$WHYFLOATS,;t t
 s,@PVS@,$PVS,;t t
 s,@PVSLIB@,$PVSLIB,;t t
 s,@MIZAR@,$MIZAR,;t t

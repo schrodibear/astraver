@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: zenon.ml,v 1.17 2006-06-09 13:40:02 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.18 2006-06-21 09:19:46 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -70,6 +70,9 @@ let rename s =
 let ident fmt id = fprintf fmt "%s" (rename (string id))
 let idents fmt s = fprintf fmt "%s" (rename s)
 
+let symbol fmt (id,i) = ident fmt id
+  (* Monomorph.symbol fmt (id, i) *)
+
 let infix id =
   if id == t_lt then "why__lt"
   else if id == t_le then "why__le"
@@ -106,8 +109,8 @@ let rec print_pure_type fmt = function
   | PTreal -> fprintf fmt "REAL"
   | PTunit -> fprintf fmt "UNIT"
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
-  | PTvar _ -> assert false
-  | PTexternal (i ,id) -> Monomorph.symbol fmt (id, i)
+  | PTvar {type_val=None; tag=t} -> fprintf fmt "'a%d" t
+  | PTexternal (i ,id) -> symbol fmt (id,i)
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -151,9 +154,9 @@ let rec print_term fmt = function
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a %a)@]" (infix id) print_term a print_term b
   | Tapp (id, [], i) ->
-      fprintf fmt "%a" Monomorph.symbol (id, i)
+      symbol fmt (id,i)
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[(%a %a)@]" Monomorph.symbol (id, i) print_terms tl
+      fprintf fmt "@[(%a %a)@]" symbol (id,i) print_terms tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -184,8 +187,7 @@ let rec print_predicate fmt = function
 	"@[(/\\ (why__le_int why__int_const_0 %a)@ (why__lt_int %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[(%a@ %a)@]" 
-	Monomorph.symbol (id, i) print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" symbol (id, i) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(=> %a@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -296,15 +298,14 @@ let print_obligation fmt loc o s =
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation_position loc;
   fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
 
-let push_decl d = Monomorph.push_decl d
+let push_decl d = Encoding.push (*Monomorph.push_decl*) d
 
-let iter = Monomorph.iter
+let iter = Encoding.iter (*Monomorph.iter*)
 
-let reset () = Monomorph.reset ()
+let reset () = Encoding.reset (*Monomorph.reset*) ()
 
 let output_elem fmt = function
-  | Dtype (loc, [], id) -> declare_type fmt id
-  | Dtype _ -> assert false
+  | Dtype (loc, _, id) -> declare_type fmt id
   | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type

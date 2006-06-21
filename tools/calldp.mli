@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.mli,v 1.4 2006-03-22 11:31:53 dogguy Exp $ i*)
+(*i $Id: calldp.mli,v 1.5 2006-06-21 09:19:46 filliatr Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -22,22 +22,25 @@
    harvey where it may contain several proof obligations (used in dp) *)
 
 type prover_result = 
-  | Valid | Invalid of string option | CannotDecide | Timeout | ProverFailure of string
+  | Valid 
+  | Invalid of string option 
+  | CannotDecide 
+  | Timeout 
+  | ProverFailure of string
 
 val simplify : 
-  ?timeout:int -> filename:string -> unit -> 
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
 val harvey : 
-  ?timeout:int -> ?eclauses:int -> filename:string -> unit -> 
+  ?debug:bool -> ?timeout:int -> ?eclauses:int -> filename:string -> unit -> 
   prover_result list
 
 val cvcl : 
-  ?timeout:int -> filename:string -> unit -> 
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
 val zenon : 
-  ?timeout:int -> filename:string -> unit -> 
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
-val debug : bool ref

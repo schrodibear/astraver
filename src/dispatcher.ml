@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.7 2006-04-06 14:26:44 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.8 2006-06-21 09:19:45 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -62,7 +62,8 @@ let push_obligation p (loc, id, s) =
   | Zenon -> Zenon.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
-let output_file p (elems,o) =
+let output_file ?encoding p (elems,o) =
+  begin match encoding with Some e -> set_types_encoding e | None -> () end;
   begin match p with
     | Simplify -> Simplify.reset () 
     | Harvey -> Harvey.reset () 
@@ -78,7 +79,7 @@ let output_file p (elems,o) =
     | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
 
-open Printf
+open Format
 
 let prover_name = function 
   | Simplify -> "Simplify" 
@@ -86,11 +87,11 @@ let prover_name = function
   | Cvcl -> "CVC Lite"
   | Zenon -> "Zenon"
 
-let call_prover ~obligation:o ?timeout p =
+let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
-  let filename = output_file p so in
+  let filename = output_file ?encoding p so in
   if debug then begin
-    eprintf "calling %s on %s\n" (prover_name p) filename; flush stderr;
+    eprintf "calling %s on %s@." (prover_name p) filename; flush stderr;
   end;
   let r = match p with
     | Simplify -> 

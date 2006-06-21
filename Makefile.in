@@ -55,7 +55,7 @@ VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo     lib/coq/WhyReal.vo \
      lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo \
      lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo \
-     lib/coq/WhyFloats.vo \
+     @WHYFLOATS@ \
      lib/coq/caduceus_why.vo     lib/coq/caduceus_tactics.vo \
      lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo
 V8FILES=$(VO8:.vo=.v)
@@ -84,11 +84,18 @@ WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 
 TOOLS=$(WHY2HTML) $(DP) $(RVMERGE) $(WHYOBFUSCATOR)
 
-all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
+all: $(BINARY) check $(CADUCEUS) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
 opt: bin/why.opt bin/caduceus.opt
 
 byte : bin/why.byte bin/caduceus.byte
+
+.PHONY: check
+
+# sanity check: the prelude files do typecheck
+check: $(BINARY) lib/why/prelude.why lib/why/floats.why
+	$(BINARY) --no-prelude -tc lib/why/prelude.why
+	$(BINARY) -tc lib/why/floats.why
 
 # why
 CMO = src/lib.cmo \

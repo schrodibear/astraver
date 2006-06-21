@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.67 2006-06-19 14:37:53 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.68 2006-06-21 09:19:45 filliatr Exp $ i*)
 
 open Format
 
@@ -382,7 +382,9 @@ let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
-let types_encoding = !types_encoding_
+
+let get_types_encoding () = !types_encoding_
+let set_types_encoding ec = types_encoding_ := ec
 
 let floats = !floats_
 
