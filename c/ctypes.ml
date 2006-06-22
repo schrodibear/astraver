@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.16 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: ctypes.ml,v 1.17 2006-06-22 13:07:17 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -100,6 +100,7 @@ let pop () = match !stack with
 
 let rec ctype fmt ty =
   (if ty.ctype_ghost then fprintf fmt "ghost "else ());
+  (if ty.ctype_const then fprintf fmt "const "else ());
   ctype_node fmt ty.ctype_node
 
 and ctype_node fmt = function

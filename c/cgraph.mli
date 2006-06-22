@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cgraph.mli,v 1.1 2005-05-19 12:36:06 hubert Exp $ i*)
+(*i $Id: cgraph.mli,v 1.2 2006-06-22 13:07:16 hubert Exp $ i*)
 
 open Cast
 
 val file : tdecl located list -> unit
 
+val find_comp : (string*tfile) list -> (Info.fun_info list) array

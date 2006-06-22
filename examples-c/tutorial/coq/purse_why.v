@@ -153,13 +153,11 @@ Save.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   (* File "purse.c", line 36, characters 14-36 *)
   ((purse_inv balance_global alloc result) /\ 100 >= 0).
 Proof.
@@ -173,13 +171,11 @@ Save.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc result) /\ 100 >= 0)),
   forall (balance_global0: ((memory) Z global)),
@@ -193,7 +189,7 @@ Save.
   ((purse_inv balance_global0 alloc result0) /\ 200 >= 0).
 Proof.
 unfold purse_inv; intuition.
-rewrite H11; intuition.
+rewrite H9; intuition.
 (* problem: need to know that p1 <> p2, which
    should be a consequence of
 H1 : valid alloc p1
@@ -212,13 +208,11 @@ Admitted.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc result) /\ 100 >= 0)),
   forall (balance_global0: ((memory) Z global)),
@@ -242,7 +236,7 @@ Admitted.
   (acc balance_global1 result)).
 Proof.
 unfold purse_inv; intuition.
-rewrite H18; intuition.
+rewrite H16; intuition.
 (* again we need p1 <> p2 *)
 Admitted.
 
@@ -253,13 +247,11 @@ Admitted.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc result) /\ 100 >= 0)),
   forall (balance_global0: ((memory) Z global)),
@@ -302,13 +294,11 @@ Admitted.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc result) /\ 100 >= 0)),
   forall (balance_global0: ((memory) Z global)),
@@ -359,13 +349,11 @@ Save.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc result) /\ 100 >= 0)),
   forall (balance_global0: ((memory) Z global)),
@@ -419,13 +407,11 @@ Save.
   forall (result: ((pointer) global)),
   forall (HW_1: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result) /\
-                (purse_inv balance_global alloc result)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result))),
   forall (result0: ((pointer) global)),
   forall (HW_2: (* File "purse.c", line 65, characters 30-67 *)
                 ((fresh alloc result0) /\
-                (purse_inv balance_global alloc result0)) /\
-                (not_assigns alloc balance_global balance_global pset_empty)),
+                (purse_inv balance_global alloc result0))),
   forall (HW_3: (* File "purse.c", line 36, characters 14-36 *)
                 ((purse_inv balance_global alloc result) /\ 100 >= 0)),
   forall (balance_global0: ((memory) Z global)),
@@ -474,13 +460,13 @@ Save.
 Proof.
 intuition.
 subst.
-rewrite H27.
-rewrite H25; intuition.
-rewrite H23.
-rewrite H19; intuition.
-rewrite H17.
-rewrite H13; intuition.
-rewrite H12.
+rewrite H25.
+rewrite H23; intuition.
+rewrite H21.
+rewrite H17; intuition.
+rewrite H15.
+rewrite H11; intuition.
+rewrite H10.
 Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)

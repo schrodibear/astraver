@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.127 2006-06-21 13:02:01 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.128 2006-06-22 13:07:16 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -208,7 +208,8 @@ let rec term t = match t.nterm_node with
       else ef_empty
   | NTarrow (t1,z,f) -> 
       let z = repr z in
-      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
+      (*eprintf "tw1: %s , tw2 : %s@." (snd (output_why_type (Cnorm.type_why_for_term t1))) (snd (output_why_type (Pointer z)));
+      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));*)
       reads_add_alloc (reads_add_field_var f (Pointer z) (term t1))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
@@ -1059,7 +1060,7 @@ let file l = List.iter decl l
 
 let warnings = Queue.create ()
 
-let functions dl = 
+let functions fun_list dl = 
   let fixpoint = ref true in
   let declare id ef =
     lprintf "effects for function %s before invariants: reads %a %a writes %a %a@." 
@@ -1083,51 +1084,59 @@ let functions dl =
       id.function_writes_var <- ef.assigns_var;
     end
   in
-  let decl d = match d.node with
+  let decl fun_list d = match d.node with
     | Nfunspec (sp, _, id) ->
-	let sp = spec sp in
-	declare id sp
+	if List.mem id fun_list then 
+	  let sp = spec sp in
+	  declare id sp
+	else ()
     | Nfundef (sp, _, id, s) ->
-	let ef_spec = spec sp in
-	let ef = 
-	  if verify id.fun_name then
-	    let ef_body = statement s in
-	    begin match sp.Clogic.assigns with
-	      | None -> 
-		  (* no assigns given by user:
-		     emit a warning if some side-effects have been detected *)
-		  if id <> Cinit.invariants_initially_established_info &&
-		    not ((ZoneSet.is_empty ef_body.assigns) && 
-			   (HeapVarSet.is_empty ef_body.assigns_var)) then
+	if List.mem id fun_list then 
+	  let ef_spec = spec sp in
+	  let ef = 
+	    if verify id.fun_name then
+	      let ef_body = statement s in
+	      begin match sp.Clogic.assigns with
+		| None -> 
+		    (*no assigns given by user:
+		      emit a warning if some side-effects have been detected *)
+		    if id <> Cinit.invariants_initially_established_info &&
+		      not ((ZoneSet.is_empty ef_body.assigns) && 
+			     (HeapVarSet.is_empty ef_body.assigns_var)) then
+			Queue.add 
+			  (d.loc,
+			   "function " ^ id.fun_name ^ 
+			     " has side-effects but no 'assigns' clause given")
+			  warnings
+		| Some _ -> 
+		    (* some assigns given by user:
+		       emit a warning if side-effects of spec differs from 
+		       side-effects of body *) 
+		    if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
+			      (HeapVarSet.equal 
+				 ef_spec.assigns_var ef_body.assigns_var))
+		    then begin 
 		      Queue.add 
 			(d.loc,
-			 "function " ^ id.fun_name ^ 
-			   " has side-effects but no 'assigns' clause given")
-			warnings
-	      | Some _ -> 
-		  (* some assigns given by user:
-		     emit a warning if side-effects of spec differs from 
-		     side-effects of body *) 
-		  if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
-			    (HeapVarSet.equal 
-			       ef_spec.assigns_var ef_body.assigns_var))
-		  then begin 
-		    Queue.add 
-		      (d.loc,
-		       "'assigns' clause for function " ^ id.fun_name ^
-			 " do not match side-effects of its body ")
-		      warnings		    
-		  end
-	    end;
-	    ef_union ef_spec ef_body
-	  else
-	    ef_spec
-	in
-	declare id ef
+			 "'assigns' clause for function " ^ id.fun_name ^
+			   " do not match side-effects of its body ")
+			warnings		    
+		    end
+	      end;
+	      ef_union ef_spec ef_body
+	    else
+	      ef_spec
+	  in
+	  declare id ef
+	else ()
     | _ -> 
 	()
   in
-  List.iter decl dl;
+  List.iter (decl fun_list) dl;
   !fixpoint
 
-
+let effect  nfiles fun_list=
+    while not (List.for_all (fun (_,p) -> functions fun_list p) nfiles)
+    do 
+      Queue.clear warnings
+    done

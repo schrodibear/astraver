@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.32 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.33 2006-06-22 13:07:17 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -192,6 +192,7 @@ let default_logic_info x =
 
 type fun_info =
     {
+      fun_tag : int;
       fun_name : string;
       mutable fun_unique_name : string;
       mutable function_reads : ZoneSet.t;
@@ -207,8 +208,11 @@ type fun_info =
       mutable has_body : bool;
     }
 
+let fun_tag_counter = ref 0
+
 let default_fun_info x =
-  { fun_name = x; 
+  { fun_tag = (let n = !fun_tag_counter in incr fun_tag_counter; n);
+    fun_name = x; 
     fun_unique_name = x;
     function_reads = ZoneSet.empty;
     function_writes = ZoneSet.empty;
@@ -248,8 +252,8 @@ let var_type d =
     | Fun_info f -> f.fun_type
 
 let set_var_type d ty whyty = match d with
-  | Var_info v ->   
-      Coptions.lprintf "set_var_type %s <- %a@." v.var_name Ctypes.ctype ty;
+  | Var_info v -> 
+      Coptions.lprintf "set_var_type %s <-  %a@." v.var_name Ctypes.ctype ty;
       v.var_type <- ty;
       v.var_why_type <- whyty
   | Fun_info f -> 

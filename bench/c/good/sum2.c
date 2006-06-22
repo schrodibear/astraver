@@ -13,19 +13,20 @@
 
 /*@ requires \valid_range(t,0,n) 
   @ ensures \result == sum(t,0,n)
-  @*/
+*/  
 int test1(int t[],int n) {
   int i,s = 0;
 
-  /*@ invariant 0 <= i <= n && s == sum(t,0,i)
+  /*@invariant 0 <= i <= n && s == sum(t,0,i)
     @ variant n-i
-    @*/
+  */
   for(i=0; i < n; i++) 
   {
     s += t[i];
   }
   return s;
 }
+
 
 /*@ requires \valid_range(t,0,n)
   @ assigns t[..]

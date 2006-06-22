@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.64 2006-05-15 14:08:41 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.65 2006-06-22 13:07:16 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -73,11 +73,12 @@ let main () =
   (* typing *)
   let tfiles = List.map type_file pfiles in
   if type_only then exit 0;
-  (* function graph *)
-  List.iter (fun (f,p) -> Cgraph.file p) tfiles ;
-  if print_graph then Cprint_graph.print_graph ();  
   (* initialisation of global variables *)
   let tfiles = List.map (fun (f,p) -> (f,Cinit.add_init p)) tfiles in
+  (* function graph *)
+  List.iter (fun (f,p) -> Cgraph.file p) tfiles ;
+  if print_graph then Cprint_graph.print_graph ();
+  let tab_comp = Cgraph.find_comp tfiles in
   (* normalisation *)
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
@@ -106,9 +107,10 @@ let main () =
   (* effects *)
   lprintf "starting computation of effects.@.";
   List.iter (fun (_,p) -> Ceffect.file p) nfiles;
-  while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 
+(*  while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 
     Queue.clear Ceffect.warnings
-  done;
+  done;*)
+  Array.iter (Ceffect.effect nfiles) tab_comp;
   Queue.iter 
     (fun (loc,msg) ->
        lprintf "%a %s@." Loc.report_position loc msg;
@@ -184,3 +186,4 @@ let () =
   with e ->
     eprintf "%a@." explain_exception e;
     exit 1
+

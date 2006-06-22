@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.26 2006-06-19 14:37:51 filliatr Exp $ i*)
+(*i $Id: ceffect.mli,v 1.27 2006-06-22 13:07:16 hubert Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -73,8 +73,11 @@ val statement : Cast.nstatement -> effect
 val file : Cast.nfile -> unit
 
 (* computes functions effects; 
-   return [true] when fixpoint is reached (no more modification) *)
-val functions : Cast.nfile -> bool
+   return [true] when fixpoint is reached (no more modification) 
+val functions : Cast.nfile -> bool*)
+
+(* Compute functions effects *)
+val effect : ('a * Cast.ndecl Cast.located list) list -> fun_info list -> unit
 
 (* table for weak invariants *)
 val weak_invariants : (string, Cast.npredicate * effect) Hashtbl.t

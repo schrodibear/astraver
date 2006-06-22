@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.63 2006-06-20 09:50:30 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.64 2006-06-22 13:07:16 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -1055,7 +1055,7 @@ let global_decl e1 =
   | Ttypedecl t -> Ntypedecl (t)
   | Tdecl (t, v, c) -> 
       let t =
-	if  (* not *) v.var_is_assigned && Coptions.closed_program then   
+	if  (not v.var_is_assigned) && Coptions.closed_program then   
 	  { t with Ctypes.ctype_const = true }
 	else t 
       in

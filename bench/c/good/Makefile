@@ -1,5 +1,5 @@
 
-CADUCEUS=../../../bin/caduceus.opt 
+CADUCEUS=../../../bin/caduceus.opt
 CADUCEUSLIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 EXECCADUCEUS=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm -separation -why-opt -split-user-conj

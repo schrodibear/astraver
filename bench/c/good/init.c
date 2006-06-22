@@ -14,6 +14,7 @@ struct S s = {1,{1,3,4}};
 
 /*@ ensures \result == 7 */
 int f() {
+  int y =x;
   return t[1] + s.b[0] + s.b[2];
 }
 

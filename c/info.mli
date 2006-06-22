@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.28 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: info.mli,v 1.29 2006-06-22 13:07:17 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
@@ -99,6 +99,7 @@ val default_logic_info : string -> logic_info
 
 type fun_info =
     {
+      fun_tag : int;
       fun_name : string;
       mutable fun_unique_name : string;
       mutable function_reads : ZoneSet.t;
