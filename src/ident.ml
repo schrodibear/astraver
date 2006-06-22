@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.56 2006-06-08 09:14:21 lescuyer Exp $ i*)
+(*i $Id: ident.ml,v 1.57 2006-06-22 13:45:57 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -120,6 +120,7 @@ let t_sub_real = create "sub_real"
 let t_mul_real = create "mul_real"
 let t_div_real = create "div_real"
 let t_neg_real = create "neg_real"
+let t_pow_real = create "pow_real"
 
 let t_mod_int = create "mod_int"
 let t_sqrt_real = create "sqrt_real"
@@ -266,7 +267,7 @@ let is_int_arith_binop id =
 
 let is_real_arith_binop id =
   id == t_add_real || id == t_sub_real || id == t_mul_real || 
-  id == t_div_real
+  id == t_div_real 
 
 let is_arith_binop id =
   is_int_arith_binop id || is_real_arith_binop id
