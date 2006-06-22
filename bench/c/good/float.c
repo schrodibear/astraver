@@ -30,3 +30,11 @@ double f2(double x) {
   return x + 1.0f + 2 * 3.14 / 3.6l;
 }
 
+/*@ requires x == y
+  @ ensures \result == 1
+  @*/
+double f3(double x, float y) {
+  long double z;
+  if (x < y ) z = y; else z = x;
+  return z;
+}

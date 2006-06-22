@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.187 2006-06-20 09:50:29 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.188 2006-06-22 09:25:07 filliatr Exp $ i*)
 
 
 open Format
@@ -449,7 +449,7 @@ let interp_float_conversion ty1 ty2 e =
     | _ -> 
 	assert false
 
-let float_op fk opr ops opd opq =
+let float_op ~cmp fk opr ops opd opq =
   if floats then
     let op = match fk with 
       | Float -> ops
@@ -457,8 +457,11 @@ let float_op fk opr ops opd opq =
       | LongDouble -> opq
       | Real -> opr
     in
-    let m = rounding_mode () in
-    App (Var (if fp_overflow_check then op ^ "_" else op), m)
+    if cmp then
+      Var op
+    else
+      App (Var (if fp_overflow_check then op ^ "_" else op), 
+	   rounding_mode ())
   else
     Var opr
 
@@ -475,25 +478,25 @@ let interp_bin_op = function
   | Beq_int -> Var "eq_int_"
   | Bneq_int -> Var "neq_int_" 
   | Badd_float fk -> 
-      float_op fk "add_real" "add_single" "add_double" "add_quad"
+      float_op ~cmp:false fk "add_real" "add_single" "add_double" "add_quad"
   | Bsub_float fk -> 
-      float_op fk "sub_real" "sub_single" "sub_double" "sub_quad"
+      float_op ~cmp:false fk "sub_real" "sub_single" "sub_double" "sub_quad"
   | Bmul_float fk -> 
-      float_op fk "mul_real" "mul_single" "mul_double" "mul_quad"
+      float_op ~cmp:false fk "mul_real" "mul_single" "mul_double" "mul_quad"
   | Bdiv_float fk -> 
-      float_op fk "div_real_" "div_single" "div_double" "div_quad"
+      float_op ~cmp:false fk "div_real_" "div_single" "div_double" "div_quad"
   | Blt_float fk -> 
-      float_op fk "lt_real_" "lt_single_" "lt_double_" "lt_quad_"
+      float_op ~cmp:true fk "lt_real_" "lt_single" "lt_double" "lt_quad"
   | Bgt_float fk -> 
-      float_op fk "gt_real_" "gt_single_" "gt_double_" "gt_quad_"
+      float_op ~cmp:true fk "gt_real_" "gt_single" "gt_double" "gt_quad"
   | Ble_float fk -> 
-      float_op fk "le_real_" "le_single_" "le_double_" "le_quad_"
+      float_op ~cmp:true fk "le_real_" "le_single" "le_double" "le_quad"
   | Bge_float fk -> 
-      float_op fk "ge_real_" "ge_single_" "ge_double_" "ge_quad_"
+      float_op ~cmp:true fk "ge_real_" "ge_single" "ge_double" "ge_quad"
   | Beq_float fk -> 
-      float_op fk "eq_real_" "eq_single_" "eq_double_" "eq_quad_"
+      float_op ~cmp:true fk "eq_real_" "eq_single" "eq_double" "eq_quad"
   | Bneq_float fk ->
-       float_op fk "neq_real_" "neq_single_" "neq_double_" "neq_quad_"
+      float_op ~cmp:true fk "neq_real_" "neq_single" "neq_double" "neq_quad"
   | Blt_pointer -> Var "lt_pointer_"
   | Bgt_pointer -> Var "gt_pointer_"
   | Ble_pointer -> Var "le_pointer_"
