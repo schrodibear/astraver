@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.17 2006-06-22 13:07:17 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.18 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -33,7 +33,7 @@ type valid = Valid | Not_valid | Tab of int64
 
 type ctype_node =
   | Tvoid
-  | Tint of sign * cinteger
+  | Tint of (sign * cinteger)
   | Tfloat of cfloat
   | Tvar of string
   | Tarray of valid * ctype * int64 option

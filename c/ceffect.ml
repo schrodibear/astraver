@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.128 2006-06-22 13:07:16 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.129 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -465,8 +465,9 @@ let rec expr e = match e.nexpr_node with
   | NEunary (Ustar , _ ) -> assert false
   | NEunary (Uamp, e) -> assert false (* address_expr e *)
   | NEunary 
-      ((Uplus | Uminus | Unot | Utilde 
-       | Ufloat_of_int | Uint_of_float | Ufloat_conversion), e) ->
+      (( Uplus | Uminus | Unot | Utilde 
+       | Ufloat_of_int | Uint_of_float 
+       | Ufloat_conversion | Uint_conversion), e) ->
       expr e
   | NEincr (_, e) ->
       assign_expr e
@@ -696,7 +697,7 @@ let unop = function
   | Uint_of_float -> Clogic.Uint_of_float
   | Ufloat_conversion -> Clogic.Ufloat_conversion
   | Uminus -> Clogic.Uminus
-  | Uplus | Unot -> assert false
+  | Uplus | Unot | Uint_conversion -> assert false
 
 let rec term_of_expr e =
   let make n = 
@@ -715,22 +716,24 @@ let rec term_of_expr e =
       make (NTif ((term_of_expr nexpr), 
 		  make (NTconstant (IntConstant "0")), 
 		  make (NTconstant (IntConstant "1"))))
+  | NEunary (Uint_conversion, e) ->
+      term_of_expr e
   | NEunary (op, nexpr) ->  
       make (NTunop (unop op, term_of_expr nexpr))  
   | NEbinary (e1, op, e2) ->
       begin
 	match e1.nexpr_node, e2.nexpr_node, op with
-	  | _, _, Badd | _, _, Badd_int | _, _, Badd_float _
+	  | _, _, Badd | _, _, Badd_int _ | _, _, Badd_float _
 	  | _, _, Badd_pointer_int ->
 	      make (NTbinop(term_of_expr e1, Clogic.Badd, term_of_expr e2))
-	  | _, _, Bsub | _, _, Bsub_int | _, _, Bsub_float _
+	  | _, _, Bsub | _, _, Bsub_int _ | _, _, Bsub_float _
 	  | _, _, Bsub_pointer -> 
 	      make (NTbinop(term_of_expr e1, Clogic.Bsub, term_of_expr e2))
-	  | _, _, Bmul | _, _, Bmul_int | _, _, Bmul_float _ -> 
+	  | _, _, Bmul | _, _, Bmul_int _ | _, _, Bmul_float _ -> 
 	      make (NTbinop(term_of_expr e1, Clogic.Bmul, term_of_expr e2))
-	  | _, _, Bdiv | _, _, Bdiv_int | _, _, Bdiv_float _ -> 
+	  | _, _, Bdiv | _, _, Bdiv_int _ | _, _, Bdiv_float _ -> 
 	      make (NTbinop(term_of_expr e1, Clogic.Bdiv, term_of_expr e2))
-	  | _, _, Bmod | _, _, Bmod_int ->  
+	  | _, _, Bmod | _, _, Bmod_int _ ->  
 	      make (NTbinop(term_of_expr e1, Clogic.Bmod, term_of_expr e2))
 	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_int 
 	  | NEconstant (RealConstant e1), NEconstant (RealConstant e2), 

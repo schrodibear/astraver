@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.26 2006-06-20 09:50:30 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.27 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -218,11 +218,11 @@ let loop_annot fmt = function
 	(print_option variant) a.variant
 
 let binop fmt = function
-  | Badd | Badd_int | Badd_float _ | Badd_pointer_int -> fprintf fmt "+" 
-  | Bsub | Bsub_int | Bsub_float _ | Bsub_pointer -> fprintf fmt "-"
-  | Bmul | Bmul_int | Bmul_float _ -> fprintf fmt "*"
-  | Bdiv | Bdiv_int | Bdiv_float _ -> fprintf fmt "/"
-  | Bmod | Bmod_int -> fprintf fmt "%%" 
+  | Badd | Badd_int _ | Badd_float _ | Badd_pointer_int -> fprintf fmt "+" 
+  | Bsub | Bsub_int _ | Bsub_float _ | Bsub_pointer -> fprintf fmt "-"
+  | Bmul | Bmul_int _ | Bmul_float _ -> fprintf fmt "*"
+  | Bdiv | Bdiv_int _ | Bdiv_float _ -> fprintf fmt "/"
+  | Bmod | Bmod_int _ -> fprintf fmt "%%" 
   | Blt | Blt_int | Blt_float _ | Blt_pointer -> fprintf fmt "<"
   | Bgt | Bgt_int | Bgt_float _ | Bgt_pointer -> fprintf fmt ">"
   | Ble | Ble_int | Ble_float _ | Ble_pointer -> fprintf fmt "<="
@@ -249,6 +249,7 @@ let unop fmt = function
   | Ufloat_of_int -> fprintf fmt "float_of_int"
   | Uint_of_float -> fprintf fmt "int_of_float"
   | Ufloat_conversion -> fprintf fmt "float_conversion"
+  | Uint_conversion -> fprintf fmt "int_conversion"
 
 let rec nexpr fmt e = match e.nexpr_node with
   | NEnop ->

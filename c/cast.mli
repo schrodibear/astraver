@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.67 2006-06-19 14:37:51 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.68 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -62,7 +62,7 @@ type incr_operator =
 type unary_operator = 
   | Uplus | Uminus | Unot | Ustar | Uamp | Utilde
   (* these are introduced during typing *)
-  | Ufloat_of_int | Uint_of_float | Ufloat_conversion
+  | Ufloat_of_int | Uint_of_float | Ufloat_conversion | Uint_conversion
 
 type binary_operator =
   | Badd | Bsub | Bmul | Bdiv | Bmod 
@@ -70,7 +70,11 @@ type binary_operator =
   | Bbw_and | Bbw_xor | Bbw_or | Band | Bor
   | Bshift_left | Bshift_right
   (* these are introduced during typing *)
-  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int 
+  | Badd_int of (sign * Ctypes.cinteger) 
+  | Bsub_int of (sign * Ctypes.cinteger) 
+  | Bmul_int of (sign * Ctypes.cinteger)
+  | Bdiv_int of (sign * Ctypes.cinteger)
+  | Bmod_int of (sign * Ctypes.cinteger)
   | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
   | Badd_float of cfloat | Bsub_float of cfloat 
   | Bmul_float of cfloat | Bdiv_float of cfloat

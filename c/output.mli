@@ -14,10 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.18 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.19 2006-06-22 14:20:23 filliatr Exp $ i*)
 
 type constant =
-  | Prim_int of int64
+  | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool
 ;;

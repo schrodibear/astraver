@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.24 2006-06-21 14:53:12 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.25 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -84,13 +84,25 @@ let set_fp_rounding_mode = function
 let fp_overflow_check = ref false
 
 let int_overflow_check = ref false
-let char_size_ = ref 8
-let short_size_ = ref 16
-let int_size_ = ref 32
+let min_signed_char_ = ref "-128"
+let max_signed_char_ = ref "127"
+let max_unsigned_char_ = ref "255"
+let min_signed_short_ = ref "-32768"
+let max_signed_short_ = ref "32767"
+let max_unsigned_short_ = ref "65535"
+let min_signed_int_ = ref "-2147483648"
+let max_signed_int_ = ref "2147483647"
+let max_unsigned_int_ = ref "4294967295"
+let min_signed_long_ = ref "-2147483648"
+let max_signed_long_ = ref "2147483647"
+let max_unsigned_long_ = ref "4294967295"
+let min_signed_longlong_ = ref "-9223372036854775808"
+let max_signed_longlong_ = ref "9223372036854775807"
+let max_unsigned_longlong_ = ref "18446744073709551615"
 
-let set_integer_size r = function
-  | 8 | 16 | 32 as n -> r := n
-  | n -> Format.eprintf "unsupported integer size: %d@." n; exit 1
+let set_integer_size r s = 
+  (* TODO: check for an integer constant *)
+  r := s
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -177,8 +189,8 @@ let _ =
 	  "  check for FP overflows";
 	"--int-overflow", Arg.Set int_overflow_check,
 	  "  check for integer overflows";
-	"--char-size", Arg.Int (set_integer_size char_size_),
-	  "  set the size for type `char' (default is 8)";
+	"--min-signed-char", Arg.String (set_integer_size min_signed_char_),
+	  "  set the minimal value for type `signed char' (default is -128)";
       ]
       add_file "caduceus [options] file..."
 
@@ -198,13 +210,29 @@ let separate = !separate
 let closed_program = !closed_program
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check
+
 let int_overflow_check = !int_overflow_check
+let min_signed_char = !min_signed_char_
+let max_signed_char = !max_signed_char_
+let max_unsigned_char = !max_unsigned_char_
+let min_signed_short = !min_signed_short_
+let max_signed_short = !max_signed_short_
+let max_unsigned_short = !max_unsigned_short_
+let min_signed_int = !min_signed_int_
+let max_signed_int = !max_signed_int_
+let max_unsigned_int = !max_unsigned_int_
+let min_signed_long = !min_signed_long_
+let max_signed_long = !max_signed_long_
+let max_unsigned_long = !max_unsigned_long_
+let min_signed_longlong = !min_signed_longlong_
+let max_signed_longlong = !max_signed_longlong_
+let max_unsigned_longlong = !max_unsigned_longlong_
 
 let use_floats = ref false
 
 let why_opt () = 
   let o = !why_opt in
-  let o = if int_overflow_check then o ^ " --lib-file marith.why" else o in
+  (*let o = if int_overflow_check then o ^ " --lib-file marith.why" else o in*)
   if floats && !use_floats then o ^ " --fp" else o
 
 let verify f = match !verification with

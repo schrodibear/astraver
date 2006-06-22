@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.12 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: ctypes.mli,v 1.13 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -33,7 +33,7 @@ type valid = Valid | Not_valid | Tab of int64
 
 type ctype_node =
   | Tvoid
-  | Tint of sign * cinteger
+  | Tint of (sign * cinteger)
   | Tfloat of cfloat
   | Tvar of string
   | Tarray of valid * ctype * int64 option 

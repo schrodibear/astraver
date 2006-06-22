@@ -1,6 +1,15 @@
 
 Note: These are the changes for Caduceus.
 
+ o new option --int-overflow to ensure the absence of arithmetic overflows
+ o floating-point arithmetic is now supported
+   the use of floating-point arithmetic is automatically detected
+   it can be turned off with command-line option --no-fp and then all
+   floating-point computations are interpreted as exact computations
+   on real numbers.
+   The Why model can be found in lib/why/floats.why; it is currently
+   realized in Coq only (in lib/coq/WhyFloats.v)
+  
 version 1.00, June 12th, 2006
 =============================
  o new option -separation to turn on deep memory separation analysis.

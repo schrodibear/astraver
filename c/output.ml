@@ -14,20 +14,19 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.31 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.32 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 open Format;;
 
 type constant =
-  | Prim_int of int64
+  | Prim_int of string
   | Prim_real of string
   | Prim_bool of bool
 ;;
 
 let fprintf_constant form e =
   match e with
-    | Prim_int(n) when Int64.compare n Int64.zero < 0 -> fprintf form "(%Ld)" n
-    | Prim_int(n) -> fprintf form "%Ld" n
+    | Prim_int(n) -> fprintf form "%s" n
     | Prim_real(f) -> fprintf form "%s" f
     | Prim_bool(b) -> fprintf form "%b" b
 ;;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.188 2006-06-22 09:25:07 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.189 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 
 open Format
@@ -45,6 +45,21 @@ let heap_var_name v =
 	v.var_unique_name ^ "_" ^ (found_repr z)
     | _ -> v.var_unique_name
 
+let is_bin_op = function
+  | "add_int"
+  | "sub_int" -> true
+  | _ -> false
+
+let rec is_pure e =
+  match e with
+    | Var _ | Deref _ | Cte _ -> true
+    | App(Var id,l) -> is_bin_op id && is_pure l
+    | App(e1,e2) -> is_pure e1 && is_pure e2
+    | _ -> false
+
+let tempvar_count = ref 0
+let reset_tmp_var () = tempvar_count := 0
+let tmp_var () = incr tempvar_count; "caduceus_" ^ string_of_int !tempvar_count
 
 let interp_int_rel = function
   | Lt -> "lt_int"
@@ -119,7 +134,7 @@ let interp_term_bin_op ty1 ty2 op =
 
 let term_bin_op ty1 ty2 op t1 t2 =
   match ty1.ctype_node, op, t2 with
-    | (Tpointer _ | Tarray _), Badd, LConst (Prim_int n) when n = 0L ->
+    | (Tpointer _ | Tarray _), Badd, LConst (Prim_int "0") ->
 	t1
     | _ -> 
 	LApp (interp_term_bin_op ty1 ty2 op, [t1; t2])
@@ -150,7 +165,7 @@ let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
     | NTconstant (IntConstant c) ->
-	LConst(Prim_int (Cconst.int t.nterm_loc c))
+	LConst(Prim_int (Int64.to_string (Cconst.int t.nterm_loc c)))
     | NTconstant (RealConstant c) ->
 	LConst(Prim_real c)
     | NTvar id ->
@@ -307,7 +322,7 @@ let rec interp_predicate label old_label p =
 		     Info.output_why_type x.var_why_type,p)) l (f p)
     | NPif (t, p1, p2) -> 
 	let t = ft t in
-	let zero = LConst (Prim_int Int64.zero) in
+	let zero = LConst (Prim_int "0") in
 	LAnd (make_impl (LPred ("neq_int", [t; zero])) (f p1),
 	      make_impl (LPred ("eq_int",  [t; zero])) (f p2))
     | NPnot p -> 
@@ -391,8 +406,6 @@ let interp_predicate_opt label old_label pred =
     | None -> LTrue
     | Some p -> interp_predicate label old_label p
 
-open Cast
-
 let rounding_mode () = match !fp_rounding_mode with
   | RM_dynamic -> Deref "rounding_mode"
   | RM_nearest_even -> Var "nearest_even"
@@ -449,7 +462,71 @@ let interp_float_conversion ty1 ty2 e =
     | _ -> 
 	assert false
 
-let float_op ~cmp fk opr ops opd opq =
+(* TODO: should be consistent with command line options *)
+let int_size = function
+  | Char -> 8
+  | Short -> 16
+  | Int | Long -> 32
+  | LongLong -> 64
+  | Bitfield n -> Int64.to_int n
+
+let le_cinteger i1 i2 = int_size i1 <= int_size i2
+
+let lt_cinteger i1 i2 = int_size i1 < int_size i2
+
+let max_int = function
+  | Signed, Char -> max_signed_char
+  | Unsigned, Char -> max_unsigned_char
+  | Signed, Short -> max_signed_short 
+  | Unsigned, Short -> max_unsigned_short
+  | Signed, Int -> max_signed_int
+  | Unsigned, Int -> max_unsigned_int
+  | Signed, Long -> max_signed_long 
+  | Unsigned, Long -> max_unsigned_long
+  | Signed, LongLong -> max_signed_longlong
+  | Unsigned, LongLong -> max_unsigned_longlong
+  | _, Bitfield _ -> assert false (*TODO*)
+
+let min_int = function
+  | Unsigned, _ -> "0"
+  | _, Char -> min_signed_char
+  | _, Short -> min_signed_short
+  | _, Int -> min_signed_int
+  | _, Long -> min_signed_long
+  | _, LongLong -> min_signed_longlong
+  | _ -> assert false (*TODO*)
+
+let le_max_int i e = LPred ("le_int", [e; LConst (Prim_int (max_int i))])
+
+let is_non_negative e = LPred ("le_int", [LConst (Prim_int "0"); e])
+
+let within_bounds i e = 
+  LAnd (LPred ("le_int", [LConst (Prim_int (min_int i)); e]), le_max_int i e)
+
+let guard_1 g e =
+  let v = tmp_var () in Let (v, e, Output.Assert (g (LVar v), Var v))
+
+(* int conversion ty1 -> ty2 *)
+let interp_int_conversion ty1 ty2 e = 
+  if not int_overflow_check then e else
+  match ty1.Ctypes.ctype_node, ty2.Ctypes.ctype_node with
+    | Tint (Unsigned, i1), Tint (Unsigned, i2) 
+    | Tint (Signed, i1), Tint (Signed, i2) when le_cinteger i1 i2 -> 
+	e
+    | Tint (Unsigned, i1), Tint (Signed, i2) when lt_cinteger i1 i2 -> 
+	e
+    | Tint (Unsigned, i1), Tint si2 ->
+	guard_1 (le_max_int si2) e
+    | Tint (Signed, i1), Tint (Unsigned, i2) when le_cinteger i1 i2 ->
+	guard_1 is_non_negative e
+    | Tint (Signed, i1), Tint si2 ->
+	guard_1 (within_bounds si2) e
+    | Tenum _, Tenum _ ->
+	assert false (*TODO*)
+    | _ -> 
+	assert false
+
+let float_binop ~cmp fk opr ops opd opq =
   if floats then
     let op = match fk with 
       | Float -> ops
@@ -457,7 +534,7 @@ let float_op ~cmp fk opr ops opd opq =
       | LongDouble -> opq
       | Real -> opr
     in
-    if cmp then
+    if cmp || fk = Real then
       Var op
     else
       App (Var (if fp_overflow_check then op ^ "_" else op), 
@@ -465,12 +542,53 @@ let float_op ~cmp fk opr ops opd opq =
   else
     Var opr
 
+let float_unop fk = function
+  | Cast.Uminus -> 
+      if floats && fk <> Real then 
+	let op = match fk with
+	  | Float -> "neg_single"
+	  | Double -> "neg_double"
+	  | LongDouble -> "neg_quad"
+	  | Real -> assert false
+	in
+	App (Var op, rounding_mode ())
+      else 
+	Var "neg_real"
+  | _ -> assert false
+
+let int_op (sign,kind) op =
+  if int_overflow_check then 
+    let ops = match op with
+      | Badd_int _ -> "add"
+      | Bsub_int _ -> "sub"
+      | Bmul_int _ -> "mul"
+      | Bdiv_int _ -> "div"
+      | Bmod_int _ -> "mod"
+      | _ -> assert false
+    in
+    let sgs = match sign with Signed -> "signed" | Unsigned -> "unsigned" in
+    let tys = match kind with
+      | Char -> "char"
+      | Short -> "short"
+      | Int -> "int"
+      | Long -> "long"
+      | LongLong -> "longlong"
+      | Bitfield _ -> assert false (*TODO*)
+    in
+    ops ^ "_" ^ sgs ^ "_" ^ tys
+  else match op with
+    | Badd_int _ -> "add_int"
+    | Bsub_int _ -> "sub_int"
+    | Bmul_int _ -> "mul_int"
+    | Bdiv_int _ -> "div_int_"
+    | Bmod_int _ -> "mod_int_"
+    | _ -> assert false
+
+open Cast
+
 let interp_bin_op = function
-  | Badd_int -> Var "add_int"
-  | Bsub_int -> Var "sub_int"
-  | Bmul_int -> Var "mul_int"
-  | Bdiv_int -> Var "div_int_"
-  | Bmod_int -> Var "mod_int_"
+  | Badd_int i | Bsub_int i | Bmul_int i | Bdiv_int i | Bmod_int i as op ->
+      Var (int_op i op)
   | Blt_int -> Var "lt_int_"
   | Bgt_int -> Var "gt_int_"
   | Ble_int -> Var "le_int_"
@@ -478,25 +596,26 @@ let interp_bin_op = function
   | Beq_int -> Var "eq_int_"
   | Bneq_int -> Var "neq_int_" 
   | Badd_float fk -> 
-      float_op ~cmp:false fk "add_real" "add_single" "add_double" "add_quad"
+      float_binop ~cmp:false fk "add_real" "add_single" "add_double" "add_quad"
   | Bsub_float fk -> 
-      float_op ~cmp:false fk "sub_real" "sub_single" "sub_double" "sub_quad"
+      float_binop ~cmp:false fk "sub_real" "sub_single" "sub_double" "sub_quad"
   | Bmul_float fk -> 
-      float_op ~cmp:false fk "mul_real" "mul_single" "mul_double" "mul_quad"
+      float_binop ~cmp:false fk "mul_real" "mul_single" "mul_double" "mul_quad"
   | Bdiv_float fk -> 
-      float_op ~cmp:false fk "div_real_" "div_single" "div_double" "div_quad"
+      float_binop 
+	~cmp:false fk "div_real_" "div_single" "div_double" "div_quad"
   | Blt_float fk -> 
-      float_op ~cmp:true fk "lt_real_" "lt_single" "lt_double" "lt_quad"
+      float_binop ~cmp:true fk "lt_real_" "lt_single" "lt_double" "lt_quad"
   | Bgt_float fk -> 
-      float_op ~cmp:true fk "gt_real_" "gt_single" "gt_double" "gt_quad"
+      float_binop ~cmp:true fk "gt_real_" "gt_single" "gt_double" "gt_quad"
   | Ble_float fk -> 
-      float_op ~cmp:true fk "le_real_" "le_single" "le_double" "le_quad"
+      float_binop ~cmp:true fk "le_real_" "le_single" "le_double" "le_quad"
   | Bge_float fk -> 
-      float_op ~cmp:true fk "ge_real_" "ge_single" "ge_double" "ge_quad"
+      float_binop ~cmp:true fk "ge_real_" "ge_single" "ge_double" "ge_quad"
   | Beq_float fk -> 
-      float_op ~cmp:true fk "eq_real_" "eq_single" "eq_double" "eq_quad"
+      float_binop ~cmp:true fk "eq_real_" "eq_single" "eq_double" "eq_quad"
   | Bneq_float fk ->
-      float_op ~cmp:true fk "neq_real_" "neq_single" "neq_double" "neq_quad"
+      float_binop ~cmp:true fk "neq_real_" "neq_single" "neq_double" "neq_quad"
   | Blt_pointer -> Var "lt_pointer_"
   | Bgt_pointer -> Var "gt_pointer_"
   | Ble_pointer -> Var "le_pointer_"
@@ -524,8 +643,8 @@ let any_float fk =
   else 
     "any_real"
 
-let int_one = Cte(Prim_int Int64.one)
-let int_minus_one = Cte(Prim_int Int64.minus_one)
+let int_one = Cte(Prim_int "1")
+let int_minus_one = Cte(Prim_int "-1")
 
 let float_of_real r fk = 
   if floats then match fk with
@@ -559,10 +678,6 @@ type interp_lvalue =
   | LocalRef of Info.var_info
   | HeapRef of valid * string * Output.expr
 
-let tempvar_count = ref 0;;
-let reset_tmp_var () = tempvar_count := 0
-let tmp_var () = incr tempvar_count; "caduceus_" ^ string_of_int !tempvar_count
-
 let build_complex_app e args =
   let rec build n e args =
     match args with
@@ -578,19 +693,6 @@ let build_complex_app e args =
     | [] -> App(e,Void)
     | _ -> build 1 e args
 
-let is_bin_op = function
-  | "add_int"
-  | "sub_int" -> true
-  | _ -> false
-
-let rec is_pure e =
-  match e with
-    | Var _ | Deref _ | Cte _ -> true
-    | App(Var id,l) -> is_bin_op id && is_pure l
-    | App(e1,e2) -> is_pure e1 && is_pure e2
-    | _ -> false
-
-
 let build_minimal_app e args =
   match args with
     | [] -> App(e,Void)
@@ -601,7 +703,7 @@ let build_minimal_app e args =
 	  build_complex_app e args
 
 let bin_op op t1 t2 = match op, t1, t2 with
-  | Badd_pointer_int, _, Cte (Prim_int n) when n = 0L ->
+  | Badd_pointer_int, _, Cte (Prim_int "0") ->
       t1
   | Beq_int, Cte (Prim_int n1), Cte (Prim_int n2) ->
       Cte (Prim_bool (n1 = n2))
@@ -613,7 +715,7 @@ let bin_op op t1 t2 = match op, t1, t2 with
 let rec interp_expr e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
-	Cte (Prim_int (Cconst.int e.nexpr_loc c))
+	Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c)))
     | NEconstant (RealConstant c) ->
 	Cte(Prim_real c)
     | NEvar(Var_info v) -> 
@@ -629,9 +731,9 @@ let rec interp_expr e =
 		 |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
     | NEunary (Unot, _) ->
 	begin match interp_boolean_expr e with (* partial evaluation *)
-	  | Cte (Prim_bool true) -> Cte (Prim_int Int64.one)
-	  | Cte (Prim_bool false) -> Cte(Prim_int Int64.zero)
-	  | e -> If (e, Cte(Prim_int Int64.one), Cte(Prim_int Int64.zero))
+	  | Cte (Prim_bool true) -> Cte (Prim_int "1")
+	  | Cte (Prim_bool false) -> Cte(Prim_int "0")
+	  | e -> If (e, Cte(Prim_int "1"), Cte(Prim_int "0"))
 	end
     | NEbinary(e1,op,e2) ->
 	bin_op op (interp_expr e1) (interp_expr e2)
@@ -744,9 +846,12 @@ let rec interp_expr e =
 	interp_expr e
     | NEunary(Uminus, e) -> 
 	begin match e.nexpr_type.Ctypes.ctype_node with
-	  | Tenum _ | Tint _ -> make_app "neg_int" [interp_expr e]
-	  | Tfloat _ -> make_app "neg_real" [interp_expr e]
-	  | _ -> assert false
+	  | Tenum _ | Tint _ -> 
+	      make_app "neg_int" [interp_expr e]
+	  | Tfloat fk -> 
+	      build_minimal_app (float_unop fk Uminus) [interp_expr e]
+	  | _ -> 
+	      assert false
 	end
     | NEunary (Uint_of_float, e1) ->
 	interp_int_of_float e1.nexpr_type (interp_expr e1)
@@ -754,6 +859,8 @@ let rec interp_expr e =
 	interp_float_of_int e.nexpr_type (interp_expr e1)
     | NEunary (Ufloat_conversion, e1) ->
 	interp_float_conversion e1.nexpr_type e.nexpr_type (interp_expr e1)
+     | NEunary (Uint_conversion, e1) ->
+	interp_int_conversion e1.nexpr_type e.nexpr_type (interp_expr e1)
     | NEunary (Utilde, e) ->
 	make_app "bw_compl" [interp_expr e]
     | NEunary (Uamp, e) ->
@@ -798,7 +905,7 @@ and interp_boolean_expr e =
     (* otherwise e <> 0 *)
     | _ -> 
 	let cmp,zero = match e.nexpr_type.Ctypes.ctype_node with
-	  | Tenum _ | Tint _ -> "neq_int_", Cte (Prim_int Int64.zero)
+	  | Tenum _ | Tint _ -> "neq_int_", Cte (Prim_int "0")
 	  | Tfloat fk -> "neq_real_", Cte (Prim_real "0.0")
 	  | Tarray _ | Tpointer _ -> "neq_pointer", Var "null"
 	  | _ -> assert false
@@ -1561,9 +1668,10 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	      | Tarray (_,_, None) | Tpointer _ -> 
 		  App(Var "any_pointer", Var "void")
 	      | Tarray (_,_, Some n) ->
-		  App (Var "alloca_parameter", Cte (Prim_int n))
+		  App (Var "alloca_parameter", 
+		       Cte (Prim_int (Int64.to_string n)))
 	      | Tstruct _ | Tunion _ ->
-		  App (Var "alloca_parameter", Cte (Prim_int Int64.one))
+		  App (Var "alloca_parameter", Cte (Prim_int "1"))
 	      | Tvoid | Tvar _ | Tfun _ -> assert false
 	    end,([],[])
 	| Some (Iexpr e)  ->   
@@ -1830,6 +1938,7 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
 	      (List.map 
 		 (fun (info,v) -> 
 		    let x = info.var_unique_name in
+		    let v = Int64.to_string v in
 		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
 		    [Logic (false,x,Base_type ([], "int"));
 		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])

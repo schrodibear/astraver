@@ -138,7 +138,7 @@ CCMO = src/lib.cmo src/linenum.cmo \
 	src/version.cmo c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
 	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cprint_graph.cmo \
-	c/cgraph.cmo c/cinit.cmo \
+	c/components.cmo c/cgraph.cmo c/cinit.cmo \
 	c/cast_misc.cmo c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \

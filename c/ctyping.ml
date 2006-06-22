@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.113 2006-06-21 13:02:01 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.114 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -99,13 +99,13 @@ and eval_const_expr_noerror (e : texpr) = match e.texpr_node with
   | TEconstant (IntConstant c) -> Cconst.int e.texpr_loc c
   | TEunary (Uplus, t) -> eval_const_expr_noerror t
   | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr_noerror t)
-  | TEbinary (t1, Cast.Badd_int, t2) -> 
+  | TEbinary (t1, Cast.Badd_int _, t2) -> 
       Int64.add (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
-  | TEbinary (t1, Cast.Bsub_int, t2) -> 
+  | TEbinary (t1, Cast.Bsub_int _, t2) -> 
       Int64.sub (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
-  | TEbinary (t1, Cast.Bmul_int, t2) -> 
+  | TEbinary (t1, Cast.Bmul_int _, t2) -> 
       Int64.mul (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
-  | TEbinary (t1, Cast.Bdiv_int, t2) -> 
+  | TEbinary (t1, Cast.Bdiv_int _, t2) -> 
       Int64.div (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEcast (_, e) -> eval_const_expr_noerror e
   | TEsizeof (t,n) -> n
@@ -132,12 +132,12 @@ let type_spec ?result env s = type_spec result env s
 
 (*s Some predefined types, subtype relation, etc. *)
 
-let int_op = function
-  | Badd -> Badd_int
-  | Bsub -> Bsub_int
-  | Bmul -> Bmul_int
-  | Bdiv -> Bdiv_int
-  | Bmod -> Bmod_int
+let int_op i = function
+  | Badd -> Badd_int i
+  | Bsub -> Bsub_int i
+  | Bmul -> Bmul_int i
+  | Bdiv -> Bdiv_int i
+  | Bmod -> Bmod_int i
   | Blt -> Blt_int
   | Ble -> Ble_int
   | Bgt -> Bgt_int
@@ -169,7 +169,8 @@ let pointer_op = function
   | _ -> assert false
 
 let type_op op ty = match ty.ctype_node with 
-  | Tint _ | Tenum _ -> int_op op 
+  | Tint i -> int_op i op 
+  | Tenum _ -> int_op (Signed, Int) op
   | Tfloat fk -> float_op fk op 
   | Tpointer _ | Tarray _ -> pointer_op op
   | _ -> assert false 
@@ -190,6 +191,8 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | Tfloat fk1, Tfloat fk2 when fk1 <> fk2 ->
       { e with texpr_node = TEunary (Ufloat_conversion, e); texpr_type = ty }
+  | Tint c1, Tint c2 when c1 <> c2 ->
+      { e with texpr_node = TEunary (Uint_conversion, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
   | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
@@ -207,12 +210,39 @@ let max_float = function
   | (Float | Double | LongDouble), (Float | Double | LongDouble) -> LongDouble
   | _ -> assert false
 
+let le_cinteger = function
+  | _, Tint (Unsigned, LongLong) -> true
+  | Tint (Unsigned, LongLong), _ -> false
+  | _, Tint (Signed, LongLong) -> true
+  | Tint (Signed, LongLong), _ -> false
+  | _, Tint (Unsigned, Long) -> true
+  | Tint (Unsigned, Long), _ -> false
+  | _, Tint (Signed, Long) -> true
+  | Tint (Signed, Long), _ -> false
+  | _, Tint (Unsigned, Int) -> true
+  | Tint (Unsigned, Int), _ -> false
+  | _, (Tenum _ | Tint (Signed, Int)) -> true
+  | (Tenum _ | Tint (Signed, Int)), _ -> false
+  | _, Tint (Unsigned, Short) -> true
+  | Tint (Unsigned, Short), _ -> false
+  | _, Tint (Signed, Short) -> true
+  | Tint (Signed, Short), _ -> false
+  | _, Tint (Unsigned, Char) -> true
+  | Tint (Unsigned, Char), _ -> false
+  | _, Tint (Signed, Char) -> true
+  | Tint (Signed, Char), _ -> false
+  | _ -> assert false (*TODO*)
+
+let max_int i1 i2 = if le_cinteger (i1, i2) then i2 else i1
+
 (* convert [e1] and [e2] to the same arithmetic type *)
 let conversion e1 e2 =
   let ty1 = e1.texpr_type in
   let ty2 = e2.texpr_type in
   match ty1.ctype_node, ty2.ctype_node with
-    | (Tint _ | Tenum _), (Tint _ | Tenum _) -> e1, e2, ty1
+    | (Tint _ | Tenum _ as tn1), (Tint _ | Tenum _ as tn2) -> 
+	let ty = noattr (max_int tn1 tn2) in
+	coerce ty e1, coerce ty e2, ty1
     | Tfloat _, (Tint _ | Tenum _) -> e1, coerce ty1 e2, ty1
     | (Tint _ | Tenum _), Tfloat _ -> coerce ty2 e1, e2, ty2
     | Tfloat fk1, Tfloat fk2 -> 
@@ -513,7 +543,8 @@ and type_expr_node loc env = function
       let e = type_int_expr env e in
       TEunary (Utilde, e), e.texpr_type
   (* these other unops cannot be built by the parser *)
-  | CEunary ((Uint_of_float | Ufloat_of_int | Ufloat_conversion), _) ->
+  | CEunary (( Uint_of_float | Ufloat_of_int 
+	     | Ufloat_conversion | Uint_conversion), _) ->
       assert false
   | CEbinary (e1, (Bmul | Bdiv as op), e2) ->
       let e1 = type_arith_expr env e1 in
@@ -524,14 +555,16 @@ and type_expr_node loc env = function
   | CEbinary (e1, Bmod, e2) ->
       let e1 = type_int_expr env e1 in
       let e2 = type_int_expr env e2 in
-      TEbinary (e1, Bmod_int, e2), e1.texpr_type (* TODO: max ty1 ty2 ? *)
+      let e1,e2,ty = conversion e1 e2 in
+      let op = type_op Bmod ty in 
+      TEbinary (e1, op, e2), ty
   | CEbinary (e1, Badd, e2) ->
       let e1 = type_expr env e1 in
       let ty1 = e1.texpr_type in
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (Tenum _ | Tint _ | Tfloat _), (Tint _ | Tfloat _) ->
+	| (Tenum _ | Tint _ | Tfloat _), (Tenum _ | Tint _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Badd ty, e2), ty
 	| (Tpointer (valid,ty)), (Tint _ | Tenum _) ->
@@ -600,7 +633,7 @@ and type_expr_node loc env = function
       TEbinary (e1, op, e2), e1.texpr_type
   (* these other binops cannot be built by the parser *)
   | CEbinary (_, (Bdiv_float _|Bmul_float _|Bsub_float _|Badd_float _
-		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int
+		 |Bmod_int _|Bdiv_int _|Bmul_int _|Bsub_int _|Badd_int _
 		 |Blt_pointer|Bgt_pointer|Ble_pointer|Bge_pointer
 		 |Bneq_pointer|Beq_pointer
 		 |Bneq_float _|Beq_float _|Bge_float _|Ble_float _

@@ -12,7 +12,7 @@ long double l;
   @*/
 void f1() { 
   f = 0;
-  d = f + 1.0;
+  d = -f + 1.0;
   l = f + d + 3;
 }
 

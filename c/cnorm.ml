@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.64 2006-06-22 13:07:16 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.65 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -849,17 +849,17 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      (t1,
 	       begin match b,t1.nexpr_type.Ctypes.ctype_node,
 	       t2.nexpr_type.Ctypes.ctype_node with
-		 | Clogic.Badd,Tint _ , Tint _ -> Badd_int
+		 | Clogic.Badd,Tint i , Tint _ -> Badd_int i
 		 | Clogic.Badd,Tfloat fk , Tfloat _ -> Badd_float fk
 		 | Clogic.Badd,Tpointer _ , Tint _ -> Badd_pointer_int
-		 | Clogic.Bsub,Tint _ , Tint _ -> Bsub_int
+		 | Clogic.Bsub,Tint i , Tint _ -> Bsub_int i
 		 | Clogic.Bsub,Tfloat fk , Tfloat _ -> Bsub_float fk
 		 | Clogic.Bsub,Tpointer _ , Tint _ -> Bsub_pointer
 		 | Clogic.Bmul,Tfloat fk , Tfloat _ -> Bmul_float fk
-		 | Clogic.Bmul,Tint _ , Tint _ -> Bmul_int
+		 | Clogic.Bmul,Tint i , Tint _ -> Bmul_int i
 		 | Clogic.Bdiv,Tfloat fk , Tfloat _ -> Bdiv_float fk
-		 | Clogic.Bdiv,Tint _ , Tint _ -> Bdiv_int
-		 | Clogic.Bmod,Tint _ ,Tint _ -> Bmod_int
+		 | Clogic.Bdiv,Tint i , Tint _ -> Bdiv_int i
+		 | Clogic.Bmod,Tint i ,Tint _ -> Bmod_int i
 		 | Clogic.Badd,Tarray _ , Tint _ -> Badd_pointer_int
 		 | Clogic.Bsub,Tarray _ , Tint _ -> Bsub_pointer   
 		 | _ -> error  t.nterm_loc 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.18 2006-06-21 14:53:12 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.19 2006-06-22 14:20:22 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -48,6 +48,22 @@ val fp_rounding_mode : fp_rounding_mode ref
 val fp_overflow_check : bool
 
 val int_overflow_check : bool
+
+val min_signed_char : string
+val max_signed_char : string
+val max_unsigned_char : string
+val min_signed_short : string
+val max_signed_short : string
+val max_unsigned_short : string
+val min_signed_int : string
+val max_signed_int : string
+val max_unsigned_int : string
+val min_signed_long : string
+val max_signed_long : string
+val max_unsigned_long : string
+val min_signed_longlong : string
+val max_signed_longlong : string
+val max_unsigned_longlong : string
 
 val files : unit -> string list 
 
