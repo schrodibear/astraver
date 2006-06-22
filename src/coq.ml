@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.149 2006-06-20 12:27:05 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.150 2006-06-22 13:44:45 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -421,6 +421,8 @@ let print_term_v8 fmt t =
 	fprintf fmt "(@[Zdiv %a@ %a@])" print3 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "(@[Zmod %a@ %a@])" print3 a print3 b
+    | Tapp (id, [a;b], _) when id == t_pow_real ->
+	fprintf fmt "(@[Rpower %a@ %a@])" print3 a print3 b
     | t ->
 	print3 fmt t
   and print3 fmt = function
