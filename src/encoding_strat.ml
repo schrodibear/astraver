@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding_strat.ml,v 1.5 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.6 2006-06-23 13:28:40 lescuyer Exp $ i*)
 
 open Cc
 open Logic
@@ -115,12 +115,9 @@ let instantiate_arity id inst =
 (* Translation of a term *)
 let rec translate_term fv lv = function
   | Tvar id -> 
-(*       let pp id = let s = match id.Ident.label with *)
-(* 	None -> "<None>" | Some s -> "<Some "^s^">" in *)
-(*       (string_of_int id.Ident.stamp) ^ id.Ident.name ^ s in *)
       plunge fv (Tvar id)
 	(try List.assoc id lv
-	with e -> (* (print_endline ("unknown variable :"^(pp id));  *)
+	with e -> (* (print_endline ("unknown variable :"^(pp id)); *)
 (* 		   print_endline "=== in ==="; *)
 (* 		   ignore (List.iter (fun (n, _) -> print_endline (pp n)) lv); *)
 	  raise e)
@@ -143,6 +140,11 @@ let rec lifted  l p t =
       Forall(false, Ident.create s, Ident.create s, ut, t, p)
   | (_, s)::q -> 
       Forall(false, Ident.create s, Ident.create s, ut, [], lifted q p t)
+	
+let rec lifted_t l p tr =
+  match l with [] -> p
+  | (a,t)::[] -> (Forall(false, a, a, t, [[tr]], p))
+  | (a,t)::q ->  (Forall(false, a, a, t, [], lifted_t q p tr))
 
 let rec lifted_ctxt l cel =
   (List.map (fun (_,s) -> Svar(Ident.create s, ut)) l)@cel
@@ -280,32 +282,19 @@ let rec push d =
 			 Env.empty_scheme newarity)) queue
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
   | Dpredicate_def (loc, ident, pred_def_sch) ->
-      let cpt = ref 0 in
-      let fv = Env.Vset.fold
-	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
-	  (pred_def_sch.Env.scheme_vars) [] in
       let (argl, pred) = pred_def_sch.Env.scheme_type in
-      arities := (ident, Env.generalize_logic_type 
-		    (Predicate (snd (List.split argl))))::!arities;
-      let new_pred_def =
-	Env.empty_scheme
-	  ((List.map (fun (id, _) -> (id, ut)) argl),
-	   (lifted fv (translate_pred fv argl pred) [])) in
-      Queue.add (Dpredicate_def (loc, ident, new_pred_def)) queue
+      let rootexp = (Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
+      push (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
+      push (Daxiom (loc, def ident, (Env.generalize_predicate 
+				       (lifted_t argl (Piff (rootexp, pred)) (PPat rootexp)))))
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) ->
       let (argl, rt, term) = fun_def_sch.Env.scheme_type in
-      arities := (ident, Env.generalize_logic_type 
-		    (Function ((snd (List.split argl)), rt)))::!arities;
-      let cpt = ref 0 in
-      let fv = Env.Vset.fold
-	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
-	  (fun_def_sch.Env.scheme_vars) [] in
-      let new_fun_def =
-	Env.empty_scheme
-	  ((List.map (fun (id, _) -> (id, ut)) argl), ut,
-	   plunge fv (translate_term fv argl term) rt) in
-      Queue.add (Dfunction_def (loc, ident, new_fun_def)) queue
+      let rootexp = (Tapp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
+      push (Dlogic (loc, ident, (Env.generalize_logic_type (Function (snd (List.split argl), rt)))));
+      push (Daxiom (loc, def ident,
+		    (Env.generalize_predicate 
+		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) (TPat rootexp)))))
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
       let cpt = ref 0 in
@@ -338,8 +327,7 @@ let rec push d =
     Not_found -> 
       Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
       raise Not_found
-	
-	
+
 let iter f =
   (* first the prelude *)
   List.iter f prelude;

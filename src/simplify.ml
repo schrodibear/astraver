@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.53 2006-06-21 09:19:46 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.54 2006-06-23 13:28:40 lescuyer Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -214,6 +214,10 @@ let rec print_predicate pos fmt p =
       fprintf fmt "@[(OR@ %a@ %a)@]" pp a pp b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" pp a
+  | Forall (_,id,n,_,_,p) when no_simplify_triggers ->
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' pp p'
   | Forall (_,id,n,_,tl,p) -> 
       let id' = next_away id (predicate_vars p) in
       let s = subst_onev n id' in

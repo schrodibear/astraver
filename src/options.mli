@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.55 2006-06-21 14:53:12 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.56 2006-06-23 13:28:40 lescuyer Exp $ i*)
 
 (*s General options *)
 
@@ -80,6 +80,7 @@ val mizar_environ : string option
 val isabelle_base_theory : string
 
 val no_simplify_prelude : bool
+val no_simplify_triggers : bool
 val no_harvey_prelude : bool
 val no_zenon_prelude : bool
 val no_cvcl_prelude : bool

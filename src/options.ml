@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.69 2006-06-21 14:53:12 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.70 2006-06-23 13:28:40 lescuyer Exp $ i*)
 
 open Format
 
@@ -32,6 +32,7 @@ let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
 let isabelle_base_theory_ = ref "Main"
 let no_simplify_prelude_ = ref false
+let no_simplify_triggers_ = ref false
 let no_cvcl_prelude_ = ref false
 let no_harvey_prelude_ = ref false
 let no_zenon_prelude_ = ref false
@@ -50,6 +51,7 @@ let lib_files_to_load_ = ref []
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
+(* let types_encoding_ = ref Stratified *)
 
 type termination = UseVariant | Partial | Total
 let termination_ = ref UseVariant
@@ -196,6 +198,8 @@ PVS-specific options:
 Simplify-specific options:
   --no-simplify-prelude
               suppress the Simplify prelude (BG_PUSHs for Why's symbols)
+  --no-simplify-triggers
+	      ignore user-defined triggers when writing Simplify output
 
 Zenon-specific options:
   --no-zenon-prelude
@@ -289,6 +293,8 @@ let files =
 	usage (); exit 1
     | ("--no-simplify-prelude" | "-no-simplify-prelude") :: args ->
 	no_simplify_prelude_ := true; parse args
+    | ("--no-simplify-triggers" | "-no-simplify-triggers") :: args ->
+	no_simplify_triggers_ := true; parse args
     | ("--no-cvcl-prelude" | "-no-cvcl-prelude") :: args ->
 	no_cvcl_prelude_ := true; parse args
     | ("--no-harvey-prelude" | "-no-harvey-prelude") :: args ->
@@ -375,6 +381,7 @@ let pvs_preamble = match !pvs_preamble_ with
 let mizar_environ = !mizar_environ_
 let isabelle_base_theory = !isabelle_base_theory_
 let no_simplify_prelude = !no_simplify_prelude_
+let no_simplify_triggers = !no_simplify_triggers_
 let no_cvcl_prelude = !no_cvcl_prelude_
 let no_harvey_prelude = !no_harvey_prelude_
 let no_zenon_prelude = !no_zenon_prelude_
