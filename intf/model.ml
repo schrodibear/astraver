@@ -107,7 +107,7 @@ let cvcl = {
   pr_enc = NoEncoding;
 }
   
-let provers = [simplify; (*simplify_pred;*) simplify_strat; (*simplify_rec;*)
+let provers = [simplify; simplify_pred; simplify_strat; simplify_rec;
 	       zenon; zenon_pred; zenon_strat; zenon_rec;
 	       harvey; cvcl]
 let provers_selected = ref provers

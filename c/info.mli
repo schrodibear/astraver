@@ -14,14 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.29 2006-06-22 13:07:17 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.30 2006-06-23 15:06:02 filliatr Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
   | Pointer of zone
   | Addr of zone
   | Int
-  | Float of Ctypes.cfloat
   | Unit
   | Why_Logic of string 
 

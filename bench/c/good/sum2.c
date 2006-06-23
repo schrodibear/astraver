@@ -11,7 +11,7 @@
 /*@ axiom sum2 : 
       \forall int t[], int i, int j; sum(t,i,j+1) == sum(t,i,j) + t[j] */
 
-/*@ requires \valid_range(t,0,n) 
+/*@ requires n >= 1 && \valid_range(t,0,n-1) 
   @ ensures \result == sum(t,0,n)
 */  
 int test1(int t[],int n) {
@@ -28,7 +28,7 @@ int test1(int t[],int n) {
 }
 
 
-/*@ requires \valid_range(t,0,n)
+/*@ requires \valid_range(t,0,n-1)
   @ assigns t[..]
   @ ensures sum(t,0,n) == \old(sum(t,0,n))+n
   @*/

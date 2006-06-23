@@ -386,9 +386,6 @@ and unifier_type_why tw1 tw2 =
     | Addr z1 , Addr z2 ->
 	unifier_zone z1 z2
     | Info.Int, Info.Int -> ()
-    | Info.Float _, Info.Float _ -> ()
-    | Info.Int, Info.Float _ -> ()
-    | Info.Float _, Info.Int -> ()
     | Unit, Unit -> ()
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false
@@ -396,7 +393,7 @@ and unifier_type_why tw1 tw2 =
 	let _,t1 = output_why_type tw1 
 	and _,t2 = output_why_type tw2
 	in
-	Format.eprintf "anomaly : unify why type %s and %s@." t1 t2;
+	Format.eprintf "anomaly: unify why types `%s' and `%s'@." t1 t2;
 	assert false
 	  
 

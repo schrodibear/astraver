@@ -451,7 +451,7 @@ lib/coq-v7/%.vo: lib/coq-v7/%.v
 ############
 
 tags:
-	find src -name "*.ml*" | sort -r | xargs \
+	find . -name "*.ml*" | sort -r | xargs \
 	etags "--regex=/let[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/let[ \t]+rec[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/and[ \t]+\([^ \t]+\)/\1/" \
@@ -578,6 +578,7 @@ dist-clean:: clean
 
 coq-clean::
 	rm -f lib/coq*/*.vo examples/*/*.vo
+	rm .depend.coq
 
 .depend depend:: $(GENERATED)
 	rm -f .depend

@@ -243,7 +243,11 @@ let make_zone ?name is_var =
 let rec type_type_why ?name ty zone_is_var =
   match ty.ctype_node with
     | Tint _ | Tenum _ -> Int
-    | Tfloat fk -> Float fk
+    | Tfloat _ when not Coptions.floats -> Why_Logic "real"
+    | Tfloat Float -> Why_Logic "single"
+    | Tfloat Double -> Why_Logic "double"
+    | Tfloat LongDouble -> Why_Logic "quad"
+    | Tfloat Real -> Why_Logic "real"
     | Tarray (_,ty,_)  
     | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 

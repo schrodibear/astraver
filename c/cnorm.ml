@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.65 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.66 2006-06-23 15:06:02 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -119,6 +119,19 @@ let rename_zone assoc ty =
 (* table qui a tout couple zone champ associe le type why des elements pointers par p->champ ou p est un pointeur sur zone*)
 let type_why_table = Hashtbl.create 97 
 
+let why_type_for_float_kind fk =
+  if Coptions.floats then match fk with
+    | Float -> "single"
+    | Double -> "double"
+    | LongDouble -> "quad"
+    | Real -> "real"
+  else
+    "real"
+
+let why_type_for_float t = match t.Ctypes.ctype_node with
+  | Tfloat fk -> why_type_for_float_kind fk
+  | _ -> assert false
+
 let rec type_why e =
   match e.nexpr_node with
     | NEvar e -> 
@@ -139,7 +152,8 @@ let rec type_why e =
     | NEnop -> Unit
     | NEconstant (IntConstant _) -> Info.Int    
     | NEconstant (RealConstant x) -> 
-	let _,fk = Ctyping.float_constant_type x in Info.Float fk
+	let _,fk = Ctyping.float_constant_type x in 
+	Why_Logic (why_type_for_float_kind fk)
     | NEstring_literal _ -> assert false
     | NEseq (e1,e2) -> type_why e2 
     | NEassign (l,e) -> type_why e
@@ -148,6 +162,8 @@ let rec type_why e =
     | NEbinary (e1,Bgt_pointer,e2) | NEbinary (e1,Ble_pointer,e2)     
     | NEbinary (e1,Bge_pointer,e2) | NEbinary (e1,Beq_pointer,e2)     
     | NEbinary (e1,Bneq_pointer,e2) -> Info.Int
+    | NEunary ((Ufloat_conversion | Ufloat_of_int), _) -> 
+	Why_Logic (why_type_for_float e.nexpr_type)
     | NEcast (_,e) | NEunary (_,e) | NEincr (_,e) 
     | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
@@ -158,16 +174,6 @@ let find_zone e =
   match type_why e with
     | Pointer z -> repr z
     | _ -> assert false
-
-let why_type_for_float t =
-  if Coptions.floats then match t.Ctypes.ctype_node with
-    | Tfloat Float -> "single"
-    | Tfloat Double -> "double"
-    | Tfloat LongDouble -> "quad"
-    | Tfloat Real -> "real"
-    | _ -> assert false
-  else
-    "real"
 
 let rec type_why_for_term t = 
   match t.nterm_node with

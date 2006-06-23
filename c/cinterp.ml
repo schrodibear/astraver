@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.189 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.190 2006-06-23 15:06:02 filliatr Exp $ i*)
 
 
 open Format
@@ -156,7 +156,6 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Pointer z -> f ^ "_" ^ (found_repr ~quote_var:false z)
     | Addr _ 
     | Info.Int -> assert false
-    | Info.Float _ -> assert false
     | Unit -> assert false
     | Why_Logic s ->  assert false
     | Memory(t,z) -> assert false

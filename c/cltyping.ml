@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.93 2006-06-21 13:02:01 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.94 2006-06-23 15:06:02 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -363,7 +363,7 @@ and type_terms loc env at tl =
     | et :: etl, ({lexpr_loc=tloc} as t) :: tl ->
 	let t = type_term env t in
 	expected_term_type tloc t et;
-	t :: type_list (etl, tl)
+  	(*coerce et*) t :: type_list (etl, tl)
     | [], _ ->
 	raise_located loc TooManyArguments
     | _, [] ->

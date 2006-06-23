@@ -38,3 +38,17 @@ double f3(double x, float y) {
   if (x < y ) z = y; else z = x;
   return z;
 }
+
+/*@ ensures \result == 2 ^^ 40
+  @*/
+double f4(double x) {
+  return x;
+}
+
+//@ logic real f_double_to_real(double x)
+
+/*@ ensures \result == f_double_to_real(x) */
+double f5(double x) {
+  return x - 1;
+}
+
