@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.54 2006-06-23 13:28:40 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.55 2006-06-24 11:01:06 lescuyer Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -193,8 +193,13 @@ let rec print_predicate pos fmt p =
   | Papp (id, tl, _) when is_int_comparison id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[(AND (<= 0 %a)@ (< %a %a))@]" 
-	print_term b print_term a print_term b
+      (match get_types_encoding () with
+	Stratified ->
+	  fprintf fmt "@[(AND (EQ (le_int_c (c_sort c_int 0) %a) |@@true|)@ (EQ (lt_int_c %a %a) |@@true|))@]" 
+	    print_term b print_term a print_term b
+      | _ ->
+	  fprintf fmt "@[(AND (<= 0 %a)@ (< %a %a))@]" 
+	    print_term b print_term a print_term b)
   | Papp (id, tl, _) when Hashtbl.mem defpred id -> 
       fprintf fmt "@[(%a@ %a)@]" ident id print_terms tl
   | Papp (id, tl, _) -> 

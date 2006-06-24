@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding_strat.ml,v 1.6 2006-06-23 13:28:40 lescuyer Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.7 2006-06-24 11:01:06 lescuyer Exp $ i*)
 
 open Cc
 open Logic
@@ -51,6 +51,23 @@ let prelude =
 	   Env.empty_scheme (Function ([], ut))))::
   (Dlogic (loc, prefix^"ref", 
 	   Env.empty_scheme (Function ([ut], ut))))::
+(*   (Dlogic (loc, "neq"^suffix, *)
+(* 	   Env.empty_scheme (Predicate ([ut; ut])))):: *)
+  (Daxiom (loc, axiom "eq",
+	   let x = Ident.create "x"
+	   and y = Ident.create "y" 
+	   and int = Tapp (Ident.create (prefix^"int"), [], []) in
+	   Env.empty_scheme
+             (Forall (false, x, x, ut, [],
+	      Forall (false, y, y, ut, [],
+	      (Piff
+		 (Papp (Ident.t_eq,
+			[Tapp (Ident.create (prefix^"sort"),
+			       [int; Tvar x], []);
+			 Tapp (Ident.create (prefix^"sort"),
+			       [int; Tvar y], [])], []),
+		  (Papp (Ident.t_eq, [Tvar x; Tvar y], []))))
+		     )))))::
   []
 
 (* Special axioms for arithmetic *)
@@ -102,13 +119,15 @@ let plunge fv term pt =
 (* Ground instanciation of an arity (to be plunged under) *)
 let instantiate_arity id inst =
   let arity = 
-    try List.assoc (Ident.string id)!arities
+    try List.assoc (Ident.string id) !arities
     with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
   match log_type with 
-    Function (ptl, rt) -> 
-      ignore (Env.Vmap.fold (fun _ v l -> 
-	v.type_val <- Some (List.hd l); (List.tl l)) vs (List.rev inst));
+    Function (ptl, rt) ->
+      ignore (Env.Vmap.fold (fun _ v l ->
+	(match l with [] -> [] 
+	| _ -> (v.type_val <- Some (List.hd l); (List.tl l))))
+		vs (List.rev inst));
       rt
   | _ -> assert false
 
@@ -143,7 +162,7 @@ let rec lifted  l p t =
 	
 let rec lifted_t l p tr =
   match l with [] -> p
-  | (a,t)::[] -> (Forall(false, a, a, t, [[tr]], p))
+  | (a,t)::[] -> (Forall(false, a, a, t, tr, p))
   | (a,t)::q ->  (Forall(false, a, a, t, [], lifted_t q p tr))
 
 let rec lifted_ctxt l cel =
@@ -154,6 +173,8 @@ let rec translate_pred fv lv = function
   | Papp (id, tl, inst) when Ident.is_simplify_arith id ->
       Papp (Ident.create ((Ident.string id)^suffix), 
 	    List.map (translate_term fv lv) tl, [])
+(*   | Papp (id, [a; b], inst) when Ident.is_neq id -> *)
+(*       Papp (Ident.create ("neq"^suffix), [translate_term fv lv a; translate_term fv lv b], []) *)
   | Papp (id, tl, inst) ->
       Papp (id, List.map (translate_term fv lv) tl, [])
   | Pimplies (iswp, p1, p2) ->
@@ -166,6 +187,8 @@ let rec translate_pred fv lv = function
       Por (translate_pred fv lv p1, translate_pred fv lv p2)
   | Piff (p1, p2) ->
       Piff (translate_pred fv lv p1, translate_pred fv lv p2)
+(*   | Pnot (Papp (id, [a; b], inst)) when Ident.is_eq id -> *)
+(*       Papp (Ident.create ("neq"^suffix), [translate_term fv lv a; translate_term fv lv b], []) *)
   | Pnot p ->
       Pnot (translate_pred fv lv p)
   | Forall (iswp, id, n, pt, tl, p) ->
@@ -286,15 +309,16 @@ let rec push d =
       let rootexp = (Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
       push (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
       push (Daxiom (loc, def ident, (Env.generalize_predicate 
-				       (lifted_t argl (Piff (rootexp, pred)) (PPat rootexp)))))
+				       (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) ->
+      let _ = print_endline ident in
       let (argl, rt, term) = fun_def_sch.Env.scheme_type in
       let rootexp = (Tapp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
       push (Dlogic (loc, ident, (Env.generalize_logic_type (Function (snd (List.split argl), rt)))));
       push (Daxiom (loc, def ident,
-		    (Env.generalize_predicate 
-		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) (TPat rootexp)))))
+		    (Env.generalize_predicate
+		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
       let cpt = ref 0 in
