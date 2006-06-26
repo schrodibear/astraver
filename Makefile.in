@@ -97,8 +97,7 @@ PRELUDE=lib/why/prelude.why lib/why/floats.why lib/why/marith.why
 # sanity check: the prelude files do typecheck
 check: $(BINARY) $(PRELUDE)
 	$(BINARY) --no-prelude -tc lib/why/prelude.why
-	$(BINARY) -tc lib/why/floats.why
-	$(BINARY) -tc lib/why/marith.why
+	WHYLIB=lib/why $(BINARY) -tc lib/why/floats.why
 
 # why
 CMO = src/lib.cmo \
