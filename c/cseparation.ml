@@ -657,7 +657,7 @@ let rec statement twf st =
 	calcul_zones e1; calcul_zones e2; 
 	calcul_zones e3; statement twf st
     | NSblock ls -> List.iter (statement twf) ls
-    | NSreturn (Some e) -> calcul_zones e ; unifier_type_why twf (type_why e)
+    | NSreturn (Some e) -> calcul_zones e ;unifier_type_why twf (type_why e)
     | NSlabel (_,st) -> statement twf st
     | NSswitch (e1, e2, l) -> calcul_zones e1;
 	List.iter (fun (x, y) -> List.iter (statement twf) y) l
@@ -718,7 +718,8 @@ let global_decl e =
 	spec f.type_why_fun sp;
 	f.args_zones <- collect_zones f.args f.type_why_fun
     | Ntypedef _ | Ntypedecl _ | Ndecl (_,_,None) | Ntype _ -> ()
-    | Ndecl (_, v, Some i) -> c_initializer v.var_type v.var_why_type i
+    | Ndecl (_, v, Some i) -> 
+	c_initializer v.var_type v.var_why_type i
     | Nfundef (sp, _, f, st) -> 
 	spec f.type_why_fun sp; 
 	statement f.type_why_fun st; 

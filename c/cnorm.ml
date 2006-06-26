@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.66 2006-06-23 15:06:02 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.67 2006-06-26 14:24:29 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -150,7 +150,9 @@ let rec type_why e =
 	    assert false
 	end
     | NEnop -> Unit
-    | NEconstant (IntConstant _) -> Info.Int    
+    | NEconstant (IntConstant _)
+    | NEunary (Uint_of_float, _)
+    | NEcast ({Ctypes.ctype_node=Tint _}, _) -> Info.Int    
     | NEconstant (RealConstant x) -> 
 	let _,fk = Ctyping.float_constant_type x in 
 	Why_Logic (why_type_for_float_kind fk)

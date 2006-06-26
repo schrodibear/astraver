@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.191 2006-06-26 10:23:26 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.192 2006-06-26 14:24:28 hubert Exp $ i*)
 
 
 open Format
@@ -199,10 +199,10 @@ let rec interp_term label old_label t =
     | NTunop (Uminus | Uabs_real | Usqrt_real as op, t1) -> 
 	LApp(interp_term_un_op t1.nterm_type op, [f t1])
     | NTunop (Ufloat_of_int, t1) ->
-	assert (t.nterm_type.ctype_node = Tfloat Real);
+	(*assert (t.nterm_type.ctype_node = Tfloat Real);*)
 	LApp ("real_of_int", [f t1])
     | NTunop (Uint_of_float, t1) ->
-	assert (t1.nterm_type.ctype_node = Tfloat Real);
+	(*assert (t1.nterm_type.ctype_node = Tfloat Real);*)
 	LApp ("int_of_real", [f t1])
     | NTunop (Ufloat_conversion, t1) ->
 	begin match t1.nterm_type.ctype_node, t.nterm_type.ctype_node with
@@ -210,6 +210,7 @@ let rec interp_term label old_label t =
 	  | Tfloat Double, Tfloat Real -> LApp ("d_to_r", [f t1])
 	  | Tfloat LongDouble, Tfloat Real -> LApp ("q_to_r", [f t1])
 	  | Tfloat fk1, Tfloat fk2 when fk1 = fk2 -> f t1
+	  | _ -> f t1 (*TODO*)
 	  | _ -> assert false
 	end
     | NTunop (Uround_error, t1) ->
