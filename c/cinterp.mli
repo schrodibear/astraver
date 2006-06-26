@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.mli,v 1.9 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: cinterp.mli,v 1.10 2006-06-26 14:30:21 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
@@ -23,3 +23,4 @@ open Output
 val interp : Cast.nfile -> 
   (string * why_decl) list * why_decl list * prover_decl list
 
+val make_int_ops_decls : unit -> why_decl list

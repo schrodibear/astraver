@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.65 2006-06-22 13:07:16 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.66 2006-06-26 14:30:21 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -122,6 +122,7 @@ let main () =
     List.fold_left (fun specs f -> let s = interp_file f in s @ specs) 
       [] nfiles
   in
+  let why_specs = Cinterp.make_int_ops_decls () @ why_specs in
   (* Why specs *)
   List.iter
   (fun f -> 

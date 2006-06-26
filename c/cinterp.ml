@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.192 2006-06-26 14:24:28 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.193 2006-06-26 14:30:21 filliatr Exp $ i*)
 
 
 open Format
@@ -500,6 +500,8 @@ let le_max_int i e = LPred ("le_int", [e; LConst (Prim_int (max_int i))])
 
 let is_non_negative e = LPred ("le_int", [LConst (Prim_int "0"); e])
 
+let not_zero e = LPred ("neq_int", [e; LConst (Prim_int "0")])
+
 let within_bounds i e = 
   LAnd (LPred ("le_int", [LConst (Prim_int (min_int i)); e]), le_max_int i e)
 
@@ -556,8 +558,20 @@ let float_unop fk = function
 	Var "neg_real"
   | _ -> assert false
 
-let int_op (sign,kind) op =
-  if int_overflow_check then 
+(* arithmetic operations with overflow guards *)
+
+(* binary operator -> its name 
+   e.g. (Badd_int (Signed, Int)) -> "add_signed_int" *)
+let int_ops_with_check = Hashtbl.create 17
+
+let int_op_check op =
+  try
+    Hashtbl.find int_ops_with_check op 
+  with Not_found ->
+    let sign,kind = match op with
+      | Badd_int i | Bsub_int i | Bmul_int i | Bdiv_int i | Bmod_int i -> i
+      | _ ->  assert false
+    in
     let ops = match op with
       | Badd_int _ -> "add"
       | Bsub_int _ -> "sub"
@@ -575,7 +589,35 @@ let int_op (sign,kind) op =
       | LongLong -> "longlong"
       | Bitfield _ -> assert false (*TODO*)
     in
-    ops ^ "_" ^ sgs ^ "_" ^ tys
+    let name = ops ^ "_" ^ sgs ^ "_" ^ tys in
+    Hashtbl.add int_ops_with_check op name;
+    name
+
+(* buils the parameter declarations for arithmetic operations with checks *)
+let make_int_ops_decls () =
+  let int = Base_type ([], "int") in
+  let make_one op name =
+    let ope,i = match op with
+      | Badd_int i -> "add_int",i | Bsub_int i -> "sub_int",i
+      | Bmul_int i -> "mul_int",i | Bdiv_int i -> "div_int",i
+      | Bmod_int i -> "mod_int",i | _ -> assert false
+    in
+    let e = LApp (ope, [LVar "x"; LVar "y"]) in
+    let pre = match op with
+      | Bdiv_int _ | Bmod_int _ -> not_zero (LVar "y")
+      | Badd_int _ | Bsub_int _ | Bmul_int _ -> within_bounds i e
+      | _ -> assert false 
+    in
+    let post = LPred ("eq", [LVar "result"; e]) in
+    let spec = Annot_type (pre, int, [], [], post, None) in
+    Param (false, name, Prod_type ("x", int, Prod_type ("y", int, spec)))
+  in
+  Hashtbl.fold 
+    (fun op name acc -> make_one op name :: acc) int_ops_with_check []
+
+let int_op op =
+  if int_overflow_check then 
+    int_op_check op
   else match op with
     | Badd_int _ -> "add_int"
     | Bsub_int _ -> "sub_int"
@@ -587,8 +629,8 @@ let int_op (sign,kind) op =
 open Cast
 
 let interp_bin_op = function
-  | Badd_int i | Bsub_int i | Bmul_int i | Bdiv_int i | Bmod_int i as op ->
-      Var (int_op i op)
+  | Badd_int _ | Bsub_int _ | Bmul_int _ | Bdiv_int _ | Bmod_int _ as op ->
+      Var (int_op op)
   | Blt_int -> Var "lt_int_"
   | Bgt_int -> Var "gt_int_"
   | Ble_int -> Var "le_int_"
