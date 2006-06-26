@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.11 2006-05-15 13:25:10 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.12 2006-06-26 10:23:26 filliatr Exp $ i*)
 
 open Cast
 
@@ -47,6 +47,8 @@ val find_zone_for_term : nterm -> Info.zone
 val type_why_for_term : nterm -> Info.why_type
 
 val type_why : nexpr -> Info.why_type
+
+val why_type_for_float_kind : Ctypes.cfloat -> string
 
 (* smart constructors for predicates *)
 

@@ -36,7 +36,10 @@ let rec pop_initializer loc t i =
     | [] ->{ texpr_node = 
 	       (match t.ctype_node with
 		  | Tint _ | Tenum _-> TEconstant (IntConstant "0")
-		  | Tfloat _ -> TEconstant (RealConstant "0.0")
+		  | Tfloat _ -> 
+		      TEunary (Cast.Ufloat_conversion,
+			       { texpr_node = TEconstant (RealConstant "0.0");
+				 texpr_type = c_real; texpr_loc = loc })
 		  | Tpointer _ -> TEcast (t, Ctyping.tezero)
 		  | _ -> assert false);
 	     texpr_type = t;

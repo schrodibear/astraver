@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.190 2006-06-23 15:06:02 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.191 2006-06-26 10:23:26 filliatr Exp $ i*)
 
 
 open Format
@@ -1822,8 +1822,8 @@ let cinterp_logic_symbol id ls =
 	let ret_type =
 	  match ret.Ctypes.ctype_node with
 	    | Tvar s -> base_type s
-	    | Tint(_,_) -> base_type "int"
-	    | Tfloat _ -> base_type "float"
+	    | Tint _ -> base_type "int"
+	    | Tfloat fk -> base_type (Cnorm.why_type_for_float_kind fk)
 	    | _ -> assert false
 	in
 	let local_type =
@@ -1852,7 +1852,7 @@ let cinterp_logic_symbol id ls =
 	  match ret.Ctypes.ctype_node with
 	    | Tvar s -> [], s
 	    | Tint _ -> [], "int"
-	    | Tfloat _ -> [], "float"
+	    | Tfloat fk -> [], Cnorm.why_type_for_float_kind fk
 	    | _ -> assert false
 	in
 	let args = interp_predicate_args id args in
