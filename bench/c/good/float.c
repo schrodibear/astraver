@@ -3,18 +3,18 @@
    this is only a test file for the syntax and the typing of floating-point
    annotations */
    
-const float ff = 1 / (85 / (float)99);
+const float ff = -(1 / (85 / (float)99));
 float f;
 double d;
-long double l;
+long double l = 123.L;
 
-/*@ requires f == 0 + (int)1.0 + 2.0
+/*@ requires -f == -0 + (int)1.0 + 2.0
   @ ensures  d >= 1 - 2.34
   @*/
 void f1() { 
   f = (float)1 + (int)1.2;
-  d = -f + 1.0;
-  l = f + d + 3;
+  d = -f + 1.0 + 12.L;
+  l = f + d + (long double)3;
 }
 
 /*@ requires x == \exact(x) && |x| <= 1

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.94 2006-06-23 15:06:02 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.95 2006-06-27 11:45:48 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -161,7 +161,11 @@ and type_term_node loc env = function
       Tunop (Utilde, t), t.term_type
   | PLunop (Uminus, t) -> 
       let t = type_num_term env t in
-      Tunop (Uminus, t), t.term_type
+      begin match t.term_type.ctype_node with
+	| Tenum _ | Tint _ -> Tunop (Uminus, t), t.term_type
+	| Tfloat _ -> Tunop (Ufloat_conversion, coerce c_real t), c_real
+	| _ -> assert false
+      end
   | PLunop (Uabs_real | Usqrt_real as op, t) -> 
       let t = type_real_term env t in
       Tunop (op, t), c_real

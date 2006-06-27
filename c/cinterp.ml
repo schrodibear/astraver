@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.194 2006-06-27 11:27:59 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.195 2006-06-27 11:45:48 filliatr Exp $ i*)
 
 
 open Format
@@ -161,11 +161,14 @@ let term_bin_op ty1 ty2 op t1 t2 =
     | _ -> 
 	LApp (interp_term_bin_op ty1 ty2 op, [t1; t2])
 
-let interp_term_un_op ty op = match ty.ctype_node, op with
-  | (Tenum _ | Tint _), Uminus -> "neg_int"
-  | Tfloat _, Uminus -> "neg_real"
-  | _, Uabs_real -> "abs_real"
-  | _, Usqrt_real -> "sqrt_real"
+let interp_term_un_op ty op t = match ty.ctype_node, op with
+  | (Tenum _ | Tint _), Uminus -> LApp ("neg_int", [t])
+  | Tfloat (Float | Double | LongDouble as fk), Uminus when floats -> 
+      let s = select_fk "neg_single" "neg_double" "neg_quad" fk in
+      LApp (s, [term_rounding_mode; t])
+  | Tfloat _, Uminus -> LApp ("neg_real", [t])
+  | _, Uabs_real -> LApp ("abs_real", [t])
+  | _, Usqrt_real -> LApp ("sqrt_real", [t])
   | _ -> assert false
 
 let interp_var label v =
@@ -245,7 +248,7 @@ let rec interp_term label old_label t =
     | NTunop (Uamp, t1) -> 
 	interp_term_address label old_label t1
     | NTunop (Uminus | Uabs_real | Usqrt_real as op, t1) -> 
-	LApp(interp_term_un_op t1.nterm_type op, [f t1])
+	interp_term_un_op t1.nterm_type op (f t1)
     | NTunop (Ufloat_of_int, t1) ->
 	let e = LApp ("real_of_int", [f t1]) in
 	begin match t.nterm_type.ctype_node with
