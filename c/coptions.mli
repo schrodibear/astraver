@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.19 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.20 2006-06-27 11:27:59 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -45,9 +45,16 @@ type fp_rounding_mode =
   | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
   | RM_dynamic
 val fp_rounding_mode : fp_rounding_mode ref
+val dft_fp_rounding_mode : fp_rounding_mode
 val fp_overflow_check : bool
 
 val int_overflow_check : bool
+
+val char_size : int
+val short_size : int
+val int_size : int
+val long_size : int
+val long_long_size : int
 
 val min_signed_char : string
 val max_signed_char : string

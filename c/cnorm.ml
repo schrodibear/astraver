@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.67 2006-06-26 14:24:29 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.68 2006-06-27 11:27:59 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -149,28 +149,41 @@ let rec type_why e =
 	    Format.eprintf "no  why type for %a@\n" Cprint.nexpr e;
 	    assert false
 	end
-    | NEnop -> Unit
+    | NEnop -> 
+	Unit
     | NEconstant (IntConstant _)
     | NEunary (Uint_of_float, _)
-    | NEcast ({Ctypes.ctype_node=Tint _}, _) -> Info.Int    
+    | NEcast ({Ctypes.ctype_node = Tint _}, _) -> 
+	Info.Int    
     | NEconstant (RealConstant x) -> 
 	let _,fk = Ctyping.float_constant_type x in 
 	Why_Logic (why_type_for_float_kind fk)
-    | NEstring_literal _ -> assert false
-    | NEseq (e1,e2) -> type_why e2 
-    | NEassign (l,e) -> type_why e
-    | NEassign_op (l,op,e) -> type_why e
+    | NEstring_literal _ -> 
+	assert false
+    | NEseq (e1,e2) -> 
+	type_why e2 
+    | NEassign (l,e) -> 
+	type_why e
+    | NEassign_op (l,op,e) -> 
+	type_why e
     | NEbinary (e1,Bsub_pointer,e2) | NEbinary (e1,Blt_pointer,e2) 
     | NEbinary (e1,Bgt_pointer,e2) | NEbinary (e1,Ble_pointer,e2)     
     | NEbinary (e1,Bge_pointer,e2) | NEbinary (e1,Beq_pointer,e2)     
-    | NEbinary (e1,Bneq_pointer,e2) -> Info.Int
-    | NEunary ((Ufloat_conversion | Ufloat_of_int), _) -> 
+    | NEbinary (e1,Bneq_pointer,e2) -> 
+	Info.Int
+    | NEunary ((Ufloat_conversion | Ufloat_of_int), _) 
+    | NEcast ({Ctypes.ctype_node = Tfloat _}, _) -> 
 	Why_Logic (why_type_for_float e.nexpr_type)
-    | NEcast (_,e) | NEunary (_,e) | NEincr (_,e) 
-    | NEbinary (e,_,_) | NEcond (_,_,e) -> type_why e
+    | NEcast (_,e) 
+    | NEunary (_,e) 
+    | NEincr (_,e) 
+    | NEbinary (e,_,_) 
+    | NEcond (_,_,e) -> 
+	type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
 	rename_zone assoc (type_why e)
-    | NEmalloc _ -> Info.Pointer (make_zone true)
+    | NEmalloc _ -> 
+	Info.Pointer (make_zone true)
 	
 let find_zone e = 
   match type_why e with

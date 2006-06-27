@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.25 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.26 2006-06-27 11:27:59 filliatr Exp $ i*)
+
+open Format
 
 (*s The log file *)
 
@@ -84,6 +86,13 @@ let set_fp_rounding_mode = function
 let fp_overflow_check = ref false
 
 let int_overflow_check = ref false
+
+let char_size_ = ref 8
+let short_size_ = ref 16
+let int_size_ = ref 32
+let long_size_ = ref 32
+let long_long_size_ = ref 64
+
 let min_signed_char_ = ref "-128"
 let max_signed_char_ = ref "127"
 let max_unsigned_char_ = ref "255"
@@ -101,7 +110,9 @@ let max_signed_longlong_ = ref "9223372036854775807"
 let max_unsigned_longlong_ = ref "18446744073709551615"
 
 let set_integer_size r s = 
-  (* TODO: check for an integer constant *)
+  if s < 1 || s > 64 then begin
+    eprintf "invalid integer size: %d (should be with 1..64)@." s; exit 1
+  end;
   r := s
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
@@ -189,8 +200,16 @@ let _ =
 	  "  check for FP overflows";
 	"--int-overflow", Arg.Set int_overflow_check,
 	  "  check for integer overflows";
-	"--min-signed-char", Arg.String (set_integer_size min_signed_char_),
-	  "  set the minimal value for type `signed char' (default is -128)";
+	"--char_size", Arg.Int (set_integer_size char_size_),
+	  "  set the size of type `char' (default is 8)";
+	"--short_size", Arg.Int (set_integer_size short_size_),
+	  "  set the size of type `short' (default is 16)";
+	"--int_size", Arg.Int (set_integer_size int_size_),
+	  "  set the size of type `int' (default is 32)";
+	"--long_size", Arg.Int (set_integer_size long_size_),
+	  "  set the size of type `long' (default is 32)";
+	"--long_long_size", Arg.Int (set_integer_size long_long_size_),
+	  "  set the size of type `long long' (default is 64)";
       ]
       add_file "caduceus [options] file..."
 
@@ -208,8 +227,16 @@ let cpp_dump = !cpp_dump
 let coq_tactic = !coq_tactic
 let separate = !separate
 let closed_program = !closed_program
+
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check
+let dft_fp_rounding_mode = !fp_rounding_mode
+
+let char_size = !char_size_
+let short_size = !short_size_
+let int_size = !int_size_
+let long_size = !long_size_
+let long_long_size = !long_long_size_
 
 let int_overflow_check = !int_overflow_check
 let min_signed_char = !min_signed_char_

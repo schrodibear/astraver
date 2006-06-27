@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.193 2006-06-26 14:30:21 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.194 2006-06-27 11:27:59 filliatr Exp $ i*)
 
 
 open Format
@@ -132,10 +132,32 @@ let interp_term_bin_op ty1 ty2 op =
   | Tvar _ , _, _-> assert false 
   | Tvoid , _, _-> assert false
 
+let string_of_rounding_mode = function
+  | RM_nearest_even -> "nearest_even"
+  | RM_to_zero -> "to_zero"
+  | RM_up -> "up"
+  | RM_down -> "down"
+  | RM_nearest_away -> "nearest_away"
+  | RM_dynamic -> assert false
+
+let select_fk s d q = function
+  | Float -> s | Double -> d | LongDouble -> q | Real -> assert false
+
+let term_rounding_mode = LVar (string_of_rounding_mode dft_fp_rounding_mode)
+
 let term_bin_op ty1 ty2 op t1 t2 =
   match ty1.ctype_node, op, t2 with
     | (Tpointer _ | Tarray _), Badd, LConst (Prim_int "0") ->
 	t1
+    | Tfloat (Float | Double | LongDouble as fk), _, _ when floats ->
+	let s = match op with
+	  | Badd -> select_fk "add_single" "add_double" "add_quad" fk
+	  | Bsub -> select_fk "sub_single" "sub_double" "sub_quad" fk
+	  | Bmul -> select_fk "mul_single" "mul_double" "mul_quad" fk
+	  | Bdiv -> select_fk "div_single" "div_double" "div_quad" fk
+	  | _ -> assert false
+	in
+	LApp (s, [term_rounding_mode; t1; t2])
     | _ -> 
 	LApp (interp_term_bin_op ty1 ty2 op, [t1; t2])
 
@@ -160,6 +182,32 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Why_Logic s ->  assert false
     | Memory(t,z) -> assert false
   
+let term_float_conversion fk1 fk2 e = 
+  if not floats then e else
+  match fk1, fk2 with
+    | Real, Float -> LApp ("r_to_s", [term_rounding_mode; e])
+    | Real, Double -> LApp ("r_to_d", [term_rounding_mode; e])
+    | Real, LongDouble -> LApp ("r_to_q", [term_rounding_mode; e])
+    | Float, Real -> LApp ("s_to_r", [e])
+    | Double, Real -> LApp ("d_to_r", [e])
+    | LongDouble, Real -> LApp ("q_to_r", [e])
+    | Float, Double -> 
+	LApp ("double_of_single", [e])
+    | Double, Float -> 
+	LApp ("single_of_double", [term_rounding_mode; e ])
+    | Float, LongDouble -> 
+	LApp ("quad_of_single", [e])
+    | LongDouble, Float -> 
+	LApp ("single_of_quad", [term_rounding_mode; e ])
+    | Double, LongDouble -> 
+	LApp ("quad_of_double", [e])
+    | LongDouble, Double -> 
+	LApp ("double_of_quad", [term_rounding_mode; e ])
+    | fk1, fk2 when fk1 = fk2 ->
+	e
+    | _ -> 
+	assert false
+
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
@@ -199,18 +247,20 @@ let rec interp_term label old_label t =
     | NTunop (Uminus | Uabs_real | Usqrt_real as op, t1) -> 
 	LApp(interp_term_un_op t1.nterm_type op, [f t1])
     | NTunop (Ufloat_of_int, t1) ->
-	(*assert (t.nterm_type.ctype_node = Tfloat Real);*)
-	LApp ("real_of_int", [f t1])
+	let e = LApp ("real_of_int", [f t1]) in
+	begin match t.nterm_type.ctype_node with
+	  | Tfloat fk -> term_float_conversion Real fk e
+	  | _ -> assert false
+	end
     | NTunop (Uint_of_float, t1) ->
-	(*assert (t1.nterm_type.ctype_node = Tfloat Real);*)
-	LApp ("int_of_real", [f t1])
+	let e = match t1.nterm_type.ctype_node with
+	  | Tfloat fk -> term_float_conversion fk Real (f t1)
+	  | _ -> assert false
+	in
+	LApp ("int_of_real", [e])
     | NTunop (Ufloat_conversion, t1) ->
 	begin match t1.nterm_type.ctype_node, t.nterm_type.ctype_node with
-	  | Tfloat Float, Tfloat Real -> LApp ("s_to_r", [f t1])
-	  | Tfloat Double, Tfloat Real -> LApp ("d_to_r", [f t1])
-	  | Tfloat LongDouble, Tfloat Real -> LApp ("q_to_r", [f t1])
-	  | Tfloat fk1, Tfloat fk2 when fk1 = fk2 -> f t1
-	  | _ -> f t1 (*TODO*)
+	  | Tfloat fk1, Tfloat fk2 -> term_float_conversion fk1 fk2 (f t1)
 	  | _ -> assert false
 	end
     | NTunop (Uround_error, t1) ->
@@ -257,17 +307,18 @@ let rec interp_term label old_label t =
 	in
 	LApp (v.logic_name,targs)
     | NTcast({ctype_node = Tpointer _}, 
-	    {nterm_node = NTconstant (IntConstant "0")}) ->
+	     {nterm_node = NTconstant (IntConstant "0")}) ->
 	LVar "null"
     | NTcast (ty, t) -> 
 	begin match ty.ctype_node, t.nterm_type.ctype_node with
-	  | (Tenum _ | Tint _), (Tenum _ | Tint _)
-	  | Tfloat _, Tfloat _ -> 
+	  | (Tenum _ | Tint _), (Tenum _ | Tint _) ->
 	      f t
-	  | Tfloat _, (Tenum _ | Tint _) ->
-	      LApp ("real_of_int", [f t])
-	  | (Tenum _ | Tint _), Tfloat _ ->
-	      LApp ("int_of_real", [f t])
+	  | Tfloat fk1, Tfloat fk2 -> 
+	      term_float_conversion fk1 fk2 (f t)
+	  | Tfloat fk, (Tenum _ | Tint _) ->
+	      term_float_conversion Real fk (LApp ("real_of_int", [f t]))
+	  | (Tenum _ | Tint _), Tfloat fk ->
+	      LApp ("int_of_real", [term_float_conversion fk Real (f t)])
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      f t
 	  | _ -> 
@@ -408,11 +459,7 @@ let interp_predicate_opt label old_label pred =
 
 let rounding_mode () = match !fp_rounding_mode with
   | RM_dynamic -> Deref "rounding_mode"
-  | RM_nearest_even -> Var "nearest_even"
-  | RM_to_zero -> Var "to_zero"
-  | RM_up -> Var "up"
-  | RM_down -> Var "down"
-  | RM_nearest_away -> Var "nearest_away"
+  | m -> Var (string_of_rounding_mode m)
 
 let interp_float_of_int ft e =
   let e = make_app "real_of_int" [e] in
@@ -462,13 +509,7 @@ let interp_float_conversion ty1 ty2 e =
     | _ -> 
 	assert false
 
-(* TODO: should be consistent with command line options *)
-let int_size = function
-  | Char -> 8
-  | Short -> 16
-  | Int | Long -> 32
-  | LongLong -> 64
-  | Bitfield n -> Int64.to_int n
+let int_size = Ctyping.int_size
 
 let le_cinteger i1 i2 = int_size i1 <= int_size i2
 
@@ -914,13 +955,15 @@ let rec interp_expr e =
 	Var "null"
     | NEcast(t,e1) -> 
 	begin match t.Ctypes.ctype_node, e1.nexpr_type.Ctypes.ctype_node with
-	  | (Tenum _ | Tint _), (Tenum _ | Tint _)
-	  | Tfloat _, Tfloat _ -> 
+	  | (Tenum _ | Tint _), (Tenum _ | Tint _) ->
 	      interp_expr e1
+	  | Tfloat _, Tfloat _ -> 
+	      interp_float_conversion e1.nexpr_type t (interp_expr e1)
 	  | Tfloat _, (Tenum _ | Tint _) ->
-	      make_app "real_of_int" [interp_expr e1]
+	      let e = make_app "real_of_int" [interp_expr e1] in
+	      interp_float_conversion c_real t e
 	  | (Tenum _ | Tint _), Tfloat _ ->
-	      make_app "int_of_real" [interp_expr e1]
+	      interp_int_of_float e1.nexpr_type (interp_expr e1)
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      interp_expr e1
 	  | _ -> 

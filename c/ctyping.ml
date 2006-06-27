@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.114 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.115 2006-06-27 11:27:59 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -198,8 +198,10 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
   | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
       e
   | _ ->
-      if verbose || debug then eprintf 
-	"expected %a, found %a@." print_type ty print_type e.texpr_type;      error e.texpr_loc "incompatible type"
+      if verbose || debug then 
+	eprintf 
+	  "expected %a, found %a@." print_type ty print_type e.texpr_type;
+      error e.texpr_loc "incompatible type"
 
 let compat_pointers ty1 ty2 = 
   (ty1.ctype_node = Tvoid) || (ty2.ctype_node = Tvoid) || eq_type ty1 ty2
@@ -210,28 +212,21 @@ let max_float = function
   | (Float | Double | LongDouble), (Float | Double | LongDouble) -> LongDouble
   | _ -> assert false
 
+let int_size = function
+  | Char -> char_size
+  | Short -> short_size
+  | Int -> int_size
+  | Long -> long_size
+  | LongLong -> long_long_size
+  | Bitfield n -> Int64.to_int n
+
 let le_cinteger = function
-  | _, Tint (Unsigned, LongLong) -> true
-  | Tint (Unsigned, LongLong), _ -> false
-  | _, Tint (Signed, LongLong) -> true
-  | Tint (Signed, LongLong), _ -> false
-  | _, Tint (Unsigned, Long) -> true
-  | Tint (Unsigned, Long), _ -> false
-  | _, Tint (Signed, Long) -> true
-  | Tint (Signed, Long), _ -> false
-  | _, Tint (Unsigned, Int) -> true
-  | Tint (Unsigned, Int), _ -> false
-  | _, (Tenum _ | Tint (Signed, Int)) -> true
-  | (Tenum _ | Tint (Signed, Int)), _ -> false
-  | _, Tint (Unsigned, Short) -> true
-  | Tint (Unsigned, Short), _ -> false
-  | _, Tint (Signed, Short) -> true
-  | Tint (Signed, Short), _ -> false
-  | _, Tint (Unsigned, Char) -> true
-  | Tint (Unsigned, Char), _ -> false
-  | _, Tint (Signed, Char) -> true
-  | Tint (Signed, Char), _ -> false
-  | _ -> assert false (*TODO*)
+  | Tint (Signed, i1), Tint (_, i2) 
+  | Tint (Unsigned, i1), Tint (Unsigned, i2) ->
+      int_size i1 <= int_size i2
+  | Tint (Unsigned, i1), Tint (Signed, i2) ->
+      int_size i1 < int_size i2
+  | _ -> assert false (* TODO: enum *)
 
 let max_int i1 i2 = if le_cinteger (i1, i2) then i2 else i1
 

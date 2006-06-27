@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.129 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.130 2006-06-27 11:27:59 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -713,7 +713,7 @@ let rec term_of_expr e =
   | NEunary (Uplus, nexpr) -> 
       term_of_expr nexpr
   | NEunary (Unot, nexpr) -> 
-      make (NTif ((term_of_expr nexpr), 
+      make (NTif (term_of_expr nexpr, 
 		  make (NTconstant (IntConstant "0")), 
 		  make (NTconstant (IntConstant "1"))))
   | NEunary (Uint_conversion, e) ->
@@ -822,7 +822,8 @@ let rec pop_initializer loc t i =
 		  | Tint _ | Tenum _ -> 
 		      NTconstant(IntConstant "0")
 		  | Tfloat _ -> 
-		      NTconstant(RealConstant "0.0")
+		      NTunop (Clogic.Ufloat_conversion,
+			      mk (NTconstant(RealConstant "0.0")) c_real)
 		  | Tpointer _ -> 
 		      NTcast (t, mk (NTconstant (IntConstant "0")) c_int)
 		  | _ -> 
@@ -839,12 +840,6 @@ let rec invariant_for_constant loc t lvalue initializers =
   match t.Ctypes.ctype_node with
     | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
 	let x,l = pop_initializer loc t initializers in
-	let lvalue = match t.Ctypes.ctype_node with 
-	  | Tfloat _ -> 
-	      { nterm_node = NTunop (Clogic.Ufloat_conversion, lvalue);
-		nterm_loc = lvalue.nterm_loc; nterm_type = c_real }
-	  | _ -> lvalue
-	in
 	nprel (lvalue, Eq, x), l
     | Tstruct n ->
 	begin match tag_type_definition n with

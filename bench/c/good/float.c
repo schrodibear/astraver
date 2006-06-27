@@ -3,15 +3,16 @@
    this is only a test file for the syntax and the typing of floating-point
    annotations */
    
+const float ff = 1 / (85 / (float)99);
 float f;
 double d;
 long double l;
 
-/*@ requires f == 0 + 1.0
+/*@ requires f == 0 + (int)1.0 + 2.0
   @ ensures  d >= 1 - 2.34
   @*/
 void f1() { 
-  f = 0;
+  f = (float)1 + (int)1.2;
   d = -f + 1.0;
   l = f + d + 3;
 }
