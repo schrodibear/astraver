@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.115 2006-06-27 11:27:59 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.116 2006-06-27 13:37:27 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -220,13 +220,19 @@ let int_size = function
   | LongLong -> long_long_size
   | Bitfield n -> Int64.to_int n
 
-let le_cinteger = function
+let rec le_cinteger = function
   | Tint (Signed, i1), Tint (_, i2) 
   | Tint (Unsigned, i1), Tint (Unsigned, i2) ->
       int_size i1 <= int_size i2
   | Tint (Unsigned, i1), Tint (Signed, i2) ->
       int_size i1 < int_size i2
-  | _ -> assert false (* TODO: enum *)
+  (* enum = int TODO: could be unsigned int *)
+  | Tenum _, ty2 ->
+      le_cinteger (Tint (Signed, Int), ty2)
+  | ty1, Tenum _ ->
+      le_cinteger (ty1, Tint (Signed, Int))
+  | _ -> 
+      assert false
 
 let max_int i1 i2 = if le_cinteger (i1, i2) then i2 else i1
 
