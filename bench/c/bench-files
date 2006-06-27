@@ -4,5 +4,4 @@ copy dowhile invariants latespec logic_cast
 param passing purse queue rec ref ref_glob search see 
 sizeof alloca sort all_zeros malloc false pointer init
 struct struct2 struct3 switch enum sum1 sum2 separation1 separation2
-separation3 separation4 ifs separation float
-
+separation3 separation4 ifs separation
