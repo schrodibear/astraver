@@ -663,8 +663,7 @@ supposed to happen, and indeed the returned value of \verb|test1| would not be
 the proof of the post-condition, will not be provable. This is an
 instance of the so-called \emph{pointer aliasing} problem, and in fact
 one should avoid this aliasing in the pre-condition of \verb|test1| by
-requiring also \verb|p1 != p2|.\index{pointer
-  aliasing}\index{aliasing} 
+requiring also \verb|p1 != p2|.\index{Pointer aliasing}\index{Aliasing} 
 
 With that addition, the second obligation is provable in Coq with
 \begin{verbatim}
@@ -994,6 +993,15 @@ void f(int n) \{
   \item[\texttt{-verify} \textit{f,g,h,\dots}]: ~\par
     Specify the sets of functions to verify. Implies \texttt{-s}.
 
+  \item[Models selection:] ~\par
+  \item[\texttt{-no-fp}]: ~\par
+    Turn off the floating-point arithmetic model. 
+    See~Section~\cite{arithmetic:float}.
+
+  \item[\texttt{-int-overflow}]: ~\par
+    Turn on the checks for arithmetic overflows.
+    See~Section~\cite{arithmetic:int}.
+
   \item[Prover specific options:] ~\par
   \item[\texttt{-coq-tactic} \textit{tactic}]: ~\par
     Pass a default Coq tactic to \why\ (in the generated \texttt{Makefile}).
@@ -1177,13 +1185,19 @@ annotations.
 %      & $|$ & \nt{term} \te{?} \nt{term} \te{:} \nt{term} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
       & $|$ & \te{(} \nt{logic\_type} \te{)} \nt{term} \\
-      & $|$ & \verb!\old! \te{(} \nt{term} \te{)} \\
-      & $|$ & \verb!\at! \te{(} \nt{term} \te{,} \nt{identifier} \te{)} \\
-      & $|$ & \verb!\block_length! \te{(} \nt{term} \te{)} \\
-      & $|$ & \verb!\base_addr! \te{(} \nt{term} \te{)} \\
-      & $|$ & \verb!\result! \\
-      & $|$ & \verb!\null! \\
+      & $|$ & \verb!\old! \te{(} \nt{term} \te{)} 
+        $|$   \verb!\at! \te{(} \nt{term} \te{,} \nt{identifier} \te{)} \\
+      & $|$ & \verb!\result! 
+        $|$   \verb!\null! \\
+      & $|$ & \nt{symbol} \te{(} \nt{term} \te{)} \\
   \\[0.1em]
+
+  \nt{symbol}\indexnt{symbol} 
+    & $::=$ & \verb!\block_length! $|$ \verb!\base_addr! \\
+      & $|$ & \verb!\abs! $|$ \verb!\sqrt! 
+        $|$   \verb!\round_error! $|$ \verb!\total_error!
+        $|$   \verb!\exact! $|$ \verb!\model! \\
+    \\[0.1em]
 
   \nt{constant}\indexnt{constant}
     & $::=$ & \nt{integer-constant} $|$ \nt{floating-point-constant} \\
@@ -1237,9 +1251,103 @@ annotations.
 \end{figure}
 
 
+\section{Arithmetic}
+\label{arithmetic}
 
+\subsection{Integer arithmetic}
+\label{arithmetic:int}\index{Arithmetic}
 
+\paragraph{Default model.}
+The default arithmetic model is to map all integer types to
+arbitrary precision integers i.e. to act as if all integer
+computations were \emph{exact}. Said otherwise, a C program proved
+correct with \caduceus\ is indeed correct  \emph{only if no
+  integer overflow occurs during the execution}.
 
+\paragraph{Integer arithmetic without overflows.}
+There is a second model where the user \emph{proves} that there is no
+integer overflow during the program execution. This model is turned on
+using the command-line option \texttt{-int-overflow}.
+This means that each operation, including the implicit conversions
+from one integer type to another, may be given a precondition to
+establish that the result of the computation fits into the target
+type. The sizes of the various integer types can be set using the
+following command-line options:
+\begin{center}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    type & option & default value \\\hline
+    \texttt{char} & \texttt{-char-size} & 8 \\\hline
+    \texttt{short} & \texttt{-short-size} & 16 \\\hline
+    \texttt{int} & \texttt{-int-size} & 32 \\\hline
+    \texttt{long} & \texttt{-long-size} & 32 \\\hline
+    \texttt{long long} & \texttt{-long-long-size} & 64 \\\hline
+  \end{tabular}
+\end{center}
+
+\subsection{Floating-point arithmetic}
+\label{arithmetic:float}\index{Floating-point arithmetic}
+
+Floating-point arithmetic is handled by \caduceus. The model of a
+floating-point number is a \emph{triple} consisting of:
+\begin{itemize}
+\item the floating-point number, as computed by the program;
+\item a real number, which would be the value if all computations were
+  performed on real numbers and thus exact;
+\item and another real number, which is the value which should be
+  \emph{ideally} computed.
+\end{itemize}
+We refer to these three components as the \emph{floating-point} part, the
+\emph{exact} part and the \emph{model} part, respectively. The third
+component (the model) can be seen as a ghost variable automatically
+attached to each floating-point number.
+
+Within annotations, all operations and comparisons are performed on
+\emph{real numbers}. A floating-point expression is (implicitly)
+understood as its first component (the floating-point number) seen as
+a real number. The following constructs are provided to write
+annotations: 
+
+\begin{itemize}
+\item \verb!\exact(!$e$\verb!)!: the exact part of the floating-point
+  expression $e$
+\item \verb!\model(!$e$\verb!)!: the model part of the floating-point
+  expression $e$
+\item \verb!\round_error(!$e$\verb!)!: a shortcut for $|e -
+  \verb!\exact!(e)|$, that is the difference between the
+  floating-point part of $e$ and its exact part.
+\item \verb!\total_error(!$e$\verb!)!: a shortcut for $|e -
+  \verb!\model!(e)|$, that is the difference between the
+  floating-point part of $e$ and its model part.
+\item \verb!\abs(!$e$\verb!)!: the absolute value of the real
+  expression $e$. Can be written \texttt{|$e$|}.
+\item \verb!\sqrt(!$e$\verb!)!: the square root of the real
+  expression $e$
+\item $e_1\verb!^^!e_2$: the exponentiation of real numbers
+\end{itemize}
+
+Here is for instance a function approximating the exponential and a
+possible specification:
+\begin{verbatim}
+/*@ requires x == \exact(x) && |x| <= 1
+  @ ensures  \round_error(\result) <= 2 ^^ (-48)
+  @*/
+double my_exp(double x) {
+  return 1 + x + x*x/2;
+}
+\end{verbatim}
+
+\medskip
+
+The \why\ model for floating-point arithmetic can be found in
+\texttt{lib/why/floats.why} (it is passed to \why\ automatically, and
+only when the use of floating-point arithmetic is detected). This
+model is currently realized for the \coq\ prover only, in
+\texttt{lib/coq/WhyFloats.v}.
+
+This model for floating-point numbers can be turned off using the
+command-line \texttt{-no-fp} and then all floating-point numbers are
+mapped to real numbers, as if all computations were exact.
 
 \section{Memory model and pointer arithmetic
 \label{pointer-arith}}
@@ -1372,14 +1480,11 @@ parts of the code and its specification is visible.
 The following features are not yet supported by \caduceus\ but will be
 so in future versions of the tool:
 \begin{itemize}
-\item \texttt{switch} constructs
 \item string literals (e.g. \texttt{"hello world"})
-\item arithmetic overflow (currently all integers types are mapped to
-  arbitrary precision integers on the prover side)
-\item \texttt{sizeof}
 \item standard library functions: \texttt{memcpy},
   \texttt{strcmp}, etc.
 \item more support for \verb|&| operator.
+\item no model for \emph{modular arithmetic}.
 \end{itemize}
 
 \subsection{Other unsupported features}

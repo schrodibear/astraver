@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.68 2006-06-27 11:27:59 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.69 2006-06-27 12:56:49 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -1126,7 +1126,13 @@ let global_decl e1 =
   | Ttype s ->
       Ntype s
       
-      
+
+let rec map_succeed f = function
+  | [] -> 
+      []
+  | x :: r -> 
+      try let y = f x in y :: map_succeed f r 
+      with Exit -> map_succeed f r
 	
 let file = List.map (fun d -> { node = global_decl d.node ; loc = d.loc})
 

@@ -92,7 +92,7 @@ byte : bin/why.byte bin/caduceus.byte
 
 .PHONY: check
 
-PRELUDE=lib/why/prelude.why lib/why/floats.why lib/why/marith.why
+PRELUDE=lib/why/prelude.why lib/why/floats.why 
 
 # sanity check: the prelude files do typecheck
 check: $(BINARY) $(PRELUDE)
