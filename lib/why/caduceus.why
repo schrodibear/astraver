@@ -417,18 +417,18 @@ axiom not_assigns_refl :
 
 (* validity *)
 
-predicate valid1(m1: ('y pointer,'z) memory) =
+predicate valid_acc(m1: ('y pointer,'z) memory) =
 	forall p : 'z pointer. forall a : alloc_table.
 	valid(a,p) -> valid(a,acc(m1, p)) 
 
-predicate valid1_range (m1: ('y pointer,'z) memory, size : int) =
+predicate valid_acc_range (m1: ('y pointer,'z) memory, size : int) =
 	forall p : 'z pointer. forall a : alloc_table.
 	valid(a,p) -> valid_range (a,acc (m1, p), 0, size-1) 
 
-axiom valid1_range_valid : 
+axiom valid_acc_range_valid : 
   forall m1: ('y pointer,'z) memory.
   forall size : int. forall p : 'z pointer. forall a : alloc_table.
-  valid1_range(m1,size) -> valid(a,p) -> valid(a, acc(m1,p))
+  valid_acc_range(m1,size) -> valid(a,p) -> valid(a, acc(m1,p))
 
 (* separation *)
 

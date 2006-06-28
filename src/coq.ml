@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.151 2006-06-23 14:26:11 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.152 2006-06-28 14:31:56 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -449,6 +449,8 @@ let print_term_v8 fmt t =
 	assert false
     | Tapp (id, [a;b], _) when id == t_pow_real ->
 	fprintf fmt "(@[Rpower %a@ %a@])" print3 a print3 b
+    | Tapp (id, [a], _) when id == t_abs_real ->
+	fprintf fmt "(@[Rabs %a@])" print3 a
     | Tapp (id, [t], _) when id == t_neg_int ->
 	fprintf fmt "(Zopp %a)" print3 t
     | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->

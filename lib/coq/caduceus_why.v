@@ -597,24 +597,25 @@ Admitted.
     (forall (m:((memory) A2 A1)), (not_assigns a m m l)))).
 Admitted.
 
-(*Why predicate*) Definition valid1 (A801:Set)
+
+(*Why predicate*) Definition valid_acc (A801:Set)
   (A800:Set) (m1:((memory) ((pointer) A800) A801))
   := (forall (p:((pointer) A801)),
       (forall (a:alloc_table), ((valid a p) -> (valid a (acc m1 p))))).
 
-(*Why predicate*) Definition valid1_range (A803:Set)
+(*Why predicate*) Definition valid_acc_range (A803:Set)
   (A802:Set) (m1:((memory) ((pointer) A802) A803)) (size:Z)
   := (forall (p:((pointer) A803)),
       (forall (a:alloc_table),
        ((valid a p) -> (valid_range a (acc m1 p) 0 (size - 1))))).
 
-(*Why axiom*) Lemma valid1_range_valid :
+(*Why axiom*) Lemma valid_acc_range_valid :
   forall (A1:Set), forall (A2:Set),
   (forall (m1:((memory) ((pointer) A1) A2)),
    (forall (size:Z),
     (forall (p:((pointer) A2)),
      (forall (a:alloc_table),
-      ((valid1_range m1 size) -> ((valid a p) -> (valid a (acc m1 p)))))))).
+      ((valid_acc_range m1 size) -> ((valid a p) -> (valid a (acc m1 p)))))))).
 Admitted.
 
 (*Why predicate*) Definition separation1 (A807:Set)

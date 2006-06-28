@@ -419,7 +419,7 @@ let add_predicates l =
 	 begin
 	   match f.var_type.Ctypes.ctype_node with
 	     | Tstruct n ->
-		 let pre = "%valid1_" ^ n  in 
+		 let pre = "%valid_acc_" ^ n  in 
 		 let info = Info.default_logic_info (pre) in
 		 info.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre)  ([], info);
@@ -428,11 +428,11 @@ let add_predicates l =
 		      "valid" ^ n,npapp(find_pred (pre),[])))]
 	     | Tarray(_,ty, Some s)->
 		 let n1 = f.var_unique_name in
-		 let pre = "%valid1_" ^ n1 in 
+		 let pre = "%valid_acc_" ^ n1 in 
 		 let info = Info.default_logic_info (pre) in
 		 info.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre)  ([], info);
-		 let pre2 = "%valid1_range_" ^ n1  in 
+		 let pre2 = "%valid_acc_range_" ^ n1  in 
 		 let info2 = Info.default_logic_info (pre2) in
 		 info2.logic_heap_args <- HeapVarSet.singleton f; 
 		 Cenv.add_pred (pre2)  ([], info2);

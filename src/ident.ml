@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.57 2006-06-22 13:45:57 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.58 2006-06-28 14:31:56 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -120,6 +120,7 @@ let t_sub_real = create "sub_real"
 let t_mul_real = create "mul_real"
 let t_div_real = create "div_real"
 let t_neg_real = create "neg_real"
+let t_abs_real = create "abs_real"
 let t_pow_real = create "pow_real"
 
 let t_mod_int = create "mod_int"

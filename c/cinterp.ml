@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.195 2006-06-27 11:45:48 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.196 2006-06-28 14:31:56 filliatr Exp $ i*)
 
 
 open Format
@@ -396,8 +396,8 @@ let rec interp_predicate label old_label p =
 	when is_internal_pred v.logic_name ->
        let n = v.logic_name in
        let name,num =
-	 if has_prefix "%valid1_range" n then "valid1_range", 1
-	 else if has_prefix "%valid1" n then "valid1", 1
+	 if has_prefix "%valid_acc_range" n then "valid_acc_range", 1
+	 else if has_prefix "%valid_acc" n then "valid_acc", 1
 	 else if has_prefix "%separation1_range1" n then "separation1_range1",2
 	 else if has_prefix "%separation1_range" n then "separation1_range", 1
 	 else if has_prefix "%separation1" n then "separation1", 2

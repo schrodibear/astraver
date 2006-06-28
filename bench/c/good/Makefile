@@ -82,6 +82,11 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	make why/$*.why
 	make -f $*.makefile simplify
 
+%.gui: %.c
+	rm -f why/$*.why
+	make why/$*.why
+	make -f $*.makefile gui
+
 %.coq: %.c
 	rm -f why/$*.why
 	make why/$*.why
