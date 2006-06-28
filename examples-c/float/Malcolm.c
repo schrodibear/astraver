@@ -1,12 +1,11 @@
-/*@ ensures \result == 2 ^^ (53)
-  @*/
+/*@ logic int my_log(real s) */
+
+/*@ ensures \result == 2  */
 
 double malcolm1() {
   double A;
   A=2;
- 
-  while (A != (A+1)) {
-    A*=2;
-  }
+  /*@ assert my_log(A)==1 */
+
   return A;
 }
