@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.69 2006-06-27 12:56:49 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.70 2006-06-29 08:19:27 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -235,7 +235,15 @@ let rec type_why_for_term t =
     | NToffset t -> Info.Int
     | NTblock_length t -> Info.Int
     | NTcast (_,t) -> assert false (* type_why_for_term t *)
-    | NTrange (t,_,_,_) -> type_why_for_term t
+    | NTrange (_,_,_,z,f) -> 
+	begin
+	  let z = repr z in
+	  try
+	    let t = Hashtbl.find type_why_table z  in
+	    Hashtbl.find t f
+	  with Not_found -> assert false
+	end
+
 	
 let find_zone_for_term e = 
   match type_why_for_term e with
@@ -542,7 +550,7 @@ let rec term_node loc t ty =
       let info = declare_arrow_var info in
       let zone = find_zone_for_term t1 in 
       let () = type_why_new_zone zone info in
-      NTrange (t1, term_option t2, term_option t3, info)
+      NTrange (t1, term_option t2, term_option t3, zone, info)
 
 and term t = 
 { 
@@ -1066,8 +1074,46 @@ and local_decl s l l2 =
 	end
     | _  -> assert false
 
+let add_c_function spec ty f sta loc =
+  try 
+    let (spec2,ty2,f2,sta2,loc2) = 
+      find_c_fun f.fun_name 
+    in
+    let spec = 
+      {requires = begin
+	 match spec.requires with
+	   | None -> spec2.requires
+	   | Some p -> Some p
+       end;
+       assigns = begin 
+	 match spec.assigns with
+	   | None -> spec2.assigns
+	   | Some l -> Some l
+       end;
+       ensures = begin
+	  match spec.ensures with
+	    | None -> spec2.ensures
+	    | Some p -> Some p
+       end;
+       decreases = begin 
+	 match spec.decreases with
+	   | None -> spec2.decreases
+	   | Some t -> Some t
+       end;
+      }
+    in
+    let sta = begin 
+      match sta with 
+	| None -> sta2
+	| Some s -> Some s
+    end 
+    in
+    add_c_fun  f.fun_name (spec,ty,f,sta,loc)
+  with Not_found -> add_c_fun f.fun_name (spec,ty,f,sta,loc)
+  
 
-let global_decl e1 =
+
+let global_decl e1 loc =
   match e1 with    
   | Tlogic(info, l) -> Nlogic (info , logic_symbol l)
   | Taxiom (s, p) -> Naxiom (s, predicate p)
@@ -1095,7 +1141,9 @@ let global_decl e1 =
 	  List.iter (fun arg -> 
 		       set_var_type (Var_info arg) (arg.var_type) true) f.args
 	end;
-      Nfunspec (spec s,t,f)
+      (*Nfunspec (spec s,t,f)*)
+      add_c_function (spec s) t f None loc;
+      raise Exit
 
   | Tfundef (s, t, f, st) ->
       let validity_for_struct = 
@@ -1113,7 +1161,10 @@ let global_decl e1 =
       set_var_type (Fun_info f) (f.fun_type) true;
       List.iter (fun arg -> 
 		   set_var_type (Var_info arg) (arg.var_type) true) f.args;
-      Nfundef (spec ~add:validity_for_struct s,t,f,statement st)
+      (*Nfundef (spec ~add:validity_for_struct s,t,f,statement st)*)
+      add_c_function (spec ~add:validity_for_struct s) t f 
+	(Some (statement st)) loc;
+      raise Exit
   | Tghost(x,cinit) ->
       let cinit = 
 	match cinit with
@@ -1134,7 +1185,7 @@ let rec map_succeed f = function
       try let y = f x in y :: map_succeed f r 
       with Exit -> map_succeed f r
 	
-let file = List.map (fun d -> { node = global_decl d.node ; loc = d.loc})
+let file = map_succeed (fun d -> { node = global_decl d.node d.loc ; loc = d.loc})
 
 
 

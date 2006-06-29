@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.96 2006-06-28 14:31:56 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.97 2006-06-29 08:19:27 hubert Exp $ i*)
 
 open Coptions
 open Format
@@ -151,7 +151,7 @@ and type_term_node loc env = function
       Tunop (Usqrt_real, t), c_real
   | PLapp (f, tl) ->
       (try 
-	 let pl, ty, info = find_fun f.logic_name in
+	 let pl, ty, info = find_logic f.logic_name in
 	 let tl = type_terms loc env pl tl in
 	 Tapp (info, tl), ty
        with Not_found -> 

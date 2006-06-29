@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.66 2006-06-26 14:30:21 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.67 2006-06-29 08:19:27 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -32,6 +32,15 @@ let parse_file f =
 let type_file (f,p) = 
   (f, Ctyping.type_file p)
 
+let output_why_code file why_code =
+  let file = Filename.chop_extension file in
+  let file = Lib.file "why" file in
+  let why_code = List.map snd why_code in
+  Pp.print_in_file 
+    (fun fmt -> Output.fprintf_why_decls fmt why_code) (file ^ ".tmp");
+  Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
+
+(*
 let interp_file (file,p) =
   let (why_code,why_spec,prover) = Cinterp.interp p in
   let file = Filename.chop_extension file in
@@ -52,6 +61,7 @@ let interp_file (file,p) =
     Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
   end;
   why_spec
+*)
 
 let main () = 
 (*
@@ -83,25 +93,25 @@ let main () =
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
   let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
-  if print_norm then begin
-    List.iter 
-      (fun (f,p) -> 
-	 let c = open_out (f ^ "norm") in
-	 let fmt = Format.formatter_of_out_channel c in
-	 fprintf fmt "%a@." Cprint.nfile p;
-	 close_out c) nfiles;
-  end;
   (* séparation*)
   List.iter (fun (f,p) ->  Cseparation.file p)  nfiles;
   (*predicate*)
  let nfiles = List.map (fun (f,p) -> (f, Invariant.add_predicates p)) 
 		 nfiles in
   if print_norm then begin
+    let print_fun = ref true in
     List.iter 
       (fun (f,p) -> 
 	 let c = open_out (f ^ "norm") in
 	 let fmt = Format.formatter_of_out_channel c in
-	 fprintf fmt "%a@." Cprint.nfile p;
+	 Format.fprintf fmt "/* Declarations */@.@.";
+	 Format.fprintf fmt "%a@." Cprint.nfile p;
+	 if !print_fun then begin
+	   Format.fprintf fmt "/* Functions */@.@.";
+	   Cprint.nfunctions fmt;
+	   Format.fprintf fmt "@.";
+	   print_fun := false;
+	 end;
 	 close_out c) nfiles;
   end;
   (* effects *)
@@ -118,11 +128,14 @@ let main () =
     Ceffect.warnings;
   lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
   (* Why interpretation *)
-  let why_specs =
-    List.fold_left (fun specs f -> let s = interp_file f in s @ specs) 
-      [] nfiles
+  let why_specs,prover =
+    List.fold_left 
+      (fun (specs,prover) (_,f) -> 
+	 let s,p = Cinterp.interp f in (s @ specs,p @ prover)) 
+      ([],[]) nfiles
   in
   let why_specs = Cinterp.make_int_ops_decls () @ why_specs in
+  let (why_code,why_specs,prover) = Cinterp.interp_functions (why_specs,prover) in
   (* Why specs *)
   List.iter
   (fun f -> 
@@ -157,6 +170,7 @@ let main () =
        Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why"))
     (files ());
   (* makefile *)
+  output_why_code (List.hd (files())) why_code;
   List.iter Cmake.makefile (files ())
        
        

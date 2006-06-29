@@ -461,7 +461,7 @@ let rec term tyf t =
 	(fun ty e -> unifier_type_why ty (type_why_for_term e)) li l
   | NTunop (_,t) -> term tyf t 
   | NTbinop (t1,_,t2) -> term tyf t1; term tyf t2 
-  | NTarrow (t,_,v) -> term tyf t
+  | NTarrow (t,_,_) -> term tyf t
   | NTif (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NTold t 
   | NTat (t,_) 
@@ -469,10 +469,10 @@ let rec term tyf t =
   | NToffset t
   | NTblock_length t 
   | NTcast (_,t) 
-  | NTrange (t,None,None,_) -> term tyf t
-  | NTrange (t1,Some t2,None,_) | NTrange (t1,None,Some t2,_) -> 
+  | NTrange (t,None,None,_,_) -> term tyf t
+  | NTrange (t1,Some t2,None,_,_) | NTrange (t1,None,Some t2,_,_) -> 
       term tyf t1; term tyf t2
-  | NTrange (t1,Some t2,Some t3,_) -> term tyf t1; term tyf t2; term tyf t3
+  | NTrange (t1,Some t2,Some t3,_,_) -> term tyf t1; term tyf t2; term tyf t3
 
 let rec predicate tyf p =
   match p.npred_node with
@@ -714,15 +714,36 @@ let global_decl e =
 	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
     | Nlogic (f, (NPredicate_reads _ | NFunction _)) -> 
 	f.logic_args_zones <- collect_zones f.logic_args f.logic_why_type
-    | Nfunspec (sp,_,f) -> 
+(*    | Nfunspec (sp,_,f) -> 
 	spec f.type_why_fun sp;
-	f.args_zones <- collect_zones f.args f.type_why_fun
+	if f.args_zones = [] then f.args_zones <- collect_zones f.args f.type_why_fun
+*)
     | Ntypedef _ | Ntypedecl _ | Ndecl (_,_,None) | Ntype _ -> ()
     | Ndecl (_, v, Some i) -> 
 	c_initializer v.var_type v.var_why_type i
-    | Nfundef (sp, _, f, st) -> 
+(*    | Nfundef (sp, _, f, st) -> 
 	spec f.type_why_fun sp; 
 	statement f.type_why_fun st; 
-	f.args_zones <- collect_zones f.args f.type_why_fun
+	if f.args_zones = [] then f.args_zones <- collect_zones f.args f.type_why_fun
+*)
 
-let file =  List.iter (fun d -> global_decl d.node)
+let c_fun fun_name (sp, _, f, st,_) =
+  spec f.type_why_fun sp;
+  begin
+    match st with
+      | None -> ()
+      | Some st  -> statement f.type_why_fun st
+  end; 
+  if f.args_zones = [] then 
+    begin
+      let l = collect_zones f.args f.type_why_fun in
+      Coptions.lprintf "Why polymorphic zones for function %s:@." f.fun_name;
+      List.iter
+	(fun z -> Coptions.lprintf "%s " z.name) l;
+      Coptions.lprintf "@.";
+      f.args_zones <- l
+    end
+
+
+let file p =  List.iter (fun d -> global_decl d.node) p;
+  Hashtbl.iter c_fun Cenv.c_functions

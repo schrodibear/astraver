@@ -313,11 +313,18 @@ let add_sym l x ty info =
     Hashtbl.add sym_t x info;
     info
 
-let functions = 
+let c_functions = 
+  (Hashtbl.create 97 : 
+     (string, Cast.nspec * ctype * Info.fun_info * Cast.nstatement option * 
+	Loc.position) Hashtbl.t)
+let add_c_fun f = Hashtbl.remove c_functions f; Hashtbl.add c_functions f
+let find_c_fun = Hashtbl.find c_functions
+
+let logic_functions = 
   (Hashtbl.create 97 : 
      (string, ctype list * ctype * Info.logic_info) Hashtbl.t)
-let add_fun = Hashtbl.add functions
-let find_fun = Hashtbl.find functions
+let add_logic = Hashtbl.add logic_functions
+let find_logic = Hashtbl.find logic_functions
 
 let predicates = 
   (Hashtbl.create 97 : (string, ctype list * Info.logic_info) Hashtbl.t) 

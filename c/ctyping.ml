@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.116 2006-06-27 13:37:27 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.117 2006-06-29 08:19:27 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -1043,7 +1043,7 @@ let type_spec_decl loc = function
       id.logic_args <- List.map fst pl;
       id.logic_why_type <- type_type_why ty false;
       let ll = List.map (type_location env') ll in
-      Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
+      Cenv.add_logic id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
   | LDlogic_def (id, ty, pl, t) ->
       let ty = type_logic_type loc (Env.empty ()) ty in
@@ -1051,7 +1051,7 @@ let type_spec_decl loc = function
       id.logic_args <- List.map fst pl;
       id.logic_why_type <- type_type_why ty false;
       let t = type_term env' t in
-      Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
+      Cenv.add_logic id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function_def (pl, ty, t))
   | LDpredicate_reads (id, pl, ll) ->
       let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
@@ -1113,6 +1113,27 @@ let function_spec loc f = function
        with Not_found -> 
 	 Hashtbl.add function_specs f s; s)
 
+let type_prototype loc pl ty f = 
+  let pl = type_parameters loc (Env.empty ()) pl in
+  let ty_res = type_type loc (Env.empty ()) ty in
+  let info = default_fun_info f in
+  let spl = List.map fst pl in
+  let info = 
+    match add_sym loc f (noattr (Tfun (spl, ty_res))) 
+      (Fun_info info) with
+	| Var_info _ -> assert false
+	| Fun_info f -> 
+	    if f.args = [] then f.args <- List.map snd pl;
+	    f
+  in
+  let env = (* we build the env. to type the spec and the body *)
+    List.fold_right 
+      (fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
+      info.args (Env.empty ())
+  in
+  info,ty_res,env
+
+
 let type_decl d = match d.node with
   | Cspecdecl s -> 
       type_spec_decl d.loc s
@@ -1126,23 +1147,7 @@ let type_decl d = match d.node with
   | Cdecl (ty, x, i) -> 
       begin match ty.Cast.ctype_node with
 	| CTfun(pl,ty_res) ->
-	    let pl = type_parameters d.loc (Env.empty ()) pl in
-	    let ty_res = type_type d.loc (Env.empty ()) ty_res in
-	    let info = default_fun_info x in
-	    let spl = List.map fst pl in
-	    let info = 
-	      match add_sym d.loc x (noattr (Tfun (spl, ty_res))) 
-		(Fun_info info) with
-		| Var_info _ -> assert false
-		| Fun_info f -> 
-		    if f.args = [] then f.args <- List.map snd pl;
-		    f
-	    in
-	    let _ = (* we build the env. to rename locals *)
-	      List.fold_right 
-		(fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
-		info.args (Env.empty ())
-	    in
+	    let info,ty_res,_ = type_prototype d.loc pl ty_res x in
 	    Tfunspec (function_spec d.loc x None, ty_res, info)
 	| _ -> 
 	    let ty = type_type d.loc (Env.empty ()) ty in
@@ -1161,41 +1166,15 @@ let type_decl d = match d.node with
 	    Tdecl (ty, info,i)(* type_initializer_option d.loc (Env.empty ()) ty i*)
       end
   | Cfunspec (s, ty, f, pl) ->
-      let ty = type_type d.loc (Env.empty ()) ty in
-      let pl = type_parameters d.loc (Env.empty ()) pl in
-      let info = default_fun_info f in
+      let info,ty,env = type_prototype d.loc pl ty f in
       info.has_assigns <- (s.assigns <> None);
-      let spl = List.map fst pl in
-      let info = 
-	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with 
-	  | Var_info _ -> assert false
-	  | Fun_info f -> if f.args = [] then f.args <- List.map snd pl; f
-      in
-      let env =
-	List.fold_right 
-	  (fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
-	  info.args (Env.empty ())
-      in
       let s = type_spec ~result:ty env s in
       let s = function_spec d.loc f (Some s) in
       Tfunspec (s, ty, info)
   | Cfundef (s, ty, f, pl, bl) -> 
-      let ty = type_type d.loc (Env.empty ()) ty in
+      let info,ty,env = type_prototype d.loc pl ty f in
       let et = if eq_type ty c_void then None else Some ty in
-      let pl = type_parameters d.loc (Env.empty ()) pl in
-      let info = default_fun_info f in
-      let spl = List.map fst pl in
-      let info = 
-	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with
-	  | Var_info v -> assert false
-	  | Fun_info f -> if f.args = [] then f.args <- List.map snd pl; f
-      in
       info.has_body <- true;
-      let env =
-	List.fold_right 
-	  (fun v env -> Env.add v.var_name v.var_type (Var_info v) env)
-	  info.args (Env.empty ())
-      in
       let s = option_app (type_spec ~result:ty env) s in
       let s = function_spec d.loc f s in
       info.has_assigns <- (s.assigns <> None);

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.27 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.28 2006-06-29 08:19:27 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -87,7 +87,7 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\block_length(%a)" nterm t
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
-  | NTrange (t1, t2, t3, _) ->
+  | NTrange (t1, t2, t3, _,_) ->
       fprintf fmt "%a[%a..%a]" nterm t1 nterm_option t2 nterm_option t3
 
 and nterm_p fmt t = match t.nterm_node with
@@ -372,12 +372,13 @@ and ndecl fmt d = match d.node with
       fprintf fmt "%a %s;@\n" ctype ty vi.var_unique_name
   | Ndecl (ty, vi, Some i) ->
       fprintf fmt "%a %s = %a;@\n" ctype ty vi.var_unique_name c_initializer i
-  | Nfunspec (s, ty, fi) ->
+(*  | Nfunspec (s, ty, fi) ->
       fprintf fmt "%a%a %s(@[%a@]);@\n" spec s ctype ty fi.fun_name
 	parameters fi.args
   | Nfundef (s, ty, fi, st) ->
       fprintf fmt "%a%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
 	 parameters fi.args nstatement st
+*)
   | Ntype s ->
       fprintf fmt "/*@@ type %s */@\n" s
 
@@ -386,5 +387,18 @@ let nfile fmt p =
   Cenv.iter_all_struct (declare_struct fmt);
   List.iter (fun d -> ndecl fmt d; fprintf fmt "@\n") p;
   fprintf fmt "@]@."
+
+
+let nfunctions fmt =
+  Hashtbl.iter
+    (fun f (s, ty, fi, st,_) -> 
+       match st with
+	 | Some st ->
+	     fprintf fmt "%a%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
+	       parameters fi.args nstatement st
+	 | None ->
+	     fprintf fmt "%a%a %s(@[%a@]);@\n" spec s ctype ty fi.fun_name
+	       parameters fi.args)
+    Cenv.c_functions
 
 

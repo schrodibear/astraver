@@ -33,8 +33,16 @@ val add_type : string -> unit
 val mem_type : string -> bool
 val iter_types : (string -> unit) -> unit
 
-val add_fun : string -> ctype list * ctype * Info.logic_info -> unit
-val find_fun : string -> ctype list * ctype * Info.logic_info
+
+val c_functions : (string,Cast.nspec * ctype * Info.fun_info * 
+  Cast.nstatement option * Loc.position ) Hashtbl.t
+val add_c_fun : string -> Cast.nspec * ctype * Info.fun_info * 
+  Cast.nstatement option * Loc.position -> unit
+val find_c_fun : string -> Cast.nspec * ctype * Info.fun_info * 
+  Cast.nstatement option * Loc.position
+
+val add_logic : string -> ctype list * ctype * Info.logic_info -> unit
+val find_logic : string -> ctype list * ctype * Info.logic_info
 
 val add_pred : string -> ctype list * Info.logic_info -> unit
 val mem_pred : string -> bool 

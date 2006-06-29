@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.196 2006-06-28 14:31:56 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.197 2006-06-29 08:19:27 hubert Exp $ i*)
 
 
 open Format
@@ -317,7 +317,7 @@ let rec interp_term label old_label t =
 	  | (Tenum _ | Tint _), (Tenum _ | Tint _) ->
 	      f t
 	  | Tfloat fk1, Tfloat fk2 -> 
-	      term_float_conversion fk1 fk2 (f t)
+	      term_float_conversion fk2 fk1 (f t)
 	  | Tfloat fk, (Tenum _ | Tint _) ->
 	      term_float_conversion Real fk (LApp ("real_of_int", [f t]))
 	  | (Tenum _ | Tint _), Tfloat fk ->
@@ -1241,29 +1241,39 @@ let collect_locations before acc loc =
   (* term_loc t interprets t either as Term t' with t' a Why term of type 
      pointer, or as Pset s with s a Why term of type pset *)
   let rec term_or_pset t = match t.nterm_node with
-    | NTarrow (e,_, f) ->
+    | NTarrow (e,z, f) ->
+	let ty = Cnorm.type_why_for_term e in
+	assert (same_why_type ty (Pointer z));
 	let m = 
 	  interp_var (Some before) 
-	    (zoned_name f.var_unique_name (Cnorm.type_why_for_term e)) in
+	    (zoned_name f.var_unique_name ty) in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
 	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
-    | NTrange (e, None, None,f) ->
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
+    | NTrange (e, None, None, z, f) ->
+	let ty = Cnorm.type_why_for_term e in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
-    | NTrange (e, None, Some a,f) ->
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
+    | NTrange (e, None, Some a,z,f) ->
+	let ty = Cnorm.type_why_for_term e in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_range_left", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
-    | NTrange (e, Some a, None,f) ->
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
+    | NTrange (e, Some a, None,z,f) ->
+	let ty = Cnorm.type_why_for_term e in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_range_right", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a]))
-    | NTrange (e, Some a, Some b,f) ->
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term e) in
+    | NTrange (e, Some a, Some b,z,f) ->
+	let ty = Cnorm.type_why_for_term e in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	Pset (LApp ("pset_acc_range", 
 		    [pset e; interp_var (Some before) var;
 		     interp_term (Some before) before a;
@@ -1277,26 +1287,36 @@ let collect_locations before acc loc =
     | Term t -> LApp ("pset_singleton", [t])
   in
   let var,iloc = match loc.nterm_node with
-    | NTarrow(e,_,f) ->
-	zoned_name f.var_unique_name (Cnorm.type_why_for_term e), Some (pset e)
+    | NTarrow(e,z,f) ->
+	let ty = Cnorm.type_why_for_term e in
+	assert (same_why_type ty (Pointer z));
+	zoned_name f.var_unique_name ty, Some (pset e)
     | NTvar v ->
 	v.var_unique_name, None
-    | NTrange (t, None, None,f) -> 
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t) in
+    | NTrange (t, None, None,z,f) -> 
+	let ty = Cnorm.type_why_for_term t in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	let loc = LApp ("pset_all", [pset t]) in
 	var, Some loc
-    | NTrange (t, None, Some a,f) -> 
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t) in
+    | NTrange (t, None, Some a,z,f) -> 
+	let ty = Cnorm.type_why_for_term t in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	let loc = LApp ("pset_range_left", 
 			[pset t; interp_term (Some before) before a]) in
 	var, Some loc
-    | NTrange (t, Some a, None,f) -> 
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t) in
+    | NTrange (t, Some a, None,z,f) -> 
+	let ty = Cnorm.type_why_for_term t in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	let loc = LApp ("pset_range_right", 
 			[pset t; interp_term (Some before) before a]) in
 	var, Some loc
-    | NTrange(t1, Some t2, Some t3,f) -> 
-	let var = zoned_name f.var_unique_name (Cnorm.type_why_for_term t1) in
+    | NTrange(t1, Some t2, Some t3,z,f) -> 
+	let ty = Cnorm.type_why_for_term t1 in
+	assert (same_why_type ty (Pointer z));
+	let var = zoned_name f.var_unique_name ty in
 	let loc = 
 	  LApp("pset_range",
 	       [pset t1;
@@ -1540,12 +1560,10 @@ let interp_decl d acc =
     | Ntype _
     | Ndecl _
     | Ntypedecl _
-    | Nfunspec _
     | Naxiom _
     | Ninvariant _
     | Ninvariant_strong _
-    | Nlogic _
-    | Nfundef _ ->
+    | Nlogic _ ->
 	assert false
 
 
@@ -2036,16 +2054,16 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
   | _ -> 
       []
 
-let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
+let interp_located_tdecl ((why_spec,prover_decl) as why) decl =
   match decl.node with
   | Nlogic(id,ltype) -> 
       lprintf "translating logic declaration of %s@." id.logic_name;
-      (why_code, cinterp_logic_symbol id ltype::why_spec,
+      (cinterp_logic_symbol id ltype::why_spec,
        prover_decl)
   | Naxiom(id,p) -> 
       lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
-      (why_code, Axiom(id,a)::why_spec, prover_decl)
+      (Axiom(id,a)::why_spec, prover_decl)
   | Ninvariant(id,p) -> 
       lprintf "translating invariant declaration %s@." id;      
       why
@@ -2055,7 +2073,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ntypedecl ({ Ctypes.ctype_node = Tenum _ } as ctype)
   | Ntypedef (ctype,_) -> 
       let dl = interp_type decl.loc ctype in 
-      why_code, dl @ why_spec, prover_decl
+      dl @ why_spec, prover_decl
   | Ntypedecl { Ctypes.ctype_node = Tstruct _ | Tunion _ } -> 
       why
   | Ntypedecl _ ->
@@ -2065,7 +2083,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ndecl(ctype,v,init) -> 
       (* global initialisations already handled in cinit.ml *)
       why
-  | Nfunspec(spec,ctype,id) -> 
+(*  | Nfunspec(spec,ctype,id) -> 
       let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
       (why_code, spec :: why_spec,
        prover_decl)
@@ -2118,9 +2136,72 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	   (why_code, tspec :: why_spec, prover_decl)
 	 end
 	)
+*)
 
+let interp_c_fun fun_name (spec, ctype, id, block, loc) 
+    (why_code,why_spec,prover_decl)   =
+(*      let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
+      (why_code, spec :: why_spec,
+       prover_decl)*)
+  if (id = Cinit.invariants_initially_established_info &&  
+      not !Cinit.user_invariants)
+  then
+    (why_code, why_spec, prover_decl)
+  else
+    (reset_tmp_var ();
+     let tparams,pre,post,tspec = 
+       interp_function_spec id spec ctype id.args in
+     match block with 
+       | None -> (why_code, tspec :: why_spec, prover_decl)
+       | Some block ->
+	   let f = id.fun_unique_name in
+	   if Coptions.verify id.fun_name then begin try
+	     lprintf "translating function %s@." f;
+	     abrupt_return := None;
+	     let may_break = ref false in
+	     let list_of_refs =
+	       List.fold_right
+		 (fun id bl ->
+		    if id.var_is_assigned
+		    then 
+		      let n = id.var_unique_name in
+		      set_unique_name (Var_info id) ("mutable_" ^ n); 
+		      unset_formal_param id;
+		      (id.var_unique_name,n) :: bl
+		    else bl) 
+		 id.args [] 
+	     in
+	     let tblock = catch_return 
+	       (interp_statement false may_break block) in
+	     assert (not !may_break);
+	     let tblock = make_label "init" tblock in
+	     let tblock =
+	       List.fold_right
+		 (fun (mut_id,id) bl ->
+		    Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
+	     printf "generating Why code for function %s@." f;
+	     ((f, Def(f ^ "_impl", 
+		      Fun(tparams,pre,tblock,post,None)))::why_code,
+	      tspec :: why_spec,
+	      prover_decl)
+	   with Error (_, Cerror.Unsupported s) ->
+	     lprintf "unsupported feature (%s); skipping function %s@." s f;
+	     eprintf "unsupported feature (%s); skipping function %s@." s f;
+	     (why_code,
+	      tspec :: why_spec,
+	      prover_decl)
+	   end else begin
+	     lprintf "assuming function %s@." f;
+	     (why_code, tspec :: why_spec, prover_decl)
+	   end
+    ) 
+      
 let interp l =
   let s = interp_strong_invariants () in
-  List.fold_left interp_located_tdecl ([],s,[]) l
+  List.fold_left interp_located_tdecl (s,[]) l
+
+let interp_functions (why,prover) =
+  Hashtbl.fold interp_c_fun Cenv.c_functions ([],why,prover)
+  
 
 

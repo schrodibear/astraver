@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.130 2006-06-27 11:27:59 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.131 2006-06-29 08:19:27 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -56,7 +56,7 @@ let print_effects fmt l =
 let print_effects2 fmt l =
   fprintf fmt "@[%a@]"
     (print_list space (fun fmt (z,s,_) ->let z = repr z in
-		       fprintf fmt " %s_%s " s z.name)) 
+		       fprintf fmt " %s_%s_%d " s z.name z.number)) 
     (ZoneSet.elements l)
 
 let print_effects3 fmt l =
@@ -208,8 +208,8 @@ let rec term t = match t.nterm_node with
       else ef_empty
   | NTarrow (t1,z,f) -> 
       let z = repr z in
-      (*eprintf "tw1: %s , tw2 : %s@." (snd (output_why_type (Cnorm.type_why_for_term t1))) (snd (output_why_type (Pointer z)));
-      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));*)
+     (* eprintf "tw1: %s , tw2 : %s loc : %a@." (snd (output_why_type (Cnorm.type_why_for_term t1))) (snd (output_why_type (Pointer z)))  Loc.report_position t.nterm_loc;*)
+      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
       reads_add_alloc (reads_add_field_var f (Pointer z) (term t1))
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
@@ -242,7 +242,7 @@ let rec term t = match t.nterm_node with
 	  tl  
   | NTconstant _ -> ef_empty
   | NTcast (_, t) -> term t
-  | NTrange (t1, t2, t3,f) ->
+  | NTrange (t1, t2, t3, z, f) ->
       reads_add_alloc 
 	(reads_add_field_var f (Cnorm.type_why_for_term t1)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
@@ -282,7 +282,7 @@ let rec assign_location t = match t.nterm_node with
   | NTconstant _  
   | NTcast (_, _) -> 
       error t.nterm_loc "invalid location"
-  | NTrange (t1, t2, t3,f) ->
+  | NTrange (t1, t2, t3, z, f) ->
       reads_add_alloc 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1)
 	  (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
@@ -473,7 +473,9 @@ let rec expr e = match e.nexpr_node with
       assign_expr e
   | NEcall {ncall_fun = e; ncall_args = el; ncall_zones_assoc = assoc} ->
       let ef = match e.nexpr_node with
-	| NEvar (Fun_info f) ->
+	| NEvar (Fun_info f) ->    	   
+	    List.iter (fun (z1,z2) -> eprintf "(%s,%s)@." z1.name z2.name) assoc;
+	    Format.eprintf "%a@." print_effects2 f.function_reads;
 	    let reads = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
@@ -482,6 +484,7 @@ let rec expr e = match e.nexpr_node with
 		 if not z.zone_is_var then add_heap_var s z ty else ();
 		 ZoneSet.add (z,s,ty) acc)
 	      f.function_reads empty in
+    	    Format.eprintf "%a@." print_effects2 reads;
 	    let writes = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
@@ -1049,8 +1052,6 @@ let decl d =
     | Ntypedef(ctype,id) -> () 
     | Ntypedecl(ctype) -> ()
     | Ntype _ -> ()
-    | Nfunspec(spec,ctype,id) -> () (* TODO *)
-    | Nfundef(spec,ctype,id,block) -> () (* TODO *)
 
 let file l = List.iter decl l
 
@@ -1058,83 +1059,100 @@ let file l = List.iter decl l
 
 let warnings = Queue.create ()
 
-let functions fun_list dl = 
+let functions fun_list  = 
   let fixpoint = ref true in
   let declare id ef =
+    lprintf "previous effects for function %s: reads %a %a writes %a %a@." id.fun_name 
+      print_effects id.function_reads_var print_effects2 id.function_reads print_effects id.function_writes_var print_effects2 id.function_writes;
+(*
     lprintf "effects for function %s before invariants: reads %a %a writes %a %a@." 
       id.fun_name print_effects ef.reads_var print_effects2 ef.reads print_effects ef.assigns_var print_effects2 ef.assigns;
+*)
     let ef  = 
       ef_union
 	(ef_union
 	   (weak_invariants_for ef)
-	   (strong_invariants_for ef)) ef
+	   (strong_invariants_for ef)) 
+	(ef_union ef { reads = id.function_reads ;
+		       reads_var = id.function_reads_var;
+		       assigns = id.function_writes;
+		       assigns_var = id.function_writes_var; })
     in
     lprintf "effects for function %s: reads %a %a writes %a %a@." id.fun_name 
       print_effects ef.reads_var print_effects2 ef.reads print_effects ef.assigns_var print_effects2 ef.assigns;
+    if not (HeapVarSet.subset ef.reads_var id.function_reads_var) then begin
+      fixpoint := false;
+      lprintf "effects for function %s: reads_var changed@." id.fun_name;
+      id.function_reads_var <- ef.reads_var
+    end;
     if not (ZoneSet.subset ef.reads id.function_reads) then begin
       fixpoint := false;
+      lprintf "effects for function %s: reads changed@." id.fun_name;
       id.function_reads <- ef.reads;
-      id.function_reads_var <- ef.reads_var
+    end;
+    if not (HeapVarSet.subset ef.assigns_var id.function_writes_var) then begin
+      fixpoint := false;
+      lprintf "effects for function %s: assigns_var changed@." id.fun_name;
+      id.function_writes_var <- ef.assigns_var;
     end;
     if not (ZoneSet.subset ef.assigns id.function_writes) then begin
       fixpoint := false;
+      lprintf "effects for function %s: assigns changed@." id.fun_name;
       id.function_writes <- ef.assigns;
-      id.function_writes_var <- ef.assigns_var;
     end
   in
-  let decl fun_list d = match d.node with
-    | Nfunspec (sp, _, id) ->
-	if List.mem id fun_list then 
-	  let sp = spec sp in
-	  declare id sp
-	else ()
-    | Nfundef (sp, _, id, s) ->
-	if List.mem id fun_list then 
-	  let ef_spec = spec sp in
-	  let ef = 
-	    if verify id.fun_name then
-	      let ef_body = statement s in
-	      begin match sp.Clogic.assigns with
-		| None -> 
-		    (*no assigns given by user:
-		      emit a warning if some side-effects have been detected *)
-		    if id <> Cinit.invariants_initially_established_info &&
-		      not ((ZoneSet.is_empty ef_body.assigns) && 
-			     (HeapVarSet.is_empty ef_body.assigns_var)) then
-			Queue.add 
-			  (d.loc,
-			   "function " ^ id.fun_name ^ 
-			     " has side-effects but no 'assigns' clause given")
-			  warnings
-		| Some _ -> 
-		    (* some assigns given by user:
-		       emit a warning if side-effects of spec differs from 
-		       side-effects of body *) 
-		    if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
-			      (HeapVarSet.equal 
-				 ef_spec.assigns_var ef_body.assigns_var))
-		    then begin 
-		      Queue.add 
-			(d.loc,
-			 "'assigns' clause for function " ^ id.fun_name ^
-			   " do not match side-effects of its body ")
-			warnings		    
-		    end
-	      end;
-	      ef_union ef_spec ef_body
-	    else
-	      ef_spec
-	  in
-	  declare id ef
-	else ()
-    | _ -> 
-	()
+  let decl f  = 
+    let (sp,_,id,s,loc) = find_c_fun f.fun_name in
+    let ef_spec = spec sp in
+    let ef = 
+      if (verify id.fun_name) && s <> None then
+	let s = begin 
+	  match s with 
+	    | None -> assert false
+	    | Some s -> s
+        end in
+	let ef_body = statement s in
+	begin match sp.Clogic.assigns with
+	  | None -> 
+	      (*no assigns given by user:
+		emit a warning if some side-effects have been detected *)
+	      if id <> Cinit.invariants_initially_established_info &&
+		not ((ZoneSet.is_empty ef_body.assigns) && 
+		       (HeapVarSet.is_empty ef_body.assigns_var)) then
+		  Queue.add 
+		    (loc,
+		     "function " ^ id.fun_name ^ 
+		       " has side-effects but no 'assigns' clause given")
+		    warnings
+	  | Some _ -> 
+	      (* some assigns given by user:
+		 emit a warning if side-effects of spec differs from 
+		 side-effects of body *) 
+	      if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
+			(HeapVarSet.equal 
+			   ef_spec.assigns_var ef_body.assigns_var))
+	      then begin 
+		Queue.add 
+		  (loc,
+		   "'assigns' clause for function " ^ id.fun_name ^
+		     " do not match side-effects of its body ")
+		  warnings		    
+	      end
+	end;
+	ef_union ef_spec ef_body
+      else
+	ef_spec
+    in
+    declare id ef
   in
-  List.iter (decl fun_list) dl;
+  List.iter decl fun_list(* dl*);
   !fixpoint
+    
+let effect  nfiles fun_list =
+  List.iter (fun f ->
+	       while not (functions fun_list) 
+	       do 
+		 Queue.clear warnings
+	       done) 
+    fun_list 
 
-let effect  nfiles fun_list=
-    while not (List.for_all (fun (_,p) -> functions fun_list p) nfiles)
-    do 
-      Queue.clear warnings
-    done
