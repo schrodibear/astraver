@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.131 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.132 2006-06-30 12:22:19 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -160,7 +160,7 @@ let add_field_var v ty s =
 	    assert false
 	in
 	let n = v.var_unique_name in
-	if not z.zone_is_var then add_heap_var n z ty';
+	if not z.zone_is_var then  add_heap_var n z ty';
 	ZoneSet.add (z,n,ty') s
     | Unit -> assert false
     | Info.Int -> assert false
@@ -474,17 +474,16 @@ let rec expr e = match e.nexpr_node with
   | NEcall {ncall_fun = e; ncall_args = el; ncall_zones_assoc = assoc} ->
       let ef = match e.nexpr_node with
 	| NEvar (Fun_info f) ->    	   
-	    List.iter (fun (z1,z2) -> eprintf "(%s,%s)@." z1.name z2.name) assoc;
-	    Format.eprintf "%a@." print_effects2 f.function_reads;
 	    let reads = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
 		 let z = try List.assoc z assoc with Not_found -> z in
 		 let z = repr z in
-		 if not z.zone_is_var then add_heap_var s z ty else ();
+		 let ty = Cseparation.assoctype ty assoc in
+		 if not z.zone_is_var then add_heap_var s z ty 
+		 else ();
 		 ZoneSet.add (z,s,ty) acc)
 	      f.function_reads empty in
-    	    Format.eprintf "%a@." print_effects2 reads;
 	    let writes = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
@@ -1105,43 +1104,43 @@ let functions fun_list  =
     let (sp,_,id,s,loc) = find_c_fun f.fun_name in
     let ef_spec = spec sp in
     let ef = 
-      if (verify id.fun_name) && s <> None then
-	let s = begin 
-	  match s with 
-	    | None -> assert false
-	    | Some s -> s
-        end in
-	let ef_body = statement s in
-	begin match sp.Clogic.assigns with
-	  | None -> 
-	      (*no assigns given by user:
-		emit a warning if some side-effects have been detected *)
-	      if id <> Cinit.invariants_initially_established_info &&
-		not ((ZoneSet.is_empty ef_body.assigns) && 
-		       (HeapVarSet.is_empty ef_body.assigns_var)) then
-		  Queue.add 
-		    (loc,
-		     "function " ^ id.fun_name ^ 
-		       " has side-effects but no 'assigns' clause given")
-		    warnings
-	  | Some _ -> 
-	      (* some assigns given by user:
-		 emit a warning if side-effects of spec differs from 
-		 side-effects of body *) 
-	      if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
-			(HeapVarSet.equal 
-			   ef_spec.assigns_var ef_body.assigns_var))
-	      then begin 
-		Queue.add 
-		  (loc,
-		   "'assigns' clause for function " ^ id.fun_name ^
-		     " do not match side-effects of its body ")
-		  warnings		    
-	      end
-	end;
-	ef_union ef_spec ef_body
-      else
-	ef_spec
+(*      if (verify id.fun_name) && s <> None then*)
+      begin 
+	match s with 
+	  | None -> ef_spec
+	  | Some s -> 
+  	      let ef_body = statement s in
+	      begin match sp.Clogic.assigns with
+		| None -> 
+		    (*no assigns given by user:
+		      emit a warning if some side-effects have been detected *)
+		    if id <> Cinit.invariants_initially_established_info &&
+		      not ((ZoneSet.is_empty ef_body.assigns) && 
+			     (HeapVarSet.is_empty ef_body.assigns_var)) then
+			Queue.add 
+			  (loc,
+			   "function " ^ id.fun_name ^ 
+			     " has side-effects but no 'assigns' clause given")
+			  warnings
+		| Some _ -> 
+		    (* some assigns given by user:
+		       emit a warning if side-effects of spec differs from 
+		       side-effects of body *) 
+		    if not ((ZoneSet.equal ef_spec.assigns ef_body.assigns) &&
+			      (HeapVarSet.equal 
+				 ef_spec.assigns_var ef_body.assigns_var))
+		    then begin 
+		      Queue.add 
+			(loc,
+			 "'assigns' clause for function " ^ id.fun_name ^
+			   " do not match side-effects of its body ")
+			warnings		    
+		    end
+	      end;
+		ef_union ef_spec ef_body
+      end
+(*      else
+	ef_spec*)
     in
     declare id ef
   in

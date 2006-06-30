@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.34 2006-06-23 15:06:02 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.35 2006-06-30 12:22:19 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -24,7 +24,7 @@ type why_type =
   | Pointer of zone
   | Addr of zone
   | Int
-  | Unit
+  | Unit 
   | Why_Logic of string
 
 and zone = 
@@ -60,7 +60,7 @@ let rec same_why_type wt1 wt2 =
     | Memory(a1,z1), Memory(a2,z2) ->
 	same_zone z1 z2 && same_why_type a1 a2
     | Int, Int -> true
-    | Unit, Unit -> true
+(*    | Unit, Unit -> true *)
     | Why_Logic s1, Why_Logic s2 -> s1=s2
     | _, _ -> false
 
@@ -70,7 +70,7 @@ let rec same_why_type_no_zone wt1 wt2 =
     | Memory(a1,z1),Memory(a2,z2) ->
 	same_why_type_no_zone a1 a2
     | Int,Int -> true
-    | Unit,Unit -> true
+(*     | Unit,Unit -> true *)
     | Why_Logic s1,Why_Logic s2 -> s1=s2
     | _, _ -> false
 
@@ -79,13 +79,15 @@ let found_repr ?(quote_var=true) z =
   let z = repr z in
   if quote_var && z.zone_is_var then "'"^z.name else z.name
 
-let rec output_why_type ty =
+let rec output_why_type ?(quote_var=true) ty =
     match ty with
     | Int -> [], "int"
-    | Pointer z -> [] , found_repr z ^ " pointer"    
-    | Addr z -> [] , found_repr z ^ " addr"
-    | Memory(t,z) -> (snd (output_why_type t))::[found_repr z], " memory"
-    | Unit -> [], "unit"
+    | Pointer z -> [] , found_repr ~quote_var:quote_var z ^ " pointer"    
+    | Addr z -> [] , found_repr ~quote_var:quote_var z ^ " addr"
+    | Memory(t,z) -> 
+	(snd (output_why_type ~quote_var:quote_var t))::
+	[found_repr ~quote_var:quote_var z], " memory"
+    | Unit -> [], "unit" 
     | Why_Logic v -> [], v
 
 
@@ -178,7 +180,7 @@ let default_logic_info x =
     logic_heap_zone = ZoneSet.empty;
     logic_heap_args = HeapVarSet.empty;
     logic_args = [];
-    logic_why_type = Unit;
+    logic_why_type = Why_Logic "?";
     logic_args_zones = [];
   }
 

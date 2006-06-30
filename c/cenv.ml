@@ -258,7 +258,7 @@ let rec type_type_why ?name ty zone_is_var =
 	      let z = make_zone ?name zone_is_var in
 	      Pointer z
 	end
-    | Tvoid -> Unit
+    | Tvoid -> Unit 
     | Tfun (_,ty) -> type_type_why ?name ty zone_is_var
     | Tvar v -> 
 	begin

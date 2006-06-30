@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.24 2006-06-21 13:02:01 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.25 2006-06-30 12:22:19 hubert Exp $ i*)
 
 open Format
 open Pp
@@ -129,7 +129,6 @@ let generic f targets =
     (f ^ ".makefile")
 
 let makefile f =
-  let f = Filename.chop_extension f in
   if Coptions.separate then
     let l = try Hashtbl.find files f with Not_found -> [] in
     generic f (List.map (fun x -> f ^ "__" ^ x) l)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.70 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.71 2006-06-30 12:22:19 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -149,8 +149,7 @@ let rec type_why e =
 	    Format.eprintf "no  why type for %a@\n" Cprint.nexpr e;
 	    assert false
 	end
-    | NEnop -> 
-	Unit
+    | NEnop -> assert false (* 	Unit *)
     | NEconstant (IntConstant _)
     | NEunary (Uint_of_float, _)
     | NEcast ({Ctypes.ctype_node = Tint _}, _) -> 

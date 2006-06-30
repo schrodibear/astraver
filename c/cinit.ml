@@ -91,7 +91,13 @@ let rec init_expr loc t lvalue initializers =
 	  else
 	    let ts = Ctyping.int_teconstant (Int64.to_string i) in
 	    let (b,init') = 
-	      init_expr loc ty (noattr loc ty (TEarrget(lvalue,ts))) init 
+	      match ty.ctype_node with 
+		| Tstruct _ |  Tunion _ ->
+		    init_expr loc ty 
+		      (noattr loc ty 
+			 (TEbinary(lvalue,Badd_int(Signed,Int),ts))) init
+		| _ ->
+		    init_expr loc ty (noattr loc ty (TEarrget(lvalue,ts))) init
 	    in
 	    init_cells (Int64.add i Int64.one) (block@b,init')
 	in

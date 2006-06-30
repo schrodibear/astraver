@@ -14,14 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.30 2006-06-23 15:06:02 filliatr Exp $ i*)
+(*i $Id: info.mli,v 1.31 2006-06-30 12:22:19 hubert Exp $ i*)
 
 type why_type = 
   | Memory of why_type * zone
   | Pointer of zone
   | Addr of zone
   | Int
-  | Unit
+  | Unit 
   | Why_Logic of string 
 
 and zone = 
@@ -44,7 +44,7 @@ val repr : zone -> zone
 
 val found_repr : ?quote_var:bool -> zone -> string
 
-val output_why_type : why_type -> string list * string
+val output_why_type : ?quote_var:bool -> why_type -> string list * string
 
 type var_info = private
     {

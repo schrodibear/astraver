@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.67 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.68 2006-06-30 12:22:19 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -32,36 +32,6 @@ let parse_file f =
 let type_file (f,p) = 
   (f, Ctyping.type_file p)
 
-let output_why_code file why_code =
-  let file = Filename.chop_extension file in
-  let file = Lib.file "why" file in
-  let why_code = List.map snd why_code in
-  Pp.print_in_file 
-    (fun fmt -> Output.fprintf_why_decls fmt why_code) (file ^ ".tmp");
-  Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
-
-(*
-let interp_file (file,p) =
-  let (why_code,why_spec,prover) = Cinterp.interp p in
-  let file = Filename.chop_extension file in
-  if separate then begin
-    List.iter
-      (fun (f,d) ->
-	 Cmake.add file f;
-	 let file = Lib.file "why" (file ^ "__" ^ f ) in
-	 Pp.print_in_file 
-	   (fun fmt -> Output.fprintf_why_decl fmt d) (file ^ ".tmp");
-	 Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why"))
-      why_code
-  end else begin
-    let file = Lib.file "why" file in
-    let why_code = List.map snd why_code in
-    Pp.print_in_file 
-      (fun fmt -> Output.fprintf_why_decls fmt why_code) (file ^ ".tmp");
-    Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
-  end;
-  why_spec
-*)
 
 let main () = 
 (*
@@ -78,7 +48,8 @@ let main () =
   end;
 *)
   (* parsing *)
-  let pfiles = List.map parse_file (files ()) in
+  let input_files = files () in
+  let pfiles = List.map parse_file input_files in
   if parse_only then exit 0;
   (* typing *)
   let tfiles = List.map type_file pfiles in
@@ -137,41 +108,55 @@ let main () =
   let why_specs = Cinterp.make_int_ops_decls () @ why_specs in
   let (why_code,why_specs,prover) = Cinterp.interp_functions (why_specs,prover) in
   (* Why specs *)
-  List.iter
-  (fun f -> 
-     let f = Filename.chop_extension f in
-     let file = Lib.file "why" (f ^ "_spec") in
-     Pp.print_in_file 
-	 (fun fmt -> 
-	    fprintf fmt 
-	      "(* this file was automatically generated; do not edit *)@\n@\n";
-	    fprintf fmt "(* zone variables *)@.";
-	    Hashtbl.iter 
-	      (fun name z ->
-		 match z.Info.repr with 
-		   | None ->
-		       let d = Type (name,[]) in
-		       fprintf fmt "@[%a@]" fprintf_why_decls [d]
-		   | Some _ -> ())
-	      Cenv.zone_table;
-	    fprintf fmt "(* logic types *)@.";
-	    Cenv.iter_types (fun t -> fprintf fmt "@[type %s@\n@]" t);
-	    fprintf fmt "(* heap variables *)@.";
-	    Hashtbl.iter 
-	      (fun v bt -> 
-		 let d = Param 
-		   (false, v, 
-		    Ref_type (Base_type (Info.output_why_type bt.Info.var_why_type))) in
-		 fprintf fmt "@[%a@]" fprintf_why_decls [d])
-	      Ceffect.heap_vars;
-	    fprintf fmt "(* functions specifications *)@\n";
-	    Output.fprintf_why_decls fmt why_specs) 
-	 (file ^ ".tmp");
-       Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why"))
-    (files ());
+  let first_file = Filename.chop_extension (List.hd input_files) in
+  let file = Lib.file "why" (first_file ^ "_spec") in
+  Pp.print_in_file 
+    (fun fmt -> 
+       fprintf fmt 
+	 "(* this file was automatically generated; do not edit *)@\n@\n";
+       fprintf fmt "(* zone variables *)@.";
+       Hashtbl.iter 
+	 (fun name z ->
+	    match z.Info.repr with 
+	      | None ->
+		  let d = Type (name,[]) in
+		  fprintf fmt "@[%a@]" fprintf_why_decls [d]
+	      | Some _ -> ())
+	 Cenv.zone_table;
+       fprintf fmt "(* logic types *)@.";
+       Cenv.iter_types (fun t -> fprintf fmt "@[type %s@\n@]" t);
+       fprintf fmt "(* heap variables *)@.";
+       Hashtbl.iter 
+	 (fun v bt -> 
+	    let d = Param 
+	      (false, v, 
+	       Ref_type (Base_type (Info.output_why_type ~quote_var:false 
+				      bt.Info.var_why_type))) in
+	    fprintf fmt "@[%a@]" fprintf_why_decls [d])
+	 Ceffect.heap_vars;
+       fprintf fmt "(* functions specifications *)@\n";
+       Output.fprintf_why_decls fmt why_specs) 
+    (file ^ ".tmp");
+  Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why");
+  (* function bodies *)
+  if separate then begin
+    List.iter
+      (fun (f,d) ->
+	 Cmake.add first_file f;
+	 let file = Lib.file "why" (first_file ^ "__" ^ f ) in
+	 Pp.print_in_file 
+	   (fun fmt -> Output.fprintf_why_decl fmt d) (file ^ ".tmp");
+	 Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why"))
+      why_code
+  end else begin
+    let file = Lib.file "why" first_file in
+    let why_code = List.map snd why_code in
+    Pp.print_in_file 
+      (fun fmt -> Output.fprintf_why_decls fmt why_code) (file ^ ".tmp");
+    Lib.file_copy_if_different (file ^ ".tmp") (file ^ ".why")
+  end;
   (* makefile *)
-  output_why_code (List.hd (files())) why_code;
-  List.iter Cmake.makefile (files ())
+  Cmake.makefile first_file
        
        
  

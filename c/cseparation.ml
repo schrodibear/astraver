@@ -357,8 +357,10 @@ let rec rehash z1 z2 =
   let t =
   (try 
     let t2 = Hashtbl.find type_why_table z2 in
+    Hashtbl.remove type_why_table z2;
     (try 
        let t1 = Hashtbl.find type_why_table z1 in
+       Hashtbl.remove type_why_table z1;
        Hashtbl.iter 
 	 (fun a1 tw2 ->
 	    try 
@@ -376,7 +378,19 @@ let rec rehash z1 z2 =
        Hashtbl.find type_why_table z1
      with Not_found -> Hashtbl.create 5) 
   in
+(*  Hashtbl.iter
+    (fun f tw -> 
+       let l,n = output_why_type tw in
+       Format.eprintf "adding in type_why_table :(%s,%s) -> %s@." 
+	 z1.name f.var_name n)
+    t;*)
   Hashtbl.add type_why_table z1 t;
+(*  Hashtbl.iter
+    (fun f tw -> 
+       let l,n = output_why_type tw in
+       Format.eprintf "adding in type_why_table :(%s,%s) -> %s@." 
+	 z2.name f.var_name n)
+    t;*)
   Hashtbl.add type_why_table z2 t
     
 and unifier_type_why tw1 tw2 =
@@ -386,7 +400,7 @@ and unifier_type_why tw1 tw2 =
     | Addr z1 , Addr z2 ->
 	unifier_zone z1 z2
     | Info.Int, Info.Int -> ()
-    | Unit, Unit -> ()
+(*    | Unit, Unit -> () *)
     | Why_Logic s1, Why_Logic s2 when s1=s2 -> ()
     | Memory _, _ | _, Memory _ -> assert false
     | _ ->
@@ -410,7 +424,7 @@ and unifier_zone z1 z2 =
 	    if z1'.zone_is_var then z1'.repr <- Some z2' else 
 	      if z2'.zone_is_var then z2'.repr <- Some z1' else
 	      if z1'.number < z2'.number then z2'.repr <- Some z1'
-	  else z1'.repr <- Some z2' 
+	      else z1'.repr <- Some z2' 
 	| _ -> assert false
     end
 
@@ -425,6 +439,12 @@ let assoctype  ty assoc =
 let copyhash z za assoc =
   try let t = Hashtbl.copy (Hashtbl.find type_why_table z) in
   Hashtbl.iter (fun x y -> Hashtbl.replace t x (assoctype y assoc) ) t;
+(*  Hashtbl.iter
+    (fun f tw -> 
+       let l,n = output_why_type tw in
+       Format.eprintf "adding in type_why_table :(%s,%s) -> %s@." 
+	 za.name f.var_name n)
+    t;*)
   Hashtbl.add type_why_table za t
   with Not_found -> () 
 

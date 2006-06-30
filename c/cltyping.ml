@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.97 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.98 2006-06-30 12:22:19 hubert Exp $ i*)
 
 open Coptions
 open Format
@@ -311,7 +311,7 @@ and type_term_node loc env = function
        with Not_found -> error loc "\\result meaningless")
   | PLnull ->
       let info = default_var_info "null" in 
-      Cenv.set_var_type (Var_info info) (c_void_star Not_valid) true;
+      Cenv.set_var_type (Var_info info) (c_void_star Not_valid) false;
       Clogic.Tvar info, (c_void_star Not_valid)
   | PLcast (ty, t) ->
       let t = type_term env t in

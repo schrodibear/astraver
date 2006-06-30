@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.28 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.29 2006-06-30 12:22:19 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -93,7 +93,6 @@ let rec nterm fmt t = match t.nterm_node with
 and nterm_p fmt t = match t.nterm_node with
   | NTconstant _ | NTvar _ | NTapp _ | NTold _ | NTat _ ->
       nterm fmt t
-(* NTresult _ | NTnull | *)
   | _ ->
       fprintf fmt "(%a)" nterm t
 
