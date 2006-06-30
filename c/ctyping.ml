@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.117 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.118 2006-06-30 13:11:28 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -742,7 +742,13 @@ and type_field n loc env (ty, x, bf) =
 	  | Tenum _ -> Unsigned (* TODO: verif assez de bits pour l'enum *)
 	  | Tint (s, Int) -> s
 	  | Tint (s, _) ->
-	      warning loc ("bit-field `"^x^"' type invalid in ANSI C"); s
+	      let t = 
+		fprintf str_formatter 
+		  "bit-field type `%a' invalid in ANSI C"
+		  Creport.print_type ty;
+		flush_str_formatter ()
+	      in
+	      warning loc t; s
 	  | _ -> assert false
 	in
 	let v = eval_const_expr e in
