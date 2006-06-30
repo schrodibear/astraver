@@ -140,7 +140,7 @@ let make_graph e =
   | _ -> ()
 
       
-let file  = Format.eprintf "file@."; List.iter (fun d -> make_graph d.node) 
+let file  = List.iter (fun d -> make_graph d.node) 
 
 open Info
 
@@ -156,11 +156,15 @@ module G = struct
     let equal f1 f2 = f1.fun_tag == f2.fun_tag
   end
   let iter_vertex iter files =
-    let iter_fun  e = 
+    (*let iter_fun  e = 
       match e with    
-	| Tfundef (s, t, f, _) | Tfunspec (s, t, f) -> iter f
-	| _ -> () in
-    List.iter (fun (_,file) ->List.iter (fun d -> iter_fun d.node) file) files
+	| Tfundef (s, t, f, _)  -> iter f
+	| _ -> () in*)
+      Cenv.iter_sym 
+	(fun n x -> match x with
+	   | Var_info _ -> () 
+	   | Fun_info f -> iter f) 
+    (*List.iter (fun (_,file) ->List.iter (fun d -> iter_fun d.node) file) files*)
   let iter_succ iter _ f =
     List.iter iter f.graph 
   end
