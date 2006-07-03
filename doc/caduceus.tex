@@ -1480,15 +1480,19 @@ parts of the code and its specification is visible.
 The following features are not yet supported by \caduceus\ but will be
 so in future versions of the tool:
 \begin{itemize}
-\item string literals (e.g. \texttt{"hello world"})
+%\item \texttt{switch} constructs
+%\item string literals (e.g. \texttt{"hello world"})
+%\item arithmetic overflow (currently all integers types are mapped to
+%  arbitrary precision integers on the prover side)
+%\item \texttt{sizeof}
 \item standard library functions: \texttt{memcpy},
   \texttt{strcmp}, etc.
-\item more support for \verb|&| operator.
+%\item more support for \verb|&| operator.
 \item no model for \emph{modular arithmetic}.
 \end{itemize}
 
 \subsection{Other unsupported features}
-The following features are not planed be supported by \caduceus:
+The following features are not planed to be supported by \caduceus:
 \begin{itemize}
 \item arbitrary \texttt{goto} (some simple \texttt{goto}'s will be supported)
 \item function pointer (apart from trivial situations where we know at

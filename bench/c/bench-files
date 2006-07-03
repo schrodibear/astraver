@@ -1,4 +1,4 @@
-abs all array assigns loop_assigns break call clash clash_alloc clash_redef 
+abs all array assigns loop_assigns break call clash clash_alloc clash_redef  
 logic continue coord dassault_1 dassault_2 
 copy dowhile invariants latespec logic_cast 
 param passing purse queue rec ref ref_glob search see 
