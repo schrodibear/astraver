@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.132 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.133 2006-07-03 14:34:01 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1148,6 +1148,10 @@ let functions fun_list  =
   !fixpoint
     
 let effect  nfiles fun_list =
+  while not (functions [Cinit.invariants_initially_established_info]) 
+  do 
+    Queue.clear warnings
+  done;
   List.iter (fun f ->
 	       while not (functions fun_list) 
 	       do 

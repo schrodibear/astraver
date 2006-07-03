@@ -747,13 +747,7 @@ let global_decl e =
 	if f.args_zones = [] then f.args_zones <- collect_zones f.args f.type_why_fun
 *)
 
-let c_fun fun_name (sp, _, f, st,_) =
-  spec f.type_why_fun sp;
-  begin
-    match st with
-      | None -> ()
-      | Some st  -> statement f.type_why_fun st
-  end; 
+let c_fun_poly fun_name (_, _, f, _,_) =
   if f.args_zones = [] then 
     begin
       let l = collect_zones f.args f.type_why_fun in
@@ -764,6 +758,21 @@ let c_fun fun_name (sp, _, f, st,_) =
       f.args_zones <- l
     end
 
+let c_fun_separation fun_name (sp, _, f, st,_) =
+  spec f.type_why_fun sp;
+  begin
+    match st with
+      | None -> ()
+      | Some st  -> statement f.type_why_fun st
+  end;  spec f.type_why_fun sp;
+  begin
+    match st with
+      | None -> ()
+      | Some st  -> statement f.type_why_fun st
+  end 
+
 
 let file p =  List.iter (fun d -> global_decl d.node) p;
-  Hashtbl.iter c_fun Cenv.c_functions
+  Hashtbl.iter c_fun_poly Cenv.c_functions;
+  Hashtbl.iter c_fun_separation Cenv.c_functions;
+
