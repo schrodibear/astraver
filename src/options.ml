@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.71 2006-06-30 14:05:13 hubert Exp $ i*)
+(*i $Id: options.ml,v 1.72 2006-07-04 08:25:16 lescuyer Exp $ i*)
 
 open Format
 
@@ -32,7 +32,7 @@ let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
 let isabelle_base_theory_ = ref "Main"
 let no_simplify_prelude_ = ref false
-let no_simplify_triggers_ = ref true
+let no_simplify_triggers_ = ref false
 let no_cvcl_prelude_ = ref false
 let no_harvey_prelude_ = ref false
 let no_zenon_prelude_ = ref false

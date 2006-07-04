@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.55 2006-06-24 11:01:06 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.56 2006-07-04 08:25:16 lescuyer Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -219,16 +219,17 @@ let rec print_predicate pos fmt p =
       fprintf fmt "@[(OR@ %a@ %a)@]" pp a pp b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" pp a
-  | Forall (_,id,n,_,_,p) when no_simplify_triggers ->
-      let id' = next_away id (predicate_vars p) in
-      let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' pp p'
-  | Forall (_,id,n,_,tl,p) -> 
+  | Forall (_,id,n,_,tl,p) when (not no_simplify_triggers && 
+				 get_types_encoding () = Stratified) -> 
       let id' = next_away id (predicate_vars p) in
       let s = subst_onev n id' in
       let p' = subst_in_predicate s p in
       let tl' = List.map (List.map (subst_in_pattern s)) tl in
       fprintf fmt "@[(FORALL (%a)%a@ %a)@]" ident id' triggers tl' pp p'
+  | Forall (_,id,n,_,_,p) ->
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id' pp p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in

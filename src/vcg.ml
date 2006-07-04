@@ -628,7 +628,7 @@ let rec split lvl ctx = function
       (fun pl -> 
 	 let l1,l2 = split_list n1 pl in 
 	 ProofTerm 
-	   (cc_applist (cc_var asym_conj) 
+	   (cc_applist (cc_var asym_conj)
 	      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
   | Pimplies (wp, _, _)
   | Forall (wp, _, _, _, _, _) as concl 
