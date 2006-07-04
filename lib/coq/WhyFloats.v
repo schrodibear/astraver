@@ -341,4 +341,92 @@ Definition double_of_quad : mode -> quad -> double.
 Admitted.
 
 
-Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix).
+(** Small integers, like 1 or 2, do not suffer from rounding *)
+
+Theorem small_int_no_round: forall (m:mode), forall (z:Z), 
+ (Zabs z <= Zpower_nat radix 53)%Z -> (d_to_r (r_to_d m (IZR z))= IZR z)%R.
+intros.
+assert (exists f:float, (FtoRradix f=IZR z) /\ Fbounded bdouble f).
+case (Zle_lt_or_eq (Zabs z)  (Zpower_nat radix 53)); auto;intros H1.
+exists (Float z 0); split;[unfold FtoRradix, FtoR; simpl; ring|idtac].
+split;[rewrite pdGivesBound|simpl]; auto with zarith.
+case (Zle_or_lt 0 z); intros H2;
+  [idtac|rewrite <- Zabs_Zopp in H1]; rewrite Zabs_eq in H1; auto with zarith.
+exists (Float  (Zpower_nat radix 52) 1); split.
+rewrite H1; unfold FtoRradix, FtoR.
+apply trans_eq with ((Zpower_nat radix 52)*(powerRZ radix 1))%R; auto.
+repeat rewrite Zpower_nat_Z_powerRZ; auto.
+rewrite <- powerRZ_add; auto with real zarith.
+split;[rewrite pdGivesBound|simpl]; auto with zarith.
+exists (Float  (-(Zpower_nat radix 52))%Z 1); split.
+apply trans_eq with (-(-z)%Z)%R; [idtac|rewrite Ropp_Ropp_IZR;ring].
+rewrite H1; unfold FtoRradix, FtoR.
+apply trans_eq with ((-(Zpower_nat radix 52))%Z*(powerRZ radix 1))%R; auto.
+rewrite Ropp_Ropp_IZR; repeat rewrite Zpower_nat_Z_powerRZ; auto.
+apply trans_eq with (-(powerRZ radix (S 51) * powerRZ radix 1))%R;[ring|idtac].
+rewrite <- powerRZ_add; auto with real zarith.
+split;[rewrite pdGivesBound|simpl]; auto with zarith.
+elim H0; intros f T; elim T; intros H1 H2; clear T H0.
+rewrite <- H1.
+unfold r_to_d, r_to_d_aux, d_to_r; simpl.
+unfold FtoRradix; apply sym_eq.
+case m; simpl.
+apply RoundedModeProjectorIdemEq with bdouble 53%nat 
+  (EvenClosest bdouble radix 53); fold FtoRradix;
+  [auto with zarith|auto with zarith| apply pdGivesBound|
+    idtac|auto|idtac].
+apply EvenClosestRoundedModeP;[auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RND_EvenClosest_correct; [auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RoundedModeProjectorIdemEq with bdouble 53%nat 
+  (ToZeroP bdouble radix); fold FtoRradix;
+  [auto with zarith|auto with zarith| apply pdGivesBound|
+    idtac|auto|idtac].
+apply ToZeroRoundedModeP with 53%nat;[auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RND_Zero_correct; [auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RoundedModeProjectorIdemEq with bdouble 53%nat 
+  (isMin bdouble radix); fold FtoRradix;
+  [auto with zarith|auto with zarith| apply pdGivesBound|
+    idtac|auto|idtac].
+apply MinRoundedModeP with 53%nat;[auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RND_Min_correct; [auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RoundedModeProjectorIdemEq with bdouble 53%nat 
+  (isMax bdouble radix); fold FtoRradix;
+  [auto with zarith|auto with zarith| apply pdGivesBound|
+    idtac|auto|idtac].
+apply MaxRoundedModeP with 53%nat;[auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RND_Max_correct; [auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RoundedModeProjectorIdemEq with bdouble 53%nat 
+  (Closest bdouble radix); fold FtoRradix;
+  [auto with zarith|auto with zarith| apply pdGivesBound|
+    idtac|auto|idtac].
+apply ClosestRoundedModeP with 53%nat;[auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+apply RND_ClosestUp_correct; [auto with zarith| auto with zarith| 
+  apply pdGivesBound].
+Qed.
+
+Theorem zero_no_round: forall (m:mode), ((d_to_r (r_to_d m (IZR 1))=1))%R.
+intros.
+rewrite small_int_no_round; auto with real zarith.
+Qed.
+
+Theorem one_no_round: forall (m:mode), ((d_to_r (r_to_d m (IZR 1))=1))%R.
+intros.
+rewrite small_int_no_round; auto with real zarith.
+Qed.
+
+Theorem two_no_round: forall (m:mode),  ((d_to_r (r_to_d m (IZR 2))=2))%R.
+intros.
+rewrite small_int_no_round; auto with real zarith.
+Qed.
+
+
+Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix) (zero_no_round nearest_even) (one_no_round nearest_even) (two_no_round nearest_even).
