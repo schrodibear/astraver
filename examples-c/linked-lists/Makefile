@@ -10,11 +10,13 @@ all: swap reverse
 reverse:
 	$(EXECCADUCEUS) reverse.c
 	make -f reverse.makefile simplify
+	make -f reverse.makefile depend
 	make -f reverse.makefile coq
 
 swap:
 	$(EXECCADUCEUS) swap.c
 	make -f swap.makefile simplify
+	make -f swap.makefile depend
 	make -f swap.makefile coq
 
 simplify:
@@ -26,6 +28,7 @@ simplify:
 %: %.c 
 	$(EXECCADUCEUS) $*.c
 	make -f $*.makefile simplify
+	make -f $*.makefile depend
 	make -f $*.makefile coq
 
 .PHONY: coq simplify cvcl

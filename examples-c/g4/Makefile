@@ -12,6 +12,7 @@ coq: $(FILES)
 allcoq:
 	for f in $(FILES); do \
 	  $(EXECCADUCEUS) $$f.c; \
+	  make -f $$f.makefile depend; \
 	  make -f $$f.makefile coq; \
 	done
 

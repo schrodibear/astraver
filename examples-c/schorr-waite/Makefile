@@ -13,6 +13,7 @@ transparent.dvi: transparent.tex
 %: %.c 
 	caduceus $*.c
 	make -f $*.makefile simplify
+	make -f $*.makefile depend
 	make -f $*.makefile coq
 
 schorr_waite_split:
