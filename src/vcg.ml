@@ -605,6 +605,7 @@ let conj = match prover () with
   | _ -> Ident.create "conj"
 
 let asym_conj = Ident.create "why_asym_conj"
+let split_iff = Ident.create "why_split_iff"
 
 let rec split lvl ctx = function
   | Pand (wp, true, p1, p2) 
@@ -630,6 +631,15 @@ let rec split lvl ctx = function
 	 ProofTerm 
 	   (cc_applist (cc_var asym_conj)
 	      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
+  | Piff (p1, p2) when Options.split_user_conj ->
+      let o1,pr1 = split lvl ctx (pimplies p1 p2) in
+      let n1 = List.length o1 in
+      let o2,pr2 = split lvl ctx (pimplies p2 p1) in
+      o1 @ o2, 
+      (fun pl -> 
+	 let l1,l2 = split_list n1 pl in 
+	 ProofTerm (cc_applist (cc_var split_iff) 
+		      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
   | Pimplies (wp, _, _)
   | Forall (wp, _, _, _, _, _) as concl 
       when (wp || Options.split_user_conj) && lvl < lvlmax ->

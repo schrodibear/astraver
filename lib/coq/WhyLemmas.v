@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.19 2005-11-08 15:44:44 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.20 2006-07-04 11:19:15 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -105,6 +105,11 @@ Parameter
   why_any_unit : forall x_:unit, sig_1 unit (fun result:unit => True).
 
 Lemma why_asym_conj : forall (a b : Prop), a -> (a -> b) -> a /\ b.
+Proof.
+  tauto.
+Qed.
+
+Lemma why_split_iff : forall (a b : Prop), (a -> b) -> (b -> a) -> (a <-> b).
 Proof.
   tauto.
 Qed.
