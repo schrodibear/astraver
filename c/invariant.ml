@@ -473,3 +473,123 @@ let add_predicates l =
   in
   let l = (fold_all_struct_pairs separation_2_struct l) in
   Cenv.fold_all_struct f l
+
+
+(* Type predicates 
+  
+   For each structure "struct S" we introduce a predicate is_struct_S
+   and its definition (as an axiom)
+ *)
+
+open Cast
+
+let pand p1 p2 = match p1.pred_node, p2.pred_node with
+  | Ptrue, _ -> p2
+  | _, Ptrue -> p1
+  | _ -> { p1 with pred_node = Pand (p1, p2) }
+
+let pimp p1 p2 = match p1.pred_node, p2.pred_node with
+  | Ptrue, _ -> p2
+  | _, Ptrue -> p2
+  | _ -> { p1 with pred_node = Pimplies (p1, p2) }
+
+let pforall q p = match p.pred_node with
+  | Ptrue -> { p with pred_node = Ptrue }
+  | _ -> { p with pred_node = Pforall (q, p) }
+
+let tterm d t = { term_node = d; term_type = t; term_loc = Loc.dummy_position }
+let dummy_pred p = { pred_node = p; pred_loc = Loc.dummy_position }
+let prel (t1, r, t2) = dummy_pred (Prel (t1, r, t2))
+let piff (p1, p2) = dummy_pred (Piff (p1, p2))
+let pvalid t = dummy_pred (Pvalid t)
+let pvalid_range (t,i,j) = dummy_pred (Pvalid_range (t,i,j))
+let pfresh t = dummy_pred (Pfresh t)
+let ptrue = dummy_pred Ptrue
+let papp (p, l) = dummy_pred (Papp (p, l))
+
+let var_i = Info.default_var_info "i"
+let tconstant n = tterm (Tconstant (IntConstant n)) c_int
+let tzero = tconstant "0"
+
+let rec pred_for_type ty t = match ty.Ctypes.ctype_node with
+  | Ctypes.Tstruct n ->
+      let _,info = Cenv.find_pred ("is_struct_" ^ n) in papp (info, [t])
+  | Ctypes.Tint si when Coptions.int_overflow_check ->
+      ptrue (*TODO*)
+  | Ctypes.Tarray (_, ty', Some s) ->
+      let tvar_i = tterm (Tvar var_i) c_int in
+      let n = tconstant (Int64.to_string (Int64.pred s)) in
+      let t_i = tterm (Tbinop (t, Clogic.Badd, tvar_i)) ty in
+      let star_t_i = tterm (Tunop (Clogic.Ustar, t_i)) ty' in
+      pand (pvalid_range (t, tzero, n))
+	   (pforall [c_int,var_i] 
+	      (pimp (pand (prel (tzero, Le, tvar_i)) (prel (tvar_i, Le, n)))
+		 (pred_for_type ty' star_t_i)))
+  | Ctypes.Tpointer (_, ty') | Ctypes.Tarray (_, ty', None) ->
+      let t_i = tterm (Tbinop (t, Clogic.Badd, tterm (Tvar var_i) c_int)) ty in
+      let star_t_i = tterm (Tunop (Clogic.Ustar, t_i)) ty' in
+      pforall [c_int,var_i] (pimp (pvalid t_i) (pred_for_type ty' star_t_i))
+  | Ctypes.Tunion n ->
+      ptrue (*TODO*)
+  | Ctypes.Tenum n ->
+      ptrue (*TODO*)
+  | Ctypes.Tvoid | Ctypes.Tfun _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
+  | Ctypes.Tint _ -> 
+      ptrue
+
+let add_typing_predicates dl =
+  let loc = Loc.dummy_position in
+  let tdecl d = { node = d; loc = loc } in
+  (* 1. declare all is_struct_S predicates *)
+  let declare_is_struct s (tyn,fl) acc = 
+    let ty = noattr tyn in
+    let n = "is_struct_" ^ s in
+    let is_struct_s = Info.default_logic_info n in
+    Cenv.add_pred n ([ty], is_struct_s);
+    let x = Info.default_var_info "x" in
+    set_formal_param x;
+    set_var_type (Var_info x) ty true;
+    is_struct_s.logic_args <- [x];
+    let varx = tterm (Tvar x) ty in
+    let reads = (* reads = x.f1, ..., x.fn *)
+      List.map (fun f -> tterm (Tdot (varx, f)) f.var_type) fl
+    in
+    let d = tdecl (Tlogic (is_struct_s, Predicate_reads ([x,ty], reads))) in
+    d :: acc
+  in
+  (* 2. axiomatize all is_struct_S predicates *)
+  let define_is_struct s (tyn,fl) acc =
+    let _,is_struct_s = Cenv.find_pred ("is_struct_" ^ s) in
+    let x = match is_struct_s.logic_args with [x] -> x | _ -> assert false in
+    let ty = noattr tyn in
+    let varx = tterm (Tvar x) ty in
+    let ax = 
+      let def = 
+	List.fold_left
+	  (fun acc f -> 
+	     let t = tterm (Tdot (varx, f)) f.var_type in
+	     pand acc (pred_for_type f.var_type t))
+	  ptrue fl
+      in
+      let p = pforall [ty,x] (piff (papp (is_struct_s, [varx]), def)) in
+      tdecl (Taxiom ("is_struct_" ^ s ^ "_def", p)) 
+    in
+    ax :: acc
+  in
+  (* 3. add typing predicates for global variables *)
+  (**
+  let add_invariant_for_global d acc = match d.node with
+    | Tdecl (ty, x, _) ->
+	let inv = 
+	  tdecl (Tinvariant_strong ("typing_predicate_for_" ^ x.var_name,
+				    pred_for_type ty (tterm (Tvar x) ty)))
+	in
+	d :: inv :: acc
+    | _ -> 
+	d :: acc
+  in
+  **)
+  let dl = Cenv.fold_all_struct declare_is_struct dl in
+  let dl = Cenv.fold_all_struct define_is_struct dl in
+  (*let dl = List.fold_right add_invariant_for_global dl [] in*)
+  dl

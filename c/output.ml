@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.32 2006-06-22 14:20:22 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.33 2006-07-04 09:08:54 filliatr Exp $ i*)
 
 open Format;;
 
@@ -300,27 +300,28 @@ let rec fprintf_type anon form t =
 
 let fprint_base_type form b =
   match b with
-    | ([],s) -> fprintf form "-> %s" s
+    | ([],s) -> fprintf form " -> %s" s
     | (t::tl,s) -> 
-	fprintf form "-> (%s" t;
+	fprintf form " -> (%s" t;
 	List.iter (fun t -> fprintf form ",%s" t) tl;
 	fprintf form ") %s" s 
 
 let rec fprint_logic_type sep form t = 
   match t with
     | Prod_type(_,Base_type([],s),t2) ->
-	fprintf form "@[<hv 1>%s%s%a@]" sep s (fprint_logic_type ", ") t2
+	fprintf form "%s@,%s%a" sep s (fprint_logic_type ", ") t2
     | Prod_type(_,Base_type(t::tl,s),t2) ->
-	fprintf form "@[<hv 1>%s(%s" sep t;
+	fprintf form "%s@,(%s" sep t;
 	List.iter (fun t -> fprintf form ",%s" t) tl;
-	fprintf form ") %s %a@]" s (fprint_logic_type ", ") t2
+	fprintf form ") %s %a" s (fprint_logic_type ", ") t2
     | Base_type b -> fprint_base_type form b 
-    | Ref_type(_) -> assert false (* should never happen *)
+    | Ref_type _ -> assert false (* should never happen *)
     | Prod_type _ -> assert false (* should never happen *)
     | Annot_type _ -> assert false (* should never happen *)
 ;;
 
-let fprint_logic_type = fprint_logic_type ""
+let fprint_logic_type fmt t = 
+  fprintf fmt "@[<hov 2>%a@]" (fprint_logic_type "") t
 
 (*s expressions *)
 

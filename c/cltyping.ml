@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.98 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.99 2006-07-04 09:08:53 filliatr Exp $ i*)
 
 open Coptions
 open Format
@@ -606,15 +606,6 @@ let type_variant env = function
   | (t, r) -> (type_term env t, r)
 
 let type_location = type_term
-(***
-let rec type_location env = function
-  | Lterm t -> 
-      Lterm (type_term env t)
-  | Lstar l -> 
-      Lstar (type_term env l)
-  | Lrange (l1, l2, l3) -> 
-      Lrange (type_term env l1, type_term env l2, type_term env l3)
-***)
 
 let type_loop_annot env la =
   { invariant = option_app (type_predicate env) la.invariant;

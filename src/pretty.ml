@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pretty.ml,v 1.2 2006-06-21 09:19:46 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.3 2006-07-04 09:08:54 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -63,6 +63,8 @@ let rec term fmt = function
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "void" 
+  | Tconst (ConstFloat (i,f,"")) -> 
+      fprintf fmt "%s.%s" i f
   | Tconst (ConstFloat (i,f,e)) -> 
       fprintf fmt "%s.%se%s" i f e
   | Tvar id | Tderef id | Tapp (id, [], _) -> 

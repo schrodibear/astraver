@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.197 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.198 2006-07-04 09:08:53 filliatr Exp $ i*)
 
 
 open Format
@@ -1500,7 +1500,7 @@ let strong_invariants_for hvs =
 	 (make_and 
 	   (if (Ceffect.mem_strong_invariant_2 id) || (Cenv.mem_pred id)
 	    then
-	       strong_invariant_name id e1.Ceffect.reads_var e1.Ceffect.reads
+	      strong_invariant_name id e1.Ceffect.reads_var e1.Ceffect.reads
 	    else
 	      strong_invariant id p )  acc)
        else acc) 

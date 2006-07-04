@@ -280,7 +280,8 @@ let rec type_type_why ?name ty zone_is_var =
 
 
 let set_var_type info ty zone_is_var =
-  Info.set_var_type info ty (type_type_why ~name:(env_name info) ty zone_is_var) 
+  Info.set_var_type info ty 
+    (type_type_why ~name:(env_name info) ty zone_is_var)
 
 (* global variables and functions *)
 

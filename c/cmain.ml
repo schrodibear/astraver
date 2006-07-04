@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.68 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.69 2006-07-04 09:08:53 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -34,19 +34,6 @@ let type_file (f,p) =
 
 
 let main () = 
-(*
-  if not (parse_only || type_only || cpp_dump) then begin
-    let theorysrc = Filename.concat Coptions.libdir "why/caduceus.why" in
-    let theory = Lib.file "why" "caduceus.why" in
-    file_copy_if_different theorysrc theory;
-    let coqsrc = Filename.concat Coptions.libdir "coq/caduceus_why.v" in
-    let coq = Lib.file "coq" "caduceus_why.v" in
-    Lib.file_copy_if_different coqsrc coq;
-    let coqtactics = Filename.concat Coptions.libdir "coq/caduceus_tactics.v" in
-    let coq = Lib.file "coq" "caduceus_tactics.v" in
-    Lib.file_copy_if_different coqtactics coq
-  end;
-*)
   (* parsing *)
   let input_files = files () in
   let pfiles = List.map parse_file input_files in
@@ -54,21 +41,23 @@ let main () =
   (* typing *)
   let tfiles = List.map type_file pfiles in
   if type_only then exit 0;
+  let on_all_files g = List.map (fun (f, dl) -> (f, g dl)) in
   (* initialisation of global variables *)
-  let tfiles = List.map (fun (f,p) -> (f,Cinit.add_init p)) tfiles in
+  let tfiles = on_all_files Cinit.add_init tfiles in
   (* function graph *)
   List.iter (fun (f,p) -> Cgraph.file p) tfiles ;
   if print_graph then Cprint_graph.print_graph ();
   let tab_comp = Cgraph.find_comp tfiles in
+  (* typing predicates *)
+  (*let tfiles = on_all_files Invariant.add_typing_predicates tfiles in*)
   (* normalisation *)
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
-  let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
-  (* séparation*)
-  List.iter (fun (f,p) ->  Cseparation.file p)  nfiles;
-  (*predicate*)
- let nfiles = List.map (fun (f,p) -> (f, Invariant.add_predicates p)) 
-		 nfiles in
+  let nfiles = on_all_files Cnorm.file tfiles in
+  (* separation *)
+  List.iter (fun (f,p) -> Cseparation.file p)  nfiles;
+  (* predicate *)
+  let nfiles = on_all_files Invariant.add_predicates nfiles in
   if print_norm then begin
     let print_fun = ref true in
     List.iter 
@@ -88,9 +77,6 @@ let main () =
   (* effects *)
   lprintf "starting computation of effects.@.";
   List.iter (fun (_,p) -> Ceffect.file p) nfiles;
-(*  while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 
-    Queue.clear Ceffect.warnings
-  done;*)
   Array.iter (Ceffect.effect nfiles) tab_comp;
   Queue.iter 
     (fun (loc,msg) ->
@@ -106,7 +92,9 @@ let main () =
       ([],[]) nfiles
   in
   let why_specs = Cinterp.make_int_ops_decls () @ why_specs in
-  let (why_code,why_specs,prover) = Cinterp.interp_functions (why_specs,prover) in
+  let (why_code,why_specs,prover) = 
+    Cinterp.interp_functions (why_specs,prover) 
+  in
   (* Why specs *)
   let first_file = Filename.chop_extension (List.hd input_files) in
   let file = Lib.file "why" (first_file ^ "_spec") in

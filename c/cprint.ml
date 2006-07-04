@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.29 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.30 2006-07-04 09:08:53 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -120,23 +120,23 @@ let rec npredicate fmt p = match p.npred_node with
   | NPapp {napp_pred = li; napp_args = tl;} ->
       fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
   | NPrel (t1, rel, t2) ->
-      fprintf fmt "%a %s %a" nterm t1 (relation rel) nterm t2
+      fprintf fmt "@[(%a %s %a)@]" nterm t1 (relation rel) nterm t2
   | NPand (p1, p2) ->
-      fprintf fmt "%a &&@ %a" npredicate p1 npredicate p2
+      fprintf fmt "@[(%a &&@ %a)@]" npredicate p1 npredicate p2
   | NPor (p1, p2) ->
-      fprintf fmt "%a ||@ %a" npredicate p1 npredicate p2
+      fprintf fmt "@[(%a ||@ %a)@]" npredicate p1 npredicate p2
   | NPimplies (p1, p2) ->
-      fprintf fmt "%a ->@ %a" npredicate p1 npredicate p2
+      fprintf fmt "@[(%a =>@ %a)@]" npredicate p1 npredicate p2
   | NPiff (p1, p2) ->
-      fprintf fmt "%a <->@ %a" npredicate p1 npredicate p2
+      fprintf fmt "@[(%a <=>@ %a)@]" npredicate p1 npredicate p2
   | NPnot p ->
       fprintf fmt "! %a" npredicate p
   | NPif (t, p1, p2) ->
-      fprintf fmt "%a ? %a : %a" nterm t npredicate p1 npredicate p2
+      fprintf fmt "@[(%a ? %a : %a)@]" nterm t npredicate p1 npredicate p2
   | NPforall (q, p) ->
-      fprintf fmt "\\forall %a;@ %a" quantifiers q npredicate p
+      fprintf fmt "@[(\\forall %a;@ %a)@]" quantifiers q npredicate p
   | NPexists (q, p) ->
-      fprintf fmt "\\exists %a;@ %a" quantifiers q npredicate p
+      fprintf fmt "@[(\\exists %a;@ %a)@]" quantifiers q npredicate p
   | NPold p ->
       fprintf fmt "\\old(%a)" npredicate p
   | NPat (p, l) ->
@@ -150,7 +150,7 @@ let rec npredicate fmt p = match p.npred_node with
   | NPfresh t ->
       fprintf fmt "\\fresh(%a)" nterm t
   | NPnamed (id, p) ->
-      fprintf fmt "%s:: %a" id npredicate p
+      fprintf fmt "@[(%s::@ %a)@]" id npredicate p
 
 let parameter fmt  x = fprintf fmt "%a %s" ctype x.var_type x.var_unique_name
 
@@ -161,12 +161,6 @@ let logic_parameter fmt (x, ty) = fprintf fmt "%a %s" ctype ty x.var_unique_name
 let logic_parameters = print_list comma logic_parameter
 
 let location = nterm
-(****
-let location fmt = function
-  | Lterm t -> nterm fmt t
-  | Lstar t -> fprintf fmt "%a[*]" nterm t
-  | Lrange (t1, t2, t3) -> fprintf fmt "%a[%a..%a]" nterm t1 nterm t2 nterm t3
-****)
 
 let locations = print_list comma location
 

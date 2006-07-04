@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.69 2006-06-29 08:19:27 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.70 2006-07-04 09:08:53 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -365,10 +365,6 @@ and ndecl =
   | Ntypedef of nctype * string
   | Ntypedecl of nctype
   | Ndecl of nctype * Info.var_info * nexpr c_initializer option
-(*
-  | Nfunspec of nspec * nctype * Info.fun_info 
-  | Nfundef of nspec * nctype * Info.fun_info * nstatement
-*)
   | Ntype of string
 
 type nfile = ndecl located list
