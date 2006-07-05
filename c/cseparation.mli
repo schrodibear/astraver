@@ -40,6 +40,8 @@ val valid_for_type :
   ?fresh:bool -> Loc.position -> string -> 
     nterm -> npredicate
 
+val predicate : Info.why_type -> Cast.nctype Clogic.npredicate -> unit
+
 val separation :
   Loc.position -> 
   Info.var_info -> Info.var_info -> Ctypes.ctype Clogic.npredicate

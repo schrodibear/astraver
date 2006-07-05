@@ -25,8 +25,11 @@ typedef struct S { A a; A *b; A c[3]; struct S *s; unsigned char i; } S;
        
  */
 
+struct S aaa;
+
 /*@ requires \valid(x.s) */
 int f(struct S x) {
   x.s->a.v = 0;
+  aaa.i = 'a';
   return x.c[1].v;
 }

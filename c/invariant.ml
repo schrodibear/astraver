@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.31 2006-07-05 13:21:10 filliatr Exp $ i*)
+(*i $Id: invariant.ml,v 1.32 2006-07-05 14:29:29 hubert Exp $ i*)
 
 open Coptions
 open Creport
@@ -576,20 +576,15 @@ let rec pred_for_type ty t =
 	let _,info = Cenv.find_pred (predicate_for_int_type si) in 
 	npapp (info, [t])
     | Ctypes.Tarray (_, ty', Some s) ->
-	let info = make_field ty' in
-	let info = declare_arrow_var info in
-	let zone = find_zone_for_term t in
-	let () = type_why_new_zone zone info in	
 	let var_i = var_i () in
 	let tvar_i = nterm (NTvar var_i) c_int in
 	let n = ntconstant (Int64.to_string (Int64.pred s)) in
 	let t_i = nterm (NTbinop (t, Clogic.Badd, tvar_i)) ty in
-	let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
 	npand (npvalid_range (t, ntzero, n),
 	       npforall [c_int,var_i] 
 		 (npimp (npand (nprel (ntzero, Le, tvar_i),
 				nprel (tvar_i, Le, n)))
-		    (pred_for_type ty' arrow_t_i)))
+		    (pred_for_type ty' t_i)))
     | Ctypes.Tpointer (_, ty') | Ctypes.Tarray (_, ty', None) ->
 	let info = make_field ty' in
 	let info = declare_arrow_var info in
@@ -664,15 +659,14 @@ let add_typing_predicates dl =
 	  (fun acc f -> 
 	     let zone = find_zone_for_term varx in
 	     let () = type_why_new_zone zone f in
-	     let t = nterm (NTarrow (varx, zone, f)) 
-	       f.var_type in
+	     let t = nterm (NTarrow (varx, zone, f)) f.var_type in
 	     npand (acc, pred_for_type f.var_type t))
 	  nptrue fl
       in
       let p = npforall [ty,x] (npiff (npapp (is_struct_s, [varx]), def)) in
       tdecl (Naxiom ("is_struct_" ^ s ^ "_def", p)) 
     in
-    ax :: acc
+    acc@[ax]  
   in
   (* 3. add typing predicates for global variables *)
   (**
@@ -699,5 +693,6 @@ let add_typing_predicates dl =
   in
   let dl = Cenv.fold_all_struct declare_is_struct dl in
   let dl = Cenv.fold_all_struct define_is_struct dl in
+  
   (*let dl = List.fold_right add_invariant_for_global dl [] in*)
   dl

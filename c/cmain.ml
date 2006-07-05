@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.70 2006-07-05 09:06:57 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.71 2006-07-05 14:29:29 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -54,10 +54,10 @@ let main () =
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
   let nfiles = on_all_files Cnorm.file tfiles in
+  (* predicate *)
+  let nfiles = on_all_files Invariant.add_typing_predicates nfiles in
   (* separation *)
   List.iter (fun (f,p) -> Cseparation.file p)  nfiles;
-  (* predicate *)
-  let nfiles = on_all_files Invariant.add_typing_predicates(*add_predicates*) nfiles in
   if print_norm then begin
     let print_fun = ref true in
     List.iter 

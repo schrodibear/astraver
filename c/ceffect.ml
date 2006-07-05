@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.133 2006-07-03 14:34:01 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.134 2006-07-05 14:29:29 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -928,6 +928,7 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
 let diff loc x y = 
   nprel ( x, Neq,  y)
 	  
+(*
 let rec validity x ty size =
   match ty.Ctypes.ctype_node with
     | Tarray (_,ty', Some size') ->
@@ -992,6 +993,8 @@ let rec validity x ty size =
 			 nterm_type = c_int;
 			 } in
       npvalid_range (x, Cnorm.nzero,term_sup), nptrue
+*)
+
 
 let decl d =
   match d.Cast.node with
@@ -1021,8 +1024,10 @@ let decl d =
 			 nterm_loc = d.loc;
 			 nterm_type = ty ;
 			 } in
-	       let name1 = "valid_range_" ^ v.var_name in
-	       let (pre1,pre2) = validity t typ s in
+	       let name1 = "predicate_for_" ^ v.var_name in
+(*	       let (pre1,_) = validity t typ s in*)
+	       let pre1 = Invariant.pred_for_type ty t in
+	       Cseparation.predicate Unit pre1;
 	       add_strong_invariant name1 pre1 
 		 {ef_empty with reads_var =(HeapVarSet.singleton v)};
 	       List.iter 
