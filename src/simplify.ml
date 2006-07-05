@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.56 2006-07-04 08:25:16 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.57 2006-07-05 13:21:10 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -100,11 +100,19 @@ let ident fmt id = idents fmt (Ident.string id)
 
 let sortp fmt id = idents fmt ("IS" ^ Ident.string id)
 
+let simplify_max_int = Int64.of_string "2147483647"
+
 let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" ident id
   | Tconst (ConstInt n) ->
-      fprintf fmt "%s" n
+      begin try 
+	let n64 = Int64.of_string n in
+	if n64 < 0L || n64 > simplify_max_int then raise Exit;
+	fprintf fmt "%s" n
+      with _ -> (* the constant is too large for Simplify *)
+	fprintf fmt "constant_too_large_%s" n
+      end
   | Tconst (ConstBool b) -> 
       fprintf fmt "|@@%b|" b
   | Tconst ConstUnit -> 

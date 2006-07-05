@@ -1,3 +1,22 @@
+(*
+ * The Caduceus certification tool
+ * Copyright (C) 2003 Jean-Christophe Filliâtre - Claude Marché
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
+
+(*i $Id: invariant.ml,v 1.31 2006-07-05 13:21:10 filliatr Exp $ i*)
+
+open Coptions
 open Creport
 open Info
 open Ctypes
@@ -498,6 +517,28 @@ let reset_var_i,var_i =
 let ntconstant n = nterm (NTconstant (IntConstant n)) c_int
 let ntzero = ntconstant "0"
 
+let max_int = function
+  | Signed, Char -> max_signed_char
+  | Unsigned, Char -> max_unsigned_char
+  | Signed, Short -> max_signed_short 
+  | Unsigned, Short -> max_unsigned_short
+  | Signed, Int -> max_signed_int
+  | Unsigned, Int -> max_unsigned_int
+  | Signed, Long -> max_signed_long 
+  | Unsigned, Long -> max_unsigned_long
+  | Signed, LongLong -> max_signed_longlong
+  | Unsigned, LongLong -> max_unsigned_longlong
+  | _, Bitfield _ -> assert false (*TODO*)
+
+let min_int = function
+  | Unsigned, _ -> "0"
+  | _, Char -> min_signed_char
+  | _, Short -> min_signed_short
+  | _, Int -> min_signed_int
+  | _, Long -> min_signed_long
+  | _, LongLong -> min_signed_longlong
+  | _ -> assert false (*TODO*)
+
 let predicate_name_for_int_type (sign,kind) =
   let sgs = match sign with 
     | Ctypes.Signed -> "signed" 
@@ -582,8 +623,8 @@ let add_typing_predicates dl =
     set_var_type (Var_info x) ty true;
     is_int_n.logic_args <- [x];
     let var_x = nterm (NTvar x) ty in
-    let min_si = ntconstant "0" in (*TODO*)
-    let max_si = ntconstant "255" in (*TODO*)
+    let min_si = ntconstant (min_int si) in
+    let max_si = ntconstant (max_int si) in
     let p = npand (nprel (min_si, Le, var_x),
 		   nprel (var_x, Le, max_si)) in
     let d = tdecl (Nlogic (is_int_n, NPredicate_def ([x,ty], p))) in

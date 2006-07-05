@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.198 2006-07-04 09:08:53 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.199 2006-07-05 13:21:09 filliatr Exp $ i*)
 
 
 open Format
@@ -215,7 +215,8 @@ let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
     | NTconstant (IntConstant c) ->
-	LConst(Prim_int (Int64.to_string (Cconst.int t.nterm_loc c)))
+	LConst(Prim_int (try Int64.to_string (Cconst.int t.nterm_loc c)
+			 with _ -> c))
     | NTconstant (RealConstant c) ->
 	LConst(Prim_real c)
     | NTvar id ->
@@ -518,27 +519,8 @@ let le_cinteger i1 i2 = int_size i1 <= int_size i2
 
 let lt_cinteger i1 i2 = int_size i1 < int_size i2
 
-let max_int = function
-  | Signed, Char -> max_signed_char
-  | Unsigned, Char -> max_unsigned_char
-  | Signed, Short -> max_signed_short 
-  | Unsigned, Short -> max_unsigned_short
-  | Signed, Int -> max_signed_int
-  | Unsigned, Int -> max_unsigned_int
-  | Signed, Long -> max_signed_long 
-  | Unsigned, Long -> max_unsigned_long
-  | Signed, LongLong -> max_signed_longlong
-  | Unsigned, LongLong -> max_unsigned_longlong
-  | _, Bitfield _ -> assert false (*TODO*)
-
-let min_int = function
-  | Unsigned, _ -> "0"
-  | _, Char -> min_signed_char
-  | _, Short -> min_signed_short
-  | _, Int -> min_signed_int
-  | _, Long -> min_signed_long
-  | _, LongLong -> min_signed_longlong
-  | _ -> assert false (*TODO*)
+let min_int = Invariant.min_int
+let max_int = Invariant.max_int
 
 let le_max_int i e = LPred ("le_int", [e; LConst (Prim_int (max_int i))])
 

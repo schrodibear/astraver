@@ -10,3 +10,6 @@ val add_predicates :
 
 val add_typing_predicates :
   Cast.ndecl Cast.located list -> Cast.ndecl Cast.located list
+
+val min_int : Ctypes.sign * Ctypes.cinteger -> string
+val max_int : Ctypes.sign * Ctypes.cinteger -> string
