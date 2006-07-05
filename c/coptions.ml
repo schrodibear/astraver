@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.26 2006-06-27 11:27:59 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.27 2006-07-05 14:51:43 filliatr Exp $ i*)
 
 open Format
 
@@ -69,6 +69,7 @@ let why_opt = ref ""
 let coq_tactic = ref "intuition"
 let separate = ref false
 let closed_program = ref false
+let typing_predicates = ref false
 let floats = ref true
 
 type fp_rounding_mode = 
@@ -210,6 +211,8 @@ let _ =
 	  "  set the size of type `long' (default is 32)";
 	"--long_long_size", Arg.Int (set_integer_size long_long_size_),
 	  "  set the size of type `long long' (default is 64)";
+	"--typing-predicates", Arg.Set typing_predicates,
+	  "  use typing predicates (experimental)";
       ]
       add_file "caduceus [options] file..."
 
@@ -227,6 +230,7 @@ let cpp_dump = !cpp_dump
 let coq_tactic = !coq_tactic
 let separate = !separate
 let closed_program = !closed_program
+let typing_predicates = !typing_predicates
 
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check

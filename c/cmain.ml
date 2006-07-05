@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.71 2006-07-05 14:29:29 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.72 2006-07-05 14:51:43 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -48,16 +48,25 @@ let main () =
   List.iter (fun (f,p) -> Cgraph.file p) tfiles ;
   if print_graph then Cprint_graph.print_graph ();
   let tab_comp = Cgraph.find_comp tfiles in
-  (* typing predicates *)
-  (*let tfiles = on_all_files Invariant.add_typing_predicates tfiles in*)
   (* normalisation *)
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
   let nfiles = on_all_files Cnorm.file tfiles in
   (* predicate *)
-  let nfiles = on_all_files Invariant.add_typing_predicates nfiles in
+  let nfiles = 
+    if typing_predicates then 
+      on_all_files Invariant.add_typing_predicates nfiles
+    else
+      nfiles
+  in
   (* separation *)
   List.iter (fun (f,p) -> Cseparation.file p)  nfiles;
+  let nfiles = 
+    if typing_predicates then 
+      nfiles 
+    else
+      on_all_files Invariant.add_predicates nfiles 
+  in
   if print_norm then begin
     let print_fun = ref true in
     List.iter 

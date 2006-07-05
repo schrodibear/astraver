@@ -17,7 +17,7 @@ void f1() {
   l = f + d + (long double)3;
 }
 
-/*@ requires x == \exact(x) && |x| <= 1
+/*@ requires x == \exact(x) && | x - (x+x) | <= 1
   @ ensures  \round_error(\result) <= 2 ^^ (-48)
   @*/
 double my_exp(double x) {

@@ -8,7 +8,7 @@ open Cnorm
 val add_predicates : 
   Cast.ndecl Cast.located list -> Cast.ndecl Cast.located list
 
-val  pred_for_type : 
+val pred_for_type : 
   Cast.nctype -> Cast.nterm -> Cast.npredicate
 
 val add_typing_predicates :
