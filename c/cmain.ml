@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.69 2006-07-04 09:08:53 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.70 2006-07-05 09:06:57 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -57,7 +57,7 @@ let main () =
   (* separation *)
   List.iter (fun (f,p) -> Cseparation.file p)  nfiles;
   (* predicate *)
-  let nfiles = on_all_files Invariant.add_predicates nfiles in
+  let nfiles = on_all_files Invariant.add_typing_predicates(*add_predicates*) nfiles in
   if print_norm then begin
     let print_fun = ref true in
     List.iter 

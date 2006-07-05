@@ -9,4 +9,4 @@ val add_predicates :
   Cast.ndecl Cast.located list -> Cast.ndecl Cast.located list
 
 val add_typing_predicates :
-  Cast.tdecl Cast.located list -> Cast.tdecl Cast.located list
+  Cast.ndecl Cast.located list -> Cast.ndecl Cast.located list

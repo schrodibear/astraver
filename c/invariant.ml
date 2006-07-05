@@ -483,59 +483,75 @@ let add_predicates l =
 
 open Cast
 
-let pand p1 p2 = match p1.pred_node, p2.pred_node with
-  | Ptrue, _ -> p2
-  | _, Ptrue -> p1
-  | _ -> { p1 with pred_node = Pand (p1, p2) }
+let npand p1 p2 = match p1.npred_node, p2.npred_node with
+  | NPtrue, _ -> p2
+  | _, NPtrue -> p1
+  | _ -> { p1 with npred_node = NPand (p1, p2) }
 
-let pimp p1 p2 = match p1.pred_node, p2.pred_node with
-  | Ptrue, _ -> p2
-  | _, Ptrue -> p2
-  | _ -> { p1 with pred_node = Pimplies (p1, p2) }
+let npimp p1 p2 = match p1.npred_node, p2.npred_node with
+  | NPtrue, _ -> p2
+  | _, NPtrue -> p2
+  | _ -> { p1 with npred_node = NPimplies (p1, p2) }
 
-let pforall q p = match p.pred_node with
-  | Ptrue -> { p with pred_node = Ptrue }
-  | _ -> { p with pred_node = Pforall (q, p) }
+let npforall q p = match p.npred_node with
+  | NPtrue -> { p with npred_node = NPtrue }
+  | _ -> { p with npred_node = NPforall (q, p) }
 
-let tterm d t = { term_node = d; term_type = t; term_loc = Loc.dummy_position }
-let dummy_pred p = { pred_node = p; pred_loc = Loc.dummy_position }
-let prel (t1, r, t2) = dummy_pred (Prel (t1, r, t2))
-let piff (p1, p2) = dummy_pred (Piff (p1, p2))
-let pvalid t = dummy_pred (Pvalid t)
-let pvalid_range (t,i,j) = dummy_pred (Pvalid_range (t,i,j))
-let pfresh t = dummy_pred (Pfresh t)
-let ptrue = dummy_pred Ptrue
-let papp (p, l) = dummy_pred (Papp (p, l))
+let nterm d t = { nterm_node = d; nterm_type = t; 
+		  nterm_loc = Loc.dummy_position }
+let dummy_pred p = { npred_node = p; npred_loc = Loc.dummy_position }
+let nprel (t1, r, t2) = dummy_pred (NPrel (t1, r, t2))
+let npiff (p1, p2) = dummy_pred (NPiff (p1, p2))
+let npvalid t = dummy_pred (NPvalid t)
+let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
+let npfresh t = dummy_pred (NPfresh t)
+let nptrue = dummy_pred NPtrue
+let npapp (p, l) = dummy_pred (NPapp {napp_pred = p; 
+				      napp_args = l;
+				      napp_zones_assoc = [];})
 
 let var_i = Info.default_var_info "i"
-let tconstant n = tterm (Tconstant (IntConstant n)) c_int
-let tzero = tconstant "0"
+let ntconstant n = nterm (NTconstant (IntConstant n)) c_int
+let ntzero = ntconstant "0"
 
-let rec pred_for_type ty t = match ty.Ctypes.ctype_node with
-  | Ctypes.Tstruct n ->
-      let _,info = Cenv.find_pred ("is_struct_" ^ n) in papp (info, [t])
-  | Ctypes.Tint si when Coptions.int_overflow_check ->
-      ptrue (*TODO*)
-  | Ctypes.Tarray (_, ty', Some s) ->
-      let tvar_i = tterm (Tvar var_i) c_int in
-      let n = tconstant (Int64.to_string (Int64.pred s)) in
-      let t_i = tterm (Tbinop (t, Clogic.Badd, tvar_i)) ty in
-      let star_t_i = tterm (Tunop (Clogic.Ustar, t_i)) ty' in
-      pand (pvalid_range (t, tzero, n))
-	   (pforall [c_int,var_i] 
-	      (pimp (pand (prel (tzero, Le, tvar_i)) (prel (tvar_i, Le, n)))
-		 (pred_for_type ty' star_t_i)))
-  | Ctypes.Tpointer (_, ty') | Ctypes.Tarray (_, ty', None) ->
-      let t_i = tterm (Tbinop (t, Clogic.Badd, tterm (Tvar var_i) c_int)) ty in
-      let star_t_i = tterm (Tunop (Clogic.Ustar, t_i)) ty' in
-      pforall [c_int,var_i] (pimp (pvalid t_i) (pred_for_type ty' star_t_i))
-  | Ctypes.Tunion n ->
-      ptrue (*TODO*)
-  | Ctypes.Tenum n ->
-      ptrue (*TODO*)
-  | Ctypes.Tvoid | Ctypes.Tfun _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
-  | Ctypes.Tint _ -> 
-      ptrue
+let rec pred_for_type ty t = 
+  match ty.Ctypes.ctype_node with
+    | Ctypes.Tstruct n ->
+	let _,info = Cenv.find_pred ("is_struct_" ^ n) in 
+	npand (npapp (info, [t])) (npvalid t)
+    | Ctypes.Tint si when Coptions.int_overflow_check ->
+	nptrue (*TODO*)
+    | Ctypes.Tarray (_, ty', Some s) ->
+	let info = make_field ty' in
+	let info = declare_arrow_var info in
+	let zone = find_zone_for_term t in
+	let () = type_why_new_zone zone info in	
+	let tvar_i = nterm (NTvar var_i) c_int in
+	let n = ntconstant (Int64.to_string (Int64.pred s)) in
+	let t_i = nterm (NTbinop (t, Clogic.Badd, tvar_i)) ty in
+	let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
+	npand (npvalid_range (t, ntzero, n))
+	  (npforall [c_int,var_i] 
+	     (npimp (npand (nprel (ntzero, Le, tvar_i)) (nprel (tvar_i, Le, n)))
+		(pred_for_type ty' arrow_t_i)))
+    | Ctypes.Tpointer (_, ty') | Ctypes.Tarray (_, ty', None) ->
+	let info = make_field ty' in
+	let info = declare_arrow_var info in
+	let zone = find_zone_for_term t in
+	let () = type_why_new_zone zone info in
+	let t_i = 
+	  nterm (NTbinop (t, Clogic.Badd, nterm (NTvar var_i) c_int)) ty 
+	in
+	let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
+	npforall [c_int,var_i] (npimp (npvalid t_i) 
+				  (pred_for_type ty' arrow_t_i))
+    | Ctypes.Tunion n ->
+	nptrue (*TODO*)
+    | Ctypes.Tenum n ->
+	nptrue (*TODO*)
+    | Ctypes.Tvoid | Ctypes.Tfun _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
+    | Ctypes.Tint _ -> 
+	nptrue
 
 let add_typing_predicates dl =
   let loc = Loc.dummy_position in
@@ -550,11 +566,15 @@ let add_typing_predicates dl =
     set_formal_param x;
     set_var_type (Var_info x) ty true;
     is_struct_s.logic_args <- [x];
-    let varx = tterm (Tvar x) ty in
+    let varx = nterm (NTvar x) ty in
     let reads = (* reads = x.f1, ..., x.fn *)
-      List.map (fun f -> tterm (Tdot (varx, f)) f.var_type) fl
+      List.map (fun f ->       
+		  let zone = find_zone_for_term varx in
+		  let () = type_why_new_zone zone f in
+		  nterm (NTarrow (varx,zone, f)) f.var_type)
+	fl
     in
-    let d = tdecl (Tlogic (is_struct_s, Predicate_reads ([x,ty], reads))) in
+    let d = tdecl (Nlogic (is_struct_s, NPredicate_reads ([x,ty], reads))) in
     d :: acc
   in
   (* 2. axiomatize all is_struct_S predicates *)
@@ -562,17 +582,20 @@ let add_typing_predicates dl =
     let _,is_struct_s = Cenv.find_pred ("is_struct_" ^ s) in
     let x = match is_struct_s.logic_args with [x] -> x | _ -> assert false in
     let ty = noattr tyn in
-    let varx = tterm (Tvar x) ty in
+    let varx = nterm (NTvar x) ty in
     let ax = 
       let def = 
 	List.fold_left
 	  (fun acc f -> 
-	     let t = tterm (Tdot (varx, f)) f.var_type in
-	     pand acc (pred_for_type f.var_type t))
-	  ptrue fl
+	     let zone = find_zone_for_term varx in
+	     let () = type_why_new_zone zone f in
+	     let t = nterm (NTarrow (varx, zone, f)) 
+	       f.var_type in
+	     npand acc (pred_for_type f.var_type t))
+	  nptrue fl
       in
-      let p = pforall [ty,x] (piff (papp (is_struct_s, [varx]), def)) in
-      tdecl (Taxiom ("is_struct_" ^ s ^ "_def", p)) 
+      let p = npforall [ty,x] (npiff (npapp (is_struct_s, [varx]), def)) in
+      tdecl (Naxiom ("is_struct_" ^ s ^ "_def", p)) 
     in
     ax :: acc
   in
