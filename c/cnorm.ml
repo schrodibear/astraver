@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.71 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.72 2006-07-05 09:44:33 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -705,6 +705,7 @@ let npfresh t = dummy_pred (NPfresh t)
 let nptrue = dummy_pred NPtrue
 let npapp (f, l) = dummy_pred (NPapp {napp_pred = f;napp_args =  l; 
 				      napp_zones_assoc = []})
+let npiff (p1, p2) = dummy_pred (NPiff (p1, p2))
 
 let spec ?(add=nptrue) s = 
   let pred = match s.requires with 

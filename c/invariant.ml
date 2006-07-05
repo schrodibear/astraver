@@ -482,63 +482,79 @@ let add_predicates l =
  *)
 
 open Cast
+open Ctypes
 
-let npand p1 p2 = match p1.npred_node, p2.npred_node with
-  | NPtrue, _ -> p2
-  | _, NPtrue -> p1
-  | _ -> { p1 with npred_node = NPand (p1, p2) }
-
-let npimp p1 p2 = match p1.npred_node, p2.npred_node with
-  | NPtrue, _ -> p2
-  | _, NPtrue -> p2
-  | _ -> { p1 with npred_node = NPimplies (p1, p2) }
-
-let npforall q p = match p.npred_node with
-  | NPtrue -> { p with npred_node = NPtrue }
-  | _ -> { p with npred_node = NPforall (q, p) }
+let npforall = make_forall
+let npimp = make_implies
 
 let nterm d t = { nterm_node = d; nterm_type = t; 
 		  nterm_loc = Loc.dummy_position }
-let dummy_pred p = { npred_node = p; npred_loc = Loc.dummy_position }
-let nprel (t1, r, t2) = dummy_pred (NPrel (t1, r, t2))
-let npiff (p1, p2) = dummy_pred (NPiff (p1, p2))
-let npvalid t = dummy_pred (NPvalid t)
-let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
-let npfresh t = dummy_pred (NPfresh t)
-let nptrue = dummy_pred NPtrue
-let npapp (p, l) = dummy_pred (NPapp {napp_pred = p; 
-				      napp_args = l;
-				      napp_zones_assoc = [];})
 
-let var_i = Info.default_var_info "i"
+let reset_var_i,var_i = 
+  let r = ref 0 in
+  (fun () -> r := 0),
+  (fun () -> incr r; Info.default_var_info ("i" ^ string_of_int !r))
+
 let ntconstant n = nterm (NTconstant (IntConstant n)) c_int
 let ntzero = ntconstant "0"
 
+let predicate_name_for_int_type (sign,kind) =
+  let sgs = match sign with 
+    | Ctypes.Signed -> "signed" 
+    | Ctypes.Unsigned -> "unsigned" in
+  let tys = match kind with
+    | Ctypes.Char -> "char"
+    | Ctypes.Short -> "short"
+    | Ctypes.Int -> "int"
+    | Ctypes.Long -> "long"
+    | Ctypes.LongLong -> "longlong"
+    | Ctypes.Bitfield _ -> assert false (*TODO*)
+  in
+  "is_" ^ sgs ^ "_" ^ tys
+
+let predicate_for_int_type =
+  let h = Hashtbl.create 17 in
+  fun si ->
+    try
+      Hashtbl.find h si
+    with Not_found -> 
+      let n = predicate_name_for_int_type si in
+      Hashtbl.add h si n;
+      n
+
+(* [pred_for_type ty t] builds a predicate expressing that [t]
+   is of type [ty] *)
 let rec pred_for_type ty t = 
   match ty.Ctypes.ctype_node with
     | Ctypes.Tstruct n ->
 	let _,info = Cenv.find_pred ("is_struct_" ^ n) in 
-	npand (npapp (info, [t])) (npvalid t)
-    | Ctypes.Tint si when Coptions.int_overflow_check ->
-	nptrue (*TODO*)
+	npand (npapp (info, [t]), npvalid t)
+    | Ctypes.Tint (_, Ctypes.Bitfield _) ->
+	nptrue (* TODO *)
+    | Ctypes.Tint si ->
+	let _,info = Cenv.find_pred (predicate_for_int_type si) in 
+	npapp (info, [t])
     | Ctypes.Tarray (_, ty', Some s) ->
 	let info = make_field ty' in
 	let info = declare_arrow_var info in
 	let zone = find_zone_for_term t in
 	let () = type_why_new_zone zone info in	
+	let var_i = var_i () in
 	let tvar_i = nterm (NTvar var_i) c_int in
 	let n = ntconstant (Int64.to_string (Int64.pred s)) in
 	let t_i = nterm (NTbinop (t, Clogic.Badd, tvar_i)) ty in
 	let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
-	npand (npvalid_range (t, ntzero, n))
-	  (npforall [c_int,var_i] 
-	     (npimp (npand (nprel (ntzero, Le, tvar_i)) (nprel (tvar_i, Le, n)))
-		(pred_for_type ty' arrow_t_i)))
+	npand (npvalid_range (t, ntzero, n),
+	       npforall [c_int,var_i] 
+		 (npimp (npand (nprel (ntzero, Le, tvar_i),
+				nprel (tvar_i, Le, n)))
+		    (pred_for_type ty' arrow_t_i)))
     | Ctypes.Tpointer (_, ty') | Ctypes.Tarray (_, ty', None) ->
 	let info = make_field ty' in
 	let info = declare_arrow_var info in
 	let zone = find_zone_for_term t in
 	let () = type_why_new_zone zone info in
+	let var_i = var_i () in
 	let t_i = 
 	  nterm (NTbinop (t, Clogic.Badd, nterm (NTvar var_i) c_int)) ty 
 	in
@@ -549,13 +565,30 @@ let rec pred_for_type ty t =
 	nptrue (*TODO*)
     | Ctypes.Tenum n ->
 	nptrue (*TODO*)
-    | Ctypes.Tvoid | Ctypes.Tfun _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
-    | Ctypes.Tint _ -> 
+    | Ctypes.Tvoid | Ctypes.Tfun _ | Ctypes.Tfloat _ | Ctypes.Tvar _ -> 
 	nptrue
 
 let add_typing_predicates dl =
   let loc = Loc.dummy_position in
   let tdecl d = { node = d; loc = loc } in
+  (* 1. declare all is_signed_char, ... predicates *)
+  let declare_int_type si acc =
+    let ty = noattr (Tint si) in
+    let n = predicate_for_int_type si in
+    let is_int_n = Info.default_logic_info n in
+    Cenv.add_pred n ([ty], is_int_n);
+    let x = Info.default_var_info "x" in
+    set_formal_param x;
+    set_var_type (Var_info x) ty true;
+    is_int_n.logic_args <- [x];
+    let var_x = nterm (NTvar x) ty in
+    let min_si = ntconstant "0" in (*TODO*)
+    let max_si = ntconstant "255" in (*TODO*)
+    let p = npand (nprel (min_si, Le, var_x),
+		   nprel (var_x, Le, max_si)) in
+    let d = tdecl (Nlogic (is_int_n, NPredicate_def ([x,ty], p))) in
+    d :: acc
+  in
   (* 1. declare all is_struct_S predicates *)
   let declare_is_struct s (tyn,fl) acc = 
     let ty = noattr tyn in
@@ -579,6 +612,7 @@ let add_typing_predicates dl =
   in
   (* 2. axiomatize all is_struct_S predicates *)
   let define_is_struct s (tyn,fl) acc =
+    reset_var_i ();
     let _,is_struct_s = Cenv.find_pred ("is_struct_" ^ s) in
     let x = match is_struct_s.logic_args with [x] -> x | _ -> assert false in
     let ty = noattr tyn in
@@ -591,7 +625,7 @@ let add_typing_predicates dl =
 	     let () = type_why_new_zone zone f in
 	     let t = nterm (NTarrow (varx, zone, f)) 
 	       f.var_type in
-	     npand acc (pred_for_type f.var_type t))
+	     npand (acc, pred_for_type f.var_type t))
 	  nptrue fl
       in
       let p = npforall [ty,x] (npiff (npapp (is_struct_s, [varx]), def)) in
@@ -612,6 +646,16 @@ let add_typing_predicates dl =
 	d :: acc
   in
   **)
+  let dl = 
+    List.fold_right declare_int_type
+      [Signed, Char; Unsigned, Char;
+       Signed, Short; Unsigned, Short;
+       Signed, Int; Unsigned, Int;
+       Signed, Long; Unsigned, Long;
+       Signed, LongLong; Unsigned, LongLong;
+      ] 
+      dl
+  in
   let dl = Cenv.fold_all_struct declare_is_struct dl in
   let dl = Cenv.fold_all_struct define_is_struct dl in
   (*let dl = List.fold_right add_invariant_for_global dl [] in*)

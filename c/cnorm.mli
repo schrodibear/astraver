@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.12 2006-06-26 10:23:26 filliatr Exp $ i*)
+(*i $Id: cnorm.mli,v 1.13 2006-07-05 09:44:35 filliatr Exp $ i*)
 
 open Cast
 
@@ -63,7 +63,7 @@ val npvalid : nterm -> npredicate
 val npvalid_range : nterm * nterm * nterm -> npredicate
 val npapp : Info.logic_info * nterm list -> npredicate
 val npfresh : nterm -> npredicate
-
+val npiff : npredicate * npredicate -> npredicate
 
 
 
