@@ -116,7 +116,7 @@ cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 
 bench_c_good () {
-    options="$1 -why-opt -split-user-conj"
+    options="$1 -why-opt -split-user-conj --typing-predicates"
     echo "-------------------------------------------------------------------"
     echo "Bench Caduceus+Simplify avec options: $options"
     parsing="../../../bin/caduceus.opt $options"

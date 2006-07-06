@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.32 2006-07-05 14:29:29 hubert Exp $ i*)
+(*i $Id: invariant.ml,v 1.33 2006-07-06 13:18:06 hubert Exp $ i*)
 
 open Coptions
 open Creport
@@ -580,23 +580,45 @@ let rec pred_for_type ty t =
 	let tvar_i = nterm (NTvar var_i) c_int in
 	let n = ntconstant (Int64.to_string (Int64.pred s)) in
 	let t_i = nterm (NTbinop (t, Clogic.Badd, tvar_i)) ty in
-	npand (npvalid_range (t, ntzero, n),
-	       npforall [c_int,var_i] 
-		 (npimp (npand (nprel (ntzero, Le, tvar_i),
-				nprel (tvar_i, Le, n)))
-		    (pred_for_type ty' t_i)))
+	begin
+	  match ty'.ctype_node with
+	    | Tstruct _ | Tunion _ ->	
+		npand (npvalid_range (t, ntzero, n),
+		       npforall [c_int,var_i] 
+			 (npimp (npand (nprel (ntzero, Le, tvar_i),
+					nprel (tvar_i, Le, n)))
+			    (pred_for_type ty' t_i)))
+	    | _ -> 
+		let info = make_field ty' in
+		let info = declare_arrow_var info in
+		let zone = find_zone_for_term t in
+		let () = type_why_new_zone zone info in
+		let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
+		npand (npvalid_range (t, ntzero, n),
+		       npforall [c_int,var_i] 
+			 (npimp (npand (nprel (ntzero, Le, tvar_i),
+					nprel (tvar_i, Le, n)))
+			    (pred_for_type ty' arrow_t_i)))
+	end
     | Ctypes.Tpointer (_, ty') | Ctypes.Tarray (_, ty', None) ->
-	let info = make_field ty' in
-	let info = declare_arrow_var info in
-	let zone = find_zone_for_term t in
-	let () = type_why_new_zone zone info in
 	let var_i = var_i () in
 	let t_i = 
 	  nterm (NTbinop (t, Clogic.Badd, nterm (NTvar var_i) c_int)) ty 
 	in
-	let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
-	npforall [c_int,var_i] (npimp (npvalid t_i) 
-				  (pred_for_type ty' arrow_t_i))
+	begin 
+	  match ty'.ctype_node with
+	    | Tstruct _ | Tunion _ ->	
+		npforall [c_int,var_i] (npimp (npvalid t_i) 
+					  (pred_for_type ty' t_i))
+	    | _ -> 
+		let info = make_field ty' in
+		let info = declare_arrow_var info in
+		let zone = find_zone_for_term t in
+		let () = type_why_new_zone zone info in
+		let arrow_t_i = nterm (NTarrow (t_i, zone,info)) ty' in
+		npforall [c_int,var_i] (npimp (npvalid t_i) 
+					  (pred_for_type ty' arrow_t_i))
+	end
     | Ctypes.Tunion n ->
 	nptrue (*TODO*)
     | Ctypes.Tenum n ->
@@ -668,19 +690,31 @@ let add_typing_predicates dl =
     in
     acc@[ax]  
   in
-  (* 3. add typing predicates for global variables *)
-  (**
-  let add_invariant_for_global d acc = match d.node with
-    | Tdecl (ty, x, _) ->
-	let inv = 
-	  tdecl (Tinvariant_strong ("typing_predicate_for_" ^ x.var_name,
-				    pred_for_type ty (tterm (Tvar x) ty)))
-	in
-	d :: inv :: acc
-    | _ -> 
-	d :: acc
+  (* 3. add typing predicates for input variables *)
+  let adding_typing_invariant_requires fun_name (sp, ty, f, st, loc) =
+    let requires = 
+      begin 
+	match sp.requires with
+	  | None -> nptrue
+	  | Some p -> p
+      end 
+    in
+    let requires =
+      List.fold_left (fun acc arg -> 
+			let arg_term = nterm (NTvar arg) arg.var_type in
+			npand (acc ,pred_for_type arg.var_type arg_term))
+	requires f.args
+    in
+    let requires = 
+      if requires.Clogic.npred_node = NPtrue then
+	None
+      else
+	Some requires
+    in
+    sp.requires <- requires
   in
-  **)
+
+
   let dl = 
     List.fold_right declare_int_type
       [Signed, Char; Unsigned, Char;
@@ -693,6 +727,7 @@ let add_typing_predicates dl =
   in
   let dl = Cenv.fold_all_struct declare_is_struct dl in
   let dl = Cenv.fold_all_struct define_is_struct dl in
+  Hashtbl.iter  adding_typing_invariant_requires Cenv.c_functions;
   
   (*let dl = List.fold_right add_invariant_for_global dl [] in*)
   dl

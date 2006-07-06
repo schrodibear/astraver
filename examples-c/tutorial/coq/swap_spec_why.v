@@ -10,3 +10,32 @@ Require Export Caduceus.
 (*Why type*) Definition global: Set.
 Admitted.
 
+(*Why predicate*) Definition is_signed_char  (x:Z)
+  := (Zopp 128) <= x /\ x <= 127.
+
+(*Why predicate*) Definition is_signed_int  (x:Z)
+  := (Zopp 2147483648) <= x /\ x <= 2147483647.
+
+(*Why predicate*) Definition is_signed_long  (x:Z)
+  := (Zopp 2147483648) <= x /\ x <= 2147483647.
+
+(*Why predicate*) Definition is_signed_longlong  (x:Z)
+  := (Zopp 9223372036854775808) <= x /\ x <= 9223372036854775807.
+
+(*Why predicate*) Definition is_signed_short  (x:Z)
+  := (Zopp 32768) <= x /\ x <= 32767.
+
+(*Why predicate*) Definition is_unsigned_char  (x:Z) := 0 <= x /\ x <= 255.
+
+(*Why predicate*) Definition is_unsigned_int  (x:Z)
+  := 0 <= x /\ x <= 4294967295.
+
+(*Why predicate*) Definition is_unsigned_long  (x:Z)
+  := 0 <= x /\ x <= 4294967295.
+
+(*Why predicate*) Definition is_unsigned_longlong  (x:Z)
+  := 0 <= x /\ x <= 18446744073709551615.
+
+(*Why predicate*) Definition is_unsigned_short  (x:Z)
+  := 0 <= x /\ x <= 65535.
+

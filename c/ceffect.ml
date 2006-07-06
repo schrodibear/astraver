@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.135 2006-07-05 14:51:43 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.136 2006-07-06 13:18:06 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1024,7 +1024,15 @@ let decl d =
 	       let name1 = "predicate_for_" ^ v.var_name in
 	       let pre1 =
 		 if typing_predicates then begin
-		   let pre1 = Invariant.pred_for_type ty t in
+		   let pre1 = 
+		     match s,typ.Ctypes.ctype_node with
+		       | 1L, Tstruct _ | 1L, Tunion _ ->
+			   eprintf "cassage tableau@.";
+			   Invariant.pred_for_type typ t
+		       | _, _ ->
+			   eprintf "non cassage tableau@.";
+			   Invariant.pred_for_type ty t	   
+		   in
 		   Cseparation.predicate Unit pre1;
 		   pre1
 		 end else
