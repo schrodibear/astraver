@@ -196,7 +196,7 @@ Implicit Arguments llist_append.
 Lemma list_length_absurd :
  forall (A:Set) (l1 l2:list A), length l1 <> length l2 -> l1 <> l2.
 Proof.
-simple induction l1; simple induction l2; simpl; intuition.
+simple induction l1; simple induction l2; simpl; intuition idtac.
 discriminate H1.
 discriminate H1.
 injection H2; intros.
