@@ -2,7 +2,7 @@ OCAMLC   = @OCAMLC@
 OCAMLOPT = @OCAMLOPT@ 
 OCAMLDEP = @OCAMLDEP@
 
-OFLAGS = -for-pack Graph
+OFLAGS = @FORPACK@
 
 CMO=util.cmo per_imp.cmo bitv.cmo imperative.cmo
 CMX = $(CMO:.cmo=.cmx)

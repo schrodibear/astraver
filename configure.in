@@ -62,9 +62,13 @@ case $OCAMLVERSION in
   0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*|3.07*)
         AC_MSG_ERROR(You need Objective 3.08 or later);;
   3.08.2)
+	FORPACK=""
 	OCAMLV=3082;;
   3.08*)
+	FORPACK=""
 	OCAMLV=308;;
+  *)
+	FORPACK="-for-pack Graph";;
 esac
 
 # then we look for ocamlopt; if not present, we issue a warning
@@ -282,6 +286,8 @@ AC_SUBST(PVSLIB)
 AC_SUBST(MIZAR)
 AC_SUBST(MIZF)
 AC_SUBST(MIZARLIB)
+
+AC_SUBST(FORPACK)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile bench/bench ocamlgraph/Makefile)

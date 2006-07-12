@@ -272,7 +272,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
 ac_unique_file="src/monad.mli"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1287,9 +1287,13 @@ case $OCAMLVERSION in
 echo "$as_me: error: You need Objective 3.08 or later" >&2;}
    { (exit 1); exit 1; }; };;
   3.08.2)
+	FORPACK=""
 	OCAMLV=3082;;
   3.08*)
+	FORPACK=""
 	OCAMLV=308;;
+  *)
+	FORPACK="-for-pack Graph";;
 esac
 
 # then we look for ocamlopt; if not present, we issue a warning
@@ -1996,6 +2000,8 @@ fi
 
 
 
+
+
 # Finally create the Makefile from Makefile.in
                               ac_config_files="$ac_config_files Makefile bench/bench ocamlgraph/Makefile"
 cat >confcache <<\_ACEOF
@@ -2664,6 +2670,7 @@ s,@PVS@,$PVS,;t t
 s,@PVSLIB@,$PVSLIB,;t t
 s,@MIZAR@,$MIZAR,;t t
 s,@MIZARLIB@,$MIZARLIB,;t t
+s,@FORPACK@,$FORPACK,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
