@@ -78,9 +78,10 @@
 %left STAR SLASH PERCENT AMP
 %right HATHAT
 %right prec_uminus 
+%right prec_abs
 %right prec_cast
 %left DOT ARROW LSQUARE
-%right prec_par
+%right prec_par 
 
 %type <Cast.parsed_annot> annot
 %start annot
@@ -124,7 +125,7 @@ lexpr:
 | lexpr LSQUARE lexpr_option DOTDOT lexpr_option RSQUARE    
    { info (PLrange ($1, $3, $5)) }
 | MINUS lexpr %prec prec_uminus { info (PLunop (Uminus, $2)) }
-| BAR lexpr BAR { info (PLunop (Uabs_real, $2)) }
+| BAR lexpr BAR %prec prec_abs { info (PLunop (Uabs_real, $2)) }
 | ABS LPAR lexpr RPAR { info (PLunop (Uabs_real, $3)) }
 | SQRT LPAR lexpr RPAR { info (PLunop (Usqrt_real, $3)) }
 | ROUNDERROR LPAR lexpr RPAR { info (PLunop (Uround_error, $3)) }

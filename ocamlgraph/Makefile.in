@@ -1,0 +1,46 @@
+OCAMLC   = @OCAMLC@
+OCAMLOPT = @OCAMLOPT@ 
+OCAMLDEP = @OCAMLDEP@
+
+OFLAGS = -for-pack Graph
+
+CMO=util.cmo per_imp.cmo bitv.cmo imperative.cmo
+CMX = $(CMO:.cmo=.cmx)
+
+opt: graph.cmx
+byte: graph.cmo
+
+graph.cma: graph.cmo
+	$(OCAMLC) -a -o $@ $^
+
+graph.cmxa: graph.cmx
+	$(OCAMLOPT) -a -o $@ $^
+
+graph.cmx: sig.cmi $(CMX)
+	$(OCAMLOPT) -pack -o $@ $^
+
+graph.cmo: sig.cmi $(CMO)
+	$(OCAMLC) -pack -o $@ $^
+
+.SUFFIXES: .mli .ml .cmi .cmo .cmx
+
+.mli.cmi:
+	$(OCAMLC) -c $(BFLAGS) $<
+
+.ml.cmo:
+	$(OCAMLC) -c $(BFLAGS) $<
+
+.ml.o:
+	$(OCAMLOPT) -c $(OFLAGS) $<
+
+.ml.cmx:
+	$(OCAMLOPT) -c $(OFLAGS) $<
+
+clean:
+	rm -f *.cm[iox]
+
+.depend depend: $(GENERATED)
+	rm -f .depend
+	$(OCAMLDEP) $(INCLUDES) *.ml *.mli > .depend
+
+include .depend

@@ -1,0 +1,10 @@
+bitv.cmo: bitv.cmi 
+bitv.cmx: bitv.cmi 
+imperative.cmo: sig.cmi per_imp.cmo bitv.cmi imperative.cmi 
+imperative.cmx: sig.cmi per_imp.cmx bitv.cmx imperative.cmi 
+per_imp.cmo: util.cmi sig.cmi 
+per_imp.cmx: util.cmx sig.cmi 
+util.cmo: sig.cmi util.cmi 
+util.cmx: sig.cmi util.cmi 
+imperative.cmi: sig.cmi 
+util.cmi: sig.cmi 

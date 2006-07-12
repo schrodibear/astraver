@@ -1997,7 +1997,7 @@ fi
 
 
 # Finally create the Makefile from Makefile.in
-                    ac_config_files="$ac_config_files Makefile bench/bench"
+                              ac_config_files="$ac_config_files Makefile bench/bench ocamlgraph/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -2550,6 +2550,7 @@ do
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "bench/bench" ) CONFIG_FILES="$CONFIG_FILES bench/bench" ;;
+  "ocamlgraph/Makefile" ) CONFIG_FILES="$CONFIG_FILES ocamlgraph/Makefile" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
@@ -2929,5 +2930,5 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
-chmod a-w Makefile bench/bench
+chmod a-w Makefile bench/bench ocamlgraph/Makefile
 chmod a+x bench/bench

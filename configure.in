@@ -284,6 +284,6 @@ AC_SUBST(MIZF)
 AC_SUBST(MIZARLIB)
 
 # Finally create the Makefile from Makefile.in
-AC_OUTPUT(Makefile bench/bench)
-chmod a-w Makefile bench/bench
+AC_OUTPUT(Makefile bench/bench ocamlgraph/Makefile)
+chmod a-w Makefile bench/bench ocamlgraph/Makefile
 chmod a+x bench/bench
