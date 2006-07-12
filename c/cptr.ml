@@ -1419,7 +1419,11 @@ module CFGLangFromNormalized : InterLang
 				 the function body for all offset variables *)
 			      let assign_stat = 
 				{ s with nst_node = NSexpr new_e } in
-			      NSblock [assign_stat;new_s1]
+			      let block_stat = NSblock [assign_stat;new_s1] in
+			      let block_stat = { s with nst_node = block_stat }
+			      in
+			      (* always keep the pointer declaration *)
+			      NSdecl (typ,var,None,block_stat)
 			  | _ -> assert false
 		      end
 		  with Bad_encoding ->
@@ -1430,7 +1434,11 @@ module CFGLangFromNormalized : InterLang
 		       only the right-hand side was returned. Keep it. *)
 		    let new_s = statement_expr_or_nop new_e in
 		    let new_stat = { s with nst_node = new_s } in
-		    NSblock [new_stat;new_s1]
+		    let block_stat = NSblock [new_stat;new_s1] in
+		    let block_stat = { s with nst_node = block_stat }
+		    in
+		    (* always keep the pointer declaration *)
+		    NSdecl (typ,var,None,block_stat)
 		  end
 	      | NSswitch (e,c,cases) -> 
 		  let new_e = List.hd sub_nodes in
@@ -2101,7 +2109,8 @@ module ConnectCFGtoPtr : Connection
     let offset_map =
       VarSet.fold (fun var m ->
 		     let offset_var = 
-		       default_var_info (var.var_name ^ "_offset") in
+		       Info.default_var_info (var.var_name ^ "_offset") in
+		     Info.set_assigned offset_var;
 		     Cenv.set_var_type 
 		       (Var_info offset_var) int_offset_type false;
 		     VarMap.add var offset_var m
@@ -2110,7 +2119,8 @@ module ConnectCFGtoPtr : Connection
     let offset_map =
       VarSet.fold (fun var m ->
 		     let offset_var = 
-		       default_var_info (var.var_name ^ "_self_offset") in
+		       Info.default_var_info (var.var_name ^ "_self_offset") in
+		     Info.set_assigned offset_var;
 		     Cenv.set_var_type 
 		       (Var_info offset_var) int_offset_type false;
 		     VarMap.add var offset_var m
