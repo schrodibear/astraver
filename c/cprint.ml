@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.31 2006-07-12 09:04:26 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.32 2006-07-12 09:06:08 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -266,7 +266,7 @@ let rec nexpr fmt e = match e.nexpr_node with
   | NEassign_op (e1, op, e2) ->
       fprintf fmt "%a %a= %a" nexpr e1 binop op nexpr e2
   | NEunary (op, e) ->
-      fprintf fmt "%a%a" unop op nexpr_p e
+      fprintf fmt "%a(%a)" unop op nexpr_p e
   | NEincr (Uprefix_inc, e) -> fprintf fmt "++%a" nexpr_p e
   | NEincr (Uprefix_dec, e) -> fprintf fmt "--%a" nexpr_p e
   | NEincr (Upostfix_inc, e) -> fprintf fmt "%a++" nexpr_p e
