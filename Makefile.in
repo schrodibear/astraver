@@ -35,8 +35,10 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
 INCLUDES = -I src -I c -I intf -I tools
-BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
-OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
+BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads \
+	   -I $(OCAMLLIB)/ocamlgraph
+OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads \
+	   -I $(OCAMLLIB)/ocamlgraph
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -142,18 +144,19 @@ CCMO = src/lib.cmo src/linenum.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
-	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cmain.cmo
+	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cptr.cmo c/cmain.cmo 
 CCMX = $(CCMO:.cmo=.cmx)
 
 bin/caduceus.opt: $(CCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
 	strip $@
 
 bin/caduceus.byte: $(CCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
 
 bin/caduceus.static: $(CCMX)
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa \
+	  graph.cmxa $^
 	strip $@
 
 # graphical interface

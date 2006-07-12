@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.30 2006-07-04 09:08:53 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.31 2006-07-12 09:04:26 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -306,7 +306,7 @@ let rec nstatement fmt s = match s.nst_node with
 	loop_annot a nstatement_nb s nexpr e 
   | NSfor (a, e1, e2, e3, s) ->
       fprintf fmt "@[%afor (%a; %a; %a) {@\n    @[%a@]@\n}@]"
-	loop_annot a nexpr e1 nexpr e2 nexpr e2 nstatement_nb s
+	loop_annot a nexpr e1 nexpr e2 nexpr e3 nstatement_nb s
   | NSreturn None ->
       fprintf fmt "return;"
   | NSreturn (Some e) ->
@@ -329,16 +329,21 @@ let rec nstatement fmt s = match s.nst_node with
       fprintf fmt "%a%a" spec sp nstatement s
   | NSblock b ->
       fprintf fmt "@[{@\n  @[%a@]@\n}@]" nblock b
-  | NSdecl (ty, vi, None,rem) ->
-      fprintf fmt "@[<hov 2>{@\n%a %s;@\n" ctype ty vi.var_unique_name;
-      nstatement fmt rem;
-      fprintf fmt "}@\n@]"
-  | NSdecl (ty, vi, Some i, rem) ->
-      fprintf fmt "@[<hov 2>{@\n%a %s = %a;@\n" ctype ty vi.var_unique_name 
-	c_initializer i;
-      nstatement fmt rem;
+  | NSdecl _ ->
+      (* successive declarations share the same block statement *)
+      fprintf fmt "@[<hov 2>{@\n";
+      nsdecl fmt s;
       fprintf fmt "}@\n@]"
 
+and nsdecl fmt s = match s.nst_node with
+  | NSdecl (ty, vi, None,rem) ->
+      fprintf fmt "%a %s;@\n" ctype ty vi.var_unique_name;
+      nsdecl fmt rem
+  | NSdecl (ty, vi, Some i, rem) ->
+      fprintf fmt "%a %s = %a;@\n" ctype ty vi.var_unique_name c_initializer i;
+      nsdecl fmt rem
+  | _ -> nstatement fmt s
+    
 and nstatement_nb fmt s = match s.nst_node with
   | NSblock b -> nblock fmt b
   | _ -> nstatement fmt s

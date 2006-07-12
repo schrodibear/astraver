@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.27 2006-07-05 14:51:43 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.28 2006-07-12 09:04:26 moy Exp $ i*)
 
 open Format
 
@@ -71,6 +71,7 @@ let separate = ref false
 let closed_program = ref false
 let typing_predicates = ref false
 let floats = ref true
+let local_aliasing = ref false
 
 type fp_rounding_mode = 
   | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
@@ -213,6 +214,8 @@ let _ =
 	  "  set the size of type `long long' (default is 64)";
 	"--typing-predicates", Arg.Set typing_predicates,
 	  "  use typing predicates (experimental)";
+	"--local-aliasing", Arg.Set local_aliasing,
+	  "  local aliasing analysis (experimental)";
       ]
       add_file "caduceus [options] file..."
 
@@ -231,6 +234,7 @@ let coq_tactic = !coq_tactic
 let separate = !separate
 let closed_program = !closed_program
 let typing_predicates = !typing_predicates
+let local_aliasing = !local_aliasing
 
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check

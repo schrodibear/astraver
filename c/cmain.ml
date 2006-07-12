@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.72 2006-07-05 14:51:43 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.73 2006-07-12 09:04:25 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -52,6 +52,8 @@ let main () =
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
   let nfiles = on_all_files Cnorm.file tfiles in
+  (* local aliasing analysis *)
+  if local_aliasing then Cptr.local_aliasing_transform ();
   (* predicate *)
   let nfiles = 
     if typing_predicates then 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.21 2006-07-05 14:51:43 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.22 2006-07-12 09:04:26 moy Exp $ i*)
 
 (*s environment variables *)
 
@@ -39,6 +39,7 @@ val coq_tactic : string
 val separate : bool
 val closed_program : bool
 val typing_predicates : bool
+val local_aliasing : bool
 
 val use_floats : bool ref
 val floats : bool
