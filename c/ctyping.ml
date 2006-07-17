@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.118 2006-06-30 13:11:28 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.119 2006-07-17 14:46:07 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -325,6 +325,11 @@ let make_shift e1 e2 valid ty n =
   TEbinary (e1, Badd_pointer_int, e2), 
   { ty1 with ctype_node = Tpointer(is_valid,ty) }
 
+let remove_top_conversion e = match e.texpr_node with
+  | TEunary (( Uint_conversion | Ufloat_conversion
+	     | Uint_of_float | Ufloat_of_int), e) -> e
+  | _ -> e
+
 (*s Types *)
 
 let rec type_type loc env ty = 
@@ -495,6 +500,7 @@ and type_expr_node loc env = function
       let b = type_expr env b in
       (match b.texpr_node with
 	 | TEbinary (te1, op', te2) -> 
+	     let te1 = remove_top_conversion te1 in
 	     check_lvalue e1.loc te1;
 	     warn_for_read_only e1.loc te1;
 	     let ty1 = te1.texpr_type in
