@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.70 2006-07-04 09:08:53 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.71 2006-07-17 11:50:48 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -329,7 +329,7 @@ type nloop_annot = (nterm, npredicate) Clogic.loop_annot
 
 type nstatement = {
   nst_node : nstatement_node;
-  nst_break : bool;    (* may breaks *)
+  nst_break : bool;    (* may break *)
   nst_continue : bool; (* may continue *)
   nst_return : bool;   (* may return *)
   nst_term : bool;     (* may terminate normally *)

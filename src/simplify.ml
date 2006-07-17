@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.57 2006-07-05 13:21:10 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.58 2006-07-17 11:50:49 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -100,7 +100,7 @@ let ident fmt id = idents fmt (Ident.string id)
 
 let sortp fmt id = idents fmt ("IS" ^ Ident.string id)
 
-let simplify_max_int = Int64.of_string "2147483647"
+let simplify_max_int = Int64.of_string "2147483646"
 
 let rec print_term fmt = function
   | Tvar id -> 

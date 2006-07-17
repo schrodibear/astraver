@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.39 2006-06-20 09:50:29 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.40 2006-07-17 11:50:48 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -135,6 +135,9 @@ rule token = parse
   | rD+ rE rFS?             { CONSTANT (RealConstant (lexeme lexbuf)) }
   | rD* "." rD+ (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
   | rD+ "." rD* (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
+  (* hack to lex 0..3 as 0 .. 3 and not as 0. .3 *)
+  | (rD+ as n) ".."         { lexbuf.lex_curr_pos <- lexbuf.lex_curr_pos - 2;
+			      CONSTANT (IntConstant n) }
   | 'L'? '"' [^ '"']* '"'   { STRING_LITERAL (lexeme lexbuf) }
 
   | "@"                     { AT }
