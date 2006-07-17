@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.32 2006-07-12 09:06:08 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.33 2006-07-17 12:37:30 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -318,9 +318,8 @@ let rec nstatement fmt s = match s.nst_node with
   | NSlabel (l, s) ->
       fprintf fmt "%s: %a" l nstatement s
   | NSswitch (e, m, l) ->
-      (*** nexpr * (nexpr Cconst.IntMap.t) * 
-      ((nexpr Cconst.IntMap.t * nstatement list) list) ***)
-      fprintf fmt "<switch>"
+      fprintf fmt "@[switch (%a) {@\n    @[%a@]@\n}@]"
+	nexpr e (print_list newline ncase) l
   | NSassert p ->
       fprintf fmt "/*@@ assert %a */" npredicate p
   | NSlogic_label l ->
@@ -351,6 +350,16 @@ and nstatement_nb fmt s = match s.nst_node with
 and nblock fmt sl =
   fprintf fmt "@[%a@]" 
     (print_list newline nstatement) sl
+
+and ncase fmt (cmap,sl) =
+  fprintf fmt "@[%a@\n    %a@]"
+    (fun fmt -> 
+       if Cconst.IntMap.is_empty cmap then
+	 (fun _ -> fprintf fmt "default:")
+       else
+	 Cconst.IntMap.iter 
+	   (fun _ e -> fprintf fmt "case %a:" nexpr e)) cmap
+    nblock sl
 
 and ndecl fmt d = match d.node with
   | Nlogic (li, ls) -> 
