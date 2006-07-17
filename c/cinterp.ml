@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.200 2006-07-05 14:29:29 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.201 2006-07-17 12:36:54 moy Exp $ i*)
 
 
 open Format
@@ -224,7 +224,7 @@ let rec interp_term label old_label t =
 	if id.var_is_assigned && not id.var_is_a_formal_param then
 	  interp_var label n
 	else LVar n
-    | NTold t ->	interp_term (Some old_label) old_label t
+    | NTold t -> interp_term (Some old_label) old_label t
     | NTbinop (t1, op, t2) ->
 	term_bin_op t1.nterm_type t2.nterm_type op (f t1) (f t2)
     | NTbase_addr t -> 
