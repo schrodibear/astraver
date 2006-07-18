@@ -71,6 +71,7 @@ module type PointerLattice = sig
   val get_offset_opt : t -> var_t * var_t option
   val get_offset : t -> var_t * var_t
   val get_defined_opt : t -> var_t * var_t option
+  val has_variable : t -> bool
   val get_variable : t -> var_t
 end
 
@@ -162,6 +163,9 @@ module Make_PtrLattice(V : Variable) : PointerLattice with type var_t = V.t
   let get_defined_opt t = match t with 
     | PKdefined (v,vo) -> v,vo 
     | _ -> assert false
+  let has_variable t = match t with
+    | PKindex _ | PKoffset _ | PKdefined _ -> true
+    | _ -> false
   let get_variable t = match t with
     | PKindex _ -> fst (get_index t)
     | PKoffset _ -> fst (get_offset_opt t)
@@ -259,7 +263,7 @@ module Make_PtrLattice(V : Variable) : PointerLattice with type var_t = V.t
 	| _,PKindex _ -> false
 	    (* PKoffset is the next lowest element *)
 	| PKoffset _,_ -> true
-	| _,PKoffset _ -> true
+	| _,PKoffset _ -> false
 	    (* PKcomplex is the top element *)
 	| PKcomplex,PKcomplex -> true
 
@@ -536,13 +540,14 @@ module Make_DataFlowAnalysis
 	  if debug then Coptions.lprintf 
 	    "[compute] node has %i successor(s)@." (List.length next_nodes);
 	  if debug then Coptions.lprintf 
-	    "[compute] %a@." (fun fmt -> List.iter (Node.pretty fmt))
+	    "[compute] %a@." (fun fmt -> List.iter 
+				(Coptions.lprintf "%a " Node.pretty))
 	    next_nodes;
 	  List.iter (fun nx_node ->
 		       let nx_pre,nx_post = res_val nx_node in
-		       let nx_val = PWL.join nx_pre cur_val in
 		       if debug_more then Coptions.lprintf 
 			 "[compute] succ prev value: %a@." PWL.pretty nx_pre;
+		       let nx_val = PWL.join nx_pre cur_val in
 		       if debug_more then Coptions.lprintf 
 			 "[compute] succ cur value: %a@." PWL.pretty nx_val;
 
@@ -588,6 +593,7 @@ end
 
 (* type used for offset from pointer *)
 let int_offset_type = Ctypes.c_int
+let int_offset_kind = Ctypes.Signed,Ctypes.Int
 
 (* type to represent a function in the normalized code.
    It has the same elements as the hash-table [Cenv.c_functions]. *)
@@ -669,8 +675,14 @@ module CFGLangFromNormalized : sig
   val stat_is_spec : Node.t -> bool
     (* is it a label statement ? *)
   val stat_is_label : Node.t -> bool
+    (* is it a declaration statement ? *)
+  val stat_is_decl : Node.t -> bool
     (* get the label associated with this label statement *)
   val stat_get_label : Node.t -> string
+    (* get the variable associated with this declaration statement *)
+  val decl_stat_get_var : Node.t -> var_t
+    (* get the next statement of this declaration statement *)
+  val decl_stat_get_next : Node.t -> Node.t
     (* is the type of this expression a pointer type ? *)
   val expr_type_is_ptr : Node.t -> bool
     (* is this expression a -local- variable ? *)
@@ -722,6 +734,9 @@ module CFGLangFromNormalized : sig
   val make_int_termexpr_add_termexpr : Node.t -> Node.t -> Node.t
     (* create a new node pointer expression + constant *)
   val make_ptr_expr_add_cst : Node.t -> int -> Node.t
+    (* create a new declaration statement for the variable, with the given
+       statement as next statement *)
+  val make_var_decl : Node.t -> var_t -> Node.t
     (* make this node be a term/expression over a variable *)
   val change_in_var : Node.t -> var_t -> Node.t
     (* make this node be a term/expression of a sum variable + constant *)
@@ -1000,10 +1015,22 @@ end = struct
   let stat_is_label node =
     match get_stat node with NSlabel _ | NSlogic_label _ -> true | _ -> false
 
+  let stat_is_decl node =
+    match get_stat node with NSdecl _ -> true | _ -> false
+
   let stat_get_label node =
     match get_stat node with 
       | NSlabel (lab,_) | NSlogic_label lab -> lab | _ -> assert false
 
+  let decl_stat_get_var node =
+    match get_stat node with NSdecl (_,var,_,_) -> var | _ -> assert false
+
+  let decl_stat_get_next node =
+    match get_stat node with 
+      | NSdecl (_,_,_,ns) -> 
+	  Node.create (Nstat ns)
+      | _ -> assert false
+	  
   let expr_type_is_ptr node = is_pointer_type (get_e node).nexpr_type
 
   let expr_is_local_var node = match get_expr node with
@@ -1158,6 +1185,8 @@ end = struct
   let nodes_in_exec_order : Node.t list ref = ref []
   let add_node_in_order node = 
     nodes_in_exec_order := node :: (!nodes_in_exec_order)
+  let add_node_first node = (* list will be reversed *)
+    nodes_in_exec_order := (!nodes_in_exec_order) @ [node]
 
   (* add a node *)
   let add_vertex = Self.add_vertex graph
@@ -1350,6 +1379,12 @@ end = struct
     let new_e = NEbinary (e,Badd_pointer_int,cst_e) in
     let new_e = { e with nexpr_node = new_e } in
     Node.create (Nexpr new_e)
+
+  let make_var_decl node var =
+    let s = get_s node in
+    let new_s = NSdecl (var.var_type,var,None,s) in
+    let new_s = { s with nst_node = new_s } in
+    Node.create (Nstat new_s)
 
   let change_in_var node var =
     match get_node_kind node with
@@ -1544,6 +1579,9 @@ end = struct
       let e = simplify_expr e in
       if useless_expr e then NSnop else NSexpr e
     in
+    let filter_nop sl =
+      List.filter (fun s -> not (s.nst_node = NSnop)) sl
+    in
     let new_s = match s.nst_node with
       | NSnop | NSlogic_label _ ->
 	  assert (List.length sub_nodes = 0);
@@ -1588,7 +1626,7 @@ end = struct
 	  let new_eincr = simplify_expr new_eincr in
 	  NSfor (new_a,new_einit,new_etest,new_eincr,new_s1)
       | NSblock sl ->
-	  let new_sl = List.map get_s sub_nodes in
+	  let new_sl = filter_nop (List.map get_s sub_nodes) in
 	  NSblock new_sl
       | NSreturn None ->
 	  assert (List.length sub_nodes = 0);
@@ -1621,6 +1659,7 @@ end = struct
 	  assert (List.length sub_nodes = 2);
 	  let new_e,new_s1 = list2 sub_nodes in
 	  let new_e = get_e new_e in
+	  let new_e = simplify_expr new_e in
 	  let new_s1 = get_s new_s1 in
 	  begin try
 	    (* to be matched with [encode_list] below *)
@@ -1661,16 +1700,14 @@ end = struct
 		   program. We can safely eliminate it. *)
 		match cinit with
 		  | Iexpr e ->
-		      (* remove the initialization, since it is 
-			 performed globally at the beginning of 
-			 the function body for all offset variables *)
-		      let assign_stat = 
-			{ s with nst_node = NSexpr new_e } in
-		      let block_stat = NSblock [assign_stat;new_s1] in
-		      let block_stat = { s with nst_node = block_stat }
-		      in
+		      (* keep the offset initialization *)
+		      let new_typ = new_var.var_type in
+		      let new_cinit = decode_list rhs_expr in
+		      let offset_stat = 
+			NSdecl (new_typ,new_var,Some new_cinit,new_s1) in
+		      let offset_stat = { s with nst_node = offset_stat } in
 		      (* always keep the pointer declaration *)
-		      NSdecl (typ,var,None,block_stat)
+		      NSdecl (typ,var,None,offset_stat)
 		  | _ -> assert false
 	      end
 	  with Bad_encoding ->
@@ -1680,12 +1717,17 @@ end = struct
 	       the assignment was detected as useless, and therefore
 	       only the right-hand side was returned. Keep it. *)
 	    let new_s = statement_expr_or_nop new_e in
-	    let new_stat = { s with nst_node = new_s } in
-	    let block_stat = NSblock [new_stat;new_s1] in
-	    let block_stat = { s with nst_node = block_stat }
-	    in
-	    (* always keep the pointer declaration *)
-	    NSdecl (typ,var,None,block_stat)
+	    match new_s with
+	      | NSnop ->
+		  (* always keep the pointer declaration *)
+		  NSdecl (typ,var,None,new_s1)
+	      | _ ->
+		  let new_stat = { s with nst_node = new_s } in
+		  let block_stat = NSblock [new_stat;new_s1] in
+		  let block_stat = { s with nst_node = block_stat }
+		  in
+		  (* always keep the pointer declaration *)
+		  NSdecl (typ,var,None,block_stat)
 	  end
       | NSswitch (e,c,cases) -> 
 	  let new_e = List.hd sub_nodes in
@@ -1761,38 +1803,67 @@ end = struct
 		   the pointer operation into an equivalent integer 
 		   operation. *)
 		let rec destr_ptr_off e = match e.nexpr_node with
+		  | NEvar (Var_info v) -> Some (v,None)
+		  | NEcast (_,e3) ->
+		      (* deals with array address used as pointer *)
+		      begin match e3.nexpr_node with
+			| NEvar (Var_info v) -> Some (v,None)
+			| _ -> None
+		      end
 		  | NEbinary(e1,Badd_pointer_int,e2) ->
-		      begin match e1.nexpr_node with
-			| NEvar (Var_info v) -> Some (v,e2)
-			| _ -> 
-			    (* recursive call *)
-			    begin match destr_ptr_off e1 with
-			      | Some (v,e3) ->
-				  let e2 = Node.create (Nexpr e2) in
-				  let e3 = Node.create (Nexpr e3) in
-				  let e4 = make_int_termexpr_add_termexpr e2 e3
-				  in
-				  Some (v,get_e e4)
-			      | None -> None
-			    end
+		      (* recursive call *)
+		      begin match destr_ptr_off e1 with
+			| Some (v,None) ->
+			    Some (v,Some e2)
+			| Some (v,Some e3) ->
+			    let e2 = Node.create (Nexpr e2) in
+			    let e3 = Node.create (Nexpr e3) in
+			    let e4 = make_int_termexpr_add_termexpr e2 e3
+			    in
+			    Some (v,Some (get_e e4))
+			| None -> None
 		      end
 		  | _ -> None
 		in
 		let pointer_op_to_int_op op = match op with
-		  | Bsub_pointer -> Bsub
-		  | Blt_pointer -> Blt
-		  | Bgt_pointer -> Bgt
-		  | Ble_pointer -> Ble
-		  | Bge_pointer -> Bge
-		  | Beq_pointer -> Beq
-		  | Bneq_pointer -> Bneq
+		  | Bsub_pointer -> Bsub_int int_offset_kind
+		  | Blt_pointer -> Blt_int
+		  | Bgt_pointer -> Bgt_int
+		  | Ble_pointer -> Ble_int
+		  | Bge_pointer -> Bge_int
+		  | Beq_pointer -> Beq_int
+		  | Bneq_pointer -> Bneq_int
 		  | _ -> assert false
 		in
 		begin match destr_ptr_off new_e1,destr_ptr_off new_e2 with
 		  | Some (v1,e3),Some (v2,e4) ->
 		      if Var.equal v1 v2 then 
 			let op = pointer_op_to_int_op op in
-			NEbinary (e3,op,e4)
+			match e3,e4 with
+			  | None,None -> 
+			      let e3 = 
+				NEconstant (IntConstant (string_of_int 0)) in
+			      let e3 = { new_e1 with nexpr_node = e3;
+					   nexpr_type = int_offset_type } in
+			      let e4 = 
+				NEconstant (IntConstant (string_of_int 0)) in
+			      let e4 = { new_e2 with nexpr_node = e4;
+					   nexpr_type = int_offset_type } in
+			      NEbinary (e3,op,e4)
+			  | None,Some e4 ->
+			      let e3 = 
+				NEconstant (IntConstant (string_of_int 0)) in
+			      let e3 = { new_e1 with nexpr_node = e3;
+					   nexpr_type = int_offset_type } in
+			      NEbinary (e3,op,e4)
+			  | Some e3,None ->
+			      let e4 = 
+				NEconstant (IntConstant (string_of_int 0)) in
+			      let e4 = { new_e2 with nexpr_node = e4;
+					   nexpr_type = int_offset_type } in
+			      NEbinary (e3,op,e4)
+			  | Some e3,Some e4 ->
+			      NEbinary (e3,op,e4)
 		      else NEbinary (new_e1,op,new_e2)
 		  | _ -> NEbinary (new_e1,op,new_e2)
 		end
@@ -1816,20 +1887,24 @@ end = struct
 
   (* recognize offset from pointer *)
   let rec term_destr_ptr_off t = match t.nterm_node with
+    | NTvar v -> Some (v,None)
+    | NTcast (_,t3) -> (* deals with array address used as pointer *)
+	begin match t3.nterm_node with
+	  | NTvar v -> Some (v,None)
+	  | _ -> None
+	end
     | NTbinop(t1,Clogic.Badd,t2) ->
-	begin match t1.nterm_node with
-	  | NTvar v -> Some (v,t2)
-	  | _ -> 
-	      (* recursive call *)
-	      begin match term_destr_ptr_off t1 with
-		| Some (v,t3) ->
-		    let t2 = Node.create (Nterm t2) in
-		    let t3 = Node.create (Nterm t3) in
-		    let t4 = make_int_termexpr_add_termexpr t2 t3
-		    in
-		    Some (v,get_t t4)
-		| None -> None
-	      end
+	(* recursive call *)
+	begin match term_destr_ptr_off t1 with
+	  | Some (v,None) ->
+	      Some (v,Some t2)
+	  | Some (v,Some t3) ->
+	      let t2 = Node.create (Nterm t2) in
+	      let t3 = Node.create (Nterm t3) in
+	      let t4 = make_int_termexpr_add_termexpr t2 t3
+	      in
+	      Some (v,Some (get_t t4))
+	  | None -> None
 	end
     | _ -> None
 
@@ -1896,7 +1971,16 @@ end = struct
 		begin match term_destr_ptr_off new_t1,
 		  term_destr_ptr_off new_t2 with
 		    | Some (v1,t3),Some (v2,t4) ->
-			if Var.equal v1 v2 then NTbinop (t3,op,t4)
+			if Var.equal v1 v2 then 
+			  match t3,t4 with
+			    | None,None -> 
+				NTconstant (IntConstant (string_of_int 0))
+			    | Some t,None ->
+				t.nterm_node
+			    | None,Some t ->
+				NTunop (Clogic.Uminus,t)
+			    | Some t3,Some t4 ->
+				NTbinop (t3,op,t4)
 			else NTbinop (new_t1,op,new_t2)
 		    | _ -> NTbinop (new_t1,op,new_t2)
 		end
@@ -1924,7 +2008,7 @@ end = struct
 	  in
 	  (* [new_t1] could be an offset from some pointer *)
 	  begin match term_destr_ptr_off new_t1 with
-	    | Some (v,t4) ->
+	    | Some (v,Some t4) ->
 		let new_t2 = match new_t2 with
 		  | Some new_t2 -> 
 		      let t2 = Node.create (Nterm new_t2) in
@@ -1941,7 +2025,7 @@ end = struct
 		in
 		let new_t1 = { new_t1 with nterm_node = NTvar v } in
 		NTrange (new_t1,new_t2,new_t3,zone,info)
-	    | None ->
+	    | _ ->
 		NTrange (new_t1,new_t2,new_t3,zone,info)
 	  end
     in		
@@ -1968,7 +2052,25 @@ end = struct
 	     operation. *)
 	  begin match term_destr_ptr_off new_t1,term_destr_ptr_off new_t2 with
 	    | Some (v1,t3),Some (v2,t4) ->
-		if Var.equal v1 v2 then NPrel (t3,rel,t4)
+		if Var.equal v1 v2 then 
+		  match t3,t4 with
+		    | None,None -> 
+			begin match rel with
+			  | Le | Ge | Eq -> NPtrue
+			  | Lt | Gt | Neq -> NPfalse
+			end
+		    | None,Some t4 ->
+			let t3 = NTconstant (IntConstant (string_of_int 0)) in
+			let t3 = { new_t1 with nterm_node = t3;
+				     nterm_type = t4.nterm_type } in
+			NPrel (t3,rel,t4)
+		    | Some t3,None ->
+			let t4 = NTconstant (IntConstant (string_of_int 0)) in
+			let t4 = { new_t2 with nterm_node = t4;
+				     nterm_type = t3.nterm_type } in
+			NPrel (t3,rel,t4)
+		    | Some t3,Some t4 ->
+			NPrel (t3,rel,t4)
 		else NPrel (new_t1,rel,new_t2)
 	    | _ -> NPrel (new_t1,rel,new_t2)
 	  end
@@ -2397,8 +2499,9 @@ end = struct
 	loop_switch_ends : Node.t list;
 	(* context of \old logical terms *)
 	function_begin : Node.t;
-	(* target of return and last statement of function *)
-	function_end : Node.t
+	(* target of return and last statement of function.
+	   Set only if needed. *)
+	function_end : Node.t option
       }
 
   let rec from_stat (ctxt : context_descr) start_node (s : nstatement) =
@@ -2512,12 +2615,20 @@ end = struct
 	    (* struct *) add_stedge snode snodes
 	| NSreturn None ->
 	    (* oper *) add_opedge start_node snode;
-	    (* logic *) force_add_opedge snode ctxt.function_end
+	    begin match ctxt.function_end with
+	      | Some function_end ->
+		  (* logic *) force_add_opedge snode function_end
+	      | None -> ()
+	    end
 	| NSreturn (Some e) -> 
 	    let enode = from_expr start_node e in
 	    (* oper *) add_opedge enode snode;
 	    (* struct *) add_stedge snode [enode];
-	    (* logic *) force_add_opedge snode ctxt.function_end
+	    begin match ctxt.function_end with
+	      | Some function_end ->
+		  (* logic *) force_add_opedge snode function_end
+	      | None -> ()
+	    end
 	| NSbreak -> 
 	    (* oper *) add_opedge start_node snode;
 	    (* oper *) force_add_opedge snode (List.hd ctxt.loop_switch_ends);
@@ -2666,17 +2777,22 @@ end = struct
 	     All return statements and the last statement should be linked
 	     to this end node.
 	     This transformation may lead to a less precise analysis. 
-	     It could be restricted to functions that need it to translate
-	     their [ensures] part.
+	     It is currently restricted to functions that have an [ensures]
+	     part. It could be restricted further to functions that need it 
+	     to translate their [ensures] part.
 	  *)
 	  let end_node = Node.create (Nfwd (* is_structural= *)true) in
 	  add_vertex end_node;
+	  let has_ensure = match d.spec.ensures with
+	    | None -> false
+	    | Some _ -> true
+	  in
 	  let start_ctxt = 
 	    { 
 	      loop_starts = []; 
 	      loop_switch_ends = [];
 	      function_begin = dnode;
-	      function_end = end_node
+	      function_end = if has_ensure then Some end_node else None
 	    } in
 	  let snode = from_stat start_ctxt dnode s in
 	  (* oper *) add_opedge snode end_node;
@@ -2688,10 +2804,11 @@ end = struct
 	  (* logic *) add_endedge spcnode end_node
       | None -> ()
     end;
-    add_node_in_order dnode;
+    add_node_first dnode;
     dnode
 
   let from_file file =
+    nodes_in_exec_order := [];
     let decls = List.map from_decl file in
     nodes_in_exec_order := List.rev (!nodes_in_exec_order);
     decls,!nodes_in_exec_order
@@ -2706,11 +2823,16 @@ end = struct
 
 end
 
-module ConnectCFGtoPtr : Connection 
-  with type node_t = CFGLangFromNormalized.Node.t 
-  and type absval_t = PointWisePtrLattice.t
-  and type map_t = Var.t VarMap.t
-  = struct
+module ConnectCFGtoPtr : sig
+  include Connection with type node_t = CFGLangFromNormalized.Node.t 
+		     and type absval_t = PointWisePtrLattice.t
+		     and type map_t = Var.t VarMap.t
+
+  (* collect the local variables used/declared in the code *)
+  val collect_vars : node_t list -> VarSet.t * VarSet.t
+    (* cleanup variable declarations and declare offset variables *)
+  val cleanup : VarSet.t -> VarSet.t -> map_t -> node_t list -> node_t list
+end = struct
 
   open CFGLangFromNormalized
 
@@ -2722,7 +2844,8 @@ module ConnectCFGtoPtr : Connection
   (* type used in [transfer] to compute the representant of a pointer *)
   type transfer_rep_t = 
       {
-	orig_var : Var.t;
+	orig_lhs_var : Var.t;
+	orig_rhs_var : Var.t;
 	is_index : bool;
 	sum_index : int;
 	is_offset : bool
@@ -2745,7 +2868,7 @@ module ConnectCFGtoPtr : Connection
        contain a loop between variables, except possible self-loops.
        [rep] is an accumulator that tells if on the current path of 
        representative pointers, we found index or offset pointer kinds. 
-       [rep.orig_var] is the original variable for which we compute 
+       [rep.orig_lhs_var] is the original variable for which we compute 
        a representant.
     *)
     let rec representative rep cur_val var =
@@ -2777,15 +2900,25 @@ module ConnectCFGtoPtr : Connection
 	  begin
 	    if debug then Coptions.lprintf 
 	      "[transfer] %a is represented by an offset of %a@."
-	      Var.pretty rep.orig_var Var.pretty var;
+	      Var.pretty rep.orig_lhs_var Var.pretty var;
 	    PtrLattice.make_offset var None
 	  end
 	else if rep.is_index then
 	  begin
-	    let idx = rep.sum_index + last_index in
+	    (* In an assignment
+	           q = p;
+	       if [p] is a self-index, then count this self-index for [q].
+	       But if [p] is an index on [r], which is itself a self-index, 
+	       then only count [p]'s index for [q]. *)
+	    let idx = 
+	      if Var.equal rep.orig_rhs_var var then
+		rep.sum_index + last_index
+	      else
+		rep.sum_index 
+	    in
 	    if debug then Coptions.lprintf 
 	      "[transfer] %a is represented by an index of %i from %a@."
-	      Var.pretty rep.orig_var idx Var.pretty var;
+	      Var.pretty rep.orig_lhs_var idx Var.pretty var;
 	    PtrLattice.make_index var idx
 	  end
 	else assert false
@@ -2808,20 +2941,49 @@ module ConnectCFGtoPtr : Connection
 	      | None -> cur_val
 	      | Some lhs_var ->
 		  begin
+		    (* compute new value for [lhs_var] *)
 		    let rhs_val =
 		      match ptr_assign_get_rhs_var node with
 			| None,None -> 
 			    PtrLattice.make_defined lhs_var None
 			| Some rhs_var,None -> 
-			    let rep = { orig_var = lhs_var; is_index = false; 
+			    let rep = { orig_lhs_var = lhs_var; 
+					orig_rhs_var = rhs_var; 
+					is_index = false; 
 					sum_index = 0; is_offset = true } in
 			    representative rep cur_val rhs_var
 			| Some rhs_var,Some index ->
-			    let rep = { orig_var = lhs_var; is_index = true;
+			    let rep = { orig_lhs_var = lhs_var; 
+					orig_rhs_var = rhs_var; 
+					is_index = true;
 					sum_index = index; is_offset = false }
 			    in
 			    representative rep cur_val rhs_var
 			| _ -> assert false
+		    in
+		    let representative_or_var var rep_val = 
+		      if PtrLattice.has_variable rep_val then
+			PtrLattice.get_variable rep_val 
+		      else var
+		    in
+		    let remove_ref_to_var rem_var var abs_val =
+		      let rep_var = representative_or_var var abs_val in
+		      if Var.equal rem_var rep_var then
+			PtrLattice.top
+		      else
+			abs_val
+		    in
+		    (* *)
+		    let old_val = PointWisePtrLattice.find lhs_var cur_val in
+		    let old_rep_var = representative_or_var lhs_var old_val in
+		    let new_rep_var = representative_or_var lhs_var rhs_val in
+		    let cur_val =
+		      if Var.equal old_rep_var new_rep_var
+			&& not (PtrLattice.is_defined rhs_val) then
+			cur_val
+		      else
+			PointWisePtrLattice.mapi 
+			  (remove_ref_to_var lhs_var) cur_val
 		    in
 		    PointWisePtrLattice.replace lhs_var rhs_val cur_val
 		  end
@@ -2854,6 +3016,10 @@ module ConnectCFGtoPtr : Connection
     let defined_vars = ref VarSet.empty in
     let complex_vars = ref VarSet.empty in
 
+    (* correspondance between representative variable and the variables 
+       it represents at some point *)
+    let rep_to_based = Hashtbl.create 0 in
+
     (* basic operations on sets of variables *)
     let add_to_set var set =
       set := VarSet.add var (!set) in
@@ -2864,12 +3030,29 @@ module ConnectCFGtoPtr : Connection
 	Coptions.lprintf "[format] %a@." 
 	  (fun fmt -> (VarSet.iter (Coptions.lprintf "%a " Var.pretty))) set
     in
+    let add_to_table rep_var var =
+      let var_set =
+	try 
+	  VarSet.add var (Hashtbl.find rep_to_based rep_var)
+	with Not_found ->
+	  VarSet.add var VarSet.empty 
+      in
+      Hashtbl.add rep_to_based rep_var var_set
+    in
 
     (* collect variables in the sets they match *)
     Hashtbl.iter
 	(fun _ (_,pwval) ->
 	   PointWisePtrLattice.iter
 	     (fun var pval ->
+		(* if [pval] uses a representative variable, 
+		   store this correspondance *)
+		if PtrLattice.has_variable pval then
+		  begin
+		    let rep_var = PtrLattice.get_variable pval in
+		    add_to_table rep_var var
+		  end;
+		(* dispatch [var] in sets according to [pval] *)
 		if PtrLattice.is_index pval then
 		  if PtrLattice.is_self_index var pval then
 		    add_to_set var self_index_vars
@@ -2902,6 +3085,23 @@ module ConnectCFGtoPtr : Connection
     if debug then print_set self_offset_vars "basic self-offset";
     if debug then print_set defined_vars "basic defined";
     if debug then print_set complex_vars "basic complex";
+
+    (* all variables represented by a complex one are complex *)
+    let rec close_set corresp set =
+      let new_set =
+	VarSet.fold (fun v vs -> 
+		       try
+			 let ns = Hashtbl.find corresp v in
+			 VarSet.fold VarSet.add ns vs
+		       with Not_found -> vs
+		    ) set set
+      in
+      if VarSet.equal new_set set then
+	set
+      else
+	close_set corresp new_set
+    in
+    let complex_vars = close_set rep_to_based complex_vars in
 
     (* compute cross-referencing pointers *)
     let cross_vars = VarSet.union offset_vars index_vars in
@@ -3509,11 +3709,9 @@ module ConnectCFGtoPtr : Connection
 		 with Not_found -> set
 	      ) VarSet.empty param_list
 	  in
-	  let other_offset_vars = 
-	    VarSet.diff (!(params.offset_vars)) param_offset_vars in
-	  let new_node = introduce_new_vars new_node 
-	    (VarSet.elements other_offset_vars) (* zero_init= *)false
-	  in
+	  (* only introduce offset variables for parameters here.
+	     Other offset variables are already declared locally, or will
+	     be declared in [cleanup]. *)
 	  let new_node = introduce_new_vars new_node 
 	    (VarSet.elements param_offset_vars) (* zero_init= *)true
 	  in
@@ -3569,6 +3767,63 @@ module ConnectCFGtoPtr : Connection
 		new_decl
 	     ) decls
 
+  let collect_vars nodes =
+    List.fold_left 
+      (fun (used_vars,decl_vars) node ->
+	 match get_node_kind node with
+	   | NKexpr -> (* only on code, not on logical part *)
+	       let used_vars =
+		 if expr_is_local_var node then
+		   let var = termexpr_var_get_var node in
+		   VarSet.add var used_vars
+		 else
+		   used_vars
+	       in
+	       used_vars,decl_vars
+	   | NKstat ->
+	       let decl_vars = 
+		 if stat_is_decl node then
+		   let var = decl_stat_get_var node in
+		   VarSet.add var decl_vars
+		 else
+		   decl_vars
+	       in
+	       used_vars,decl_vars
+	   | _ -> used_vars,decl_vars
+      ) (VarSet.empty,VarSet.empty) nodes
+
+  let cleanup used_vars decl_vars offset_map decls =
+    
+    let rec sub_cleanup node = 
+
+      let sub_nodes = (code_children node) @ (logic_children node) in
+      let new_sub_nodes = List.map sub_cleanup sub_nodes in
+      let node = change_sub_components node new_sub_nodes in
+
+      match get_node_kind node with
+	| NKstat ->
+	    if stat_is_decl node then
+	      let var = decl_stat_get_var node in
+	      if debug then Coptions.lprintf
+		"[sub_cleanup] declaration of variable %s used ? %B@."
+		var.var_name (VarSet.mem var used_vars);
+	      let node =
+		if VarSet.mem var used_vars then 
+		  node 
+		else 
+		  decl_stat_get_next node 
+	      in
+	      try
+		let offset_var = VarMap.find var offset_map in
+		if VarSet.mem offset_var decl_vars then
+		  node
+		else
+		  make_var_decl node offset_var
+	      with Not_found -> node
+	    else node
+	| _ -> node
+    in
+    List.map sub_cleanup decls
 end
 
 module LocalPtrAnalysis = Make_DataFlowAnalysis(Var)(CFGLangFromNormalized)
@@ -3602,9 +3857,24 @@ let local_aliasing_transform () =
   (* format results of the analysis *)
   let analysis,offset_map = ConnectCFGtoPtr.format raw_analysis in
   (* transform the program using the analysis *)
-  let new_decls = ConnectCFGtoPtr.transform analysis offset_map decls in
+  let decls = ConnectCFGtoPtr.transform analysis offset_map decls in
   (* return the new program *)
-  let file = CFGLangFromNormalized.to_file new_decls in
+  let file = CFGLangFromNormalized.to_file decls in
+
+  (* rebuild control-flow graph *)
+  let decls,all = CFGLangFromNormalized.from_file file in
+  (* collect the local variables used/declared *)
+  let used_vars,decl_vars = ConnectCFGtoPtr.collect_vars all in
+  if debug then Coptions.lprintf
+    "[local_aliasing_transform] %i local variables used@." 
+    (VarSet.cardinal used_vars);
+  if debug && not (VarSet.is_empty used_vars) then 
+    Coptions.lprintf "[local_aliasing_transform] %a@." 
+      (fun fmt -> (VarSet.iter (Coptions.lprintf "%a " Var.pretty))) used_vars;
+  (* add the necessary declarations *)
+  let decls = ConnectCFGtoPtr.cleanup used_vars decl_vars offset_map decls in
+  (* return the new program *)
+  let file = CFGLangFromNormalized.to_file decls in
 
   if debug then Coptions.lprintf 
     "[local_aliasing_transform] %i functions treated@." (List.length file);
