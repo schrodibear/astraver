@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.33 2006-07-17 12:37:30 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.34 2006-07-18 13:18:01 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -332,7 +332,7 @@ let rec nstatement fmt s = match s.nst_node with
       (* successive declarations share the same block statement *)
       fprintf fmt "@[<hov 2>{@\n";
       nsdecl fmt s;
-      fprintf fmt "}@\n@]"
+      fprintf fmt "@\n}@\n@]"
 
 and nsdecl fmt s = match s.nst_node with
   | NSdecl (ty, vi, None,rem) ->
@@ -352,13 +352,13 @@ and nblock fmt sl =
     (print_list newline nstatement) sl
 
 and ncase fmt (cmap,sl) =
-  fprintf fmt "@[%a@\n    %a@]"
+  fprintf fmt "@[%a    %a@]"
     (fun fmt -> 
        if Cconst.IntMap.is_empty cmap then
-	 (fun _ -> fprintf fmt "default:")
+	 (fun _ -> fprintf fmt "default:@\n")
        else
 	 Cconst.IntMap.iter 
-	   (fun _ e -> fprintf fmt "case %a:" nexpr e)) cmap
+	   (fun _ e -> fprintf fmt "case %a:@\n" nexpr e)) cmap
     nblock sl
 
 and ndecl fmt d = match d.node with
