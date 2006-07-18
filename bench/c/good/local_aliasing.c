@@ -1,10 +1,10 @@
 
 /* test option --local-aliasing */
 
-extern char* name;
-//@ invariant name_valid : \valid_range(name,0,99)
+extern char* name ;
+//@ axiom name_valid : \valid_range(name,0,99)
 
-//@ requires \valid_range(buf,0,size-1)
+//@ requires \valid_range(buf,0,size-1) && 0 <= size <= 100
 int f(char* buf, int size) {
   int i;
   char* p = buf;
@@ -27,11 +27,11 @@ int f(char* buf, int size) {
   return 0;
 }
 
-//@ requires \exists int i; s[i] == 0
+//@ requires \exists int i; i >= 0 && s[i] == 0 && \valid_range(s,0,i)
 int g(char* s) {
   char c;
   int count = 0;
-  /*@ invariant \exists int i; s[i] == 0
+  /*@ invariant \exists int i; i >= 0 && s[i] == 0 && \valid_range(s,0,i)
     @*/
   while (c = *s++) {
     switch (c) {
@@ -52,8 +52,6 @@ int g(char* s) {
   return count;
 }
 
-char* malloc(int size);
-
 int h(char* p, int s) {
   char *q = p+s;
   char *pp = p;
@@ -67,15 +65,15 @@ int h(char* p, int s) {
   if (p < q && buf < b) {
     int diff = (buf-b) + (pp-p);
     diff += (q-p);
-    //p = malloc(100);
+    //p = malloc(100 * sizeof(char));
     p++;
     //@ assert pp == p
     pp++;
     //@ assert pp == p + 1
     q++;
-    //@ assert pp + s == q + 2
+    //@ assert pp + s == q + 1
     diff += (q-pp);
-    q = malloc(100);
+    q = (char*)malloc(100 * sizeof(char));
     p = pp;
     //@ assert pp == p
     diff += (p-pp);
