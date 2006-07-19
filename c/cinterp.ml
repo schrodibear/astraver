@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.201 2006-07-17 12:36:54 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.202 2006-07-19 08:52:14 marche Exp $ i*)
 
 
 open Format
@@ -712,7 +712,7 @@ let any_float fk =
     "any_real"
 
 let int_one = Cte(Prim_int "1")
-let int_minus_one = Cte(Prim_int "-1")
+let int_minus_one = Cte(Prim_int "(-1)")
 
 let float_of_real r fk = 
   if floats then match fk with

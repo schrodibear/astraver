@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.119 2006-07-17 14:46:07 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.120 2006-07-19 08:52:14 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -662,10 +662,24 @@ and type_expr_node loc env = function
       begin match typ.ctype_node with
 	| Tpointer (_, ty') when eq_type ty' ty ->
 	    let e = match e with
-	      | CEbinary (e, _, {node = CEsizeof _}) -> e
+	      | CEbinary (e, _, {node = CEsizeof _}) 
 	      | CEbinary ({node = CEsizeof _}, _, e) -> e
 	      | _ -> { node = CEconstant (IntConstant "1"); loc = loc }
 	    in
+	    let e = type_int_expr env e in
+	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (Valid, ty) }
+	| _ -> 
+	    error loc "incompatible types"
+      end
+  | CEcast (typ, 
+	    { node = 
+		CEcall 
+		  ({ node = CEvar "calloc" },
+		   [ e ; { node = CEsizeof ty }])}) ->
+      let ty = type_type loc env ty in
+      let typ = type_type loc env typ in
+      begin match typ.ctype_node with
+	| Tpointer (_, ty') when eq_type ty' ty ->
 	    let e = type_int_expr env e in
 	    TEmalloc (ty, e), { typ with ctype_node = Tpointer (Valid, ty) }
 	| _ -> 
