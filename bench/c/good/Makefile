@@ -92,6 +92,11 @@ harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	make why/$*.why
 	make -f $*.makefile coq
 
+%.overflow: %.c
+	rm -f why/$*.why
+	$(EXECCADUCEUS) --int-overflow $<
+	make -f $*.makefile gui
+
 .PHONY: simplify coq harvey cvcl
 
 clean:

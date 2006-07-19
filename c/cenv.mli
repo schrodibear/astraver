@@ -69,6 +69,9 @@ val fold_all_struct_pairs :
   (string -> ctype_node * var_info list ->
    string -> ctype_node * var_info list -> 'a -> 'a) -> 'a -> 'a
 
+val fold_all_enum : 
+  (string -> ctype_node * (var_info * int64) list -> 'a -> 'a) -> 'a -> 'a
+
 (* Local environment *)
 module Env : sig
 
@@ -96,3 +99,4 @@ val declare_fields : ctype_node -> (ctype * var_info) list -> unit
 (* for normalization of fields types *)
 val update_fields_type : unit -> unit
 
+val get_fresh_name : string -> string

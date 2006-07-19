@@ -1,9 +1,12 @@
 
 Note: These are the changes for Caduceus.
 
+ o fixed bug with enum assignment
  o support for calloc, under similar conditions as malloc
  o new option --int-overflow to ensure the absence of arithmetic overflows
    See section ``Integer arithmetic'' in the manual.
+   new options --char-size, --short-size, --int-size, --long-size
+   and --long-long-size to set the integer types sizes (in bits)
  o support for floating-point arithmetic (turned off with --no-fp)
    See section ``Floating-point arithmetic'' in the manual.
   

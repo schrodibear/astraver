@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.13 2006-07-05 09:44:35 filliatr Exp $ i*)
+(*i $Id: cnorm.mli,v 1.14 2006-07-19 15:14:50 filliatr Exp $ i*)
 
 open Cast
 
@@ -57,7 +57,9 @@ val make_forall : nctype Clogic.typed_quantifiers -> npredicate -> npredicate
 val make_implies : npredicate -> npredicate -> npredicate
 
 val nptrue : npredicate
+val npfalse : npredicate
 val npand : npredicate * npredicate -> npredicate
+val npor : npredicate * npredicate -> npredicate
 val nprel : nterm * Clogic.relation * nterm -> npredicate
 val npvalid : nterm -> npredicate
 val npvalid_range : nterm * nterm * nterm -> npredicate

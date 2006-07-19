@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.120 2006-07-19 08:52:14 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.121 2006-07-19 15:14:50 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -37,6 +37,11 @@ let int_teconstant n =
 
 let tezero = int_teconstant "0"
 
+let char_size_b = char_size / 8
+let short_size_b = short_size / 8
+let int_size_b = int_size / 8
+let long_size_b = long_size / 8
+let long_long_size_b = long_long_size / 8
 
 (* evaluation static *)
 let rec sizeof loc = 
@@ -52,11 +57,11 @@ let rec sizeof loc =
   in
   let rec sizeof ?(field=false) (ty : tctype) = match ty.ctype_node with
     | Tvoid -> of_int 1
-    | Tint (_, Char) -> of_int 1 
-    | Tint (_, Short) -> of_int 2
-    | Tint (_, Int) -> architecture (); of_int 4
-    | Tint (_, Long) -> of_int 4
-    | Tint (_, LongLong) -> of_int 8
+    | Tint (_, Char) -> of_int char_size_b
+    | Tint (_, Short) -> of_int short_size_b
+    | Tint (_, Int) -> architecture (); of_int int_size_b
+    | Tint (_, Long) -> of_int long_size_b
+    | Tint (_, LongLong) -> of_int long_long_size_b
     | Tint (_, Bitfield n) -> 
 	architecture ();
 	let d = div n (of_int 8) in
@@ -191,7 +196,7 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | Tfloat fk1, Tfloat fk2 when fk1 <> fk2 ->
       { e with texpr_node = TEunary (Ufloat_conversion, e); texpr_type = ty }
-  | Tint c1, Tint c2 when c1 <> c2 ->
+  | (Tint _ | Tenum _ as tn1), (Tint _ | Tenum _ as tn2) when tn1 <> tn2 ->
       { e with texpr_node = TEunary (Uint_conversion, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e

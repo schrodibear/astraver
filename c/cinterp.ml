@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.202 2006-07-19 08:52:14 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.203 2006-07-19 15:14:50 filliatr Exp $ i*)
 
 
 open Format
@@ -531,6 +531,9 @@ let not_zero e = LPred ("neq_int", [e; LConst (Prim_int "0")])
 let within_bounds i e = 
   LAnd (LPred ("le_int", [LConst (Prim_int (min_int i)); e]), le_max_int i e)
 
+let is_enum e t = 
+  let _,info = Cenv.find_pred ("is_enum_" ^ e) in LPred (info.logic_name, [t])
+
 let guard_1 g e =
   let v = tmp_var () in Let (v, e, Output.Assert (g (LVar v), Var v))
 
@@ -538,6 +541,7 @@ let guard_1 g e =
 let interp_int_conversion ty1 ty2 e = 
   if not int_overflow_check then e else
   match ty1.Ctypes.ctype_node, ty2.Ctypes.ctype_node with
+    (* int -> int *)
     | Tint (Unsigned, i1), Tint (Unsigned, i2) 
     | Tint (Signed, i1), Tint (Signed, i2) when le_cinteger i1 i2 -> 
 	e
@@ -549,8 +553,16 @@ let interp_int_conversion ty1 ty2 e =
 	guard_1 is_non_negative e
     | Tint (Signed, i1), Tint si2 ->
 	guard_1 (within_bounds si2) e
-    | Tenum _, Tenum _ ->
-	assert false (*TODO*)
+    (* enum -> int *)
+    | Tenum _, Tint (Signed, i2) when le_cinteger Int i2 ->
+	e
+    | Tenum _, Tint si2 ->
+	guard_1 (within_bounds si2) e
+    (* enum -> enum *)
+    | Tenum e1, Tenum e2 when e1 = e2 ->
+	e 
+    | (Tint _ | Tenum _), Tenum e2 ->
+	guard_1 (is_enum e2) e
     | _ -> 
 	assert false
 

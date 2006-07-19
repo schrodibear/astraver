@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.72 2006-07-05 09:44:33 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.73 2006-07-19 15:14:50 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -686,6 +686,10 @@ let make_and p1 p2 = match p1.npred_node, p2.npred_node with
   | _, NPtrue -> p1
   | _ -> { p1 with npred_node = NPand (p1, p2) }
 
+let make_or p1 p2 = match p1.npred_node, p2.npred_node with
+  | NPfalse, _ -> p2
+  | _, NPfalse -> p1
+  | _ -> { p1 with npred_node = NPor (p1, p2) }
 
 let make_implies p1 p2 = match p2.npred_node with
   | NPtrue -> { p1 with npred_node = NPtrue }
@@ -695,14 +699,15 @@ let make_forall q p = match p.npred_node with
   | NPtrue -> { p with npred_node = NPtrue }
   | _ -> { p with npred_node = NPforall (q, p) }
 
-
 let dummy_pred p = { npred_node = p; npred_loc = Loc.dummy_position }
 let nprel (t1, r, t2) = dummy_pred (NPrel (t1, r, t2))
 let npand (p1, p2) = make_and p1 p2
+let npor (p1, p2) = make_or p1 p2
 let npvalid t = dummy_pred (NPvalid t)
 let npvalid_range (t,i,j) = dummy_pred (NPvalid_range (t,i,j))
 let npfresh t = dummy_pred (NPfresh t)
 let nptrue = dummy_pred NPtrue
+let npfalse = dummy_pred NPfalse
 let npapp (f, l) = dummy_pred (NPapp {napp_pred = f;napp_args =  l; 
 				      napp_zones_assoc = []})
 let npiff (p1, p2) = dummy_pred (NPiff (p1, p2))

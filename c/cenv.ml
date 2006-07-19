@@ -51,7 +51,7 @@ let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
 let compatible_type ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
 
 let arith_type ty = match ty.ctype_node with
-  | Tint _ | Tfloat _ -> true
+  | Tint _ | Tenum _ | Tfloat _ -> true
   | _ -> false
 
 let array_type ty = match ty.ctype_node with
@@ -144,6 +144,14 @@ let fold_all_struct_pairs f x =
   in
   fold x ls
 
+let fold_all_enum f x =
+  Hashtbl.fold
+    (fun s tt acc ->
+       match tt.tag_type with
+	 | TTEnum (tn, l) -> f s (tn, l) acc
+	 | _ -> acc)
+    tags_t x
+
 (* typedefs *)
 
 let typedef_t = (Hashtbl.create 97 : (string, 'a) Hashtbl.t)
@@ -192,6 +200,8 @@ let rec next_name ?local_names n i =
 
 let unique_name ?local_names n = 
   try use_name ?local_names n with Exit -> next_name ?local_names n 0
+
+let get_fresh_name n = unique_name n
 
 (*s Environments for the logical side *)
 

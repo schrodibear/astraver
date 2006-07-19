@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.33 2006-07-06 13:18:06 hubert Exp $ i*)
+(*i $Id: invariant.ml,v 1.34 2006-07-19 15:14:50 filliatr Exp $ i*)
 
 open Coptions
 open Creport
@@ -622,14 +622,15 @@ let rec pred_for_type ty t =
     | Ctypes.Tunion n ->
 	nptrue (*TODO*)
     | Ctypes.Tenum n ->
-	nptrue (*TODO*)
+	let _,info = Cenv.find_pred ("is_enum_" ^ n) in 
+	npapp (info, [t])
     | Ctypes.Tvoid | Ctypes.Tfun _ | Ctypes.Tfloat _ | Ctypes.Tvar _ -> 
 	nptrue
 
 let add_typing_predicates dl =
   let loc = Loc.dummy_position in
   let tdecl d = { node = d; loc = loc } in
-  (* 1. declare all is_signed_char, ... predicates *)
+  (* 1. define all is_signed_char, ... predicates *)
   let declare_int_type si acc =
     let ty = noattr (Tint si) in
     let n = predicate_for_int_type si in
@@ -647,8 +648,29 @@ let add_typing_predicates dl =
     let d = tdecl (Nlogic (is_int_n, NPredicate_def ([x,ty], p))) in
     d :: acc
   in
-  (* 1. declare all is_struct_S predicates *)
-  let declare_is_struct s (tyn,fl) acc = 
+  (* 2. define all is_enum_E predicates *)
+  let declare_enum_type s (tyn, vl) acc =
+    let ty = noattr tyn in
+    let n = "is_enum_" ^ s in
+    let is_enum_s = Info.default_logic_info n in
+    Cenv.add_pred n ([ty], is_enum_s);
+    let x = Info.default_var_info (get_fresh_name "x") in
+    set_formal_param x;
+    set_var_type (Var_info x) ty true;
+    is_enum_s.logic_args <- [x];
+    let var_x = nterm (NTvar x) ty in
+    let p = 
+      List.fold_left 
+	(fun p (v,_) -> 
+	   let p1 = nprel (var_x, Eq, nterm (NTvar v) ty) in
+	   npor (p, p1)) 
+	npfalse vl
+    in
+    let d = tdecl (Nlogic (is_enum_s, NPredicate_def ([x,ty], p))) in
+    d :: acc
+  in
+  (* 3. declare all is_struct_S predicates *)
+  let declare_is_struct s (tyn, fl) acc = 
     let ty = noattr tyn in
     let n = "is_struct_" ^ s in
     let is_struct_s = Info.default_logic_info n in
@@ -668,7 +690,7 @@ let add_typing_predicates dl =
     let d = tdecl (Nlogic (is_struct_s, NPredicate_reads ([x,ty], reads))) in
     d :: acc
   in
-  (* 2. axiomatize all is_struct_S predicates *)
+  (* 4. axiomatize all is_struct_S predicates *)
   let define_is_struct s (tyn,fl) acc =
     reset_var_i ();
     let _,is_struct_s = Cenv.find_pred ("is_struct_" ^ s) in
@@ -713,8 +735,6 @@ let add_typing_predicates dl =
     in
     sp.requires <- requires
   in
-
-
   let dl = 
     List.fold_right declare_int_type
       [Signed, Char; Unsigned, Char;
@@ -725,6 +745,7 @@ let add_typing_predicates dl =
       ] 
       dl
   in
+  let dl = Cenv.fold_all_enum declare_enum_type dl in
   let dl = Cenv.fold_all_struct declare_is_struct dl in
   let dl = Cenv.fold_all_struct define_is_struct dl in
   Hashtbl.iter  adding_typing_invariant_requires Cenv.c_functions;

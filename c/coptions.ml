@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.28 2006-07-12 09:04:26 moy Exp $ i*)
+(*i $Id: coptions.ml,v 1.29 2006-07-19 15:14:50 filliatr Exp $ i*)
 
 open Format
 
@@ -94,22 +94,6 @@ let short_size_ = ref 16
 let int_size_ = ref 32
 let long_size_ = ref 32
 let long_long_size_ = ref 64
-
-let min_signed_char_ = ref "-128"
-let max_signed_char_ = ref "127"
-let max_unsigned_char_ = ref "255"
-let min_signed_short_ = ref "-32768"
-let max_signed_short_ = ref "32767"
-let max_unsigned_short_ = ref "65535"
-let min_signed_int_ = ref "-2147483648"
-let max_signed_int_ = ref "2147483647"
-let max_unsigned_int_ = ref "4294967295"
-let min_signed_long_ = ref "-2147483648"
-let max_signed_long_ = ref "2147483647"
-let max_unsigned_long_ = ref "4294967295"
-let min_signed_longlong_ = ref "-9223372036854775808"
-let max_signed_longlong_ = ref "9223372036854775807"
-let max_unsigned_longlong_ = ref "18446744073709551615"
 
 let set_integer_size r s = 
   if s < 1 || s > 64 then begin
@@ -202,15 +186,15 @@ let _ =
 	  "  check for FP overflows";
 	"--int-overflow", Arg.Set int_overflow_check,
 	  "  check for integer overflows";
-	"--char_size", Arg.Int (set_integer_size char_size_),
+	"--char-size", Arg.Int (set_integer_size char_size_),
 	  "  set the size of type `char' (default is 8)";
-	"--short_size", Arg.Int (set_integer_size short_size_),
+	"--short-size", Arg.Int (set_integer_size short_size_),
 	  "  set the size of type `short' (default is 16)";
-	"--int_size", Arg.Int (set_integer_size int_size_),
+	"--int-size", Arg.Int (set_integer_size int_size_),
 	  "  set the size of type `int' (default is 32)";
-	"--long_size", Arg.Int (set_integer_size long_size_),
+	"--long-size", Arg.Int (set_integer_size long_size_),
 	  "  set the size of type `long' (default is 32)";
-	"--long_long_size", Arg.Int (set_integer_size long_long_size_),
+	"--long-long-size", Arg.Int (set_integer_size long_long_size_),
 	  "  set the size of type `long long' (default is 64)";
 	"--typing-predicates", Arg.Set typing_predicates,
 	  "  use typing predicates (experimental)";
@@ -247,21 +231,40 @@ let long_size = !long_size_
 let long_long_size = !long_long_size_
 
 let int_overflow_check = !int_overflow_check
-let min_signed_char = !min_signed_char_
-let max_signed_char = !max_signed_char_
-let max_unsigned_char = !max_unsigned_char_
-let min_signed_short = !min_signed_short_
-let max_signed_short = !max_signed_short_
-let max_unsigned_short = !max_unsigned_short_
-let min_signed_int = !min_signed_int_
-let max_signed_int = !max_signed_int_
-let max_unsigned_int = !max_unsigned_int_
-let min_signed_long = !min_signed_long_
-let max_signed_long = !max_signed_long_
-let max_unsigned_long = !max_unsigned_long_
-let min_signed_longlong = !min_signed_longlong_
-let max_signed_longlong = !max_signed_longlong_
-let max_unsigned_longlong = !max_unsigned_longlong_
+
+let string_two_power_n = function
+  | 64 -> "18446744073709551616"
+  | 63 -> "9223372036854775808"
+  | n -> 
+      assert (0 <= n && n <= 62); 
+      Int64.to_string (Int64.shift_left Int64.one n)
+
+let string_two_power_n_minus_one = function
+  | 64 -> "18446744073709551615"
+  | 63 -> "9223372036854775807"
+  | n -> 
+      assert (0 <= n && n <= 62); 
+      Int64.to_string (Int64.pred (Int64.shift_left Int64.one n))
+
+let min_signed n = "-" ^ string_two_power_n (n-1)
+let max_signed n = string_two_power_n_minus_one (n-1)
+let max_unsigned n = string_two_power_n_minus_one n
+
+let min_signed_char = min_signed char_size
+let max_signed_char = max_signed char_size
+let max_unsigned_char = max_unsigned char_size
+let min_signed_short = min_signed short_size
+let max_signed_short = max_signed short_size
+let max_unsigned_short = max_unsigned short_size
+let min_signed_int = min_signed int_size
+let max_signed_int = max_signed int_size
+let max_unsigned_int = max_unsigned int_size
+let min_signed_long = min_signed long_size
+let max_signed_long = max_signed long_size
+let max_unsigned_long = max_unsigned long_size
+let min_signed_longlong = min_signed long_long_size
+let max_signed_longlong = max_signed long_long_size
+let max_unsigned_longlong = max_unsigned long_long_size
 
 let use_floats = ref false
 
