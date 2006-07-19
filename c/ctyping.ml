@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.121 2006-07-19 15:14:50 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.122 2006-07-19 15:20:38 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -113,6 +113,7 @@ and eval_const_expr_noerror (e : texpr) = match e.texpr_node with
   | TEbinary (t1, Cast.Bdiv_int _, t2) -> 
       Int64.div (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEcast (_, e) -> eval_const_expr_noerror e
+  | TEunary (Uint_conversion, e) -> eval_const_expr_noerror e
   | TEsizeof (t,n) -> n
   | TEvar (Var_info v) ->
       if e.texpr_type.Ctypes.ctype_const 
