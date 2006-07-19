@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.18 2006-06-19 14:37:52 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.19 2006-07-19 15:27:37 marche Exp $ i*)
 
 open Format
 open Cerror
@@ -106,6 +106,7 @@ let raise_locop locop e = raise (Error (locop, e))
 let unsupported loc s = raise (Error (Some loc, Unsupported s))
 
 let error l s = raise (Error (Some l, AnyMessage s))
+let errorf l f = ksprintf (fun s -> raise (Error (Some l, AnyMessage s))) f
 
 let wtbl = Hashtbl.create 17;;
 

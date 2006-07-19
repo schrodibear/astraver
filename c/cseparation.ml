@@ -665,7 +665,8 @@ let spec tyf sp =
 
 let rec statement twf st =
   match st.nst_node with 
-    | NSnop | NSreturn None | NSbreak | NScontinue | NSlogic_label _ -> ()
+    | NSnop | NSreturn None | NSbreak | NScontinue | NSlogic_label _ 
+    | NSgoto _ -> ()
     | NSassert p ->  predicate twf p
     | NSexpr e -> calcul_zones e
     | NSif (e,st1,st2) -> calcul_zones e; statement twf st1; statement twf st2 

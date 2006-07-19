@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.203 2006-07-19 15:14:50 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.204 2006-07-19 15:27:37 marche Exp $ i*)
 
 
 open Format
@@ -1738,6 +1738,12 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       Raise ("Continue", None)
   | NSlabel(lab,s) -> 
       Output.Label (lab, interp_statement ab may_break s)
+  | NSgoto(GotoForwardOuter,lab) ->
+      Raise ("Goto_" ^ lab, None)
+  | NSgoto(GotoForwardInner,lab) ->
+      unsupported stat.nst_loc "forward inner goto"
+  | NSgoto(GotoBackward,lab) ->
+      unsupported stat.nst_loc "backward goto"
   | NSswitch(e,used_cases,l) ->
       let tmp = tmp_var() in
       let switch_may_break = ref false in
@@ -1812,6 +1818,8 @@ and interp_block ab may_break stats =
 	      If (interp_boolean_expr e,
 		  interp_statement ab may_break s1, block (s2 :: bl))
 	end
+    | { nst_node = NSlabel(lab,st) } as s :: bl ->
+	assert false
     | s :: bl ->
 	if not s.nst_term then unreachable_block bl;
 	append (interp_statement true may_break s) (block bl)

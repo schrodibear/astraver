@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.34 2006-07-18 13:18:01 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.35 2006-07-19 15:27:37 marche Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -290,6 +290,11 @@ let rec c_initializer fmt = function
   | Iexpr e -> nexpr fmt e
   | Ilist l -> fprintf fmt "@[{ %a }@]" (print_list comma c_initializer) l
 
+let ngoto_status = function
+  | GotoBackward -> "backward"
+  | GotoForwardOuter -> "forward,outer"
+  | GotoForwardInner -> "forward,inner"
+
 let rec nstatement fmt s = match s.nst_node with
   | NSnop -> 
       fprintf fmt ";"
@@ -317,6 +322,8 @@ let rec nstatement fmt s = match s.nst_node with
       fprintf fmt "continue;"
   | NSlabel (l, s) ->
       fprintf fmt "%s: %a" l nstatement s
+  | NSgoto (status, l) ->
+      fprintf fmt "goto(%s) %s" (ngoto_status status) l 
   | NSswitch (e, m, l) ->
       fprintf fmt "@[switch (%a) {@\n    @[%a@]@\n}@]"
 	nexpr e (print_list newline ncase) l

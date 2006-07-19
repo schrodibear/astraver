@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.73 2006-07-19 15:14:50 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.74 2006-07-19 15:27:37 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -1021,7 +1021,7 @@ and statement s =
       NSswitch(expr texpr, used_cases, s) 
   | TScase (texpr, tstatement) -> assert false
   | TSdefault tstatement -> assert false
-  | TSgoto  string -> assert false (*error "not supported"*)
+  | TSgoto(status,l) -> NSgoto(status,l)
   | TSassert p -> NSassert (predicate p)
   | TSlogic_label  string -> NSlogic_label string
   | TSspec (s, tstatement) -> NSspec (spec s, statement tstatement)

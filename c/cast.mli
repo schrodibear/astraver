@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.71 2006-07-17 11:50:48 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.72 2006-07-19 15:27:37 marche Exp $ i*)
 
 (*s C types *)
 
@@ -231,6 +231,8 @@ type variant = tterm * string option
 
 type loop_annot = (tterm, predicate) Clogic.loop_annot
 
+type goto_status = GotoBackward | GotoForwardOuter | GotoForwardInner
+
 type tstatement = {
   st_node : tstatement_node;
   st_break : bool;    (* may breaks *)
@@ -255,7 +257,7 @@ and tstatement_node =
   | TSswitch of texpr * tstatement
   | TScase of texpr * tstatement
   | TSdefault of tstatement
-  | TSgoto of string
+  | TSgoto of goto_status * string
   | TSassert of predicate
   | TSlogic_label of string
   | TSspec of spec * tstatement
@@ -347,6 +349,7 @@ and nstatement_node =
   | NSreturn of nexpr option
   | NSbreak
   | NScontinue
+  | NSgoto of goto_status * string
   | NSlabel of string * nstatement
   | NSswitch of nexpr * (nexpr Cconst.IntMap.t) * 
       ((nexpr Cconst.IntMap.t * nstatement list) list)

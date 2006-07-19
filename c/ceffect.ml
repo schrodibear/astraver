@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.136 2006-07-06 13:18:06 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.137 2006-07-19 15:27:37 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -544,7 +544,8 @@ let rec statement s = match s.nst_node with
   | NSbreak
   | NScontinue
   | NSlogic_label _
-  | NSreturn None ->
+  | NSreturn None 
+  | NSgoto _ ->
       ef_empty
   | NSexpr e -> 
       expr e

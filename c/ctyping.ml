@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.122 2006-07-19 15:20:38 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.123 2006-07-19 15:27:37 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -904,65 +904,182 @@ let or_status s1 s2 =
     continue = s1.continue || s2.continue;
     term = s1.term || s2.term }
 
+(* structure of labels in a function body : using Huet's zipper *)
 
-let rec type_statement env et s =
-  let sn,st = type_statement_node s.loc env et s.node in
+type label_tree =
+  | LabelItem of string
+  | LabelBlock of label_tree list
+
+let rec printf_label_tree fmt lt =
+  match lt with 
+    | LabelItem s -> fprintf fmt "%s" s
+    | LabelBlock l -> 
+	fprintf fmt "{ %a }" (Pp.print_list Pp.space printf_label_tree ) l
+
+let rec in_label_tree lab = function
+  | LabelItem l -> l=lab
+  | LabelBlock l -> in_label_tree_list lab l
+
+and in_label_tree_list lab = List.exists (in_label_tree lab) 
+
+let in_label_upper_tree_list lab l = 
+  List.exists (function LabelItem lab' -> lab=lab' | _ -> false) l
+
+(*
+type label_path =
+  | Top
+  | Node of label_tree list * label_path * label_tree list
+
+type label_zipper = label_tree * label_path
+*)
+
+let rec build_label_tree st acc : label_tree list =
+  match st.node with
+    | CSnop  
+    | CSexpr _ 
+    | CSbreak 
+    | CScontinue 
+    | CSgoto _
+    | CSreturn _
+    | CSannot _ -> acc
+    | CSif (e, s1, s2) ->
+	let l1 = build_label_tree s1 [] in
+	let l2 = build_label_tree s2 [] in
+	(LabelBlock l1) :: (LabelBlock l2) :: acc
+    | CSlabel (lab, s) ->
+	(LabelItem lab) :: (build_label_tree s acc)
+    | CSblock (_,sl) ->
+	let l = List.fold_right build_label_tree sl [] in
+	(LabelBlock l) :: acc
+    | CSfor (_, _, _, _, s) 
+    | CSdowhile (_, s, _) 
+    | CSwhile (_, _, s) 
+    | CSswitch (_, s) 
+    | CScase (_, s) 
+    | CSdefault (s) 
+    | CSspec (_, s) ->
+	let l = build_label_tree s [] in
+	(LabelBlock l) :: acc
+	
+  
+
+let rec type_statement env et lz s =
+  let sn,st,lz = type_statement_node s.loc env et lz s.node in
   { st_node = sn; 
     st_return = st.return; 
     st_break = st.break;
     st_continue = st.continue;
     st_term = st.term;
-    st_loc = s.loc }, st
+    st_loc = s.loc }, st, lz
 
-and type_statement_node loc env et = function
+and type_statement_node loc env et lz = function
   | CSnop -> 
-      TSnop, mt_status
+      TSnop, mt_status, lz
   | CSexpr e ->
       let e = type_expr env e in
-      TSexpr e, mt_status
+      TSexpr e, mt_status, lz
   | CSif (e, s1, s2) ->
       let e = type_boolean env e in
-      let s1,st1 = type_statement env et s1 in
-      let s2,st2 = type_statement env et s2 in
-      TSif (e, s1, s2), or_status st1 st2
+      let lz1,lz2,lz3 = match lz with
+	| before,LabelBlock b1::LabelBlock b2::after ->
+	    (before,b1@(LabelBlock b2)::after),
+	    (before,b2@(LabelBlock b1)::after),
+	    (LabelBlock b1::LabelBlock b2::before,after)
+	| _ -> assert false
+      in
+      let s1,st1,_ = type_statement env et lz1 s1 in
+      let s2,st2,_ = type_statement env et lz2 s2 in
+      TSif (e, s1, s2), or_status st1 st2, lz3
   | CSbreak ->
-      TSbreak, { mt_status with term = false; break = true }
+      TSbreak, { mt_status with term = false; break = true }, lz
   | CScontinue -> 
-     TScontinue, { mt_status with term = false; continue = true }
+     TScontinue, { mt_status with term = false; continue = true }, lz
   | CSlabel (lab, s) ->
-      (* TODO: %default% label not within a switch statement *)
-      let s, st = type_statement env et s in
-      TSlabel (lab, s), st
+      let lz1 = match lz with
+	| before,LabelItem lab'::after ->
+	    assert (lab=lab');
+	    (LabelItem lab'::before,after)
+	| _ -> assert false
+      in
+      let s, st, lz2 = type_statement env et lz1 s in
+      TSlabel (lab, s), st, lz2
   | CSblock bl ->
-      let bl,st = type_block env et bl in
-      TSblock bl, st
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let bl,st,_ = type_block env et lz1 bl in
+      TSblock bl, st, lz2
   | CSgoto lab ->
-      (* TODO: vérifier existence label *)
-      TSgoto lab, mt_status
+      let before,after = lz in
+      let status =
+	if in_label_tree_list lab before
+	then 
+	  begin
+	    lprintf "%a: backward goto@." Loc.report_position loc;
+	    GotoBackward
+	  end
+      else
+	if in_label_upper_tree_list lab after
+	then 
+	  begin
+	    lprintf "%a: forward outer goto@." Loc.report_position loc;
+	    GotoForwardOuter
+	  end
+	else
+	  if in_label_tree_list lab after
+	  then 
+	    begin
+	      lprintf "%a: forward inner goto@." Loc.report_position loc;
+	      GotoForwardInner
+	    end
+	  else errorf loc "undefined label '%s'" lab
+      in
+      TSgoto(status,lab), mt_status, lz
   | CSfor (an, e1, e2, e3, s) -> 
       let an = type_loop_annot env an in
       let e1 = type_expr env e1 in
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
-      let s,st = type_statement env et s in
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s,st, _ = type_statement env et lz1 s in
       TSfor (an, e1, e2, e3, s),
-      { mt_status with return = st.return }
+      { mt_status with return = st.return }, lz2
   | CSdowhile (an, s, e) ->
       let an = type_loop_annot env an in
-      let s, st = type_statement env et s in
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s, st, _ = type_statement env et lz1 s in
       let e = type_boolean env e in
       TSdowhile (an, s, e), 
-      { mt_status with return = st.return }
+      { mt_status with return = st.return }, lz2
   | CSwhile (an, e, s) ->
       let an = type_loop_annot env an in
       let e = type_boolean env e in
-      let s, st = type_statement env et s in
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s, st, _ = type_statement env et lz1 s in
       TSwhile (an, e, s), 
-      { mt_status with return = st.return }
+      { mt_status with return = st.return }, lz2
   | CSreturn None ->
       if et <> None then warning loc 
 	      "`return' with no value, in function returning non-void";
-      TSreturn None,{ mt_status with term = false; return = true } 
+      TSreturn None,{ mt_status with term = false; return = true }, lz
   | CSreturn (Some e) ->
       let e' = type_expr env e in
       let e' = match et with
@@ -972,31 +1089,55 @@ and type_statement_node loc env et = function
 	| Some ty ->
 	    Some (coerce ty e')
       in
-      TSreturn e', { mt_status with term = false; return = true }
+      TSreturn e', { mt_status with term = false; return = true }, lz
   | CSswitch (e, s) ->
       let e = type_int_expr env e in
-      let s,st = type_statement env et s in
-      TSswitch (e, s), { st with break = false ; term = true }
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s,st,_ = type_statement env et lz1 s in
+      TSswitch (e, s), { st with break = false ; term = true }, lz2
   | CScase (e, s) ->
       let e = type_int_expr env e in
-      let s,st = type_statement env et s in
-      TScase (e, s), st
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s,st,_ = type_statement env et lz1 s in
+      TScase (e, s), st, lz2
   | CSdefault (s) ->
-      let s,st = type_statement env et s in
-      TSdefault (s), st
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s,st,_ = type_statement env et lz1 s in
+      TSdefault (s), st, lz2
   | CSannot (Assert p) ->
       let p = type_predicate env p in
-      TSassert p, mt_status
+      TSassert p, mt_status, lz
   | CSannot (Label l) ->
-      TSlogic_label l, mt_status
+      TSlogic_label l, mt_status, lz
   | CSannot (GhostSet(x,t)) ->
-      TSset (type_ghost_lvalue env x,type_term env t), mt_status
+      TSset (type_ghost_lvalue env x,type_term env t), mt_status, lz
   | CSspec (spec, s) ->
       let spec = type_spec env spec in
-      let s,st = type_statement env et s in
-      TSspec (spec, s), st
+      let lz1,lz2 = match lz with
+	| before,LabelBlock b1::after ->
+	    (before,b1@after),
+	    (LabelBlock b1::before,after)
+	| _ -> assert false
+      in
+      let s,st,_ = type_statement env et lz1 s in
+      TSspec (spec, s), st, lz2
 
-and type_block env et (dl,sl) = 
+and type_block env et lz (dl,sl) = 
   let rec type_decls vs env = function
     | [] -> 
 	[], env
@@ -1020,20 +1161,20 @@ and type_block env et (dl,sl) =
 	error l "unsupported local declaration"
   in
   let dl',env' = type_decls Sset.empty (Env.new_block env) dl in
-  let rec type_bl = function
+  let rec type_bl lz = function
     | [] -> 
-	[], mt_status
+	[], mt_status, lz
     | [s] ->
-	let s',st = type_statement env' et s in
-	[s'], st
+	let s',st, lz1 = type_statement env' et lz s in
+	[s'], st, lz1
     | s :: bl ->
-	let s', st1 = type_statement env' et s in
-	let bl', st2 = type_bl bl in
+	let s', st1, lz1 = type_statement env' et lz s in
+	let bl', st2, lz2 = type_bl lz1 bl in
 	let st = or_status st1 st2 in
-	s' :: bl', { st with term = st2.term }
+	s' :: bl', { st with term = st2.term }, lz2
   in
-  let sl', st = type_bl sl in
-  (dl', sl'), st
+  let sl', st, lz1 = type_bl lz sl in
+  (dl', sl'), st, lz1
 
 let type_parameters loc env pl =
   let type_one (ty,x) pl =
@@ -1210,7 +1351,11 @@ let type_decl d = match d.node with
       let s = option_app (type_spec ~result:ty env) s in
       let s = function_spec d.loc f s in
       info.has_assigns <- (s.assigns <> None);
-      let bl,st = type_statement env et bl in
+      let lz = build_label_tree bl [] in
+      fprintf Coptions.log "Labels for function %s:@\n" f;
+      printf_label_tree Coptions.log (LabelBlock lz);
+      fprintf Coptions.log "@.";
+      let bl,st,_ = type_statement env et ([],lz) bl in
       if st.term && et <> None then
 	warning d.loc "control reaches end of non-void function";
       if st.break then 
