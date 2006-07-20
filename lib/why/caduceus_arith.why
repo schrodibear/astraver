@@ -205,7 +205,8 @@ axiom arrlen_shift :
 
 (* axiomatic definition of [strlen] *)
 axiom strlen_create :
-  forall m : ('a,'z) memory. forall p: 'z pointer. forall i:int.
+  forall m : ('a,'z) memory. forall p: 'z pointer. 
+  forall i:int [strlen(upd(m,shift(p,i),0),p)].
     i >= 0 -> 0 <= strlen(upd(m,shift(p,i),0),p) <= i
 
 axiom strlen_zero :
@@ -214,7 +215,8 @@ axiom strlen_zero :
     strlen(m,p) >= 0 -> acc(m,shift(p,strlen(m,p))) = 0
 
 axiom strlen_not_zero :
-  forall m : ('a,'z) memory. forall p: 'z pointer. forall i:int. 
+  forall m : ('a,'z) memory. forall p: 'z pointer. 
+  forall i:int [strlen(m,p),acc(m,shift(p,i))]. 
     i <= strlen(m,p) and acc(m,shift(p,i)) <> 0 -> i < strlen(m,p)
 
 axiom strlen_shift :
@@ -224,7 +226,7 @@ axiom strlen_shift :
 
 axiom strlen_update_before :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
-  forall v:'a. forall i:int. 
+  forall v:'a. forall i:int [strlen(upd(m,shift(p,i),v),p)]. 
     0 <= i < strlen(m,p) -> strlen(upd(m,shift(p,i),v),p) <= strlen(m,p)
 
 axiom strlen_update_zero :
@@ -234,12 +236,12 @@ axiom strlen_update_zero :
 
 axiom strlen_update_not_zero :
   forall m : ('a,'z) memory. forall p: 'z pointer. 
-  forall v:'a. forall i:int. 
+  forall v:'a. forall i:int [strlen(upd(m,shift(p,i),v),p)]. 
     0 <= i <= strlen(m,p) and v <> 0 -> i < strlen(upd(m,shift(p,i),v),p)
 
 (* axiom linking [arrlen] and [strlen] *)
 axiom arrlen_strlen :
-  forall m : ('a,'z) memory. forall p: 'z pointer. 
+  forall m : ('a,'z) memory. forall p: 'z pointer [strlen(m,p)]. 
     arrlen(p) > 0 -> strlen(m,p) >= 0
 
 (* exceptions *)
