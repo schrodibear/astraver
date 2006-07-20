@@ -319,6 +319,7 @@ install-lib:
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
+	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/caduceus/coq
 	if test "@COQVER@" = "v7"; then \
 	  cp -f lib/coq-v7/caduceus_why.v lib/coq-v7/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
