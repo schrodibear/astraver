@@ -14,6 +14,10 @@ module Option = struct
     | Some y1,Some y2 -> f y1 y2
     | _ -> false
 end
+  
+(* used in various functions for the correspondance between labels and their 
+   representative node *)
+module StringMap = Map.Make (String)
 
 (* to avoid warnings about missing cases in pattern-matching,
    when exact form of the list known due to context *)
@@ -734,11 +738,13 @@ module CFGLangFromNormalized : sig
   val make_int_termexpr_add_termexpr : Node.t -> Node.t -> Node.t
     (* create a new node pointer expression + constant *)
   val make_ptr_expr_add_cst : Node.t -> int -> Node.t
+    (* create a new node pointer expression + expression *)
+  val make_ptr_expr_add_expr : Node.t -> Node.t -> Node.t
     (* create a new declaration statement for the variable, with the given
        statement as next statement *)
   val make_var_decl : Node.t -> var_t -> Node.t
     (* make this node be a term/expression over a variable *)
-  val change_in_var : Node.t -> var_t -> Node.t
+  val change_in_ptr_var : Node.t -> var_t -> Node.t
     (* make this node be a term/expression of a sum variable + constant *)
   val change_in_ptr_var_add_cst : Node.t -> var_t -> int -> Node.t
     (* make this node be a term/expression of a sum variable + variable *)
@@ -746,11 +752,11 @@ module CFGLangFromNormalized : sig
     (* make this node be a sum variable + expression *)
   val change_in_ptr_var_add_expr : Node.t -> var_t -> Node.t -> Node.t
     (* make this node be an assignment variable = constant *)
-  val change_in_var_assign_cst : Node.t -> var_t -> int -> Node.t
+  val change_in_int_var_assign_cst : Node.t -> var_t -> int -> Node.t
     (* make this node be an assignment variable = variable *)
-  val change_in_var_assign_var : Node.t -> var_t -> var_t -> Node.t
+  val change_in_int_var_assign_var : Node.t -> var_t -> var_t -> Node.t
     (* make this node be an assignment variable = expression *)
-  val change_in_var_assign_expr : Node.t -> var_t -> Node.t -> Node.t
+  val change_in_int_var_assign_expr : Node.t -> var_t -> Node.t -> Node.t
     (* make this node be an increment/decrement of the 2nd node,
        materialized as a pointer addition.
        The boolean is [true] if the function is called on the result of
@@ -869,6 +875,7 @@ end = struct
 	    | NSreturn (Some e) -> Format.fprintf fmt "NSreturn" 
 	    | NSbreak -> Format.fprintf fmt "NSbreak"
 	    | NScontinue -> Format.fprintf fmt "NScontinue" 
+	    | NSgoto _ -> Format.fprintf fmt "NSgoto"
 	    | NSlabel (str,s1) -> Format.fprintf fmt "NSlabel"
 	    | NSspec (spec,s1) -> Format.fprintf fmt "NSspec"
 	    | NSdecl (typ,var,None,s1) -> Format.fprintf fmt "NSdecl"
@@ -944,9 +951,13 @@ end = struct
   (* more elaborate query functions related to pointer usage *)
 
   let is_pointer_type ctyp = match ctyp.Ctypes.ctype_node with
-    | Ctypes.Tvar _ -> assert false (* not allowed in code *)
-    | Ctypes.Tarray _ | Ctypes.Tpointer _ -> true
-    | _ -> false
+    | Ctypes.Tvar _ -> 
+	assert false (* not allowed in code *)
+    | Ctypes.Tarray _ | Ctypes.Tpointer _ -> 
+	true
+    | Ctypes.Tvoid | Ctypes.Tint _ | Ctypes.Tfloat _ | Ctypes.Tfun _ 
+    | Ctypes.Tstruct _ | Ctypes.Tunion _ | Ctypes.Tenum _ ->
+	false
 
   let var_is_pointer var =
     is_pointer_type var.var_type
@@ -1252,7 +1263,7 @@ end = struct
 
   (* add an operational edge.
      - [force_add_opedge] should be used for edges that originate in 
-     a jumping statement like a return/break/continue.
+     a jumping statement like a return/break/continue/goto.
      - [add_opedge] should be used in all other cases, with the knowledge
      that an edge will be added only if the source statement is not
      a jumping one. *)
@@ -1261,12 +1272,15 @@ end = struct
     match get_node_kind v1 with
       | NKstat ->
 	  begin match get_stat v1 with
-	    | NSreturn _ | NSbreak | NScontinue ->
+	    | NSreturn _ | NSbreak | NScontinue | NSgoto _ ->
 		(* normal operational edges should not originate from
 		   a jumping statement, in which case [force_add_opedge]
 		   is used. Do nothing. *)
 		()
-	    | _ -> force_add_opedge v1 v2
+	    | NSnop | NSassert _ | NSlogic_label _ | NSexpr _ | NSif _
+	    | NSwhile _ | NSdowhile _ | NSfor _ | NSblock _ | NSlabel _
+	    | NSspec _ | NSdecl _ | NSswitch _ ->
+		force_add_opedge v1 v2
 	  end
       | _ -> force_add_opedge v1 v2
     
@@ -1380,90 +1394,105 @@ end = struct
     let new_e = { e with nexpr_node = new_e } in
     Node.create (Nexpr new_e)
 
+  let make_ptr_expr_add_expr node1 node2 =
+    let e1 = get_e node1 in
+    let e2 = get_e node2 in
+    let new_e = NEbinary (e1,Badd_pointer_int,e2) in
+    let new_e = { e1 with nexpr_node = new_e } in
+    Node.create (Nexpr new_e)
+
   let make_var_decl node var =
     let s = get_s node in
     let new_s = NSdecl (var.var_type,var,None,s) in
     let new_s = { s with nst_node = new_s } in
     Node.create (Nstat new_s)
 
-  let change_in_var node var =
+  (* deals with array address used as pointer *)
+  let change_in_ptr_var node var =
     match get_node_kind node with
       | NKexpr -> 
 	  let e = get_e node in
-	  let new_e = NEvar (Var_info var) in
-	  let new_e = { e with nexpr_node = new_e } in
-	  Node.create (Nexpr new_e)
+	  let var_e = NEvar (Var_info var) in
+	  let var_e = { e with nexpr_node = var_e } in
+	  let new_e =
+	    match var.var_type.Ctypes.ctype_node with 
+	      | Ctypes.Tarray (valid,ty,_) -> 
+		  let cast_e = NEcast (Ctypes.c_pointer valid ty,var_e) in
+		  { e with nexpr_node = cast_e }
+	      | _ -> var_e
+	  in
+	  Node.create (Nexpr new_e) 
       | NKterm ->
 	  let t = get_t node in
-	  let new_t = NTvar var in
-	  let new_t = { t with nterm_node = new_t } in
+	  let var_t = NTvar var in
+	  let var_t = { t with nterm_node = var_t } in
+	  let new_t = 
+	    match var.var_type.Ctypes.ctype_node with 
+	      | Ctypes.Tarray (valid,ty,_) -> 
+		  let cast_t = NTcast (Ctypes.c_pointer valid ty,var_t) in
+		  { t with nterm_node = cast_t }
+	      | _ -> var_t
+	  in
 	  Node.create (Nterm new_t)
       | _ -> assert false
 
   (* var + neg_cst is coded as var + (-abs(neg_cst))
      This format is expected by [Cconst] module. *)
   let change_in_ptr_var_add_cst node var offset =
+    let var_te = change_in_ptr_var node var in
     match get_node_kind node with
       | NKexpr -> 
 	  let e = get_e node in
-	  let var_e = NEvar (Var_info var) in
-	  let var_e = { e with nexpr_node = var_e } in
 	  let cst_e = NEconstant (IntConstant (string_of_int (abs offset))) in
 	  let cst_e = { e with nexpr_node = cst_e; 
 			  nexpr_type = int_offset_type } in
 	  let cst_e = if offset >= 0 then cst_e else
 	    { cst_e with nexpr_node = NEunary (Uminus,cst_e) } in
-	  let new_e = NEbinary (var_e, Badd_pointer_int, cst_e) in
+	  let new_e = NEbinary (get_e var_te, Badd_pointer_int, cst_e) in
 	  let new_e = { e with nexpr_node = new_e } in
 	  Node.create (Nexpr new_e)
       | NKterm ->
 	  let t = get_t node in
-	  let var_t = NTvar var in
-	  let var_t = { t with nterm_node = var_t } in
 	  let cst_t = NTconstant (IntConstant (string_of_int (abs offset))) in
 	  let cst_t = { t with nterm_node = cst_t; 
 			  nterm_type = int_offset_type } in
 	  let cst_t = if offset >= 0 then cst_t else
 	    { cst_t with nterm_node = NTunop (Clogic.Uminus,cst_t) } in
-	  let new_t = NTbinop (var_t, Clogic.Badd, cst_t) in
+	  let new_t = NTbinop (get_t var_te, Clogic.Badd, cst_t) in
 	  let new_t = { t with nterm_node = new_t } in
 	  Node.create (Nterm new_t)
       | _ -> assert false
 
   let change_in_ptr_var_add_var node var offset_var =
+    let var_te = change_in_ptr_var node var in
     match get_node_kind node with
       | NKexpr -> 
 	  let e = get_e node in
-	  let var_e = NEvar (Var_info var) in
-	  let var_e = { e with nexpr_node = var_e } in
 	  let cst_e = NEvar (Var_info offset_var) in
 	  let cst_e = { e with nexpr_node = cst_e; 
 			  nexpr_type = int_offset_type } in
-	  let new_e = NEbinary (var_e, Badd_pointer_int, cst_e) in
+	  let new_e = NEbinary (get_e var_te, Badd_pointer_int, cst_e) in
 	  let new_e = { e with nexpr_node = new_e } in
 	  Node.create (Nexpr new_e)
       | NKterm ->
 	  let t = get_t node in
-	  let var_t = NTvar var in
-	  let var_t = { t with nterm_node = var_t } in
 	  let cst_t = NTvar offset_var in
 	  let cst_t = { t with nterm_node = cst_t; 
 			  nterm_type = int_offset_type } in
-	  let new_t = NTbinop (var_t, Clogic.Badd, cst_t) in
+	  let new_t = NTbinop (get_t var_te, Clogic.Badd, cst_t) in
 	  let new_t = { t with nterm_node = new_t } in
 	  Node.create (Nterm new_t)
       | _ -> assert false
 
   let change_in_ptr_var_add_expr node var offset_expr =
+    let var_te = change_in_ptr_var node var in
     let e = get_e node in
-    let var_e = NEvar (Var_info var) in
-    let var_e = { e with nexpr_node = var_e } in
-    let new_e = NEbinary (var_e, Badd_pointer_int, get_e offset_expr) in
+    let new_e = NEbinary (get_e var_te, Badd_pointer_int, get_e offset_expr) in
     let new_e = { e with nexpr_node = new_e } in
     Node.create (Nexpr new_e)
 
   (* changes the expression's type if necessary *)
-  let change_in_var_assign_cst node var index =
+  let change_in_int_var_assign_cst node var index =
     let e = get_e node in
     let var_e = NEvar (Var_info var) in
     let typ_e = var.var_type in
@@ -1475,7 +1504,7 @@ end = struct
     Node.create (Nexpr new_e)
     
   (* changes the expression's type if necessary *)
-  let change_in_var_assign_var node var other_var =
+  let change_in_int_var_assign_var node var other_var =
     let e = get_e node in
     let var_e = NEvar (Var_info var) in
     let typ_e = var.var_type in
@@ -1487,7 +1516,7 @@ end = struct
     Node.create (Nexpr new_e)
       
   (* changes the expression's type if necessary *)
-  let change_in_var_assign_expr node var sub_node =
+  let change_in_int_var_assign_expr node var sub_node =
     let e = get_e node in
     let var_e = NEvar (Var_info var) in
     let typ_e = var.var_type in
@@ -1566,17 +1595,25 @@ end = struct
 	   by the transformation *)
       | NEconstant _ | NEvar _ -> true
       | NEbinary (e1,_,e2) -> (useless_expr e1) && (useless_expr e2)
-      | NEunary (_,e1) -> useless_expr e1
+      | NEunary (_,e1) | NEcast (_,e1) -> useless_expr e1
       | _ -> false
     in
-    let rec simplify_expr e = match e.nexpr_node with
+    let simplify_expr e = match e.nexpr_node with
       | NEseq (e1,e2) ->
 	  (* [e2] may be the pointer evaluation, useless here *)
 	  if useless_expr e2 then e1 else e
       | _ -> e
     in
-    let statement_expr_or_nop e = 
+    let simplify_expr_under_stat e = 
       let e = simplify_expr e in
+      match e.nexpr_node with
+	| NEbinary (e1,_,e2) ->
+	    (* [e1] may be the base pointer evaluation, useless here *)
+	    if useless_expr e1 then e2 else e
+	| _ -> e
+    in
+    let statement_expr_or_nop e = 
+      let e = simplify_expr_under_stat e in
       if useless_expr e then NSnop else NSexpr e
     in
     let filter_nop sl =
@@ -1637,7 +1674,7 @@ end = struct
 	  let new_e = get_e new_e in
 	  let new_e = simplify_expr new_e in
 	  NSreturn (Some new_e)
-      | NSbreak | NScontinue -> 
+      | NSbreak | NScontinue | NSgoto _ -> 
 	  assert (List.length sub_nodes = 0);
 	  s.nst_node
       | NSlabel (str,s1) ->
@@ -1953,6 +1990,16 @@ end = struct
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTblock_length new_t
+      | NTarrlen t1 ->
+	  assert (List.length sub_nodes = 1);
+	  let new_t = list1 sub_nodes in
+	  let new_t = get_t new_t in
+	  NTarrlen new_t
+      | NTstrlen (t1,zone,var) ->
+	  assert (List.length sub_nodes = 1);
+	  let new_t = list1 sub_nodes in
+	  let new_t = get_t new_t in
+	  NTstrlen (new_t,zone,var)
       | NTcast (typ,t1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
@@ -2306,7 +2353,8 @@ end = struct
 	    let args_nodes = List.map from_term a.napp_args in
 	    (* logic *) add_logedge tnode args_nodes
 	| NTunop (_,t1) | NTarrow (t1,_,_) | NTold t1 | NTat (t1,_)
-	| NTbase_addr t1 | NToffset t1 | NTblock_length t1 | NTcast (_,t1) ->
+	| NTbase_addr t1 | NToffset t1 | NTblock_length t1 
+	| NTarrlen t1 | NTstrlen (t1,_,_) | NTcast (_,t1) ->
 	    let t1node = from_term t1 in
 	    (* logic *) add_logedge tnode [t1node]
 	| NTbinop (t1,_,t2) ->
@@ -2501,8 +2549,21 @@ end = struct
 	function_begin : Node.t;
 	(* target of return and last statement of function.
 	   Set only if needed. *)
-	function_end : Node.t option
+	function_end : Node.t option;
+	(* targets for [goto] statements, and sources for [label] ones *)
+	label_aliases : Node.t StringMap.t ref
       }
+
+  (* Whenever a [goto] or [label] is found, this function is called 
+     and returns a node that represents the label, and updates 
+     globally all the contexts *)
+  let update_context_for_label ctxt lab =
+    try
+      StringMap.find lab (!(ctxt.label_aliases))
+    with Not_found ->
+      let lab_node = Node.create (Nfwd (* is_structural= *)true) in
+      ctxt.label_aliases := StringMap.add lab lab_node (!(ctxt.label_aliases));
+      lab_node
 
   let rec from_stat (ctxt : context_descr) start_node (s : nstatement) =
     let snode = Node.create (Nstat s) in add_vertex snode;
@@ -2514,8 +2575,8 @@ end = struct
 	    (* oper *) add_opedge start_node snode;
 	    let pnode = from_pred p in
 	    (* logic *) add_logedge snode [pnode];
-	    (* assert node is its self-begin and its self-end *)
-	    (* logic *) add_begedge snode snode; 
+	    (* assert node is -only- its self-end *)
+	    (* logic *) add_begedge snode ctxt.function_begin;
 	    (* logic *) add_endedge snode snode
 	| NSexpr e -> 
 	    let enode = from_expr start_node e in
@@ -2536,10 +2597,9 @@ end = struct
 	    (* oper *) add_opedge start_node bwd_node;
 	    let enode = from_expr bwd_node e in
 	    let upd_ctxt =
-	      { loop_starts = bwd_node :: ctxt.loop_starts;
-		loop_switch_ends = snode :: ctxt.loop_switch_ends;
-		function_begin = ctxt.function_begin;
-		function_end = ctxt.function_end } in
+	      { ctxt with 
+		  loop_starts = bwd_node :: ctxt.loop_starts;
+		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
 	    let s1node = from_stat upd_ctxt enode s1 in
 	    (* oper *) add_opedge s1node bwd_node; (* before [e]'s eval *)
 	    (* oper *) add_opedge enode snode; (* after [e]'s eval *)
@@ -2559,10 +2619,9 @@ end = struct
 	    let fwd_enode = Node.create (Nfwd (* is_structural= *)true) in
 	    add_vertex fwd_enode;
 	    let upd_ctxt =
-	      { loop_starts = fwd_enode :: ctxt.loop_starts;
-		loop_switch_ends = snode :: ctxt.loop_switch_ends;
-		function_begin = ctxt.function_begin;
-		function_end = ctxt.function_end } in
+	      { ctxt with 
+		  loop_starts = fwd_enode :: ctxt.loop_starts;
+		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
 	    let s1node = from_stat upd_ctxt bwd_node s1 in
 	    let enode = from_expr fwd_enode e in
 	    (* oper *) add_opedge s1node fwd_enode;
@@ -2586,10 +2645,9 @@ end = struct
 	    let fwd_enode = Node.create (Nfwd (* is_structural= *)true) in
 	    add_vertex fwd_enode;
 	    let upd_ctxt =
-	      { loop_starts = fwd_enode :: ctxt.loop_starts;
-		loop_switch_ends = snode :: ctxt.loop_switch_ends;
-		function_begin = ctxt.function_begin;
-		function_end = ctxt.function_end } in
+	      { ctxt with 
+		  loop_starts = fwd_enode :: ctxt.loop_starts;
+		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
 	    let s1node = from_stat upd_ctxt etest_node s1 in
 	    let eincr_node = from_expr fwd_enode eincr in
 	    (* oper *) add_opedge s1node fwd_enode;
@@ -2635,6 +2693,10 @@ end = struct
 	| NScontinue -> 
 	    (* oper *) add_opedge start_node snode;
 	    (* oper *) force_add_opedge snode (List.hd ctxt.loop_starts)
+	| NSgoto (_,lab) ->
+	    (* oper *) add_opedge start_node snode;
+	    let label_node = update_context_for_label ctxt lab in
+	    (* oper *) force_add_opedge snode label_node
 	| NSspec (spc,s1) ->
 	    let s1node = from_stat ctxt start_node s1 in
 	    (* oper *) add_opedge s1node snode;
@@ -2644,7 +2706,13 @@ end = struct
 	    (* the logical "spec" node is linked to the start and end nodes *)
 	    (* logic *) add_begedge spcnode start_node;
 	    (* logic *) add_endedge spcnode snode
-	| NSlabel (_,s1) | NSdecl (_,_,None,s1) ->
+	| NSlabel (lab,s1) ->
+	    let label_node = update_context_for_label ctxt lab in
+	    (* oper *) add_opedge start_node label_node;
+	    let s1node = from_stat ctxt label_node s1 in
+	    (* oper *) add_opedge s1node snode;
+	    (* struct *) add_stedge snode [s1node]
+	| NSdecl (_,_,None,s1) ->
 	    let s1node = from_stat ctxt start_node s1 in
 	    (* oper *) add_opedge s1node snode;
 	    (* struct *) add_stedge snode [s1node]
@@ -2702,10 +2770,9 @@ end = struct
 	| NSswitch (e,_,cases) -> 
 	    let enode = from_expr start_node e in
 	    let upd_ctxt =
-	      { loop_starts = ctxt.loop_starts;
-		loop_switch_ends = snode :: ctxt.loop_switch_ends;
-		function_begin = ctxt.function_begin;
-		function_end = ctxt.function_end } in
+	      { ctxt with 
+		  loop_starts = ctxt.loop_starts;
+		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
 	    let cnodes = List.map
 	      (fun (_,sl) -> 
 		 let cnode,clnodes =
@@ -2792,7 +2859,8 @@ end = struct
 	      loop_starts = []; 
 	      loop_switch_ends = [];
 	      function_begin = dnode;
-	      function_end = if has_ensure then Some end_node else None
+	      function_end = if has_ensure then Some end_node else None;
+	      label_aliases = ref StringMap.empty
 	    } in
 	  let snode = from_stat start_ctxt dnode s in
 	  (* oper *) add_opedge snode end_node;
@@ -3220,10 +3288,6 @@ end = struct
   (* exception used to share the default treatment in [sub_transform] *)
   exception Rec_transform
 
-  (* used in [transform_t] for the correspondance between labels and their 
-     representative node *)
-  module StringMap = Map.Make (String)
-
   (* type used to propagate information in [sub_transform] and
      its sub-functions *)
   type transform_t =
@@ -3237,12 +3301,18 @@ end = struct
 	has_at : String.t option
       }
 
-  (* type used to pass information from [sub_transform] to its sub-functions *)
+  (* types used to pass information from [sub_transform] to 
+     its sub-functions *)
+  type addon_t = 
+      {
+	is_replacement : bool;
+	addon_node : Node.t
+      }
   type local_nodes_t =
       {
 	node : Node.t;
 	sub_nodes : Node.t list;
-	new_sub_nodes : (Node.t * Node.t option) list
+	new_sub_nodes : (Node.t * addon_t option) list
       }
 
   (* transformation on an individual node.
@@ -3289,7 +3359,7 @@ end = struct
     if PtrLattice.is_alias pval then
       (* rewrite alias of v as v *)
       let new_var = PtrLattice.get_alias pval in
-      change_in_var node new_var
+      change_in_ptr_var node new_var
     else if PtrLattice.is_index pval then
       (* rewrite constant offset i of v as v+i *)
       let new_var,index = PtrLattice.get_index pval in
@@ -3302,7 +3372,29 @@ end = struct
     else if PtrLattice.is_defined pval then
       (* rewrite possible assignment to v as v *)
       let new_var,_ = PtrLattice.get_defined_opt pval in
-      change_in_var node new_var
+      change_in_ptr_var node new_var
+    else node
+
+  (* returns a pointer read that corresponds to the base pointer for
+     the abstract value [aval], with other elements taken in [node] 
+  *)
+  let make_base_pointer_read node pval =
+    if PtrLattice.is_alias pval then
+      (* rewrite alias of v as v *)
+      let new_var = PtrLattice.get_alias pval in
+      change_in_ptr_var node new_var
+    else if PtrLattice.is_index pval then
+      (* rewrite constant offset i of v as v *)
+      let new_var,_ = PtrLattice.get_index pval in
+      change_in_ptr_var node new_var
+    else if PtrLattice.is_offset pval then
+      (* rewrite offset o of v as v *)
+      let new_var,_ = PtrLattice.get_offset pval in
+      change_in_ptr_var node new_var
+    else if PtrLattice.is_defined pval then
+      (* rewrite possible assignment to v as v *)
+      let new_var,_ = PtrLattice.get_defined_opt pval in
+      change_in_ptr_var node new_var
     else node
 
   (* returns an offset assignment from the abstract value [rhs_val]
@@ -3320,11 +3412,11 @@ end = struct
 	let (_,index) = PtrLattice.get_index rhs_val in
 	match add_offset_opt with
 	  | None -> 
-	      change_in_var_assign_cst node offset_lhs_var index
+	      change_in_int_var_assign_cst node offset_lhs_var index
 	  | Some offset_expr ->
 	      let add_expr = make_int_expr_add_cst offset_expr index
 	      in
-	      change_in_var_assign_expr node offset_lhs_var add_expr
+	      change_in_int_var_assign_expr node offset_lhs_var add_expr
       end
     else if PtrLattice.is_offset rhs_val then
       (* [offset_lhs_var] is assigned another offset *)
@@ -3337,7 +3429,7 @@ end = struct
 	    if is_incr_decr then
 	      change_in_int_incr_assign node offset_lhs_var
 	    else
-	      change_in_var_assign_var 
+	      change_in_int_var_assign_var 
 		node offset_lhs_var offset_rhs_var
 	| Some offset_expr ->
 	    begin
@@ -3345,7 +3437,7 @@ end = struct
 	      assert (not is_incr_decr);
 	      let add_expr = 
 		make_int_expr_add_var offset_expr offset_rhs_var in
-	      change_in_var_assign_expr node offset_lhs_var add_expr
+	      change_in_int_var_assign_expr node offset_lhs_var add_expr
 	    end
     else
       begin
@@ -3353,9 +3445,9 @@ end = struct
 	assert (not is_incr_decr);
 	match add_offset_opt with
 	  | None -> (* [offset_lhs_var] is reset *)
-	      change_in_var_assign_cst node offset_lhs_var 0
+	      change_in_int_var_assign_cst node offset_lhs_var 0
 	  | Some offset_expr ->
-	      change_in_var_assign_expr 
+	      change_in_int_var_assign_expr 
 		node offset_lhs_var offset_expr
       end
 
@@ -3453,15 +3545,34 @@ end = struct
 	    let lhs_val = PointWisePtrLattice.find lhs_var aval in 
 
 	    (* share addon part used in offset/defined cases *)
-	    let addon_node = 
-	      if is_incr_decr then
-		(* [new_rhs_node] must be a variable here,
-		   in the offset/defined cases *)
-		change_in_ptr_incr node new_rhs_node true
-	      else
-		make_pointer_read params node lhs_val 
-	    in
-	    let wrap_addon node = node,Some addon_node in
+	    let wrap_addon offset_node = 
+	      let addon_part = 
+		if is_incr_decr then
+		  (* [new_rhs_node] must be a variable here, 
+		     in the offset/defined cases *)
+		  (* the original treatment here was 
+		         { is_replacement = false;
+		           addon_node = 
+		             change_in_ptr_incr node new_rhs_node true }
+		     but this led to some problems with Simplify trying
+		     to prove the subsequent goal.
+		     Therefore it was change to the following, which gives
+		     Simplify an easier goal.
+		     e.g. the C code
+		         *p++ = 0;
+		     was changed to
+		         *(p_offset++, q+p_offset-1) = 0;
+		     and is now translated into
+		         *(q+(p_offset++)) = 0;
+		  *)
+		  let base_node = make_base_pointer_read node lhs_val in
+		  { is_replacement = true;
+		    addon_node = make_ptr_expr_add_expr base_node offset_node }
+		else
+		  { is_replacement = false;
+		    addon_node = make_pointer_read params node lhs_val }
+	      in
+	      offset_node,Some addon_part in
 
 	    if PtrLattice.is_index lhs_val then
 	      (* assignment to [lhs_var] not useful, since reading
@@ -3516,7 +3627,7 @@ end = struct
 		  else
 		    (* The rhs is itself an offset assignment. 
 		       Use it. *)
-		    wrap_addon (change_in_var_assign_expr 
+		    wrap_addon (change_in_int_var_assign_expr 
 				  node offset_lhs_var new_rhs_node)
 		end
 	      else
@@ -3573,7 +3684,7 @@ end = struct
 		| _,Some offset_var ->
 		    store_offset_var params offset_var;
 		    let reset_node = 
-		      change_in_var_assign_cst node offset_var 0 in
+		      change_in_int_var_assign_cst node offset_var 0 in
 		    (* sequence in this order due to possible effects
 		       in [assign_node]. Use [wrap_addon] to return 
 		       pointer. *) 
@@ -3737,8 +3848,12 @@ end = struct
 			     && not (expr_type_is_ptr new_main) then
 			       match new_addon with
 				 | Some new_addon ->
-				     assert (expr_type_is_ptr new_addon);
-				     make_seq_expr new_main new_addon
+				     let addon_node = new_addon.addon_node in
+				     assert (expr_type_is_ptr addon_node);
+				     if new_addon.is_replacement then
+				       addon_node
+				     else
+				       make_seq_expr new_main addon_node
 				 | None -> assert false
 			   else
 			     new_main
