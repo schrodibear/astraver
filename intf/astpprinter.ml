@@ -77,7 +77,7 @@ let print_term fmt t =
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[if %a then@ %a else@ %a@])" print0 a print0 b print0 c
     | Tapp (id, tl, _) -> 
-	fprintf fmt "@[%s(%a)@])" (Ident.string id) print_terms tl
+	fprintf fmt "@[%s(%a)@]" (Ident.string id) print_terms tl
   and print_terms fmt tl =
     print_list comma print3 fmt tl
   and is_shift = function 
