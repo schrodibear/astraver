@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.74 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.75 2006-07-20 14:21:52 moy Exp $ i*)
 
 open Creport
 open Cconst
@@ -233,6 +233,8 @@ let rec type_why_for_term t =
 	end  
     | NToffset t -> Info.Int
     | NTblock_length t -> Info.Int
+    | NTarrlen _ -> Info.Int
+    | NTstrlen _ -> Info.Int
     | NTcast (_,t) -> assert false (* type_why_for_term t *)
     | NTrange (_,_,_,z,f) -> 
 	begin
@@ -537,6 +539,24 @@ let rec term_node loc t ty =
   | Tbase_addr t -> NTbase_addr (term t)
   | Toffset t -> NToffset (term t)
   | Tblock_length t -> NTblock_length (term t)
+  | Tarrlen t -> NTarrlen (term t)
+  | Tstrlen t ->
+      (* [strlen(p)] depends on the value pointed to by [p].
+	 Add fields to describe this dependency. *)
+      let ty = match t.term_type.Ctypes.ctype_node with
+	| Ctypes.Tarray (_,ty,_) | Ctypes.Tpointer (_,ty) -> 
+	    ty
+	| Ctypes.Tvoid | Ctypes.Tint _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
+	| Ctypes.Tstruct _ | Ctypes.Tunion _ | Ctypes.Tenum _ 
+	| Ctypes.Tfun _ ->
+	    assert false
+      in
+      let info = make_field ty in
+      let info = declare_arrow_var info in
+      let t' = term t in
+      let zone = find_zone_for_term t' in
+      let () = type_why_new_zone zone info in
+      NTstrlen (t', zone, info)
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
@@ -913,6 +933,10 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "offset can't be used here"
 	| NTblock_length t -> error t.nterm_loc 
 	      "block_length can't be used here"
+	| NTarrlen t -> error t.nterm_loc 
+	    "arrlen can't be used here"
+	| NTstrlen (t,z,v) -> error t.nterm_loc 
+	    "strlen can't be used here"
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
 	| NTrange _ -> 
 	    error t.nterm_loc "range cannot by used here"

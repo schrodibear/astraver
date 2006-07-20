@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.206 2006-07-20 11:22:12 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.207 2006-07-20 14:21:52 moy Exp $ i*)
 
 
 open Format
@@ -232,7 +232,19 @@ let rec interp_term label old_label t =
     | NToffset t -> 
 	LApp("offset",[f t])
     | NTblock_length t -> 
+	(* [block_length] should not be used with the 
+	   arithmetic memory model *)
+	assert (not arith_memory_model);
 	LApp("block_length",[interp_var label "alloc"; f t])
+    | NTarrlen t -> 
+	LApp("arrlen",[f t])
+    | NTstrlen (t,zone,var) -> 
+	(* [strlen(p)] depends on the value pointed to by [p].
+	   Pass an additional parameter for the memory. *)
+	let te = f t in
+	let var = zoned_name var.var_unique_name (Cnorm.type_why_for_term t)
+	in
+	LApp("strlen",[interp_var label var;te])
     | NTat (t, l) -> 
 	interp_term (Some l) old_label t
     | NTif (_, _, _) -> 
@@ -433,18 +445,33 @@ let rec interp_predicate label old_label p =
     | NPat (p, l) -> 
 	interp_predicate (Some l) old_label p
     | NPfresh (t) ->
+	(* [fresh] should not be used with the arithmetic memory model *)
+	assert (not arith_memory_model);
 	LPred("fresh",[interp_var (Some old_label) "alloc"; ft t])
     | NPvalid (t) ->
-	LPred("valid",[interp_var label "alloc"; ft t])
+	if arith_memory_model then
+	  LPred("valid",[ft t])
+	else
+	  LPred("valid",[interp_var label "alloc"; ft t])
     | NPvalid_index (t,a) ->
-	LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
+	if arith_memory_model then
+	  LPred("valid_index",[ft t;ft a])
+	else
+	  LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
     | NPvalid_range (t,a,b) ->
 	begin 
 	  match a.nterm_node , b.nterm_node with
 	    | NTconstant IntConstant "0", NTconstant IntConstant "0" -> 
-		LPred("valid",[interp_var label "alloc"; ft t])
+		if arith_memory_model then
+		  LPred("valid",[ft t])
+		else
+		  LPred("valid",[interp_var label "alloc"; ft t])
 	    | _ ->
-		LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
+		if arith_memory_model then
+		  LPred("valid_range",[ft t;ft a;ft b])
+		else
+		  LPred("valid_range",
+			[interp_var label "alloc"; ft t;ft a;ft b])
 	end
     | NPnamed (n, p) ->
 	LNamed (n, f p)
@@ -1357,10 +1384,16 @@ let interp_assigns before assigns = function
       StringMap.fold
 	(fun v p acc -> match p with
 	   | Memory p ->
-	       make_and acc
-		 (LPred("not_assigns",
-			[LVarAtLabel("alloc",before); LVarAtLabel(v,before);
-			 LVar v; make_union_loc p]))
+	       if arith_memory_model then
+		 make_and acc
+		   (LPred("not_assigns",
+			  [LVarAtLabel(v,before);
+			   LVar v; make_union_loc p]))
+	       else
+		 make_and acc
+		   (LPred("not_assigns",
+			  [LVarAtLabel("alloc",before); LVarAtLabel(v,before);
+			   LVar v; make_union_loc p]))
 	   | Reference false ->
 	       make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)]))
 	   | Reference true ->
@@ -1502,10 +1535,14 @@ let strong_invariants_for hvs =
     Ceffect.strong_invariants  
     pred
 
-let alloc_extends = 
+let alloc_extends () = 
+  (* [alloc_extends] should not be used with the arithmetic memory model *)
+  assert (not arith_memory_model);
   LPred ("alloc_extends", [LVar "alloc@"; LVar "alloc"])
 
 let alloc_extends_at label = 
+  (* [alloc_extends] should not be used with the arithmetic memory model *)
+  assert (not arith_memory_model);
   LPred ("alloc_extends", [LVarAtLabel ("alloc", label); LVar "alloc"])
 
 let interp_spec add_inv effect s =
@@ -1524,7 +1561,7 @@ let interp_spec add_inv effect s =
 	(interp_assigns "" effect s.assigns)
 	(make_and
 	   (if add_inv then weak_invariants_for effect else LTrue)
-	   (if Ceffect.assigns_alloc effect then alloc_extends else LTrue)))
+	   (if Ceffect.assigns_alloc effect then alloc_extends () else LTrue)))
   in 
   (tpre_with,tpre_without,tpost)
 

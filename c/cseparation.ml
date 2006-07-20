@@ -488,6 +488,8 @@ let rec term tyf t =
   | NTbase_addr t
   | NToffset t
   | NTblock_length t 
+  | NTarrlen t 
+  | NTstrlen (t,_,_)
   | NTcast (_,t) 
   | NTrange (t,None,None,_,_) -> term tyf t
   | NTrange (t1,Some t2,None,_,_) | NTrange (t1,None,Some t2,_,_) -> 

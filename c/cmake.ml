@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.27 2006-07-04 09:20:24 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.28 2006-07-20 14:21:52 moy Exp $ i*)
 
 open Format
 open Pp
@@ -48,6 +48,7 @@ let generic f targets =
        fprintf fmt "WHY=why %s@\n@\n" (Coptions.why_opt ());	    
        fprintf fmt "GWHY=gwhy %s@\n@\n" (Coptions.why_opt ());	    
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
+       fprintf fmt "CADULIBFILE=%s@\n@\n" Coptions.libfile;
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
        fprintf fmt "COQDEP=coqdep -I `coqc -where`/user-contrib@\n@\n";	    
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
@@ -57,68 +58,68 @@ let generic f targets =
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
 
        fprintf fmt "coq/%%_spec_why.v: why/%%_spec.why@\n";
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Caduceus.\" $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export Caduceus.\" $(CADULIB)/why/$(CADULIBFILE) why/$*_spec.why@\n@\n";
 
        fprintf fmt "coq/%%_why.v: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export %s_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f f;
+       fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export %s_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
 
        fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
        
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;
 
        fprintf fmt "pvs/%%_spec_why.pvs: why/%%_spec.why@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing caduceus_why\" $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing caduceus_why\" $(CADULIB)/why/$(CADULIBFILE) why/$*_spec.why@\n@\n";
 
        fprintf fmt "pvs/%%_why.pvs: pvs/%s_spec_why.pvs why/%%.why@\n" f;
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f f;
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
 
        fprintf fmt "pvs/caduceus_why.pvs:@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs $(CADULIB)/why/caduceus.why@\n@\n";
+       fprintf fmt "\t$(WHY) -pvs -dir pvs $(CADULIB)/why/$(CADULIBFILE)@\n@\n";
        
        fprintf fmt "isabelle: %a@\n@\n" (print_files isabelle) targets;
 
        fprintf fmt "isabelle/%%_spec_why.thy: why/%%_spec.why@\n";
-       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory caduceus_why $(CADULIB)/why/caduceus.why why/$*_spec.why@\n@\n";
+       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory caduceus_why $(CADULIB)/why/$(CADULIBFILE) why/$*_spec.why@\n@\n";
 
        fprintf fmt "isabelle/%%_why.thy: isabelle/%s_spec_why.thy why/%%.why@\n" f;
-       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory %s_spec_why $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n" f f;
+       fprintf fmt "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory %s_spec_why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n" f f;
        fprintf fmt "\tcp -f %s/isabelle/caduceus_why.thy isabelle/@\n@\n" 
 	 Coptions.libdir;
 
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "goals: %a@\n@\n" (print_files why_goals) targets;
        fprintf fmt "why/%%_why.why: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
        fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
        fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "harvey/%%_why.rv: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "zenon: %a@\n" (print_files zenon) targets;
        fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "zenon/%%_why.znn: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        fprintf fmt "@\n";
        fprintf fmt "%%.stat: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/caduceus.why why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'gwhy [...] why/$*.why' && $(GWHY) $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "-include %s.depend@\n@\n" f;
        fprintf fmt "depend: coq/%s_spec_why.v %a@\n" f

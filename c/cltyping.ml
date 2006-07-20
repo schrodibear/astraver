@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.99 2006-07-04 09:08:53 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.100 2006-07-20 14:21:52 moy Exp $ i*)
 
 open Coptions
 open Format
@@ -300,6 +300,16 @@ and type_term_node loc env = function
       (match t.term_type.ctype_node with
 	 | Tarray _ | Tpointer _ -> Tblock_length t, c_int
 	 | _ -> error loc "block_length argument must be either array or pointer")
+  | PLarrlen t ->
+      let t = type_term env t in
+      (match t.term_type.ctype_node with
+	 | Tarray _ | Tpointer _ -> Tarrlen t, c_int
+	 | _ -> error loc "arrlen argument must be either array or pointer")
+  | PLstrlen t ->
+      let t = type_term env t in
+      (match t.term_type.ctype_node with
+	 | Tarray _ | Tpointer _ -> Tstrlen t, c_int
+	 | _ -> error loc "strlen argument must be either array or pointer")
   | PLresult ->
       (try 
 	 let t = Env.find "result" env in 
@@ -591,7 +601,8 @@ and type_predicate_node env p0 = match p0.lexpr_node with
   | PLat (p, l) ->
       (* TODO check label l *)
       Pat (type_predicate env p, l)
-  | PLcast _ | PLblock_length _ | PLbase_addr _ | PLoffset _ | PLarrget _ | PLarrow _ 
+  | PLcast _ | PLblock_length _ | PLarrlen _ | PLstrlen _ 
+  | PLbase_addr _ | PLoffset _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
   | PLresult | PLrange _ ->
       (*raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))*)

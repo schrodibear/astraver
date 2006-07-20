@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.22 2006-07-12 09:04:26 moy Exp $ i*)
+(*i $Id: coptions.mli,v 1.23 2006-07-20 14:21:52 moy Exp $ i*)
 
 (*s environment variables *)
 
 val libdir : string
 val whylib : string
+val libfile : string (* depends on the command-line option --arith-mem *)
 
 (*s command-line options *)
 
@@ -40,6 +41,7 @@ val separate : bool
 val closed_program : bool
 val typing_predicates : bool
 val local_aliasing : bool
+val arith_memory_model : bool
 
 val use_floats : bool ref
 val floats : bool

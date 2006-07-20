@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.139 2006-07-20 12:42:23 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.140 2006-07-20 14:21:52 moy Exp $ i*)
 
 open Cast
 open Cnorm
@@ -187,7 +187,10 @@ let reads_add_var v ty e = { e with reads_var = add_var v ty e.reads_var }
 let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
 (*let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }*)
 
-let reads_add_alloc e = { e with reads_var = add_alloc e.reads_var }
+let reads_add_alloc e = 
+  (* [alloc] not used with the arithmetic memory model *)
+  assert (not arith_memory_model);
+  { e with reads_var = add_alloc e.reads_var }
 
 let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
 				 assigns_var = add_var v ty e.assigns_var }
@@ -196,8 +199,11 @@ let assigns_add_field_var v ty e =
   { e with reads = add_field_var v ty e.reads;
       assigns = add_field_var v ty e.assigns }
 
-let assigns_add_alloc e = { e with reads_var = add_alloc e.reads_var;
-				 assigns_var = add_alloc e.assigns_var }
+let assigns_add_alloc e = 
+  (* [alloc] should not be used with the arithmetic memory model *)
+  assert (not arith_memory_model);
+  { e with reads_var = add_alloc e.reads_var;
+      assigns_var = add_alloc e.assigns_var }
 
 let assigns_alloc e = HeapVarSet.mem alloc e.assigns_var
 
@@ -210,7 +216,9 @@ let rec term t = match t.nterm_node with
       let z = repr z in
      (* eprintf "tw1: %s , tw2 : %s loc : %a@." (snd (output_why_type (Cnorm.type_why_for_term t1))) (snd (output_why_type (Pointer z)))  Loc.report_position t.nterm_loc;*)
       assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
-      reads_add_alloc (reads_add_field_var f (Pointer z) (term t1))
+      (* [alloc] not used with the arithmetic memory model *)
+      let ef = reads_add_field_var f (Pointer z) (term t1) in
+      if arith_memory_model then ef else reads_add_alloc ef
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, t) -> term t
   | NTunop (Uminus, t) -> term t
@@ -220,7 +228,16 @@ let rec term t = match t.nterm_node with
 	    | Uround_error | Utotal_error | Uexact | Umodel), t) -> term t
   | NTbase_addr t -> term t
   | NToffset t -> term t
-  | NTblock_length t -> reads_add_alloc (term t)
+  | NTblock_length t -> 
+      (* [block_length] should not be used with the arithmetic memory model *)
+      assert (not arith_memory_model);
+      reads_add_alloc (term t)
+  | NTarrlen t -> term t
+  | NTstrlen (t1,zone,var) ->
+      (* effect of [strlen(p)] is to read the memory pointed-to by [p] *)
+      let zone = repr zone in
+      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer zone));
+      reads_add_var var (Pointer zone) (term t1)
   | NTat (t, _) -> 
       term t
   | NTold t -> 
@@ -246,9 +263,12 @@ let rec term t = match t.nterm_node with
   | NTconstant _ -> ef_empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3, z, f) ->
-      reads_add_alloc 
+      let ef = 
 	(reads_add_field_var f (Cnorm.type_why_for_term t1)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
+      in
+      (* [alloc] not used with the arithmetic memory model *)
+      if arith_memory_model then ef else reads_add_alloc ef
 
 and term_option = function None -> ef_empty | Some t -> term t
 
@@ -265,8 +285,11 @@ let rec assign_location t = match t.nterm_node with
       then { ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty }
       else ef_empty
   | NTarrow (t1,z,f) -> 
-      reads_add_alloc 
+      let ef = 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
+      in
+      (* [alloc] not used with the arithmetic memory model *)
+      if arith_memory_model then ef else reads_add_alloc ef
   | NTunop (Ustar,_) -> assert false
   | NTunop (Uamp, _) -> assert false
   | NTunop (Uminus, _)  
@@ -277,6 +300,8 @@ let rec assign_location t = match t.nterm_node with
   | NTbase_addr _  
   | NToffset _  
   | NTblock_length _  
+  | NTarrlen _  
+  | NTstrlen _
   | NTat (_, _)  
   | NTold _  
   | NTif (_, _, _)  
@@ -286,10 +311,12 @@ let rec assign_location t = match t.nterm_node with
   | NTcast (_, _) -> 
       error t.nterm_loc "invalid location"
   | NTrange (t1, t2, t3, z, f) ->
-      reads_add_alloc 
+      let ef = 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1)
-	  (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
-
+	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
+      in
+      (* [alloc] not used with the arithmetic memory model *)
+      if arith_memory_model then ef else reads_add_alloc ef
 
 (***
 let assign_location loc =
@@ -348,11 +375,21 @@ let rec predicate p =
 	(ef_union (predicate p1) (predicate p2))
     | NPforall (_, p) -> predicate p	
     | NPexists (_, p) -> predicate p
-    | NPfresh t -> reads_add_alloc (term t)
-    | NPvalid t -> reads_add_alloc (term t)
-    | NPvalid_index (t1,t2) -> reads_add_alloc (ef_union (term t1) (term t2))
+    | NPfresh t -> 
+	(* [fresh] should not be used with the arithmetic memory model *)
+	assert (not arith_memory_model);
+	reads_add_alloc (term t)
+    | NPvalid t -> 
+	(* [alloc] not used with the arithmetic memory model *)
+	if arith_memory_model then term t else reads_add_alloc (term t)
+    | NPvalid_index (t1,t2) -> 
+	let ef = ef_union (term t1) (term t2) in
+	(* [alloc] not used with the arithmetic memory model *)
+	if arith_memory_model then ef else reads_add_alloc ef
     | NPvalid_range (t1,t2, t3) -> 
-	reads_add_alloc (ef_union (term t1) (ef_union (term t2) (term t3)))
+	let ef = ef_union (term t1) (ef_union (term t2) (term t3)) in
+	(* [alloc] not used with the arithmetic memory model *)
+	if arith_memory_model then ef else reads_add_alloc ef
     | NPold p -> predicate p
     | NPat (p,_) -> predicate p
     | NPnamed (_, p) -> predicate p
@@ -464,7 +501,9 @@ let rec expr e = match e.nexpr_node with
   | NEarrow (e1,z, f) ->
       let z = repr z in
       assert (same_why_type (type_why e1)  (Pointer z));
-      reads_add_alloc (reads_add_field_var f (Pointer z) (expr e1))
+      let ef = reads_add_field_var f (Pointer z) (expr e1) in
+      (* [alloc] not used with the arithmetic memory model *)
+      if arith_memory_model then ef else reads_add_alloc ef
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr e1) (expr e2)
   | NEassign (lv, e) | NEassign_op (lv, _, e) ->
@@ -508,7 +547,10 @@ let rec expr e = match e.nexpr_node with
   | NEcast (_, e) ->
       expr e
   | NEmalloc (_, e) ->
-      assigns_add_alloc (expr e)
+      if arith_memory_model then
+	expr e
+      else
+	assigns_add_alloc (expr e)
 
 (* effects for [e = ...] *)
 and assign_expr e = match e.nexpr_node with
@@ -520,7 +562,9 @@ and assign_expr e = match e.nexpr_node with
       ef_empty
   | NEunary (Ustar,_) -> assert false
   | NEarrow (e1,z, f) ->
-      reads_add_alloc (assigns_add_field_var f (type_why e1) (expr e1))
+      let ef = assigns_add_field_var f (type_why e1) (expr e1) in
+      (* [alloc] not used with the arithmetic memory model *)
+      if arith_memory_model then ef else reads_add_alloc ef
   | NEcast (_, e1) ->
       assign_expr e1
   | _ -> 

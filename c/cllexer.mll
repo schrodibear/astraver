@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.40 2006-07-17 11:50:48 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.41 2006-07-20 14:21:52 moy Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -110,6 +110,8 @@ rule token = parse
   | "\\base_addr" { BASE_ADDR }
   | "\\offset" { OFFSET }
   | "\\block_length" { BLOCK_LENGTH }
+  | "\\arrlen" { ARRLEN }
+  | "\\strlen" { STRLEN }
   | "\\valid" { VALID }
   | "\\separated" { SEPARATED }
   | "\\fullseparated" { FULLSEPARATED }

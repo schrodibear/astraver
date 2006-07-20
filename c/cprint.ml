@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.35 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: cprint.ml,v 1.36 2006-07-20 14:21:52 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -85,6 +85,10 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\offset(%a)" nterm t
   | NTblock_length t ->
       fprintf fmt "\\block_length(%a)" nterm t
+  | NTarrlen t ->
+      fprintf fmt "\\arrlen(%a)" nterm t
+  | NTstrlen (t,_, _) ->
+      fprintf fmt "\\strlen(%a)" nterm t
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
   | NTrange (t1, t2, t3, _,_) ->

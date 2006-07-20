@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.29 2006-07-19 15:14:50 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.30 2006-07-20 14:21:52 moy Exp $ i*)
 
 open Format
 
@@ -72,6 +72,7 @@ let closed_program = ref false
 let typing_predicates = ref false
 let floats = ref true
 let local_aliasing = ref false
+let arith_memory_model = ref false
 
 type fp_rounding_mode = 
   | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
@@ -198,8 +199,10 @@ let _ =
 	  "  set the size of type `long long' (default is 64)";
 	"--typing-predicates", Arg.Set typing_predicates,
 	  "  use typing predicates (experimental)";
-	"--local-aliasing", Arg.Set local_aliasing,
+	"--loc-alias", Arg.Set local_aliasing,
 	  "  local aliasing analysis (experimental)";
+	"--arith-mem", Arg.Set arith_memory_model,
+	  "  alternate arithmetic memory model (experimental)";
       ]
       add_file "caduceus [options] file..."
 
@@ -219,6 +222,7 @@ let separate = !separate
 let closed_program = !closed_program
 let typing_predicates = !typing_predicates
 let local_aliasing = !local_aliasing
+let arith_memory_model = !arith_memory_model
 
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check
@@ -231,6 +235,12 @@ let long_size = !long_size_
 let long_long_size = !long_long_size_
 
 let int_overflow_check = !int_overflow_check
+
+let libfile =
+  if arith_memory_model then
+    "caduceus_arith.why"
+  else
+    "caduceus.why"
 
 let string_two_power_n = function
   | 64 -> "18446744073709551616"

@@ -6,7 +6,8 @@ let rec term t =
     | Tconstant _
     | Tvar _ ->  []
     | Tapp (f,lt) -> f::(List.fold_left (fun acc x -> term x@acc) []  lt)
-    | Tcast (_,t)| Tblock_length t| Toffset t| Tbase_addr t| Tat (t,_)| Told t 
+    | Tcast (_,t)| Tblock_length t | Tarrlen t | Tstrlen t
+    | Toffset t| Tbase_addr t| Tat (t,_)| Told t 
     | Tdot (t,_)  | Tarrow (t,_) | Tunop (_,t) -> term t
     | Tarrget (t1,t2) | Tbinop (t1,_,t2) -> (term t1)@(term t2)
     | Tif (t1,t2,t3) -> (term t1)@(term t2)@(term t3)
