@@ -573,6 +573,7 @@ clean::
 	rm -f c/*.cm[iox] c/*.o c/*~
 	rm -f intf/*.cm[iox] intf/*.o intf/*~
 	rm -f tools/*.cm[iox] tools/*.o tools/*~
+	rm -f ocamlgraph/*.cm[iox] ocamlgraph/*.o ocamlgraph/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)

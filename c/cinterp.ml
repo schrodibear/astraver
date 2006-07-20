@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.205 2006-07-20 09:33:03 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.206 2006-07-20 11:22:12 hubert Exp $ i*)
 
 
 open Format
@@ -1489,7 +1489,7 @@ let strong_invariants_for hvs =
       LTrue
   in
   Hashtbl.fold
-    (fun id (p,e1,e2) acc -> 
+    (fun id (p,e1,e2) acc ->
        if ZoneSet.subset e2.Ceffect.reads hvs.Ceffect.reads 
 	 && HeapVarSet.subset e2.Ceffect.reads_var hvs.Ceffect.reads_var then
 	 (make_and 

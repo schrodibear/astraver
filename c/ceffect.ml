@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.137 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.138 2006-07-20 11:22:12 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -1014,40 +1014,56 @@ let decl d =
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
 	  match ty.Ctypes.ctype_node with
-	   | Tstruct _ | Tarray (_,_,None) -> assert false
-	   | Tarray (_,typ, Some s) ->
-	       lprintf "adding implicit invariant for validity of %s@." 
+	    | Tvoid -> ()
+	    | Tint _| Tfloat _ | Tpointer _ | Tenum _ ->	
+		let t = { nterm_node = NTvar v; 
+			  nterm_loc = d.loc;
+			  nterm_type = ty ;
+			} in  
+		if typing_predicates then 
+		  begin
+		    let name = "predicate_for_" ^ v.var_name in
+		    let pre = Invariant.pred_for_type ty t in
+		    Cseparation.predicate Unit pre; 
+		    add_strong_invariant name pre 
+		      {ef_empty with reads_var =(HeapVarSet.singleton v)} 
+		  end
+		else
+		  ()
+	    | Tvar s -> ()
+	    | Tfun _ -> ()
+	    | Tunion _ -> ()
+	    | Tstruct _ | Tarray (_,_,None) -> assert false
+	    | Tarray (_,typ, Some s) ->
+		lprintf "adding implicit invariant for validity of %s@." 
 		 v.var_name;
-	       let t = { nterm_node = NTvar v; 
-			 nterm_loc = d.loc;
-			 nterm_type = ty ;
-			 } in
-	       let name1 = "predicate_for_" ^ v.var_name in
-	       let pre1 =
-		 if typing_predicates then begin
-		   let pre1 = 
+		let t = { nterm_node = NTvar v; 
+			  nterm_loc = d.loc;
+			  nterm_type = ty ;
+			} in
+		let name1 = "predicate_for_" ^ v.var_name in
+		let pre1 =
+		  if typing_predicates then begin
+		    let pre1 = 
 		     match s,typ.Ctypes.ctype_node with
 		       | 1L, Tstruct _ | 1L, Tunion _ ->
-			   eprintf "cassage tableau@.";
 			   Invariant.pred_for_type typ t
 		       | _, _ ->
-			   eprintf "non cassage tableau@.";
 			   Invariant.pred_for_type ty t	   
-		   in
-		   Cseparation.predicate Unit pre1;
+		    in
+		    Cseparation.predicate Unit pre1;
 		   pre1
-		 end else
-		   let (pre1,_) = validity t typ s in
-		   pre1
-	       in
-	       add_strong_invariant name1 pre1 
-		 {ef_empty with reads_var =(HeapVarSet.singleton v)};
-	       List.iter 
-		 (fun (x1,x2,p,y) -> 
-		    add_strong_invariant x2 p {ef_empty with reads_var = y};
+		  end else
+		    let (pre1,_) = validity t typ s in
+		    pre1
+		in
+		add_strong_invariant name1 pre1 
+		  {ef_empty with reads_var =(HeapVarSet.singleton v)};
+		List.iter 
+		  (fun (x1,x2,p,y) -> 
+		     add_strong_invariant x2 p {ef_empty with reads_var = y};
 		    add_strong_invariant_2 x1 p [])
-		 (invariant_for_global d.loc v);
-	   | _ -> ()
+		  (invariant_for_global d.loc v);
 	end;
 	
 	let init = (match init with | None -> [] | Some l -> [l]) in
@@ -1161,7 +1177,7 @@ let functions fun_list  =
     in
     declare id ef
   in
-  List.iter decl fun_list(* dl*);
+  List.iter decl fun_list (*dl*);
   !fixpoint
     
 let effect  nfiles fun_list =
