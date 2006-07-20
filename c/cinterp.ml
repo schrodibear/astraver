@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.204 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.205 2006-07-20 09:33:03 marche Exp $ i*)
 
 
 open Format
@@ -1659,6 +1659,11 @@ let noattr loc ty e =
     nexpr_loc  = loc
   }
 
+
+let labels_table = Hashtbl.create 17
+
+let append_block e (f,l) = (append e f,l)
+
 (* [ab] indicates if returns are abrupt *)
 
 let rec interp_statement ab may_break stat = match stat.nst_node with
@@ -1739,6 +1744,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSlabel(lab,s) -> 
       Output.Label (lab, interp_statement ab may_break s)
   | NSgoto(GotoForwardOuter,lab) ->
+      Hashtbl.add labels_table lab ();
       Raise ("Goto_" ^ lab, None)
   | NSgoto(GotoForwardInner,lab) ->
       unsupported stat.nst_loc "forward inner goto"
@@ -1796,35 +1802,42 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	Let(v.var_unique_name,tinit,
 	    Block (decl@[interp_statement ab may_break rem]))
 
-and interp_block ab may_break stats =
+and interp_block ab may_break statements =
   let rec block = function
     | [] -> 
-	Void
+	Void,[]
+    | { nst_node = NSlabel(lab,st) } :: bl ->
+	let (be,bl) = block (st::bl) in
+	Raise("Goto_"^lab,None),(lab,be)::bl
     | [s] ->
-	interp_statement ab may_break s
+	interp_statement ab may_break s,[]
     | { nst_node = NSnop } :: bl ->
 	block bl
     | { nst_node = NSif (e, s1, s2) } as s :: bl ->
 	begin match s1.nst_term, s2.nst_term with
 	  | true, true ->
-	      append (interp_statement true may_break s) (block bl)
+	      append_block (interp_statement true may_break s) (block bl)
 	  | false, false ->
 	      unreachable_block bl;
-	      interp_statement ab may_break s
+	      interp_statement ab may_break s,[]
 	  | true, false ->
+	      let (be,bl) = block (s1::bl) in
 	      If (interp_boolean_expr e, 
-		  block (s1 :: bl), interp_statement ab may_break s2)
+		  be, interp_statement ab may_break s2), bl
 	  | false, true ->
+	      let (be,bl) = block (s2::bl) in
 	      If (interp_boolean_expr e,
-		  interp_statement ab may_break s1, block (s2 :: bl))
+		  interp_statement ab may_break s1, be), bl
 	end
-    | { nst_node = NSlabel(lab,st) } as s :: bl ->
-	assert false
     | s :: bl ->
 	if not s.nst_term then unreachable_block bl;
-	append (interp_statement true may_break s) (block bl)
+	append_block (interp_statement true may_break s) (block bl)
   in
-  (block stats)
+  let be,bl = block statements in
+  List.fold_left 
+    (fun acc (lab,e) ->
+       Try(acc,"Goto_"^lab,None,e)) be bl
+
 
 and interp_switch tmp ab may_break l c used_cases post_default =
   match l with
@@ -2204,7 +2217,16 @@ let interp l =
   List.fold_left interp_located_tdecl (s,[]) l
 
 let interp_functions (why,prover) =
-  Hashtbl.fold interp_c_fun Cenv.c_functions ([],why,prover)
+  let (code,spec,prover) = 
+    Hashtbl.fold interp_c_fun Cenv.c_functions ([],why,prover)
+  in
+  let code = 
+    Hashtbl.fold
+      (fun lab () acc ->
+	 (lab,Exception("Goto_"^lab))::acc) labels_table code
+  in
+  (code,spec,prover)
+
   
 
 

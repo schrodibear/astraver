@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.33 2006-07-04 09:08:54 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.34 2006-07-20 09:33:03 marche Exp $ i*)
 
 open Format;;
 
@@ -587,6 +587,7 @@ type why_decl =
   | Predicate of bool * string * (string * base_type) list * assertion  
   | Function of bool * string * (string * base_type) list * base_type * term
   | Type of string * string list
+  | Exception of string
 
 type prover_decl =
   | Parameter  of string * why_type    (*r Parameter *)
@@ -606,7 +607,8 @@ let get_why_id d =
     | Predicate(_,id,_,_) -> id
     | Function(_,id,_,_,_) -> id
     | Type (id,_) -> id
-    
+    | Exception id -> id
+
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
@@ -621,6 +623,7 @@ let iter_why_decl f d =
 	iter_base_type f t;
 	iter_term f p
     | Type(t,args) -> List.iter f args
+    | Exception id -> ()
 
 let get_prover_id d =
   match d with
@@ -717,7 +720,9 @@ let fprintf_why_decl form d =
 	fprintf form "@[type ('%s" t;
 	List.iter (fun t -> fprintf form ", '%s" t) l;
 	fprintf form ") %s@]@." id
-
+    | Exception id ->
+	fprintf form "@[exception %s@]@.@." id
+	
 let iter_prover_decl f d =
   match d with
     | Parameter(id,t) -> iter_why_type f t

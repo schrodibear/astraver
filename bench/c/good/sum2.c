@@ -34,7 +34,7 @@ int test1(int t[],int n) {
   @*/
 void test2(int t[],int n) {
   int i;
- L:
+  //@ label L 
   /*@ invariant 0 <= i <= n && 
          sum(t,0,n) == \at(sum(t,0,n),L)+i
     @ variant n-i

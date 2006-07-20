@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.19 2006-06-22 14:20:23 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.20 2006-07-20 09:33:03 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
@@ -159,6 +159,7 @@ type why_decl =
   | Predicate of bool * string * (string * base_type) list * assertion  
   | Function of bool * string * (string * base_type) list * base_type * term
   | Type of string * string list
+  | Exception of string
 
 type prover_decl =
   | Parameter  of string * why_type       (*r Parameter *)

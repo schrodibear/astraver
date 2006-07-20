@@ -1,8 +1,9 @@
-abs all minusminus array assigns loop_assigns break 
+false abs all minusminus 
+array assigns loop_assigns break continue goto
 call clash clash_alloc clash_redef  
-logic continue coord dassault_1 dassault_2 
+logic coord dassault_1 dassault_2 
 copy dowhile invariants latespec logic_cast 
 param passing purse queue rec ref ref_glob search see 
-sizeof alloca sort all_zeros malloc calloc false pointer init
+sizeof alloca sort all_zeros malloc calloc pointer init
 struct struct2 struct3 switch enum sum1 sum2 separation1 separation2
 separation3 separation4 ifs separation
