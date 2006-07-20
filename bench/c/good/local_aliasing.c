@@ -1,10 +1,12 @@
 
 /* test option --local-aliasing */
 
-extern char* name ;
-//@ axiom name_valid : \valid_range(name,0,99)
+char name[200];
+// invariant name_valid : \valid_range(name,0,99)
+//@ invariant name_valid : \arrlen(name) >= 100
 
-//@ requires \valid_range(buf,0,size-1) && 0 <= size <= 100
+// requires \valid_range(buf,0,size-1) && 0 <= size <= 100
+//@ requires \arrlen(buf) >= size && 0 <= size <= 100
 int f(char* buf, int size) {
   int i;
   char* p = buf;
@@ -27,12 +29,15 @@ int f(char* buf, int size) {
   return 0;
 }
 
-//@ requires \exists int i; i >= 0 && s[i] == 0 && \valid_range(s,0,i)
+// requires \exists int i; i >= 0 && s[i] == 0 && \valid_range(s,0,i)
+//@ requires 0 <= \strlen(s) < \arrlen(s)
 int g(char* s) {
   char c;
   int count = 0;
-  /*@ invariant \exists int i; i >= 0 && s[i] == 0 && \valid_range(s,0,i)
-    @*/
+  /* invariant \exists int i; i >= 0 && s[i] == 0 && \valid_range(s,0,i)
+    */
+  /*@ invariant 0 <= s-\old(s) <= \strlen(\old(s)) < \arrlen(\old(s))
+   */
   while (c = *s++) {
     switch (c) {
     case '0':
