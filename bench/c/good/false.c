@@ -7,7 +7,7 @@ struct u{int x;};
 
 struct v{struct u x; int y[5];};
 
-struct v * z;
+struct v  *z;
 struct u zz;
 
 int x[4];

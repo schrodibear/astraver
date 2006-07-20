@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.138 2006-07-20 11:22:12 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.139 2006-07-20 12:42:23 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -233,8 +233,11 @@ let rec term t = match t.nterm_node with
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ZoneSet.add 
-	       ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+	     let z = try List.assoc z assoc with Not_found -> z in
+	     let z = repr z in
+	     let ty = Cseparation.assoctype ty assoc in
+	     if not z.zone_is_var then add_heap_var s z ty else ();
+	     ZoneSet.add (z,s,ty) acc)
 	  id.logic_heap_zone empty in
 	List.fold_left 
 	  (fun acc t -> ef_union acc (term t))
@@ -325,8 +328,11 @@ let rec predicate p =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ZoneSet.add 
-	       ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+	     let z = try List.assoc z assoc with Not_found -> z in
+	     let z = repr z in
+	     let ty = Cseparation.assoctype ty assoc in
+	     if not z.zone_is_var then add_heap_var s z ty else ();
+	     ZoneSet.add (z,s,ty) acc)
 	  id.logic_heap_zone empty in
 	List.fold_left 
 	  (fun acc t -> ef_union acc (term t)) 
@@ -338,7 +344,8 @@ let rec predicate p =
     | NPiff (p1, p2) 
     | NPimplies (p1, p2) -> ef_union (predicate p1) (predicate p2)
     | NPnot p -> predicate p
-    | NPif (t, p1, p2) -> ef_union (term t) (ef_union (predicate p1) (predicate p2))
+    | NPif (t, p1, p2) -> ef_union (term t) 
+	(ef_union (predicate p1) (predicate p2))
     | NPforall (_, p) -> predicate p	
     | NPexists (_, p) -> predicate p
     | NPfresh t -> reads_add_alloc (term t)
@@ -480,8 +487,7 @@ let rec expr e = match e.nexpr_node with
 		 let z = try List.assoc z assoc with Not_found -> z in
 		 let z = repr z in
 		 let ty = Cseparation.assoctype ty assoc in
-		 if not z.zone_is_var then add_heap_var s z ty 
-		 else ();
+		 if not z.zone_is_var then add_heap_var s z ty else ();
 		 ZoneSet.add (z,s,ty) acc)
 	      f.function_reads empty in
 	    let writes = ZoneSet.fold 
@@ -1015,13 +1021,15 @@ let decl d =
 	begin
 	  match ty.Ctypes.ctype_node with
 	    | Tvoid -> ()
-	    | Tint _| Tfloat _ | Tpointer _ | Tenum _ ->	
+	    | Tint _| Tfloat _ | Tpointer _ | Tenum _ ->
 		let t = { nterm_node = NTvar v; 
 			  nterm_loc = d.loc;
 			  nterm_type = ty ;
 			} in  
 		if typing_predicates then 
 		  begin
+		    lprintf "adding implicit invariant for type of %s@." 
+		      v.var_name; 
 		    let name = "predicate_for_" ^ v.var_name in
 		    let pre = Invariant.pred_for_type ty t in
 		    Cseparation.predicate Unit pre; 
@@ -1035,7 +1043,7 @@ let decl d =
 	    | Tunion _ -> ()
 	    | Tstruct _ | Tarray (_,_,None) -> assert false
 	    | Tarray (_,typ, Some s) ->
-		lprintf "adding implicit invariant for validity of %s@." 
+		lprintf "adding implicit invariant for type of %s@." 
 		 v.var_name;
 		let t = { nterm_node = NTvar v; 
 			  nterm_loc = d.loc;
