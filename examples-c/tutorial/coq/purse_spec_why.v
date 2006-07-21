@@ -11,44 +11,17 @@ Admitted.
   := (* File "purse.c", line 6, characters 37-65 *) ((valid alloc p) /\
      (acc balance_global p) >= 0).
 
-(*Why predicate*) Definition is_signed_char  (x:Z)
-  := (Zopp 128) <= x /\ x <= 127.
 
-(*Why predicate*) Definition is_signed_int  (x:Z)
-  := (Zopp 2147483648) <= x /\ x <= 2147483647.
 
-(*Why predicate*) Definition is_signed_long  (x:Z)
-  := (Zopp 2147483648) <= x /\ x <= 2147483647.
 
-(*Why predicate*) Definition is_signed_longlong  (x:Z)
-  := (Zopp 9223372036854775808) <= x /\ x <= 9223372036854775807.
 
-(*Why predicate*) Definition is_signed_short  (x:Z)
-  := (Zopp 32768) <= x /\ x <= 32767.
 
-(*Why logic*) Definition is_struct_anonymous_0 :
-  ((memory) Z global) -> alloc_table -> ((pointer) global) -> Prop.
 Admitted.
 
-(*Why axiom*) Lemma is_struct_anonymous_0_def :
-  (forall (balance_global:((memory) Z global)),
-   (forall (alloc:alloc_table),
-    (forall (x:((pointer) global)),
-     ((is_struct_anonymous_0 balance_global alloc x) <->
-      (is_signed_int (acc balance_global x)))))).
 Admitted.
 
-(*Why predicate*) Definition is_unsigned_char  (x:Z) := 0 <= x /\ x <= 255.
 
-(*Why predicate*) Definition is_unsigned_int  (x:Z)
-  := 0 <= x /\ x <= 4294967295.
 
-(*Why predicate*) Definition is_unsigned_long  (x:Z)
-  := 0 <= x /\ x <= 4294967295.
 
-(*Why predicate*) Definition is_unsigned_longlong  (x:Z)
-  := 0 <= x /\ x <= 18446744073709551615.
 
-(*Why predicate*) Definition is_unsigned_short  (x:Z)
-  := 0 <= x /\ x <= 65535.
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.207 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.208 2006-07-21 14:44:50 hubert Exp $ i*)
 
 
 open Format
@@ -1813,7 +1813,10 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       let tinit,(decl,_) = match init with 
 	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
-	      | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
+	      | Tenum _ -> App(Var("any_int"),Var("void")) 
+	      | Tint si ->
+		  let n = (Invariant.function_for_int_type si) ^"_parameter" in
+		  App(Var(n),Var("void"))
 	      | Tfloat fk -> App(Var (any_float fk),Var("void"))
 	      | Tarray (_,_, None) | Tpointer _ -> 
 		  App(Var "any_pointer", Var "void")

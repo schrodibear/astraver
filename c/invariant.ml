@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.34 2006-07-19 15:14:50 filliatr Exp $ i*)
+(*i $Id: invariant.ml,v 1.35 2006-07-21 14:44:50 hubert Exp $ i*)
 
 open Coptions
 open Creport
@@ -563,6 +563,30 @@ let predicate_for_int_type =
       Hashtbl.add h si n;
       n
 
+let function_name_for_int_type (sign,kind) =
+  let sgs = match sign with 
+    | Ctypes.Signed -> "signed" 
+    | Ctypes.Unsigned -> "unsigned" in
+  let tys = match kind with
+    | Ctypes.Char -> "char"
+    | Ctypes.Short -> "short"
+    | Ctypes.Int -> "int"
+    | Ctypes.Long -> "long"
+    | Ctypes.LongLong -> "longlong"
+    | Ctypes.Bitfield _ -> assert false (*TODO*)
+  in
+  "any_" ^ sgs ^ "_" ^ tys
+
+let function_for_int_type =
+  let h = Hashtbl.create 17 in
+  fun si ->
+    try
+      Hashtbl.find h si
+    with Not_found -> 
+      let n = function_name_for_int_type si in
+      Hashtbl.add h si n;
+      n
+
 (* [pred_for_type ty t] builds a predicate expressing that [t]
    is of type [ty] *)
 let rec pred_for_type ty t = 
@@ -634,7 +658,19 @@ let add_typing_predicates dl =
   let declare_int_type si acc =
     let ty = noattr (Tint si) in
     let n = predicate_for_int_type si in
+    let n' = function_for_int_type si in
     let is_int_n = Info.default_logic_info n in
+    let any_int_n' = Info.default_fun_info n' in
+    let result = {nterm_node = NTvar(Info.default_var_info "result");
+		  nterm_loc = Loc.dummy_position ;
+		  nterm_type = ty}
+    in
+    let spec_n' = { requires = None;
+		    assigns = None;
+		    ensures = Some (npapp (is_int_n, [result]));
+		    decreases = None} 
+    in
+    Cenv.add_c_fun n' (spec_n',ty,any_int_n',None,Loc.dummy_position);
     Cenv.add_pred n ([ty], is_int_n);
     let x = Info.default_var_info "x" in
     set_formal_param x;
