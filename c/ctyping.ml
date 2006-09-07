@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.123 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.124 2006-09-07 13:12:30 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -338,15 +338,16 @@ let remove_top_conversion e = match e.texpr_node with
 
 (*s Types *)
 
-let rec type_type loc env ty = 
-  { Ctypes.ctype_node = type_type_node loc env ty.Cast.ctype_node;
+let rec type_type ?(parameters=false) loc env ty = 
+  { Ctypes.ctype_node = type_type_node ~parameters:parameters loc env 
+      ty.Cast.ctype_node;
     ctype_storage = ty.Cast.ctype_storage ;
     ctype_const = ty.Cast.ctype_const ;
     ctype_volatile = ty.Cast.ctype_volatile;
     ctype_ghost = false;
   }
 
-and type_type_node loc env = function
+and type_type_node ?(parameters=false) loc env = function
   | CTvoid -> Tvoid
   | CTfloat x -> 
       begin match x with Real -> () | _ -> use_floats := true end; Tfloat x
@@ -358,8 +359,11 @@ and type_type_node loc env = function
   | CTarray (tyn, None) ->
       Tarray (Not_valid,type_type loc env tyn, None)
   | CTarray (tyn, Some e) -> 
-      Tarray (Valid,type_type loc env tyn , 
-	      Some (eval_const_expr  (type_int_expr env e)))
+      if parameters then
+	Tarray (Not_valid,type_type loc env tyn, None)
+      else
+	Tarray (Valid,type_type loc env tyn , 
+		Some (eval_const_expr  (type_int_expr env e)))
   | CTpointer tyn -> 
       Tpointer (Not_valid,type_type loc env tyn)
   | CTstruct (x,Tag) -> Env.find_tag_type loc env (Tstruct x)  
@@ -447,14 +451,14 @@ and type_expr_node loc env = function
       let te = type_expr env e in
       let x = type_of_field loc x te.texpr_type in
       let te_dot_x = match te.texpr_node with
-	| TEunary (Ustar, e) -> TEarrow (e, x)
+(*	| TEunary (Ustar, e) -> TEarrow (e, x)
 	| TEarrget (e1, e2) -> 
 	    let a = 
 	      { te with 
 		  texpr_node = TEbinary (e1, Badd_pointer_int, e2);
 		  texpr_type = e1.texpr_type }
 	    in
-	    TEarrow (a, x)
+	    TEarrow (a, x)*)
 	| _ -> TEdot (te, x)
       in
       te_dot_x, x.var_type
@@ -1179,7 +1183,7 @@ and type_block env et lz (dl,sl) =
 let type_parameters loc env pl =
   let type_one (ty,x) pl =
     let info = default_var_info x in
-    let ty = type_type loc env ty in 
+    let ty = type_type loc ~parameters:true env ty in 
     set_formal_param info;
     set_var_type (Var_info info) ty true;
     Coptions.lprintf 

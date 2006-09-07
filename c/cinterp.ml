@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.208 2006-07-21 14:44:50 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.209 2006-09-07 13:12:30 hubert Exp $ i*)
 
 
 open Format
@@ -1371,13 +1371,14 @@ let interp_assigns before assigns = function
 	(fun v m -> 
 	   if Ceffect.is_alloc v then m 
 	   else StringMap.add (heap_var_name v) (Reference false) m)
-	assigns.Ceffect.reads_var StringMap.empty 
+	assigns.Ceffect.assigns_var StringMap.empty 
       in
       let m = ZoneSet.fold
 	(fun (z,s,ty) m -> 
 	   StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
-	assigns.Ceffect.reads m 
+	assigns.Ceffect.assigns m 
       in
+      
       let l = 
 	List.fold_left (collect_locations before) m locl
       in
@@ -1813,10 +1814,18 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       let tinit,(decl,_) = match init with 
 	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
-	      | Tenum _ -> App(Var("any_int"),Var("void")) 
+	      | Tenum s ->    
+		  if typing_predicates then  
+		    App(Var("any_enum_" ^s^ "_parameter"),Var("void")) 
+		  else 
+		    App(Var("any_int"),Var("void"))
 	      | Tint si ->
-		  let n = (Invariant.function_for_int_type si) ^"_parameter" in
-		  App(Var(n),Var("void"))
+		    if typing_predicates then 
+		      let n = (Invariant.function_for_int_type si) 
+			^"_parameter" in
+		      App(Var(n),Var("void"))
+		    else 
+		      App(Var("any_int"),Var("void"))
 	      | Tfloat fk -> App(Var (any_float fk),Var("void"))
 	      | Tarray (_,_, None) | Tpointer _ -> 
 		  App(Var "any_pointer", Var "void")

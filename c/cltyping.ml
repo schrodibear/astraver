@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.100 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: cltyping.ml,v 1.101 2006-09-07 13:12:30 hubert Exp $ i*)
 
 open Coptions
 open Format
@@ -236,7 +236,7 @@ and type_term_node loc env = function
       let t = type_term env t in
       let x = type_of_field loc x t.term_type in
       let t_dot_x = match t.term_node with
-	| Tunop (Ustar, e) -> 
+(*	| Tunop (Ustar, e) -> 
 	    Tarrow (e, x)
 	| Tarrget (e1, e2) -> 
 	    let a = 
@@ -244,7 +244,7 @@ and type_term_node loc env = function
 		term_loc = t.term_loc;
 		term_type = e1.term_type}
 	    in
-	    Tarrow (a, x)
+	    Tarrow (a, x)*)
 	| _ -> 
 	    Tdot (t, x)
       in

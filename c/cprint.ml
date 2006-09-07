@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.36 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: cprint.ml,v 1.37 2006-09-07 13:12:30 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -91,8 +91,8 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "\\strlen(%a)" nterm t
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
-  | NTrange (t1, t2, t3, _,_) ->
-      fprintf fmt "%a[%a..%a]" nterm t1 nterm_option t2 nterm_option t3
+  | NTrange (t1, t2, t3, _,f) ->
+      fprintf fmt "(%a+%a..%a+%a)->%s" nterm t1 nterm_option t2 nterm t1 nterm_option t3 f.var_unique_name
 
 and nterm_p fmt t = match t.nterm_node with
   | NTconstant _ | NTvar _ | NTapp _ | NTold _ | NTat _ ->

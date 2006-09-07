@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.140 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.141 2006-09-07 13:12:30 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -263,8 +263,10 @@ let rec term t = match t.nterm_node with
   | NTconstant _ -> ef_empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3, z, f) ->
+      let z = repr z in
+      assert (same_why_type (Cnorm.type_why_for_term t1) (Pointer z));
       let ef = 
-	(reads_add_field_var f (Cnorm.type_why_for_term t1)
+	(reads_add_field_var f (Pointer z)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
       in
       (* [alloc] not used with the arithmetic memory model *)
@@ -280,7 +282,7 @@ let locations ll =
 
 (* used to interpret the assigns clause *)
 let rec assign_location t = match t.nterm_node with 
-  | NTvar v -> 
+  | NTvar v ->
       if v.var_is_static
       then { ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty }
       else ef_empty
@@ -530,10 +532,16 @@ let rec expr e = match e.nexpr_node with
 		 ZoneSet.add (z,s,ty) acc)
 	      f.function_reads empty in
 	    let writes = ZoneSet.fold 
-	      (fun (z,s,ty) acc ->
+	      (fun (z,s,ty) acc ->	 
 		 let z = repr z in
+		 let z = try List.assoc z assoc with Not_found -> z in
+		 let z = repr z in
+		 let ty = Cseparation.assoctype ty assoc in
+		 if not z.zone_is_var then add_heap_var s z ty else ();
+		 ZoneSet.add (z,s,ty) acc)
+	(*	 let z = repr z in
 		 ZoneSet.add 
-		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)
+		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)*)
 	      f.function_writes empty in
 	    { reads = reads; assigns = writes; 
 	      reads_var = f.function_reads_var; 
@@ -1222,7 +1230,7 @@ let functions fun_list  =
 			warnings		    
 		    end
 	      end;
-		ef_union ef_spec ef_body
+	      ef_union ef_spec ef_body
       end
 (*      else
 	ef_spec*)

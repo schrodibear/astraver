@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.75 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: cnorm.ml,v 1.76 2006-09-07 13:12:30 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -236,7 +236,7 @@ let rec type_why_for_term t =
     | NTarrlen _ -> Info.Int
     | NTstrlen _ -> Info.Int
     | NTcast (_,t) -> assert false (* type_why_for_term t *)
-    | NTrange (_,_,_,z,f) -> 
+    | NTrange (_,_,_,z,f) ->
 	begin
 	  let z = repr z in
 	  try
@@ -285,7 +285,16 @@ let ne_arrow loc valid ty e z f =
 		nexpr_type = noattr (Tpointer (valid,ty));
 		nexpr_loc = loc},z,f)
 
-	
+let dot_translate t' var_info ty loc =
+  let zone = find_zone t' in
+  let () = type_why_new_zone zone var_info in 
+  let t' = NEarrow (t', zone, var_info) in
+  if var_requires_indirection var_info then
+    let info = make_field ty in
+    let info = declare_arrow_var info in
+    let zone = find_zone (noattr2 loc ty t') in
+    ne_arrow loc Valid ty t' zone info
+  else t'	
 	  
 let rec expr t =
   let ty = t.texpr_type in
@@ -315,6 +324,19 @@ and expr_node loc ty t =
 		else t'
 	    | Fun_info _  -> NEvar env_info)
       | TEdot (lvalue,var_info) -> 
+	  begin    
+	    match lvalue.Cast.texpr_node with
+	      | TEunary(Ustar, e) -> dot_translate (expr lvalue) var_info ty loc
+	      | TEarrget (e1, e2) -> 
+		  let a = 
+		    { lvalue with 
+			texpr_node = TEbinary (e1, Badd_pointer_int, e2);
+			texpr_type = e1.texpr_type }
+	      in
+	      dot_translate (expr a) var_info ty loc
+	      | _ -> dot_translate (expr lvalue) var_info ty loc
+	  end 
+(*	    
 	  let t' =
 	    match lvalue.texpr_node with
 	      | TEunary (Ustar ,texpr) -> expr texpr
@@ -329,7 +351,8 @@ and expr_node loc ty t =
 	    let zone = find_zone (noattr2 loc ty t') in
 	    ne_arrow loc Valid ty t' zone info
 	  else t'
-      | TEarrow (lvalue,var_info) ->
+*)
+    | TEarrow (lvalue,var_info) ->
 	  let expr = expr lvalue in
 	  let zone = find_zone expr in
 	  let () = type_why_new_zone zone var_info in
@@ -435,6 +458,22 @@ let nt_arrow loc valid ty e z f =
 	    nterm_loc = loc},z,f)
       
 
+let dot_translate t' var_info ty loc =
+  let zone = find_zone_for_term t' in
+  let () = type_why_new_zone zone var_info in
+  let t' = NTarrow (t', zone, var_info) in
+  if var_requires_indirection var_info then
+    let info = make_field ty in
+    let info = declare_arrow_var info in
+    let zone = find_zone_for_term {nterm_node = t';
+				   nterm_loc = loc;
+				   nterm_type =  var_info.var_type}  
+    in
+    nt_arrow loc true var_info.var_type t' zone info
+  else
+    t'
+
+
 let rec term_node loc t ty =
   match t with
   | Tconstant constant -> NTconstant constant
@@ -486,24 +525,23 @@ let rec term_node loc t ty =
   | Tunop (unop,t) -> NTunop(unop,term t)
   | Tbinop (t1, binop, t2) -> NTbinop (term t1, binop, term t2)
   | Tdot (t', var_info) ->
-      let t' =
+      begin    
 	match t'.term_node with
-	  | Tunop (Clogic.Ustar ,t') -> term t'
-	  | _ -> term t'
-      in
-      let zone = find_zone_for_term t' in
-      let () = type_why_new_zone zone var_info in
-      let t' = NTarrow (t', zone, var_info) in
-      if var_requires_indirection var_info then
-	let info = make_field ty in
-	let info = declare_arrow_var info in
-	let zone = find_zone_for_term {nterm_node = t';
-				       nterm_loc = loc;
-				       nterm_type =  var_info.var_type}  
-	in
-	nt_arrow loc true var_info.var_type t' zone info
-      else
-	t'
+	  | Tunop (Clogic.Ustar, e) -> dot_translate (term t') var_info ty loc
+	  | Tarrget (e1, e2) -> 
+	      let a = 
+		{ t' with 
+		    term_node = Tbinop (e1, Clogic.Badd, e2);
+		    term_type = e1.term_type }
+	      in
+	      dot_translate (term a) var_info ty loc
+	  | Trange (e1, e2,e3) -> 
+	      let t' = term e1 in
+	      let zone = find_zone_for_term t' in
+	      let () = type_why_new_zone zone var_info in
+	      NTrange (term e1, term_option e2, term_option e3, zone, var_info)
+	  | _ -> dot_translate (term t') var_info ty loc
+      end 
   | Tarrow (t', var_info) ->
 	  let t' = term t' in
 	  let zone = find_zone_for_term t' in

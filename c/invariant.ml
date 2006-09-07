@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.35 2006-07-21 14:44:50 hubert Exp $ i*)
+(*i $Id: invariant.ml,v 1.36 2006-09-07 13:12:30 hubert Exp $ i*)
 
 open Coptions
 open Creport
@@ -587,10 +587,16 @@ let function_for_int_type =
       Hashtbl.add h si n;
       n
 
+(* dummy_is_struct records the is_struct predicates which are equivalent
+   to true *)
+let dummy_is_struct = Hashtbl.create 97
+
 (* [pred_for_type ty t] builds a predicate expressing that [t]
    is of type [ty] *)
 let rec pred_for_type ty t = 
   match ty.Ctypes.ctype_node with
+    | Ctypes.Tstruct n when Hashtbl.mem dummy_is_struct n ->
+	npvalid t
     | Ctypes.Tstruct n ->
 	let _,info = Cenv.find_pred ("is_struct_" ^ n) in 
 	npand (npapp (info, [t]), npvalid t)
@@ -688,7 +694,19 @@ let add_typing_predicates dl =
   let declare_enum_type s (tyn, vl) acc =
     let ty = noattr tyn in
     let n = "is_enum_" ^ s in
-    let is_enum_s = Info.default_logic_info n in
+    let n' = "any_enum_" ^ s in
+    let is_enum_s = Info.default_logic_info n in   
+    let any_enum_n' = Info.default_fun_info n' in    
+    let result = {nterm_node = NTvar(Info.default_var_info "result");
+		  nterm_loc = Loc.dummy_position ;
+		  nterm_type = ty}
+    in
+    let spec_n' = { requires = None;
+		    assigns = None;
+		    ensures = Some (npapp (is_enum_s, [result]));
+		    decreases = None} 
+    in    
+    Cenv.add_c_fun n' (spec_n',ty,any_enum_n',None,Loc.dummy_position);
     Cenv.add_pred n ([ty], is_enum_s);
     let x = Info.default_var_info (get_fresh_name "x") in
     set_formal_param x;
@@ -743,10 +761,14 @@ let add_typing_predicates dl =
 	     npand (acc, pred_for_type f.var_type t))
 	  nptrue fl
       in
-      let p = npforall [ty,x] (npiff (npapp (is_struct_s, [varx]), def)) in
-      tdecl (Naxiom ("is_struct_" ^ s ^ "_def", p)) 
+      if def.npred_node = NPtrue then begin
+	Hashtbl.add dummy_is_struct s ();
+	[]
+      end else 
+	let p = npforall [ty,x] (npiff (npapp (is_struct_s, [varx]), def)) in
+	[tdecl (Naxiom ("is_struct_" ^ s ^ "_def", p))]
     in
-    acc@[ax]  
+    acc @ ax  
   in
   (* 3. add typing predicates for input variables *)
   let adding_typing_invariant_requires fun_name (sp, ty, f, st, loc) =

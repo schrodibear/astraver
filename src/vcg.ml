@@ -631,6 +631,13 @@ let rec split lvl ctx = function
 	 ProofTerm 
 	   (cc_applist (cc_var asym_conj)
 	      [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
+  (* splits Zwf if splitting user conjunctions required *)
+  | Papp (id, [a;b], inst) when id == t_zwf_zero && Options.split_user_conj ->
+      (* 0 <= b and a < b *)
+      split lvl ctx 
+	(Pand(true, true, 
+	      Papp(t_le_int, [Tconst (ConstInt "0") ; b ], inst) ,
+	      Papp(t_lt_int, [a ; b ], inst)))
   | Piff (p1, p2) when Options.split_user_conj ->
       let o1,pr1 = split lvl ctx (pimplies p1 p2) in
       let n1 = List.length o1 in
