@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.19 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: monomorph.ml,v 1.20 2006-09-18 12:19:50 couchot Exp $ i*)
 
 (* monomorphic output *)
 
@@ -278,7 +278,8 @@ module OpenInstances = struct
     | Forallb (_, a, b) -> predicate (predicate s a) b
     | Pif (a, b, c) -> predicate (predicate (term s a) b) c
     | Pnot a -> predicate s a
-    | Forall (_, _, _, _, tl, p) -> List.fold_left (List.fold_left pattern) (predicate s p) tl
+    | Forall (_, _, _, _, tl, p) -> 
+	List.fold_left (List.fold_left pattern) (predicate s p) tl
     | Exists (_, _, _, p) -> predicate s p
     | Pnamed (_, p) -> predicate s p
     | Pfpi (t, _, _) -> term s t
@@ -342,7 +343,6 @@ type logic_symbol =
 let logic_symbols = Hashtbl.create 97
 			
 let push_logic loc id t = 
-  (*eprintf "print_logic %s@." id;*)
   if Vset.is_empty t.scheme_vars then
     push_logic_instance loc id [] t.scheme_type
   else

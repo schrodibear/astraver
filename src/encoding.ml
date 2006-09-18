@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding.ml,v 1.2 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: encoding.ml,v 1.3 2006-09-18 12:19:49 couchot Exp $ i*)
 
 open Options
 
@@ -25,15 +25,23 @@ let reset () = match get_types_encoding () with
   | Predicates -> Encoding_pred.reset ()
   | Stratified -> Encoding_strat.reset ()
   | Recursive -> Encoding_rec.reset ()
+  | Monomorph -> Monomorph.reset ()
 
 let push d = match get_types_encoding () with
   | NoEncoding -> Queue.add d queue
   | Predicates -> Encoding_pred.push d
   | Stratified -> Encoding_strat.push d
   | Recursive -> Encoding_rec.push d
+  | Monomorph -> Monomorph.push_decl d
 
 let iter f = match get_types_encoding () with
   | NoEncoding -> Queue.iter f queue
   | Predicates -> Encoding_pred.iter f
   | Stratified -> Encoding_strat.iter f
   | Recursive -> Encoding_rec.iter f
+  | Monomorph -> Monomorph.iter f
+
+let symbol fmt ((id,_) as s) = match get_types_encoding () with
+  | Monomorph -> Monomorph.symbol fmt s
+  | _ -> Ident.print fmt id
+

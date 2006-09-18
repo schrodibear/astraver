@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.12 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.13 2006-09-18 12:19:50 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -56,9 +56,13 @@ let prefix id =
        || id == t_neg_real 
        || id == t_sqrt_real 
        || id == t_real_of_int 
+       || id == t_lt_real
+       || id == t_le_real
+       || id == t_gt_real
+       || id == t_ge_real
   then
-    Report.raise_unlocated (AnyMessage "haRVey does not support reals")
-  else assert false
+    Ident.string id
+  else (eprintf "%a@." Ident.print id; assert false)
 
 let print_bvar fmt id = fprintf fmt "?%a" Ident.print id
 
@@ -68,39 +72,44 @@ let rec print_term fmt = function
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
-      fprintf fmt "%b" b
+      fprintf fmt "Boolean_%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
-  | Tconst (ConstFloat _) ->
-      Report.raise_unlocated (AnyMessage "haRVey does not support reals")
+  | Tconst (ConstFloat (i,f,e)) ->
+      fprintf fmt "const_real_%s_%s_%s" i f e
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
-      fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
-	print_term c
+      fprintf fmt "@[(ite@ (= %a Boolean_true) @ %a@ %a)@]" 
+	print_term a print_term b print_term c
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
+  | Tapp (id, [], i) -> 
+      fprintf fmt "%a" Encoding.symbol (id, i)
   | Tapp (id, tl, i) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	Monomorph.symbol (id, i) (print_list space print_term) tl
+	Encoding.symbol (id, i)	(print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "Int"
-  | PTbool -> fprintf fmt "Bool"
+  | PTbool -> fprintf fmt "Boolean"
   | PTreal -> fprintf fmt "Real"
   | PTunit -> fprintf fmt "Unit"
   | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
-  | PTvar _ -> assert false
-  | PTexternal (i,id) -> Monomorph.symbol fmt (id, i)
+  | PTvar v -> assert false (* fprintf fmt "A%d" v.tag *)
+  | PTexternal (i,id) -> Encoding.symbol fmt (id, i)
 
 and instance fmt = function
   | [] -> ()
   | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
 
+let bound_variable =
+  let x = ref 0 in
+  fun () -> incr x; Ident.create ("bv" ^ string_of_int !x)
 
 let rec print_predicate fmt = function
   | Ptrue ->
@@ -111,6 +120,8 @@ let rec print_predicate fmt = function
       fprintf fmt "false"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
+  | Papp (id, [t], _) when id == well_founded ->
+      fprintf fmt "true;; was well founded @\n" 
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->
@@ -121,12 +132,12 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[(%a@ %a)@]" Monomorph.symbol (id, i) print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" Encoding.symbol (id, i) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
-      fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_predicate b
-	print_predicate c
+      fprintf fmt "@[(if_then_else@ (= %a Boolean_true)@ %a@ %a)@]" 
+	print_term a print_predicate b print_predicate c
   | Pand (_, _, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(and@ %a@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
@@ -136,12 +147,14 @@ let rec print_predicate fmt = function
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
   | Forall (_,id,n,t,_,p) -> 
-      let id' = next_away id (predicate_vars p) in
+      (*let id' = next_away id (predicate_vars p) in*)
+      let id' = bound_variable () in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall (%a %a) %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
   | Exists (id,n,t,p) -> 
-      let id' = next_away id (predicate_vars p) in
+      (*let id' = next_away id (predicate_vars p) in*)
+      let id' = bound_variable () in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(exists (%a %a) %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
@@ -161,16 +174,23 @@ let print_quantifiers =
   in
   print_list space print_quantifier 
 
+let pure_type_list = print_list space print_pure_type
+
 let print_predicate_def fmt id (bl,p) =
+  let tl = List.map snd bl in
+  fprintf fmt "@[:extrapreds ((%s %a))@]@\n@\n" id pure_type_list tl;
   fprintf fmt "@[:assumption@ (forall %a (iff (%s %a)@ @[%a@]))@]@\n@\n" 
     print_quantifiers bl id
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_predicate p
 
-let print_function_def fmt id (bl,_,e) =
+let print_function_def fmt id (bl,pt,e) =
+  let tl = List.map snd bl in
+  fprintf fmt "@[:extrafuns ((%s %a %a))@]@\n@\n" id pure_type_list tl
+    print_pure_type pt;
   fprintf fmt "@[:assumption@ (forall %a (= (%s %a)@ @[%a@]))@]@\n@\n" 
     print_quantifiers bl id
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_term e
 
 let output_sequent fmt (hyps,concl) =
@@ -179,7 +199,8 @@ let output_sequent fmt (hyps,concl) =
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(forall (%a %a)@ %a)@]" 
-	  Ident.print id print_pure_type v print_seq hyps
+	  print_bvar id print_pure_type v print_seq hyps
+(* TODO : update this for renaming each variable *) 
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate p print_seq hyps
   in
@@ -188,21 +209,20 @@ let output_sequent fmt (hyps,concl) =
 let print_obligation fmt loc o s = 
   fprintf fmt "@[:formula@\n"; 
   fprintf fmt "  @[;; %a@]@\n" Loc.report_obligation_position loc;
-  output_sequent fmt s;
+  fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 
-let push_decl d = Monomorph.push_decl d
+let push_decl d = Encoding.push d
 
-let iter = Monomorph.iter
+let iter = Encoding.iter
 
-let reset () = Monomorph.reset ()
+let reset () = Encoding.reset ()
 
 let declare_type fmt id =
   fprintf fmt ":extrasorts (%s)@\n" id
 
 let print_logic fmt id t =
   fprintf fmt ";;;; Why logic %s@\n" id;
-  let pure_type_list = print_list space print_pure_type in
   match t with
     | Predicate tl ->
 	fprintf fmt "@[:extrapreds ((%s %a))@]@\n@\n" id pure_type_list tl
@@ -212,7 +232,7 @@ let print_logic fmt id t =
 	
 let output_elem fmt = function
   | Dtype (loc, [], id) -> declare_type fmt id
-  | Dtype _ -> assert false
+  | Dtype (_, _, id) -> fprintf fmt ";; polymorphic type %s@\n@\n" id
   | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
@@ -223,10 +243,19 @@ let output_file f =
   let fname = f ^ "_why.smt" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
-  fprintf fmt "(benchmark %s@\n" f;
-  fprintf fmt "  :source { Generated by the Why tool }@\n";
+  fprintf fmt "(benchmark %s@\n" (Filename.basename f);
+  (*fprintf fmt "  :source { Generated by the Why tool }@\n";*)
   fprintf fmt "  :status unknown@\n";
   (*fprintf fmt "  :logic  caduceus_logic\n";*)
+  fprintf fmt "  :extrasorts (Boolean)@\n";
+  fprintf fmt "  :extrasorts (Unit)@\n";
+  fprintf fmt "  :extrafuns ((Boolean_true Boolean))@\n";
+  fprintf fmt "  :extrafuns ((Boolean_false Boolean))@\n";
+  fprintf fmt "  :assumption
+                   (forall (?bcd Boolean) (or (= ?bcd Boolean_true) 
+                                            (= ?bcd Boolean_false)))@\n";
+  fprintf fmt "  :extrafuns ((int_div Int Int Int))@\n";
+  fprintf fmt "  :extrafuns ((int_mod Int Int Int))@\n";
   iter (output_elem fmt);
   fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.106 2006-06-20 12:27:05 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.107 2006-09-18 12:19:50 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -288,7 +288,7 @@ let load_prelude () =
     if floats then load_file ~prelude:true floats_file;
     (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
-      | Pvs ->
+      | Pvs | SmtLib ->
 	  let prover_prelude = Filename.temp_file "why_prelude" "" in
 	  output prover_prelude;
 	  Sys.remove prover_prelude

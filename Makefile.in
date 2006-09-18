@@ -109,8 +109,8 @@ CMO = src/lib.cmo \
            src/ltyping.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo src/mlize.cmo src/red.cmo src/vcg.cmo \
 	   src/encoding_rec.cmo src/encoding_pred.cmo src/encoding_strat.cmo \
-	   src/encoding.cmo \
-	   src/monomorph.cmo src/pvs.cmo src/hol4.cmo src/gappa.cmo \
+	   src/monomorph.cmo src/encoding.cmo \
+	   src/pvs.cmo src/hol4.cmo src/gappa.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
 	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo src/dispatcher.cmo \
@@ -358,6 +358,13 @@ install-mizar-yes:
 	mkdir -p @MIZARLIB@/mml/dict
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
+
+local-install: $(BINARY) $(CADUCEUS) bin/gwhy.$(OCAMLBEST)
+	cp $(BINARY) $$HOME/bin/why
+	cp $(CADUCEUS) $$HOME/bin/caduceus
+	if test -f bin/gwhy.$(OCAMLBEST); then \
+	  cp -f bin/gwhy.$(OCAMLBEST) $$HOME/bin/gwhy; \
+	fi
 
 local: install
 # local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE) coq-@COQ@

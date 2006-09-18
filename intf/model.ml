@@ -106,9 +106,23 @@ let cvcl = {
   pr_id = Dispatcher.Cvcl;
   pr_enc = NoEncoding;
 }
-  
-let provers = [simplify; simplify_pred; simplify_strat; simplify_rec;
-	       zenon; zenon_pred; zenon_strat; zenon_rec;
+let rvsat = {
+  pr_name = "rv-sat";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Rvsat;
+  pr_enc = Monomorph;
+  }
+let yices = {
+  pr_name = "Yices";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Yices;
+  pr_enc = Monomorph;
+  }
+
+let provers = [simplify; rvsat; yices; simplify_rec;
+	       zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
 	       harvey; cvcl]
 let provers_selected = ref provers
 let provers_s = Hashtbl.create 17

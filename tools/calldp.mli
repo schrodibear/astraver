@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.mli,v 1.5 2006-06-21 09:19:46 filliatr Exp $ i*)
+(*i $Id: calldp.mli,v 1.6 2006-09-18 12:20:35 couchot Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -44,3 +44,10 @@ val zenon :
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
+val rvsat : 
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+  prover_result
+
+val yices : 
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+  prover_result

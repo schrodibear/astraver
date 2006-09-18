@@ -1,62 +1,3 @@
-(BG_PUSH (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t))))
-
-(BG_PUSH
-  ; exchange
-  (FORALL (t1 t2 i j)
-	  (IFF (EQ (exchange t1 t2 i j) |@true|)
-	       (AND (EQ (array_length t1) (array_length t2))
-		    (EQ (select t1 i) (select t2 j))
-		    (EQ (select t1 j) (select t2 i))
-		    (FORALL (k) (IMPLIES (AND (NEQ k i) (NEQ k j))
-					 (EQ (select t1 k) (select t2 k)))))))
-  (FORALL (t1 t2 i j)
-	  (IMPLIES (EQ (exchange t1 t2 i j) |@true|)
-		   (EQ (array_length t1) (array_length t2))))
-  ; permut
-  (FORALL (t) (EQ (permut t t) |@true|))
-  (FORALL (t1 t2) (IMPLIES (EQ (permut t1 t2) |@true|)
-			   (EQ (permut t2 t1) |@true|)))
-  (FORALL (t1 t2 t3) (IMPLIES (AND (EQ (permut t1 t2) |@true|)
-				   (EQ (permut t2 t3) |@true|))
-			      (EQ (permut t1 t3) |@true|)))
-  (FORALL 
-   (t i j) 
-   (EQ (permut t (store (store t i (select t j)) j (select t i))) |@true|))
-  (FORALL (t1 t2)
-	  (IMPLIES (EQ (permut t1 t2) |@true|)
-		   (EQ (array_length t1) (array_length t2))))
-  ; sub_permut
-  (FORALL (t g d) (EQ (sub_permut g d t t) |@true|))
-  (FORALL (t1 t2 g d) (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
-			   (EQ (sub_permut g d t2 t1) |@true|)))
-  (FORALL (t1 t2 t3 g d) (IMPLIES (AND (EQ (sub_permut g d t1 t2) |@true|)
-				       (EQ (sub_permut g d t2 t3) |@true|))
-				  (EQ (sub_permut g d t1 t3) |@true|)))
-  (FORALL 
-   (t g d i j) 
-   (IMPLIES (AND (<= g i) (<= i d) (<= g j) (<= j d))
-	    (EQ (sub_permut g d t 
-			    (store (store t i (select t j)) j (select t i))) 
-		|@true|)))
-  (FORALL 
-   (t1 t2 g d i j)
-   (IMPLIES (AND (EQ (exchange t1 t2 i j) |@true|)
-		 (<= g i) (<= i d) (<= g j) (<= j d))
-	    (EQ (sub_permut g d t1 t2) |@true|)))
-  (FORALL (t1 t2 i j) 
-	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
-		   (EQ (permut t1 t2) |@true|)))
-  (FORALL (t1 t2 i j)
-	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
-		   (EQ (array_length t1) (array_length t2))))
-  ; sorted_array
-  (FORALL 
-   (t i j) 
-   (IFF (EQ (sorted_array t i j) |@true|)
-	(IMPLIES (<= i j)
-		 (FORALL (k) (IMPLIES (AND (<= i k) (< k j))
-				      (<= (select t k) (select t (+ k 1))))))))
-)
 
 ;; DO NOT EDIT BELOW THIS LINE
 
@@ -163,15 +104,6 @@
  (FORALL (d)
  (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
  (IMPLIES (EQ (sub_permut g d t2 t3) |@true|)
- (EQ (sub_permut g d t1 t3) |@true|))))))))
-
- (FORALL (t1)
- (FORALL (t2)
- (FORALL (g)
- (FORALL (d)
- (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
- (FORALL (t3)
- (IMPLIES (EQ (sub_permut g d t2 t3) |@true|)
  (EQ (sub_permut g d t1 t3) |@true|)))))))))
 
 (BG_PUSH
@@ -182,15 +114,6 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (EQ (sub_permut g d t
- (update (update t i (access t j)) j (access t i))) |@true|)))))))
-
- (FORALL (g)
- (FORALL (d)
- (FORALL (i)
- (FORALL (j)
- (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
- (FORALL (t)
  (EQ (sub_permut g d t
  (update (update t i (access t j)) j (access t i))) |@true|))))))))
 

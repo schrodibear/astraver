@@ -15,13 +15,9 @@ Admitted.
 (*Why logic*) Definition red : color.
 Admitted.
 
-(*Why predicate*) Definition is_color  (c:color)
+(*Why predicate*) Definition is_color  [c:color]
   := c = blue \/ c = white \/ c = red.
 
-(*Why*) Parameter eq_color :
-  forall (c1: color), forall (c2: color),
-  (sig_1 bool
-   (fun (result: bool)  => ((if result then c1 = c2 else ~(c1 = c2))))).
 
 (*Why type*) Definition color_array: Set.
 Admitted.
@@ -36,51 +32,74 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (forall (a:color_array),
-   (forall (i:Z), (forall (c:color), (acc (upd a i c) i) = c))).
+  ((a:color_array) ((i:Z) ((c:color) (acc (upd a i c) i) = c))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (forall (a:color_array),
-   (forall (i:Z),
-    (forall (j:Z),
-     (forall (c:color), (i <> j -> (acc (upd a j c) i) = (acc a i)))))).
+  ((a:color_array)
+   ((i:Z) ((j:Z) ((c:color) (`i <> j` -> (acc (upd a j c) i) = (acc a i)))))).
 Admitted.
 
 (*Why axiom*) Lemma length_update :
-  (forall (a:color_array),
-   (forall (i:Z), (forall (c:color), (length (upd a i c)) = (length a)))).
+  ((a:color_array) ((i:Z) ((c:color) `(length (upd a i c)) = (length a)`))).
 Admitted.
 
-(*Why*) Parameter get :
-  forall (i: Z), forall (t: color_array), forall (_: 0 <= i /\ i <
-  (length t)), (sig_1 color (fun (result: color)  => (result = (acc t i)))).
 
-(*Why*) Parameter set :
-  forall (i: Z), forall (c: color), forall (t: color_array), forall (_: 0 <=
-  i /\ i < (length t)),
-  (sig_2 color_array unit
-   (fun (t0: color_array) (result: unit)  => (t0 = (upd t i c)))).
 
-(*Why predicate*) Definition monochrome  (t:color_array) (i:Z) (j:Z)
-  (c:color) := (forall (k:Z), (i <= k /\ k < j -> (acc t k) = c)).
+(*Why predicate*) Definition monochrome  [t:color_array] [i:Z] [j:Z]
+  [c:color] := ((k:Z) (`i <= k` /\ `k < j` -> (acc t k) = c)).
+
+(*Why logic*) Definition permutation :
+  color_array -> color_array -> Z -> Z -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma permut_refl :
+  ((t:color_array) ((l:Z) ((r:Z) (permutation t t l r)))).
+Admitted.
+
+(*Why axiom*) Lemma permut_swap :
+  ((t:color_array)
+   ((l:Z)
+    ((r:Z)
+     ((i:Z)
+      ((j:Z)
+       (`l <= i` /\ `i <= r` ->
+        (`l <= j` /\ `j <= r` ->
+         (permutation t (upd (upd t i (acc t j)) j (acc t i)) l r)))))))).
+Admitted.
+
+(*Why axiom*) Lemma permut_sym :
+  ((t1:color_array)
+   ((t2:color_array)
+    ((l:Z) ((r:Z) ((permutation t1 t2 l r) -> (permutation t2 t1 l r)))))).
+Admitted.
+
+(*Why axiom*) Lemma permut_trans :
+  ((t1:color_array)
+   ((t2:color_array)
+    ((t3:color_array)
+     ((l:Z)
+      ((r:Z)
+       ((permutation t1 t2 l r) ->
+        ((permutation t2 t3 l r) -> (permutation t1 t3 l r)))))))).
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_1 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: color_array),
-  forall (HW_1: (0 <= i /\ i < (length t)) /\ 0 <= j /\ j < (length t)),
-  forall (HW_2: 0 <= i /\ i < (length t)),
-  forall (result: color),
-  forall (HW_3: result = (acc t i)),
-  forall (HW_4: 0 <= j /\ j < (length t)),
-  forall (result0: color),
-  forall (HW_5: result0 = (acc t j)),
-  forall (HW_6: 0 <= i /\ i < (length t)),
-  forall (t0: color_array),
-  forall (HW_7: t0 = (upd t i result0)),
-  0 <= j /\ j < (length t0).
+  (i: Z)
+  (j: Z)
+  (t: color_array)
+  (HW_1: (`0 <= i` /\ `i < (length t)`) /\ `0 <= j` /\ `j < (length t)`)
+  (HW_2: `0 <= i` /\ `i < (length t)`)
+  (result: color)
+  (HW_3: result = (acc t i))
+  (HW_4: `0 <= j` /\ `j < (length t)`)
+  (result0: color)
+  (HW_5: result0 = (acc t j))
+  (HW_6: `0 <= i` /\ `i < (length t)`)
+  (t0: color_array)
+  (HW_7: t0 = (upd t i result0))
+  `0 <= j` /\ `j < (length t0)`.
 Proof.
 intuition; subst.
 rewrite length_update; intuition.
@@ -88,22 +107,22 @@ Qed.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma swap_po_2 : 
-  forall (i: Z),
-  forall (j: Z),
-  forall (t: color_array),
-  forall (HW_1: (0 <= i /\ i < (length t)) /\ 0 <= j /\ j < (length t)),
-  forall (HW_2: 0 <= i /\ i < (length t)),
-  forall (result: color),
-  forall (HW_3: result = (acc t i)),
-  forall (HW_4: 0 <= j /\ j < (length t)),
-  forall (result0: color),
-  forall (HW_5: result0 = (acc t j)),
-  forall (HW_6: 0 <= i /\ i < (length t)),
-  forall (t0: color_array),
-  forall (HW_7: t0 = (upd t i result0)),
-  forall (HW_8: 0 <= j /\ j < (length t0)),
-  forall (t1: color_array),
-  forall (HW_9: t1 = (upd t0 j result)),
+  (i: Z)
+  (j: Z)
+  (t: color_array)
+  (HW_1: (`0 <= i` /\ `i < (length t)`) /\ `0 <= j` /\ `j < (length t)`)
+  (HW_2: `0 <= i` /\ `i < (length t)`)
+  (result: color)
+  (HW_3: result = (acc t i))
+  (HW_4: `0 <= j` /\ `j < (length t)`)
+  (result0: color)
+  (HW_5: result0 = (acc t j))
+  (HW_6: `0 <= i` /\ `i < (length t)`)
+  (t0: color_array)
+  (HW_7: t0 = (upd t i result0))
+  (HW_8: `0 <= j` /\ `j < (length t0)`)
+  (t1: color_array)
+  (HW_9: t1 = (upd t0 j result))
   t1 = (upd (upd t i (acc t j)) j (acc t i)).
 Proof.
 intuition; subst; intuition.
@@ -111,13 +130,15 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_1 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\ (monochrome t 0 0 blue) /\
-  (monochrome t 0 0 white) /\ (monochrome t n n red) /\ (length t) = n /\
-  (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k)))).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+  (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+  (monochrome t n n red) /\ `(length t) = n` /\
+  ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+  (permutation t t `0` `n - 1`).
 Proof.
 unfold monochrome; intuition.
 absurd (0<0); intuition.
@@ -127,91 +148,97 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_2 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_4: i < r),
-  0 <= i /\ i < (length t0).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_4: `i < r`)
+  `0 <= i` /\ `i < (length t0)`.
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_3 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_4: i < r),
-  forall (HW_5: 0 <= i /\ i < (length t0)),
-  forall (result: color),
-  forall (HW_6: result = (acc t0 i)),
-  forall (HW_7: result = blue),
-  (0 <= b /\ b < (length t0)) /\ 0 <= i /\ i < (length t0).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_4: `i < r`)
+  (HW_5: `0 <= i` /\ `i < (length t0)`)
+  (result: color)
+  (HW_6: result = (acc t0 i))
+  (HW_7: result = blue)
+  (`0 <= b` /\ `b < (length t0)`) /\ `0 <= i` /\ `i < (length t0)`.
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_4 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_4: i < r),
-  forall (HW_5: 0 <= i /\ i < (length t0)),
-  forall (result: color),
-  forall (HW_6: result = (acc t0 i)),
-  forall (HW_7: result = blue),
-  forall (HW_8: (0 <= b /\ b < (length t0)) /\ 0 <= i /\ i < (length t0)),
-  forall (t1: color_array),
-  forall (HW_9: t1 = (upd (upd t0 b (acc t0 i)) i (acc t0 b))),
-  forall (b0: Z),
-  forall (HW_10: b0 = (b + 1)),
-  forall (i0: Z),
-  forall (HW_11: i0 = (i + 1)),
-  ((0 <= b0 /\ b0 <= i0) /\ (i0 <= r /\ r <= n) /\
-  (monochrome t1 0 b0 blue) /\ (monochrome t1 b0 i0 white) /\
-  (monochrome t1 r n red) /\ (length t1) = n /\
-  (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t1 k))))) /\
-  (Zwf 0 (r - i0) (r - i)).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_4: `i < r`)
+  (HW_5: `0 <= i` /\ `i < (length t0)`)
+  (result: color)
+  (HW_6: result = (acc t0 i))
+  (HW_7: result = blue)
+  (HW_8: (`0 <= b` /\ `b < (length t0)`) /\ `0 <= i` /\ `i < (length t0)`)
+  (t1: color_array)
+  (HW_9: t1 = (upd (upd t0 b (acc t0 i)) i (acc t0 b)))
+  (b0: Z)
+  (HW_10: b0 = `b + 1`)
+  (i0: Z)
+  (HW_11: i0 = `i + 1`)
+  ((`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r` /\ `r <= n`) /\
+  (monochrome t1 `0` b0 blue) /\ (monochrome t1 b0 i0 white) /\
+  (monochrome t1 r n red) /\ `(length t1) = n` /\
+  ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t1 k)))) /\
+  (permutation t1 t `0` `n - 1`)) /\ (Zwf `0` `r - i0` `r - i`).
 Proof.
 unfold monochrome; intuition; subst.
 assert (k<b \/ k=b). omega. intuition.
@@ -238,37 +265,40 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_5 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_4: i < r),
-  forall (HW_5: 0 <= i /\ i < (length t0)),
-  forall (result: color),
-  forall (HW_6: result = (acc t0 i)),
-  forall (HW_12: ~(result = blue)),
-  forall (HW_13: 0 <= i /\ i < (length t0)),
-  forall (result0: color),
-  forall (HW_14: result0 = (acc t0 i)),
-  forall (HW_15: result0 = white),
-  forall (i0: Z),
-  forall (HW_16: i0 = (i + 1)),
-  ((0 <= b /\ b <= i0) /\ (i0 <= r /\ r <= n) /\ (monochrome t0 0 b blue) /\
-  (monochrome t0 b i0 white) /\ (monochrome t0 r n red) /\ (length t0) = n /\
-  (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))) /\
-  (Zwf 0 (r - i0) (r - i)).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_4: `i < r`)
+  (HW_5: `0 <= i` /\ `i < (length t0)`)
+  (result: color)
+  (HW_6: result = (acc t0 i))
+  (HW_12: ~(result = blue))
+  (HW_13: `0 <= i` /\ `i < (length t0)`)
+  (result0: color)
+  (HW_14: result0 = (acc t0 i))
+  (HW_15: result0 = white)
+  (i0: Z)
+  (HW_16: i0 = `i + 1`)
+  ((`0 <= b` /\ `b <= i0`) /\ (`i0 <= r` /\ `r <= n`) /\
+  (monochrome t0 `0` b blue) /\ (monochrome t0 b i0 white) /\
+  (monochrome t0 r n red) /\ `(length t0) = n` /\
+  ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+  (permutation t0 t `0` `n - 1`)) /\ (Zwf `0` `r - i0` `r - i`).
 Proof.
 unfold monochrome; intuition; subst.
 assert (k<i \/ k=i). omega. intuition.
@@ -277,74 +307,79 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_6 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_4: i < r),
-  forall (HW_5: 0 <= i /\ i < (length t0)),
-  forall (result: color),
-  forall (HW_6: result = (acc t0 i)),
-  forall (HW_12: ~(result = blue)),
-  forall (HW_13: 0 <= i /\ i < (length t0)),
-  forall (result0: color),
-  forall (HW_14: result0 = (acc t0 i)),
-  forall (HW_17: ~(result0 = white)),
-  forall (r0: Z),
-  forall (HW_18: r0 = (r - 1)),
-  (0 <= r0 /\ r0 < (length t0)) /\ 0 <= i /\ i < (length t0).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_4: `i < r`)
+  (HW_5: `0 <= i` /\ `i < (length t0)`)
+  (result: color)
+  (HW_6: result = (acc t0 i))
+  (HW_12: ~(result = blue))
+  (HW_13: `0 <= i` /\ `i < (length t0)`)
+  (result0: color)
+  (HW_14: result0 = (acc t0 i))
+  (HW_17: ~(result0 = white))
+  (r0: Z)
+  (HW_18: r0 = `r - 1`)
+  (`0 <= r0` /\ `r0 < (length t0)`) /\ `0 <= i` /\ `i < (length t0)`.
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_7 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_4: i < r),
-  forall (HW_5: 0 <= i /\ i < (length t0)),
-  forall (result: color),
-  forall (HW_6: result = (acc t0 i)),
-  forall (HW_12: ~(result = blue)),
-  forall (HW_13: 0 <= i /\ i < (length t0)),
-  forall (result0: color),
-  forall (HW_14: result0 = (acc t0 i)),
-  forall (HW_17: ~(result0 = white)),
-  forall (r0: Z),
-  forall (HW_18: r0 = (r - 1)),
-  forall (HW_19: (0 <= r0 /\ r0 < (length t0)) /\ 0 <= i /\ i < (length t0)),
-  forall (t1: color_array),
-  forall (HW_20: t1 = (upd (upd t0 r0 (acc t0 i)) i (acc t0 r0))),
-  ((0 <= b /\ b <= i) /\ (i <= r0 /\ r0 <= n) /\ (monochrome t1 0 b blue) /\
-  (monochrome t1 b i white) /\ (monochrome t1 r0 n red) /\ (length t1) = n /\
-  (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t1 k))))) /\
-  (Zwf 0 (r0 - i) (r - i)).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_4: `i < r`)
+  (HW_5: `0 <= i` /\ `i < (length t0)`)
+  (result: color)
+  (HW_6: result = (acc t0 i))
+  (HW_12: ~(result = blue))
+  (HW_13: `0 <= i` /\ `i < (length t0)`)
+  (result0: color)
+  (HW_14: result0 = (acc t0 i))
+  (HW_17: ~(result0 = white))
+  (r0: Z)
+  (HW_18: r0 = `r - 1`)
+  (HW_19: (`0 <= r0` /\ `r0 < (length t0)`) /\ `0 <= i` /\ `i < (length t0)`)
+  (t1: color_array)
+  (HW_20: t1 = (upd (upd t0 r0 (acc t0 i)) i (acc t0 r0)))
+  ((`0 <= b` /\ `b <= i`) /\ (`i <= r0` /\ `r0 <= n`) /\
+  (monochrome t1 `0` b blue) /\ (monochrome t1 b i white) /\
+  (monochrome t1 r0 n red) /\ `(length t1) = n` /\
+  ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t1 k)))) /\
+  (permutation t1 t `0` `n - 1`)) /\ (Zwf `0` `r0 - i` `r - i`).
 Proof.
 unfold monochrome; intuition; subst.
 do 2 (rewrite acc_upd_neq; intuition).
@@ -374,26 +409,29 @@ Save.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma dutch_flag_po_8 : 
-  forall (n: Z),
-  forall (t: color_array),
-  forall (HW_1: 0 <= n /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (HW_2: (0 <= 0 /\ 0 <= 0) /\ (0 <= n /\ n <= n) /\
-                (monochrome t 0 0 blue) /\ (monochrome t 0 0 white) /\
-                (monochrome t n n red) /\ (length t) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t k))))),
-  forall (b: Z),
-  forall (i: Z),
-  forall (r: Z),
-  forall (t0: color_array),
-  forall (HW_3: (0 <= b /\ b <= i) /\ (i <= r /\ r <= n) /\
-                (monochrome t0 0 b blue) /\ (monochrome t0 b i white) /\
-                (monochrome t0 r n red) /\ (length t0) = n /\
-                (forall (k:Z), (0 <= k /\ k < n -> (is_color (acc t0 k))))),
-  forall (HW_21: i >= r),
-  (exists b:Z,
-   (exists r:Z, (monochrome t0 0 b blue) /\ (monochrome t0 b r white) /\
-    (monochrome t0 r n red))).
+  (n: Z)
+  (t: color_array)
+  (HW_1: `0 <= n` /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))))
+  (HW_2: (`0 <= 0` /\ `0 <= 0`) /\ (`0 <= n` /\ `n <= n`) /\
+         (monochrome t `0` `0` blue) /\ (monochrome t `0` `0` white) /\
+         (monochrome t n n red) /\ `(length t) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t k)))) /\
+         (permutation t t `0` `n - 1`))
+  (b: Z)
+  (i: Z)
+  (r: Z)
+  (t0: color_array)
+  (HW_3: (`0 <= b` /\ `b <= i`) /\ (`i <= r` /\ `r <= n`) /\
+         (monochrome t0 `0` b blue) /\ (monochrome t0 b i white) /\
+         (monochrome t0 r n red) /\ `(length t0) = n` /\
+         ((k:Z) (`0 <= k` /\ `k < n` -> (is_color (acc t0 k)))) /\
+         (permutation t0 t `0` `n - 1`))
+  (HW_21: `i >= r`)
+  (EX b:Z |
+   (EX r:Z | (monochrome t0 `0` b blue) /\ (monochrome t0 b r white) /\
+    (monochrome t0 r n red))) /\
+  (permutation t0 t `0` `n - 1`).
 Proof.
 intros.
 exists b; exists r; intuition.

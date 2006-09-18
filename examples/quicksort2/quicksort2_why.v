@@ -63,6 +63,12 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
+(*Why*) Parameter swap_valid :
+  forall (i: Z), forall (j: Z), forall (t: (array Z)), forall (_: (0 <= i /\
+  i < (array_length t)) /\ 0 <= j /\ j < (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  => ((exchange t0 t i j)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quick_rec_po_1 : 
   forall (l: Z),
@@ -596,6 +602,13 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
+(*Why*) Parameter quick_rec_valid :
+  forall (l: Z), forall (r: Z), forall (t: (array Z)), forall (_: 0 <= l /\
+  r < (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  => ((sorted_array t0 l r) /\
+    (sub_permut l r t0 t)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma quicksort_po_1 : 
   forall (t: (array Z)),
@@ -622,4 +635,10 @@ ArrayLength; assumption.
 eauto.
 Qed.
 
+
+(*Why*) Parameter quicksort_valid :
+  forall (t: (array Z)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  =>
+    ((sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t)))).
 

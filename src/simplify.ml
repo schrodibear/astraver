@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.58 2006-07-17 11:50:49 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.59 2006-09-18 12:19:50 couchot Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -259,6 +259,7 @@ let cc_external_type = function
   | _ -> false
 
 let cc_has_type ty fmt id = match ty with
+  (*JFC :  where is it called ?*)
   | Cc.TTpure ty when external_type ty ->
       has_type ty fmt id
   | Cc.TTarray (Cc.TTpure (PTexternal(_,ty))) ->

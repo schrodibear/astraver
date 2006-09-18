@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding.mli,v 1.2 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: encoding.mli,v 1.3 2006-09-18 12:19:49 couchot Exp $ i*)
 
 open Cc
 
@@ -22,3 +22,5 @@ val reset : unit -> unit
 
 val push : Logic_decl.t -> unit
 val iter : (Logic_decl.t -> unit) -> unit
+
+val symbol : Format.formatter -> Ident.t * Logic.instance -> unit
