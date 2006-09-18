@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.29 2006-09-18 12:22:56 couchot Exp $ i*)
+(*i $Id: cmake.ml,v 1.30 2006-09-18 13:34:00 couchot Exp $ i*)
 
 open Format
 open Pp
@@ -113,7 +113,7 @@ let generic f targets =
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
        fprintf fmt "@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib --encoding pred $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib --encoding mono $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");
