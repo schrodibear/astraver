@@ -1,3 +1,12 @@
+  o fixed bugs into smtlib output : 
+    all variables are "?" prefixed, 
+    brackets around constants are removed, 
+    validity question is turned into a sat question,  
+    Boolean sort with Boolean_false and  Boolean_true constants 
+    are introduced, 
+    Unit sort is introduced  
+  o fixed bugs into the harvey (rv-fol) output (principally the 
+    command lines)
   o triggers added to axioms of the caduceus model
 
 version 2.00, June 12th, 2006
