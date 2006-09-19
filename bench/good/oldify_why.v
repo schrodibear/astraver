@@ -8,13 +8,7 @@ Admitted.
 
 
 
-(*Why*) Parameter f1 :
-  forall (y: Z), forall (r: Z),
-  (sig_2 Z unit (fun (r0: Z) (result: unit)  => ((q1 r0 r y)))).
 
-(*Why*) Parameter g1_valid :
-  forall (_: unit), forall (r: Z),
-  (sig_2 Z unit (fun (r0: Z) (result: unit)  => ((q1 r0 r r)))).
 
 (*Why logic*) Definition q : (array Z) -> (array Z) -> Z -> Prop.
 Admitted.
@@ -22,9 +16,6 @@ Admitted.
 
 
 
-(*Why*) Parameter f :
-  forall (x: Z), forall (t: (array Z)),
-  (sig_2 (array Z) unit (fun (t0: (array Z)) (result: unit)  => ((q t0 t x)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma g_po_1 : 
@@ -40,8 +31,4 @@ subst; intuition.
 Save.
 
 
-(*Why*) Parameter g_valid :
-  forall (t: (array Z)),
-  (sig_2 (array Z) unit
-   (fun (t0: (array Z)) (result: unit)  => ((q t0 t (array_length t))))).
 

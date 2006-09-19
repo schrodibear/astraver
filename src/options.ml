@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.73 2006-09-18 12:19:50 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.74 2006-09-19 17:34:49 filliatr Exp $ i*)
 
 open Format
 
@@ -45,6 +45,7 @@ let split_user_conj_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
+let arrays_ = ref true
 let floats_ = ref false
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
@@ -155,9 +156,10 @@ Typing/Annotations/VCG options:
   --total            total correctness
 
 Prelude files:
-  --no-prelude   do not read the prelude file (prelude.why)
-  --fp           use floating-point arithmetic (same as --lib-file floats.why)
+  --no-prelude   do not read the prelude files (prelude.why and arrays.why)
+  --no-arrays    do not read the arrays prelude file (arrays.why)
   --lib-file f   load file f from the library
+  --fp           use floating-point arithmetic (same as --lib-file floats.why)
 
 Encoding for types in untyped logic:
   --encoding none    does not encode types into terms for untyped provers
@@ -340,6 +342,8 @@ let files =
 	all_vc_ := true; parse args
     | ("-no-prelude" | "--no-prelude") :: args ->
 	prelude_ := false; parse args
+    | ("-no-arrays" | "--no-arrays") :: args ->
+	arrays_ := false; parse args
     | ("-partial" | "--partial") :: args ->
 	termination_ := Partial; parse args
     | ("-total" | "--total") :: args ->
@@ -402,6 +406,7 @@ let gappa_rnd = !gappa_rnd_
 let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec
 
+let arrays = !arrays_
 let floats = !floats_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
@@ -441,8 +446,16 @@ let lib_file f =
     Filename.concat Version.libdir f
 
 let prelude_file = lib_file "prelude.why"
+let arrays_file = lib_file "arrays.why"
 let floats_file = lib_file "floats.why"
-let lib_files_to_load = List.rev_map lib_file !lib_files_to_load_
+
+let lib_files_to_load = 
+  (if prelude then 
+     prelude_file :: (if arrays then [arrays_file] else [])
+   else
+     []) @
+  (if floats then [floats_file] else []) @
+  List.rev_map lib_file !lib_files_to_load_
 
 let () = 
   if prelude && not (Sys.file_exists prelude_file) then begin

@@ -126,6 +126,12 @@ intuition.
 subst; auto with *.
 Save.
 
+(*Why*) Parameter swap_valid :
+  forall (i: Z), forall (j: Z), forall (t: (array Z)), forall (_: (0 <= i /\
+  i < (array_length t)) /\ 0 <= j /\ j < (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  => ((exchange t0 t i j)))).
+
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma maximum_po_1 : 
   forall (n: Z),
@@ -259,6 +265,14 @@ Save.
 Proof.
 intuition.
 Save.
+
+(*Why*) Parameter maximum_valid :
+  forall (n: Z), forall (k: Z), forall (i: Z), forall (t: (array Z)),
+  forall (_: (0 <= k /\ k <= i) /\ i <= n /\ n < (array_length t) /\
+  (Maximize t n (access t i) k)),
+  (sig_1 Z
+   (fun (result: Z)  => ((0 <= result /\ result <= n) /\
+    (Maximize t n (access t result) 0)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma maxisort_po_1 : 
@@ -506,4 +520,10 @@ Qed.
    [ intros H; rewrite H in Post2; split; tauto | Omega' ].
 Qed.
 
+
+(*Why*) Parameter maxisort_valid :
+  forall (t: (array Z)), forall (_: 0 <= (array_length t)),
+  (sig_2 (array Z) unit
+   (fun (t0: (array Z)) (result: unit)  =>
+    ((sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t)))).
 

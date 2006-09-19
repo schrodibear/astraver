@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.13 2006-09-18 12:19:50 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.14 2006-09-19 17:34:49 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -150,7 +150,7 @@ let rec print_predicate fmt = function
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = bound_variable () in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(forall (%a %a) %a)@]" 
+      fprintf fmt "@[(forall (%a %a)@ %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
   | Exists (id,n,t,p) -> 
       (*let id' = next_away id (predicate_vars p) in*)
@@ -179,7 +179,7 @@ let pure_type_list = print_list space print_pure_type
 let print_predicate_def fmt id (bl,p) =
   let tl = List.map snd bl in
   fprintf fmt "@[:extrapreds ((%s %a))@]@\n@\n" id pure_type_list tl;
-  fprintf fmt "@[:assumption@ (forall %a (iff (%s %a)@ @[%a@]))@]@\n@\n" 
+  fprintf fmt "@[:assumption@ (forall %a@ (iff (%s %a)@ @[%a@]))@]@\n@\n" 
     print_quantifiers bl id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_predicate p
@@ -188,7 +188,7 @@ let print_function_def fmt id (bl,pt,e) =
   let tl = List.map snd bl in
   fprintf fmt "@[:extrafuns ((%s %a %a))@]@\n@\n" id pure_type_list tl
     print_pure_type pt;
-  fprintf fmt "@[:assumption@ (forall %a (= (%s %a)@ @[%a@]))@]@\n@\n" 
+  fprintf fmt "@[:assumption@ (forall %a@ (= (%s %a)@ @[%a@]))@]@\n@\n" 
     print_quantifiers bl id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_term e

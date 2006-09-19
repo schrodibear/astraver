@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.107 2006-09-18 12:19:50 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.108 2006-09-19 17:34:49 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -284,8 +284,7 @@ let load_file ?(prelude=false) f =
 
 let load_prelude () =
   try
-    load_file ~prelude:true prelude_file;
-    if floats then load_file ~prelude:true floats_file;
+    List.iter (load_file ~prelude:true) lib_files_to_load;
     (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
       | Pvs | SmtLib ->
@@ -326,7 +325,7 @@ let deal_file f =
   if not (single_file ()) then output (Options.out_file fwe)
 
 let main () =
-  if prelude then load_prelude ();
+  load_prelude ();
   if files = [] then begin
     deal_channel (why_parser "standard input") stdin;
     output (Options.out_file "out")

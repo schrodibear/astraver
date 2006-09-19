@@ -104,6 +104,15 @@
  (FORALL (d)
  (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
  (IMPLIES (EQ (sub_permut g d t2 t3) |@true|)
+ (EQ (sub_permut g d t1 t3) |@true|))))))))
+
+ (FORALL (t1)
+ (FORALL (t2)
+ (FORALL (g)
+ (FORALL (d)
+ (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
+ (FORALL (t3)
+ (IMPLIES (EQ (sub_permut g d t2 t3) |@true|)
  (EQ (sub_permut g d t1 t3) |@true|)))))))))
 
 (BG_PUSH
@@ -114,6 +123,15 @@
  (FORALL (i)
  (FORALL (j)
  (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
+ (EQ (sub_permut g d t
+ (update (update t i (access t j)) j (access t i))) |@true|)))))))
+
+ (FORALL (g)
+ (FORALL (d)
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (AND (<= g i) (AND (<= i d) (AND (<= g j) (<= j d))))
+ (FORALL (t)
  (EQ (sub_permut g d t
  (update (update t i (access t j)) j (access t i))) |@true|))))))))
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.57 2006-09-18 12:19:50 couchot Exp $ i*)
+(*i $Id: options.mli,v 1.58 2006-09-19 17:34:49 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -104,11 +104,6 @@ val files : string list
 (*s GUI? *)
 
 val gui : bool ref
-
-val prelude : bool
-val prelude_file : string
-
-val floats_file : string
 
 val lib_files_to_load : string list
 

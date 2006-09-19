@@ -399,3 +399,12 @@ assert (h: (In t l0 u0)). assumption.
 inversion h; omega.
 Save.
 
+(*Why*) Parameter binary_search_valid :
+  forall (_: unit), forall (l: Z), forall (m: Z), forall (p: Z),
+  forall (t: (array Z)), forall (u: Z), forall (_: (array_length t) >= 1 /\
+  (sorted_array t 1 ((array_length t) - 1))),
+  (sig_5 Z Z Z Z unit
+   (fun (l0: Z) (m0: Z) (p0: Z) (u0: Z) (result: unit)  => ((1 <= p0 /\ p0 <=
+    ((array_length t) - 1)) /\ (access t p0) = v \/ p0 = 0 /\
+    ~(In t 1 ((array_length t) - 1))))).
+

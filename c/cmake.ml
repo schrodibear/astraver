@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.30 2006-09-18 13:34:00 couchot Exp $ i*)
+(*i $Id: cmake.ml,v 1.31 2006-09-19 17:34:49 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -45,8 +45,8 @@ let generic f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
-       fprintf fmt "WHY=why %s@\n@\n" (Coptions.why_opt ());	    
-       fprintf fmt "GWHY=gwhy %s@\n@\n" (Coptions.why_opt ());	    
+       fprintf fmt "WHY=why --no-arrays %s@\n@\n" (Coptions.why_opt ());
+       fprintf fmt "GWHY=gwhy --no-arrays %s@\n@\n" (Coptions.why_opt ());
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "CADULIBFILE=%s@\n@\n" Coptions.libfile;
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    

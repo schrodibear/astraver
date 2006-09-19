@@ -6,10 +6,8 @@ Require Export words.
 Require Import Omega.
 Require Import Sumbool.
 
-(*Why*) Parameter n1 : Z.
 Axiom n1_non_negative : (0 <= n1)%Z.
 
-(*Why*) Parameter n2 : Z.
 Axiom n2_non_negative : (0 <= n2)%Z.
 
 Ltac omega' :=
@@ -20,6 +18,12 @@ Definition min_suffix (w1 w2:array A) (i j n:Z) :=
   min_dist (suffix n1 w1 i) (suffix n2 w2 j) n.
 
 Definition test_char (a b:A) := bool_of_sumbool (A_eq_dec a b).
+
+(*Why logic*) Definition n1 : Z.
+Admitted.
+
+(*Why logic*) Definition n2 : Z.
+Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma distance_po_1 : 
@@ -963,3 +967,12 @@ subst.
 assert (h: min_suffix w1 w2 (i2+1) 0 (access t1 0)); auto with *.
 rewrite hi2 in h; auto.
 Save.
+(*Why*) Parameter distance_valid :
+  forall (_: unit), forall (i: Z), forall (j: Z), forall (old: Z),
+  forall (t: (array Z)), forall (w1: (array A)), forall (w2: (array A)),
+  forall (_: (array_length w1) = n1 /\ (array_length w2) = n2 /\
+  (array_length t) = (n2 + 1)),
+  (sig_5 Z Z Z (array Z) Z
+   (fun (i0: Z) (j0: Z) (old0: Z) (t0: (array Z)) (result: Z)  =>
+    ((min_dist (word_of_array n1 w1) (word_of_array n2 w2) result)))).
+

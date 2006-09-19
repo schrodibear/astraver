@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.59 2006-09-18 12:19:50 couchot Exp $ i*)
+(*i $Id: simplify.ml,v 1.60 2006-09-19 17:34:49 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -318,7 +318,7 @@ let print_axiom fmt id p =
 
 let print_predicate fmt id p =
   let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[(DEFPRED (%a %a) @[%a@])@]@\n@\n" idents id
+  fprintf fmt "@[<hov 2>(DEFPRED @[(%a %a)@]@ @[%a@])@]@\n@\n" idents id
     (print_list space (fun fmt (x,_) -> ident fmt x)) bl
     (print_predicate false) p;
   Hashtbl.add defpred (Ident.create id) ()

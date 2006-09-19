@@ -29,9 +29,6 @@ intuition.
 Save.
 
 
-(*Why*) Parameter loop1_valid :
-  forall (u: unit), forall (i: Z), forall (_: i <= 10),
-  (sig_2 Z unit (fun (i0: Z) (result: unit)  => (i0 = 10))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma oppose_po_1 : 
@@ -44,9 +41,6 @@ intuition.
 Save.
 
 
-(*Why*) Parameter oppose_valid :
-  forall (u: unit), forall (x: Z),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = (Zopp x)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma loop2_po_1 : 
@@ -103,7 +97,4 @@ intuition.
 Save.
 
 
-(*Why*) Parameter loop2_valid :
-  forall (u: unit), forall (x: Z), forall (_: x <= 10),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = (Zopp 10)))).
 

@@ -10,57 +10,12 @@ Require Import Why.
 
 
 
-(*Why*) Parameter p1_valid :
-  forall (_: unit),
-  (sig_1 (EM unit unit)
-   (fun (result: (EM unit unit))  =>
-    (((qcomb (fun (result: unit) => True) (fun (result: unit) => False))
-      result)))).
 
-(*Why*) Parameter p2_valid :
-  forall (_: unit),
-  (sig_1 (EM Z unit)
-   (fun (result: (EM Z unit))  =>
-    (((qcomb (fun (result: Z) => result = 1) (fun (result: unit) => False))
-      result)))).
 
-(*Why*) Parameter p2a_valid :
-  forall (_: unit),
-  (sig_1 (EM unit (EM Z unit))
-   (fun (result: (EM unit (EM Z unit)))  =>
-    (((qcomb (fun (result: unit) => True)
-       (qcomb (fun (result: Z) => False) (fun (result: unit) => False)))
-      result)))).
 
-(*Why*) Parameter p3_valid :
-  forall (_: unit),
-  (sig_1 (EM Z unit)
-   (fun (result: (EM Z unit))  =>
-    (((qcomb (fun (result: Z) => result = 1) (fun (result: unit) => False))
-      result)))).
 
-(*Why*) Parameter p4_valid :
-  forall (_: unit),
-  (sig_1 (EM Z unit)
-   (fun (result: (EM Z unit))  =>
-    (((qcomb (fun (result: Z) => result = 1) (fun (result: unit) => False))
-      result)))).
 
-(*Why*) Parameter p5_valid :
-  forall (_: unit),
-  (sig_1 (EM unit (EM Z unit))
-   (fun (result: (EM unit (EM Z unit)))  =>
-    (((qcomb (fun (result: unit) => False)
-       (qcomb (fun (result: Z) => result = 1) (fun (result: unit) => False)))
-      result)))).
 
-(*Why*) Parameter p6_valid :
-  forall (_: unit),
-  (sig_1 (EM unit (EM Z unit))
-   (fun (result: (EM unit (EM Z unit)))  =>
-    (((qcomb (fun (result: unit) => True)
-       (qcomb (fun (result: Z) => False) (fun (result: unit) => False)))
-      result)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p7_po_1 : 
@@ -73,12 +28,6 @@ intuition.
 Save.
 
 
-(*Why*) Parameter p7_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z (EM unit unit)
-   (fun (x0: Z) (result: (EM unit unit))  =>
-    (((qcomb (fun (result: unit) => x0 = 1) (fun (result: unit) => False))
-      result)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p8_po_1 : 
@@ -91,13 +40,6 @@ intuition.
 Save.
 
 
-(*Why*) Parameter p8_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z (EM Z unit)
-   (fun (x0: Z) (result: (EM Z unit))  =>
-    (((qcomb (fun (result: Z) => x0 = 1 /\ result = 1)
-       (fun (result: unit) => False))
-      result)))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p9_po_1 : 
@@ -113,19 +55,9 @@ Save.
 
 
 
-(*Why*) Parameter p9_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z (EM Z unit)
-   (fun (x0: Z) (result: (EM Z unit))  =>
-    (((qcomb (fun (result: Z) => x0 = 1 /\ result = 1)
-       (fun (result: unit) => False))
-      result)))).
 
-(*Why*) Parameter p10_valid : (sig_1 Z (fun (result: Z)  => (result = 0))).
 
-(*Why*) Parameter p11_valid : (sig_1 Z (fun (result: Z)  => (result = 1))).
 
-(*Why*) Parameter p12_valid : (sig_1 Z (fun (result: Z)  => (result = 2))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p13_po_1 : 
@@ -138,9 +70,6 @@ intuition.
 Save.
 
 
-(*Why*) Parameter p13_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = 2))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p13a_po_1 : 
@@ -155,9 +84,6 @@ intuition.
 Save.
 
 
-(*Why*) Parameter p13a_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 <> 1))).
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p14_po_1 : 
@@ -172,13 +98,4 @@ intuition.
 Save.
 
 
-(*Why*) Parameter p14_valid :
-  forall (_: unit), forall (x: Z),
-  (sig_1 (EM unit (EM unit (EM unit (EM unit unit))))
-   (fun (result: (EM unit (EM unit (EM unit (EM unit unit)))))  =>
-    (((qcomb (fun (result: unit) => x <> 1 /\ x <> 2 /\ x <> 3)
-       (qcomb (fun (result: unit) => x = 1)
-        (qcomb (fun (result: unit) => x = 2)
-         (qcomb (fun (result: unit) => x = 3) (fun (result: unit) => False)))))
-      result)))).
 
