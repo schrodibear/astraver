@@ -1900,17 +1900,30 @@ q[x\leftarrow t]$.
 
 Apart from the type names \texttt{unit}, \texttt{bool}, \texttt{int},
 \texttt{real}, and the type constructor \texttt{ref}, nothing is
-built-in in the \why\ tool. But a prelude 
-file is read before considering the files given on the command
-line. The prelude file lies in \url{/usr/local/lib/why/prelude.why}
-(if your library path was not set differently).
+built-in in the \why\ tool. But two prelude 
+files are read before considering the files given on the command
+line. The prelude files are
+\begin{itemize}
+\item \url{/usr/local/lib/why/prelude.why}, and
+\item \url{/usr/local/lib/why/arrays.why}
+\end{itemize}
+(unless your library path is set differently).
 The interpretation of this prelude is prover-dependent. 
 It is possible not to load the prelude using the command-line option
-\texttt{--no-prelude}.
-The remaining of this section describes the contents of the prelude.
+\texttt{--no-prelude}, or to load only the first prelude file using
+the command-line option \texttt{--no-arrays}.
+The remaining of this section describes the contents of the prelude files.
+
+\subsection{\texttt{prelude.why}}
 
 {\small
 \verbatiminput{../lib/why/prelude.why}
+}
+
+\subsection{\texttt{arrays.why}}
+
+{\small
+\verbatiminput{../lib/why/arrays.why}
 }
 
 \section{Provers specificities}
