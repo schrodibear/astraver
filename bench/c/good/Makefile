@@ -11,6 +11,7 @@ BENCHFILES=$(shell cat ../bench-files)
 CBENCHFILES=$(addsuffix .c, $(BENCHFILES))
 WBENCHFILES=$(addprefix why/, $(CBENCHFILES:.c=.why))
 SBENCHFILES=$(addprefix simplify/, $(CBENCHFILES:.c=_why.sx.all))
+SMTBENCHFILES=$(addprefix smtlib/, $(CBENCHFILES:.c=_why.smt.all))
 HBENCHFILES=$(addprefix harvey/, $(CBENCHFILES:.c=_why.all.rv))
 
 TIMEOUT=60
@@ -30,10 +31,15 @@ default:
 simplify: $(SBENCHFILES)
 	dp -timeout $(TIMEOUT) $(SBENCHFILES)
 
+# running yices/rvsat on all programs
+smtlib: $(SMTBENCHFILES)
+	dp -timeout $(TIMEOUT) $(SMTBENCHFILES)
+
 # running haRVey on all programs
 harvey: $(HBENCHFILES)
 	dp -timeout $(TIMEOUT) $(HBENCHFILES)
 
+# running cvcl on all programs
 cvcl: $(CVCBENCHFILES)
 	for f in $(BENCHFILES); do \
 	  rm -f why/$$f.why; \
@@ -71,6 +77,12 @@ simplify/%_why.sx.all: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
 	$(EXECCADUCEUS) $<
 	make -f $*.makefile $@
+
+smtlib/%_why.smt.all: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+	rm -f coq/caduceus_spec_why.v
+	$(EXECCADUCEUS) $<
+	make -f $*.makefile $@
+
 
 harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v

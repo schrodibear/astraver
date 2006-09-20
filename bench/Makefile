@@ -44,6 +44,13 @@ simplify:
 	../bin/why.opt --simplify -d -V test.mlw
 	../bin/dp.opt test_why.sx
 
+yices:
+	../bin/why.opt --smtlib -d --encoding mono -V test.mlw
+	../bin/dp.opt test_why.smt
+
+rv-sat:
+	../bin/why.opt --smtlib -d --encoding mono -V test.mlw
+	../bin/dp.opt test_why.smt
 cvcl:
 	../bin/why.opt --cvcl -d -V test.mlw
 	../bin/dp.opt test_why.cvc
@@ -87,6 +94,6 @@ zenon:
 	../bin/why.opt -d -V --zenon test.mlw
 	zenon test_why.znn
 
-rv-sat:
-	../bin/why.opt -d -V --smtlib test.mlw
-	rv-sat test_why.smt
+#rv-sat:
+#	../bin/why.opt -d -V --encoding mono --smtlib test.mlw
+#	rv-sat test_why.smt

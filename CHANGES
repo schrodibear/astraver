@@ -1,3 +1,5 @@
+  o the  bench-c-yices rule of the main Makefile launches the yices prover 
+    thanks to the tool/smtlib_split that splits the verification conditions
   o fixed bugs into smtlib output : 
     all variables are "?" prefixed, 
     brackets around constants are removed, 

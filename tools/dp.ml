@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.20 2006-06-21 09:19:46 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.21 2006-09-20 07:39:23 couchot Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -31,7 +31,7 @@ let spec =
     "-eclauses", Arg.Int ((:=) eclauses), 
     "<int>  set the max nb of clauses for the E prover";
     "-debug", Arg.Set debug, "set the debug flag" ]
-let usage = "usage: dp [options] files.{cvc,cvc.all,sx,sx.all}"
+let usage = "usage: dp [options] files.{cvc,cvc.all,sx,sx.all,smt,smt.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
 
 let () = 
@@ -61,6 +61,10 @@ let call_cvcl f =
   wrapper (Calldp.cvcl ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_simplify f = 
   wrapper (Calldp.simplify ~debug:!debug ~timeout:!timeout ~filename:f ())
+let call_yices f = 
+  wrapper (Calldp.yices ~debug:!debug ~timeout:!timeout ~filename:f ())
+let call_rvsat f = 
+  wrapper (Calldp.rvsat ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_zenon f = 
   wrapper (Calldp.zenon ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_harvey f = 
@@ -68,11 +72,17 @@ let call_harvey f =
     (Calldp.harvey ~debug:!debug ~timeout:!timeout 
        ~eclauses:!eclauses ~filename:f ())
 
+
 let split f =
   printf "%s: " f; flush stdout;
   let oldv = !nvalid in
   let oldi = !ninvalid in
   let oldt = !ntimeout in
+  if Filename.check_suffix f ".smt"  || Filename.check_suffix f ".smt.all" then
+    begin
+      Smtlib_split.iter call_yices f 
+    end 
+  else
   if Filename.check_suffix f ".cvc"  || Filename.check_suffix f ".cvc.all" then
     Cvcl_split.iter call_cvcl f 
   else 
