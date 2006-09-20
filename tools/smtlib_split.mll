@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib_split.mll,v 1.1 2006-09-20 07:40:14 couchot Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.2 2006-09-20 13:44:45 marche Exp $ i*)
 
 {
 
@@ -22,7 +22,7 @@
   open Lexing 
 
   let debug = ref true
-  let callback = ref (fun f -> assert false)
+  let callback = ref (fun f -> assert false : string -> unit)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192

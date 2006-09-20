@@ -118,7 +118,7 @@ export CADUCEUSLIB=`pwd`/../../../lib
 bench_c_good () {
     options="$1 -why-opt -split-user-conj --typing-predicates"
     echo "-------------------------------------------------------------------"
-    echo "Bench Caduceus+Simplify with options: $options"
+    echo "Bench Caduceus+Yices with options: $options"
     parsing="../../../bin/caduceus.opt $options"
 
     rm -f why/*.why
