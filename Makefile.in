@@ -274,11 +274,7 @@ BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
 
 bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
 	cp -f c/cversion.ml $(BENCHLOG)
-	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt simplify-$(BENCHLOG)
-
-bench-c-yices:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
-	cp -f c/cversion.ml $(BENCHLOG)
-	(cd bench/c; sh ./benchY 2>&1) | bin/cadlog.opt yices-$(BENCHLOG)
+	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
 
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs

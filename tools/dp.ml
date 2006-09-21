@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.21 2006-09-20 07:39:23 couchot Exp $ i*)
+(*i $Id: dp.ml,v 1.22 2006-09-21 12:30:06 marche Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -74,7 +74,7 @@ let call_harvey f =
 
 
 let split f =
-  printf "%s: " f; flush stdout;
+  printf "%-30s: " f; flush stdout;
   let oldv = !nvalid in
   let oldi = !ninvalid in
   let oldt = !ntimeout in
