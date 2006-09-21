@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.31 2006-09-19 17:34:49 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.32 2006-09-21 14:01:42 marche Exp $ i*)
 
 open Format
 open Pp
@@ -111,7 +111,7 @@ let generic f targets =
        fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
-       fprintf fmt "@\n";
+       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib --encoding mono $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
