@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.73 2006-07-12 09:04:25 moy Exp $ i*)
+(*i $Id: cmain.ml,v 1.74 2006-09-25 14:34:45 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -56,7 +56,7 @@ let main () =
   if local_aliasing then Cptr.local_aliasing_transform ();
   (* predicate *)
   let nfiles = 
-    if typing_predicates then 
+    if typing_predicates then
       on_all_files Invariant.add_typing_predicates nfiles
     else
       nfiles
@@ -114,14 +114,17 @@ let main () =
        fprintf fmt 
 	 "(* this file was automatically generated; do not edit *)@\n@\n";
        fprintf fmt "(* zone variables *)@.";
-       Hashtbl.iter 
-	 (fun name z ->
-	    match z.Info.repr with 
-	      | None ->
-		  let d = Type (name,[]) in
-		  fprintf fmt "@[%a@]" fprintf_why_decls [d]
-	      | Some _ -> ())
-	 Cenv.zone_table;
+       if Coptions.no_zone_type then
+	 fprintf fmt "type global@.@."
+       else
+	 Hashtbl.iter 
+	   (fun name z ->
+	      match z.Info.repr with 
+		| None ->
+		    let d = Type (name,[]) in
+		    fprintf fmt "@[%a@]" fprintf_why_decls [d]
+		| Some _ -> ())
+	   Cenv.zone_table;
        fprintf fmt "(* logic types *)@.";
        Cenv.iter_types (fun t -> fprintf fmt "@[type %s@\n@]" t);
        fprintf fmt "(* heap variables *)@.";

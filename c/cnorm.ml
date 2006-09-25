@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.76 2006-09-07 13:12:30 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.77 2006-09-25 14:34:45 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -104,13 +104,19 @@ let make_field ty =
   set_var_type (Info.Var_info info)  ty  false;
   info
 
+let rec assoc_zone z assoc =
+  match assoc with 
+    | [] -> raise Not_found
+    | (x,y)::l ->
+	if (repr x) == z then y else assoc_zone z l
+
 let rename_zone assoc ty =
   match ty with
     | Pointer z ->
 	let z = repr z in
 	begin
 	  try
-	    Pointer(List.assoc z assoc)
+	    Pointer(assoc_zone z assoc)
 	  with
 	      Not_found -> ty
 	end
@@ -180,7 +186,8 @@ let rec type_why e =
     | NEcond (_,_,e) -> 
 	type_why e
     | NEcall {ncall_fun = e; ncall_zones_assoc = assoc } ->
-	rename_zone assoc (type_why e)
+	let tw = type_why e in
+	rename_zone assoc tw 
     | NEmalloc _ -> 
 	Info.Pointer (make_zone true)
 	
@@ -326,7 +333,8 @@ and expr_node loc ty t =
       | TEdot (lvalue,var_info) -> 
 	  begin    
 	    match lvalue.Cast.texpr_node with
-	      | TEunary(Ustar, e) -> dot_translate (expr lvalue) var_info ty loc
+	      | TEunary(Ustar, e) -> 
+		  dot_translate (expr lvalue) var_info ty loc
 	      | TEarrget (e1, e2) -> 
 		  let a = 
 		    { lvalue with 
@@ -409,14 +417,38 @@ and expr_node loc ty t =
 	     | TEvar v -> NEvar v
 	     | TEunary (Ustar, texpr)-> expr_node loc ty texpr.texpr_node
 	     | TEdot(lvalue,var_info)->
-		  let t' =
+		 begin    
+		   match lvalue.Cast.texpr_node with
+		     | TEunary(Ustar, e) ->  
+			 let t' = (expr lvalue) in
+			 let zone = find_zone t' in
+			 let () = type_why_new_zone zone var_info in 
+			 NEarrow (t', zone, var_info)
+		     | TEarrget (e1, e2) -> 
+			 let a = 
+			   { lvalue with 
+			       texpr_node = 
+			       TEbinary (e1, Badd_pointer_int, e2);
+			       texpr_type = e1.texpr_type }
+			 in
+			 let t' = expr a in
+			 let zone = find_zone t' in
+			 let () = type_why_new_zone zone var_info in 
+			 NEarrow (t', zone, var_info)
+		     | _ ->   
+			 let t' = (expr lvalue) in
+			 let zone = find_zone t' in
+			 let () = type_why_new_zone zone var_info in 
+			 NEarrow (t', zone, var_info)
+		 end 
+	   (*let t' =
 		    match lvalue.texpr_node with
 		      | TEunary (Ustar ,texpr) -> expr texpr
 		      | _ -> expr lvalue
 		  in
 		  let zone = find_zone t' in
 		  let () = type_why_new_zone zone var_info in
-		  NEarrow (t', zone, var_info)
+		  NEarrow (t', zone, var_info)*)
 	     | TEarrow(lvalue,var_info) ->
 		 let t' = expr lvalue in
 		 let zone = find_zone t' in 
@@ -503,7 +535,26 @@ let rec term_node loc t ty =
 	    let () = type_why_new_zone zone f in
 	    NTarrow (t, zone,  f) 
 	| Tdot(t,f) ->  
-	    let t =
+	    begin    
+	      match t.term_node with
+		| Tunop (Clogic.Ustar, e) -> 
+		    dot_translate (term t) f ty loc
+		| Tarrget (e1, e2) -> 
+		    let a = 
+		      { t with 
+			  term_node = Tbinop (e1, Clogic.Badd, e2);
+			  term_type = e1.term_type }
+		    in
+		    dot_translate (term a) f ty loc
+		| Trange (e1, e2,e3) -> 
+		    let t' = term e1 in
+		    let zone = find_zone_for_term t' in
+		    let () = type_why_new_zone zone f in
+		    NTrange (term e1, term_option e2, term_option e3, 
+			     zone, f)
+		| _ -> Format.eprintf "ici@."; dot_translate (term t) f ty loc
+	    end  
+      (*let t =
 	      match t.term_node with
 		| Tunop (Clogic.Ustar ,t) -> term t
 		| _ -> term t
@@ -511,6 +562,7 @@ let rec term_node loc t ty =
 	    let zone = find_zone_for_term t in
 	    let () = type_why_new_zone zone f in
 	    NTarrow (t, zone, f)
+      *)
 	| _ -> 
 	    unsupported loc "cannot handle this & operator"
 	    (* NTunop(Clogic.Uamp,term t)    *)

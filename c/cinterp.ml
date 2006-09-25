@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.210 2006-09-25 14:12:31 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.211 2006-09-25 14:34:45 hubert Exp $ i*)
 
 
 open Format
@@ -311,7 +311,7 @@ let rec interp_term label old_label t =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ((try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	     ((try Cnorm.assoc_zone z assoc with Not_found -> z),s,ty)::acc)
 	  v.logic_heap_zone [] in
 	let targs = List.map f tl in
 	let targs = HeapVarSet.fold 
@@ -427,7 +427,7 @@ let rec interp_predicate label old_label p =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     ((try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	     ((try Cnorm.assoc_zone z assoc with Not_found -> z),s,ty)::acc)
 	  v.logic_heap_zone [] in
 	let targs = List.map ft tl in
 	let targs = HeapVarSet.fold 
@@ -1214,7 +1214,7 @@ and interp_call e1 args assoc =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     (z,(try List.assoc z assoc with Not_found -> z),s,ty)::acc)
+	     (z,(try Cnorm.assoc_zone z assoc with Not_found -> z),s,ty)::acc)
 	  v.function_reads [] 
 	in
 	let targs = List.map interp_expr args in

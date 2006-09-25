@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.30 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: coptions.ml,v 1.31 2006-09-25 14:34:45 hubert Exp $ i*)
 
 open Format
 
@@ -68,6 +68,7 @@ let werror = ref false
 let why_opt = ref ""
 let coq_tactic = ref "intuition"
 let separate = ref false
+let no_zone_type = ref false
 let closed_program = ref false
 let typing_predicates = ref false
 let floats = ref true
@@ -179,6 +180,9 @@ let _ =
 	"-separation", 
 	  Arg.Unit(fun () -> zones := true; closed_program := true),
 	  "  separates pointers into several zones (implies -closed)";
+	"-no-zone-type", 
+	  Arg.Set no_zone_type,
+	  "  zones do not generate different why types";
 	"--no-fp", Arg.Clear floats,
 	  "  do not use floating-point arithmetic";
 	"--fp-rounding-mode", Arg.String set_fp_rounding_mode,
@@ -207,6 +211,7 @@ let _ =
       add_file "caduceus [options] file..."
 
 let zones = !zones
+let no_zone_type = !no_zone_type
 let parse_only = !parse_only
 let type_only = !type_only
 let print_norm = !print_norm

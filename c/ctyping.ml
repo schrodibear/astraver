@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.124 2006-09-07 13:12:30 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.125 2006-09-25 14:34:46 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -450,16 +450,17 @@ and type_expr_node loc env = function
   | CEdot (e, x) ->
       let te = type_expr env e in
       let x = type_of_field loc x te.texpr_type in
-      let te_dot_x = match te.texpr_node with
-(*	| TEunary (Ustar, e) -> TEarrow (e, x)
+      let te_dot_x = 
+(*	match te.texpr_node with
+	| TEunary (Ustar, e) -> TEarrow (e, x)
 	| TEarrget (e1, e2) -> 
 	    let a = 
 	      { te with 
 		  texpr_node = TEbinary (e1, Badd_pointer_int, e2);
 		  texpr_type = e1.texpr_type }
 	    in
-	    TEarrow (a, x)*)
-	| _ -> TEdot (te, x)
+	    TEarrow (a, x)
+  | _ -> *) TEdot (te, x)
       in
       te_dot_x, x.var_type
   | CEarrow (e, x) ->

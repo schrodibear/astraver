@@ -432,7 +432,7 @@ let assoctype  ty assoc =
   match ty with 
     |  Pointer z ->
 	 let z = repr z in
-	 let z  = try List.assoc z assoc with Not_found -> z in
+	 let z  = try Cnorm.assoc_zone z assoc with Not_found -> z in
 	 Pointer z 
     | _ -> ty
 
@@ -467,7 +467,7 @@ let rec term tyf t =
 	       | Pointer z as ty -> 
 		   begin
 		     try
-		       Pointer (List.assoc z assoc)
+		       Pointer (assoc_zone z assoc)
 		     with
 			 Not_found -> ty
 		   end
@@ -514,7 +514,7 @@ let rec predicate tyf p =
 	       | Pointer z as ty -> 
 		   begin
 		     try
-		       Pointer (List.assoc z assoc)
+		       Pointer (assoc_zone z assoc)
 		     with
 			 Not_found -> ty
 		   end
@@ -589,7 +589,7 @@ let rec calcul_zones expr =
 		     begin
 		       try
 			 let z = repr z in
-			 Pointer (List.assoc z assoc)
+			 Pointer (assoc_zone z assoc)
 		       with
 			   Not_found -> ty
 		     end
@@ -604,7 +604,11 @@ let rec calcul_zones expr =
  
 let rec c_initializer ty tw init =
   match init with 
-    | Iexpr e -> calcul_zones e; unifier_type_why tw (type_why e)
+    | Iexpr e -> 
+	calcul_zones e; 
+	Coptions.lprintf "initializer: unifying types %s and %s@."
+	  (snd (output_why_type tw)) (snd (output_why_type (type_why e)));
+	unifier_type_why tw (type_why e)
     | Ilist l -> 
 	match ty.ctype_node with  
 	  | Tstruct tag  ->
@@ -767,15 +771,11 @@ let c_fun_separation fun_name (sp, _, f, st,_) =
     match st with
       | None -> ()
       | Some st  -> statement f.type_why_fun st
-  end;  spec f.type_why_fun sp;
-  begin
-    match st with
-      | None -> ()
-      | Some st  -> statement f.type_why_fun st
   end 
 
 
-let file p =  List.iter (fun d -> global_decl d.node) p;
+let file p =  
+  List.iter (fun d -> global_decl d.node) p;
   Hashtbl.iter c_fun_poly Cenv.c_functions;
   Hashtbl.iter c_fun_separation Cenv.c_functions;
 

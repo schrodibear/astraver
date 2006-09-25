@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.21 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.22 2006-09-25 14:34:46 hubert Exp $ i*)
 
 (* monomorphic output *)
 
@@ -473,7 +473,8 @@ let instantiate_axiom loc id a =
     a.ax_symbols_instances <- all_ci;
     fixpoint := false;
     let p = a.ax_pred in
-    let rec iter s = function
+    let rec iter s l = 
+      match l with
       | [] ->
 	  if Vset.for_all 
 	    (fun x -> 
@@ -496,7 +497,7 @@ let instantiate_axiom loc id a =
 	    all_ci;
 	  iter s oil
     in
-    iter Vmap.empty a.ax_symbols_i
+    iter Vmap.empty a.ax_symbols_i;
   end
 
 let instantiate_axioms loc = 

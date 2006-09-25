@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.35 2006-06-30 12:22:19 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.36 2006-09-25 14:34:46 hubert Exp $ i*)
 
 open Ctypes
 open Creport
@@ -76,17 +76,22 @@ let rec same_why_type_no_zone wt1 wt2 =
 
 
 let found_repr ?(quote_var=true) z = 
-  let z = repr z in
-  if quote_var && z.zone_is_var then "'"^z.name else z.name
+    let z = repr z in
+    if quote_var && z.zone_is_var then "'"^z.name else z.name
+
+let output_zone_name ?(quote_var=true) z =
+  if Coptions.no_zone_type then
+    "global"
+  else found_repr ~quote_var:quote_var z
 
 let rec output_why_type ?(quote_var=true) ty =
     match ty with
     | Int -> [], "int"
-    | Pointer z -> [] , found_repr ~quote_var:quote_var z ^ " pointer"    
-    | Addr z -> [] , found_repr ~quote_var:quote_var z ^ " addr"
+    | Pointer z -> [] , output_zone_name ~quote_var:quote_var z ^ " pointer"    
+    | Addr z -> [] , output_zone_name ~quote_var:quote_var z ^ " addr"
     | Memory(t,z) -> 
 	(snd (output_why_type ~quote_var:quote_var t))::
-	[found_repr ~quote_var:quote_var z], " memory"
+	[output_zone_name ~quote_var:quote_var z], " memory"
     | Unit -> [], "unit" 
     | Why_Logic v -> [], v
 

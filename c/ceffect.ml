@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.141 2006-09-07 13:12:30 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.142 2006-09-25 14:34:45 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -250,7 +250,7 @@ let rec term t = match t.nterm_node with
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     let z = try List.assoc z assoc with Not_found -> z in
+	     let z = try assoc_zone z assoc with Not_found -> z in
 	     let z = repr z in
 	     let ty = Cseparation.assoctype ty assoc in
 	     if not z.zone_is_var then add_heap_var s z ty else ();
@@ -357,7 +357,7 @@ let rec predicate p =
 	let reads = ZoneSet.fold 
 	  (fun (z,s,ty) acc ->
 	     let z = repr z in
-	     let z = try List.assoc z assoc with Not_found -> z in
+	     let z = try assoc_zone z assoc with Not_found -> z in
 	     let z = repr z in
 	     let ty = Cseparation.assoctype ty assoc in
 	     if not z.zone_is_var then add_heap_var s z ty else ();
@@ -525,7 +525,7 @@ let rec expr e = match e.nexpr_node with
 	    let reads = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->
 		 let z = repr z in
-		 let z = try List.assoc z assoc with Not_found -> z in
+		 let z = try assoc_zone z assoc with Not_found -> z in
 		 let z = repr z in
 		 let ty = Cseparation.assoctype ty assoc in
 		 if not z.zone_is_var then add_heap_var s z ty else ();
@@ -534,14 +534,14 @@ let rec expr e = match e.nexpr_node with
 	    let writes = ZoneSet.fold 
 	      (fun (z,s,ty) acc ->	 
 		 let z = repr z in
-		 let z = try List.assoc z assoc with Not_found -> z in
+		 let z = try assoc_zone z assoc with Not_found -> z in
 		 let z = repr z in
 		 let ty = Cseparation.assoctype ty assoc in
 		 if not z.zone_is_var then add_heap_var s z ty else ();
 		 ZoneSet.add (z,s,ty) acc)
 	(*	 let z = repr z in
 		 ZoneSet.add 
-		   ((try List.assoc z assoc with Not_found -> z),s,ty) acc)*)
+		   ((try assoc_zone z assoc with Not_found -> z),s,ty) acc)*)
 	      f.function_writes empty in
 	    { reads = reads; assigns = writes; 
 	      reads_var = f.function_reads_var; 

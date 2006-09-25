@@ -125,20 +125,20 @@ Ltac AssignsRec :=
       apply modifiable_trans_sub with (4:=id);
        [ subst; krakatoa; unfold inter_loc; intuition; fail 
        | Store | ModRec ]
-*)
+
   |  |- (not_assigns ?X1 ?X2 ?X3 (pset_singleton ?X4)) =>
        unfold not_assigns; intros tmpp validcond unchangedcond;
         generalize (pset_singleton_elim tmpp X4 unchangedcond);
         intro neq_pointer_cond;
         caduceus; progress auto
-(*
+
   |  |- (assigns ?X1 ?X2 ?X3 (union_loc ?X4 ?X5)) =>
 *) 
   end.
 
 
 Ltac Assigns := CleanAssigns; AssignsRec.
-
+(*
 Lemma not_not_in_pset_singleton : 
   forall z : Set,
   forall p : pointer z, ~ (not_in_pset p (pset_singleton p)).
@@ -147,7 +147,7 @@ Proof.
   elim (pset_singleton_elim H); auto.
 Save.
 Hint Resolve not_not_in_pset_singleton.
-
+*)
 Ltac Unchanged :=
   match goal with
   | |- (not_in_pset ?X1 pset_empty) =>

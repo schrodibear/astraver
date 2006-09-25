@@ -116,7 +116,7 @@ cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 
 bench_c_good () {
-    options="$1 -why-opt -split-user-conj"  # --typing-predicates"
+    options="$* -why-opt -split-user-conj"  # --typing-predicates"
     echo "-------------------------------------------------------------------"
     echo "Bench Caduceus+Simplify/Yices with options: $options"
     parsing="../../../bin/caduceus.opt $options"
@@ -151,8 +151,8 @@ bench_c_good () {
     ../../../bin/dp.opt -timeout 20 $VCS 2>/dev/null || true
 }
 
-bench_c_good
-bench_c_good -separation
+# bench_c_good
+bench_c_good -separation -no-zone-type
 
 cd ../../../examples-c
 make bench

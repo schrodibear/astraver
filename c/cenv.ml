@@ -460,9 +460,10 @@ module Env = struct
               let tt = Hashtbl.find (List.hd env.tags) n in
 	      begin match tt.tag_type with
 		| TTIncomplete ->
+		    Format.eprintf "set_enum_type_Incomplete : %s@." n;
                     (* tag already seen in this block but not yet defined *)
                     tt.tag_type <- TTEnum (tyn,fields)
-		| TTStructUnion (tyn',_) | TTEnum (tyn', _) ->  
+		| TTStructUnion (tyn',_) | TTEnum (tyn', _) ->
 		    (* tag [n] already defined in current block *)
 		    clash_tag loc tyn tyn'
 	      end;
