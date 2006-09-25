@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.209 2006-09-07 13:12:30 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.210 2006-09-25 14:12:31 marche Exp $ i*)
 
 
 open Format
@@ -318,7 +318,7 @@ let rec interp_term label old_label t =
 		 (fun x acc -> (interp_var label (heap_var_name x)) :: acc) 
 		 v.logic_heap_args targs in
 	let targs = List.fold_right 
-	  (fun (z,s,_) l -> LVar(zoned_name s (Pointer z))::l)
+	  (fun (z,s,_) l -> (interp_var label (zoned_name s (Pointer z)))::l)
 	  reads targs 
 	in
 	LApp (v.logic_name,targs)
@@ -435,7 +435,7 @@ let rec interp_predicate label old_label p =
 		 v.logic_heap_args targs in
 	let targs = List.fold_right 
 	  (fun (z,s,_) l -> 
-	     LVar(zoned_name s (Pointer z))::l)
+	     (interp_var label (zoned_name s (Pointer z)))::l)
 	  reads targs in
 	LPred (v.logic_name,targs)
     | NPfalse -> 

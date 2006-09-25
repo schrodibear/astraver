@@ -61,6 +61,7 @@ int test2() {
   return p1->balance + p2->balance;
 }
 
+
 /*
 void main() {
   purse *p = new_purse();
