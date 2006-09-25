@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.15 2006-09-25 11:02:24 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.16 2006-09-25 12:56:07 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -90,7 +90,9 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat (i,f,e)) ->
-      fprintf fmt "const_real_%s_%s_%s" i f e
+      fprintf fmt "%s.%s" i f ;
+      if not (e = "") then
+	failwith "exposant notation not yet suported "
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
@@ -204,7 +206,9 @@ let print_function_def fmt id (bl,pt,e) =
   fprintf fmt "@[:extrafuns ((%a %a %a))@]@\n@\n" idents id pure_type_list tl
     print_pure_type pt;
   fprintf fmt "@[:assumption@ (forall %a@ (= (%a %a)@ @[%a@]))@]@\n@\n" 
-    print_quantifiers bl idents id
+    print_quantifiers bl 
+    idents 
+    id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_term e
 
@@ -272,7 +276,11 @@ let output_file f =
                                             (= ?bcd Boolean_false)))@\n";
   fprintf fmt "  :extrafuns ((int_div Int Int Int))@\n";
   fprintf fmt "  :extrafuns ((int_mod Int Int Int))@\n";
+  
+  (* recursive call for pushing  into fmt the translated programm*)
+ 
   iter (output_elem fmt);
+  (* end of smtlib file *)
   fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();
   close_out cout
