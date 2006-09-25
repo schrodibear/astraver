@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.16 2006-09-25 12:56:07 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.17 2006-09-25 14:06:01 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -69,7 +69,12 @@ let print_bvar fmt id = fprintf fmt "?%a" Ident.print id
 let is_smtlib_keyword =
   let ht = Hashtbl.create 17 in
   List.iter (fun kw -> Hashtbl.add ht kw ()) 
-    ["benchmark"];
+    ["and";" benchmark";" distinct";"exists";"false";"flet";"forall";
+     "if then else";"iff";"implies";"ite";"let";"logic";"not";"or";
+     "sat";"theory";"true";"unknown";"unsat";"xor";
+     "assumption";"axioms";"defintion";"extensions";"formula";
+     "funs";"extrafuns";"extrasorts";"extrapreds. language";"logic";
+     "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool"];
   Hashtbl.mem ht
 
 let idents fmt s = 
