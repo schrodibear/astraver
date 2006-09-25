@@ -1,8 +1,18 @@
 
 (** Various implementations of the gcd. *)
 
-external logic gcd : int,int -> int
-external logic max : int,int -> int
+logic gcd : int,int -> int
+
+axiom gcd_asubb_b : forall a,b:int. gcd(a, b) = gcd(a - b, b)
+axiom gcd_a_bsuba : forall a,b:int. gcd(a, b) = gcd(a, b - a)
+axiom gcd_a_a : forall a:int. gcd(a, a) = a
+axiom gcd_a_0 : forall a:int. gcd(a, 0) = a
+
+logic max : int,int -> int
+
+axiom max_def :  
+  forall x:int. forall y:int. 
+  (max(x,y) = x or max(x,y) = y) and max(x,y) >= x and max(x,y) >= y
 
 (** Simple algorithm with difference *)
 
@@ -24,6 +34,9 @@ let gcd1 (a:int) (b:int) =
 
 
 (** Euclid's algorithm *)
+
+axiom gcd_a_amodb : forall a,b:int. gcd(a, b) = gcd(b, a % b)
+axiom mod_lt: forall a,b:int. 0 <= a % b < b
 
 let gcd2 (a:int) (b:int) =
   { a >= 0 and b >= 0 }
