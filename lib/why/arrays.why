@@ -13,6 +13,18 @@ parameter array_length_ :
 logic access : 'a farray, int -> 'a
 logic update : 'a farray, int, 'a -> 'a farray
 
+axiom access_update : 
+  forall t : 'a farray. forall i : int. forall v : int.
+  access(update(t,i,v), i) = v
+
+axiom access_update_eq : 
+  forall t : 'a farray. forall i : int. forall j : int. forall v : int.
+  i = j -> access(update(t,i,v), j) = v
+
+axiom access_update_neq : 
+  forall t : 'a farray. forall i : int. forall j : int. forall v : int.
+  i <> j -> access(update(t,i,v), j) = access(t,j)
+
 (* t[e] is syntactic sugar for (array_get t e) *)
 parameter array_get :
   t:'a array -> i:int -> 
