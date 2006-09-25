@@ -61,33 +61,33 @@ Admitted.
   forall (A1:Set), ((pointer) A1) -> ((pointer) A1) -> Z.
 Admitted.
 
-(*Why predicate*) Definition lt_pointer (A708:Set) (p1:((pointer) A708))
-  (p2:((pointer) A708))
+(*Why predicate*) Definition lt_pointer (A718:Set) (p1:((pointer) A718))
+  (p2:((pointer) A718))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) < (offset p2).
 
-(*Why predicate*) Definition le_pointer (A709:Set) (p1:((pointer) A709))
-  (p2:((pointer) A709))
+(*Why predicate*) Definition le_pointer (A719:Set) (p1:((pointer) A719))
+  (p2:((pointer) A719))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) <= (offset p2).
 
-(*Why predicate*) Definition gt_pointer (A710:Set) (p1:((pointer) A710))
-  (p2:((pointer) A710))
+(*Why predicate*) Definition gt_pointer (A720:Set) (p1:((pointer) A720))
+  (p2:((pointer) A720))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) > (offset p2).
 
-(*Why predicate*) Definition ge_pointer (A711:Set) (p1:((pointer) A711))
-  (p2:((pointer) A711))
+(*Why predicate*) Definition ge_pointer (A721:Set) (p1:((pointer) A721))
+  (p2:((pointer) A721))
   := (base_addr p1) = (base_addr p2) /\ (offset p1) >= (offset p2).
 
 
 
-(*Why predicate*) Definition valid (A712:Set) (a:alloc_table)
-  (p:((pointer) A712)) := 0 <= (offset p) /\ (offset p) < (block_length a p).
+(*Why predicate*) Definition valid (A722:Set) (a:alloc_table)
+  (p:((pointer) A722)) := 0 <= (offset p) /\ (offset p) < (block_length a p).
 
-(*Why predicate*) Definition valid_index (A713:Set) (a:alloc_table)
-  (p:((pointer) A713)) (i:Z)
+(*Why predicate*) Definition valid_index (A723:Set) (a:alloc_table)
+  (p:((pointer) A723)) (i:Z)
   := 0 <= ((offset p) + i) /\ ((offset p) + i) < (block_length a p).
 
-(*Why predicate*) Definition valid_range (A714:Set) (a:alloc_table)
-  (p:((pointer) A714)) (i:Z) (j:Z)
+(*Why predicate*) Definition valid_range (A724:Set) (a:alloc_table)
+  (p:((pointer) A724)) (i:Z) (j:Z)
   := 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) < (block_length a p).
 
 (*Why axiom*) Lemma offset_shift :
@@ -329,10 +329,10 @@ Admitted.
   forall (A1:Set), ((pointer) A1) -> ((pset) A1) -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A760:Set)
-  (A759:Set) (a:alloc_table) (m1:((memory) A759 A760)) (m2:((memory) A759
-  A760)) (l:((pset) A760))
-  := (forall (p:((pointer) A760)),
+(*Why predicate*) Definition not_assigns (A770:Set)
+  (A769:Set) (a:alloc_table) (m1:((memory) A769 A770)) (m2:((memory) A769
+  A770)) (l:((pset) A770))
+  := (forall (p:((pointer) A770)),
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments not_assigns.
 
@@ -598,14 +598,14 @@ Admitted.
 Admitted.
 
 
-(*Why predicate*) Definition valid_acc (A801:Set)
-  (A800:Set) (m1:((memory) ((pointer) A800) A801))
-  := (forall (p:((pointer) A801)),
+(*Why predicate*) Definition valid_acc (A811:Set)
+  (A810:Set) (m1:((memory) ((pointer) A810) A811))
+  := (forall (p:((pointer) A811)),
       (forall (a:alloc_table), ((valid a p) -> (valid a (acc m1 p))))).
 
-(*Why predicate*) Definition valid_acc_range (A803:Set)
-  (A802:Set) (m1:((memory) ((pointer) A802) A803)) (size:Z)
-  := (forall (p:((pointer) A803)),
+(*Why predicate*) Definition valid_acc_range (A813:Set)
+  (A812:Set) (m1:((memory) ((pointer) A812) A813)) (size:Z)
+  := (forall (p:((pointer) A813)),
       (forall (a:alloc_table),
        ((valid a p) -> (valid_range a (acc m1 p) 0 (size - 1))))).
 
@@ -618,26 +618,26 @@ Admitted.
       ((valid_acc_range m1 size) -> ((valid a p) -> (valid a (acc m1 p)))))))).
 Admitted.
 
-(*Why predicate*) Definition separation1 (A807:Set)
-  (A806:Set) (m1:((memory) ((pointer) A806) A807))
-  (m2:((memory) ((pointer) A806) A807))
-  := (forall (p:((pointer) A807)),
+(*Why predicate*) Definition separation1 (A817:Set)
+  (A816:Set) (m1:((memory) ((pointer) A816) A817))
+  (m2:((memory) ((pointer) A816) A817))
+  := (forall (p:((pointer) A817)),
       (forall (a:alloc_table),
        ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
 
-(*Why predicate*) Definition separation1_range1 (A809:Set)
-  (A808:Set) (m1:((memory) ((pointer) A808) A809))
-  (m2:((memory) ((pointer) A808) A809)) (size:Z)
-  := (forall (p:((pointer) A809)),
+(*Why predicate*) Definition separation1_range1 (A819:Set)
+  (A818:Set) (m1:((memory) ((pointer) A818) A819))
+  (m2:((memory) ((pointer) A818) A819)) (size:Z)
+  := (forall (p:((pointer) A819)),
       (forall (a:alloc_table),
        ((valid a p) ->
         (forall (i:Z),
          (0 <= i /\ i < size ->
           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p)))))))).
 
-(*Why predicate*) Definition separation1_range (A811:Set)
-  (A810:Set) (m:((memory) ((pointer) A810) A811)) (size:Z)
-  := (forall (p:((pointer) A811)),
+(*Why predicate*) Definition separation1_range (A821:Set)
+  (A820:Set) (m:((memory) ((pointer) A820) A821)) (size:Z)
+  := (forall (p:((pointer) A821)),
       (forall (a:alloc_table),
        ((valid a p) ->
         (forall (i1:Z),
@@ -648,19 +648,19 @@ Admitted.
              ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
                                                               (shift p i2)))))))))))).
 
-(*Why predicate*) Definition separation2 (A813:Set)
-  (A812:Set) (m1:((memory) ((pointer) A812) A813))
-  (m2:((memory) ((pointer) A812) A813))
-  := (forall (p1:((pointer) A813)),
-      (forall (p2:((pointer) A813)),
+(*Why predicate*) Definition separation2 (A823:Set)
+  (A822:Set) (m1:((memory) ((pointer) A822) A823))
+  (m2:((memory) ((pointer) A822) A823))
+  := (forall (p1:((pointer) A823)),
+      (forall (p2:((pointer) A823)),
        (forall (a:alloc_table),
         (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2))))))).
 
-(*Why predicate*) Definition separation2_range1 (A815:Set)
-  (A814:Set) (m1:((memory) ((pointer) A814) A815))
-  (m2:((memory) ((pointer) A814) A815)) (size:Z)
-  := (forall (p:((pointer) A815)),
-      (forall (q:((pointer) A815)),
+(*Why predicate*) Definition separation2_range1 (A825:Set)
+  (A824:Set) (m1:((memory) ((pointer) A824) A825))
+  (m2:((memory) ((pointer) A824) A825)) (size:Z)
+  := (forall (p:((pointer) A825)),
+      (forall (q:((pointer) A825)),
        (forall (a:alloc_table),
         (forall (i:Z),
          (0 <= i /\ i < size ->

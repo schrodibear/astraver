@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.9 2006-09-18 12:19:49 couchot Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.10 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 open Options
 open Vcg
@@ -43,7 +43,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices
+type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ccx
 
 let push_elem p e = 
   assert (match e with Dgoal _ -> false | _ -> true);
@@ -54,6 +54,7 @@ let push_elem p e =
   | Zenon -> Zenon.push_decl e
   | Rvsat -> Smtlib.push_decl e
   | Yices -> Smtlib.push_decl e
+  | Ccx -> Pretty.push_decl e
 
 let push_obligation p (loc, id, s) = 
   let g = Dgoal (loc, id, s) in
@@ -64,6 +65,7 @@ let push_obligation p (loc, id, s) =
   | Zenon -> Zenon.push_decl g
   | Rvsat -> Smtlib.push_decl g
   | Yices -> Smtlib.push_decl g
+  | Ccx -> Pretty.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
 let output_file ?encoding p (elems,o) =
@@ -75,6 +77,7 @@ let output_file ?encoding p (elems,o) =
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
     | Rvsat -> Smtlib.reset ()
     | Yices -> Smtlib.reset ()
+    | Ccx -> Pretty.reset ()
 
   end;
   List.iter (push_elem p) elems;
@@ -87,6 +90,7 @@ let output_file ?encoding p (elems,o) =
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
     | Rvsat -> Smtlib.output_file f; f ^ "_why.smt"
     | Yices -> Smtlib.output_file f; f ^ "_why.smt"
+    | Ccx -> Pretty.output_file f; f ^ "_why.why"
 
 open Format
 
@@ -97,6 +101,7 @@ let prover_name = function
   | Zenon -> "Zenon"
   | Rvsat -> "rv-sat"
   | Yices -> "Yices"
+  | Ccx -> "ccX"
 
 let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -118,6 +123,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.rvsat ~debug ?timeout ~filename ()
     | Yices -> 
 	Calldp.yices ~debug ?timeout ~filename ()
+    | Ccx ->
+	Calldp.ccx ~debug ?timeout ~filename ()
   in
   if not debug then begin try Sys.remove filename with _ -> () end;
   r

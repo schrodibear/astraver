@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.73 2006-06-09 13:40:01 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.74 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -58,7 +58,7 @@ let rec print_pure_type fmt = function
       fprintf fmt "warray(%a)" print_pure_type pt
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> assert false
-  | PTexternal (i ,id) -> Monomorph.symbol fmt (id, i)
+  | PTexternal (i ,id) -> fprintf fmt "%s" (Monomorph.symbol (id, i))
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -112,10 +112,10 @@ let print_term fmt t =
     | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
-	fprintf fmt "%a" Monomorph.symbol (id, i)
+	fprintf fmt "%s" (Monomorph.symbol (id, i))
     | Tapp (id, tl, i) -> 
-	fprintf fmt "%a(@[%a@])" 
-	  Monomorph.symbol (id, i) (print_list comma print0) tl
+	fprintf fmt "%s(@[%a@])" 
+	  (Monomorph.symbol (id, i)) (print_list comma print0) tl
   in
   print0 fmt t
 
@@ -177,7 +177,7 @@ let print_predicate fmt p =
     | Papp (id, [a;b], _) when is_neq id ->
 	fprintf fmt "%a /=@ %a" print_term a print_term b
     | Papp (id, l, i) -> 	
-	fprintf fmt "%a(@[" Monomorph.symbol (id, i);
+	fprintf fmt "%s(@[" (Monomorph.symbol (id, i));
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> 

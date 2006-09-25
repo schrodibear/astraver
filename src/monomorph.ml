@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.20 2006-09-18 12:19:50 couchot Exp $ i*)
+(*i $Id: monomorph.ml,v 1.21 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -59,11 +59,11 @@ let name id i =
 let external_logic = Hashtbl.create 97
 let add_external id = Hashtbl.add external_logic id ()
 
-let symbol fmt (id, i) =
+let symbol (id, i) =
   if Hashtbl.mem external_logic id then
-    Ident.print fmt id
+    Ident.string id
   else
-    fprintf fmt "%a%a" Ident.print id print_instance i
+    name (Ident.string id) i
 
 (* iteration over instances (function [f]) and types (function [g]) *)
 module IterIT = struct

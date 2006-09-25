@@ -14,10 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pretty.mli,v 1.2 2006-06-21 09:19:46 filliatr Exp $ i*)
+(*i $Id: pretty.mli,v 1.3 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 (* Why pretty-printer *)
 
 val push_decl : Logic_decl.t -> unit
+
+val reset : unit -> unit
 
 val output_file : string -> unit

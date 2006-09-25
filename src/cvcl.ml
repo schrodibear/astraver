@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.43 2006-06-09 13:40:00 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.44 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -73,7 +73,7 @@ let rec print_pure_type fmt = function
       fprintf fmt "(ARRAY INT OF %a)" print_pure_type pt
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (i ,id) -> Monomorph.symbol fmt (id, i)
+  | PTexternal (i ,id) -> fprintf fmt "%s" (Monomorph.symbol (id, i))
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -115,9 +115,9 @@ let rec print_term fmt = function
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
   | Tapp (id, [], i) ->
-      fprintf fmt "%a" Monomorph.symbol (id, i)
+      fprintf fmt "%s" (Monomorph.symbol (id, i))
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[%a(%a)@]" Monomorph.symbol (id, i) print_terms tl
+      fprintf fmt "@[%s(%a)@]" (Monomorph.symbol (id, i)) print_terms tl
 
 and print_terms fmt tl = 
   print_list comma print_term fmt tl
@@ -147,7 +147,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[%a(%a)@]" Monomorph.symbol (id, i) print_terms tl
+      fprintf fmt "@[%s(%a)@]" (Monomorph.symbol (id, i)) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(%a =>@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.12 2006-09-18 12:20:35 couchot Exp $ i*)
+(*i $Id: calldp.ml,v 1.13 2006-09-25 11:02:24 filliatr Exp $ i*)
 
 open Printf
 
@@ -113,6 +113,22 @@ let yices ?debug ?(timeout=10) ~filename:f () =
       if c = 0 then Valid else Invalid None
     end
 
+let ccx ?debug ?(timeout=10) ~filename:f () =
+  let out = Filename.temp_file "out" "" in
+  let cmd = sprintf "timeout %d ccX %s > %s 2>&1" timeout f out in
+  let c = Sys.command cmd in
+  if c = 137 then
+    Timeout
+  else 
+    let c = Sys.command (sprintf "grep -q -w Error %s" out) in
+    if c = 0 then begin 
+      remove_file ?debug out; 
+      ProverFailure ("command failed: " ^ cmd)
+    end else begin
+      let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
+      remove_file ?debug out;
+      if c = 0 then Valid else Invalid None
+    end
 
 let harvey ?debug ?(timeout=10) ?(eclauses=200000) ~filename:f () =
   let out = Sys.command (sprintf "rvc  %s > /dev/null 2>&1" f) in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.14 2006-09-19 17:34:49 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.15 2006-09-25 11:02:24 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -66,6 +66,20 @@ let prefix id =
 
 let print_bvar fmt id = fprintf fmt "?%a" Ident.print id
 
+let is_smtlib_keyword =
+  let ht = Hashtbl.create 17 in
+  List.iter (fun kw -> Hashtbl.add ht kw ()) 
+    ["benchmark"];
+  Hashtbl.mem ht
+
+let idents fmt s = 
+  if is_smtlib_keyword s then
+    fprintf fmt "smtlib__%s" s
+  else 
+    fprintf fmt "%s" s
+
+let ident fmt id = idents fmt (Ident.string id)
+
 let rec print_term fmt = function
   | Tvar id -> 
       print_bvar fmt id
@@ -85,10 +99,10 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, [], i) -> 
-      fprintf fmt "%a" Encoding.symbol (id, i)
+      fprintf fmt "%a" idents (Encoding.symbol (id, i))
   | Tapp (id, tl, i) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	Encoding.symbol (id, i)	(print_list space print_term) tl
+	idents (Encoding.symbol (id, i)) (print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -101,7 +115,7 @@ let rec print_pure_type fmt = function
   | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar v -> assert false (* fprintf fmt "A%d" v.tag *)
-  | PTexternal (i,id) -> Encoding.symbol fmt (id, i)
+  | PTexternal (i,id) -> idents fmt (Encoding.symbol (id, i))
 
 and instance fmt = function
   | [] -> ()
@@ -119,7 +133,7 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "false"
   | Pvar id -> 
-      fprintf fmt "%a" Ident.print id
+      fprintf fmt "%a" ident id
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "true;; was well founded @\n" 
   | Papp (id, [a; b], _) when is_eq id ->
@@ -132,7 +146,8 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[(%a@ %a)@]" Encoding.symbol (id, i) print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" 
+	idents (Encoding.symbol (id, i)) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
@@ -178,18 +193,18 @@ let pure_type_list = print_list space print_pure_type
 
 let print_predicate_def fmt id (bl,p) =
   let tl = List.map snd bl in
-  fprintf fmt "@[:extrapreds ((%s %a))@]@\n@\n" id pure_type_list tl;
-  fprintf fmt "@[:assumption@ (forall %a@ (iff (%s %a)@ @[%a@]))@]@\n@\n" 
-    print_quantifiers bl id
+  fprintf fmt "@[:extrapreds ((%a %a))@]@\n@\n" idents id pure_type_list tl;
+  fprintf fmt "@[:assumption@ (forall %a@ (iff (%a %a)@ @[%a@]))@]@\n@\n" 
+    print_quantifiers bl idents id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_predicate p
 
 let print_function_def fmt id (bl,pt,e) =
   let tl = List.map snd bl in
-  fprintf fmt "@[:extrafuns ((%s %a %a))@]@\n@\n" id pure_type_list tl
+  fprintf fmt "@[:extrafuns ((%a %a %a))@]@\n@\n" idents id pure_type_list tl
     print_pure_type pt;
-  fprintf fmt "@[:assumption@ (forall %a@ (= (%s %a)@ @[%a@]))@]@\n@\n" 
-    print_quantifiers bl id
+  fprintf fmt "@[:assumption@ (forall %a@ (= (%a %a)@ @[%a@]))@]@\n@\n" 
+    print_quantifiers bl idents id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_term e
 
@@ -225,10 +240,11 @@ let print_logic fmt id t =
   fprintf fmt ";;;; Why logic %s@\n" id;
   match t with
     | Predicate tl ->
-	fprintf fmt "@[:extrapreds ((%s %a))@]@\n@\n" id pure_type_list tl
+	fprintf fmt "@[:extrapreds ((%a %a))@]@\n@\n" 
+	  idents id pure_type_list tl
     | Function (tl, pt) ->
-	fprintf fmt "@[:extrafuns ((%s %a %a))@]@\n@\n" id pure_type_list tl
-	  print_pure_type pt
+	fprintf fmt "@[:extrafuns ((%a %a %a))@]@\n@\n" 
+	  idents id pure_type_list tl print_pure_type pt
 	
 let output_elem fmt = function
   | Dtype (loc, [], id) -> declare_type fmt id

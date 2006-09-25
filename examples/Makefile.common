@@ -10,6 +10,9 @@ dp: simplify cvcl
 simplify: $(VO:_valid.vo=_why.sx)
 	dp -timeout 10 $^  2>/dev/null
 
+yices: $(VO:_valid.vo=_why.smt)
+	dp -timeout 10 $^  2>/dev/null
+
 zenon: $(VO:_valid.vo=_why.znn)
 	dp -timeout 10 $^ 2>/dev/null
 
@@ -39,6 +42,9 @@ harvey: $(VO:_valid.vo=_why.rv)
 
 %_why.sx: %.mlw $(WHY)
 	$(WHY) --simplify $<
+
+%_why.smt: %.mlw $(WHY)
+	$(WHY) --smtlib --encoding mono $<
 
 %_why.znn: %.mlw $(WHY)
 	$(WHY) --zenon $<

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.mli,v 1.6 2006-04-24 14:28:45 filliatr Exp $ i*)
+(*i $Id: monomorph.mli,v 1.7 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)
@@ -34,5 +34,4 @@ val reset : unit -> unit
 (* [symbol id i] prints the instance [i] of symbol [id] using the same 
    conventions as in the monomorphization process *)
 
-val symbol : Format.formatter -> Ident.t * Logic.instance -> unit
-
+val symbol : Ident.t * Logic.instance -> string

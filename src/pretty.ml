@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pretty.ml,v 1.3 2006-07-04 09:08:54 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.4 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -23,6 +23,8 @@ open Logic
 open Logic_decl
 
 let queue = Queue.create ()
+
+let reset () = Queue.clear queue
 
 let push_decl d = Queue.add d queue
 

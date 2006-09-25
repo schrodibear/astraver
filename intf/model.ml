@@ -120,8 +120,15 @@ let yices = {
   pr_id = Dispatcher.Yices;
   pr_enc = Monomorph;
   }
+let ccx = {
+  pr_name = "ccX";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Ccx;
+  pr_enc = Monomorph;
+  }
 
-let provers = [simplify; rvsat; yices; simplify_rec;
+let provers = [simplify; yices; ccx; rvsat; simplify_rec;
 	       zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
 	       harvey; cvcl]
 let provers_selected = ref provers

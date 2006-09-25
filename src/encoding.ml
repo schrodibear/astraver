@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: encoding.ml,v 1.3 2006-09-18 12:19:49 couchot Exp $ i*)
+(*i $Id: encoding.ml,v 1.4 2006-09-25 11:02:23 filliatr Exp $ i*)
 
 open Options
 
@@ -41,7 +41,6 @@ let iter f = match get_types_encoding () with
   | Recursive -> Encoding_rec.iter f
   | Monomorph -> Monomorph.iter f
 
-let symbol fmt ((id,_) as s) = match get_types_encoding () with
-  | Monomorph -> Monomorph.symbol fmt s
-  | _ -> Ident.print fmt id
-
+let symbol ((id,_) as s) = match get_types_encoding () with
+  | Monomorph -> Monomorph.symbol s
+  | _ -> Ident.string id
