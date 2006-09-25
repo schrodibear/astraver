@@ -1,7 +1,8 @@
 
 (* exemple pour le Coq'Art *)
 
-external logic l : int
+logic l : int
+axiom l_pos : 0 < l
 
 parameter a : int array
 parameter x,y : int ref

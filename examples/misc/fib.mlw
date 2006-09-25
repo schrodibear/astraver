@@ -7,7 +7,11 @@
     where F is the Fibonacci function defined on the external logical side
     (with F(0) = F(1) = 1 and F(n+2) = F(n+1) + F(n)) *)
 
-external logic F : int -> int
+logic F : int -> int
+
+axiom F_0 : F(0) = 1
+axiom F_1 : F(1) = 1
+axiom F_n : forall n:int. n>=2 -> F(n) = F(n-1) + F(n-2)
 
 (** Naive and purely functional *)
 

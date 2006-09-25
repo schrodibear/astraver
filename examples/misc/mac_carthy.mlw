@@ -1,7 +1,11 @@
 
 (**** McCarthy's ``91'' function. *)
 
-external logic max : int,int -> int
+logic max : int,int -> int
+
+axiom max_def :  
+  forall x:int. forall y:int. 
+  (max(x,y) = x or max(x,y) = y) and max(x,y) >= x and max(x,y) >= y
 
 let rec f91 (n:int) : int { variant max(0,101-n) } =
   {} 
