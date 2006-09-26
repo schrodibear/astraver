@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: invariant.ml,v 1.37 2006-09-25 14:34:46 hubert Exp $ i*)
+(*i $Id: invariant.ml,v 1.38 2006-09-26 11:39:17 hubert Exp $ i*)
 
 open Coptions
 open Creport
@@ -692,7 +692,6 @@ let add_typing_predicates dl =
   in
   (* 2. define all is_enum_E predicates *)
   let declare_enum_type s (tyn, vl) acc =
-    Format.eprintf "declare_enum_type : %s@." s;
     let ty = noattr tyn in
     let n = "is_enum_" ^ s in
     let n' = "any_enum_" ^ s in
