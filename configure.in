@@ -248,7 +248,8 @@ else
 	MIZARLIB=$MIZFILES
 	AC_MSG_RESULT($MIZARLIB)
     else
-	AC_MSG_ERROR(Cannot find Mizar library; please set \$MIZFILES)
+	AC_MSG_WARN(Cannot find Mizar library; please set \$MIZFILES)
+	MIZAR=no
     fi
     fi
 fi

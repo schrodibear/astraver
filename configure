@@ -1959,9 +1959,9 @@ echo "${ECHO_T}$MIZARLIB" >&6
 	echo "$as_me:$LINENO: result: $MIZARLIB" >&5
 echo "${ECHO_T}$MIZARLIB" >&6
     else
-	{ { echo "$as_me:$LINENO: error: Cannot find Mizar library; please set \$MIZFILES" >&5
-echo "$as_me: error: Cannot find Mizar library; please set \$MIZFILES" >&2;}
-   { (exit 1); exit 1; }; }
+	{ echo "$as_me:$LINENO: WARNING: Cannot find Mizar library; please set \$MIZFILES" >&5
+echo "$as_me: WARNING: Cannot find Mizar library; please set \$MIZFILES" >&2;}
+	MIZAR=no
     fi
     fi
 fi
