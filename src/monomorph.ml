@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.23 2006-09-27 15:46:20 marche Exp $ i*)
+(*i $Id: monomorph.ml,v 1.24 2006-09-27 15:47:22 marche Exp $ i*)
 
 (* monomorphic output *)
 
@@ -68,7 +68,9 @@ let symbol (id, i) =
   else
     name n i
   in
+(*
   if n="upd" then eprintf "Monomorph : i=%a, rename %s(%a) -> %s@." print_instance i n dbprint id nn;
+*)
   nn
 
 (* iteration over instances (function [f]) and types (function [g]) *)
