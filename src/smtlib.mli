@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.mli,v 1.3 2006-03-07 11:12:50 filliatr Exp $ i*)
+(*i $Id: smtlib.mli,v 1.4 2006-10-02 09:08:38 couchot Exp $ i*)
 
 open Cc
 
@@ -24,3 +24,4 @@ val push_decl : Logic_decl.t -> unit
 
 val output_file : string -> unit
 
+val output_file_reduced : string -> Logic_decl.t Queue.t  -> unit

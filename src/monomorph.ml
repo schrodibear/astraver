@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.24 2006-09-27 15:47:22 marche Exp $ i*)
+(*i $Id: monomorph.ml,v 1.25 2006-10-02 09:08:37 couchot Exp $ i*)
 
 (* monomorphic output *)
 
@@ -546,5 +546,4 @@ let reset () =
   Hinstance.clear declared_logic;
   Hashtbl.clear logic_symbols;
   Hashtbl.clear axioms
-
 

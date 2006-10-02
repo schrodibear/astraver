@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.74 2006-09-19 17:34:49 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.75 2006-10-02 09:08:37 couchot Exp $ i*)
 
 open Format
 
@@ -47,8 +47,10 @@ let all_vc_ = ref false
 let prelude_ = ref true
 let arrays_ = ref true
 let floats_ = ref false
+let pruning_ = ref false 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
+
 
 type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
@@ -154,7 +156,7 @@ Typing/Annotations/VCG options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --partial          partial correctness
   --total            total correctness
-
+  --prune            prunes the theory 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
   --no-arrays    do not read the arrays prelude file (arrays.why)
@@ -348,6 +350,8 @@ let files =
 	termination_ := Partial; parse args
     | ("-total" | "--total") :: args ->
 	termination_ := Total; parse args
+    | ("-prune" | "--prune") :: args ->
+	 pruning_ := true ; parse args
     | ("-encoding" | "--encoding") :: s :: args ->
 	(match s with 
 	  "none" -> types_encoding_ := NoEncoding 
@@ -402,6 +406,7 @@ let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_
 let gappa_rnd = !gappa_rnd_
+let pruning = !pruning_
 
 let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec

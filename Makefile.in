@@ -115,7 +115,8 @@ CMO = src/lib.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
 	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo src/pretty.cmo  \
-           src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo src/main.cmo
+           src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo  \
+	   src/unionfind.cmo src/theoryreducer.cmo src/main.cmo 
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
@@ -360,7 +361,7 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local-install: $(BINARY) $(CADUCEUS) bin/gwhy.$(OCAMLBEST)
+local-install: $(BINARY) $(CADUCEUS) bin/gwhy.$(OCAMLBEST) byte
 	cp $(BINARY) $$HOME/bin/why
 	cp $(CADUCEUS) $$HOME/bin/caduceus
 	if test -f bin/gwhy.$(OCAMLBEST); then \

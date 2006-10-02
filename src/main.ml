@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.108 2006-09-19 17:34:49 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.109 2006-10-02 09:08:37 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -31,19 +31,23 @@ open Util
 open Logic
 open Logic_decl
 
+
 (*s Prover dependent functions. *)
+
+
+let declarationQueue = Queue.create ()
 
 let reset () =
   Vcg.logs := []; 
   match prover () with
-  | Pvs -> (*Pvs.reset*) ()
-  | Coq _ -> Coq.reset ()
-  | HolLight -> Holl.reset ()
-  | Mizar -> Mizar.reset ()
-  | Isabelle -> Isabelle.reset ()
-  | Hol4 -> Hol4.reset ()
-  | Harvey | Simplify | Zenon | CVCLite | SmtLib | Gappa 
-  | Why | Dispatcher -> ()
+    | Pvs -> (*Pvs.reset*) ()
+    | Coq _ -> Coq.reset ()
+    | HolLight -> Holl.reset ()
+    | Mizar -> Mizar.reset ()
+    | Isabelle -> Isabelle.reset ()
+    | Hol4 -> Hol4.reset ()
+    | Harvey | Simplify | Zenon | CVCLite | SmtLib | Gappa 
+    | Why | Dispatcher -> ()
 
 let add_loc = function
   | Dtype (loc, _, s)
@@ -55,21 +59,26 @@ let add_loc = function
 
 let push_decl d = 
   add_loc d;
-  match prover () with
-  | Pvs -> Pvs.push_decl d
-  | Coq _ -> Coq.push_decl d
-  | HolLight -> Holl.push_decl d
-  | Mizar -> Mizar.push_decl d
-  | Harvey -> Harvey.push_decl d
-  | Simplify -> Simplify.push_decl d
-  | Zenon -> Zenon.push_decl d
-  | CVCLite -> Cvcl.push_decl d
-  | SmtLib -> Smtlib.push_decl d
-  | Isabelle -> Isabelle.push_decl d
-  | Hol4 -> Hol4.push_decl d
-  | Gappa -> Gappa.push_decl d
-  | Dispatcher -> Dispatcher.push_decl d
-  | Why -> Pretty.push_decl d
+  Queue.push d declarationQueue;
+  if not pruning then 
+    match prover () with
+      | Pvs -> Pvs.push_decl d
+      | Coq _ -> Coq.push_decl d
+      | HolLight -> Holl.push_decl d
+      | Mizar -> Mizar.push_decl d
+      | Isabelle -> Isabelle.push_decl d
+      | Hol4 -> Hol4.push_decl d
+      | Gappa -> Gappa.push_decl d  
+      | Why -> Pretty.push_decl d
+      | Dispatcher -> Dispatcher.push_decl d      
+      | Harvey -> Harvey.push_decl d
+      | Simplify -> Simplify.push_decl d
+      | Zenon -> Zenon.push_decl d
+      | CVCLite -> Cvcl.push_decl d
+      | SmtLib -> Smtlib.push_decl d
+	  
+
+
 
 let push_obligations = 
   List.iter 
@@ -101,12 +110,12 @@ let output fwe =
     | Pvs -> Pvs.output_file fwe
     | Coq _ -> Coq.output_file fwe
     | HolLight -> Holl.output_file fwe
-    | Mizar -> Mizar.output_file fwe
+    | Mizar -> Mizar.output_file fwe    
     | Harvey -> Harvey.output_file fwe
     | Simplify -> Simplify.output_file fwe
     | CVCLite -> Cvcl.output_file fwe
     | Zenon -> Zenon.output_file fwe
-    | SmtLib -> Smtlib.output_file fwe
+    | SmtLib ->  Smtlib.output_file fwe
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
     | Gappa -> Gappa.output_file fwe
@@ -114,6 +123,31 @@ let output fwe =
     | Why -> Pretty.output_file fwe
   end
 
+
+
+(** This method aims at translating the theory  according to
+    the selected encoding  
+    @q is the queue of  theory that will be modified
+**)
+let encode q = 
+  let callEncoding d =  match prover () with
+    | Pvs -> Pvs.push_decl d
+    | Coq _ -> Coq.push_decl d
+    | HolLight -> Holl.push_decl d
+    | Mizar -> Mizar.push_decl d
+    | Isabelle -> Isabelle.push_decl d
+    | Hol4 -> Hol4.push_decl d
+    | Gappa -> Gappa.push_decl d  
+    | Why -> Pretty.push_decl d
+    | Dispatcher -> Dispatcher.push_decl d      
+    | Harvey -> Harvey.push_decl d
+    | Simplify -> Simplify.push_decl d
+    | Zenon -> Zenon.push_decl d
+    | CVCLite -> Cvcl.push_decl d
+    | SmtLib -> Smtlib.push_decl d
+  in
+  Queue.iter callEncoding q 
+ 
 (*s Processing of a single declaration [let id = p]. *)
 
 let print_if_debug p x = if_debug_3 eprintf "  @[%a@]@." p x
@@ -148,12 +182,12 @@ let interp_program id p =
   if ocaml then begin Ocaml.push_program id p; raise Exit end;
 
   (***
-  if_debug eprintf "* functionalization@.";
-  let ren = initial_renaming env in
-  let cc = Mlize.trad p ren in
-  if_debug_3 eprintf "  %a@\n  -----@." print_cc_term cc;
-  let cc = Red.red cc in
-  print_if_debug print_cc_term cc;
+      if_debug eprintf "* functionalization@.";
+      let ren = initial_renaming env in
+      let cc = Mlize.trad p ren in
+      if_debug_3 eprintf "  %a@\n  -----@." print_cc_term cc;
+      let cc = Red.red cc in
+      print_if_debug print_cc_term cc;
   ***)
 
   if_debug eprintf "* generating obligations@.";
@@ -172,11 +206,11 @@ let interp_program id p =
     let ren = initial_renaming env in
     let tt = Monad.trad_type_c ren env c in
     Coq.push_parameter (ids ^ "_valid") tt;
-  (*** TODO
-  push_validation ids tt v;
-  if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
-  ***)
-  flush stderr
+    (*** TODO
+	 push_validation ids tt v;
+	 if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
+    ***)
+    flush stderr
 
 (*s Processing of a program. *)
 
@@ -200,79 +234,79 @@ let cannot_be_generalized = function
 let interp_decl ?(prelude=false) d = 
   let lab = Label.empty in
   match d with 
-  | Program (id, p) ->
-      if Env.is_global id then raise_located p.ploc (Clash id);
-      (try interp_program id p with Exit -> ())
-  | Parameter (loc, ext, ids, v) ->
-      let env = Env.empty_progs () in
-      let v = Ltyping.type_v loc lab env v in
-      if ext && is_mutable v then raise_located loc MutableExternal;
-      let gv = Env.generalize_type_v v in
-      let v_spec = snd (specialize_type_scheme gv) in
-      if not (Vset.is_empty gv.scheme_vars) && cannot_be_generalized v_spec 
-      then
-	raise_located loc CannotGeneralize;
-      List.iter (add_external loc gv) ids;
-      if ext && ocaml_externals || ocaml then Ocaml.push_parameters ids v_spec;
-      if not ext && not (is_mutable v_spec) then
-	let tv = Monad.trad_scheme_v (initial_renaming env) env gv in
-	List.iter (add_parameter gv tv) ids
-  | Exception (loc, id, v) ->
-      let env = Env.empty_progs () in
-      if is_exception id then raise_located loc (ClashExn id);
-      let v = option_app (Ltyping.pure_type env) v in
-      add_exception id v
-  | Logic (loc, ext, ids, t) ->
-      let add id =
+    | Program (id, p) ->
+	if Env.is_global id then raise_located p.ploc (Clash id);
+	(try interp_program id p with Exit -> ())
+    | Parameter (loc, ext, ids, v) ->
+	let env = Env.empty_progs () in
+	let v = Ltyping.type_v loc lab env v in
+	if ext && is_mutable v then raise_located loc MutableExternal;
+	let gv = Env.generalize_type_v v in
+	let v_spec = snd (specialize_type_scheme gv) in
+	if not (Vset.is_empty gv.scheme_vars) && cannot_be_generalized v_spec 
+	then
+	  raise_located loc CannotGeneralize;
+	List.iter (add_external loc gv) ids;
+	if ext && ocaml_externals || ocaml then Ocaml.push_parameters ids v_spec;
+	if not ext && not (is_mutable v_spec) then
+	  let tv = Monad.trad_scheme_v (initial_renaming env) env gv in
+	  List.iter (add_parameter gv tv) ids
+    | Exception (loc, id, v) ->
+	let env = Env.empty_progs () in
+	if is_exception id then raise_located loc (ClashExn id);
+	let v = option_app (Ltyping.pure_type env) v in
+	add_exception id v
+    | Logic (loc, ext, ids, t) ->
+	let add id =
+	  if is_global_logic id then raise_located loc (Clash id);
+	  let t = Ltyping.logic_type t in
+	  let t = generalize_logic_type t in
+	  add_global_logic id t;
+	  if ext then 
+	    Monomorph.add_external id
+	  else
+	    push_decl (Dlogic (loc, Ident.string id, t))
+	in
+	List.iter add ids
+    | Predicate_def (loc, id, pl, p) ->
+	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);
-	let t = Ltyping.logic_type t in
+	let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
+	let t = Predicate (List.map snd pl) in
 	let t = generalize_logic_type t in
 	add_global_logic id t;
-	if ext then 
-	  Monomorph.add_external id
-	else
-	  push_decl (Dlogic (loc, Ident.string id, t))
-      in
-      List.iter add ids
-  | Predicate_def (loc, id, pl, p) ->
-      let env = Env.empty_logic () in
-      if is_global_logic id then raise_located loc (Clash id);
-      let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
-      let t = Predicate (List.map snd pl) in
-      let t = generalize_logic_type t in
-      add_global_logic id t;
-      let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
-      let p = Ltyping.predicate lab env' p in
-      let p = generalize_predicate_def (pl,p) in
-      push_decl (Dpredicate_def (loc, Ident.string id, p))
-  | Function_def (loc, id, pl, ty, e) ->
-      let env = Env.empty_logic () in
-      if is_global_logic id then raise_located loc (Clash id);
-      let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
-      let ty = Ltyping.pure_type env ty in
-      let t = Function (List.map snd pl, ty) in
-      let t = generalize_logic_type t in
-      add_global_logic id t;
-      let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
-      let e,ty' = Ltyping.term lab env' e in
-      if not (eq_pure_type ty ty') then 
-	Ltyping.expected_type loc (PureType ty);
-      let f = generalize_function_def (pl,ty,e) in
-      push_decl (Dfunction_def (loc, Ident.string id, f))
-  | Axiom (loc, id, p) ->
-      let env = Env.empty_logic () in
-      let p = Ltyping.predicate lab env p in
-      let p = generalize_predicate p in
-      push_decl (Daxiom (loc, Ident.string id, p))
-  | Goal (loc, id, p) ->
-      let env = Env.empty_logic () in
-      let p = Ltyping.predicate lab env p in
-      let s = generalize_sequent ([], p) in
-      push_decl (Dgoal (loc, Ident.string id, s))
-  | TypeDecl (loc, ext, vl, id) ->
-      Env.add_type loc vl id;
-      let vl = List.map Ident.string vl in
-      if not ext then push_decl (Dtype (loc, vl, Ident.string id))
+	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
+	let p = Ltyping.predicate lab env' p in
+	let p = generalize_predicate_def (pl,p) in
+	push_decl (Dpredicate_def (loc, Ident.string id, p))
+    | Function_def (loc, id, pl, ty, e) ->
+	let env = Env.empty_logic () in
+	if is_global_logic id then raise_located loc (Clash id);
+	let pl = List.map (fun (x,t) -> (x, Ltyping.pure_type env t)) pl in
+	let ty = Ltyping.pure_type env ty in
+	let t = Function (List.map snd pl, ty) in
+	let t = generalize_logic_type t in
+	add_global_logic id t;
+	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
+	let e,ty' = Ltyping.term lab env' e in
+	if not (eq_pure_type ty ty') then 
+	  Ltyping.expected_type loc (PureType ty);
+	let f = generalize_function_def (pl,ty,e) in
+	push_decl (Dfunction_def (loc, Ident.string id, f))
+    | Axiom (loc, id, p) ->
+	let env = Env.empty_logic () in
+	let p = Ltyping.predicate lab env p in
+	let p = generalize_predicate p in
+	push_decl (Daxiom (loc, Ident.string id, p))
+    | Goal (loc, id, p) ->
+	let env = Env.empty_logic () in
+	let p = Ltyping.predicate lab env p in
+	let s = generalize_sequent ([], p) in
+	push_decl (Dgoal (loc, Ident.string id, s))
+    | TypeDecl (loc, ext, vl, id) ->
+	Env.add_type loc vl id;
+	let vl = List.map Ident.string vl in
+	if not ext then push_decl (Dtype (loc, vl, Ident.string id))
 
 (*s Prelude *)
 
@@ -287,14 +321,13 @@ let load_prelude () =
     List.iter (load_file ~prelude:true) lib_files_to_load;
     (* Monomorph requires the prelude to be analyzed *)
     begin match prover () with
-      | Pvs | SmtLib ->
+      | Pvs (*| SmtLib *)->
 	  let prover_prelude = Filename.temp_file "why_prelude" "" in
 	  output prover_prelude;
 	  Sys.remove prover_prelude
       | Simplify when no_simplify_prelude ->
 	  Simplify.reset ()
-      | _ ->
-	  ()
+      | _ -> ()
     end
   with e ->
     eprintf "anomaly while reading prelude: %a@." Report.explain_exception e;
@@ -303,10 +336,10 @@ let load_prelude () =
 (*s Processing of a channel / a file. *)
 
 let why_parser f c = 
-   let lb = Lexing.from_channel c in
-   lb.Lexing.lex_curr_p <- { lb.Lexing.lex_curr_p with Lexing.pos_fname = f };
-   Lexer.parse_file lb
- 
+  let lb = Lexing.from_channel c in
+  lb.Lexing.lex_curr_p <- { lb.Lexing.lex_curr_p with Lexing.pos_fname = f };
+  Lexer.parse_file lb
+    
 let deal_channel parsef cin =
   let p = parsef cin in
   if not parse_only then List.iter interp_decl p
@@ -324,6 +357,8 @@ let deal_file f =
   let fwe = Filename.chop_extension f in
   if not (single_file ()) then output (Options.out_file fwe)
 
+
+
 let main () =
   load_prelude ();
   if files = [] then begin
@@ -331,10 +366,19 @@ let main () =
     output (Options.out_file "out")
   end else begin
     List.iter deal_file files;
-    if single_file () then 
+    if pruning then
+      begin
+	let q =  (Theoryreducer.reduce declarationQueue) in 
+	encode q ;
+	if single_file () then 
+	  let lf = Filename.chop_extension (last files) in
+	  output (Options.out_file lf)  
+      end
+    else if single_file () then 
       let lf = Filename.chop_extension (last files) in
       output (Options.out_file lf)
   end
+
 
 
 
