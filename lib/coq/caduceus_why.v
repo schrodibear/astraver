@@ -651,8 +651,7 @@ Admitted.
   (m2:((memory) ((pointer) A815) A816))
   := (forall (p1:((pointer) A816)),
       (forall (p2:((pointer) A816)),
-       (forall (a:alloc_table),
-        (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2))))))).
+       (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2)))))).
 
 (*Why predicate*) Definition separation2_range1 (A818:Set)
   (A817:Set) (m1:((memory) ((pointer) A817) A818))

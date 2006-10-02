@@ -589,7 +589,7 @@ predicate separation1_range(m:('y pointer,'z) memory, size:int) =
 
 
 predicate separation2(m1:('y pointer,'z) memory, m2:('y pointer,'z) memory) =
-  forall p1:'z pointer. forall p2:'z pointer.forall a : alloc_table.
+  forall p1:'z pointer. forall p2:'z pointer.
     p1 <> p2 -> base_addr(acc(m1, p1)) <> base_addr(acc(m2, p2))
 	
 predicate separation2_range1(m1:('y pointer,'z) memory,
