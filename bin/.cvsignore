@@ -9,8 +9,8 @@ caduceus.opt
 *.static
 dp.byte
 dp.opt
+cpulimit
 rv_merge.opt
 why-obfuscator.byte
 why-obfuscator.opt
-
 cadlog.opt

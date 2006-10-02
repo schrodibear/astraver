@@ -80,9 +80,10 @@ STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
 RVMERGE=bin/rv_merge.$(OCAMLBEST)
 DP=bin/dp.$(OCAMLBEST)
+CPULIMIT=bin/cpulimit
 WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 
-TOOLS=$(WHY2HTML) $(DP) $(RVMERGE) $(WHYOBFUSCATOR)
+TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR)
 
 all: $(BINARY) check $(CADUCEUS) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@
 
@@ -212,6 +213,9 @@ bin/dp.byte: $(DPCMO)
 bin/dp.opt: $(DPCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
+bin/cpulimit: tools/cpulimit.c
+	$(CC) -o $@ $^
+
 bin/rv_merge.byte: tools/rv_merge.ml
 	$(OCAMLC) $(BFLAGS) -o $@ $^
 
@@ -304,12 +308,13 @@ db debug: bin/why.byte src/logic.cmo
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE) gwhy-@LABLGTK2@
+install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 	cp -f $(DP) $(BINDIR)/dp$(EXE)
+	cp -f $(CPULIMIT) $(BINDIR)/cpulimit$(EXE)
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
 	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \

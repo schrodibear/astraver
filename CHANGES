@@ -1,3 +1,6 @@
+  o no using anymore the external command 'timeout', but use our own
+    command 'cpulimit' for the same purpose. Time limit is now user
+    CPU time instead of wall clock time.
   o the  bench-c-yices rule of the main Makefile launches the yices prover 
     thanks to the tool/smtlib_split module 
     that splits the verification conditions

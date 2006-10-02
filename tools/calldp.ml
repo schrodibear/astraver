@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.13 2006-09-25 11:02:24 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.14 2006-10-02 14:06:05 marche Exp $ i*)
 
 open Printf
 
@@ -44,9 +44,9 @@ let file_contents f =
 
 let cvcl ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "timeout %d cvcl < %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d cvcl < %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
-  if c = 137 then 
+  if c = 152 then 
     Timeout
   else if c <> 0 then (* e.g. timeout missing *)
     ProverFailure ("command failed: " ^ cmd)
@@ -59,9 +59,9 @@ let cvcl ?debug ?(timeout=10) ~filename:f () =
 
 let simplify ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "timeout %d Simplify %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d Simplify %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
-  if c = 137 then 
+  if c = 152 then 
     Timeout
   else if c <> 0 then (* e.g. timeout missing *)
     ProverFailure ("command failed: " ^ cmd)
@@ -75,9 +75,9 @@ let simplify ?debug ?(timeout=10) ~filename:f () =
 
 let rvsat ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "timeout %d rv-sat %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d rv-sat %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
-  if c = 137 then 
+  if c = 152 then 
     Timeout
   else 
     let c = Sys.command (sprintf "grep -q -w error %s" out) in
@@ -98,9 +98,9 @@ let rvsat ?debug ?(timeout=10) ~filename:f () =
 let yices ?debug ?(timeout=10) ~filename:f () =
   (* select-and-past from rvsat *)
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "timeout %d yices -tc -smt < %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d yices -tc -smt < %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
-  if c = 137 then
+  if c = 152 then
     Timeout
   else 
     let c = Sys.command (sprintf "grep -q -w Error %s" out) in
@@ -115,9 +115,9 @@ let yices ?debug ?(timeout=10) ~filename:f () =
 
 let ccx ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "timeout %d ccX %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d ccX %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
-  if c = 137 then
+  if c = 152 then
     Timeout
   else 
     let c = Sys.command (sprintf "grep -q -w Error %s" out) in
@@ -143,7 +143,7 @@ let harvey ?debug ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 	let out = Filename.temp_file "out" "" in
 	let cmd = sprintf "timeout  %d rv --dpll   %s > %s 2>&1" timeout  fi out in
 	let c = Sys.command cmd in
-	if c = 137 then
+	if c = 152 then
 	  add Timeout
 	else 
 	  let c = Sys.command (sprintf 
@@ -160,9 +160,9 @@ let harvey ?debug ?(timeout=10) ?(eclauses=200000) ~filename:f () =
 
 let zenon ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "timeout %d zenon %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d zenon %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
-  if c = 137 then 
+  if c = 152 then 
     Timeout
   else if c <> 0 then (* e.g. timeout missing *)
     ProverFailure ("command failed: " ^ cmd)
