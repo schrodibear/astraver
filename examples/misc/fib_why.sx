@@ -36,6 +36,34 @@
  (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
 
 (BG_PUSH
+ ;; Why axiom access_update
+ (FORALL (t) (FORALL (i) (FORALL (v) (EQ (access (update t i v) i) v)))))
+
+(BG_PUSH
+ ;; Why axiom access_update_eq
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (j)
+ (FORALL (v) (IMPLIES (EQ i j) (EQ (access (update t i v) j) v))))))
+
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (EQ i j)
+ (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) v)))))))
+
+(BG_PUSH
+ ;; Why axiom access_update_neq
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (j)
+ (FORALL (v) (IMPLIES (NEQ i j) (EQ (access (update t i v) j) (access t j)))))))
+
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (NEQ i j)
+ (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) (access t j))))))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
@@ -178,6 +206,18 @@
  (FORALL (t2)
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
+
+(BG_PUSH
+ ;; Why axiom F_0
+ (EQ (F 0) 1))
+
+(BG_PUSH
+ ;; Why axiom F_1
+ (EQ (F 1) 1))
+
+(BG_PUSH
+ ;; Why axiom F_n
+ (FORALL (n) (IMPLIES (>= n 2) (EQ (F n) (+ (F (- n 1)) (F (- n 2)))))))
 
 ;; fib1_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))

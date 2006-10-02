@@ -36,6 +36,34 @@
  (FORALL (x) (FORALL (y) (EQ (ite |@false| x y) y))))
 
 (BG_PUSH
+ ;; Why axiom access_update
+ (FORALL (t) (FORALL (i) (FORALL (v) (EQ (access (update t i v) i) v)))))
+
+(BG_PUSH
+ ;; Why axiom access_update_eq
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (j)
+ (FORALL (v) (IMPLIES (EQ i j) (EQ (access (update t i v) j) v))))))
+
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (EQ i j)
+ (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) v)))))))
+
+(BG_PUSH
+ ;; Why axiom access_update_neq
+ (FORALL (t)
+ (FORALL (i)
+ (FORALL (j)
+ (FORALL (v) (IMPLIES (NEQ i j) (EQ (access (update t i v) j) (access t j)))))))
+
+ (FORALL (i)
+ (FORALL (j)
+ (IMPLIES (NEQ i j)
+ (FORALL (t) (FORALL (v) (EQ (access (update t i v) j) (access t j))))))))
+
+(BG_PUSH
  ;; Why axiom sorted_array_def
  (FORALL (t)
  (FORALL (i)
@@ -179,6 +207,29 @@
  (IMPLIES (EQ (permut t1 t2) |@true|)
  (EQ (array_length t1) (array_length t2))))))
 
+(BG_PUSH
+ ;; Why axiom gcd_asubb_b
+ (FORALL (a) (FORALL (b) (EQ (gcd a b) (gcd (- a b) b)))))
+
+(BG_PUSH
+ ;; Why axiom gcd_a_bsuba
+ (FORALL (a) (FORALL (b) (EQ (gcd a b) (gcd a (- b a))))))
+
+(BG_PUSH
+ ;; Why axiom gcd_a_a
+ (FORALL (a) (EQ (gcd a a) a)))
+
+(BG_PUSH
+ ;; Why axiom gcd_a_0
+ (FORALL (a) (EQ (gcd a 0) a)))
+
+(BG_PUSH
+ ;; Why axiom max_def
+ (FORALL (x)
+ (FORALL (y)
+ (AND (OR (EQ (max x y) x) (EQ (max x y) y))
+ (AND (>= (max x y) x) (>= (max x y) y))))))
+
 ;; gcd1_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)
 (FORALL (b)
@@ -224,6 +275,14 @@
 (FORALL (y)
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
 (IMPLIES (EQ x y) (EQ x (gcd a b))))))))))
+
+(BG_PUSH
+ ;; Why axiom gcd_a_amodb
+ (FORALL (a) (FORALL (b) (EQ (gcd a b) (gcd b (int_mod a b))))))
+
+(BG_PUSH
+ ;; Why axiom mod_lt
+ (FORALL (a) (FORALL (b) (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
 
 ;; gcd2_po_1, Why obligation from file "", line 0, characters 0-0:
 (FORALL (a)

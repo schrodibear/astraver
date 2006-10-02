@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.120 2006-04-06 07:19:27 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.121 2006-10-02 14:07:18 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -582,7 +582,7 @@ let rec typef lab env expr =
 		    make 
 		      (LetIn (v, t_a, 
 			      let make n = 
-				gmake_node loc env' (label_name ()) n tapp ef
+				gmake_node loc env' (label_name ()) n tapp ef'
 			      in
 			      make (Assertion 
 				      (List.map (pre_named loc) papp, app))))
