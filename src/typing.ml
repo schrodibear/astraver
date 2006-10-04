@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.121 2006-10-02 14:07:18 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.122 2006-10-04 20:07:26 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -555,7 +555,6 @@ let rec typef lab env expr =
  	        (* otherwise we transform into [let v = arg in (f v)] *)
 		| _ ->
 		    let _,eapp,_,_ = decomp_type_c kapp in
-		    let ef = union3effects (effect t_a) (effect t_f) eapp in
 		    let v = fresh_var () in
 		    let kapp = type_c_subst (subst_onev x v) kapp in
 		    let _,_,papp,_ = decomp_type_c kapp in
@@ -577,12 +576,13 @@ let rec typef lab env expr =
 		    let tapp = result_type app in
 		    if occur_type_v v tapp then
 		      raise_located a.ploc TooComplexArgument;
-		    let ef' = Effect.union ef (effect app) in
+		    let ef = union3effects (effect app) (effect t_f) eapp in
+		    let ef' = Effect.union ef (effect t_a) in
 		    let make n = make_node (label_name ()) n tapp ef' in
 		    make 
 		      (LetIn (v, t_a, 
 			      let make n = 
-				gmake_node loc env' (label_name ()) n tapp ef'
+				gmake_node loc env' (label_name ()) n tapp ef
 			      in
 			      make (Assertion 
 				      (List.map (pre_named loc) papp, app))))
