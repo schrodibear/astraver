@@ -62,7 +62,19 @@ int get(ref *p, int i) {
 
 
 /*@ requires is_parray(p) && 0<=i<100
-  @ ensures is_parray(p) && is_parray(\result)
+  @ ensures 
+      (* is_parray(p) i.e. *)
+       (\valid(p) && \valid(p->contents) &&
+        (  (p->contents->tag==Array && \valid_range(p->contents->arr,0,99))
+        || (p->contents->tag==Diff && 0<=p->contents->idx<100 &&
+            is_parray(p->contents->next))))
+   && (* is_parray(\result) i.e *)
+       (\valid(\result) && \valid(\result->contents) &&
+        (  (\result->contents->tag==Array && 
+	    \valid_range(\result->contents->arr,0,99))
+        || (\result->contents->tag==Diff && 0<=\result->contents->idx<100 &&
+            is_parray(\result->contents->next))))
+   && In(\result,i,v)
   @*/
 ref* set(ref *p, int i, int v) {
   if (p->contents->tag == Array) {
@@ -76,22 +88,26 @@ ref* set(ref *p, int i, int v) {
     res->contents = new_arr;
     new_arr->tag = Array;
     new_arr->arr = p->contents->arr;
+    /*@ assert is_parray(res) */
     /* t := Diff (i,old,res) */
     new_diff->tag = Diff;
     new_diff->idx = i;
     new_diff->val = old;
     new_diff->next = res;
     p->contents = new_diff;
+    /*@ assert is_parray(p) */
     return res;
   } else {
     struct data *new_diff = (struct data*)malloc(sizeof(struct data));
     ref *res = (ref*)malloc(sizeof(ref));
+    /*@ assert is_parray(p) */
     /* ref (Diff (i, v, t)) */
     new_diff->tag = Diff;
     new_diff->idx = i;
     new_diff->val = v;
-    new_diff->next = res;
+    new_diff->next = p;
     res->contents = new_diff;
+    /*@ assert is_parray(res) */
     return res;
   }
 }
