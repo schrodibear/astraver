@@ -651,7 +651,7 @@ axiom alloc_extends_valid_range :
 axiom alloc_extends_refl : forall a:alloc_table. alloc_extends(a,a) 
 
 axiom alloc_extends_trans : 
-  forall a1,a2,a3:alloc_table. 
+  forall a1,a2,a3:alloc_table [alloc_extends(a1,a2), alloc_extends(a2,a3)]. 
     alloc_extends(a1,a2) -> 
     alloc_extends(a2,a3) -> 
     alloc_extends(a1,a3) 

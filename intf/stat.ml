@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.40 2006-06-21 09:19:45 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.41 2006-10-05 08:39:16 conchon Exp $ i*)
 
 open Printf
 open Options
@@ -24,6 +24,7 @@ open Cache
 open Pprinter
 
 let _ = gui := true
+let debug = ref Options.debug
 
 let is_caduceus = 
   List.exists (fun f -> Filename.basename f = "caduceus.why") Options.files 
@@ -224,7 +225,7 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
       model#set ~row ~column:column_p `EXECUTE;
       let r = 
 	Dispatcher.call_prover 
-	  ~debug:Options.debug ~encoding:p.Model.pr_enc
+	  ~debug:!debug ~encoding:p.Model.pr_enc
 	  ~obligation:oblig ~timeout:(Tools.get_timeout ())  p.Model.pr_id
       in
       let get_result = function
@@ -579,6 +580,9 @@ let main () =
   let liveupd = proof_factory#add_check_item 
     ~callback:(fun b -> Tools.set_live b) "_Live update" in
   let _ = liveupd#set_active (Tools.live_update ()) in
+  let debugd = proof_factory#add_check_item 
+    ~callback:(fun b -> debug := b) "_Debug mode" in
+  let _ = debugd#set_active !debug in
 
   (* run provers on all proof obligations *)
   List.iter
