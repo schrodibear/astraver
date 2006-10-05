@@ -15,7 +15,7 @@ struct data {
   enum tag tag;
   /*should be a union*/
   int idx; int val; struct ref *next;
-  int arr[100];
+  int arr[N];
 };
 
 typedef struct ref ref;
@@ -29,8 +29,8 @@ typedef struct ref ref;
     \forall ref *p; 
     is_parray(p) <=> 
        (\valid(p) && \valid(p->contents) &&
-        (  (p->contents->tag==Array && \valid_range(p->contents->arr,0,99))
-        || (p->contents->tag==Diff && 0<=p->contents->idx<100 &&
+        (  (p->contents->tag==Array && \valid_range(p->contents->arr,0,N-1))
+        || (p->contents->tag==Diff && 0<=p->contents->idx<N &&
             is_parray(p->contents->next))))
 */
  
@@ -49,7 +49,7 @@ typedef struct ref ref;
              (p->contents->idx != i && In(p->contents->next,i,v)))))
 */
 
-/*@ requires is_parray(p) && 0<=i<100
+/*@ requires is_parray(p) && 0<=i<N
   @ ensures In(p,i,\result)
   @*/
 int get(ref *p, int i) {
@@ -78,23 +78,10 @@ ref *alloc_ref();
   @*/
 struct data *alloc_data();
 
-/*@ requires is_parray(p) && 0<=i<100
+/*@ requires is_parray(p) && 0<=i<N
   @ ensures 
       is_parray(p) 
-(***
-       (\valid(p) && \valid(p->contents) &&
-        (  (p->contents->tag==Array && \valid_range(p->contents->arr,0,99))
-        || (p->contents->tag==Diff && 0<=p->contents->idx<100 &&
-            is_parray(p->contents->next))))
-***)
    && is_parray(\result)
-(***
-       (\valid(\result) && \valid(\result->contents) &&
-        (  (\result->contents->tag==Array && 
-	    \valid_range(\result->contents->arr,0,99))
-        || (\result->contents->tag==Diff && 0<=\result->contents->idx<100 &&
-            is_parray(\result->contents->next))))
-***)
    && (\forall int k; \forall int w; 
        In(\result,k,w) <=> (\old(In(p,k,w)) || (k==i && w==v)))
    && (\forall int k; \forall int w; \old(In(p,k,w)) <=> In(p,k,w))
