@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.19 2006-10-02 09:08:38 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.20 2006-10-05 11:18:45 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -74,7 +74,8 @@ let is_smtlib_keyword =
      "sat";"theory";"true";"unknown";"unsat";"xor";
      "assumption";"axioms";"defintion";"extensions";"formula";
      "funs";"extrafuns";"extrasorts";"extrapreds";"language";
-     "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool"];
+     "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
+     "Array"];
   Hashtbl.mem ht
 
 let idents fmt s = 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.142 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.143 2006-10-05 11:18:44 filliatr Exp $ i*)
 
 open Cast
 open Cnorm
@@ -380,7 +380,7 @@ let rec predicate p =
     | NPfresh t -> 
 	(* [fresh] should not be used with the arithmetic memory model *)
 	assert (not arith_memory_model);
-	reads_add_alloc (term t)
+	assigns_add_alloc (term t)
     | NPvalid t -> 
 	(* [alloc] not used with the arithmetic memory model *)
 	if arith_memory_model then term t else reads_add_alloc (term t)

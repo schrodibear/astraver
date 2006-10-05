@@ -57,7 +57,7 @@ predicate valid_index(a:alloc_table, p: 'z pointer, i:int) =
 
 predicate valid_range(a:alloc_table, p: 'z pointer, i:int, j:int) =
 	0 <= offset(p)+i 
-	and i <= j
+	(*and i <= j*)
 	and offset(p)+j < block_length(a,p)
 
 axiom offset_shift :

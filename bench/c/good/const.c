@@ -49,3 +49,14 @@ int i (){
   w.t2[0] = 2;
   return w.t1[0];
 }
+
+const int N = 100;
+int t2[N];
+
+void j() { return t2[99]; }
+
+enum E { A,B,C };
+const enum E e = B;
+
+//@ ensures \result == B
+enum E k() { return e; }

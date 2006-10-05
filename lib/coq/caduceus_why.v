@@ -89,7 +89,7 @@ Admitted.
 
 (*Why predicate*) Definition valid_range (A718:Set) (a:alloc_table)
   (p:((pointer) A718)) (i:Z) (j:Z)
-  := 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) < (block_length a p).
+  := 0 <= ((offset p) + i) /\ ((offset p) + j) < (block_length a p).
 
 (*Why axiom*) Lemma offset_shift :
   forall (A1:Set),

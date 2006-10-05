@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.125 2006-09-25 14:34:46 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.126 2006-10-05 11:18:44 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -1341,7 +1341,13 @@ let type_decl d = match d.node with
 	    let i = type_initializer_option d.loc (Env.empty ()) ty i in
 	    let ty = array_size_from_initializer d.loc ty i in
 	    set_var_type (Var_info info) ty false;
-	    Tdecl (ty, info,i)(* type_initializer_option d.loc (Env.empty ()) ty i*)
+	    if ty.ctype_const then begin match ty.ctype_node, i with
+	      | (Tint _ | Tfloat _ | Tenum _), Some (Iexpr e) -> 
+		  set_const_value info (eval_const_expr e)
+	      | _ ->
+		  ()
+	    end;
+	    Tdecl (ty, info,i)
       end
   | Cfunspec (s, ty, f, pl) ->
       let info,ty,env = type_prototype d.loc pl ty f in
