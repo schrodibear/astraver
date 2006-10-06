@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pretty.ml,v 1.4 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.5 2006-10-06 08:28:09 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -124,11 +124,10 @@ let rec predicate fmt = function
       fprintf fmt "(not %a)" predicate a
   | Forall (_,_,b,v,tl,p) ->
       fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]"
-	ident b 
-	pure_type v print_triggers tl predicate p
-  | Exists (_,b,_,p) ->
-      fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
-	ident b predicate p
+	ident b pure_type v print_triggers tl predicate p
+  | Exists (_,b,v,p) ->
+      fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
+	ident b pure_type v predicate p
   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	term t i1 f1 e1 i2 f2 e2
