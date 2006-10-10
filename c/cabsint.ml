@@ -3,9 +3,6 @@
 
    - change work-list algo to use topological order provided with OCamlGraph
 
-   - change [nodes_in_exec_order] in a topological iteration on graph.
-   Need to add sub-graph extraction to OcamlGraph.
-
    - add location to the hooks for invariants/preconditions ?
 
    - problem with construction of graph for "do-while", not knowing
@@ -447,10 +444,10 @@ module type DATA_FLOW_ANALYSIS = sig
       ?analysis:'a analysis_t -> ?roots:node_t list -> 'a propagate_t
 	-> 'a analysis_t
     (* 
-       takes a program and computes the result of an analysis.
+       computes the result of an analysis on the implicit program.
        It is based on [propagate]. 
      *)
-  val compute : all_nodes:node_t list -> absint_analysis_t
+  val compute : unit -> absint_analysis_t
     (* 
        takes a program and computes the result of propagating forward
        the information, and then propagating backward/forward again from
@@ -471,8 +468,7 @@ module type DATA_FLOW_ANALYSIS = sig
 	 (* do merge forward and backward informations *)
        merge_analyses : absval_t -> absval_t -> absval_t;
      }
-  val compute_back_and_forth : 
-      compute_bnf_t -> all_nodes:node_t list -> absint_analysis_t
+  val compute_back_and_forth : compute_bnf_t -> absint_analysis_t
 end
 
 (* very simple dataflow analysis, with fixed characteristics:
@@ -788,17 +784,14 @@ module Make_DataFlowAnalysis
       action = action;
     }
 
-  let compute ~(all_nodes:Node.t list) =
-    if debug then Coptions.lprintf 
-      "[compute] begin with %i nodes in working list@." 
-	(List.length all_nodes);
+  let compute () =
     propagate (forward_params ~one_pass:false)
 
-  let compute_back_and_forth params ~all_nodes =
+  let compute_back_and_forth params =
     (* 1st step: propagate forward information *)
     let fwd_analysis = propagate (forward_params ~one_pass:false) in
     (* 2nd step: propagate backward/forward again from every selected node *)
-    List.fold_left (fun cur_analysis node ->
+    IL.fold_operational Forward ~roots:[] (fun node cur_analysis ->
 
       let node_value_in_analysis analysis node =
 	let pre_cur_val,post_cur_val = 
@@ -852,18 +845,18 @@ module Make_DataFlowAnalysis
 	ignore (bwd_analysis);
 	(* add appropriate assume invariant when "forgotten" by last
 	   backward analysis *)
-	List.iter (fun node ->
+	IL.iter_operational Forward ~roots:[] (fun node ->
 	  if params.keep_select node then
 	    let pre_mix_val,post_mix_val = 
 	      node_value_in_analysis mix_analysis node
 	    in
 	    NodeHash.add mix_analysis node (pre_mix_val,post_mix_val)
-	) all_nodes;
+	);
 	(* propagate forward again *)
 	propagate (forward_params ~one_pass:true) ~analysis:mix_analysis
 
       else cur_analysis
-    ) fwd_analysis all_nodes
+    ) fwd_analysis
 
 end
 
@@ -1165,11 +1158,11 @@ module type CFG_LANG_EXTERNAL = sig
   val change_sub_components : Node.t -> Node.t list -> Node.t 
 
   (* language interface *)
-  (* returns a pair of the list of roots + the list of elements in the graph *)
-  val from_file : decl_t list -> Node.t list * Node.t list
+  (* returns the list of roots *)
+  val from_file : decl_t list -> Node.t list
   val to_file : Node.t list -> decl_t list
     (* collect variables used and declared in the code *)
-  val collect_vars : Node.t list -> ILVarSet.t * ILVarSet.t
+  val collect_vars : unit -> ILVarSet.t * ILVarSet.t
 end
 
 module CFGLangFromNormalized : sig
@@ -1838,6 +1831,16 @@ end = struct
     let e = Edge.create v1 edge v2 in
     Self.add_edge_e (graph ()) e
 
+  (* topological order used by operations of iteration below.
+     - [direction] is either forward or backward.
+     - [roots] is empty for a classical propagation, and a single element
+     for a propagation from a distinguished point of the program. It could
+     be used also to propagate from a set of distinguished points, although
+     not useful for now.
+     - [sub_graph] is used when propagating from (a) distinguished point(s),
+     to identify nodes in the resulting DAG.
+  *)
+
   module OperationalTopologicalOrder =
     struct
       type t = 
@@ -1933,14 +1936,6 @@ end = struct
       OperationalTopologicalOrder.sub_graph = NodeSet.empty;
     } in
     OperationalIterator.fold f ord init
-
-  (* contains all operational nodes, i.e. all coding nodes plus logical nodes
-     that are part of the operational graph (invariants + preconditions) *)
-  let nodes_in_exec_order : Node.t list ref = ref []
-  let add_node_in_order node = 
-    nodes_in_exec_order := node :: (!nodes_in_exec_order)
-  let add_node_first node = (* list will be reversed *)
-    nodes_in_exec_order := (!nodes_in_exec_order) @ [node]
 
   (* add an operational edge.
      - [force_add_opedge] should be used for edges that originate in 
@@ -2753,11 +2748,6 @@ end = struct
     let snode = create_node (Nspec s) in
     (* logic *) add_logedge snode [requires_node; assigns_node;
 				   ensures_node; decreases_node];
-    (* add precondition in node list, if any *)
-    begin match reqnode_opt with
-    | None -> ()
-    | Some reqnode -> add_node_in_order reqnode
-    end;
     snode,reqnode_opt
 
   let from_annot (a : nloop_annot) write_vars =
@@ -2818,15 +2808,6 @@ end = struct
     let anode = create_node (Nannot a) in 
     (* logic *) add_logedge anode
       [invariant_node; assume_invariant_node; assigns_node; variant_node];
-    (* add invariants in node list, if any *)
-    begin match assinvnode_opt with
-    | None -> ()
-    | Some assinvnode -> add_node_in_order assinvnode
-    end;
-    begin match invnode_opt with
-    | None -> ()
-    | Some invnode -> add_node_in_order invnode
-    end;
     anode,invnode_opt,assinvnode_opt
 
   (* shared code between the creation of a simple expression node and 
@@ -2915,7 +2896,6 @@ end = struct
 	    (* oper *) add_opedge e3node enode;
 	    (* struct *) add_stedge enode [e1node; e2node; e3node]
     end;
-    add_node_in_order enode;
     enode
 
   type context_descr = 
@@ -3282,7 +3262,6 @@ end = struct
 	    in
 	    (* struct *) add_stedge snode (enode::first_nodes)
     end;
-    add_node_in_order snode;
     snode
 
   let rec from_decl d =
@@ -3330,15 +3309,11 @@ end = struct
 	  (* logic *) add_endedge spcnode end_node
       | None -> ()
     end;
-    add_node_first dnode;
     dnode
 
   let from_file file =
     internal_graph := Some (Self.create ());
-    nodes_in_exec_order := [];
-    let decls = List.map from_decl file in
-    nodes_in_exec_order := List.rev (!nodes_in_exec_order);
-    decls,!nodes_in_exec_order
+    List.map from_decl file
 
   let to_decl node =
     match get_node_kind node with
@@ -3350,9 +3325,9 @@ end = struct
     internal_graph := None;
     decls
 
-  let collect_vars nodes =
-    List.fold_left 
-      (fun (used_vars,decl_vars) node ->
+  let collect_vars () =
+    fold_operational Forward ~roots:[]
+      (fun node (used_vars,decl_vars) ->
 	 match get_node_kind node with
 	   | NKexpr | NKtest -> (* only on code, not on logical part *)
 	       let used_vars =
@@ -3373,7 +3348,7 @@ end = struct
 	       in
 	       used_vars,decl_vars
 	   | _ -> used_vars,decl_vars
-      ) (ILVarSet.empty,ILVarSet.empty) nodes
+      ) (ILVarSet.empty,ILVarSet.empty)
 
 end
 
