@@ -35,8 +35,7 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I c -I intf -I tools -I ocamlgraph -I octagon/ocamllib \
-	   -I octagon/ocamllib/.libs -I octagon/clib/.libs
+INCLUDES = -I src -I c -I intf -I tools -I ocamlgraph -I octagon/ocamllib
 BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
 OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
 
@@ -156,11 +155,13 @@ CCMX = $(CCMO:.cmo=.cmx)
 CCMXA = $(CCMA:.cma=.cmxa)
 
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
+	      -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
-	$(OCAMLC) -cclib -static $(BFLAGS) -o $@ unix.cma str.cma $^
+	$(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
+	      -cclib -static $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
