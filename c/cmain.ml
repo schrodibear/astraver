@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.75 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cmain.ml,v 1.76 2006-10-10 12:54:54 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -55,13 +55,7 @@ let main () =
   (* local aliasing analysis *)
   if local_aliasing then Cptr.local_aliasing_transform ();
   (* local abstract interpretation over integers *)
-(* COMMENTED OUT OTHERWISE WE GET A COMPILATION ERROR:
-
-Files c/cmain.cmx and c/cint.cmx
-make inconsistent assumptions over implementation Cint
-
   if abstract_interp then Cint.local_int_analysis_attach ();
-*)
   (* predicate *)
   let nfiles = 
     if typing_predicates then
