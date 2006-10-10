@@ -15,11 +15,6 @@
 
    - replace [with module VV = V] with [with module V = V] does not work !
 
-   - Failure("[to_pred] atom parsing error") on 
-   void f(int* p, int s) {
-     *p = 0;
-   }
-
    - implement a real variable packing.
 
    - why "parse error" if | before 1st case in [parse_atom] ?
@@ -3127,8 +3122,7 @@ sig
        returns a formatted analysis easily exploited by 
        [ConnectCFGtoOct.transform]. *)
   val format : 
-      absint_analysis_t -> node_t list -> node_t list 
-	-> absint_analysis_t * NodeSet.t
+    absint_analysis_t -> node_t list -> absint_analysis_t * NodeSet.t
 end = 
 struct
 
@@ -3280,7 +3274,7 @@ struct
 
   (* remove abstract information on statements that do not change it.
      The analysis returned is only valid for post-analysis. *)
-  let format analysis decls nodes =
+  let format analysis decls =
     (* modify [analysis] to take into account constraints, and return
        safe access nodes *)
     let format_params = 
@@ -3391,9 +3385,9 @@ let local_int_analysis_attach () =
     "[local_int_analysis_attach] %i functions to treat@." (List.length file); 
 
   (* build control-flow graph *)
-  let decls,all = IntLangFromNormalized.from_file file in
+  let decls = IntLangFromNormalized.from_file file in
   (* collect the local variables used/declared *)
-  let used_vars,decl_vars = IntLangFromNormalized.collect_vars all in
+  let used_vars,decl_vars = IntLangFromNormalized.collect_vars () in
   (* pack all local integer variables together *)
   let il_pack_vars = 
     ILVarSet.elements (ILVarSet.fold ILVarSet.add used_vars decl_vars) in
@@ -3406,11 +3400,10 @@ let local_int_analysis_attach () =
   ContextLattice.pack_variables pack_vars;
   (* perform local memory analysis *)
   let comp_params = LocalMemoryAnalysis.compute_bnf_params in
-  let raw_analysis =
-    LocalMemoryAnalysis.compute_back_and_forth comp_params all in
+  let raw_analysis = LocalMemoryAnalysis.compute_back_and_forth comp_params in
   (* detect the statements where introducing an assume is useful *)
   let analysis,safe_access_nodes = 
-    LocalMemoryAnalysis.format raw_analysis decls all in
+    LocalMemoryAnalysis.format raw_analysis decls in
   (* transform the program using the analysis *)
   let trans_params = 
     { safe_access_nodes = safe_access_nodes } in

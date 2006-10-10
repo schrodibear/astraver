@@ -2223,9 +2223,9 @@ let local_aliasing_transform () =
     "[local_aliasing_transform] %i functions to treat@." (List.length file); 
 
   (* build control-flow graph *)
-  let decls,all = PtrLangFromNormalized.from_file file in
+  let decls = PtrLangFromNormalized.from_file file in
   (* perform local pointer analysis *)
-  let raw_analysis = LocalPtrAnalysis.compute all in
+  let raw_analysis = LocalPtrAnalysis.compute () in
   (* format results of the analysis *)
   let analysis,offset_map = ConnectCFGtoPtr.format raw_analysis in
   (* transform the program using the analysis *)
@@ -2234,9 +2234,9 @@ let local_aliasing_transform () =
   let file = PtrLangFromNormalized.to_file decls in
 
   (* rebuild control-flow graph *)
-  let decls,all = PtrLangFromNormalized.from_file file in
+  let decls = PtrLangFromNormalized.from_file file in
   (* collect the local variables used/declared *)
-  let used_vars,decl_vars = PtrLangFromNormalized.collect_vars all in
+  let used_vars,decl_vars = PtrLangFromNormalized.collect_vars () in
   if debug then Coptions.lprintf
     "[local_aliasing_transform] %i local variables used@." 
     (ILVarSet.cardinal used_vars);

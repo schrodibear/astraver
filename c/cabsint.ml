@@ -1,8 +1,6 @@
 
 (* TO DO:
 
-   - change work-list algo to use topological order provided with OCamlGraph
-
    - add location to the hooks for invariants/preconditions ?
 
    - problem with construction of graph for "do-while", not knowing
