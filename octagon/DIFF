@@ -1,0 +1,4 @@
+diffs from Miné's octogon library:
+clib/*.[c/h]
+ocamllib/*.[ml/mli/c/h]
+test/*.c

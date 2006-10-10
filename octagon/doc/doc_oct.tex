@@ -1,0 +1,3350 @@
+% doc_oct.tex
+% Documentation
+%
+% This file is part of the Octagon Abstract Domain Library.
+% Please read the COPYING file packaged in the distribution.
+% Main web page is: http://www.di.ens.fr/~mine/oct/
+%
+% Copyright (C) Antoine Mine' 2000-2005
+%
+\documentclass[twosides]{report}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{ae}
+\usepackage[english]{babel}
+\usepackage[ps,matrix,arrow,curve]{xypic}
+\usepackage[mathscr]{euscript}
+\usepackage[psamsfonts]{amsfonts}
+\usepackage{amsfonts,stmaryrd,amsmath,amsthm,amssymb}
+\usepackage{epsfig}
+\usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{makeidx}
+
+\xyoption{xdvi}
+
+% version
+%%%%%%%%%
+
+\newcommand{\ver}{0.9.8}
+
+% draft
+%%%%%%%
+
+%\special{!userdict begin /bop-hook{fillsecret}def end}
+\special{!userdict begin /fillsecret{gsave 
+/Helvetica findfont
+24 scalefont setfont
+0.9 setgray
+10 rotate
+-50 300 800 {/totox exch def -100 40 800 {/totoy exch def 
+totox totoy moveto (Draft - Do not circulate...) show } for} for
+grestore}def  end }
+
+
+% page size
+%%%%%%%%%%%
+
+\addtolength{\textwidth}{4cm}
+\addtolength{\hoffset}{-2cm}
+\addtolength{\textheight}{6cm}
+\addtolength{\voffset}{-2cm}
+
+% header / footer
+%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancyplain}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter - #1}{\thechapter - #1}}
+\renewcommand{\sectionmark}[1]{\markboth{\thesection - #1}{\thesection - #1}}
+\lhead[\bfseries The Octagon Abstract Domain Library v. \ver, Manual Reference]
+      {\bfseries The Octagon Abstract Domain Library v. \ver, Manual Reference}
+\rhead[\sc Antoine Min\'e]{\sc Antoine Min\'e}
+\lfoot[\bfseries\thepage/\pageref{theend}]{\bfseries\leftmark}
+\rfoot[\bfseries\rightmark]{\bfseries\thepage/\pageref{theend}}
+\cfoot{}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\plainfootrulewidth}{0.4pt}
+\renewcommand{\plainheadrulewidth}{0.4pt}
+
+\newenvironment{mylist}
+        {\vskip-3mm\begin{list}{$\bullet$}{\setlength{\leftmargin}{.5cm}}}
+        {\end{list}}
+
+\newenvironment{mylist2}
+        {\vskip-1mm\begin{list}{$\cdot$}{\setlength{\leftmargin}{.2cm}}}
+        {\end{list}}
+
+\newenvironment{entrylist}
+        {\vskip0.5cm\begin{list}{}{\setlength{\leftmargin}{1.5cm}
+                                   \setlength{\itemsep}{0.6cm}}}
+        {\end{list}\vskip0.5cm}
+\newcommand{\entry}[1]{\item\hskip-1cm$\blacksquare$\hskip0.5em{\large\tt \begin{tabular}[t]{lll}#1\end{tabular}}~\nopagebreak\par}
+
+\newcommand{\findex}[1]{\index{#1@{\tt #1}}}
+
+
+% clearplaindoublepage
+%\newcommand{\clearplaindoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+
+% notations
+\renewcommand{\vec}[1]{{{\mathbf #1}}}
+\newcommand{\itop}{{\,\bar{\imath}}}
+\newcommand{\jtop}{{\bar{\jmath}}}
+\newcommand{\ktop}{{\bar{k}}}
+
+% theorems, proofs
+\newtheorem{theorem}{Theorem}
+\newenvironment{mytheorem}
+      {\vspace*{0.2cm}\par\begin{theorem}}
+      {\par\vspace*{-0.2cm}\hfill$\blacksquare$\end{theorem}}
+\newenvironment{myproof}
+      {\begin{proof}}
+      {\end{proof}}
+
+\makeindex
+
+\begin{document}           
+
+\sloppy
+
+% title
+
+\thispagestyle{empty}
+
+\vspace*{3cm}
+
+\begin{center}
+\rule{\linewidth}{1mm}
+\vspace*{-0.2mm}\par
+\textsf{\Huge The Octagon Abstract Domain Library}\par
+\vspace*{0.8mm}
+\rule{\linewidth}{1mm}
+\end{center}
+\vspace*{0.5cm}
+\begin{center}\Large Version \ver\end{center}
+\vspace*{3cm}
+\begin{center}\LARGE\sc Antoine Min\'e\end{center}
+\begin{center}\large\tt mine@di.ens.fr\\
+http://www.di.ens.fr/$\sim$mine\end{center}
+\vspace*{0.1cm}
+\begin{center}\Large 
+Semantics and Abstract Interpretation\\
+Computer Science Lab.\\
+\'Ecole Normale Sup\'erieure, Paris
+\end{center}
+\vspace*{2cm}\begin{center}\Large June 2005\end{center}
+
+
+% table of contents
+
+\cleardoublepage
+\tableofcontents
+
+% disclaimer
+\cleardoublepage
+\chapter*{License}
+\markboth{LICENSE}{LICENSE}
+
+{\large
+
+\noindent
+The Octagon Abstract Domain Library is Copyright \copyright 
+2000-2005 Antoine Min\'e.
+
+\bigskip
+
+\noindent
+This license applies to all files distributed in the original package,
+including all source code, libraries, binaries, and documentation, except
+the files that are part of the GNU autoconf, automake, and libtool
+software.
+A copy of this license is available in the \texttt{COPYING} file.
+
+\bigskip
+
+\noindent
+By using, distributing, or modifying the Octagon Abstract Domain Library,
+you indicate that you understand and accept all the terms of this license.
+
+\bigskip
+
+\noindent{\bf DISCLAIMER}\\
+This library is provided 'as is' without warranty of any kind, either
+expressed or implied, including, but not limited to, warranties of
+merchantability and fitness for a particular purpose, warranties of
+correctness and absence of error of any kind.
+In no event will the author be liable for any damage caused by the use,
+or inability to use, of the Octagon Abstract Domain Library.
+
+
+\bigskip
+
+\noindent{\bf USING}\\
+The Octagon Abstract Domain Library is intended for academic use only.
+The Octagon Abstract Domain Library may be used freely, in original or
+modified form, in any academic software, provided the software notice specify
+explicitly that it uses the Octagon Abstract Domain Library, what part
+of it are used, how it was modified, if it was modified, and precisely
+what usage of the Octagon Abstract Domain Library is done in the
+software.
+Commercial use of the library is not possible without the explicit
+authorization of the authors of the original and modified parts of the
+library.
+
+\bigskip
+
+\noindent{\bf COPYING}\\
+The Octagon Abstract Domain Library may be freely distributed in its original,
+unmodified package form, as long as no fee is charged for the package.
+Whenever the Octagon Abstract Domain Library or portions of it are
+distributed, this license must be included in unmodified form, and all files
+must contain their original copyright notices.
+If only a portion of a file is being distributed, the appropriate copyright
+notice must be copied into it from the beginning of the file, and this
+license must still be included in unmodified form.
+If the whole library or part of it is distributed in compiled or processed
+form, the present license must be included, as well as a a reference to
+the official library web site: \texttt{http://www.di.ens.fr/$\sim$mine/oct/} .
+
+\bigskip
+
+\noindent{\bf MODIFYING}\\
+The Octagon Abstract Domain Library files may be freely modified and these
+modified files distributed under the terms of the COPYING section, provided
+that these files remain under the terms of the present license, and
+all files carry their original copyright notice, in addition to the list
+of all modifications the were made and their respective authors.
+If a modified version of the library is distributed in source, compiled or 
+processed form, the present license applies to all unmodified and modified
+parts and you must provide a reference to the modified sources, as well
+as a reference to the official library web site: 
+\texttt{http://www.di.ens.fr/$\sim$mine/oct/} .
+
+\bigskip
+
+\noindent{\bf EXTERNAL TOOLS}\\
+The Octagon Abstract Domain Library is designed to operate with external
+programs and libraries not provided in this package, including,
+but not limited to, any C or C++ compiler, the OCaml programming language,
+the New Polka Library, the GMP library
+These tools must be used according to their respective license.
+The present license does not apply to them.
+The author is not responsible for any problem encountered with these
+tools.
+
+}
+
+
+% contents
+\cleardoublepage
+\chapter{Introduction}
+
+\section{Goal}
+This library implements the representation and manipulation of set
+of constraints of the form $(\pm x \pm y\leq c)$, so called {\it octagons}.
+Operators are intended for {\it Abstract Interpretation} use; so they
+implement {\it standard semantics} operators, as well {\it convergence
+acceleration} operators (see \cite{ai} for an Abstract Interpretation primer).
+This work is based on the author's Master's thesis \cite{mine:dea} and
+lead to the following publications: \cite{mine:padoII} and \cite{mine:ast01}.
+
+\section{Organization of the Package}
+
+\noindent
+The library source is composed of the following parts:\\
+\begin{tabular}{lll}
+$\bullet$ & {\tt clib/} & \qquad C library\\
+$\bullet$ & {\tt test/} & \qquad C library test suite\\
+$\bullet$ & {\tt ocamllib/} &\qquad OCaml module (a wrapper around the C library)\\
+$\bullet$ & {\tt ocamlanal/} &\qquad sample OCaml static analyzer\\
+$\bullet$ & {\tt doc/} &\qquad this documentation
+\end{tabular}
+\bigskip
+
+\noindent
+Please take a look at the following files:\\
+\begin{tabular}{lll}
+$\bullet$ & {\tt AUTHORS} &\qquad list of authors\\
+$\bullet$ & {\tt COPYING} &\qquad the license of the library, it is recalled in the
+beginning of the present\\&&\qquad documentation;
+{\it you must agree with it in order to use the library}\\
+$\bullet$ & {\tt INSTALL}  &\qquad detailed installation informations\\
+$\bullet$ & {\tt README} &\qquad read this before complaining\\
+\end{tabular}
+
+\bigskip
+
+\noindent
+Here is a list of what gets installed, and where:\\
+\quad Libraries (in {\tt PREFIX/lib/})\\
+\quad\quad \begin{tabular}{lll}
+$\bullet$ & {\tt liboct.*} &\qquad C library\\
+$\bullet$ & {\tt libocamloct.*} &\qquad C wrapper for the OCaml module\\
+\end{tabular}\\
+\quad C headers (in {\tt PREFIX/include/oct/})\\
+\quad\quad \begin{tabular}{lll}
+$\bullet$ & {\tt oct.h} &\qquad main header\\
+$\bullet$ & {\tt oct\_private.h} &\qquad use this to access to low-level structures (not recommended)\\
+$\bullet$ & {\tt oct\_num.h} & \qquad underlying numerical domain\\
+\end{tabular}\\
+\quad OCaml code (in {\tt PREFIX/lib/ocaml/})\\
+\quad\quad \begin{tabular}{lll}
+$\bullet$ & {\tt oct.cma} &\qquad OCaml byte-code module\\
+$\bullet$ & {\tt oct.[cmx]a} &\qquad OCaml native code module\\
+$\bullet$ & {\tt oct*.cmi} &\qquad compiled interfaces for OCaml modules\\
+$\bullet$ & {\tt oct*.mli} &\qquad interfaces for OCaml modules
+in human-readable form\\
+\end{tabular}\\
+\quad Binaries (in {\tt PREFIX/bin/})\\
+\quad\quad \begin{tabular}{lll}
+$\bullet$ & {\tt oct-config} &\qquad configuration utility\\
+$\bullet$ & {\tt octtest} &\qquad C test-suite\\
+$\bullet$ & {\tt octanal} &\qquad OCaml sample analyzer\\
+\end{tabular}\\
+\quad The documentation (in {\tt PREFIX/share/oct/})\\
+\quad\quad \begin{tabular}{lll}
+$\bullet$ & {\tt doc\_oct.dvi} &\qquad this documentation\\
+\end{tabular}
+
+\bigskip
+
+\noindent
+The library can be interfaced with the following:\\
+\begin{tabular}{ll}
+$\bullet$ & the OCaml language 3.04 \cite{OCaml}\\
+$\bullet$ & the Gnu MP and MPFR libraries 4.1 \cite{GMP,MPFR,MLGMP}\\
+$\bullet$ & the New Polka library 2.0.0 \cite{polka}\\
+\end{tabular}
+
+\bigskip
+
+\noindent
+In order to support several versions of the library installed with different
+configuration options, copies of {\tt liboct.so} and {\tt oct-config} that are
+name-mangled are installed (they are named {\tt liboct\_XXX.so} and 
+{\tt oct-config-XXX}, where the suffix {\tt XXX} is derived from the choice
+of options).
+
+\section{Building and Installing the Library}
+
+There is a {\tt configure} script that helps to compile the library easily,
+so you simply have to type:
+
+\hspace*{0.2cm}
+
+{\tt
+\begin{tabular}{ll}
+\%\quad&./configure -{}-with-num=frac\\
+\%&make\\
+\%&make install
+\end{tabular}
+}
+
+\hspace*{0.2cm}
+
+\noindent
+The script should discover automatically whether it can build the OCaml, GMP,
+MPFR, and New Polka supports.
+The {\tt configure} script accepts many arguments:
+\begin{mylist}
+\item To install the C library in another directory than {\tt /usr/local}, use
+{\tt -{}-prefix=DIR} ({\em e.g.}, {\tt -{}-prefix=\$HOME}, if you are not root).
+\item To install the OCaml library in another directory than
+{\tt /usr/local/lib/ocaml}, use the {\tt -{}-with-ocaml=DIR} option.
+OCaml version 3.04 at least must be present.
+
+\item If the New Polka Library, or the GMP / MPFR libraries
+are installed in non-standard directories, use the
+{\tt -{}-with-polka=DIR}, {\tt with-gmp=DIR}, and {\tt with-mpfr=DIR} options.
+New Polka version 2.0.0 at least (version 1.x will not work) and
+GMP version 4.1 at least must be installed with MPFR support enabled.
+
+\item By default, the library is compiled with debugging informations and
+no optimization. 
+You can switch to optimized mode (much faster, but no debugging information) 
+with the {\tt -{}-disable-debug} option.
+\item Internal memory and time profiling can be also enabled using the
+{\tt -{}-enabled-prof} option. It is disabled by default as it makes the
+library a little slower.
+\item The Octagon Library can use several different underlying numerical 
+representations for numbers: integers, fractions, or
+machine floating-point numbers. 
+If GMP and MPFR are present, you can also use GMP arbitrary precision integers,
+GMP arbitrary precision fractions, or MPFR floating-point numbers.
+To choose which one is used,
+use the {\tt -{}-with-num=NUM} option, where {\tt NUM} is either
+{\tt int}, {\tt frac}, {\tt float}, {\tt longdouble}, {\tt gmpint}, 
+{\tt gmpfrac}, or {\tt mpfrfloat}.
+
+{\bf Note:} the option {\tt -{}-with-num=NUM} is now {\bf mandatory}.
+
+\item You can also choose which integer representation will be used by
+the New Polka Library with the {\tt -{}-with-polka-num=NUM} option, where 
+{\tt NUM} is {\tt long}, {\tt longlong}, or {\tt gmp}.
+
+The New Polka Library name to use is derived from the {\tt -{}-with-polka-num}
+and {\tt -{}-enable-debug} configuration options.
+{\tt long}, {\tt longlong}, and {\tt gmp} select respectively one of the 
+following prefix: {\tt libpolkai}, {\tt libpolkal}, or {\tt libpolkag}.
+If debugging is enabled, the {\tt \_debug} suffix is added to the New Polka 
+library name used.
+You must make sure this library exists and can be found by the configuration
+program (maybe using the {\tt -{}-with-polka=DIR} option).
+
+\item
+If you want the OCaml support in the Octagon Library to work with the
+OCaml support for the New Polka library, you must make sure that the
+OCaml libraries {\tt polka.cma} (for byte-code support) and {\tt polka.cmxa},
+{\tt polka.a} (for native code support) are available (you may need to use
+the {\tt -{}-with-ocaml} flag).
+A {\tt libpolkaX\_caml} C library must also be available; as for the 
+{\tt libpolka}
+library; its exact name depends upon the configuration flags options
+{\tt -{}-with-polka-num} and {\tt -{}-enable-debug} chosen:
+one of the {\tt libpolkai\_caml}, {\tt libpolka\_caml}, or 
+{\tt libpolkag\_caml} 
+prefix is chosen, and the {\tt \_debug} suffix is appended if debugging is
+enabled.
+
+\item
+If you want OCaml support for GMP and MPFR numbers, you must also have
+the Caml-GMP library \cite{MLGMP} installed.
+
+
+\end{mylist}
+
+\noindent
+To see all options, type {\tt ./configure -{}-help}.
+Please refer to the {\tt INSTALL} file for a detailed description of the
+installation process.
+
+
+\section{Using the Library}
+
+Finding the correct compile and link flags to build a program using the
+Octagon Library may be difficult.
+Thankfully, a helper shell-script, {\tt oct-config}, is installed; it guesses
+automatically all the {\tt -D}, {\tt -I}, {\tt -l}, and {\tt -L} flags needed.
+
+\begin{mylist}
+\item In order to compile a C or C++ program {\tt toto.c}, simply type:
+\par\hspace*{0.2cm}{\tt \%\quad cc `oct-config -{}-cflags` -c toto.c}
+\par\noindent Your C or C++ program must include the {\tt oct/oct.h} 
+header file in order to access to the functions in the library.
+
+\item To link a C or C++ object files, type:
+\par\hspace*{0.2cm}{\tt \%\quad cc `oct-config -{}-libs` toto.o toto2.o -o totor}
+\par\noindent If the New Polka Library support is enabled, it will also link 
+the correct version of the New Polka Library.
+
+\item You can use both {\tt -{}-cflags} and {\tt -{}-libs} if you plan to
+compile and link at the same time.
+
+\item To build a OCaml byte-code program, type:
+\par\hspace*{0.2cm}{\tt \%\quad ocamlc `oct-config -{}-mlflags` toto.ml toto2.ml}
+
+\item To build a OCaml native code program, type:
+\par\hspace*{0.2cm}{\tt \%\quad ocamlopt 
+`oct-config -{}-mlflags -{}-with-ocamlopt` toto.ml toto2.ml}
+
+\item To launch a OCaml top-level with the Octagon Library linked in, type:
+\par\hspace*{0.2cm}{\tt \%\quad `oct-config -{}-mltop`}
+\par\noindent Your OCaml program should open the {\tt Oct} module in
+order to access to the functions in the library.
+\par\noindent If the OCaml New Polka Library support is enabled, the New
+Polka Library will also be automatically
+available within the {\tt Polka} module.
+\end{mylist}
+
+\section{Installing Several Versions of the Library}
+
+You may want to experiment with different {\tt configure}
+options at the same time; this is supported easily with by the Octagon
+Library.
+Simply run the sequence {\tt ./configure [options]; make; make 
+install; make clean} one time for each option set you want to be installed.
+Do not forget to invoke {\tt make clean} between two compilations.
+To choose which library is actually used, you simply recall all the
+desired options in {\tt oct-config}, {\em e.g.}:
+
+\hspace*{0.2cm}
+{\tt
+\begin{tabular}{ll}
+\%\quad&./configure -{}-with-num=frac\\
+\%&make\\
+\%&make install\\
+\%&make clean\\
+\%&./configure -{}-disable-debug -{}-with-num=frac\\
+\%&make\\
+\%&make install\\
+\%&cc `oct-config -{}-libs -{}-cflags -{}-enable-debug` toto.c -o toto\_debug\\
+\%&cc `oct-config -{}-libs -{}-cflags -{}-disable-debug` toto.c -o toto\\
+\end{tabular}
+}
+
+All options that are not recalled when calling {\tt oct-config} are 
+defaulted to the value they had in the last installation of the library;
+they can be figured out by typing {\tt oct-config} without any argument.
+
+If {\tt oct-config} cannot find the library corresponding to the
+desired options, it will issue an error message.
+
+This feature is supported using name-mangling. A suffix {\tt XXX} is derived 
+from the set of options passed to the configuration script. Then the files
+{\tt liboct\_XXX.so} and {\tt oct-config-XXX} are installed.
+The {\tt oct-config} scripts parses the optional arguments to retrieve
+the name suffix {\tt XXX}, then calls {\tt oct-config-XXX} which gives
+the correct compilation flags and links against the correct
+{\tt liboct\_XXX.so}.
+The installation process always install a {\tt liboct.so} file so that you
+can compile easily with the last library installed using the {\tt -loct}
+link option, would you wish to bypass {\tt oct-config}.
+
+\medskip
+
+If you use the OCaml binding, name-mangled {\tt Oct\_XXX} modules are available;
+use {\tt oct-config -{}-mlmodule} to guess the right module name.
+One name-mangled OCaml top-level is also generated for each set of 
+options; {\tt oct-config -{}-mltop} automatically choose the right one.
+
+
+\bigskip
+
+Note that you can use several versions of the library {\it a the same time}
+in one application.
+In order to support this, all non-static functions in the library have
+a name-mangling prefix (however, this process is hidden to the user).
+For example, you can do:
+
+\hspace*{0.2cm}
+{\tt
+\begin{tabular}{ll}
+\%\quad&./configure -{}-with-num=frac\\
+\%&cc -c a.c `oct-config -{}-cflags -{}-with-num=float`\\
+\%&cc -c b.c `oct-config -{}-cflags -{}-with-num=frac`\\
+\%&cc a.o b.o -o toto `oct-config -{}-libs -{}-with-num=float`
+\\&\qquad`oct-config -{}-libs -{}-with-num=frac`
+\end{tabular}
+}
+
+Remark, however, that one C file can only use one library version; the
+multi-library feature is only supported at the linker level!
+Also, do not directly use an octagon created by one library with a function
+of another library.
+
+
+
+\section{Thread-Safety}
+
+When internal memory and time profiling is not enabled
+(default), the Octagon Library is thread-safe.
+Internal profiling makes use of statically allocated data, resulting in
+a non thread-safe implementation.
+
+The New Polka Library is not thread-safe.
+You must not use the New Polka Library directly, nor the interface provided
+by the Octagon Library if you want to make thread-safe library calls.
+
+
+
+\section{Examples}
+
+The package comes with a C example and an OCaml example.
+The C example is a simple test-suite. The OCaml example is a basic
+abstract analyzer for a toy language.
+This analyzer is also available on-line at 
+\url{http://dmi.ens.fr/cgi-bin/mine/octanalhtml/octanalweb} .
+
+
+\cleardoublepage
+\chapter{C Library API}
+
+This chapter describes the C API used to access to the Octagon Abstract Domain
+Library. It is also safe to call this functions from a C++ program.
+The API was designed to be as close as possible to the New Polka
+convex polyhedra library \cite{polka}.
+If the New Polka Library is installed, some conversion functions between
+octagons and polyhedra are available (Section \ref{polka}).
+
+The beginning of the chapter presents the high-level functions, available
+when you include the header file {\tt oct/oct.h}.
+The low-level functions and internal representations, available
+when you include {\tt oct/oct\_private.h}, are presented later in
+Sections \ref{lowlevelfuncs} and \ref{matrixinternal}
+
+\section{Initialization}
+
+\begin{entrylist}
+\findex{oct\_init}
+\entry{int oct\_init ()}
+Always call this function before using the library.
+If you use several versions of the library at the same time, call 
+{\tt oct\_init} one time for each version.
+When using machine floating-point representation, {\tt oct\_init} tries
+to set the FPU rounding mode towards $+\infty$, thus ensuring the soundness
+of the library.
+%It also enable the invalid exception so that invalid floating-point
+%operations result in exception instead of silent {\it NaN}s;
+%this is for debugging purpose as the library functions cannot handle
+%{\it NaN}s properly and are not supposed to produce them.
+Returns {\tt 1} when the library was successfully initialized, {\tt 0}
+elsewhere.
+
+\end{entrylist}
+
+
+
+\section{Booleans}
+
+\begin{entrylist}
+\findex{OCT\_HAS\_BOOL}\findex{true}\findex{false}\findex{bool}\entry{bool}
+The classical boolean type {\tt bool} and the constants {\tt true=1},
+{\tt false=0} are defined, if not already defined by the compiler
+(the {\tt configure} scripts tests this and defines the symbol
+{\tt OCT\_HAS\_BOOL} in {\tt oct\_config.h}).
+
+\findex{tbool}\findex{tbool\_true}\findex{tbool\_false}
+\findex{tbool\_top}\findex{tbool\_bottom}\entry{tbool}
+Defines the boolean lattice: \\
+\hspace{3cm}
+\xymatrix{ 
+  & \ar@{-}[dl] \ar@{-}[dr] {\tt tbool\_top} & \\
+ \ar@{-}[dr] {\tt tbool\_true} &&   \ar@{-}[dl] {\tt tbool\_false} \\
+  & {\tt tbool\_bottom} & \\
+}
+
+{\tt tbool\_bottom} is returned when the answer to a question is undefined,
+{\tt tbool\_top} when it is not known.
+
+\end{entrylist}
+
+\section{Underlying Numerical Domain}
+\index{.I@$\mathbb{I}$}
+The underlying numerical domain, denoted by $\mathbb{I}$, can be
+either $\mathbb{Z}$, $\mathbb{Q}$, or $\mathbb{R}$.
+The implementation uses machine integers ({\tt long}),
+machine floating-points numbers ({\tt double} or {\tt long double}) or
+multi-precision number (using GMP and MPFR).
+Then, it is lifted to represent 
+$\overline{\mathbb{I}}=\mathbb{I}\cup\{+\infty\}$.
+
+The choice of $\mathbb{I}$ and its actual implementation is done 
+using the {\tt -{}-with-num=} option of
+the {\tt configure} script.
+It can be set to {\tt int} or {\tt gmpint} (integers),
+{\tt frac} or {\tt gmpfrac} (rationals), {\tt float}, {\tt longdouble} or 
+{\tt mpfrfloat} (reals).
+Note that {\tt float} uses, in fact, the $64-$bit {\tt double} C data-type.
+
+\index{soundness}
+Fast integers, {\tt -{}-with-num=int}, is unsafe in case of overflow, whether
+all other numerical domains either saturate to $+\infty$\footnote{when {\tt -{}-with-num=float} or {\tt -{}-with-num=longdouble} is used, {\tt oct\_init} automatically
+sets your FPU in ``round to $+\infty$'' mode.}, or have arbitrary precision.
+{\tt -{}-with-num=float}, {\tt -{}-with-num=longdouble}, and even
+{\tt -{}-with-num=mpfrfloat}, can have some stability problems (leading to a
+fast precision degradation).
+
+Choosing integers, {\tt -{}-with-num=int} or {\tt -{}-with-num=gmpint}, 
+causes certain tests to
+be only semi-corrects ({\tt true} means ``really true'' and {\tt false}
+means ``true or false'').
+
+\medskip
+
+\begin{tabular}{c|c|c|c|c}
+&mathematical&internal&correct when&test\\
+name&domain&representation&overflow&correctness\\
+\hline
+{\tt int}&$\mathbb{Z}$&{\tt long}&no&semi\\
+{\tt gmpint}&$\mathbb{Z}$&{\tt mpz\_t} (GMP)&yes&semi\\
+{\tt frac}&$\mathbb{Q}$&{\tt long$\times$long}&yes&full\\
+{\tt gmpfrac}&$\mathbb{Q}$&{\tt mpq\_t} (GMP)&yes&full\\
+{\tt float}&$\mathbb{R}$&{\tt double}&yes&full\\
+{\tt longdouble}&$\mathbb{R}$&{\tt long double}&yes&full\\
+{\tt mpfrfloat}&$\mathbb{R}$&{\tt mpfr\_t} (MPFR)&yes&full\\
+\end{tabular}
+
+\medskip
+
+All numerical types and operators are defined in the file
+{\tt clib/num\_oct.h}.
+Operators are implemented as macro, when possible, or in-line functions.
+
+\medskip
+
+\begin{entrylist}
+\findex{num\_t}\entry{num\_t}
+\index{.Ia@$\overline{\mathbb{I}}$}
+{\it Abstract type} of numerical variables.
+This type represents values in
+$\overline{\mathbb{I}}=\mathbb{I}\cup\{+\infty\}$.
+Remark that type {\tt num\_t} can be a complex structure,
+involving pointers to dynamic blocks of memory (especially when using
+GMP and MPFR numbers); this means that variables of type {\tt num\_t} must
+be explicitly initialized, freed, and cannot be copied with 
+a mere {\tt =}
+(use, respectively, the {\tt num\_init}, {\tt num\_clear},
+and {\tt num\_set} families of functions described bellow).
+
+\findex{num\_init}\findex{num\_init\_n}
+\entry{ void num\_init& (num\_t* a)\\
+	void num\_init\_n& (num\_t* a, size\_t n)}
+Initialize a single {\tt num\_t}, or an array of {\tt n} {\tt num\_t}.
+This function must be called only once, after the variable is created and 
+before it is used with any operator.
+
+\findex{num\_clear}\findex{num\_clear\_n}
+\entry{ void num\_clear& (num\_t* a)\\
+	void num\_clear\_n& (num\_t* a, size\_t n)}
+Uninitialize a single {\tt num\_t}, or an array of {\tt n} {\tt num\_t}.
+This function must be called only once, before the variable is deleted, 
+if it has been initialized.
+
+\findex{num\_set}
+\entry{void num\_set (num\_t* a, const num\_t* b)}
+Copy the value of the number {\tt b} into {\tt a}.
+
+\findex{num\_set\_n}
+\entry{void num\_set\_n (num\_t* a, const num\_t* b, size\_t n)}
+Copy the {\tt n} numbers from the array {\tt b} into the array {\tt a}.
+
+\findex{num\_set\_int}
+\findex{num\_set\_float}
+\findex{num\_set\_frac}
+\findex{num\_set\_infty}
+\entry{ void num\_set\_int& (num\_t* a, long i)\\
+	void num\_set\_float& (num\_t* a, double d)\\
+	void num\_set\_frac& (num\_t* a, long i, long j)\\
+	void num\_set\_infty& (num\_t* a)}
+Set {\tt a} to the integer {\tt i}, the double {\tt d}, the fraction
+${\tt i}/{\tt j}$, or the $+\infty$ number.
+If the number cannot be exactly represented in the current {\tt num\_t}
+type, an over-approximation is put instead (possibly $+\infty$).
+
+\findex{num\_init\_set}
+\findex{num\_init\_set\_n}
+\findex{num\_init\_set\_int}
+\findex{num\_init\_set\_float}
+\findex{num\_init\_set\_frac}
+\findex{num\_init\_set\_infty}
+\entry{ void num\_init\_set&(num\_t* a, const num\_t* b) \\
+	void num\_init\_set\_n&(num\_t* a, const num\_t* b, size\_t n)\\
+	void num\_init\_set\_int&(num\_t* a, long i)\\
+	void num\_init\_set\_float&(num\_t* a, double d)\\
+	void num\_init\_set\_frac&(num\_t* a, long i, long j)\\
+	void num\_init\_set\_infty&(num\_t* a)}
+These operators are combinations of an initialization operator
+({\tt num\_init} or {\tt num\_init\_n}) and a copy operator.
+You must not initialize {\tt a} before using these functions, and 
+they can be used only once on an
+non initialized number (subsequent copies are done using the 
+corresponding {\tt num\_set\_} function).
+
+\findex{num\_fits\_int}
+\findex{num\_fits\_float}
+\findex{num\_fits\_frac}
+\findex{num\_get\_int}
+\findex{num\_get\_float}
+\findex{num\_get\_num}
+\findex{num\_get\_den}
+\entry{ bool& num\_fits\_int&(const num\_t* a)\\
+	bool& num\_fits\_float&(const num\_t* a)\\
+	bool& num\_fits\_frac&(const num\_t* a)\\\\
+	long& num\_get\_int&(const num\_t* a)\\
+	double& num\_get\_float&(const num\_t* a)\\
+	long& num\_get\_num&(const num\_t* a)\\
+	long& num\_get\_den&(const num\_t* a)}
+Converts the number {\tt a} into an integer
+({\tt num\_get\_int}), a float 
+({\tt num\_get\_float}), or a fraction
+({\tt num\_get\_num} for the numerator, and
+{\tt num\_get\_den} for the denominator).
+If the number cannot be represented in the desired format, an
+over-approximation is returned.
+This only works when the corresponding {\tt num\_fits\_} function
+returns {\tt true}. Elsewhere, the number should be considered as
+infinite (either truly infinite, or too big to be over-approximated in
+the desired type).
+
+\findex{num\_infty}
+\entry{bool num\_infty(const num\_t* a)}
+Returns {\tt true} if and only if {\tt a} represents $+\infty$.
+
+\findex{num\_set\_mpz}\findex{num\_set\_mpq}
+\findex{num\_get\_mpz}\findex{num\_get\_mpq}
+\entry{	void num\_set\_mpz&(num\_t* a, const mpz\_t b)\\
+	void num\_set\_mpq&(num\_t* a, const mpq\_t b)\\
+	void num\_get\_mpz&(mpz\_t a, const num\_t* b)\\
+	void num\_get\_mpq&(mpq\_t q, const num\_t* b)}
+These functions are defined only if the GMP library is available.
+They can be used to convert between multi-precision integers or fractions,
+and numbers.
+There is no {\tt num\_fits\_} associated functions as an over-approximation
+can always be put in a multi-precision number, as long as it is not
+$+\infty$ (this can be tested with {\tt num\_infty}).
+
+\findex{num\_set\_mpfr}\findex{num\_get\_mpfr}
+\entry{	void num\_set\_mpfr&(num\_t* a, const mpfr\_t b)\\
+	void num\_get\_mpfr&(mpfr\_t a, const num\_t* b)}
+These functions are defined only if the MPFR library is available.
+They can be used to convert between multi-precision floating-point values
+and numbers.
+There is no {\tt num\_fits\_} associated function, you should use
+{\tt num\_infty} instead.
+
+\findex{num\_cmp}
+\findex{num\_cmp\_int}
+\findex{num\_cmp\_zero}
+\entry{ int num\_cmp&(const num\_t* a, const num\_t* b)\\
+	int num\_cmp\_int&(const num\_t* a, long b)\\
+	int num\_cmp\_zero&(const num\_t* a)}
+Returns a strictly positive integer
+if {\tt a} is strictly greater than {\tt b}, a strictly negative integer
+if {\tt a} is strictly lesser than {\tt b}, and zero if {\tt a} and
+{\tt b} are equal.
+One can compare two {\tt num\_t} numbers, or a {\tt num\_t} number
+with an integer.
+The last form is the special case {\tt b=0}: it returns the
+sign of {\tt a}.
+
+\findex{num\_max}
+\findex{num\_min}
+\findex{num\_add}
+\findex{num\_sub}
+\findex{num\_mul}
+\findex{num\_mul\_by\_2}
+\findex{num\_div\_by\_2}
+\findex{num\_neg}
+\entry{ void num\_max&(num\_t* r, const num\_t* a, const num\_t* b)\\
+	void num\_min&(num\_t* r, const num\_t* a, const num\_t* b)\\
+	void num\_add&(num\_t* r, const num\_t* a, const num\_t* b)\\
+	void num\_sub&(num\_t* r, const num\_t* a, const num\_t* b)\\
+	void num\_mul&(num\_t* r, const num\_t* a, const num\_t* b)\\
+	void num\_mul\_by\_2&(num\_t* r, const num\_t* a)\\
+	void num\_div\_by\_2&(num\_t* r, const num\_t* a)\\
+	void num\_neg&(num\_t* r, const num\_t* a)}
+Put in {\tt r} the result of the operation
+(respectively $\max({\tt a},{\tt b})$, $\min({\tt a},{\tt b})$,
+${\tt a}+{\tt b}$, ${\tt a}-{\tt b}$,
+${\tt a}*{\tt b}$, ${\tt a}*2$, ${\tt a}/2$, and $-{\tt a}$).
+The result is always either exact, or an over-approximation
+(possibly $+\infty$). $+\infty$ arguments are correctly handled,
+except for $-(+\infty)$, $x-(+\infty)$, and $x*(+\infty)$ which are undefined.
+One can safely have {\tt r}={\tt a}={\tt b}.
+
+
+\findex{num\_print}
+\findex{num\_snprintf}
+\entry{ void num\_print&(const num\_t* a)\\
+	void num\_snprintf&(char* s, size\_t n, const num\_t* a)}
+Prints the number {\tt a}, either directly to {\tt stdout}, or to
+a string (up to \texttt{n} characters).
+
+\findex{OCT\_NUM\_EXACT}
+\entry{OCT\_NUM\_EXACT}
+This symbol is only defined when {\tt num\_t} always allows the exact
+representation of all numerical operators (up to overflowing to $+\infty$).
+Only fractional types are exact: integers are not closed under division by 2, 
+and floating-point numbers are subject to rounding errors.
+
+\findex{OCT\_NUM\_CLOSED}
+\entry{OCT\_NUM\_CLOSED}
+This symbol is only defined when {\tt num\_t} is closed under division by 2.
+That is to say, when $\mathbb{I}\neq\mathbb{Z}$.
+When the underlying numerical domain is closed, the strong closure algorithm
+is a normal form, all tests are complete and we have a best
+approximation for union (not taking into account rounding errors that
+can occur).
+
+\findex{OCT\_DOMAIN}\findex{oct\_domain\_string}
+\entry{OCT\_DOMAIN}
+This symbol recalls the current underlying numerical domain $\mathbb{I}$.
+It is defined to be one of
+{\tt OCT\_DOMAIN\_INT}, {\tt OCT\_DOMAIN\_FRAC}, or
+{\tt OCT\_DOMAIN\_REAL}.
+{\tt oct\_domain\_string[OCT\_DOMAIN]} is a human-readable string
+representation of $\mathbb{I}$ 
+({\tt "integers"}, {\tt "rationals"}, or {\tt "reals"}).
+
+\findex{OCT\_IMPLEMENTATION\_STRING}
+\entry{OCT\_IMPLEMENTATION\_STRING}
+This string recall which internal data type is used to represent
+the current underlying numerical domain $\mathbb{I}$
+(one of
+{\tt "long"}, {\tt "double"}, {\tt "mpz"}, {\tt "mpq"}, or {\tt "mpfr"}).
+
+\end{entrylist}
+
+\index{precision}
+When {\tt OCT\_NUM\_CLOSED} is not defined ($\mathbb{I}=\mathbb{Z}$), 
+the strong closure is not a full normal form; thus emptiness, inclusion,
+and equality tests are only semi-decidable ({\tt true} means
+really true, whereas {\tt false} means {\it I do not know}),
+and some operators and transfer functions are not the most accurate possible.
+However the octagon domain {\it remains sound}.
+
+
+
+\section{Octagons}
+\label{Coct}
+\index{.N@$N$}
+A set of constraints of the form $(\pm x_i\pm x_j\leq c)$, with
+$i,j\in\{0,\ldots,N-1\}$ and $c\in\overline{\mathbb{I}}$ is
+represented internally by a {\it matrix of dimension} $N$.
+
+\begin{entrylist}
+
+\findex{oct\_t}\entry{oct\_t*}
+{\it Abstract type} of octagons. The real definition lies in
+{\tt oct\_private.h} but is somewhat complex (see Section
+\ref{matrixinternal}).
+You only manipulate {\it pointers} to {oct\_t} structures.
+Use the library (see Section \ref{management}) to create, copy and destroy
+octagons: do not call {\tt malloc}, {\tt memcpy} or {\tt free} on the 
+pointers.
+
+\findex{var\_t}\entry{var\_t}
+This is the integer type representing a domain dimension, or a variable
+index.
+Presently, it is {\tt unsigned int}.
+
+\end{entrylist}
+
+\subsection{Octagon Management}
+\label{management}
+
+
+\begin{entrylist}
+
+\findex{oct\_empty}\entry{oct\_t* oct\_empty (var\_t n)}
+Creates a new octagon representing the empty domain $\emptyset$
+in {\tt n} dimensions.
+No constraint is stored in an empty octagon, so the representation
+has a $\mathcal{O}(1)$ memory cost.
+The returned octagon must be freed by {\tt oct\_free}, or used as a 
+destructive argument when it is no longer used.
+
+\findex{oct\_universe}\entry{oct\_t* oct\_universe (var\_t n)}
+Creates a new octagon representing the full space $\mathbb{I}^{\tt n}$
+in {\tt n} dimensions.
+The representation has a $\mathcal{O}({\tt n}^2)$ memory cost.
+The returned octagon must be freed by {\tt oct\_free}, or used as a 
+destructive argument when it is no longer used.
+
+
+\findex{oct\_copy}\entry{oct\_t* oct\_copy (oct\_t* m)}
+\index{reference counting}
+Returns a copy of the octagon {\tt m}.
+This is a {\it lazy copy}, as octagons are reference counted; so it is very
+fast ($\mathcal{O}(1)$ memory and time cost): 
+the library takes care of making a full copy when needed
+(see Section \ref{memoryinternal}).
+The returned octagon must be freed by {\tt oct\_free}, or used as a 
+destructive argument when it is no longer used.
+
+\findex{oct\_free}\entry{void oct\_free (oct\_t* m)}
+Decrease reference count of the octagon {\tt m}, and actually discards it if it
+is no longer needed.
+Every octagon returned by a function must be freed, except if the octagon
+is used as a destructive argument in a function call.
+
+\end{entrylist}
+
+\subsection{Queries}
+
+\begin{entrylist}
+\findex{oct\_dimension}\entry{var\_t oct\_dimension (oct\_t* m)}
+Returns the dimension $N$ of the octagon.
+
+\findex{oct\_nbconstraints}\entry{size\_t oct\_nbconstraints (oct\_t* m)}
+Returns the number of constraints used to represent internally {\tt m}.
+Does not take into account constraints of the form 
+$(\pm x_i \pm x_j\leq +\infty)$, nor $(x_i-x_i\leq 0)$; however there may
+be redundancy (one constraint can be the sum of two other constraints, for
+example).
+If the octagon is empty, it is not represented as a set of
+constraints, so the function returns $0$.
+$\mathcal{O}(N^2)$ time cost.
+\end{entrylist}
+
+
+
+\subsection{Tests}
+\index{closure}
+Different matrices can represent the same octagon.
+Thus, there exists a {\it normal form} called the {\it closed form}.
+Some test and manipulation algorithms require to compute the closed form
+of its argument;
+this process has a $\mathcal{O}(N^3)$ time cost, and a $\mathcal{O}(N)$
+memory cost.
+Closure computation is done automatically when needed, you do not need to
+bother about it.
+
+\index{precision}
+If you choose $\mathbb{I}=\mathbb{Z}$ ({\tt OCT\_NUM\_CLOSED} not defined),
+these tests are only semi-decidable:
+{\tt true} means ``really true'', whereas {\tt false} means 
+{\it ``I do not know''}.
+
+
+\begin{entrylist}
+
+\findex{oct\_is\_empty}\entry{bool oct\_is\_empty (oct\_t* m)}
+\index{closure remembering}
+Returns {\tt true} if the octagon {\tt m} has an empty domain, {\tt false}
+elsewhere. This call computes the closure of the matrix; the 
+octagon {\tt m} is not modified, but its closure is cached for future use.
+$\mathcal{O}(1)$ time cost, on behalf of the cost of the closure.
+
+\findex{oct\_is\_empty\_lazy}\entry{tbool oct\_is\_empty\_lazy (oct\_t* m)}
+This test does not perform the closure algorithm. So, if the closed form
+is not already available, it returns {\tt tbool\_top}.
+$\mathcal{O}(1)$ time cost in all cases.
+
+\findex{oct\_is\_universe}\entry{bool oct\_is\_universe (oct\_t* m)}
+Returns {\tt true} if the domain of {\tt m} is $\mathbb{I}^N$; {\tt false}
+elsewhere.
+$\mathcal{O}(N^2)$ time cost.
+
+\findex{oct\_is\_included\_in}\entry{bool oct\_is\_included\_in (oct\_t* ma, oct\_t* mb)}
+Returns {\tt true} if the domain of {\tt ma} is included in
+or equal to the domain of {\tt mb}, and {\tt false} elsewhere.
+This call computes the closure of {\tt ma} (but not the closure of
+{\tt mb}) and caches.
+$\mathcal{O}(N^2)$ time cost, on behalf of the cost of the closure.
+
+\findex{oct\_is\_included\_in\_lazy}\entry{tbool oct\_is\_included\_in\_lazy (oct\_t* ma, oct\_t* mb)}
+This test does not perform the closure algorithm. So, if the closed form
+of {\tt ma} is not already available, it may return {\tt tbool\_top}.
+$\mathcal{O}(N^2)$ time cost in all cases.
+
+\findex{oct\_is\_equal}\entry{bool oct\_is\_equal (oct\_t* ma, oct\_t* mb)}
+Returns {\tt true} if {\tt ma} and {\tt mb} have the same domain, and
+{\tt false} elsewhere.
+This call computes the closure of {\tt ma} and {\tt mb} and caches them.
+$\mathcal{O}(N^2)$ time cost, on behalf of the cost of the closures.
+
+\findex{oct\_is\_equal\_lazy}\entry{tbool oct\_is\_equal\_lazy (oct\_t* ma, oct\_t* mb)}
+This test does not perform the closure algorithm. So, if the closed form
+of {\tt ma} and {\tt mb} are not already available, 
+it may return {\tt tbool\_top}.
+$\mathcal{O}(N^2)$ time cost in all cases.
+
+\findex{oct\_is\_in}\entry{bool oct\_is\_in (oct\_t* m, const num\_t* v)}
+Returns {\tt true} if the point represented by {\tt v} is in 
+the domain of {\tt m}.
+{\tt v} is an array containing $N$ elements of type {\tt num\_t}.
+$\mathcal{O}(N^2)$ time cost.
+
+\end{entrylist}
+
+
+\subsection{Operators}
+It is implied that the octagon arguments of a binary operator have
+the same dimension $N$.
+
+\index{destructive}
+When {\tt destructive} is {\tt true}, the arguments are destroyed
+and cannot be reused after the call (you must not call
+{\tt oct\_free} on them); if it is set to {\tt false}, the arguments
+are left untouched.
+The octagons returned by the functions are always new octagons that must
+eventually be either freed with {\tt oct\_free}, or 
+used as destructive arguments.
+Destructive operators are more efficient: they save some internal allocations 
+and copies.
+
+
+\begin{entrylist}
+
+\findex{oct\_intersection}\entry{oct\_t* oct\_intersection (oct\_t* ma, oct\_t* mb, bool destructive)}
+Returns the exact intersection of two octagons.
+$\mathcal{O}(N^2)$ time cost.
+
+\findex{oct\_convex\_convex\_hull}\entry{oct\_t* oct\_convex\_hull (oct\_t* ma, oct\_t* mb, bool destructive)}
+Returns the smallest octagon that contains the union of two octagons.
+It must perform closure on the two octagons, but it does not cache them for
+future use as it is seldom useful.
+$\mathcal{O}(N^2)$ time cost, on behalf of the cost of the closure.
+
+\index{precision}
+If you choose $\mathbb{I}=\mathbb{Z}$ ({\tt -{}-with-num=int} or
+{\tt -{}-with-num=gmpint}), the returned octagon is not the {\it best} 
+approximation of the union; however it still contains both octagons.
+
+
+\findex{oct\_widening\_type}\findex{OCT\_WIDENING\_FAST}\findex{OCT\_WIDENING\_ZERO}\findex{OCT\_WIDENING\_UNIT}\findex{oct\_widening}
+\entry{oct\_t* oct\_widening(&oct\_t* ma, oct\_t* mb, bool destructive,\\& oct\_widening\_type type&)}
+Returns the widening $({\tt ma})\;\triangledown\;({\tt mb}^{\bullet})$.
+One of the following three widenings is chosen according to
+the value of {\tt type}:
+\begin{mylist}
+\item {\tt OCT\_WIDENING\_FAST},
+this is the original widening presented in \cite{mine:ast01}
+\par\quad$\left[m\;\triangledown\;n\right]_{ij}\left\{\begin{array}{cl}
+m_{ij}&\text{if }n_{ij}\leq m_{ij},\\
++\infty&\text{elsewhere};
+\end{array}\right.$
+\item {\tt OCT\_WIDENING\_ZERO},
+this widening is a little more precise but has a slower convergence
+\par\quad$\left[m\;\triangledown\;n\right]_{ij}\left\{\begin{array}{cl}
+m_{ij}&\text{if }n_{ij}\leq m_{ij},\\
+0&\text{if }m_{ij}<n_{ij}\leq 0,\\
++\infty&\text{elsewhere};
+\end{array}\right.$
+\item {\tt OCT\_WIDENING\_UNIT},
+this widening is even more precise and has an even slower convergence
+\par\quad$\left[m\;\triangledown\;n\right]_{ij}\left\{\begin{array}{cl}
+m_{ij}&\text{if }n_{ij}\leq m_{ij},\\
+-1&\text{if }m_{ij}<n_{ij}\leq -1,\\
+0&\text{if }m_{ij}<n_{ij}\leq 0,\\
+1&\text{if }m_{ij}<n_{ij}\leq 1,\\
++\infty&\text{elsewhere}.
+\end{array}\right.$
+\end{mylist}
+
+{\tt mb} is closed for better accuracy, but {\tt ma} is not as it would
+prevent convergence (see \cite{mine:padoII}).
+$\mathcal{O}(N^2)$ time cost, on behalf of the cost of the closure.
+
+\findex{oct\_widening\_steps}
+\entry{oct\_t* oct\_widening\_steps(&oct\_t* ma, oct\_t* mb, bool destructive,\\& int nb\_steps, num\_t* steps&)}
+This widening uses a set of threshold values to gradually loosen 
+unstable constraints.
+{\tt steps} is an array of {\tt nb\_steps} numbers in increasing order.
+If the constraint $\pm x \pm y\leq c$ in {\tt ma} is not stable
+in {\tt mb}, it will replace it by 
+$\pm x \pm y\leq {\tt steps[i]}$, such that ${\tt steps[i]}\geq c$ and
+{\tt i} is minimal, or remove the constraint if there is no such {\tt i}.
+
+
+\findex{oct\_narrowing}\entry{oct\_t* oct\_narrowing (oct\_t* ma, oct\_t* mb, bool destructive)}
+Returns the narrowing $({\tt ma}^{\bullet})\;\triangle\;({\tt mb}^{\bullet})$.
+\par\quad$\left[m\;\triangle\;n\right]_{ij}\left\{\begin{array}{cl}
+n_{ij}&\text{if }m_{ij}=+\infty,\\
+m_{ij}&\text{elsewhere}.
+\end{array}\right.$
+
+Both octagons are closed.
+$\mathcal{O}(N^2)$ time cost, on behalf of the cost of the closure.
+
+\end{entrylist}
+
+\subsection{Transfer Functions}
+
+\index{precision}
+If you choose $\mathbb{I}=\mathbb{Z}$ ({\tt -{}-with-num=int} or
+{\tt -{}-with-num=gmpint}), some transfer functions may not be as accurate as
+possible.
+
+\begin{entrylist}
+\findex{oct\_forget}\entry{oct\_t* oct\_forget (oct\_t* m, var\_t k, bool destructive)}
+Returns an octagon where all informations about the variable $v_{\tt k}$
+has been forgotten.
+This transfer function corresponds to both instructions
+$v_{\tt k}\leftarrow {\tt ?}$ and $v_{\tt k}\rightarrow {\tt ? }$
+({\em i.e.}, forward and backward assignment).
+It computes the closure of its argument.
+$\mathcal{O}(N)$ time cost, on behalf of the cost of the closure.
+
+\findex{oct\_add\_bin\_constraints}\findex{oct\_cons}
+\entry{oct\_t* oct\_add\_bin\_constraints (&oct\_t* m, unsigned int nb,\\& const oct\_cons* cons,\\& bool destructive&)}
+
+Adds some constraints of the form $(\pm v_{\tt x} \pm v_{\tt y}\leq c)$ or 
+$(\pm v_{\tt x}\leq c)$
+to the octagon {\tt m}.
+It corresponds to the semantics of the several instructions of the form
+{\tt assert($\pm v_{\tt x} \pm v_{\tt y}\leq c$)} and {\tt assert($\pm v_{\tt x}\leq c$)}.
+
+The array {\tt cons} contains the {\tt nb} constraints to add.
+The structure {\tt oct\_cons} has the following fields:
+\begin{mylist}
+\item {\tt enum type} is the type of the constraint, it can be
+\begin{mylist2}
+\item {\tt px}, constraint of the form $(v_{\tt x}\leq c)$,
+\item {\tt mx}, constraint of the form $(-v_{\tt x}\leq c)$,
+\item {\tt pxpy}, constraint of the form $(v_{\tt x}+v_{\tt y}\leq c)$,
+\item {\tt pxmy}, constraint of the form $(v_{\tt x}-v_{\tt y}\leq c)$,
+\item {\tt mxpy}, constraint of the form $(-v_{\tt x}+v_{\tt y}\leq c)$,
+\item {\tt mxmy}, constraint of the form $(-v_{\tt x}-v_{\tt y}\leq c)$;
+\end{mylist2}
+\item {\tt var\_t x} is the index of the first variable;
+\item {\tt var\_t y} is the index of the second variable;
+it is not used if the constraint is a unary constraint
+({\tt type} is {\tt px} or {\tt mx});
+\item {\tt num\_t c} is the numerical constant appearing in the right
+member of the constraint.
+Do not forget to initialize {\tt c} with a function from
+the {\tt num\_init} family!
+\end{mylist}
+
+$\mathcal{O}({\tt nb})$ time cost.
+
+\findex{oct\_assign\_variable}\entry{oct\_t* oct\_assign\_variable (&oct\_t* m, var\_t x, const num\_t* tab,\\&bool destructive&)}
+
+Returns a new octagon representing the domain of {\tt m} after the 
+linear variable assignment\\ $v_{\tt x}\leftarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot {\tt tab}[i]\right)+{\tt tab}[N]$.
+
+When the the result of the assignment is not representable by an octagon,
+or would be too costly to compute, a sound over-approximation is returned.
+The transfer function is exact for assignments of the form
+$x\leftarrow c$, $x\leftarrow \pm x+c$, and $x\leftarrow \pm y+c$.
+Sound approximations include the use of interval arithmetic.
+
+
+\findex{oct\_interv\_assign\_variable}\entry{oct\_t* oct\_interv\_assign\_variable (&oct\_t* m, var\_t x,\\& const num\_t* tab,\\&bool destructive&)}
+
+Same as {\tt oct\_assign\_variable}, but allowing {\em interval\/}
+coefficients instead of constant ones:\\
+$v_{\tt x}\leftarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot [-{\tt tab}[2i+1],{\tt tab}[2i]]\right)+[-{\tt tab}[2N+1],{\tt tab}[2N]]$.
+For each variable $v_{\tt y}$, upper bounds for 
+$\pm v_{\tt x}\pm v_{\tt x}$ are derived by evaluating the right member 
+using interval arithmetics.
+Thus, it can infer new relational constraints, but does not use the relational
+information within the argument octagon.
+It is reasonably precise yet quite fast.
+
+\findex{oct\_substitute\_variable}\entry{oct\_t* oct\_substitute\_variable (&oct\_t* m,\\&var\_t x, const num\_t* tab,\\& bool destructive&)}
+
+Returns a new octagon representing the domain of {\tt m} after the 
+linear variable substitution\\ $v_{\tt x}\rightarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot {\tt tab}[i]\right)+{\tt tab}[N]$.
+It is the {\it backward} semantics of the corresponding assignment.
+
+When the the result of the substitution is not representable by an octagon,
+or would be too costly to compute, a sound over-approximation is returned.
+The transfer function is exact for substitution of the form
+$x\rightarrow c$, $x\rightarrow \pm x+c$, and $x\rightarrow \pm y+c$.
+For the moment, the general case is not very precise and could be
+improved by using interval arithmetic, as it is the case for
+{\tt oct\_assign\_variable}.
+
+
+\findex{oct\_interv\_substitute\_variable}\entry{oct\_t* oct\_interv\_substitute\_variable (&oct\_t* m, var\_t x,\\& const num\_t* tab,\\&bool destructive&)}
+
+Same as {\tt oct\_substitute\_variable}, but allowing {\em interval\/}
+coefficients instead of constant ones:\\
+$v_{\tt x}\rightarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot [-{\tt tab}[2i+1],{\tt tab}[2i]]\right)+[-{\tt tab}[2N+1],{\tt tab}[2N]]$.
+For the moment, only the cases $v_{\tt x}\rightarrow \pm v_{\tt y}+[a,b]$ are
+treated precisely, while the general case falls back to forgetting the value
+of $v_{\tt x}$.
+It could be improved using techniques similar to 
+{\tt oct\_interv\_assign\_variable}.
+
+\findex{oct\_add\_constraint}\entry{oct\_t* oct\_add\_constraint (&oct\_t* m, const num\_t* tab,\\&
+bool destructive&)}
+
+Returns a new octagon representing the domain of {\tt m} with the
+linear constraint added
+$\left(\sum_{i=0}^{N-1} v_i\cdot {\tt tab}[i]\right)+{\tt tab}[N]\geq 0$.
+
+When the the result of the constraint is not representable by an octagon,
+or would be too costly to compute, a sound over-approximation is returned.
+The transfer function is exact for constraints of the form
+$c\geq 0$, $\pm x+c\geq 0$, and $\pm x \pm y+c\geq 0$.
+The general case simply returns its argument unchanged.
+
+\findex{oct\_interv\_add\_constraint}\entry{oct\_t* oct\_interv\_add\_constraint (&oct\_t* m, const num\_t* tab,\\&
+bool destructive&)}
+
+Same as {\tt oct\_add\_constraint}, but allowing {\em interval\/}
+coefficients instead of constant ones:\\
+$
+\left(\sum_{i=0}^{N-1} v_i\cdot [-{\tt tab}[2i+1],{\tt tab}[2i]]\right)+[-{\tt tab}[2N+1],{\tt tab}[2N]] \geq 0$.
+
+As {\tt oct\_interv\_assign\_variable}, it is able to infer new relational
+constraints but does not take into account relational information in the
+octagon argument.
+It is reasonably precise and fast.
+
+\end{entrylist}
+
+\subsection{Change of Dimension}
+
+The following functions change the dimension $N$ of an octagon by adding or 
+subtracting variables {\it at the end} of $\mathcal{V}$.
+It is most useful to model creation and destruction of local variables
+when entering and exiting from nested instruction blocks.
+
+\begin{entrylist}
+
+\findex{oct\_add\_dimensions\_and\_embed}\entry{oct\_t* oct\_add\_dimensions\_and\_embed(&oct\_t* m, var\_t  dimsup,\\& bool destructive&)}
+Adds {\tt dimsup} variables at the end of $\mathcal{V}$ without adding any
+constraint.
+If the original domain is denoted by $\mathcal{D}^+({\tt m})$,
+the new domain is $\mathcal{D}^+({\tt m})\times\mathbb{I}^{\tt dimsup}$.
+$\mathcal{O}({\tt dimsup}^2)$ time cost; however the call to
+{\tt realloc} may induce an extra $\mathcal{O}(N^2)$ time for copy.
+
+\findex{oct\_add\_dimensions\_and\_project}\entry{oct\_t* oct\_add\_dimensions\_and\_project(&oct\_t* m, var\_t  dimsup,\\& bool destructive&)}
+Adds {\tt dimsup} variables at the end of $\mathcal{V}$. The new variables
+are initialized to $0$.
+If the original domain is denoted by $\mathcal{D}^+({\tt m})$,
+the new domain is $\mathcal{D}^+({\tt m})\times\{\;0\;\}^{\tt dimsup}$.
+$\mathcal{O}({\tt dimsup}^2)$ time cost; however the call to
+{\tt realloc} may induce an extra $\mathcal{O}(N^2)$ time for copy.
+
+\findex{oct\_remove\_dimensions}\entry{oct\_t* oct\_remove\_dimensions(&oct\_t* m, var\_t  dimmin,\\&bool destructive&)}
+Removes the {\tt dimmin} last variables from $\mathcal{V}$.
+It computes the closure of its argument.
+No time cost, on behalf of the cost of the closure;
+however the call to {\tt realloc} may induce an extra
+$\mathcal{O}((N-{\tt dimmin})^2)$ 
+time for copy.
+
+\end{entrylist}
+
+
+The following functions are used to add and remove dimensions not necessarily
+at the end of $\mathcal{V}$.
+They all use arrays of {\tt dimsup\_t} objects to define where dimensions
+are added or removed.
+Note that these functions are a little less efficient (by a constant factor) 
+than the functions that add and remove dimensions at the end of $\mathcal{V}$.
+
+
+\begin{entrylist}
+\findex{dimsup\_t}\entry{struct dimsup\_t \{&var\_t pos;\\&var\_t nbdims;\quad\}}
+Specifies that {\tt nbdims} variables must be added or removed just before
+the variable at position {\tt pos}.
+All positions are counted from $0$, and always with respect to the variable
+set of the {\em argument} octagon.
+
+\findex{oct\_add\_dimensions\_and\_embed\_multi}\entry{oct\_t* oct\_add\_dimensions\_and\_embed\_multi(&oct\_t* m,\\& const dimsup\_t* tab,\\&size\_t size\_tab,\\& bool destructive&)}
+Adds variables in $\mathcal{V}$ without adding any constraint.
+The positions and numbers of variables to add are specified in the array 
+{\tt tab} containing {\tt size\_tab} structure of type {\tt dimsup\_t}.
+Note that the {\tt pos} fields of {\tt tab} elements 
+must be sorted in {\em strictly increasing order}.
+
+$\mathcal{O}({\tt n}^2)$ time cost, in the size of the variable set 
+$\mathcal{V}$ {\em after} insertion.
+
+\findex{oct\_add\_dimensions\_and\_project\_multi}\entry{oct\_t* oct\_add\_dimensions\_and\_project\_multi(&oct\_t* m,\\& const dimsup\_t* tab,\\&size\_t size\_tab,\\& bool destructive&)}
+Adds zero-initialized variables in $\mathcal{V}$.
+
+$\mathcal{O}({\tt n}^2)$ time cost, in the size of the variable set 
+$\mathcal{V}$ {\em after} insertion.
+
+\findex{oct\_remove\_dimensions\_multi}\entry{oct\_t* oct\_remove\_dimensions\_multi(&oct\_t* m,\\& const dimsup\_t* tab,\\&size\_t size\_tab,\\&bool destructive&)}
+Removes variables from $\mathcal{V}$.
+
+$\mathcal{O}({\tt n}^2)$ time cost, in the size of the variable set 
+$\mathcal{V}$ {\em before} deletion.
+\end{entrylist}
+
+
+\subsection{Interval Manipulations}
+
+\begin{entrylist}
+
+\findex{oct\_get\_bounds}\entry{void oct\_get\_bounds (&oct\_t* m, var\_t  k,\\&num\_t* up, num\_t* down&)}
+Returns the interval where the variable $v_{{\tt k}}$ lies:
+$v_{{\tt k}}\in [-{\tt *down},{\tt *up}]$.
+If the octagon is empty, {\tt *up} and {\tt *down} are not updated and
+should be ignored.
+This call computes the closed form of its argument, and caches it for
+future use.
+
+\findex{oct\_set\_bounds}\entry{oct\_t* oct\_set\_bounds (&oct\_t* m, var\_t  k,\\&const num\_t* up,const num\_t* down,\\&bool destructive&)}
+Returns a new octagon with the same domain as {\tt m} except for $v_{{\tt k}}$
+which is now in the interval $[-{\tt *down},{\tt *up}]$.
+All prior informations about $v_{{\tt k}}$ are lost.
+This is strictly equivalent to a call to {\tt oct\_forget} followed by
+two calls to {\tt oct\_add\_bin\_constraints}.
+Used in combination with {\tt oct\_get\_box} or 
+{\tt oct\_get\_bounds}, it provides a way to the user to model complex 
+arithmetic using its own interval arithmetic.
+
+\findex{oct\_get\_box}\entry{num\_t* oct\_get\_box (oct\_t* m)}
+Returns the box enclosing the octagon as an array {\tt r} of 
+{\tt 2n} numbers:
+$v_{{\tt i}}\in [-{\tt r[2i+1]},{\tt r[2i]}]$.
+If the octagon is empty, {\tt r} is {\tt NULL}.
+This call computes the closed form of its argument, and caches it for
+future use. {\tt r} must be freed with {\tt oct\_mm\_free}.
+
+\findex{oct\_from\_box}\entry{oct\_t* oct\_get\_box (var\_t n, const num\_t* b)}
+Creates a new octagon of dimension {\tt n} the domain of which is defined
+by the box {\tt b} containing {\tt 2n} numbers:
+$v_{{\tt i}}\in [-{\tt r[2i+1]},{\tt r[2i]}]$.
+
+\end{entrylist}
+
+
+\subsection{Perturbation}
+
+\begin{entrylist}
+\findex{oct\_add\_epsilon}\entry{oct\_t* oct\_add\_epsilon (&oct\_t* m, const num\_t* epsilon,\\&bool destructive)}
+Returns an enlarged octagon, where all constraints $\pm x\pm y\leq a$ are
+replaced by $\pm x \pm y\leq a + {\tt epsilon} |a|$.
+{\tt epsilon} must be positive.
+
+$\mathcal{O}(N^2)$ time cost.
+The normal form is lost.
+
+\findex{oct\_add\_epsilon\_max}\entry{oct\_t* oct\_add\_epsilon\_max (&oct\_t* m, const num\_t* epsilon,\\&bool destructive)}
+As {\tt oct\_add\_epsilon}, but all constraints are replaced by
+$\pm x \pm y\leq a + {\tt epsilon} \times M$.
+where $M = \max \{\;|m|\;|\;\pm x\pm y\leq m,\;m\neq +\infty\;\}$.
+{\tt epsilon} must be positive.
+
+$\mathcal{O}(N^2)$ time cost.
+The normal form is lost.
+
+\findex{oct\_add\_epsilon\_bin}\entry{oct\_t* oct\_add\_epsilon\_bin (&oct\_t* ma, oct\_t* mb,\\&const num\_t* epsilon, bool destructive)}
+Binary version of {\tt oct\_add\_epsilon\_max}, where
+only the non-stable constraints in {\tt mb} are enlarged by ${\tt epsilon}\times M$.
+This is a form of widening.
+{\tt epsilon} must be positive.
+
+$\mathcal{O}(N^2)$ time cost.
+The normal form is lost.
+\end{entrylist}
+
+\subsection{Utilities}
+
+\begin{entrylist}
+
+\findex{oct\_print}\entry{void oct\_print (const oct\_t* m)}
+Prints on the standard output the domain of the octagon {\tt m} as a 
+constraint set, or {\tt empty} if the octagon is empty.
+Also prints {\tt (closed)} if {\tt m} is in closed form.
+Does not print constraints of the form 
+$(\pm x_i \pm x_j\leq +\infty)$, nor $(x_i-x_i\leq 0)$; however there may
+be redundancy (one constraint can be the sum of two other constraints, for
+example).
+See {\tt oct\_m\_print} to print the domain of an octagon without
+redundancy.
+\end{entrylist}
+
+
+
+\subsection{Minimized Octagons}
+If the $\mathcal{O}(N^2)$ memory cost of octagons become prohibitive,
+you can use the {\tt moct\_t} minimized representation.
+In the minimized form, only a minimal set of non-redundant constraints
+is kept and stored in a hollow matrix.
+This is space-efficient, but not suitable for manipulation:
+only few operators are available for minimized octagons.
+Minimized octagons are intended mostly for storage.
+A notable exception is the equality test
+{\tt oct\_m\_is\_equal}, which has a $\mathcal{O}(N^2)$ time cost
+in the worst case, as minimization is also a normal form.
+
+\begin{entrylist}
+
+\findex{moct\_t}\entry{moct\_t*}
+{\it Abstract type} of minimized octagons.
+Use {\tt oct\_m\_from\_oct} to construct one, {\tt oct\_m\_free} to free one.
+Unlike regular octagons, minimized octagons are not in-place modifiable; so
+there is no memory-friendly destructive operations on them.
+
+\findex{oct\_m\_from\_oct}
+\entry{moct\_t* oct\_m\_from\_oct (oct\_t* m)}
+The only way of constructing a minimized octagon is conversion from
+a regular octagon.
+The closure algorithm is first applied, then a $\mathcal{O}(N^3)$ time
+cost \index{minimization} minimization algorithm 
+that removes redundant constraints (see Section \ref{minimization}).
+{\tt m} is not modified.
+$\mathcal{O}(N^3)$ time and $\mathcal{O}(N)$ memory cost.
+
+\findex{oct\_m\_free}
+\entry{void oct\_m\_free (moct\_t* m)}
+Call this to discard a minimized octagon that is no longer used.
+
+\findex{oct\_m\_to\_oct}
+\entry{oct\_t* oct\_m\_to\_oct (moct\_t* m)}
+Converts the minimized octagon into a regular octagon.
+Does not modify {\tt m}.
+
+\findex{oct\_m\_is\_equal}
+\entry{bool oct\_m\_is\_equal(moct\_t* ma, moct\_t* mb)}
+Return {\tt true} is the two minimized octagons represent the same domain, and
+{\tt false} elsewhere.
+$\mathcal{O}(N^2)$ worst-case time cost, and no memory cost.
+
+\findex{oct\_m\_is\_empty}
+\entry{bool oct\_m\_is\_empty (moct\_t* m)}
+Returns {\tt true} if {\tt m} represents an empty octagon, {\tt false}
+elsewhere.
+Emptiness of a minimized octagon is determined at creation-time, so this
+test is constant-time.
+
+
+\findex{oct\_m\_dimension}
+\entry{int oct\_m\_dimension (moct\_t* a)}
+Returns the dimension $N$ of the minimized octagon.
+
+\findex{oct\_m\_print}
+\entry{void oct\_m\_print (moct\_t* a)}
+Prints on the standard output the domain of the minimized octagon as a
+constraint list.
+Because the octagon is in minimal form, printed constraints are not redundant.
+
+\end{entrylist}
+
+
+
+\subsection{Low Level Functions}
+\label{lowlevelfuncs}
+
+Because they are not of common use,
+these low-level functions are only available if you include the file 
+{\tt oct/oct\_private.h}.
+You need to understand the internal representation of octagons before using 
+these functions (Section \ref{matrixinternal}).
+
+\subsubsection{Low-Level Access}
+
+\begin{entrylist}
+
+\findex{oct\_elem}\entry{num\_t* oct\_elem (oct\_t* m, var\_t i, var\_t j)}
+Returns a pointer to
+the element at line {\tt i}, column {\tt j} in the internal matrix
+representation of {\tt m}: $0\leq{\tt i}<2N$ and $0\leq{\tt j}<2N$.
+This element is denoted by $\vec{m}^+_{ij}$, and corresponds to the constraint
+$(\alpha_j v_{j/2} - \alpha_i v_{i/2} \leq \vec{m}^+_{ij})$, where
+$\alpha_i=+1$ if $i$ is odd, and $\alpha_i=-1$ if $i$ is even.
+
+If you modify the content of the pointer,
+you are responsible for updating {\tt m->close} and {\tt m->state}.
+
+$\mathcal{O}(1)$ time cost.
+\end{entrylist}
+
+
+
+\subsubsection{Octagon Management}
+
+\begin{entrylist}
+
+\findex{oct\_alloc}\entry{oct\_t* oct\_alloc (var\_t  n)}
+Allocates space for a non-empty octagon.
+The internal matrix is allocated (unlike a call to {\tt oct\_empty})
+but its content is not initialized (unlike {\tt oct\_universe}); thus
+$\vec{m}^+_{ii}\neq0$ and the representation is initially {\it invalid}
+(making this call a bit faster than {\tt oct\_universe}).
+You are responsible for filling the internal matrix representation and
+setting {\tt m->state} accordingly.
+
+\findex{oct\_full\_copy}\entry{oct\_t* oct\_full\_copy  (oct\_t* m)}
+Allocates a new octagon which is an exact copy of {\tt m}, except
+its reference count is $1$.
+The internal matrix representation is also copied.
+This procedure is used internally whenever the library needs to modify an 
+octagon in-place but the original octagon must be kept.
+$\mathcal{O}(N^2)$ time cost.
+
+\end{entrylist}
+
+
+\subsubsection{Closure}
+\index{closure}
+
+\begin{entrylist}
+
+\findex{oct\_close}\entry{oct\_t* oct\_close (oct\_t* m, bool destructive, bool cache)}
+Returns a new octagon which has the same domain as {\tt m} but is in closed 
+form.
+Also checks for emptiness and, if {\tt m} has an empty domain, returns an
+empty octagon.
+If {\tt cache} is {\tt true} and the argument {\tt m} is not destroyed by the 
+call, makes {\tt m} remember that the closed form is available;
+this prevents re-computation of {\tt m}'s closure, but also prevents
+the returned octagon to be actually freed before {\tt m} is.
+$\mathcal{O}(N^3)$ time cost, $\mathcal{O}(N)$ memory cost
+(no temporary matrix is created during this call).
+See Section \ref{closure}.
+
+\findex{oct\_close\_incremental}\entry{void oct\_close\_incremental (oct\_t* m, var\_t v)}
+Performs one step of incremental closure on the octagon {\tt m}.
+The argument {\tt m} is supposed to be equal to a closed octagon,
+except for the informations regarding the variable {\tt v}.
+It is modified in-place to recover the closure.
+$\mathcal{O}(N^2)$ time cost and $\mathcal{O}(N)$ memory cost.
+See Section \ref{closure}.
+
+
+\findex{oct\_is\_closed}\entry{bool oct\_is\_closed (oct\_t* m)}
+Returns {\tt true} if {\tt m} is in closed form, or is an
+empty octagon. 
+Returns {\tt false} if a call to {\tt oct\_close} is necessary to discover
+whether {\tt m} has an empty domain, and to get its closed form.
+Constant cost.
+
+\findex{oct\_close\_lazy}\entry{oct\_t* oct\_close\_lazy (oct\_t* m, bool destructive)}
+As {\tt oct\_close}, but returns an octagon in closed form only if it is
+available without computation (either {\tt m} is already in closed form, 
+or empty, or the closed form of {\tt a} has already been computed and cached).
+Elsewhere, simply returns {\tt m}.
+Constant cost.
+
+\findex{oct\_check\_closed}\entry{bool oct\_check\_closed (oct\_t* m, bool quiet)}
+This procedure checks that {\tt m} is in a valid closed form
+(see Section \ref{closure}).
+It should always return {\tt true} for octagons created by
+{\tt oct\_close} and is intended only
+for debugging purpose.
+$\mathcal{O}(N^3)$ time cost.
+
+\end{entrylist}
+
+
+\subsection{Interface with the New Polka Library}
+\label{polka}
+
+\findex{OCT\_HAS\_NEW\_POLKA}
+When the {\tt configure} script discovers the New Polka Library, it
+defines the symbol {\tt OCT\_HAS\_NEW\_POLKA}, and the
+following two functions are available to convert between octagons
+and polyhedra.
+By setting the {\tt -{}-with-polka-num=} option to {\tt long}, {\tt longlong},
+or {\tt gmp} when calling {\tt configure}, you can change the integer 
+representation used in the New Polk Library.
+This will set the symbol {\tt POLKA\_NUM} to the appropriate value 
+({\tt 1}, {\tt 2}, or {\tt 3}), and choose the correct New Polka
+Library to link with
+(see the New Polka Library Manual \cite{polka} for more informations).
+Remark that if the Octagon Library is compiled with debugging enabled
+({\tt -{}-enable-debug} configuration option), then the New Polka Library
+with debugging informations will be chosen.
+
+You need to call {\tt polka\_initialize} before calling the
+following functions, as well as functions in the New Polka Library.
+
+\index{soundness}
+\index{precision}
+Beware the New Polka Library and the Octagon Abstract Domain Library may
+not use the same underlying numerical domain; conversion may result in
+over-approximations, but are {\it always sound}.
+To have the best precision, you should use {\tt -{}-with-polka-num=gmp}
+and {\tt -{}-with-num=frac} (or {\tt -{}-with-num=gmpfrac}).
+
+\begin{entrylist}
+
+\findex{oct\_to\_poly}\entry{poly\_t* oct\_to\_poly (oct\_t* m)}
+Creates a polyhedron with the same domain as the octagon {\tt m}.
+The polyhedron can then be manipulated with the New Polka Library, and
+you must free it with {\tt poly\_free}.
+This function calls {\tt poly\_add\_constraints} to add at most
+$\mathcal{O}(N^2)$ constraints to the universal polyhedron.
+The returned polyhedron may have a slightly larger domain than the
+original octagon due to sound number conversions.
+
+\findex{oct\_from\_poly}\entry{oct\_t* oct\_from\_poly (poly\_t* p)}
+Returns an octagon with the smallest domain containing the polyhedron
+{\tt p}: it is guaranteed to be the {\it best approximation}.
+You can then manipulate the octagon with the Octagon Abstract Domain Library,
+and you must free it with {\tt oct\_free}.
+This function uses the frame representation of the polyhedron and
+has a $\mathcal{O}(N^2\times M)$ time and $\mathcal{O}(N)$ memory cost,
+$M$ being the size of the frame representation.
+
+\end{entrylist}
+
+
+\section{Utilities}
+\label{utilsec}
+
+The functions described in this section are not tied to octagons and can
+be used to instrument and monitor any C function.
+They were successfully used to debug and optimize the
+Octagon Abstract Domain Library.
+
+\subsection{Assertions}
+The library uses assertions to perform basic sanity checks:
+\begin{entrylist}
+
+\findex{ENABLE\_ASSERT}
+\entry{OCT\_ASSERT(c,text)}
+When the library is configured with the {\tt -{}-enable-assert} option (the
+{\tt ENABLE\_ASSERT} symbol is defined), the library
+checks the condition {\tt c}.
+If the condition {\tt c} is false, then it aborts after displaying the message
+{\tt text} as well as the source file and line where the error occurred.
+Aborting the program is done by sending a {\tt SIGABRT} signal;
+this allows easy access to the program state in a debugger, or via the
+core file.
+
+If the {\tt -{}-disable-assert} configuration option is used
+({\tt ENABLE\_ASSERT} is not defined), this function does nothing.
+
+\end{entrylist}
+
+In the Octagon Library, the assertion mechanism is mostly used to check
+arguments supplied by the user; thus we strongly recommend to always
+use the {\tt -{}-enable-assert} option.
+Disabling assertions will not result in significant speed increase.
+
+
+
+\subsection{Memory Management}
+
+The following useful functions and macros are defined:
+\begin{entrylist}
+
+\findex{oct\_mm\_malloc}\entry{void* oct\_mm\_malloc(size\_t t)}
+Works as {\tt malloc}, but may be monitored (see {\tt oct\_mm\_alloc\_t} below).
+All library functions use {\tt oct\_mm\_malloc} instead of {\tt malloc}.
+Do not mix blocks allocated with {\tt oct\_mm\_malloc} and blocks 
+allocated with {\tt malloc}.
+
+\findex{oct\_mm\_realloc}\entry{void* oct\_mm\_realloc(void* p, size\_t t)}
+Works as {\tt realloc}.
+The block {\tt p} must have been allocated with {\tt oct\_mm\_malloc}.
+If the block was allocated with {\tt malloc}, then use {\tt realloc}
+instead of {\tt oct\_mm\_realloc}.
+
+\findex{oct\_mm\_free}\entry{void oct\_mm\_free(void* p)}
+Works as {\tt free}.
+The block {\tt p} must have been allocated with {\tt oct\_mm\_malloc}.
+If the block was allocated with {\tt malloc}, then use {\tt free}
+instead of {\tt oct\_mm\_free}.
+
+\findex{new\_t}\entry{t* new\_t (t)}
+Allocates a new object of type {\tt t} in the heap with {\tt oct\_mm\_malloc}.
+It must be freed with {\tt oct\_mm\_free}.
+
+\findex{new\_n}\entry{t* new\_n (t, size\_t n) }
+Allocates an array of {\tt n} objects of type {\tt t} in the heap
+with {\tt oct\_mm\_malloc}.
+It must be freed with {\tt oct\_mm\_free}.
+
+\findex{renew\_n}\entry{t* renew\_n (t* c, t, size\_t n)}
+Resizes the block pointed by {\tt c} so that it contains
+{\tt n} objects of type {\tt t} with {\tt oct\_mm\_realloc}.
+The block {\tt c} must have been allocated using one of the preceding
+functions, not {\tt malloc} nor {\tt realloc}.
+The returned block must be freed with {\tt oct\_mm\_free}.
+
+\end{entrylist}
+
+\findex{ENABLE\_MALLOC\_MONITORING}
+When the {\tt -{}-enable-prof} configuration option is used,
+the symbol {\tt ENABLE\_MALLOC\_MONITORING} is defined and all calls 
+to the memory functions {\tt oct\_mm\_malloc}, {\tt oct\_mm\_realloc}, {\tt oct\_mm\_free},
+{\tt new\_t}, {\tt new\_n}, and {\tt renew\_n}
+are redirected through a
+memory monitoring routine that monitors memory consumption.
+You can then use the following interface.
+\begin{entrylist}
+
+\findex{mmalloc\_t}\entry{mmalloc\_t*}
+Abstract type of memory monitors.
+They are allocated by {\tt oct\_mmalloc\_new}, and never deallocated.
+There is always a current monitor to which {\tt oct\_mm\_malloc}-ed 
+blocks are attached.
+When these blocks are {\tt oct\_mm\_realloc}-ed, or {\tt oct\_mm\_free}-ed, 
+they affect the  monitor
+they are attached to, not the current monitor.
+A monitor stores the number of calls to {\tt oct\_mm\_malloc},
+{\tt oct\_mm\_realloc}, {\tt oct\_mm\_free}, as well as the total sum of memory 
+allocated,
+and the maximum this sum has reached.
+
+\findex{oct\_mmalloc\_new}\entry{mmalloc\_t* oct\_mmalloc\_new ()}
+Creates a new monitor.
+Monitors are never deallocated because
+there may still be memory blocks attached to them.
+You must not call {\tt oct\_mm\_free}, nor {\tt free} on them.
+
+\findex{oct\_mmalloc\_print}\entry{void oct\_mmalloc\_print (mmalloc\_t* mm)}
+Prints on the standard output the statistics for the monitor {\tt mm}.
+
+\findex{oct\_mmalloc\_use}\entry{void oct\_mmalloc\_use (mmalloc\_t* mm)}
+Makes {\tt mm} the current monitor.
+It will stay the current monitor until the next call to {\tt oct\_mmalloc\_use}.
+
+\findex{oct\_mmalloc\_get\_current}\entry{mmalloc\_t* oct\_mmalloc\_get\_current ()}
+Returns the current monitor.
+Before any call to {\tt oct\_mmalloc\_use}, there exists a default current
+monitor; you can retreive it using this function.
+
+\findex{oct\_mmalloc\_reset}\entry{void oct\_mmalloc\_reset (mmalloc\_t* mm)}
+Forgets about all the blocks attached to the monitor {\tt mm} and resets all
+counters.
+
+\end{entrylist}
+
+When the {\tt -{}-disable-prof} configuration option is used,
+the symbol {\tt ENABLE\_MALLOC\_MONITORING} is not defined and
+{\tt oct\_mm\_malloc}, {\tt oct\_mm\_realloc}, and {\tt oct\_mm\_free} are synonymous
+to {\tt malloc}, {\tt realloc}, and {\tt free}.
+
+
+IMPORTANT WARNING: when memory monitoring is enabled, you must call 
+{\tt oct\_mm\_free} only on blocks allocated with
+{\tt oct\_mm\_malloc}, and {\tt free} on blocks allocated with {\tt malloc}.
+All the memory used by the Octagon Library is allocated through
+{\tt oct\_mm\_malloc} to enable you to monitor the library memory usage.
+Blocks allocated by other libraries (like the C library) are allocated
+using implicitly {\tt malloc}, so they must be freed with {\tt free}.
+
+One simple usage of monitors is to call {\tt oct\_mmalloc\_print (mmalloc\_get\_current())}
+at the end of your program to get the total number of {\tt malloc}s, 
+and the maximum amount of memory used by the program.
+It can also be used to detect memory leaks (it is sometime customary
+to allocate some static structures at the beginning of the program
+and never deallocate them; they must not be taken into account when
+looking for memory leaks; {\tt mmalloc\_t} objects are one such example).
+
+Beware that enabling memory profiling makes all calls to the Octagon Library
+thread-unsafe.
+
+
+
+\subsection{Timing}
+
+The library defines {\it clocks} to help you measure precisely elapsed time.
+
+\begin{entrylist}
+
+\findex{chrono\_t}\entry{chrono\_t}
+Type of clocks.
+This is a public structure, so you can safely allocate a new
+clock using simply {\tt chrono\_t a; oct\_chrono\_reset(\&a); }.
+
+\findex{oct\_chrono\_reset}\entry{void oct\_chrono\_reset (chrono\_t* c)}
+Initializes or resets the clock.
+Elapsed time is reset to $0$ and the clock is set in the stopped state.
+
+\findex{oct\_chrono\_start}\entry{void oct\_chrono\_start (chrono\_t* c)}
+Starts the clock.
+You must not call {\tt oct\_chrono\_start} on a clock that is already started.
+
+\findex{oct\_chrono\_stop}\entry{void oct\_chrono\_stop (chrono\_t* c)}
+Stops the clock.
+You must not call {\tt oct\_chrono\_stop} on a clock that is already stopped.
+If you call {\tt oct\_chrono\_start} and {\tt oct\_chrono\_stop} several
+times, elapsed times are accumulated.
+You must call {\tt oct\_chrono\_reset} to reset the elapsed time to $0$.
+
+\findex{oct\_chrono\_get}\entry{void oct\_chrono\_get (&chrono\_t* c,\\&long* hour, long* min, long* sec, long* usec&)}
+Get the elapsed time of the clock in canonical form.
+You are guaranteed than $0\leq {\tt min}\leq 59$, $0\leq {\tt sec}\leq 59$, and
+$0\leq {\tt usec}\leq 999$.
+
+\findex{oct\_chrono\_print}\entry{void oct\_chrono\_print (chrono\_t* c)}
+Prints the elapsed time on the standard output.
+
+\end{entrylist}
+
+\findex{ENABLE\_TIMING}
+If the {\tt -{}-enable-prof} configuration option is used;
+the symbol {\tt ENABLE\_TIMING} is also defined and clocks are used to count
+the time elapsed in each library call, as well as the number of time each
+library function is called.
+It uses the following interface:
+
+\begin{entrylist}
+
+\findex{oct\_timing\_enter}\entry{void oct\_timing\_enter (const char* name, unsigned key)}
+Called when entering a section named {\tt name}.
+Also, a unique {\tt key} must be given for each {\tt name}, and this key must
+not exceed the size of the {\tt timing\_data} array defined in 
+{\tt oct\_util.c}.
+Sections must be properly nested, and entering twice a section with the
+same key (recursive sections) is forbidden.
+Use with care.
+
+\findex{oct\_timing\_exit}\entry{void oct\_timing\_exit (const char* name, unsigned key)}
+Called when exiting a section named {\tt name}, with unique key {\tt key}.
+Use with care.
+
+\findex{oct\_timing\_print}\entry{void oct\_timing\_print (const char* name)}
+Prints the number of time the section named {\tt name} has been enterer, 
+and the total elapsed time in it.
+You do not need to know the {\tt key} associated.
+
+Two elapsed times are available for each section: 
+{\it cumulative time} is the sum of 
+time between all pairs {\tt oct\_timing\_enter}, {\tt oct\_timing\_exit} for the section;
+{\it self time} does not include the time elapsed in other
+sections entered within this section.
+
+\findex{oct\_timing\_print\_all}\entry{void oct\_timing\_print\_all ()}
+Prints the number of time each section has been enterer, and the
+total elapsed time in each section.
+
+\findex{oct\_timing\_reset}\entry{void oct\_timing\_reset (const char* name)}
+Resets to $0$ the number of time the section named {\tt name} has been enterer,
+and the total elapsed time in it.
+You do not need to know the {\tt key} associated.
+
+\findex{oct\_timing\_reset\_all}\entry{void oct\_timing\_reset\_all ()}
+Resets to $0$ the number of time all the sections have been enterer, 
+and the total elapsed time in them.
+
+\findex{oct\_timing\_clear}\entry{void oct\_timing\_clear ()}
+Call this function to free all the memory used to store the timing
+informations.
+There must not be any section currently opened.
+\end{entrylist}
+
+When the {\tt -{}-enable-prof} configuration option is used,
+each library function corresponds to 
+exactly one section named by the function's name.
+Thus, if you call {\tt oct\_timing\_print\_all()} at the end of your program, 
+it
+will print how many time each library function was called, as well as the 
+the elapsed time in them.
+
+Beware that enabling time profiling makes all calls to the Octagon Library
+thread-unsafe.
+
+
+\cleardoublepage
+\chapter{OCaml Binding API}
+
+\findex{Oct}
+This chapter describes the OCaml API used to access to the Octagon Abstract 
+Domain Library.
+It is a simple binding layer that directly calls the C API.
+{\tt oct.mli} and {\tt oct.ml} contain the definition of the module
+{\tt Oct}: abstract types, and external functions.
+The C implementation of external functions are defined in {\tt oct\_ocaml.c};
+most are simply wrappers that call the C library, with proper treatment of
+OCaml {\tt value} type.
+Thus, the OCaml API inherits all configuration-time choices made for
+the C API (profiling, debugging, New Polka support, underlying numerical
+domain).
+Some pretty-printers are also defined specially for the OCaml top-level.
+
+Some functions are available only if some required OCaml library is also
+available.
+This is the case for providing octagons / polyhedra
+conversion (requires the New Polka {\tt Poly} OCaml module).
+This is also the case for access to GMP and MPFR numbers (requires the Caml-GMP
+{\tt Gmp} module \cite{MLGMP}).
+In order to support this, {\tt oct.ml} and {\tt oct.mli} are generated
+automatically by cat-ing several {\tt .ml} and {\tt .mli} files
+in the {\tt ocamllib} directory.
+
+Unlike C, OCaml has automatic memory management, so there is no need
+for {\tt free} or {\tt copy} functions.
+Variables are not in-place modifiable and functions are 
+{\it non-destructive} as it is usually the case for functional languages.
+
+
+\subsection{Initialization}
+
+\begin{entrylist}
+\findex{Oct.init}
+\entry{init: unit -> bool}
+Always call this function before using the library
+(and once for each version of the library you use).
+Returns {\tt true} if the library correctly initialized itself.
+When using machine floating-point internal representation, this tries to
+set the FPU rounding mode toward $+\infty$ in order to ensure soundness.
+
+\end{entrylist}
+
+
+\subsection{Numerical Domain}
+
+The choice of $\mathbb{I}$ and its underlying implementation are totally
+defined by the way the C library was configured; it cannot be changed by
+the OCaml library.
+All results regarding soundness and precision are exactly the same as for
+the C library.
+
+\findex{Oct.num}\findex{Oct.vnum}
+Types {\tt num} and {\tt vnum} are used to specify numbers appearing in
+the constraint sets.
+{\tt num} is the type of a single number, whereas {\tt vnum} is the type
+of a number arrays (handled more efficiently than {\tt num array} could
+possibly).
+Both are abstract types. 
+You can construct them from integer, fraction, or floating-point values 
+independently from the underlying numerical domain chosen to represent 
+internally the constraints.
+Once constructed, you cannot manipulate them, but only pass them
+to octagons functions. Construct once and use many times to
+improve efficiency.
+You can use the regular OCaml comparison operators {\tt =}, {\tt <>},
+{\tt <}, {\tt >}, {\tt compare}, etc. to directly to compare {\tt num}
+(but not {\tt vnum}).
+Moreover, you can serialize and deserialize {\tt num} and
+{\tt vnum} (but beware that this is not yet implemented for all underlying 
+numerical domains, in which case you will get an exception;
+also, deserialisation of objects serialised using a library version based on
+a different numerical underlying domain is not possible).
+
+\begin{entrylist}
+
+
+\findex{Oct.num\_of\_int}
+\findex{Oct.num\_of\_frac}
+\findex{Oct.num\_of\_float}
+\entry{ num\_of\_int:& int -> num\\
+	num\_of\_frac:& int*int -> num\\
+	num\_of\_float:& float -> num\\}
+
+Construct a number from an integer, a fraction (numerator and denominator), 
+or a floating-point number.
+
+\findex{Oct.num\_infty}
+\entry{ num\_infty:& unit -> num}
+Constructs the $+\infty$ number.
+
+\findex{Oct.vnum\_of\_int}
+\findex{Oct.vnum\_of\_frac}
+\findex{Oct.vnum\_of\_float}
+\entry{ vnum\_of\_int:& int array -> vnum\\
+	vnum\_of\_frac:& int*int array -> vnum\\
+	vnum\_of\_float:& float array -> vnum\\}
+Construct a number vector
+from an integer, a fraction (numerator and denominator), 
+or a floating-point number array.
+
+\findex{Oct.vnum\_of\_int\_opt}
+\findex{Oct.vnum\_of\_frac\_opt}
+\findex{Oct.vnum\_of\_float\_opt}
+\entry{ vnum\_of\_int\_opt:& int option array -> vnum\\
+	vnum\_of\_frac\_opt:& int*int option array -> vnum}
+Construct a number vector with infinite elements.
+{\tt None} is converted into the $+\infty$ element, and {\tt Some s} 
+is converted into a number.
+There is no need for {\tt None} when dealing with floating-points numbers
+as $+\infty$ already has a floating-point representation.
+
+\findex{Oct.int\_of\_num}
+\findex{Oct.frac\_of\_num}
+\findex{Oct.float\_of\_num}
+\entry{ int\_of\_num: num -> int option\\
+        frac\_of\_num: num -> int*int option\\
+	float\_of\_num: num -> float}
+Return an over-approximation of a number as an integer, fraction, or
+floating-point number, or {\tt None} if there is no such over-approximation
+(this means the number should be considered $+\infty$).
+There is no need for {\tt None} when dealing with floating-points numbers
+as $+\infty$ already has a floating-point representation.
+
+\findex{Oct.int\_of\_vnum}
+\findex{Oct.frac\_of\_vnum}
+\findex{Oct.float\_of\_vnum}
+\entry{ int\_of\_vnum: vnum -> int option array\\
+        frac\_of\_vnum: vnum -> int*int option array\\
+	float\_of\_vnum: vnum -> float array}
+The same as above, but for number vectors instead of single numbers.
+
+\findex{Oct.num\_of\_mpz}
+\findex{Oct.num\_of\_mpq}
+\findex{Oct.num\_of\_mpfr}
+\findex{Oct.vnum\_of\_mpz}
+\findex{Oct.vnum\_of\_mpq}
+\findex{Oct.vnum\_of\_mpfr}
+\findex{Oct.vnum\_of\_mpz\_opt}
+\findex{Oct.vnum\_of\_mpq\_opt}
+\findex{Oct.vnum\_of\_mpfr\_opt}
+\findex{Oct.mpz\_of\_num}
+\findex{Oct.mpq\_of\_num}
+\findex{Oct.mpfr\_of\_num}
+\findex{Oct.mpz\_of\_vnum}
+\findex{Oct.mpq\_of\_vnum}
+\findex{Oct.mpfr\_of\_vnum}
+\entry{ num\_of\_mpz:& Gmp.Z.t -> num\\
+	num\_of\_mpq:& Gmp.Q.t  -> num\\
+	num\_of\_mpfr:& Gmp.FR.t -> num\\
+	vnum\_of\_mpz:& Gmp.Z.t array -> vnum\\
+	vnum\_of\_mpq:& Gmp.Q.t array -> vnum\\
+	vnum\_of\_mpfr:& Gmp.FR.t array -> vnum\\
+	vnum\_of\_mpz\_opt:& Gmp.Z.t option array -> vnum\\
+	vnum\_of\_mpq\_opt:& Gmp.Q.t option array -> vnum\\
+	vnum\_of\_mpfr\_opt:& Gmp.FR.t option array -> vnum\\
+	mpz\_of\_num:& num -> Gmp.Z.t option\\
+	mpq\_of\_num:& num -> Gmp.Q.t option\\
+	mpfr\_of\_num:& num -> Gmp.FR.t option\\
+	mpz\_of\_vnum:& vnum -> Gmp.Z.t option array\\
+	mpq\_of\_vnum:& vnum -> Gmp.Q.t option array\\
+	mpfr\_of\_vnum:& vnum -> Gmp.FR.t option array}
+These functions are only defined when the {\tt Gmp} module is available
+\cite{MLGMP}.
+
+
+\end{entrylist}
+
+
+\subsection{Boolean Lattice}
+
+\begin{entrylist}
+\findex{Oct.tbool}\findex{Oct.True}\findex{Oct.False}\findex{Oct.Bottom}\findex{Oct.Top}
+\entry{type tbool}
+Defines the boolean lattice: \\
+\hspace{3cm}
+\xymatrix{ 
+  & \ar@{-}[dl] \ar@{-}[dr] {\tt Top} & \\
+ \ar@{-}[dr] {\tt True} &&   \ar@{-}[dl] {\tt False} \\
+  & {\tt Bottom} & \\
+}
+
+{\tt Bottom} is returned when the answer to a question is undefined,
+{\tt Top} when it is not known.
+
+\end{entrylist}
+
+\subsection{Octagons}
+
+Most octagons functions are direct OCaml equivalent of the corresponding C
+library call. They have the same memory and time cost.
+Thus, most functions are simply sketched here; please refer to Section 
+\ref{Coct} for more detailed informations.
+
+You can serialize and deserialize octagons ({\tt oct} and
+{\tt moct}) (but beware that this is not yet implemented for all underlying 
+numerical domains, in which case you will get an exception;
+also, deserialisation of octagons serialised using a library version based on
+a different numerical underlying domain is not possible).
+
+\begin{entrylist}
+\findex{Oct.oct}\entry{type oct}
+This is the {\it abstract type} of octagons.
+Octagons are {\it static} (not in-place modifiable), and allocated in the
+C heap by the C library.
+They can be safely copied with {\tt let a = b in}.
+They can NOT be compared with the generic OCaml operators (which would
+suppose a total ordering, while the octagon ordering is only partial).
+\end{entrylist}
+
+\subsubsection{Octagon Creation}
+There is no need to free explicitly the octagons; this is done automatically
+by the OCaml garbage collector.
+
+\begin{entrylist}
+
+\findex{Oct.empty}\entry{empty: $N$:int -> oct}
+Returns a new octagon of dimension $N$ with an empty domain: $\emptyset$.
+
+\findex{Oct.universe}\entry{universe: $N$:int -> oct}
+Returns a new octagon of dimension $N$ with an full domain: $\mathbb{I}^N$.
+
+\end{entrylist}
+
+
+
+\subsubsection{Queries}
+\begin{entrylist}
+
+\findex{Oct.dim}\entry{dim: oct -> int}
+Returns the dimension $N$ of the octagon.
+
+\findex{Oct.nbconstraints}\entry{nbconstraints: oct -> int}
+Returns the number of constraints in the octagon.
+If the octagon is known to have an empty domain, returns 0.
+The count may include redundant constraints; but constraints of the form
+$(v_i-v_i\leq 0)$ and $(v_i-v_j\leq +\infty)$ are not counted.
+
+\end{entrylist}
+
+
+
+\subsubsection{Tests}
+\begin{entrylist}
+
+\findex{Oct.is\_empty}\entry{is\_empty: oct -> bool}
+Returns {\tt true} if and only if the octagon has an empty domain.
+
+\findex{Oct.is\_empty\_lazy}\entry{is\_empty\_lazy: oct -> tbool}
+This lazy version of emptiness checking does not perform any computation.
+It returns {\tt True} if it knows the octagon has an empty domain, 
+{\tt False} if it knows it has a non-empty domain, and
+{\tt Top} if checking for emptiness would require some computation.
+
+\findex{Oct.is\_universe}\entry{is\_universe: oct -> bool}
+Returns {\tt true} if and only if the octagon has a full domain
+$\mathbb{I}^N$.
+
+\findex{Oct.is\_included\_in}\entry{is\_included\_in: oct -> oct -> bool}
+Returns {\tt true} if and only if the first octagon is included in
+or equal to the second octagon.
+
+\findex{Oct.is\_included\_in\_lazy}\entry{is\_included\_in\_lazy: oct -> oct -> tbool}
+This lazy version of inclusion checking does not perform any computation.
+It may return {\tt True} (the first argument is included in or
+equal to the second one),
+{\tt False} (the first argument is not included in nor equal to the second 
+one), or {\tt Top} (the accurate test would require some computation).
+
+\findex{Oct.is\_equal}\entry{is\_equal: oct -> oct -> bool}
+Returns {\tt true} if and only if the two octagons have
+exactly the same domain.
+
+\findex{Oct.is\_equal\_lazy}\entry{is\_equal\_lazy: oct -> oct -> tbool}
+This lazy version of equality checking does not perform any computation.
+It may return {\tt True} (the two octagons have the same domain),
+{\tt False} (the two octagons do not have equal domains),
+or {\tt Top} (the accurate test would require some computation).
+
+\findex{Oct.is\_in}\entry{is\_in: oct -> vnum -> bool}
+Returns {\tt true} if and only if the second argument is the coordinate
+of a point that is within the domain of the specified octagon.
+The second argument must contain exactly $N$ elements, where $N$ is the
+dimension of the specified octagon.
+
+\end{entrylist}
+
+
+
+\subsubsection{Operators}
+\begin{entrylist}
+
+\findex{Oct.inter}\entry{inter: oct -> oct -> oct}
+Returns a new octagon the domain of which is the intersection of the two
+octagons specified.
+
+\findex{Oct.union}\entry{union: oct -> oct -> oct}
+Returns a new octagon the domain of which is the smallest domain
+containing both octagons.
+
+\findex{Oct.widening}\findex{Oct.wident}
+\entry{widening: m:oct -> n:oct -> w:wident -> oct}
+Returns a new octagon representing ${\tt m}\triangledown ({\tt n}^\bullet)$, 
+where the widening operator $\triangledown$ is chosen by {\tt w}:
+\begin{mylist}
+\findex{Oct.WidenFast}
+\findex{Oct.WidenZero}
+\findex{Oct.WidenUnit}
+\findex{Oct.WidenSteps}
+\item {\tt WidenFast}, fast widening, as presented in\cite{mine:ast01},
+unstable coefficients are replaced by $+\infty$;
+\item {\tt WidenZero}, slower but more accurate widening,
+unstable coefficients are replaced by $0$, and then $+\infty$;
+\item {\tt WidenUnit}, even slower and even more accurate widening,
+unstable coefficients are replaced by $-1$, $0$, $1$, and then $+\infty$;
+\item {\tt WidenSteps} of {\tt vnum}, uses the given set of numbers 
+(in increasing order) to gradually loosen coefficients before replacing
+them by $+\infty$.
+\end{mylist}
+
+\findex{Oct.narrowing}\entry{narrowing: m:oct -> n:oct -> oct}
+Returns a new octagon representing 
+$({\tt m}^\bullet)\triangle ({\tt n}^\bullet)$.
+
+\end{entrylist}
+
+
+\subsubsection{Transfer Functions}
+\begin{entrylist}
+
+\findex{Oct.forget}\entry{forget: oct -> k:int -> oct}
+Returns a new octagon where the variable $v_{\tt k}$ has forgotten its value.
+Corresponds to both instructions
+$v_{\tt k}\leftarrow {\tt ?}$ and $v_{\tt k}\rightarrow {\tt ?}$.
+
+\findex{Oct.add\_bin\_constraints}\entry{add\_bin\_constraints: oct -> c:constr array -> oct}
+Returns a new octagon where the binary constraints {\tt c} have been added.
+Each element of {\tt c} can be of the following form:
+\begin{mylist}
+\item {\tt PX of int*num} represents $(x\leq c)$;
+\item {\tt MX of int*num} represents $(-x\leq c)$;
+\item {\tt PXPY of int*int*num} represents $(x+y\leq c)$;
+\item {\tt PXMY of int*int*num} represents $(x-y\leq c)$;
+\item {\tt MXPY of int*int*num} represents $(-x+y\leq c)$;
+\item {\tt MXMY of int*int*num} represents $(-x-y\leq c)$.
+\end{mylist}
+
+\findex{Oct.assign\_var}\entry{assign\_var: m:oct -> x:int -> tab:vnum -> oct}
+
+Returns a new octagon representing the domain of {\tt m} after the 
+linear variable assignment\\ $v_{\tt x}\leftarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot {\tt tab}[i]\right)+{\tt tab}[N]$.
+
+
+\findex{Oct.interv\_assign\_var}\entry{interv\_assign\_var: m:oct -> x:int -> tab:vnum -> oct}
+
+Same as {\tt assign\_var}, but allowing {\em interval\/}
+coefficients instead of constant ones:\\
+$v_{\tt x}\leftarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot [-{\tt tab}[2i+1],{\tt tab}[2i]]\right)+[-{\tt tab}[2N+1],{\tt tab}[2N]]$.
+
+
+\findex{Oct.substitute\_var}\entry{substitute\_var m:oct -> x:int -> tab:vnum -> oct}
+
+Returns a new octagon representing the domain of {\tt m} after the 
+linear variable substitution\\ $v_{\tt x}\rightarrow 
+\left(\sum_{i=0}^{N-1} v_i\cdot {\tt tab}[i]\right)+{\tt tab}[N]$.
+It is the {\it backward} semantics of the corresponding assignment.
+
+\findex{Oct.interv\_substitute\_var}\entry{interv\_substitute\_var: m:oct -> x:int -> tab:vnum -> oct}
+
+Same as {\tt substitute\_var}, but allowing {\em interval\/}
+coefficients instead of constant ones:\\
+$v_{\tt x}\rightarrow
+\left(\sum_{i=0}^{N-1} v_i\cdot [-{\tt tab}[2i+1],{\tt tab}[2i]]\right)+[-{\tt tab}[2N+1],{\tt tab}[2N]]$.
+
+
+\findex{Oct.add\_constraint}\entry{add\_constraint: m:oct -> tab:vnum -> oct}
+
+Returns a new octagon representing the domain of {\tt m} with the
+linear constraint added
+$\left(\sum_{i=0}^{N-1} v_i\cdot {\tt tab}[i]\right)+{\tt tab}[N]\geq 0$.
+
+
+\findex{Oct.interv\_add\_constraint}\entry{interv\_add\_constraint: m:oct -> tab:vnum -> oct}
+
+Same as {\tt add\_constraint}, but allowing {\em interval\/}
+coefficients instead of constant ones:\\
+$
+\left(\sum_{i=0}^{N-1} v_i\cdot [-{\tt tab}[2i+1],{\tt tab}[2i]]\right)+[-{\tt tab}[2N+1],{\tt tab}[2N]]\geq 0$.
+
+\end{entrylist}
+
+
+\subsubsection{Change of Dimensions}
+
+\noindent
+Add and remove dimensions at the end of $\mathcal{V}$.
+
+\begin{entrylist}
+
+
+\findex{Oct.add\_dims\_and\_embed}\entry{add\_dims\_and\_embed: o:oct -> n:int -> oct}
+Returns a new octagon with {\tt n} more dimensions, and with domain
+$\mathcal{D}^+({\tt o})\times\mathbb{I}^{\tt n}$.
+
+\findex{Oct.add\_dims\_and\_project}\entry{add\_dims\_and\_project: oct -> int -> oct}
+Returns a new octagon with {\tt n} more dimensions, and with domain
+$\mathcal{D}^+({\tt o})\times\{\;0\;\}^{\tt n}$.
+
+\findex{Oct.del\_dims}\entry{del\_dims: oct -> int -> oct}
+Returns a new octagon with {\tt n} dimensions removed.
+
+\end{entrylist}
+
+\noindent
+Add and remove dimensions at arbitrary positions in $\mathcal{V}$.
+
+\begin{entrylist}
+\findex{Oct.dimsup}\entry{type dimsup = \{&pos: int;\\&nbdims: int;\quad\}}
+Specifies that {\tt nbdims} variables must be added or removed just before
+the variable at position {\tt pos}.
+All positions are counted from $0$, and always with respect to the variable
+set of the {\em argument} octagon.
+
+\findex{Oct.add\_dims\_and\_embed\_multi}
+\entry{add\_dims\_and\_embed\_multi: oct -> dimsup array -> oct}
+Returns a new octagons where uninitialized dimensions at positions 
+specified by {\tt dimsup} have been inserted.
+(The {\tt pos} fields in the {\tt dimsup} array must be sorted in {\em strictly
+increasing order}.)
+
+\findex{Oct.add\_dims\_and\_project\_multi}
+\entry{oct\_add\_dims\_and\_project\_multi: oct -> dimsup array -> oct}
+Adds zero-initialized variables in $\mathcal{V}$.
+
+\findex{Oct.del\_dims\_multi}
+\entry{del\_dims\_multi: oct -> dimsup array -> oct}
+Removes variables from $\mathcal{V}$.
+\end{entrylist}
+
+
+
+\subsubsection{Minimized Octagons}
+\begin{entrylist}
+
+\findex{Oct.moct}\entry{type moct}
+This is the {\it abstract type} of minimized octagons.
+As {\tt oct} objects, they are static and allocated in the C heap by the C 
+library.
+They can be safely copied with {\tt let a = b in}.
+
+\findex{Oct.m\_to\_oct}\entry{m\_to\_oct: oct -> moct}
+Constructs an octagon from a minimized octagon.
+
+\findex{Oct.m\_from\_oct}\entry{m\_from\_oct: moct -> oct}
+\index{minimization}
+Constructs a minimized octagon from a regular octagon.
+This implies performing the $\mathcal{O}(N^3)$ time cost minimization algorithm.
+
+\findex{Oct.m\_dim}\entry{m\_dim: moct -> int}
+Returns the dimension $N$ of the minimized octagon.
+
+\findex{Oct.m\_is\_empty}\entry{m\_is\_empty: moct -> bool}
+Returns {\tt true} if and only if the minimized octagon represents
+an empty domain.
+
+\findex{Oct.m\_is\_equal}\entry{m\_is\_equal: moct -> moct -> bool}
+Returns {\tt true} if and only if the two minimized octagons have the
+same domain.
+
+\end{entrylist}
+
+\subsubsection{Interval functions}
+These functions are used to get or set the interval bound of one
+or all variables in an octagon.
+
+
+\begin{entrylist}
+
+\findex{Oct.get\_box}
+\entry{get\_box: oct -> vnum}
+Get the bounds for all the variables in the octagon.
+After conversion to an array {\tt a}, using a {\tt xxx\_of\_vnum} function,
+the interval of the variable $i$ is in $[-{\tt a.}(2i+1),-{\tt a.}(2i)]$.
+
+\findex{Oct.from\_box}
+\entry{from\_box: vnum -> oct}
+Construct an octagon from a box.
+If {\tt n} is the number of dimension of the desired octagon, the array {\tt t}
+that was used to construct the {\tt vnum} must be of length $2{\tt n}$, 
+and such that the interval $[-{\tt a.}(2i+1),-{\tt a.}(2i)]$ is the
+interval of the variable $i$.
+
+\findex{Oct.get\_bounds}
+\entry{get\_bounds: oct -> int -> num*num}
+Get the upper and lower bounds of a variable in an octagon.
+The pair of {\tt num} ({\tt a}, {\tt b}) represents the interval
+$[-{\tt b},{\tt a}]$.
+
+\findex{Oct.set\_bounds}
+\entry{set\_bounds: oct -> int -> num*num -> oct}
+Return a new octagon identical to the first argument, with the
+the upper and lower bounds of one variable set (and all other informations
+about this variable lost).
+The pair of {\tt num} ({\tt a}, {\tt b}) represents the interval
+$[-{\tt b},{\tt a}]$.
+
+\end{entrylist}
+
+\subsection{Perturbation}
+
+\begin{entrylist}
+\findex{Oct.add\_epsilon}\entry{add\_epsilon: oct -> num -> oct}
+{\tt add\_epsilon o epsilon}
+returns {\tt o}, where all constraints $\pm x\pm y\leq a$ are
+replaced by $\pm x \pm y\leq a + {\tt epsilon} |a|$.
+Thus, the returned octagon is slightly larger.
+{\tt epsilon} must be positive.
+The normal form is lost.
+
+\findex{Oct.add\_epsilon\_max}\entry{add\_epsilon\_max: oct -> num -> oct}
+As {\tt add\_epsilon}, but all constraints are replaced by
+$\pm x \pm y\leq a + {\tt epsilon} \times M$.
+where $M = \max \{\;|m|\;|\;\pm x\pm y\leq m,\;m\neq +\infty\;\}$.
+{\tt epsilon} must be positive.
+
+$\mathcal{O}(N^2)$ time cost.
+The normal form is lost.
+
+\findex{Oct.add\_epsilon\_bin}\entry{add\_epsilon\_bin: oct -> oct -> num -> oct}
+Binary version of {\tt add\_epsilon\_max}, where
+only the non-stable constraints in the second argument
+are enlarged by ${\tt epsilon}\times M$.
+This is a form of widening.
+{\tt epsilon} must be positive.
+
+$\mathcal{O}(N^2)$ time cost.
+The normal form is lost.
+\end{entrylist}
+
+
+\subsubsection{Pretty-Printers}
+\index{pretty-printers}
+Note that pretty-printers are most useful when using the OCaml top-level
+{\tt `oct-config -{}-mltop`}.
+
+\begin{entrylist}
+\findex{Oct.numprinter}
+\entry{numprinter:  num -> unit}
+Pretty-printer for objects of type {\tt num}.
+Use {\tt \#install\_printer Oct.numprinter;;} to install it in
+the top-level.
+
+\findex{Oct.fnumprinter}
+\entry{fnumprinter: Format.formatter -> num -> unit}
+Same as {\tt numprinter}, but uses any formatter instead of 
+{\tt Format.std\_formatter}.
+
+\findex{Oct.vnumprinter}
+\entry{vnumprinter:  vnum -> unit}
+Pretty-printer for objects of type {\tt vnum}.
+Use {\tt \#install\_printer Oct.vnumprinter;;} to install it in
+the top-level.
+
+\findex{Oct.fvnumprinter}
+\entry{fvnumprinter: Format.formatter -> vnum -> unit}
+Same as {\tt vnumprinter}, but uses any formatter instead of 
+{\tt Format.std\_formatter}.
+
+\findex{Oct.octprinter}
+\entry{octprinter:  (int -> string) -> oct -> unit}
+Pretty-printer for objects of type {\tt oct}.
+The first argument is a callback telling to {\tt octprinter} the name of
+each variable, from {\tt 0} to {\tt (dim o)-1}.
+You can use 
+{\tt let print2 = Oct.octprinter (fun i -> "v"\^{}(string\_of\_int i));;}
+and {\tt \#install\_printer print2;;}, for example, 
+to install it in the top-level.
+
+\findex{Oct.foctprinter}
+\entry{foctprinter: (int -> string) -> Format.formatter -> oct -> unit}
+Same as {\tt octprinter}, but uses any formatter instead of 
+{\tt Format.std\_formatter}.
+
+\findex{Oct.foctnewprinter}
+\entry{foctnewprinter: (int -> string) -> Format.formatter -> oct -> oct -> unit}
+This pretty-printer takes {\em two\/} octagons (with the same size) as 
+argument and compares the upper bound of each constraint in one octagon
+with the upper bound of the corresponding constraint in the second one.
+This function only prints the second version of constraints that are not
+the same.
+
+\findex{Oct.foctdiffprinter}
+\entry{foctdiffprinter: (int -> string) -> Format.formatter -> oct -> oct -> unit}
+Same as {\tt foctdiffprinter}, but prints both the old (first octagon) and
+new version (second octagon) of constraints that are not the same, instead
+of only the new version.
+
+
+\findex{Oct.moctprinter}
+\entry{moctprinter:  (int -> string) -> moct -> unit}
+Pretty-printer for objects of type {\tt moct}.
+You can use
+{\tt let mprint2 = Oct.moctprinter (fun i -> "v"\^{}(string\_of\_int i));;}
+and {\tt \#install\_printer mprint2;;}, for example,
+to install it in the top-level.
+
+\findex{Oct.fmoctprinter}
+\entry{fmoctprinter: (int -> string) -> Format.formatter -> moct -> unit}
+Same as {\tt moctprinter}, but uses any formatter instead of 
+{\tt Format.std\_formatter}.
+
+\end{entrylist}
+
+\subsection{Interface with the New Polka Library}
+If you have the New Polka Library 
+\cite{polka} installed, together with its OCaml
+binding, it enables some conversion functions 
+between objects of type {\tt Oct.oct} and {\tt Poly.t}.
+
+Do not forget to call {\tt Polka.initialize} before using these two functions,
+as well as all functions in the {\tt Polka} module.
+
+\begin{entrylist}
+
+\findex{Oct.to\_poly}\entry{to\_poly: oct -> Poly.t}
+Returns a new polyhedron that has the same domain (or a slightly larger one
+because of approximate, but sound, numerical type conversion).
+
+\findex{Oct.from\_poly}\entry{from\_poly: Poly.t -> oct}
+Returns the octagon with the smallest domain that contains the
+specified polyhedron.
+
+\end{entrylist}
+
+
+
+\subsection{Utilities}
+Most utility functions of Section \ref{utilsec} do not have a corresponding
+OCaml version.
+We only kept here two functions that are useful to monitor the time and
+memory consumption of the library.
+
+\begin{entrylist}
+
+\findex{ENABLE\_MALLOC\_MONITORING}
+\findex{Oct.memprint}\entry{memprint: unit -> unit}
+Prints on the standard output the memory usage for the C heap containing
+the octagon internal structures.
+The C library must have been configured with the {\tt -{}-with-prof} option 
+({\tt ENABLE\_MALLOC\_MONITORING} symbol defined).
+\findex{oct\_mmalloc\_print}
+It is equivalent to the C call {\tt oct\_mmalloc\_print (mmalloc\_get\_current())}.
+
+\findex{ENABLE\_TIMING}
+\findex{Oct.timeprint}\entry{timeprint: unit -> unit}
+Prints on the standard output the elapsed time in the C functions of the 
+library.
+The C library must have been configured with the {\tt -{}-with-prof} 
+({\tt ENABLE\_TIMING} symbol defined).
+\findex{oct\_timing\_print\_all}
+It is equivalent to the C call {\tt oct\_timing\_print\_all ()}.
+
+\end{entrylist}
+
+
+
+\subsection{Low-level Binding API}
+There is no way for the OCaml code to access directly to the internal structure
+of an octagon. 
+However, you may wish to write some C functions that manipulate octagons
+at low-level (by including the {\tt oct\_private.h} header), and then pass
+the octagon to some OCaml code.
+This facility is provided by the file {\tt oct\_ocaml.h}, which must be 
+included by your C source files.
+
+In order to do this properly, you must be familiar with the C and OCaml APIs 
+to the Octagon Library, the internal representation of octagons, and the
+standard OCaml/C interface described in the OCaml Reference Manual
+\cite{OCaml}.
+
+\begin{entrylist}
+\findex{Val\_int}\findex{Int\_val}
+\entry{value&Val\_int&(int a)\\int&Int\_val&(value v)}
+These functions are defined in {\tt caml/mlvalues.h} to convert between 
+C integers ({\tt long}) and OCaml integers ({\tt integer}).
+
+You can use them, to convert between C {\tt tbool\_t} and OCaml 
+{\tt Oct.tbool} types.
+
+\findex{Num\_val}
+\entry{num\_t* Num\_val (value v)}
+This gives a pointer to the {\tt num\_t} number an OCaml value of type 
+{\tt Oct.num} contains.
+
+\findex{vnum\_t}
+\findex{Vnum\_val}
+\entry{vnum\_t\\vnum\_t* Vnum\_val (value v)}
+{\tt vnum\_t} is a structure that holds a number vector.
+{\tt Vnum\_val} gives back the structure an OCaml value of type
+{\tt Oct.vnum} contains.
+The {\tt nb} field gives the vector length, and the {\tt n} field is a
+pointer to a C array of {\tt nb} numbers {\tt num\_t}.
+
+\findex{Val\_oct}
+\index{reference counting}
+\entry{value Val\_oct (oct\_t* o)}
+Returns a newly constructed OCaml value of type {\tt Oct.oct}
+that contains the octagon {\tt o}.
+This value is a {\it custom block} that simply contains a pointer equal
+to {\tt o}; it points in the C heap, not in the OCaml heap, as the internal
+representation of the octagon has been allocated by the C library.
+You must not call {\tt oct\_free(o)} after the call {\tt Val\_oct(o)}:
+it will be called automatically when the OCaml garbage collector discovers
+that the returned OCaml object is no longer used. Each custom block
+in the OCaml heap with a pointer to {\tt o} counts as one reference count.
+
+\findex{Oct\_val}
+\entry{oct\_t* Oct\_val(value v)}
+Returns the octagon represented by the OCaml value {\tt v} of type 
+{\tt Oct.oct}.
+
+
+\findex{Val\_moct}
+\entry{value Val\_moct (moct\_t* o)}
+Returns a newly constructed OCaml value of type {\tt Oct.moct}
+that contains the minimized octagon {\tt o}.
+It works exactly as {\tt Val\_oct}.
+
+\findex{Moct\_val}
+\entry{moct\_t* Moct\_val(value v)}
+Returns the minimized octagon represented by the OCaml value {\tt v} of type 
+{\tt Oct.moct}.
+
+
+\end{entrylist}
+
+
+
+\cleardoublepage
+\chapter{Analyzer Example}
+
+This chapter describes the analyzer example.
+It is written in OCaml and uses the Octagon Abstract Domain Library to perform
+a basic analysis on a toy programming language.
+
+\section{Language Syntax}
+
+The toy programming language is simply a {\tt while}-language, with
+no procedure, no array, no pointer, only finitely many numerical
+variables.
+
+\begin{mylist}
+\item The entry of the analyzer is a list of programs, each program
+having a name {\it id}:\\
+\nopagebreak
+\begin{tabular}{l}
+{\tt program} {\it id}\\
+{\tt beginprogram}\\
+\quad {\it stats}\\
+{\tt endprogram}\\
+\end{tabular}
+
+\item A statement is:\\
+\nopagebreak
+\begin{tabular}{lcll}
+{\it stat}&==& {\em id} {\tt =} {\em iexpr}&assignment\\
+&$|$&{\tt assert} {\em bexpr}&assertion\\
+&$|$&{\tt if} {\em bexpr} {\tt then} {\em block}&some tests\\
+&$|$&{\tt if} {\em bexpr} {\tt then} {\em block} {\tt else} {\em block}\\
+\end{tabular}
+
+Variables are all local to the program and need not to be declared.
+
+
+\item Statement lists are semicolon-separated (do not put a semicolon after the last statement):\\
+\nopagebreak
+\begin{tabular}{lcl}
+{\it stats}&==& {\em stat}\\
+&$|$&{\it stat}{\tt ;} {\it stats}\\
+\end{tabular}
+
+\item Blocks are either a single statement, or a statement list enclosed in 
+{\tt begin}/{\tt end} keywords:\\
+\nopagebreak
+\begin{tabular}{lcl}
+{\it block}&==& {\em stat}\\
+&$|$&{\tt begin} {\em stats} {\tt end}\\
+\end{tabular}
+
+\item A numerical expression is (with standard precedence):\\
+\nopagebreak
+\begin{tabular}{lcll}
+{\it iexpr}&==&{\em id}&variable\\
+&$|$& {\em num}&floating-point constant\\
+&$|$& {\tt random} & random integer\\
+&$|$& {\em iexpr} $+$ {\em iexpr}&unary and binary arithmetic operators\\
+&$|$& {\em iexpr} $-$ {\em iexpr}\\
+&$|$& {\em iexpr} $*$ {\em iexpr}\\
+&$|$& $-$ {\em iexpr}\\
+\end{tabular}
+
+\item A boolean expression is (with standard precedence):\\
+\nopagebreak
+\begin{tabular}{lcll}
+{\it bexpr}&==&{\tt true}\\
+&$|$& {\tt false}\\
+&$|$& {\tt brandom} & random boolean value\\
+&$|$& {\em iexpr} $>$ {\em iexpr}& some tests\\
+&$|$& {\em iexpr} $<$ {\em iexpr}\\
+&$|$& {\em iexpr} $=$ {\em iexpr}\\
+&$|$& {\em iexpr} $!=$ {\em iexpr}\\
+&$|$& {\em iexpr} $>=$ {\em iexpr}\\
+&$|$& {\em iexpr} $<=$ {\em iexpr}\\
+&$|$& {\em bexpr} {\tt and} {\em bexpr}&unary and binary boolean operators\\
+&$|$& {\em bexpr} {\tt or} {\em bexpr}\\
+&$|$& {\tt not} {\em bexpr}\\
+\end{tabular}
+
+{\bf WARNING:} $>$, $<$, and $!=$ have an {\em integer\/} semantics, that
+is to say $a>b\iff a>=b+1$, etc.
+To compare floats, use only $=$, $>=$ and $<=$!
+
+\end{mylist}
+
+
+\section{Analysis Method}
+
+The program is first cut into several program point: a program point
+at the beginning and at the end of each statement block, a program point
+between two statements, and a program point at the end of each {\tt if-then}
+or {\tt if-then-else} instructions (control-flow join point).
+
+\bigskip
+
+An octagon is associated to each program point.
+It is initially empty, except for the first program point which has a
+universe octagon.
+
+The analyzer then uses a simple forward analysis method to propagate 
+informations from program points to program point, applying transfer functions
+until a fix-point is reached.
+
+It uses a simple {\em work-list\/} algorithm that maintains the set of 
+control points whose state need to be recomputed.
+The first control point of the list is picked, it is updated by recomputing
+the transfer function, and all its successor control points are marked
+dirty and added {\em at the end\/} of the work-list.
+In fact, when a control point that has several predecessors is at the
+head of the work-list, it not chosen directly, but postponed so that there
+is more chance that all its predecessors have been updated;
+intuitively, it saves some computation.
+
+\bigskip
+
+In order to reach the fix-point in finite time, a widening application is
+performed at the beginning of each {\tt while} statement.
+
+\bigskip
+
+Finally, if the New Polka library and its OCaml binding are present,
+the analyzer can use polyhedra instead of octagons
+(see the file {\tt oct\_anal\_core.ml}).
+
+\section{Results}
+
+The analyzer is able to produce output in several formats:
+\begin{mylist}
+\item {\tt result.txt}: 
+text output of the original text program, with program point number
+added in bold, followed by the list of invariants octagons discovers
+at each control point;
+\item {\tt result.html}: 
+an HTML version of the previous output, with some coloring and
+links to jump between the program text and the printed invariants;
+\item {\tt result.gdl}: 
+a GDL file that describes the control-flow graph annotated with
+the invariants; this control-flow graph can be viewed with 
+AbsInt's AiSee software (\url{http://www.absint.com/aisee/});
+\item {\tt result.debug}: 
+(if debugging is enabled) a text file describing
+the computation trace together with the
+partial invariants discovered along the iterations.
+\end{mylist}
+
+\section{Analyzer Files}
+
+The analyzer comprises the following files:\\
+\begin{tabular}{lll}
+$\bullet$ & {\tt oct\_anal\_lex.mll} & lexer (using {\tt ocamllex})\\
+$\bullet$ & {\tt oct\_anal\_yacc.mly} & parser (using {\tt ocamlyacc})\\
+$\bullet$ & {\tt oct\_anal\_syn.ml} & abstract syntax tree and other
+global variables and types\\
+$\bullet$ & {\tt oct\_anal\_core.ml} & core analyzer functions\\
+$\bullet$ & {\tt oct\_anal.ml} & main program that calls functions
+in {\tt oct\_anal\_core.ml}\\\\
+$\bullet$ & {\tt oct\_anal\_examples} & a few examples program to be analyzed
+\end{tabular}
+
+\bigskip
+
+There also exists a web-based version of the analyzer (using CGI scripts
+written in OCaml thanks to the OCamlHTML library) at
+\url{http://dmi.ens.fr/cgi-bin/mine/octanalhtml/octanalweb}.
+
+
+\cleardoublepage
+\chapter{Internal Structure}
+
+This chapter describes in details the internal structure and implementation
+choices. It may be skipped at first lecture.
+
+
+\section{Abstract Elements Representation ({\tt oct\_sem.c})}
+\label{matrixinternal}
+
+In order to understand the representation of abstract elements, one have to be
+familiar with the Octagon Abstract Domain algorithms, as described in
+\cite{mine:dea} and \cite{mine:ast01}.
+However, the internal representation of abstract elements differs slightly
+compared to what is described in theses papers.
+
+\subsection{Original Representation}
+\index{.N@$N$}
+\index{.V@$\mathcal{V}$}
+\index{.vi@$v_i$}
+Let $\mathcal{V}=\{v_0,\ldots,v_{N-1}\}$ be the set of $N$ numerical variables
+we wish to manipulate.
+
+\index{.X@$\mathcal{X}$}
+\index{.xi@$x_i$}
+In the original work \cite{mine:ast01}, we introduced an auxiliary set of
+$2N$ variables $\mathcal{X}'=\{x_0,\ldots x_{2N-1}\}$ with the semantics
+$x_{2i}=v_i$, $x_{2i+1}=-v_i$.
+It allows to represent constraints of the form $(\pm v_i \pm v_j\leq c)$
+by {\em potential constraints}\footnote{A potential constraint is a constraint
+of the form $(x-y\leq c)$. The term {\em potential} comes from the remark that
+solutions of such constraint sets are defined to a constant.}\/ in
+$\mathcal{X}$. Even interval constraints $(v_i\leq c)$, $(-v_j\leq c)$ can
+be represented in $\mathcal{X}$ by $(x_{2i}-x_{2i+1}\leq 2c)$ and
+$(x_{2j+1}-x_{2j}\leq 2c)$.
+This is most useful because there exists a well-known theory, called
+{\em  Separation Theory}, developed by Pratt \cite{pratt} dealing with
+satisfiability of potential constraint sets.
+This theory was enhanced in \cite{mine:padoII} in order to build a full
+numerical abstract domain.
+Thus, \cite{mine:ast01} chose to perform the transformation from
+$\mathcal{V}$ to $\mathcal{X}$ to reuse and adapt the results of
+\cite{mine:padoII} to build the Octagon Abstract Domain.
+This choice also resulted in compact mathematical presentation and
+easy proofs of theorems, especially for normal form and lattice operators
+(see \cite{mine:dea} for such proofs).
+
+However, this representation has a drawback when it comes to
+implementing: it has redundancy.
+For example, the constraint $(v_i-v_j\leq c)$ can be represented as
+$(x_{2i}-x_{2j}\leq c)$ or $(x_{2j+1}-x_{2i+1}\leq c)$.
+This results in almost twice memory consumption as necessary.
+It also make some transfer functions less easy to understand (as we must take
+care to change the two equivalent representations of a constraint at the same
+time).
+
+\index{.m@$\vec{m}^+$}
+We now recall the matrix and index notation of the original representation.
+We denote by $\vec{m}^+$ a $2N\times 2N$ matrix that represent the
+constraint set $\{\;x_j-x_i\leq \vec{m}^+_{ij}\;\}$.
+\index{.it@$\itop$}
+We denote by $\itop$ the number $i\oplus 1$---where $\oplus$ is the bitwise 
+exclusive or.
+Thus, if $x_{i}$ corresponds to $v_j$, then $x_{\itop}$ corresponds to
+$-v_j$, and if $x_{i}$ corresponds to $-v_j$, then $x_{\itop}$ corresponds
+to $v_j$.
+A matrix $\vec{m}^+$ is said to be {\em coherent\/} if and only if
+$\forall i,j,\;\vec{m}^+_{ij}=\vec{m}^+_{\jtop \itop}$.
+Coherence means that any two redundant constraints in $\vec{m}^+$ 
+$(\epsilon_1 v_i - \epsilon_2 v_j\leq c)$ and
+$((-\epsilon_2) v_j - (-\epsilon_1) v_i \leq d)$
+are such that $c=d$.
+All matrices are supposed to be coherent in \cite{mine:ast01}.
+
+\subsection{Modified Representation ({\tt oct\_t})}
+
+\findex{oct\_t}
+In our implementation, we chose to store only elements
+$\vec{m}^+_{ij}$ such that $i=\jtop$ or $i\geq j$.
+The memory layout is the almost the lower triangle of a matrix, and can
+be stored with roughly half memory consumption.
+
+$$\begin{array}{c|c|c|c|c|c|c|}
+&0&1&2&3&4&5\\
+\hline
+0&\vec{m}^+_{0,0}&\vec{m}^+_{0,1}&&&&\\\hline
+1&\vec{m}^+_{1,0}&\vec{m}^+_{1,1}&&&&\\\hline
+2&\vec{m}^+_{2,0}&\vec{m}^+_{2,1}&\vec{m}^+_{2,2}&\vec{m}^+_{2,3}&&\\\hline
+3&\vec{m}^+_{3,0}&\vec{m}^+_{3,1}&\vec{m}^+_{3,2}&\vec{m}^+_{3,3}&&\\\hline
+4&\vec{m}^+_{4,0}&\vec{m}^+_{4,1}&\vec{m}^+_{4,2}&\vec{m}^+_{4,3}&\vec{m}^+_{4,4}&\vec{m}^+_{4,5}\\\hline
+5&\vec{m}^+_{5,0}&\vec{m}^+_{5,1}&\vec{m}^+_{5,2}&\vec{m}^+_{5,3}&\vec{m}^+_{5,4}&\vec{m}^+_{5,5}\\\hline
+\end{array}$$
+
+Because $i<j\Longrightarrow \jtop\geq \itop\mbox{ or }i=\jtop$, we have
+the property that when $\vec{m}^+_{ij}$ does not appear in our modified
+representation, then $\vec{m}^+_{\jtop \itop}$ does:
+thus, the upper triangle of the matrix can be recovered by coherence.
+Our algorithm have been slightly modified to work on this
+halved representation, but proofs of their correctness remain valid.
+With this representation, 
+the strong closure algorithm is a bit harder to understand, but
+most transfer functions are easier to read.
+
+The half-matrix is not stored as a full matrix, but as a flat array of
+size {\tt matsize($N$)}; 
+$\vec{m}^+_{ij}$ is stored in {\tt c[matpos2(i,j)]}, where:
+\begin{center}
+\texttt{
+\begin{tabular}{ll}
+\#define matsize(n)&(2*(size\_t)(n)*((size\_t)(n)+1))\\
+\#define matpos(i,j)&((size\_t)(j)+(((size\_t)(i)+1)*((size\_t)(i)+1))/2)\\
+\#define matpos2(i,j)&((i)<(j)?matpos((j\^{}1),(i\^{}1)):matpos(i,j))
+\end{tabular}
+}\end{center}
+
+Remark that elements of the form $\vec{m}^+_{ii}$ correspond to constraints
+of the form $0\leq c$ which do not carry much information.
+However we keep them in our representation for two reasons:
+it is simpler to handle a connected structure, and these elements will prove
+useful to check for emptiness in the modified strong closure algorithm.
+
+An octagon can be in one of three different states, as specified by the 
+{\tt state} field:
+{\tt OCT\_EMPTY}, {\tt OCT\_CLOSED}, {\tt OCT\_NORMAL}.
+{\tt OCT\_EMPTY} states that the octagon has an empty domain.
+{\tt OCT\_CLOSED} means that the matrix is already in closed form.
+In all other cases (we do not now if the matrix is empty or in
+normal form) the state is {\tt OCT\_NORMAL}.
+
+Here is the detailed structure, as one can see in the {\tt oct\_private.h}
+file:
+
+\findex{oct\_tt}
+\quad\quad{\tt\begin{tabular}{lll}
+struct oct\_tt \{\\
+\quad var\_t&n;&{\it /* number of variables, aka dimension */}\\
+\quad int&ref;&{\it /* reference counting */}\\
+\quad oct\_state&state;&{\it /* is it empty, closed, etc. ? */}\\
+\quad struct oct\_tt*&closed;&{\it /* pointer to the closed version, or NULL */}\\
+\quad num\_t*&c;&{\it /* the matrix, contains matsize(n) elements */}\\
+\}\\
+\end{tabular}}
+
+See Section \ref{memoryinternal} for an explanation of the fields
+{\tt ref} and {\tt closed}.
+{\tt c} contains the half-matrix array; it is only allocated if
+{\tt state} is not {\tt OCT\_EMPTY}.
+
+\section{Modified Strong Closure Algorithm ({\tt oct\_close})}
+\index{closure}
+\label{closure}
+The strong closure algorithm is the core algorithm of the library.
+It is also the more complex and most costly one.
+
+The strong closure algorithm---which we will sometime simply call {\em closure
+algorithm\/} because there is no ambiguity---presented in 
+\cite{mine:ast01} has been modified in two ways:
+
+\begin{mylist}
+\item it has been adapted to the new representation of octagons;
+\item it does no longer need to be called with a matrix the domain of which is
+not empty, it performs the emptiness check itself.
+\end{mylist}
+
+Here, we recall the original strong closure algorithm
+$\vec{m}^+\rightarrow(\vec{m}^+)^\bullet$:
+$$\begin{array}{c}
+\left\{
+\begin{array}{lcl}
+\vec{m}^+_0&=&\vec{m}^+,\\
+\vec{m}^+_{k+1}&=&S^+(C^+_{2k}(\vec{m}^+_k))
+\quad\forall k,\;0\leq k<N,\\
+(\vec{m}^+)^\bullet&=&\vec{m}^+_{N},\\
+\end{array}
+\right.
+\\\\
+\mbox{where $C^+_k$ is defined, $\forall k$, by:}
+\\\\
+\left\{
+\begin{array}{ll}
+\left[C^+_k(\vec{n}^+)\right]_{ii}=0,\\ 
+\left[C^+_k(\vec{n}^+)\right]_{ij}=\min(&
+\vec{n}^+_{ij},\;(\vec{n}^+_{ik}+\vec{n}^+_{kj}),\;
+(\vec{n}^+_{i \ktop}+\vec{n}^+_{\ktop j}),\\
+&(\vec{n}^+_{ik}+\vec{n}^+_{k \ktop}+\vec{n}^+_{\ktop j}),\;
+(\vec{n}^+_{i \ktop}+\vec{n}^+_{\ktop k}+\vec{n}^+_{k j})\;)
+\end{array}
+\right.
+\\\\
+\mbox{and $S^+$ is defined by:}
+\\\\
+\begin{array}{l}
+\left[S^+(\vec{n}^+)\right]_{ij}=\min(\;\vec{n}^+_{ij},\;
+(\vec{n}^+_{i\itop}+\vec{n}^+_{\jtop j})/2\;)\enspace.
+\end{array}
+\\\\
+\end{array}$$
+
+We say that $\vec{m}$ is {\em strongly closed\/} if and only if:
+\begin{mylist}
+\item $\vec{m}^+$ is {\it coherent}: 
+$\forall i,j,\;\vec{m}^+_{ij}=\vec{m}^+_{\jtop \itop}$;
+\item $\vec{m}^+$ is {\it closed}:
+$\forall i,\;\vec{m}^+_{ii}=0$ and
+$\forall i,j,k,\;
+\vec{m}^+_{ij}\leq\vec{m}^+_{ik}+\vec{m}^+_{kj}$;
+\item $\forall i,j,\;$ $\vec{m}^+_{ij}\leq (\vec{m}^+_{i \itop}
++\vec{m}^+_{\jtop j})/2$.
+\end{mylist}
+
+An important theorem of \cite{mine:ast01} is that the strong closure algorithm
+applied to a satisfiable constraint set gives a strongly closed matrix if
+$\mathbb{I}=\mathbb{Q}$ or $\mathbb{R}$.
+Another important theorem is that this strongly closed form is a normal form.
+
+If $\mathbb{I}=\mathbb{Z}$, the strong closure algorithm
+{\it does not lead to a normal form}.
+
+\subsection{Emptiness Test}
+
+\index{.@$\bullet$}
+Thanks to the following theorem, emptiness testing can be done with the
+strong closure algorithm:
+\begin{mytheorem}
+\label{emptythm}
+Let $\vec{m}^+$ be a matrix the domain of which can be empty or
+non empty; we have:
+\begin{mylist}
+\item either $\mathcal{D}^+(\vec{m}^+)\neq\emptyset$ and
+$(\vec{m}^+)^\bullet$ is strongly closed,
+\item or $\mathcal{D}^+(\vec{m}^+)=\emptyset$ and
+$\exists i,\; (\vec{m}^+)^\bullet_{ii}\neq0$ .
+\end{mylist}
+\end{mytheorem}
+\begin{myproof}
+\end{myproof}
+
+
+Thus, $(\vec{m}^+)^\bullet$ is computed using the closure algorithm.
+Then, $(\vec{m}^+)^\bullet$ is checked for indices $i$ such that
+$(\vec{m}^+)^\bullet_{ii}\neq0$ and the
+algorithm answer both questions: ``is the domain empty ?'' and
+``what is the normal form ?''.
+
+The stand-alone emptiness checking has been removed, as it was generally 
+followed by a strong closure computation, and was not much more efficient
+than the strong closure algorithm itself.
+
+If $\mathbb{I}=\mathbb{Z}$, this emptiness checking can return
+{\tt false} for a matrix with an empty domain;
+however, if it returns {\tt true}, the domain is empty.
+
+
+\subsection{Incremental Strong Closure Algorithm ({\tt oct\_close\_incremental})}
+\index{incremental,closure}
+\label{incclosure}
+This is an incremental version of the preceding strong closure algorithm.
+It allows to recover in $\mathcal{O}(n^2)$ time a closed form from an octagon
+that is closed except for lines and columns corresponding to {\em one\/} 
+variable.
+
+\medskip
+
+This is useful, for example, to quickly compute a closed form after an
+assignment or guard, if the original argument where closed.
+Indeed, the incremental closure is presently used internally by the transfer
+functions {\tt oct\_add\_bin\_constraints}, {\tt oct\_add\_constraint} 
+{\tt oct\_assign\_variable}, {\tt oct\_substitute\_variable}, and 
+{\tt oct\_interv\_assign\_variable} whenever possible.
+
+
+
+\section{Minimized Octagons ({\tt moct\_t})}
+
+Minimized octagons are an alternative to the matrix representation of octagons.
+Minimized octagons are very space-efficient; however they can not be
+manipulated very easily.
+They are indented manly for storage.
+
+\subsection{Minimized Representation}
+Instead of representing all {\tt matsize($N$)} constraints, the minimized
+representation only stores constraints $(x_i-x_j\leq c)$ for 
+$c\neq+\infty$.
+As the matrix storing the constraints is now {\it hollow}, we lose
+random-access to elements.
+
+Hollow matrices are stored in a {\tt moct\_t} structure.
+\findex{moct\_t}
+\findex{moct\_tt}
+Here is the detailed structure (from the {\tt oct\_private.h} file):
+\par\quad\quad{\tt\begin{tabular}{lll}
+struct moct\_tt \{\\
+\quad var\_t&n;&{\it /* number of variables */}\\
+\quad size\_t*&bol;&{\it /* begin-of-line indices, array of n*2+1 indices */}\\
+\quad var\_t*&col; &{\it /* column indices, array of bol[n*2+1] elements */}\\
+\quad num\_t*&data;&{\it /* constraint array of bol[n*2+1] elements */}\\
+\}\\
+\end{tabular}}
+
+Constraints elements are stored in the {\tt data} field.
+The {\tt bol} (begin-of-line) and {\tt col} (column) fields are used to recover
+the line and column an element had in the original full matrix representation.
+Data corresponding to line {\tt i} are contained in
+{\tt data[bol[i]]} to {\tt data[bol[i+1]-1]}.
+The column of element {\tt data[k]} is {\tt col[k]}.
+Thus, if the dimension is {\tt n}, {\tt bol} contains $2{\tt n}+1$ elements,
+{\tt data} and {\tt col} contain {\tt bol[2n+1]} elements.
+
+\subsection{Minimization Algorithm}
+\findex{oct\_m\_from\_oct}
+\index{minimization}
+\label{minimization}
+In order to be even more efficient, redundant constraints are removed before
+a matrix is put in hollow matrix form.
+
+For example, if $\vec{m}^+_{ij}=\vec{m}^+_{ik}+\vec{m}^+_{ki}$, then 
+$\vec{m}^+_{ij}$ is replaced by $+\infty$.
+The same holds when 
+$\vec{m}^+_{ij}=(\vec{m}^+_{i\itop}+\vec{m}^+_{\jtop j})/2$.
+However, we have to take care of not removing all $\vec{m}^+_{ij}$,
+$\vec{m}^+_{jk}$, $\vec{m}^+_{ki}$ when
+$\vec{m}^+_{ij}+\vec{m}^+_{jk}+\vec{m}^+_{ki}=
+\vec{m}^+_{ik}+\vec{m}^+_{kj}+\vec{m}^+_{ji}=0$.
+
+Our minimization algorithm is inspired from the one proposed for DBMs
+in \cite{DBM}, but adapted to octagons.
+It has three passes.
+First, it calls {\tt oct\_close} to get the matrix in closed form.
+It is mandatory as it reduces the test
+$\exists \langle i=i_0,\ldots,i_N=j\rangle,\;\vec{m}^+_{ij}=\sum_{k=0}^{N-1}\vec{m}^+_{i_k i_{k+1}}$ 
+to $\exists k,\;(\vec{m}^+)^\bullet_{ij}=(\vec{m}^+)^\bullet_{ik}+(\vec{m}^+)^\bullet_{kj}$.
+Then, it slices $\mathcal{X}$ into equivalent classes for the relation
+$x_i\equiv x_j\iff (\vec{m}^+)^\bullet_{ij}+(\vec{m}^+)^\bullet_{ji}=0$.
+The last phase changes the value of $(\vec{m}^+)^\bullet_{ij}$ 
+into $+\infty$ if we have $x_i\not\equiv x_j$, and:
+\begin{mylist}
+\item either
+$\exists k,\;x_k\not\equiv x_i,x_j,\;(\vec{m}^+)^\bullet_{ij}=(\vec{m}^+)^\bullet_{ik}+(\vec{m}^+)^\bullet_{kj}$,
+\item or $x_i\not\equiv x_{\itop}$, $x_j\not\equiv x_{\jtop}$, and
+$(\vec{m}^+)^\bullet_{ij}=((\vec{m}^+)^\bullet_{i\itop}+(\vec{m}^+)^\bullet_{\jtop})/2$.
+\end{mylist}
+
+Let $\vec{n}^+$ be the resulting matrix; we have the following theorem
+\begin{mytheorem}
+$(\vec{n}^+)^\bullet=(\vec{m}^+)^\bullet$.
+\end{mytheorem}
+\begin{myproof}
+\end{myproof}
+
+\medskip
+
+Because the minimization algorithm is deterministic and works on 
+the closed form, it is a normal form.
+Thus, equality can be tested easily.
+
+\subsection{Algorithms on Minimized Octagons}
+It is difficult to work on minimized octagons for two reasons:
+\begin{mylist}
+\item the representation is hardly modifiable in-place because it is hollow;
+making it modifiable in-place would require complex dynamic memory management
+and hash tables;
+\item most algorithms need the octagon in closed form in order to perform
+with maximal accuracy; closure and minimization are not compatible:
+they are at the opposite ends of the representation spectrum of an octagon.
+\end{mylist}
+
+When analyzing a program in several forward and backward passes, it is handy
+to store a minimized octagon for each program point.
+The current analysis pass will need intersect the current result at
+each program point with the corresponding stored result, and store back this
+intersection.
+
+
+\section{Memory Management of Abstract Elements ({\tt oct\_sem.c})}
+\label{memoryinternal}
+
+The library was designed be memory efficient while hiding memory management 
+details to the user.
+
+\bigskip
+
+\index{reference counting}
+In order to avoid unnecessary copies and reduce memory consumption, 
+abstract elements are reference counted:
+\begin{mylist}
+\findex{oct\_alloc}\findex{oct\_universe}\findex{oct\_empty}
+\item {\tt oct\_alloc}, {\tt oct\_universe}, {\tt oct\_empty} return new
+octagons with {\tt ref}=1;
+\findex{oct\_copy}
+\item {\tt oct\_copy(m)} returns {\tt m} with its {\tt ref} incremented: 
+it is a lazy copy;
+\findex{oct\_full\_copy}
+\item {\tt oct\_full\_copy(m)} returns a new copy of {\tt m} with {\tt ref}=1:
+it is a full copy;
+\findex{oct\_free}
+\item {\tt oct\_free(m)} decreases {\tt ref} and actually frees the octagon 
+only if {\tt ref}=0.
+\end{mylist}
+
+\index{destructive}
+Semantics functions come in two forms: a {\em destructive form\/} and a 
+{\em non-destructive form}.
+The non-destructive form preserves its arguments.
+The destructive form destroys its arguments but is less memory consuming
+(you do not have to free the arguments after a destructive call).
+One can think of a destructive call as a non-destructive call followed by
+{\tt oct\_free} on the arguments.
+In reality, it is a little more efficient as the space allocated for the
+arguments may be directly used for the result (whereas the non-destructive
+call often have to perform copies of its arguments, or to allocate
+fresh octagons).
+In either case, the returned octagon is a new octagon that must be
+freed with {\tt oct\_free} when no longer used, or used as a destructive
+argument.
+
+Because of reference counting, things are a little more complex:
+even within a destructive call, arguments are preserved if they are used
+by someone else (${\tt ref}>1$): a copy of the argument is made, as in
+a non-destructive call, and its {\tt ref} is decreased as if the argument where
+freed.
+When an operator needs to return exactly one of its argument {\tt m}, 
+it returns
+{\tt oct\_copy(m)} for a non-destructive call, and {\tt m} for a destructive
+call.
+
+\findex{oct\_close}
+\findex{oct\_close\_lazy}
+\index{closure remembering}
+There is one last feature that needs to be discussed here: remembering of the
+closed form.
+A program seldom calls {\tt oct\_close} directly, but most operators
+it calls need to compute the strong closure of its arguments
+({\tt oct\_is\_equal}, {\tt oct\_is\_empty}, {\tt oct\_forget}, etc.).
+In order to avoid duplicate closure computation,
+the closed form of a matrix {\tt m} is stored in {\tt m->closed}
+the first time {\tt oct\_close} is called, and then returned 
+without re-computation the next time {\tt oct\_close} is called on {\tt m}.
+Remark that we cannot simply replace a matrix by its closed form 
+(unlike minimization in the polyhedra domain) 
+as changing between different matrix
+representations of the same octagon disrupts fix-point computation using
+widenings.
+A closed matrix has its {\tt ref} increased by 1 for each matrix that has a 
+{\tt m->closed} pointer to it.
+Thus, {\tt oct\_close} returns newly created closed matrix with {\tt ref}=2
+when called in non-destructive mode (or when the argument has a ${\tt ref}>1$);
+{\tt oct\_full\_copy(m)} increments {\tt m->closed->ref};
+{\tt oct\_free(m)} calls {\tt oct\_free(m->closed)} whenever
+{\tt m->ref} reaches 0; and {\tt oct\_copy(m)} does not touch to
+{\tt m->closed->ref}.
+It is important to remark that a closed matrix cannot be actually
+freed as long as there exists a matrix the {\tt closed} field of which points
+to this matrix.
+Also remark that this caching mechanism can be disabled by calling 
+{\tt oct\_close} with the proper argument.
+By default, caching is only enabled within {\it tests} functions
+({\tt oct\_is\_empty}, {\tt oct\_is\_equal}, {\tt oct\_is\_included\_in}), not
+in operators and transfer functions.
+
+\bigskip
+
+Most of the time, you do not have to take care of reference counting and
+closure.
+In practice you simply have to:
+\begin{mylist}
+\item use {\tt oct\_copy} and not pointer assignment {\tt oct\_t* a = b;}
+\item call {\tt oct\_free} on octagons returned by 
+{\tt oct\_alloc}, {\tt oct\_empty}, {\tt oct\_universe}, {\tt oct\_copy},
+and the semantics operators when you no longer need them;
+\item know when to use destructive and non-destructive mode.
+\end{mylist}
+
+
+
+\section{Conversion between Octagons and Polyhedra ({\tt oct\_polka.c})}
+
+\subsection{From Octagons to Polyhedra ({\tt oct\_to\_poly})}
+\findex{oct\_to\_poly}
+Converting an octagon into a polyhedron ({\tt oct\_to\_poly}) is easy:
+one simply has to convert constraints appearing in the octagon
+into linear constraints.
+If there is no over-approximation due to different underlying numerical
+domains, the conversion is exact.
+
+\subsection{From Polyhedra to Octagons ({\tt oct\_from\_poly})}
+\findex{oct\_from\_poly}
+To find the smallest octagon that contains a given polyhedron, we use the
+{\it frame} description of the polyhedron, denoted by $\mathbb{P}$.
+The frame is composed of elements of the following type:
+\begin{mylist}
+\index{.Pv@$\mathbb{P}_{\mathcal{V}}$}
+\item vertices $\mathbb{P}_{\mathcal{V}}$: $\{\;(v_0,\ldots,v_{N-1})\;\}$;
+\index{.Pr@$\mathbb{P}_{\mathcal{R}}$}
+\item rays $\mathbb{P}_{\mathcal{R}}$:
+$\{\;(\lambda v_0,\ldots,\lambda v_{N-1})\;|\;\lambda\geq0\}$;
+\index{.Pl@$\mathbb{P}_{\mathcal{L}}$}
+\item lines $\mathbb{P}_{\mathcal{L}}$: 
+$\{\;(\lambda v_0,\ldots,\lambda v_{N-1})\;|\;\lambda\in\mathbb{R}\}$.
+\end{mylist}
+
+In the first pass, we construct $\vec{m}^+$ taking only 
+vertices into account:
+$$\vec{m}^+_{ij}=\max
+\{\;x_j-x_i\;|\;x_{2k}=v_k,\;x_{2k+1}=-v_k,\;
+(v_0,\ldots,v_{N-1})\in\mathbb{P}_{\mathcal{V}}\;\}.$$
+
+Then $\vec{m}^+_{ij}$ is replaced by $+\infty$ if:
+\begin{mylist}
+\item either $x_j-x_i>0$, for $x_{2k}=v_k,\;x_{2k+1}=-v_k,\;
+(v_0,\ldots,v_{N-1})\in\mathbb{P}_{\mathcal{R}}$;
+\item either $x_j-x_i\neq 0$, for $x_{2k}=v_k,\;x_{2k+1}=-v_k,\;
+(v_0,\ldots,v_{N-1})\in\mathbb{P}_{\mathcal{L}}$.
+\end{mylist}
+
+
+Remark that this conversion is also sound even
+when strict constraints are allowed
+in the polyhedron: $(\alpha_0 v_0+\cdots+\alpha_{N-1} v_{N-1}<c)$ 
+is simply relaxed to $(\alpha_0 v_0+\cdots+\alpha_{N-1} v_{N-1}\leq c)$.
+
+
+\section{Operators and Transfer Functions ({\tt oct\_sem.c})}
+
+Most operators and transfer functions are direct implementations of
+those described in \cite{mine:ast01}, but adapted to our more compact
+representation.
+
+
+% bibliography
+\cleardoublepage
+\bibliographystyle{alpha}
+\bibliography{bib_oct}
+
+% index
+\cleardoublepage
+\printindex
+
+\label{theend}~
+
+\end{document}

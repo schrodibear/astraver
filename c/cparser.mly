@@ -46,6 +46,7 @@
 
   let no_loop_annot = 
     { Clogic.invariant = None; 
+      Clogic.assume_invariant = None;
       Clogic.loop_assigns = None;
       Clogic.variant = None }
 

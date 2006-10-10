@@ -33,8 +33,10 @@ OCAMLYACC= @OCAMLYACC@
 OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
+CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I c -I intf -I tools -I ocamlgraph
+INCLUDES = -I src -I c -I intf -I tools -I ocamlgraph -I octagon/ocamllib \
+	   -I octagon/ocamllib/.libs -I octagon/clib/.libs
 BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
 OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
 
@@ -67,6 +69,7 @@ GENERATED = src/version.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
+	    c/cint.ml \
 	    intf/hilight.ml intf/whyhilight.ml intf/tagsplit.ml intf/config.ml\
 	    tools/why2html.ml src/float_lexer.ml tools/cvcl_split.ml\
 	    tools/simplify_split.ml tools/smtlib_split.ml tools/zenon_split.ml
@@ -135,9 +138,10 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ str.cma $^
 
 # caduceus
-CCMO = ocamlgraph/graph.cmo src/lib.cmo src/linenum.cmo \
+CCMO = ocamlgraph/graph.cmo \
+	src/lib.cmo src/linenum.cmo \
 	src/loc.cmo src/pp.cmo \
-	src/version.cmo c/cversion.cmo c/coptions.cmo \
+	src/version.cmo c/cversion.cmo c/coptions.cmo c/cutil.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
 	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cprint_graph.cmo \
 	c/components.cmo c/cgraph.cmo c/cinit.cmo \
@@ -145,17 +149,20 @@ CCMO = ocamlgraph/graph.cmo src/lib.cmo src/linenum.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
-	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cptr.cmo c/cmain.cmo 
+	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cabsint.cmo c/cptr.cmo \
+	c/cint.cmo c/cmain.cmo 
+CCMA = octagon/ocamllib/oct.cma
 CCMX = $(CCMO:.cmo=.cmx)
+CCMXA = $(CCMA:.cma=.cmxa)
 
-bin/caduceus.opt: $(CCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+bin/caduceus.opt: $(CCMXA) $(CCMX) 
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
-bin/caduceus.byte: $(CCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
+bin/caduceus.byte: $(CCMA) $(CCMO) 
+	$(OCAMLC) -cclib -static $(BFLAGS) -o $@ unix.cma str.cma $^
 
-bin/caduceus.static: $(CCMX)
+bin/caduceus.static: $(CCMXA) $(CCMX) 
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
@@ -166,6 +173,14 @@ ocamlgraph/graph.cmx: ocamlgraph/*.ml*
 
 ocamlgraph/graph.cmo: ocamlgraph/*.ml*
 	make -C ocamlgraph byte
+
+# octagon
+
+octagon/ocamllib/oct.cmxa: octagon/ocamllib/*.ml*
+	(cd octagon; make)
+
+octagon/ocamllib/oct.cma: octagon/ocamllib/*.ml*
+	(cd octagon; make)
 
 # graphical interface
 WVCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
@@ -318,7 +333,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) g
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
 	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \
-	  cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \
+  cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy$(EXE); \
 	fi
 
 install-lib: 
@@ -434,7 +449,7 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 # generic rules
 ###############
 
-.SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo
+.SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo .ml4
 
 .mli.cmi:
 	$(OCAMLC) -c $(BFLAGS) $<
@@ -456,6 +471,9 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 
 .mly.mli:
 	$(OCAMLYACC) -v $<
+
+.ml4.ml:
+	$(CAMLP4) -impl $< > $@
 
 lib/coq/%.vo: lib/coq/%.v
 	$(COQC8) -I lib/coq $<
@@ -595,9 +613,11 @@ clean::
 	make -C doc clean
 	make -C examples-v7 clean
 	make -C examples clean
+	make -C octagon clean
 
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
+	make -C octagon dist-clean
 
 coq-clean::
 	rm -f lib/coq*/*.vo examples/*/*.vo

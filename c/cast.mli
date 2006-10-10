@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.72 2006-07-19 15:27:37 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.73 2006-10-10 12:23:51 moy Exp $ i*)
 
 (*s C types *)
 
@@ -354,6 +354,9 @@ and nstatement_node =
   | NSswitch of nexpr * (nexpr Cconst.IntMap.t) * 
       ((nexpr Cconst.IntMap.t * nstatement list) list)
   | NSassert of npredicate
+      (* [NSassume] used to communicate results of abstract interpretation
+	 to the module that inserts verification conditions *)
+  | NSassume of npredicate
   | NSlogic_label of string
   | NSspec of nspec * nstatement
   | NSdecl of nctype * Info.var_info * nexpr c_initializer option * nstatement

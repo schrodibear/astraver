@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.37 2006-09-07 13:12:30 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.38 2006-10-10 12:23:51 moy Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -24,6 +24,7 @@ open Clogic
 open Cast
 open Info
 open Pp
+open Cutil
 
 let declare_struct fmt s (_,fields) =
   fprintf fmt "@[<hov 2>struct %s {@\n" s;
@@ -124,9 +125,13 @@ let rec npredicate fmt p = match p.npred_node with
   | NPapp {napp_pred = li; napp_args = tl;} ->
       fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
   | NPrel (t1, rel, t2) ->
-      fprintf fmt "@[(%a %s %a)@]" nterm t1 (relation rel) nterm t2
+      (* no need for parentheses around a relation. It can only be used
+	 inside a boolean formula, with the relational operator morally
+	 binding tighter than any boolean operator. *)
+      fprintf fmt "@[%a %s %a@]" nterm t1 (relation rel) nterm t2
   | NPand (p1, p2) ->
-      fprintf fmt "@[(%a &&@ %a)@]" npredicate p1 npredicate p2
+      (* improved printing for range inequalities, e.g. 0 <= i < 100 *)
+      nconjunct fmt p
   | NPor (p1, p2) ->
       fprintf fmt "@[(%a ||@ %a)@]" npredicate p1 npredicate p2
   | NPimplies (p1, p2) ->
@@ -155,6 +160,192 @@ let rec npredicate fmt p = match p.npred_node with
       fprintf fmt "\\fresh(%a)" nterm t
   | NPnamed (id, p) ->
       fprintf fmt "@[(%s::@ %a)@]" id npredicate p
+  | NPseparated (t1,t2) ->
+      fprintf fmt "\\separated(%a, %a)" nterm t1 nterm t2
+
+(* given a conjunct [p], try to match relations inside p's conjuncts, in order
+   to print together range inequalities that refer to the same variable, e.g.
+   print
+       0 <= i < 100
+   instead of
+       (i < 100) && (i >= 0)
+*)
+and nconjunct fmt p =
+  (* extract the conjuncts *)
+  let rec cnf p = match p.npred_node with
+    | NPand (p1,p2) -> cnf p1 @ (cnf p2)
+    | _ -> [p]
+  in
+  (* change sides in a relation *)
+  let change_side_rel rel = match rel with
+    | Lt -> Gt | Le -> Ge | Gt -> Lt | Ge -> Le | Eq -> Eq | Neq -> Neq
+  in
+  (* if a valid combination exists, return it.
+     Each parameter is a pair of a boolean stating whether the matching term
+     was found on the left-hand side or right-hand side of the corresponding
+     relation, and the predicate for this relation.
+   *)
+  let combine (left1,p1) (left2,p2) =
+    if left1 = left2 then
+      match p1.npred_node,p2.npred_node with
+        | NPrel (tl1,op1,tr1),NPrel (tl2,op2,tr2) ->
+	    begin match op1,op2 with
+	      | (Lt | Le),(Gt | Ge) | (Gt | Ge),(Lt | Le) ->
+		  (* combination is possible *)
+		  if left1 then
+		    begin match op1 with
+		      | Lt | Le ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tr2 (relation (change_side_rel op2))
+			    nterm tl1 (relation op1) nterm tr1)
+		      | Gt | Ge ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tr1 (relation (change_side_rel op1))
+			    nterm tl1 (relation op2) nterm tr2)
+		      | Eq | Neq -> 
+			  (* not a valid combination *)
+			  assert false
+		    end
+		  else
+		    begin match op1 with
+		      | Lt | Le ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tl1 (relation op1) nterm tr1
+			    (relation (change_side_rel op2)) nterm tl2)
+		      | Gt | Ge ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tl2 (relation op2) nterm tr1
+			    (relation (change_side_rel op1)) nterm tl1)
+		      | Eq | Neq -> 
+			  (* not a valid combination *)
+			  assert false
+		    end
+	      | _ -> None
+	    end
+	| _ -> 
+	    (* both [p1] and [p2] should be relations *)
+	    assert false
+    else
+      match p1.npred_node,p2.npred_node with
+        | NPrel (tl1,op1,tr1),NPrel (tl2,op2,tr2) ->
+	    begin match op1,op2 with
+	      | (Lt | Le),(Lt | Le) | (Gt | Ge),(Gt | Ge) ->
+		  (* combination is possible *)
+		  if left1 then
+		    begin match op1 with
+		      | Lt | Le ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tl2 (relation op2)
+			    nterm tl1 (relation op1) nterm tr1)
+		      | Gt | Ge ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tr1 (relation (change_side_rel op1))
+			    nterm tl1 (relation (change_side_rel op2)) 
+			    nterm tl2)
+		      | Eq | Neq -> 
+			  (* not a valid combination *)
+			  assert false
+		    end
+		  else
+		    begin match op1 with
+		      | Lt | Le ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tl1 (relation op1) nterm tr1
+			    (relation op2) nterm tr2)
+		      | Gt | Ge ->
+			  Some (fun fmt ->
+			  fprintf fmt "%a %s %a %s %a"
+			    nterm tr2 (relation (change_side_rel op2)) 
+			    nterm tr1 (relation op1) nterm tl1)
+		      | Eq | Neq -> 
+			  (* not a valid combination *)
+			  assert false
+		    end
+	      | _ -> None
+	    end
+	| _ -> 
+	    (* both [p1] and [p2] should be relations *)
+	    assert false
+  in
+  (* search if sub-term [t] of relational predicate [p] can be recognized 
+     in another relation. We base this search on names used for printing.
+     If another relation [mp] is found in map [m] with the same term [t],
+     consider whether they can be combined by calling [combine].
+     Otherwise, add the correspondance [t] -> [p] to the map.
+   *)
+  let search_and_combine p t left m =
+    match t.nterm_node with
+      | NTvar _ | NTstrlen _ | NTarrlen _ ->
+	  let name = match t.nterm_node with
+	     | NTvar v -> Some v.var_unique_name
+	     | NTstrlen (t1,_,_) ->
+		 begin match t1.nterm_node with
+		   | NTvar v -> Some ("\\strlen(" ^ v.var_unique_name ^ ")")
+		   | _ -> None
+		 end
+	     | NTarrlen t1 ->
+		 begin match t1.nterm_node with
+		   | NTvar v -> Some ("\\arrlen(" ^ v.var_unique_name ^ ")")
+		   | _ -> None
+		 end
+	     | _ -> assert false
+	  in
+	  begin match name with 
+	    | Some name ->
+		begin try 
+		  let mp = StringMap.find name m in
+		  match combine (left,p) mp with
+		    | Some cp -> (Some cp),StringMap.remove name m
+		    | None -> None,StringMap.add name (left,p) m
+		with Not_found ->
+		  None,StringMap.add name (left,p) m
+		end
+	    | _ -> None,m
+	  end
+      | _ -> None,m
+  in
+  (* [list_conjuncts] is the list of relational predicates combined.
+     [name_map] is the pending list of correspondance from term to predicates.
+   *)
+  let list_conjuncts,name_map =
+    List.fold_left 
+      (fun (cl,m) p -> match p.npred_node with
+         | NPrel (t1,rel,t2) ->
+	     begin match search_and_combine p t1 (* left = *)true m with
+	       | (Some cp),new_m ->
+		   (* [p] combined, do not search with [t2] *)
+		   cp :: cl,new_m
+	       | None,new_m ->
+		   (* continue search for a combination with [t2] *)
+		   begin match search_and_combine p t2 (* left = *)false new_m
+		       with
+		     | (Some cp),new_m ->
+			 cp :: cl,new_m
+		     | None,new_m ->
+			 (* if [p] added to [m], do not return it now *)
+			 if m == new_m then
+			   (fun fmt -> npredicate fmt p) :: cl,m
+			 else cl,new_m
+		   end
+	     end
+	 | _ -> (fun fmt -> npredicate fmt p) :: cl,m
+      ) ([],StringMap.empty) (cnf p)
+  in
+  (* if [name_map] not empty, add these predicates to the list of conjuncts *)
+  let list_conjuncts =
+    StringMap.fold (fun _ (_,p) cl -> (fun fmt -> npredicate fmt p) :: cl) 
+      name_map list_conjuncts
+  in
+  fprintf fmt "@[(%a)@]" 
+    (print_list (fun fmt () -> fprintf fmt "@\n && ") (fun fmt f -> f fmt))
+    list_conjuncts
 
 let parameter fmt  x = fprintf fmt "%a %s" ctype x.var_type x.var_unique_name
 
@@ -200,16 +391,20 @@ let spec fmt = function
 	(print_option decreases) s.decreases
 
 let loop_annot fmt = function
-  | { invariant = None; loop_assigns = None; variant = None } ->
+  | { invariant = None; assume_invariant = None; 
+      loop_assigns = None; variant = None } ->
       ()
   | a ->
       let invariant fmt p = fprintf fmt "@[invariant %a@]@\n" npredicate p in
+      let assume_invariant fmt p = 
+	fprintf fmt "@[assume invariant %a@]@\n" npredicate p in
       let loop_assigns fmt a = fprintf fmt "@[assigns %a@]@\n" locations a in
       let variant fmt = function
 	| (t, None) -> fprintf fmt "@[variant %a@]@\n" nterm t
 	| (t, Some r) -> fprintf fmt "@[variant %a for %s@]@\n" nterm t r
       in
-      fprintf fmt "/*@@ @[%a%a%a@] */@\n"
+      fprintf fmt "/*@@ @[%a%a%a%a@] */@\n"
+	(print_option assume_invariant) a.assume_invariant
 	(print_option invariant) a.invariant
 	(print_option loop_assigns) a.loop_assigns
 	(print_option variant) a.variant
@@ -260,7 +455,13 @@ let rec nexpr fmt e = match e.nexpr_node with
   | NEvar (Fun_info x) ->
       fprintf fmt "%s" x.fun_name
   | NEarrow (e,_,x) ->
-      fprintf fmt "%a->%s" nexpr_p e x.var_unique_name
+      let typ = e.nexpr_type in
+      begin match typ.Ctypes.ctype_node with
+      | Ctypes.Tpointer (Ctypes.Valid,_) | Ctypes.Tarray (Ctypes.Valid,_,_) ->
+	  fprintf fmt "%a-ok->%s" nexpr_p e x.var_unique_name
+      | _ ->
+	  fprintf fmt "%a->%s" nexpr_p e x.var_unique_name
+      end
 (*  | NEstar e ->
       fprintf fmt "*%a" nexpr_p e*)
   | NEseq (e1, e2) ->
@@ -333,6 +534,8 @@ let rec nstatement fmt s = match s.nst_node with
 	nexpr e (print_list newline ncase) l
   | NSassert p ->
       fprintf fmt "/*@@ assert %a */" npredicate p
+  | NSassume p ->
+      fprintf fmt "/*@@ assume %a */" npredicate p
   | NSlogic_label l ->
       fprintf fmt "/*@@ label %s */" l
   | NSspec (sp, s) ->

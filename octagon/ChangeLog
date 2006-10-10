@@ -1,0 +1,64 @@
+Wed Nov 16 16:16:27 CET 2005
+         - corrected int_of_num & frac_of_num bugs (thanks to Christopher Conway)	
+	 - configure updated
+	 - doc compiled in PDF
+	
+Sun Jun 26 15:11:36 CEST 2005
+        - added dimsup and add/del_dimensions..._multi
+	
+Sun Mar  6 00:12:30 CET 2005
+	- OCaml marshalisation for num / vnum
+	- OCaml pretty-printers for octagon difference (thanks to Xavier Rival &
+	  Astree)
+	- The --with-num option is now MANDATORY. 
+	  (No dangerous default anymore!)
+	
+Fri Jan 28 20:18:43 CET 2005
+        - added oct_interv_subst_variable and oct_interv_add_constraint
+
+Thu Sep 16 16:51:49 CEST 2004
+	- corrected an iterator bug in octanal example (thanks to Pierre Ganty)
+  	  (Note: I fear it is not correctly corrected in fact...)
+
+Sat Nov 29 17:10:28 CET 2003
+        - added the source for the on-line prototype (oct_anal_web.ml)
+	- a few bug-fixes on minimized form (thanks to Bernard Berthomieu)
+
+Wed Apr 30 15:29:13 CEST 2003
+
+	- new longdouble type
+	- add_epsilon, add_epsilon_max transter functions added
+	- corrected a configure bug on Darwin
+	- added copyright notice in source files
+	- marshaling support (for float octagons only, more to come)
+
+Sat Sep 28 14:24:08 CEST 2002
+
+	* First public release 0.9.3 on http://www.di.ens.fr/~mine/oct/
+
+Sat Sep  7 17:32:52 CEST 2002
+
+	* New release 0.9.2 with many changes, including:
+	- many bugs corrected
+	- faster profiling support
+	- interval assignment function transfer
+	- staged widening
+	- incremental closure
+	- many optimizations that speed things up
+	- removed buggy marshaling support, may be back sometime
+	- up-to-date support for NewPolka 2.0.0 and GMP/MPFR 4.1
+
+Sat Jan  5 20:05:21 MET 2002
+
+	* New release 0.9.1 with following changes:
+	- shallow package organization for easier maintenance
+	- corrected bugs in transfer functions
+	- added marshaling support
+	- ocaml working sample static analyzer
+	- some steps towards merge with the NewPolka distribution
+
+Mon Aug 27 00:36:11 CEST 2001
+
+	* Initial release 0.9.0
+
+	

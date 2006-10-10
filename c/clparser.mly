@@ -245,13 +245,17 @@ spec:
 
 loop_annot:
   invariant loop_effects variant 
-    { { invariant = Some $1; loop_assigns = $2; variant = Some $3 } }
+    { { invariant = Some $1; assume_invariant = None; 
+        loop_assigns = $2; variant = Some $3 } }
 | loop_effects variant 
-    { { invariant = None; loop_assigns = $1; variant = Some $2 } }
+    { { invariant = None; assume_invariant = None; 
+        loop_assigns = $1; variant = Some $2 } }
 | invariant loop_effects 
-    { { invariant = Some $1; loop_assigns = $2; variant = None } }
+    { { invariant = Some $1; assume_invariant = None; 
+        loop_assigns = $2; variant = None } }
 | ne_loop_effects 
-    { { invariant = None; loop_assigns = Some $1; variant = None } }
+    { { invariant = None; assume_invariant = None; 
+        loop_assigns = Some $1; variant = None } }
 ;
 
 invariant:

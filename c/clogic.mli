@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.58 2006-07-20 14:21:52 moy Exp $ i*)
+(*i $Id: clogic.mli,v 1.59 2006-10-10 12:23:51 moy Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -172,6 +172,8 @@ type ('term,'pred) spec = {
 
 type ('term,'pred) loop_annot = {
   invariant : 'pred option;
+    (* part of the invariant already proved by program analysis *)
+  assume_invariant : 'pred option;
   loop_assigns : 'term location list option;
   variant : 'term variant option
 }
@@ -245,6 +247,7 @@ and 'ctype npredicate_node =
   | NPvalid_range of 'ctype nterm * 'ctype nterm * 'ctype nterm
   | NPfresh of 'ctype nterm 
   | NPnamed of string * 'ctype npredicate
+  | NPseparated of 'ctype nterm * 'ctype nterm
 
 type ('term,'ctype) nlogic_symbol =
   | NPredicate_reads of (Info.var_info * 'ctype) list * 'term location list

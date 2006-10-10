@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.15 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.16 2006-10-10 12:23:51 moy Exp $ i*)
 
 open Cast
 
@@ -49,6 +49,8 @@ val type_why_for_term : nterm -> Info.why_type
 val type_why : nexpr -> Info.why_type
 
 val why_type_for_float_kind : Ctypes.cfloat -> string
+
+val make_nstrlen_node_from_nterm : nterm -> nctype Clogic.nterm_node
 
 val assoc_zone : Info.zone -> (Info.zone * Info.zone) list -> Info.zone 
 

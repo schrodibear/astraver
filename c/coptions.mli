@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.24 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: coptions.mli,v 1.25 2006-10-10 12:23:51 moy Exp $ i*)
 
 (*s environment variables *)
 
@@ -43,6 +43,7 @@ val closed_program : bool
 val typing_predicates : bool
 val local_aliasing : bool
 val arith_memory_model : bool
+val abstract_interp : bool
 
 val use_floats : bool ref
 val floats : bool
@@ -87,3 +88,9 @@ val log : Format.formatter
 val lprintf : ('a, Format.formatter, unit) format -> 'a
 val close_log : unit -> unit
 
+type evaluation_order_t =
+    { binary_left_to_right : bool;
+      assign_left_to_right : bool;
+      call_left_to_right : bool }
+
+val evaluation_order : evaluation_order_t

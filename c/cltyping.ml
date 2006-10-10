@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.101 2006-09-07 13:12:30 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.102 2006-10-10 12:23:51 moy Exp $ i*)
 
 open Coptions
 open Format
@@ -620,6 +620,7 @@ let type_location = type_term
 
 let type_loop_annot env la =
   { invariant = option_app (type_predicate env) la.invariant;
+    assume_invariant = option_app (type_predicate env) la.assume_invariant;
     loop_assigns = option_app (List.map (type_location env)) la.loop_assigns;
     variant = option_app (type_variant env) la.variant }
 

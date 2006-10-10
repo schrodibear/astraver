@@ -545,7 +545,7 @@ let rec predicate tyf p =
   | NPvalid_range (t1,t2,t3) -> term tyf t1; term tyf t2; term tyf t3
   | NPfresh  t -> term tyf t
   | NPnamed (_,p) -> predicate tyf p
-
+  | NPseparated (t1,t2) -> term tyf t1; term tyf t2
 
 let rec calcul_zones expr =
   match expr.nexpr_node with 
@@ -673,7 +673,7 @@ let rec statement twf st =
   match st.nst_node with 
     | NSnop | NSreturn None | NSbreak | NScontinue | NSlogic_label _ 
     | NSgoto _ -> ()
-    | NSassert p ->  predicate twf p
+    | NSassert p | NSassume p ->  predicate twf p
     | NSexpr e -> calcul_zones e
     | NSif (e,st1,st2) -> calcul_zones e; statement twf st1; statement twf st2 
     | NSwhile (lannot,e,st) 

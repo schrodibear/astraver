@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.211 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.212 2006-10-10 12:23:51 moy Exp $ i*)
 
 
 open Format
@@ -461,7 +461,7 @@ let rec interp_predicate label old_label p =
     | NPvalid_range (t,a,b) ->
 	begin 
 	  match a.nterm_node , b.nterm_node with
-	    | NTconstant IntConstant "0", NTconstant IntConstant "0" -> 
+	    | NTconstant (IntConstant "0"), NTconstant (IntConstant "0") -> 
 		if arith_memory_model then
 		  LPred("valid",[ft t])
 		else
@@ -475,6 +475,11 @@ let rec interp_predicate label old_label p =
 	end
     | NPnamed (n, p) ->
 	LNamed (n, f p)
+    | NPseparated (t1,t2) ->
+	if arith_memory_model then
+	  LPred("separated",[ft t1;ft t2])
+	else
+	  LPred("separated",[interp_var label "alloc"; ft t1;ft t2])
 
 let interp_predicate label old_label p = 
   let w = interp_predicate label old_label p in
@@ -1787,6 +1792,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSgoto(GotoForwardInner,lab) ->
       unsupported stat.nst_loc "forward inner goto"
   | NSgoto(GotoBackward,lab) ->
+      (* When planning to support backward gotos, add a widening node inside 
+	 the induced loop in the operational graph created for various 
+	 dataflow analyses in [Cabsint]. *)
       unsupported stat.nst_loc "backward goto"
   | NSswitch(e,used_cases,l) ->
       let tmp = tmp_var() in
@@ -1802,6 +1810,9 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 	res
   | NSassert(pred) -> 
       Output.Assert(interp_predicate None "init" pred, Void)
+  | NSassume _ -> 
+      (* WHY does not have an assume expression for the moment *)
+      Void
   | NSlogic_label(l) -> 
       Output.Label (l, Void)
   | NSspec (spec,s) ->

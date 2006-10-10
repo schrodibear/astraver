@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.31 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: coptions.ml,v 1.32 2006-10-10 12:23:51 moy Exp $ i*)
 
 open Format
 
@@ -74,6 +74,7 @@ let typing_predicates = ref false
 let floats = ref true
 let local_aliasing = ref false
 let arith_memory_model = ref false
+let abstract_interp = ref false
 
 type fp_rounding_mode = 
   | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
@@ -207,6 +208,8 @@ let _ =
 	  "  local aliasing analysis (experimental)";
 	"--arith-mem", Arg.Set arith_memory_model,
 	  "  alternate arithmetic memory model (experimental)";
+	"--abs-int", Arg.Set abstract_interp,
+	  "  local abstract interpretation over integers (experimental)";
       ]
       add_file "caduceus [options] file..."
 
@@ -228,6 +231,7 @@ let closed_program = !closed_program
 let typing_predicates = !typing_predicates
 let local_aliasing = !local_aliasing
 let arith_memory_model = !arith_memory_model
+let abstract_interp = !abstract_interp
 
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check
@@ -293,3 +297,12 @@ let verify f = match !verification with
   | Verify -> Hashtbl.mem functions f
   | Assume -> not (Hashtbl.mem functions f)
 
+type evaluation_order_t =
+    { binary_left_to_right : bool;
+      assign_left_to_right : bool;
+      call_left_to_right : bool }
+
+let evaluation_order = 
+  { binary_left_to_right = true;
+    assign_left_to_right = false;
+    call_left_to_right = true }

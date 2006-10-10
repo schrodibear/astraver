@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.77 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.78 2006-10-10 12:23:51 moy Exp $ i*)
 
 open Creport
 open Cconst
@@ -489,6 +489,25 @@ let nt_arrow loc valid ty e z f =
 	    nterm_type = ty;
 	    nterm_loc = loc},z,f)
       
+(* transformation from a normalized term [t] to a normalized node representing
+   the application of logical function [strlen] to [t]. 
+   This has been factorized so that it can be called outside of [Cnorm]. *)
+let make_nstrlen_node_from_nterm t =
+  (* [strlen(p)] depends on the value pointed to by [p].
+     Add fields to describe this dependency. *)
+  let ty = match t.nterm_type.Ctypes.ctype_node with
+  | Ctypes.Tarray (_,ty,_) | Ctypes.Tpointer (_,ty) -> 
+      ty
+  | Ctypes.Tvoid | Ctypes.Tint _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
+  | Ctypes.Tstruct _ | Ctypes.Tunion _ | Ctypes.Tenum _ 
+  | Ctypes.Tfun _ ->
+      assert false
+  in
+  let info = make_field ty in
+  let info = declare_arrow_var info in
+  let zone = find_zone_for_term t in
+  let () = type_why_new_zone zone info in
+  NTstrlen (t, zone, info)
 
 let dot_translate t' var_info ty loc =
   let zone = find_zone_for_term t' in
@@ -632,21 +651,9 @@ let rec term_node loc t ty =
   | Tarrlen t -> NTarrlen (term t)
   | Tstrlen t ->
       (* [strlen(p)] depends on the value pointed to by [p].
-	 Add fields to describe this dependency. *)
-      let ty = match t.term_type.Ctypes.ctype_node with
-	| Ctypes.Tarray (_,ty,_) | Ctypes.Tpointer (_,ty) -> 
-	    ty
-	| Ctypes.Tvoid | Ctypes.Tint _ | Ctypes.Tfloat _ | Ctypes.Tvar _ 
-	| Ctypes.Tstruct _ | Ctypes.Tunion _ | Ctypes.Tenum _ 
-	| Ctypes.Tfun _ ->
-	    assert false
-      in
-      let info = make_field ty in
-      let info = declare_arrow_var info in
-      let t' = term t in
-      let zone = find_zone_for_term t' in
-      let () = type_why_new_zone zone info in
-      NTstrlen (t', zone, info)
+	 Add fields to describe this dependency.
+	 This treatment has be factorized. *)
+      make_nstrlen_node_from_nterm (term t)
   | Tcast ({Ctypes.ctype_node = Tpointer _}as ty, 
 	    {term_node = Tconstant (IntConstant "0")}) ->      
       let info = default_var_info "null" in 
@@ -756,6 +763,7 @@ and predicate_node = function
 let loop_annot a =
   {
     invariant = noption predicate a.invariant;
+    assume_invariant = noption predicate a.assume_invariant;
     loop_assigns = 
      noption (List.map nlocation) a.loop_assigns;
     variant = noption nvariant a.variant;

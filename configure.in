@@ -144,31 +144,35 @@ AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no)
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
-#  # camlp4 
-#  AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
-#  if test "$CAMLP4O" = no ; then
-#  	AC_MSG_ERROR(Cannot find camlp4o.)
-#  fi
-#  CAMLP4LIB=`camlp4o -where`
-#  CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
-#  AC_MSG_CHECKING(camlp4 version)
-#  if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
-#      AC_MSG_ERROR(differs from ocaml version)
-#  else
-#      AC_MSG_RESULT(ok)
-#  fi
+# Octagon library
+(cd octagon; ./configure --with-num=float --with-ocaml=$OCAMLLIB;
+ chmod 755 oct-config)
 
-#  AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
-#  if test "CAMLP4OOPT" != no ; then
-#  	AC_MSG_CHECKING(camlp4o.opt version)
-#  	TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
-#  	if test "$TMPVERSION" != $CAMLP4VERSION ; then
-#  	    AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
-#  	else
-#  	    AC_MSG_RESULT(ok)
-#  	    CAMLP4O=$CAMLP4OOPT
-#  	fi
-#  fi
+# camlp4 
+AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
+if test "$CAMLP4O" = no ; then
+     AC_MSG_ERROR(Cannot find camlp4o.)
+fi
+CAMLP4LIB=`camlp4o -where`
+CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
+AC_MSG_CHECKING(camlp4 version)
+if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
+     AC_MSG_ERROR(differs from ocaml version)
+else
+     AC_MSG_RESULT(ok)
+fi
+
+AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
+if test "CAMLP4OOPT" != no ; then
+     AC_MSG_CHECKING(camlp4o.opt version)
+     TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
+     if test "$TMPVERSION" != $CAMLP4VERSION ; then
+	  AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
+     else
+ 	  AC_MSG_RESULT(ok)
+ 	  CAMLP4O=$CAMLP4OOPT
+     fi
+fi
 
 WHYFLOATS=
 

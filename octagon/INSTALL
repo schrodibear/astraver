@@ -1,0 +1,312 @@
+
+     THE OCTAGON ABSTRACT DOMAIN LIBRARY - INSTALLATION PROCEDURE
+
+Simple installation procedure
+=============================
+
+ % tar xzf liboct-X.X.X.tar.gz  # unpack the sources (X.X.X is the version)
+ % cd liboct-X.X.X              # go into the liboct source directory
+ % ./configure --with-num=frac  # launch the configure script
+ % make                         # build liboct
+
+ [ become root if necessary ]
+ % make install                 # install liboct
+
+
+NOTE. The --with-num= option is now mandatory. Please read the section
+`Changing the underlying numerical domain' for more information on this option.
+
+
+Installing in a custom directory
+================================
+
+By default, "make install" will install liboct in the /usr/local directory.
+This means you must be root when calling "make install".
+If you are not root, or you wish to install the library in another directory,
+you can choose another prefix directory by
+using the "--prefix=DIR" option of configure, e.g.:
+
+  % ./configure --prefix=$HOME --with-num=frac
+
+and then proceed with "make", and "make install" as usual.
+Directories where all files are actually installed are derived from DIR by
+appending /lib (for library files), /bin (for binary files), /include/oct
+(for include files), /lib/ocaml (for OCaml library files), and /share/doc,
+for the documentation.
+
+If you install liboct on several computers with networked file-system sharing,
+you may want to install system-independent files (OCaml byte-code, 
+documentation, C header files) in one directory, and system-dependent files 
+(binary files, libraries) in another-one.
+You should use the "--prefix=DIR" for the system-independent files, and
+"--exec-prefix=DIR" for the system-dependent files.
+Remark that when using the "--prefix=DIR"  but not the "--exec-prefix=DIR" 
+options, all files are installed in the same DIR directory.
+
+
+Optimizing vs. debug version
+============================
+
+By default, debugging is enabled (-g), so that a debugger (such as gdb)
+can be used on the library. This often disables some of the compiler's
+optimizations..
+If you wish to have an efficient version, use the --enable-debug=no
+option. Debugging will then be disabled and special optimization flags
+will be passed to the compiler.
+
+
+Using liboct
+============
+
+Now that liboct is compiled and installed, you need to know how to compile
+a C, C++, or OCaml program that uses the library.
+
+Thankfully, "make install" installed a simple "oct-config" program
+that supplies C and OCaml compile and link flags automatically.
+
+For example, you should compile C or C++ files using:
+
+  % cc `oct-config --cflags` -c toto.c -o toto.o
+
+and link using:
+
+  % cc `oct-config --libs` toto.o toto2.o -o totor
+
+You must include the C header file "oct/oct.h" in order to access any function
+in the Octagon Library.
+
+
+OCaml byte-code compiler need the --mlflags flag:
+
+  % ocamlc `oct-config --mlflags` -c toto.ml
+  % ocamlc `oct-config --mlflags` toto.cmo toto2.cmo -o totor
+
+OCaml native compiler can also be used instead of the byte-code if you use
+the --with-ocamlopt flag:
+
+  % ocamlopt `oct-config --mlflags --with-ocamlopt` toto.ml toto2.ml -o totor
+
+A OCaml top-level with the Octagon Library linked in can be called using the
+--mltop flag:
+
+  % `oct-config --mltop`
+
+All OCaml functions are defined in the module Oct which must be opened.
+
+
+Please, try "oct-config --help" for more informations.
+
+
+Compiling the documentation
+===========================
+
+By default, "make" builds a documentation as a DVI file "doc_oct.dvi" from the
+LaTeX source file "doc_oct.tex"; "make install" then copies this documentation
+in PREFIX/share/oct (where PREFIX is the directory specified by the --prefix
+option, or /usr/local if the option is not used).
+
+You need to have latex, bibtex and makeindex installed, as well as the
+standard Latex packages.
+
+You may want to perform "dvips doc_oct.dvi -o doc_oct.ps", and
+"ps2pdf doc_oct.ps" to obtain the documentation in Postscript and PDF formats.
+
+If there is a problem generating the documentation, you should use the
+"--disable-doc" configure option to disable the generation.
+
+
+Changing the underlying numerical domain
+========================================
+
+The Octagon Library can use any of the following numerical representation:
+ * plain integers (not most precise, but fast)
+ * fractions (sound and precise)
+ * floating-point numbers (sound, but may have stability problems)
+
+Numbers can be implemented by machine-integers or floats (long and double),
+or multi-precision numbers (using the GMP and MPFR libraries).
+
+There is no longer a default choice (due to too many people forgetting they
+did want a specific underlying numerical domain).
+You MUST use the --with-num option, in one of the following ways:
+ * --with-num=int
+ * --with-num=frac
+ * --with-num=float
+ * --with-num=longdouble
+ * --with-num=gmpint
+ * --with-num=gmpfrac
+ * --with-num=mpfrfloat
+
+Please read the documentation to understand how these options affects the
+library.
+
+
+Support for OCaml and New Polka
+===============================
+
+The Octagon Abstract Domain Library has support for:
+ * a C API (also working with C++);
+ * multi-precision numbers (GMP and its MPFR extension);
+ * an OCaml API (in fact, a simple OCaml wrapper that calls the C API);
+ * an interface with the New Polka library.
+
+The OCaml support needs OCaml 3.4 at least
+< http://pauillac.inria.fr/ocaml/ >.
+
+When using multi-precision integers and fractions, GMP version 4.0 or
+above is required < http://swox.com/gmp/ >.
+When using multi-precision floating-point numbers, the MPFR extension to
+GMP is required < http://www.loria.fr/projets/mpfr/ >.
+
+The New Polka Polyhedron Library support needs New Polka (version 1.1.0 
+at least, it will not work with version 1.0)
+< http://www-verimag.imag.fr/~bjeannet/newpolka-english.html >.
+
+If the New Polka library uses the GMP library (version 3.1 at least)
+< http://www.swox.com/gmp/ >, then the Octagon Library will also need it.
+
+The configure script tries automatically to discover if it can build
+the OCaml and/or the New Polka supports.
+If OCaml, New Polka, GMP, or MPFR are installed in non-standard directories
+(/usr/local/opt/newpolka, for example), you may need to precise the base
+directory of the installation with one of the following options:
+  * --with-newpolka=DIR
+  * --with-gmp=DIR
+  * --with-mpfr=DIR
+  * --with-ocaml=DIR
+Headers will be searched for in DIR/include, and libraries in DIR/lib.
+
+The New Polka library can use one of the following three integers types:
+ * long integers
+ * long long integers
+ * arbitrary long integers (with GMP)
+
+The default is GMP, but you can override this with one of the options:
+ * --with-polka-num=long
+ * --with-polka-num=longlong
+ * --with-polka-num=gmp
+
+Of course, you must have the appropriate New Polka library (libpolyi, libpolyl,
+or libpolyg, depending on the value of the --with-polka-num option) present.
+Also note that if debugging is enabled, the configure script will search for
+New Polka libraries with the _debug suffix (libpolyi_debug instead of libpolyi,
+for example).
+
+If you want support for the New Polka OCaml library, you must also have
+one of libpolyi_caml, libpolyl_caml, libpolyg_caml, libpolyi_caml_debug, 
+libpolyl_caml_debug, or libpolyg_caml_debug  present (depending on the
+--with-polka-num and --enable_debug options).
+You must also have the libraries poly.cma (OCaml byte-code library) and
+poly.cmxa, poly.a (OCaml native code library) installed in the OCaml 
+library directory.
+The resulting OCaml top-level `oct-config --mltop` will have support for 
+the Octagon Library API, the New Polka API, and the octagon/polyhedron 
+conversion  API.
+
+Remark that the "oct-config" program adds the correct flags to link the
+New Polka Library (including GMP, if needed) if the New Polka support
+is complied in.
+
+
+Compiling several versions of the Octagon Library
+=================================================
+
+You may want to install several versions of the Octagon Library with different
+options, so that you do not need to recompile the library each time you
+want to switch between debug/optimized, profiling/non-profiling modes,
+or change the underlying numerical domain used in the library (--with-num=),
+or in the New Polka library (--with-polka-num=).
+
+In order to do this, you simply have to perform the steps
+
+ % ./configure [options]
+ % make 
+ % make install
+ % make clean
+
+for each set of options you want installed
+
+Do not forget to invoke "make clean" between two compilations.
+
+Then, you simply have to recall all options you want to set when calling
+oct-config, e.g.:
+
+ % oct-config --with-num=float
+
+Beware, all options that are not set when calling oct-config are defaulted
+to the value they have in the _most recent_ Octagon Library installed.
+
+oct-config will issue an error message if you request a set options which
+are not installed.
+
+To provide this feature, the library object compiled has these options
+mangled in the library name.
+For example `liboct_qap3g.a` means: --with-num=frac, --enable-assert,
+enable-prof, --with-poly-num=gmp, --enable-debug (this is the default).
+
+All header files are the same, whatever the chosen options (even 
+"oct-config.h" which is generated by the configure script).
+One name-mangled `oct-config` is also generated for each set of options
+(`oct-config-qapt3g` in our example).
+When calling oct-config with an option, it calls the appropriate name-mangled
+oct-config.
+
+If you use the OCaml binding, name-mangled module name are avaiable
+(for example Oct_qap3g, instead of Oct); use `oct-config --mlmodule` to
+guess the right module name.
+One name-mangled `octtop` OCaml top-level is also generated for each set of 
+options; `oct-config --mltop` automatically choose the right one.
+
+However, the example programs (octtest for the C library, octanal for the OCaml
+library) are not name-mangled. They correspond to the last version of
+the library installed.
+
+The file liboct.so is always installed, so that you can link directly
+against the last installed library, would you wish to bypass
+oct-config.
+
+
+
+Non-static functions also in liboct.so also have a name-mangling prefix, so
+that you can link several different versions of the library with the same
+program (e.g. use float and fractions octagons in the same application).
+For example, you can do:
+ % cc -c a.c `oct-config --cflags --with-num=float`
+ % cc -c b.c `oct-config --cflags --with-num=frac`
+ % cc a.o b.o -o toto `oct-config --libs --with-num=float` \
+   `oct-config --libs --with-num=frac`
+
+Remark, however, that one C file can only use one library version.
+Also, do not directly use an octagon created by one library with a function
+of another library; in order to convert octagons, use the marshalling
+facility.
+
+
+
+Other configure options
+=======================
+
+Try "./configure --help" for a succinct list of all configure options.
+
+ --enable-debug        compiles the library with the -g option
+ --disable-debug       compiles the library with optimization
+
+ --enable-assert       basic argument sanity run-time checking
+ --disable-assert      very discouraged
+
+ --enable-prof         turns on internal memory and time profiling
+ --disable-prof        will be more efficient
+
+ --with-num=           choose a different numerical type
+
+ --disable-polka       do not try to compile the New Polka support
+ --with-polka-num=     choose a different integer type in New Polka 
+ --with-polka=DIR      directory where New Polka in installed
+ --with-gmp=DIR        directory where GMP is installed
+ --with-mpfr=DIR       directory where MPFR is installed
+
+ --disable-ocaml       do not try to compile the OCaml support
+ --disable-ocamlpolka  do not try to compile the New Polka OCaml support
+ --with-ocaml=DIR      where to install OCaml objects
+
+ --disable-doc         do not generate the documentation oct_doc.dvi

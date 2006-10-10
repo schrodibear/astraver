@@ -272,7 +272,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
 ac_unique_file="src/monad.mli"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB CAMLP4O CAMLP4OOPT COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1700,31 +1700,114 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-#  # camlp4
-#  AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
-#  if test "$CAMLP4O" = no ; then
-#  	AC_MSG_ERROR(Cannot find camlp4o.)
-#  fi
-#  CAMLP4LIB=`camlp4o -where`
-#  CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
-#  AC_MSG_CHECKING(camlp4 version)
-#  if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
-#      AC_MSG_ERROR(differs from ocaml version)
-#  else
-#      AC_MSG_RESULT(ok)
-#  fi
+# Octagon library
+(cd octagon; ./configure --with-num=float --with-ocaml=$OCAMLLIB;
+ chmod 755 oct-config)
 
-#  AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
-#  if test "CAMLP4OOPT" != no ; then
-#  	AC_MSG_CHECKING(camlp4o.opt version)
-#  	TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
-#  	if test "$TMPVERSION" != $CAMLP4VERSION ; then
-#  	    AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
-#  	else
-#  	    AC_MSG_RESULT(ok)
-#  	    CAMLP4O=$CAMLP4OOPT
-#  	fi
-#  fi
+# camlp4
+# Extract the first word of "camlp4o", so it can be a program name with args.
+set dummy camlp4o; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_CAMLP4O+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$CAMLP4O"; then
+  ac_cv_prog_CAMLP4O="$CAMLP4O" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_CAMLP4O="camlp4o"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_CAMLP4O" && ac_cv_prog_CAMLP4O="no"
+fi
+fi
+CAMLP4O=$ac_cv_prog_CAMLP4O
+if test -n "$CAMLP4O"; then
+  echo "$as_me:$LINENO: result: $CAMLP4O" >&5
+echo "${ECHO_T}$CAMLP4O" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+if test "$CAMLP4O" = no ; then
+     { { echo "$as_me:$LINENO: error: Cannot find camlp4o." >&5
+echo "$as_me: error: Cannot find camlp4o." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+CAMLP4LIB=`camlp4o -where`
+CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
+echo "$as_me:$LINENO: checking camlp4 version" >&5
+echo $ECHO_N "checking camlp4 version... $ECHO_C" >&6
+if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
+     { { echo "$as_me:$LINENO: error: differs from ocaml version" >&5
+echo "$as_me: error: differs from ocaml version" >&2;}
+   { (exit 1); exit 1; }; }
+else
+     echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6
+fi
+
+# Extract the first word of "camlp4o.opt", so it can be a program name with args.
+set dummy camlp4o.opt; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_CAMLP4OOPT+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$CAMLP4OOPT"; then
+  ac_cv_prog_CAMLP4OOPT="$CAMLP4OOPT" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_CAMLP4OOPT="camlp4o.opt"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_CAMLP4OOPT" && ac_cv_prog_CAMLP4OOPT="no"
+fi
+fi
+CAMLP4OOPT=$ac_cv_prog_CAMLP4OOPT
+if test -n "$CAMLP4OOPT"; then
+  echo "$as_me:$LINENO: result: $CAMLP4OOPT" >&5
+echo "${ECHO_T}$CAMLP4OOPT" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+if test "CAMLP4OOPT" != no ; then
+     echo "$as_me:$LINENO: checking camlp4o.opt version" >&5
+echo $ECHO_N "checking camlp4o.opt version... $ECHO_C" >&6
+     TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
+     if test "$TMPVERSION" != $CAMLP4VERSION ; then
+	  echo "$as_me:$LINENO: result: differs from camlp4o; camlp4o.opt discarded." >&5
+echo "${ECHO_T}differs from camlp4o; camlp4o.opt discarded." >&6
+     else
+ 	  echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6
+ 	  CAMLP4O=$CAMLP4OOPT
+     fi
+fi
 
 WHYFLOATS=
 
@@ -2650,6 +2733,8 @@ s,@OCAMLLEXDOTOPT@,$OCAMLLEXDOTOPT,;t t
 s,@OCAMLYACC@,$OCAMLYACC,;t t
 s,@LABLGTK2@,$LABLGTK2,;t t
 s,@OCAMLWEB@,$OCAMLWEB,;t t
+s,@CAMLP4O@,$CAMLP4O,;t t
+s,@CAMLP4OOPT@,$CAMLP4OOPT,;t t
 s,@COQC@,$COQC,;t t
 s,@COQDEP@,$COQDEP,;t t
 s,@PVSC@,$PVSC,;t t

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.74 2006-09-25 14:34:45 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.75 2006-10-10 12:23:51 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -45,7 +45,7 @@ let main () =
   (* initialisation of global variables *)
   let tfiles = on_all_files Cinit.add_init tfiles in
   (* function graph *)
-  List.iter (fun (f,p) -> Cgraph.file p) tfiles ;
+  List.iter (fun (_,p) -> Cgraph.file p) tfiles ;
   if print_graph then Cprint_graph.print_graph ();
   let tab_comp = Cgraph.find_comp tfiles in
   (* normalisation *)
@@ -54,6 +54,14 @@ let main () =
   let nfiles = on_all_files Cnorm.file tfiles in
   (* local aliasing analysis *)
   if local_aliasing then Cptr.local_aliasing_transform ();
+  (* local abstract interpretation over integers *)
+(* COMMENTED OUT OTHERWISE WE GET A COMPILATION ERROR:
+
+Files c/cmain.cmx and c/cint.cmx
+make inconsistent assumptions over implementation Cint
+
+  if abstract_interp then Cint.local_int_analysis_attach ();
+*)
   (* predicate *)
   let nfiles = 
     if typing_predicates then
@@ -62,7 +70,7 @@ let main () =
       nfiles
   in
   (* separation *)
-  List.iter (fun (f,p) -> Cseparation.file p)  nfiles;
+  List.iter (fun (_,p) -> Cseparation.file p)  nfiles;
   let nfiles = 
     if typing_predicates then 
       nfiles 
@@ -103,7 +111,7 @@ let main () =
       ([],[]) nfiles
   in
   let why_specs = Cinterp.make_int_ops_decls () @ why_specs in
-  let (why_code,why_specs,prover) = 
+  let (why_code,why_specs,_) = 
     Cinterp.interp_functions (why_specs,prover) 
   in
   (* Why specs *)

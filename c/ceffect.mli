@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.27 2006-06-22 13:07:16 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.28 2006-10-10 12:23:51 moy Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -65,9 +65,9 @@ val locations : Cast.nterm Clogic.location list -> effect
 
 val predicate : Cast.npredicate -> effect
 
-val expr : Cast.nexpr -> effect
+val expr : ?with_local:bool -> Cast.nexpr -> effect
 
-val statement : Cast.nstatement -> effect
+val statement : ?with_local:bool -> Cast.nstatement -> effect
 
 (* computes effects for logical symbols only *)
 val file : Cast.nfile -> unit
