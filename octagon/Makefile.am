@@ -2,7 +2,8 @@ AUTOMAKE_OPTIONS = 1.4
 
 AUTOHEADER = echo ""
 
-SUBDIRS = . @SUBDIRS@
+#SUBDIRS = . @SUBDIRS@
+SUBDIRS = . clib test ocamllib 
 
 # installed binaries
 
