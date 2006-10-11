@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.76 2006-10-10 12:54:54 moy Exp $ i*)
+(*i $Id: cmain.ml,v 1.77 2006-10-11 08:43:33 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -65,6 +65,9 @@ let main () =
   in
   (* separation *)
   List.iter (fun (_,p) -> Cseparation.file p)  nfiles;
+  Array.iter (fun l -> 
+		Cseparation.funct l ) 
+    tab_comp;
   let nfiles = 
     if typing_predicates then 
       nfiles 

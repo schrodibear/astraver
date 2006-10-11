@@ -774,8 +774,17 @@ let c_fun_separation fun_name (sp, _, f, st,_) =
   end 
 
 
-let file p =  
-  List.iter (fun d -> global_decl d.node) p;
-  Hashtbl.iter c_fun_poly Cenv.c_functions;
-  Hashtbl.iter c_fun_separation Cenv.c_functions;
 
+let file p =  
+  List.iter (fun d -> global_decl d.node) p
+    
+let funct l =
+  List.iter 
+    (fun f -> 
+	let fu = try find_c_fun f.fun_name with Not_found -> assert false in
+        c_fun_separation f.fun_name fu;
+	c_fun_poly f.fun_name fu)
+    l
+(*  Hashtbl.iter c_fun_poly Cenv.c_functions;
+  Hashtbl.iter c_fun_separation Cenv.c_functions;
+*)
