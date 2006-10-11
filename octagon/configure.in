@@ -5,6 +5,7 @@ AC_PREREQ(2.13)
 AC_INIT(oct-config.in)
 AC_CANONICAL_SYSTEM
 
+
 # versionning
 #
 # new release: MICRO_VERSION++, INTERFACE_AGE++, BINARY_AGE++
@@ -96,9 +97,9 @@ AC_ARG_WITH(mpfr, [  --with-mpfr=DIR           where MPFR is installed],,with_mp
 AC_ARG_WITH(ocaml, [  --with-ocaml=DIR         where to install OCaml objs [LIBDIR/ocaml]],,with_ocaml=NONE)
 
 # checks for programs
-AC_PROG_CXX
+#AC_PROG_CXX
 AM_PROG_CC_STDC
-AC_PROG_INSTALL
+#AC_PROG_INSTALL
 
 # checks for header files
 
@@ -189,17 +190,17 @@ AC_CACHE_VAL(oct_cv_type_bool_c,[
 ])
 AC_MSG_RESULT($oct_cv_type_bool_c)
 AC_LANG_CPLUSPLUS
-AC_MSG_CHECKING(for bool type support in the C++ compiler)
-AC_CACHE_VAL(oct_cv_type_bool_cpp,[
-        AC_TRY_COMPILE(,[
-        bool i; return 1;
-        ],
-        oct_cv_type_bool_cpp=yes
-        ,
-        oct_cv_type_bool_cpp=no
-        ,)
-])
-AC_MSG_RESULT($oct_cv_type_bool_cpp)
+#AC_MSG_CHECKING(for bool type support in the C++ compiler)
+#AC_CACHE_VAL(oct_cv_type_bool_cpp,[
+#        AC_TRY_COMPILE(,[
+#        bool i; return 1;
+#        ],
+#        oct_cv_type_bool_cpp=yes
+#        ,
+#        oct_cv_type_bool_cpp=no
+#        ,)
+#])
+#AC_MSG_RESULT($oct_cv_type_bool_cpp)
 AC_LANG_C
 
 # looking for math
@@ -207,144 +208,144 @@ AC_CHECK_LIB(m,ceil,,AC_MSG_ERROR([Cannot find maht library]))
 
 
 # GMP
-if test "x$enable_gmp" != "xno"; then
-old_CFLAGS="$CFLAGS"
-old_LIBS="$LIBS"
-AC_MSG_CHECKING(where GMP is installed)
-gmp_dir="NONE"
-LIBS="$old_LIBS -lgmp"
-AC_TRY_LINK([#include <gmp.h>],[mpz_t a; mpz_init(a)],[gmp_dir=""; break],
-for i in $with_gmp $exec_prefix $prefix /usr/local /usr /sw; do
-  if test "x$i" != "xNONE" -a -f $i/include/gmp.h; then
-    CFLAGS="$old_CFLAGS -I$i/include "
-    LIBS="$old_LIBS -L$i/lib -lgmp"
-    AC_TRY_LINK([#include <gmp.h>],[mpz_t a; mpz_init(a)],[gmp_dir="$i"; break],)
-  fi
-done)
-CFLAGS="$old_CFLAGS"
-LIBS="$old_LIBS"
-if test "x$gmp_dir" = "xNONE"; then
-  enable_gmp=no
-  AC_MSG_RESULT(not found)
-elif test "x$gmp_dir" = "x"; then
-  enable_gmp=yes
-  AC_MSG_RESULT(found)
-  EXTRA_DEFS="-DOCT_HAS_GMP $EXTRA_DEFS"
-  LIBS="-lgmp $LIBS"
-else
-  enable_gmp=yes
-  AC_MSG_RESULT(found in $gmp_dir)
-  CFLAGS="$CFLAGS -I$gmp_dir/include"
-  LDPATH="$LDPATH $gmp_dir/lib"
-  EXTRA_DEFS="-DOCT_HAS_GMP $EXTRA_DEFS"
-  LIBS="-lgmp $LIBS"
-  GMPLIB="-L$gmp_dir/lib"
-fi
-fi
-
-# MPFR
-if test "x$enable_mpfr" != "xno" -a "x$enable_gmp" = "xyes"; then
-old_CFLAGS="$CFLAGS"
-old_LIBS="$LIBS"
-AC_MSG_CHECKING(where MPFR is installed)
-mpfr_dir="NONE"
-LIBS="-lmpfr $old_LIBS"
-AC_TRY_LINK([#include <gmp.h>
-             #include <mpfr.h>],
-	    [mpfr_t a; mpfr_init(a)],
-            [mpfr_dir=""; break],
-for i in $with_mpfr $exec_prefix $prefix /usr/local /usr /sw; do
-  if test "x$i" != "xNONE" -a -f $i/include/mpfr.h; then
-    CFLAGS="$old_CFLAGS  -I$i/include "
-    LIBS="-L$i/lib -lmpfr $GMPLIB $old_LIBS"
-    AC_TRY_LINK([#include <gmp.h>
-	         #include <mpfr.h>],
-	        [mpfr_t a; mpfr_init(a)],
-                [mpfr_dir="$i"; break],)
-  fi
-done)
-LIBS="$old_LIBS"
-CFLAGS="$old_CFLAGS"
-if test "x$mpfr_dir" = "xNONE"; then
-  enable_mpfr=no
-  AC_MSG_RESULT(not found)
-elif test "x$mpfr_dir" = "x"; then
-  enable_mpfr=yes
-  AC_MSG_RESULT(found)
-  EXTRA_DEFS="-DOCT_HAS_MPFR $EXTRA_DEFS"
-  CFLAGS="$CFLAGS -DOCT_HAS_MPFR"
-  LIBS="-lmpfr $LIBS"
-else
-  enable_mpfr=yes
-  AC_MSG_RESULT(found in $mpfr_dir)
-  CFLAGS="$CFLAGS -I$mpfr_dir/include"
-  LDPATH="$LDPATH $mpfr_dir/lib"
-  EXTRA_DEFS="-DOCT_HAS_MPFR $EXTRA_DEFS"
-  LIBS="-lmpfr $LIBS"
-fi
-else
-  enable_mpfr=no
-fi
-
-
-# New Polka
-if test "x$enable_polka" != "xno"; then
-AC_MSG_CHECKING(where New Polka headers are installed)
-for i in $with_polka $exec_prefix $prefix /usr/local /usr /sw; do
-  for j in "" polka newpolka poly; do
-    if test -f $i/include/$j/poly.h; then
-      polka_includedir="$i/include/$j"
-      polka_libdir="$i/lib"
-      break 2
-    fi
-  done
-done
-if test "x$polka_includedir" = "x"; then
-  enable_polka=no
-  AC_MSG_RESULT(not found)
-else
-  AC_MSG_RESULT($polka_includedir)
-fi
-fi
-
-if test "x$enable_polka" != "xno"; then
-case $with_polka_num in
-  long)     infix="i"; num="1";;
-  longlong) infix="l"; num="2";;
-  gmp)      if test "x$enable_gmp" != "xyes"; then
-		AC_MSG_ERROR([the NewPolka numerical type requires the GMP library])
-	    fi
-	    infix="g"; num="3";;
-  *) AC_MSG_ERROR([unknown New Polka numerical type $with_polka_num]);;
-esac
-polka_libname="polka$infix"
-if test "x$enable_debug" = "xyes"; then
-  polka_libname="${polka_libname}_debug"
-fi
-AC_MSG_CHECKING(for New Polka library $polka_libname in $polka_libdir)
-old_CFLAGS="$CFLAGS"
-old_LIBS="$LIBS"
-CFLAGS="$CFLAGS -I$polka_includedir -DPOLKA_NUM=$num"
-LIBS="-L$polka_libdir -l$polka_libname $GMPLIB $LIBS"
-AC_TRY_LINK([#include <poly.h>],[poly_t*a = poly_empty(10)],[enable_polka=yes])
-CFLAGS="$old_CFLAGS"
-LIBS="$old_LIBS"
-if test "x$enable_polka" != "xyes"; then
-  enable_polka=no
-  AC_MSG_RESULT(not found)
-else
-  enable_polka=yes
-  AC_MSG_RESULT(yes)
-  CFLAGS="$CFLAGS -I$polka_includedir"
-  EXTRA_DEFS="-DPOLKA_NUM=$num -DOCT_HAS_NEW_POLKA $EXTRA_DEFS"
-  LDPATH="$LDPATH $polka_libdir"
-  LIBS="-l$polka_libname $LIBS"
-  lib_suffix="$num$lib_suffix"
-fi
-fi
-if test "x$enable_polka" = "xno"; then
-  with_polka_num=""
-fi
+#if test "x$enable_gmp" != "xno"; then
+#old_CFLAGS="$CFLAGS"
+#old_LIBS="$LIBS"
+#AC_MSG_CHECKING(where GMP is installed)
+#gmp_dir="NONE"
+#LIBS="$old_LIBS -lgmp"
+#AC_TRY_LINK([#include <gmp.h>],[mpz_t a; mpz_init(a)],[gmp_dir=""; break],
+#for i in $with_gmp $exec_prefix $prefix /usr/local /usr /sw; do
+#  if test "x$i" != "xNONE" -a -f $i/include/gmp.h; then
+#    CFLAGS="$old_CFLAGS -I$i/include "
+#    LIBS="$old_LIBS -L$i/lib -lgmp"
+#    AC_TRY_LINK([#include <gmp.h>],[mpz_t a; mpz_init(a)],[gmp_dir="$i"; break],)
+#  fi
+#done)
+#CFLAGS="$old_CFLAGS"
+#LIBS="$old_LIBS"
+#if test "x$gmp_dir" = "xNONE"; then
+#  enable_gmp=no
+#  AC_MSG_RESULT(not found)
+#elif test "x$gmp_dir" = "x"; then
+#  enable_gmp=yes
+#  AC_MSG_RESULT(found)
+#  EXTRA_DEFS="-DOCT_HAS_GMP $EXTRA_DEFS"
+#  LIBS="-lgmp $LIBS"
+#else
+#  enable_gmp=yes
+#  AC_MSG_RESULT(found in $gmp_dir)
+#  CFLAGS="$CFLAGS -I$gmp_dir/include"
+#  LDPATH="$LDPATH $gmp_dir/lib"
+#  EXTRA_DEFS="-DOCT_HAS_GMP $EXTRA_DEFS"
+#  LIBS="-lgmp $LIBS"
+#  GMPLIB="-L$gmp_dir/lib"
+#fi
+#fi
+#
+## MPFR
+#if test "x$enable_mpfr" != "xno" -a "x$enable_gmp" = "xyes"; then
+#old_CFLAGS="$CFLAGS"
+#old_LIBS="$LIBS"
+#AC_MSG_CHECKING(where MPFR is installed)
+#mpfr_dir="NONE"
+#LIBS="-lmpfr $old_LIBS"
+#AC_TRY_LINK([#include <gmp.h>
+#             #include <mpfr.h>],
+#	    [mpfr_t a; mpfr_init(a)],
+#            [mpfr_dir=""; break],
+#for i in $with_mpfr $exec_prefix $prefix /usr/local /usr /sw; do
+#  if test "x$i" != "xNONE" -a -f $i/include/mpfr.h; then
+#    CFLAGS="$old_CFLAGS  -I$i/include "
+#    LIBS="-L$i/lib -lmpfr $GMPLIB $old_LIBS"
+#    AC_TRY_LINK([#include <gmp.h>
+#	         #include <mpfr.h>],
+#	        [mpfr_t a; mpfr_init(a)],
+#                [mpfr_dir="$i"; break],)
+#  fi
+#done)
+#LIBS="$old_LIBS"
+#CFLAGS="$old_CFLAGS"
+#if test "x$mpfr_dir" = "xNONE"; then
+#  enable_mpfr=no
+#  AC_MSG_RESULT(not found)
+#elif test "x$mpfr_dir" = "x"; then
+#  enable_mpfr=yes
+#  AC_MSG_RESULT(found)
+#  EXTRA_DEFS="-DOCT_HAS_MPFR $EXTRA_DEFS"
+#  CFLAGS="$CFLAGS -DOCT_HAS_MPFR"
+#  LIBS="-lmpfr $LIBS"
+#else
+#  enable_mpfr=yes
+#  AC_MSG_RESULT(found in $mpfr_dir)
+#  CFLAGS="$CFLAGS -I$mpfr_dir/include"
+#  LDPATH="$LDPATH $mpfr_dir/lib"
+#  EXTRA_DEFS="-DOCT_HAS_MPFR $EXTRA_DEFS"
+#  LIBS="-lmpfr $LIBS"
+#fi
+#else
+#  enable_mpfr=no
+#fi
+#
+#
+## New Polka
+#if test "x$enable_polka" != "xno"; then
+#AC_MSG_CHECKING(where New Polka headers are installed)
+#for i in $with_polka $exec_prefix $prefix /usr/local /usr /sw; do
+#  for j in "" polka newpolka poly; do
+#    if test -f $i/include/$j/poly.h; then
+#      polka_includedir="$i/include/$j"
+#      polka_libdir="$i/lib"
+#      break 2
+#    fi
+#  done
+#done
+#if test "x$polka_includedir" = "x"; then
+#  enable_polka=no
+#  AC_MSG_RESULT(not found)
+#else
+#  AC_MSG_RESULT($polka_includedir)
+#fi
+#fi
+#
+#if test "x$enable_polka" != "xno"; then
+#case $with_polka_num in
+#  long)     infix="i"; num="1";;
+#  longlong) infix="l"; num="2";;
+#  gmp)      if test "x$enable_gmp" != "xyes"; then
+#		AC_MSG_ERROR([the NewPolka numerical type requires the GMP library])
+#	    fi
+#	    infix="g"; num="3";;
+#  *) AC_MSG_ERROR([unknown New Polka numerical type $with_polka_num]);;
+#esac
+#polka_libname="polka$infix"
+#if test "x$enable_debug" = "xyes"; then
+#  polka_libname="${polka_libname}_debug"
+#fi
+#AC_MSG_CHECKING(for New Polka library $polka_libname in $polka_libdir)
+#old_CFLAGS="$CFLAGS"
+#old_LIBS="$LIBS"
+#CFLAGS="$CFLAGS -I$polka_includedir -DPOLKA_NUM=$num"
+#LIBS="-L$polka_libdir -l$polka_libname $GMPLIB $LIBS"
+#AC_TRY_LINK([#include <poly.h>],[poly_t*a = poly_empty(10)],[enable_polka=yes])
+#CFLAGS="$old_CFLAGS"
+#LIBS="$old_LIBS"
+#if test "x$enable_polka" != "xyes"; then
+#  enable_polka=no
+#  AC_MSG_RESULT(not found)
+#else
+#  enable_polka=yes
+#  AC_MSG_RESULT(yes)
+#  CFLAGS="$CFLAGS -I$polka_includedir"
+#  EXTRA_DEFS="-DPOLKA_NUM=$num -DOCT_HAS_NEW_POLKA $EXTRA_DEFS"
+#  LDPATH="$LDPATH $polka_libdir"
+#  LIBS="-l$polka_libname $LIBS"
+#  lib_suffix="$num$lib_suffix"
+#fi
+#fi
+#if test "x$enable_polka" = "xno"; then
+#  with_polka_num=""
+#fi
 
 # profiling
 if test "x$enable_prof" = "xyes"; then
@@ -420,70 +421,70 @@ else
   enable_ocaml="yes"
   CFLAGS="$CFLAGS -I${ocaml_dir}"
   AC_MSG_RESULT($ocaml_dir)
-  if test "x$enable_polka" = "xyes" -a "x$enable_ocamlpolka" != "xno"; then
-    case $with_polka_num in
-      long)     infix="i";;
-      longlong) infix="l";;
-      gmp)      infix="g";;
-      *) AC_MSG_ERROR([unknown New Polka numerical type $with_polka_num]);;
-    esac
-    polka_mllibname="polka${infix}_caml"
-    if test "x$enable_debug" = "xyes"; then
-      polka_mllibname="${polka_mllibname}_debug"
-    fi
-    AC_MSG_CHECKING(for OCaml New Polka library $polka_mllibname in $polka_libdir)
-    if test -f ${polka_libdir}/lib${polka_mllibname}.a -o -f ${polka_libdir}/lib${polka_mllibname}.so; then
-      AC_MSG_RESULT(found)
-      AC_MSG_CHECKING(for OCaml New Polka library polka.cma)
-      enable_ocamlpolka="no"
-      for i in ${with_ocaml} ${ocaml_dir} ${with_ocaml}/polka ${ocaml_dir}/polka ${with_ocaml}/newpolka ${ocaml_dir}/newpolka ${with_ocaml}/poly ${ocaml_dir}/poly; do
-        if test -f $i/polka.cma; then
-          AC_MSG_RESULT(found in $i)
-          enable_ocamlpolka="yes"	  
-          MLFLAGS="$MLFLAGS -I $i"
-          MLLIBS="$MLLIBS -l$polka_mllibname -lcamlidl"
-	  MLMODS="polka.cma $MLMODS"
-	  MLMODSX="polka.cmxa $MLMODSX"
-          OCAML_ML="$OCAML_ML oct_polka.mli"
-          OCAML_MLI="$OCAML_MLI oct_polka.mli"
-          EXTRA_DEFS="-DOCT_HAS_OCAML_NEW_POLKA $EXTRA_DEFS"
-    	  break
-        fi
-      done
-      if test "x$enable_ocamlpolka" = "xno"; then
-          AC_MSG_RESULT(not found)
-      fi
-    else
-      enable_ocamlpolka="no"
-      AC_MSG_RESULT(not found)
-    fi
-  fi 
+#  if test "x$enable_polka" = "xyes" -a "x$enable_ocamlpolka" != "xno"; then
+#    case $with_polka_num in
+#      long)     infix="i";;
+#      longlong) infix="l";;
+#      gmp)      infix="g";;
+#      *) AC_MSG_ERROR([unknown New Polka numerical type $with_polka_num]);;
+#    esac
+#    polka_mllibname="polka${infix}_caml"
+#    if test "x$enable_debug" = "xyes"; then
+#      polka_mllibname="${polka_mllibname}_debug"
+#    fi
+#    AC_MSG_CHECKING(for OCaml New Polka library $polka_mllibname in $polka_libdir)
+#    if test -f ${polka_libdir}/lib${polka_mllibname}.a -o -f ${polka_libdir}/lib${polka_mllibname}.so; then
+#      AC_MSG_RESULT(found)
+#      AC_MSG_CHECKING(for OCaml New Polka library polka.cma)
+#      enable_ocamlpolka="no"
+#      for i in ${with_ocaml} ${ocaml_dir} ${with_ocaml}/polka ${ocaml_dir}/polka ${with_ocaml}/newpolka ${ocaml_dir}/newpolka ${with_ocaml}/poly ${ocaml_dir}/poly; do
+#        if test -f $i/polka.cma; then
+#          AC_MSG_RESULT(found in $i)
+#          enable_ocamlpolka="yes"	  
+#          MLFLAGS="$MLFLAGS -I $i"
+#          MLLIBS="$MLLIBS -l$polka_mllibname -lcamlidl"
+#	  MLMODS="polka.cma $MLMODS"
+#	  MLMODSX="polka.cmxa $MLMODSX"
+#          OCAML_ML="$OCAML_ML oct_polka.mli"
+#          OCAML_MLI="$OCAML_MLI oct_polka.mli"
+#          EXTRA_DEFS="-DOCT_HAS_OCAML_NEW_POLKA $EXTRA_DEFS"
+#    	  break
+#        fi
+#      done
+#      if test "x$enable_ocamlpolka" = "xno"; then
+#          AC_MSG_RESULT(not found)
+#      fi
+#    else
+#      enable_ocamlpolka="no"
+#      AC_MSG_RESULT(not found)
+#    fi
+#  fi 
 
 # checking for OCaml GMP
 
-  if test "x$enable_gmp" = "xyes"; then
-    AC_MSG_CHECKING(for Caml-GMP module gmp.cma)
-    enable_ocamlgmp="no"
-    for i in ${with_ocaml} ${ocaml_dir} ${with_ocaml}/gmp ${ocaml_dir}/gmp; do
-      if test -f $i/gmp.cma -a -f $i/libmlgmp.a; then
-        AC_MSG_RESULT(found in $i)
-        enable_ocamlgmp="yes"
-        MLLIBS="$MLLIBS -lmlgmp"
-        MLFLAGS="$MLFLAGS -I $i"
-# does not seem to work...
-#        MLMODS="gmp.cma $MLMODS"
-#	 MLMODSX="gmp.cmxa $MLMODSX"
-        OCAML_ML="$OCAML_ML oct_gmp.mli"
-        OCAML_MLI="$OCAML_MLI oct_gmp.mli"
-	LDPATH="$LDPATH $i"
-        EXTRA_DEFS="-DOCT_HAS_OCAML_GMP $EXTRA_DEFS"
-	break
-      fi
-    done
-    if test "x$enable_ocamlgmp" = "xno"; then
-        AC_MSG_RESULT(not found)
-    fi
-  fi
+#  if test "x$enable_gmp" = "xyes"; then
+#    AC_MSG_CHECKING(for Caml-GMP module gmp.cma)
+#    enable_ocamlgmp="no"
+#    for i in ${with_ocaml} ${ocaml_dir} ${with_ocaml}/gmp ${ocaml_dir}/gmp; do
+#      if test -f $i/gmp.cma -a -f $i/libmlgmp.a; then
+#        AC_MSG_RESULT(found in $i)
+#        enable_ocamlgmp="yes"
+#        MLLIBS="$MLLIBS -lmlgmp"
+#        MLFLAGS="$MLFLAGS -I $i"
+## does not seem to work...
+##        MLMODS="gmp.cma $MLMODS"
+##	 MLMODSX="gmp.cmxa $MLMODSX"
+#        OCAML_ML="$OCAML_ML oct_gmp.mli"
+#        OCAML_MLI="$OCAML_MLI oct_gmp.mli"
+#	LDPATH="$LDPATH $i"
+#        EXTRA_DEFS="-DOCT_HAS_OCAML_GMP $EXTRA_DEFS"
+#	break
+#      fi
+#    done
+#    if test "x$enable_ocamlgmp" = "xno"; then
+#        AC_MSG_RESULT(not found)
+#    fi
+#  fi
 
   if test "x$with_ocaml" = "xNONE"; then
     with_ocaml="$ocaml_dir"
