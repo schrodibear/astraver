@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.mli,v 1.7 2006-09-25 11:02:24 filliatr Exp $ i*)
+(*i $Id: calldp.mli,v 1.8 2006-10-11 08:44:29 filliatr Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -52,6 +52,6 @@ val yices :
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
-val ccx : 
+val ergo : 
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result

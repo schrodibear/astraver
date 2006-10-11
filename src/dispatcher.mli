@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.mli,v 1.10 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.11 2006-10-11 08:44:28 filliatr Exp $ i*)
 
 open Cc
 
@@ -22,7 +22,7 @@ val push_decl : Logic_decl.t -> unit
 
 val iter : (Loc.position * string * sequent Env.scheme -> unit) -> unit
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ccx
+type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo
 
 val call_prover : 
   ?debug:bool -> ?timeout:int -> ?encoding:Options.encoding ->

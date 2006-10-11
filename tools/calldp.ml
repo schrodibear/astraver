@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.14 2006-10-02 14:06:05 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.15 2006-10-11 08:44:29 filliatr Exp $ i*)
 
 open Printf
 
@@ -113,9 +113,9 @@ let yices ?debug ?(timeout=10) ~filename:f () =
       if c = 0 then Valid else Invalid None
     end
 
-let ccx ?debug ?(timeout=10) ~filename:f () =
+let ergo ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "cpulimit %d ccX %s > %s 2>&1" timeout f out in
+  let cmd = sprintf "cpulimit %d ergo %s > %s 2>&1" timeout f out in
   let c = Sys.command cmd in
   if c = 152 then
     Timeout

@@ -48,6 +48,9 @@ yices:
 	../bin/why.opt --smtlib -d --encoding mono -V test.mlw
 	../bin/dp.opt test_why.smt
 
+ergo:
+	ergo test.mlw
+
 rv-sat:
 	../bin/why.opt --smtlib -d --encoding mono -V test.mlw
 	../bin/dp.opt test_why.smt
