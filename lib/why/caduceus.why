@@ -254,10 +254,10 @@ axiom pset_singleton_intro :
   forall p1:'z pointer.forall p2:'z pointer [not_in_pset(p1, pset_singleton(p2))].
     p1 <> p2 -> not_in_pset(p1, pset_singleton(p2))
 
-(*axiom pset_singleton_elim : 
+axiom pset_singleton_elim : 
   forall p1:'z pointer. forall p2:'z pointer [not_in_pset(p1, pset_singleton(p2))].
     not_in_pset(p1, pset_singleton(p2)) -> p1 <> p2
-*)
+
 axiom not_not_in_singleton :
   forall p:'z pointer. not not_in_pset(p, pset_singleton(p))
 
