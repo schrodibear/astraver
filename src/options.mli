@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.59 2006-10-02 09:08:38 couchot Exp $ i*)
+(*i $Id: options.mli,v 1.60 2006-10-12 12:24:07 couchot Exp $ i*)
 
 (*s General options *)
 
@@ -53,7 +53,7 @@ val lvlmax : int
 val all_vc : bool
 val pruning : bool
 
-type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph
+type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
 val get_types_encoding : unit -> encoding
 val set_types_encoding : encoding -> unit
 

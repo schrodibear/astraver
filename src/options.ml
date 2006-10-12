@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.75 2006-10-02 09:08:37 couchot Exp $ i*)
+(*i $Id: options.ml,v 1.76 2006-10-12 12:23:49 couchot Exp $ i*)
 
 open Format
 
@@ -52,7 +52,7 @@ let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 
 
-type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph
+type encoding = NoEncoding | Predicates | Stratified | Recursive | Monomorph | SortedStratified
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
 (* let types_encoding_ = ref Stratified *)
 
@@ -169,6 +169,8 @@ Encoding for types in untyped logic:
   --encoding strat   encodes types into terms           
   --encoding rec     encodes types with typing axioms
   --encoding mono    encodes types using monomorphisation
+  --encoding sstrat  encodes types using some types  + strat
+
 
 Prover selection:
   --coq       selects COQ prover (default)
@@ -359,6 +361,7 @@ let files =
 	| "strat" -> types_encoding_ := Stratified
 	| "rec" -> types_encoding_ := Recursive
 	| "mono" -> types_encoding_ := Monomorph
+	| "sstrat" -> types_encoding_ := SortedStratified
 	| _ -> usage (); exit 1);
 	parse args
     | f :: args -> 
