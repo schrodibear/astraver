@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.25 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: coptions.mli,v 1.26 2006-10-12 12:52:58 moy Exp $ i*)
 
 (*s environment variables *)
 
@@ -44,6 +44,7 @@ val typing_predicates : bool
 val local_aliasing : bool
 val arith_memory_model : bool
 val abstract_interp : bool
+val gen_invariant : bool
 
 val use_floats : bool ref
 val floats : bool

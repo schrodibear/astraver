@@ -531,7 +531,7 @@ end = struct
   (* deals with array address used as pointer *)
   let change_in_intptr_var node var =
     match get_node_kind node with
-      | NKexpr | NKtest -> 
+      | NKexpr | NKtest | NKlvalue -> 
 	  let e = get_e node in
 	  let var_e = NEvar (Var_info var) in
 	  let var_e = { e with nexpr_node = var_e } in
@@ -562,7 +562,7 @@ end = struct
   let change_in_intptr_var_add_cst node var offset =
     let var_te = change_in_intptr_var node var in
     match get_node_kind node with
-      | NKexpr | NKtest -> 
+      | NKexpr | NKtest | NKlvalue -> 
 	  let e = get_e node in
 	  let cst_e = NEconstant (IntConstant (string_of_int (abs offset))) in
 	  let cst_e = { e with nexpr_node = cst_e; 
@@ -591,7 +591,7 @@ end = struct
   let change_in_intptr_var_add_var node var offset_var =
     let var_te = change_in_intptr_var node var in
     match get_node_kind node with
-      | NKexpr | NKtest -> 
+      | NKexpr | NKtest | NKlvalue -> 
 	  let e = get_e node in
 	  let cst_e = NEvar (Var_info offset_var) in
 	  let cst_e = { e with nexpr_node = cst_e; 
@@ -1079,7 +1079,7 @@ end = struct
       | NKstat ->
 	  change_sub_components_in_stat node sub_nodes
 	    
-      | NKexpr | NKtest ->
+      | NKexpr | NKtest | NKlvalue ->
 	  change_sub_components_in_expr node sub_nodes
 
       | NKterm ->
@@ -1252,7 +1252,7 @@ end = struct
 	       PointWisePtrLattice.replace param init_val pw
 	    ) cur_val param_list
 
-      | NKexpr | NKtest ->
+      | NKexpr | NKtest | NKlvalue ->
 	  if expr_is_ptr_assign node || expr_is_int_assign node then
 	    match assign_get_local_lhs_var node with
 	      | None -> cur_val
@@ -2111,7 +2111,7 @@ end = struct
 	  in
 	  (new_node,None) (* addon part has no meaning here *)
 
-      | NKexpr | NKtest ->
+      | NKexpr | NKtest | NKlvalue ->
 	  sub_transform_on_expr analysis params local_nodes
 
       | NKterm ->
@@ -2126,7 +2126,7 @@ end = struct
       let new_sub_nodes =
 	List.map2 (fun sub_node (new_main,new_addon) ->
 		     begin match get_node_kind sub_node with
-		       | NKexpr | NKtest ->
+		       | NKexpr | NKtest | NKlvalue ->
 			   if NodeSet.mem new_main !(params.offset_nodes) then
 			       match new_addon with
 				 | Some new_addon ->

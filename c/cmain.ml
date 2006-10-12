@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.77 2006-10-11 08:43:33 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.78 2006-10-12 12:52:58 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -55,7 +55,7 @@ let main () =
   (* local aliasing analysis *)
   if local_aliasing then Cptr.local_aliasing_transform ();
   (* local abstract interpretation over integers *)
-  if abstract_interp then Cint.local_int_analysis_attach ();
+  if abstract_interp || gen_invariant then Cint.local_int_analysis_attach ();
   (* predicate *)
   let nfiles = 
     if typing_predicates then

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.212 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.213 2006-10-12 12:52:58 moy Exp $ i*)
 
 
 open Format
@@ -1609,6 +1609,15 @@ let interp_invariant label effects annot =
   let inv = match annot.invariant with
     | None -> LTrue
     | Some inv -> interp_predicate None "init" inv
+  in
+  (* WHY does not distinguish invariants from assumed invariants presently *)
+  let assinv = match annot.assume_invariant with
+    | None -> LTrue
+    | Some inv -> interp_predicate None "init" inv
+  in
+  let inv = match inv,assinv with
+    | LTrue,p | p,LTrue -> p
+    | p1,p2 -> LAnd (p1,p2)
   in
   let inv = 
     make_and 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.32 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: coptions.ml,v 1.33 2006-10-12 12:52:58 moy Exp $ i*)
 
 open Format
 
@@ -75,6 +75,7 @@ let floats = ref true
 let local_aliasing = ref false
 let arith_memory_model = ref false
 let abstract_interp = ref false
+let gen_invariant = ref false
 
 type fp_rounding_mode = 
   | RM_nearest_even | RM_to_zero | RM_up | RM_down | RM_nearest_away 
@@ -210,6 +211,8 @@ let _ =
 	  "  alternate arithmetic memory model (experimental)";
 	"--abs-int", Arg.Set abstract_interp,
 	  "  local abstract interpretation over integers (experimental)";
+	"--inv-gen", Arg.Set gen_invariant,
+	  "  invariant generation by local abstract interpretation over integers (experimental)";
       ]
       add_file "caduceus [options] file..."
 
@@ -232,6 +235,7 @@ let typing_predicates = !typing_predicates
 let local_aliasing = !local_aliasing
 let arith_memory_model = !arith_memory_model
 let abstract_interp = !abstract_interp
+let gen_invariant = !gen_invariant
 
 let floats = !floats
 let fp_overflow_check = !fp_overflow_check

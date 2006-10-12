@@ -354,12 +354,16 @@ module type PACKED_CONTEXTUAL_LATTICE = sig
 
     (* echoes the elimination on the constrained parts *)
   val eliminate : V.t list -> t -> t
+    (* remove the variables not satisfying the filter condition *)
+  val filter_variables : remove:(V.t -> bool) -> t -> t
     (* returns the main context *)
   val get_context : t -> Contxt.t
     (* updates the main context *)
   val set_context : t -> Contxt.t -> t
     (* keep only main context *)
   val eliminate_conditionals : t -> t
+    (* are there conditional informations ? *)
+  val has_conditionals : t -> bool
     (* subtract main context from unique conditional. The integer is a unique
      identifier for the conditional being returned. *)
   val format_singleton : t -> int * Constr.t
@@ -1888,6 +1892,11 @@ struct
     let new_cond = Int31Map.map (Constr.remove_variable var) ctxt.conditionals 
     in { ctxt with main_context = new_main; conditionals = new_cond; }
 
+  let filter_variables ~remove ctxt =
+    let restr_vars = restrained_variables ctxt in
+    let remove_vars = List.filter remove restr_vars in
+    List.fold_right remove_variable remove_vars ctxt
+
   let eval_assign ~backward var term ctxt =
     let new_main = 
       Contxt.eval_assign ~backward:backward var term ctxt.main_context 
@@ -1960,6 +1969,8 @@ struct
   let set_context ctxt main = { ctxt with main_context = main; }
 
   let eliminate_conditionals ctxt = { ctxt with conditionals = Int31Map.empty }
+
+  let has_conditionals ctxt = not (Int31Map.is_empty ctxt.conditionals)
 
   let format_singleton ctxt =
     let cond_list =
@@ -2093,7 +2104,9 @@ module Var : sig
     | Vstrlen of var_info
   include VARIABLE with type t = var_t
   val is_strlen : t -> bool
-  val safe_access_predicate : var_info -> t int_term -> t int_predicate
+  val is_arrlen : t -> bool
+  val safe_access_predicate : 
+    ?read_string:bool -> var_info -> t int_term -> t int_predicate
 end = struct
   type var_t = 
     | Vvar of var_info
@@ -2127,10 +2140,16 @@ end = struct
   let is_strlen = function
     | Vvar _ | Varrlen _ -> false
     | Vstrlen _ -> true
-  let safe_access_predicate v t_off =
+  let is_arrlen = function
+    | Vvar _ | Vstrlen _ -> false
+    | Varrlen _ -> true
+  let safe_access_predicate ?(read_string=false) v t_off =
     (* build the safe access predicate *)
-    let t_upbound = ITvar (Varrlen v) in
-    let p_upsafe = IPrel (t_off,Clogic.Lt,t_upbound) in
+    let t_upbound,op_upbound = 
+      if read_string then ITvar (Vstrlen v),Clogic.Le
+      else ITvar (Varrlen v),Clogic.Lt
+    in
+    let p_upsafe = IPrel (t_off,op_upbound,t_upbound) in
     let t_downbound = ITconstant (IntConstant "0") in
     let p_downsafe = IPrel (t_off,Clogic.Ge,t_downbound) in
     IPand (p_upsafe,p_downsafe) 
@@ -2237,7 +2256,12 @@ module IntLangFromNormalized : sig
   val change_in_assume_stat : Node.t -> ipredicate -> Node.t
     (* modify an existing assume/assert predicate *)
   val grow_predicate : Node.t -> ipredicate -> Node.t
-  (* change type of dereference expression to make it a safe access *)
+    (* create a predicate that expresses a safe access, if given a node
+       targetted by the analysis. The first argument tells whether a given
+       variable is to be considered or not. *)
+  val memory_access_safe_predicate : 
+    (Var.t -> bool) -> Node.t -> ipredicate option
+    (* change type of dereference expression to make it a safe access *)
   val make_safe_access : Node.t -> Node.t
 
 end = struct
@@ -2696,6 +2720,52 @@ end = struct
     let new_p = { old_p with npred_node = new_p } in
     create_tmp_node (Npred new_p)
 
+  (* create a predicate that expresses a safe access, if [node] targetted by
+     the analysis. [is_packed_var] tells whether a given variable is to be
+     considered or not. *)
+  let memory_access_safe_predicate is_packed_var node =
+    if debug_more then Coptions.lprintf
+	"[memory_access_safe_predicate] %a@." Node.pretty node;
+    match get_node_kind node with
+    | NKexpr | NKtest | NKlvalue ->
+	if expr_is_deref node then
+	  match deref_get_variable_and_offset node with
+	  | None -> 
+	      (* dereference form not recognized *)
+	      None
+	  | Some (v,off) ->
+	      if is_packed_var (Var.Vvar v) then
+		(* get equivalent term for offset *)
+		let t_off = match off with
+		| None -> ITconstant (IntConstant "0")
+		| Some e -> from_expr e
+		in
+		(* build the safe access predicate *)
+		let p_safe =
+		  if expr_type_is_char node then
+		    match get_node_kind node with
+		      | NKlvalue ->  
+			  (* write access to a string *)
+			  Var.safe_access_predicate v t_off
+		      | NKexpr | NKtest ->
+			  (* read access to a string *)
+			  Var.safe_access_predicate ~read_string:true v t_off
+		      | _ -> assert false
+		  else
+		    (* not a string access *)
+		    Var.safe_access_predicate v t_off
+		in
+		Some p_safe
+	      else
+		(* variable is not packed *)
+		None
+	else
+	  (* expression is not a dereference *)
+	  None
+    | NKassume | NKassert | NKnone | NKdecl | NKstat
+    | NKpred | NKterm | NKannot | NKspec -> 
+	None
+
   (* change type of dereference expression to make it a safe access *)
   let make_safe_access node =
     let e = get_e node in
@@ -2716,7 +2786,6 @@ end = struct
       | _ ->
 	  (* should be called only on dereference *)
 	  assert false
-
 end
 
 type transform_tt =
@@ -2785,7 +2854,7 @@ struct
       let p_rep = match get_node_kind node with
         | NKtest -> from_test node
 	| NKassume | NKassert -> from_pred node
-	| NKnone | NKstat | NKdecl | NKexpr
+	| NKnone | NKstat | NKdecl | NKexpr | NKlvalue
 	| NKspec | NKannot | NKterm | NKpred -> 
 	    (* [get_pred_rep] should only be called on test/assume/assert *)
 	    assert false
@@ -2793,8 +2862,8 @@ struct
       Hashtbl.add pred_reps node p_rep;
       p_rep
 
-  let transfer ?(backward=false) ?(with_assert=false) ?(one_pass=false) 
-      ?previous_value node cur_val =
+  let internal_transfer ?(with_separation=false) ?(backward=false) 
+      ?(with_assert=false) ?(one_pass=false) ?previous_value node cur_val =
 
     if debug_more then Coptions.lprintf 
 	"[transfer] %a@." Node.pretty node;
@@ -2815,11 +2884,11 @@ struct
 	      CL.init_abstract_value (),SL.init_abstract_value ()
 	    end
 
-      | NKexpr | NKtest | NKassume ->
+      | NKexpr | NKtest | NKlvalue | NKassume ->
 	  (* test is both expression and assume, which leads to treating 
 	     those cases simultaneously *)
 	  let expr_val = match get_node_kind node with
-	  | NKexpr | NKtest ->
+	  | NKexpr | NKtest | NKlvalue ->
 
 	      if expr_is_int_assign node then
 		match assign_get_local_lhs_var node with
@@ -2836,22 +2905,22 @@ struct
 			| None ->
 			    (* no way to keep talking about [strlen] 
 			       variables *)
-			    List.fold_right CL.remove_variable 
-			      strlen_vars cur_ctxt_val 
+			    CL.filter_variables 
+			      ~remove:Var.is_strlen cur_ctxt_val
 			| Some lhs_var ->
 			    (* remove information on [strlen(p)] if [p] not 
 			       separated from the pointer being assigned.
 			       This includes [strlen(lhs_var)]. *)
-			    List.fold_right 
-			      (fun str_v abs_val -> match str_v with
+			    let not_separated = function
 			      | Var.Vstrlen v ->
-				  if SL.separated (Var.Vvar lhs_var) 
-				      (Var.Vvar v) cur_sep_val then
-				    abs_val
-				  else
-				    CL.remove_variable str_v abs_val
-			      | _ -> assert false)
-			      strlen_vars cur_ctxt_val
+				  not (SL.separated (Var.Vvar lhs_var) 
+					 (Var.Vvar v) cur_sep_val)
+			      | Var.Vvar _ | Var.Varrlen _ -> false
+			    in
+			    if with_separation then
+			      CL.filter_variables 
+				~remove:not_separated cur_ctxt_val
+			    else cur_ctxt_val
 		      in new_ctxt_val,cur_sep_val
 		    else cur_val
 		| Some lhs_var ->
@@ -2878,7 +2947,28 @@ struct
 	      else cur_val
 	  | _ -> cur_val
 	  in
+
 	  let expr_ctxt_val,expr_sep_val = expr_val in
+	  let expr_ctxt_val =
+	    if with_assert then
+	      (* consider memory accesses as asserts *)
+	      match memory_access_safe_predicate CL.is_packed_variable node 
+	      with
+		| None -> expr_ctxt_val
+		| Some p_safe ->
+		    if debug_more then Coptions.lprintf
+		      "[transfer] adding assertion %a@." 
+		      (print_predicate Var.pretty) p_safe;
+		    (* access is guaranteed to be safe for the following *)
+		    let res = 
+		      CL.eval_test ~backward:backward p_safe expr_ctxt_val in
+		    if debug then Coptions.lprintf 
+		      "[transfer] resulting value with assertion %a@."
+		      CL.pretty res;
+		    res
+	    else expr_ctxt_val
+	  in
+
 	  let expr_ctxt_val =
 	    if forward && one_pass && is_assume_invariant_node node then
 	      (* ignore variables written in loop *)
@@ -2915,7 +3005,7 @@ struct
 	      let new_ctxt_val = 
 		CL.eval_test ~backward:backward node_rep expr_ctxt_val in
 	      new_ctxt_val,expr_sep_val
-	  | _ -> expr_val
+	  | _ -> expr_ctxt_val,expr_sep_val
 	  end
 
       | NKassert ->
@@ -2941,6 +3031,8 @@ struct
 	    end
 
       | NKspec | NKannot | NKterm | NKpred -> cur_val
+
+  let transfer = internal_transfer ~with_separation:false
 
   (* exception used to share the default treatment in [sub_transform] *)
   exception Rec_transform
@@ -3037,7 +3129,7 @@ struct
 	    else
 	      raise Rec_transform
 	    
-	| NKexpr | NKtest ->
+	| NKexpr | NKtest | NKlvalue ->
 	    if NodeSet.mem node trans_params.safe_access_nodes then
 	      (* change type of dereference expression to make it a 
 		 safe access *)
@@ -3131,35 +3223,6 @@ struct
 
   open IntLangFromNormalized
 
-  let memory_access_safe_predicate node =
-    if debug_more then Coptions.lprintf
-	"[memory_access_safe_predicate] %a@." Node.pretty node;
-    match get_node_kind node with
-    | NKexpr | NKtest ->
-	if expr_is_deref node then
-	  match deref_get_variable_and_offset node with
-	  | None -> 
-	      (* dereference form not recognized *)
-	      None
-	  | Some (v,off) ->
-	      if ContextLattice.is_packed_variable (Var.Vvar v) then
-		(* get equivalent term for offset *)
-		let t_off = match off with
-		| None -> ITconstant (IntConstant "0")
-		| Some e -> from_expr e
-		in
-		(* build the safe access predicate *)
-		Some (Var.safe_access_predicate v t_off)
-	      else
-		(* variable is not packed *)
-		None
-	else
-	  (* expression is not a dereference *)
-	  None
-    | NKassume | NKassert | NKnone | NKdecl | NKstat
-    | NKpred | NKterm | NKannot | NKspec -> 
-	None
-
   (* select memory accesses that need to be considered in the analysis.
      This excludes:
      - memory accesses already analyzed as safe by the forward analysis
@@ -3170,7 +3233,8 @@ struct
 	"[memory_access_select] %a with value %a@." Node.pretty node
 	ContextSepLattice.pretty pre_val;
     let pre_ctxt_val,_ = pre_val in
-    match memory_access_safe_predicate node with
+    match memory_access_safe_predicate ContextLattice.is_packed_variable node 
+    with
     | None -> false
     | Some p_safe ->
 	if debug_more then Coptions.lprintf
@@ -3186,17 +3250,25 @@ struct
     if debug_more then Coptions.lprintf
 	"[build_safe_memory_access] %a with value %a@." Node.pretty node
 	ContextSepLattice.pretty pre_val;
-    match memory_access_safe_predicate node with
+    match memory_access_safe_predicate ContextLattice.is_packed_variable node
+    with
     | None -> assert false (* [node] should have been selected first *)
     | Some p_safe ->
 	let pre_ctxt_val,pre_sep_val = pre_val in
+	(* [arrlen] variables should not be used in left parts of conditionals,
+	   since their value cannot be tested by the programmer *)
+	let pre_ctxt_val = 
+	  ContextLattice.filter_variables ~remove:Var.is_arrlen pre_ctxt_val in
 	let ctxt_val = ContextLattice.get_context pre_ctxt_val in
 	let cstr_val = ContextLattice.Bridge.eval_constraint p_safe ctxt_val in
 	let init_val = ContextLattice.eliminate_conditionals pre_ctxt_val in
 	let init_val = ContextLattice.add_new_conditional init_val cstr_val in
+	if debug_more then Coptions.lprintf
+	  "[build_safe_memory_access] initial value %a@."
+	  ContextLattice.pretty init_val;
 	init_val,pre_sep_val
 	
-  let key_node_select node =
+  let merge_node_select node =
     if debug_more then Coptions.lprintf
 	"[key_node_select] %a@." Node.pretty node;
     let res = is_invariant_node node || is_function_precondition_node node in
@@ -3204,10 +3276,13 @@ struct
 	"[key_node_select] selected ? %b@." res;
     res
 
+  let keep_node_select node =
+    merge_node_select node || is_assume_invariant_node node
+
   (* [cur_val] is the current contextual abstract value, obtained by repeated
      forward/backward propagation.
      [new_val] is the conditional information obtained through a unique 
-     backward propagation. It should contain only one conditional.
+     backward propagation. It should contain only one conditional at most.
    *)
   let store_context_info cur_val new_val =
     if debug_more then Coptions.lprintf
@@ -3215,21 +3290,37 @@ struct
 	ContextSepLattice.pretty cur_val ContextSepLattice.pretty new_val;
     let cur_ctxt_val,cur_sep_val = cur_val in
     let new_ctxt_val,_ = new_val in
-    (* set as main context the context obtained by forward propagation *)
-    let new_ctxt_val = ContextLattice.set_context new_ctxt_val 
-	(ContextLattice.get_context cur_ctxt_val) in
-    (* subtract the main context from the conditional information *)
-    let new_cid,new_cond = ContextLattice.format_singleton new_ctxt_val in
-    (* add this minimal conditional information to the current context *)
-    ContextLattice.add_conditional cur_ctxt_val (new_cid,new_cond),cur_sep_val
+    let new_ctxt_val = 
+      if ContextLattice.has_conditionals new_ctxt_val then
+	(* set as main context the context obtained by forward propagation *)
+	let new_ctxt_val = ContextLattice.set_context new_ctxt_val 
+	  (ContextLattice.get_context cur_ctxt_val) in
+	(* subtract the main context from the conditional information *)
+	let new_cid,new_cond = ContextLattice.format_singleton new_ctxt_val in
+	(* add this minimal conditional information to the current context *)
+	ContextLattice.add_conditional cur_ctxt_val (new_cid,new_cond)
+      else cur_ctxt_val
+    in
+    new_ctxt_val,cur_sep_val
 
   let compute_bnf_params =
     {
-     backward_select = memory_access_select;
-     backward_modify = build_safe_memory_access;
-     merge_select = key_node_select;
-     keep_select = is_assume_invariant_node;
-     merge_analyses = store_context_info;
+      compute = compute_with_assert keep_node_select;
+      backward_select = memory_access_select;
+      backward_modify = build_safe_memory_access;
+      merge_select = merge_node_select;
+      keep_select = keep_node_select;
+      merge_analyses = store_context_info;
+    }
+
+  let compute_bnf_params_with_separation =
+    {
+      compute = compute_back_and_forth compute_bnf_params;
+      backward_select = memory_access_select;
+      backward_modify = build_safe_memory_access;
+      merge_select = merge_node_select;
+      keep_select = keep_node_select;
+      merge_analyses = store_context_info;
     }
 
   exception Rec_format
@@ -3253,7 +3344,8 @@ struct
       let pre_ctxt_val,pre_sep_val = pre_val in
       if debug_more then Coptions.lprintf 
 	  "[sub_format] %a@." ContextLattice.pretty pre_ctxt_val;
-      match memory_access_safe_predicate node with
+      match memory_access_safe_predicate ContextLattice.is_packed_variable node
+      with
       | None -> ()
       | Some p_safe ->
 	  (* is the access guaranteed to be safe ? *)
@@ -3295,7 +3387,7 @@ struct
 		ContextSepLattice.bottom (),ContextSepLattice.bottom ()
 	    in
 	    aval 
-	| NKassume | NKassert | NKnone | NKdecl | NKtest | NKexpr
+	| NKassume | NKassert | NKnone | NKdecl | NKtest | NKexpr | NKlvalue
 	| NKpred | NKterm | NKannot | NKspec -> 
 	    cur_val
     in
@@ -3334,7 +3426,7 @@ struct
 	    else
 	      post_val
 
-	| NKassume | NKassert | NKnone | NKdecl | NKtest | NKexpr
+	| NKassume | NKassert | NKnone | NKdecl | NKtest | NKexpr | NKlvalue
 	| NKpred | NKterm | NKannot | NKspec -> 
 	    (* use the initial [analysis] *)
 	    let pre_val,post_val =
@@ -3398,17 +3490,32 @@ let local_int_analysis_attach () =
     @ (List.map (fun v -> Var.Vstrlen v) il_pack_vars)
   in
   ContextLattice.pack_variables pack_vars;
-  (* perform local memory analysis *)
-  let comp_params = LocalMemoryAnalysis.compute_bnf_params in
-  let raw_analysis = LocalMemoryAnalysis.compute_back_and_forth comp_params in
-  (* detect the statements where introducing an assume is useful *)
-  let analysis,safe_access_nodes = 
-    LocalMemoryAnalysis.format raw_analysis decls in
-  (* transform the program using the analysis *)
-  let trans_params = 
-    { safe_access_nodes = safe_access_nodes } in
-  let decls = 
-    ConnectCFGtoOct.transform analysis trans_params decls in
+  let decls =
+    if Coptions.abstract_interp then
+      (* perform local memory analysis *)
+      let comp_params = 
+	LocalMemoryAnalysis.compute_bnf_params in
+      let raw_analysis = 
+	LocalMemoryAnalysis.compute_back_and_forth comp_params () in
+      (* detect the statements where introducing an assume is useful *)
+      let analysis,safe_access_nodes = 
+	LocalMemoryAnalysis.format raw_analysis decls in
+      (* transform the program using the analysis *)
+      let trans_params = 
+	{ safe_access_nodes = safe_access_nodes } in
+      ConnectCFGtoOct.transform analysis trans_params decls
+    else if Coptions.gen_invariant then
+      (* perform local memory analysis *)
+      let raw_analysis = LocalMemoryAnalysis.compute () in
+      (* detect the statements where introducing an assume is useful *)
+      let analysis,_ = 
+	LocalMemoryAnalysis.format raw_analysis decls in
+      (* transform the program using the analysis *)
+      let trans_params = 
+	{ safe_access_nodes = IntLangFromNormalized.NodeSet.empty } in
+      ConnectCFGtoOct.transform analysis trans_params decls      
+    else assert false
+  in
   (* return the new program *)
   let file = IntLangFromNormalized.to_file decls in
 

@@ -446,6 +446,12 @@ module type DATA_FLOW_ANALYSIS = sig
        It is based on [propagate]. 
      *)
   val compute : unit -> absint_analysis_t
+    (*
+       same as compute, with additional assertion propagation.
+       Takes as input the function that selects nodes to keep before assertion
+       propagation.
+    *)
+  val compute_with_assert : (node_t -> bool) -> unit -> absint_analysis_t
     (* 
        takes a program and computes the result of propagating forward
        the information, and then propagating backward/forward again from
@@ -455,6 +461,8 @@ module type DATA_FLOW_ANALYSIS = sig
      *)
   type compute_bnf_t = 
      {
+         (* initial computation before back-and-forth propagation *)
+       compute : unit -> absint_analysis_t;
          (* select nodes on which to propagate backward *)
        backward_select : node_t -> absval_t -> bool;
 	 (* modifier to apply before initiating backward propagation *)
@@ -466,7 +474,7 @@ module type DATA_FLOW_ANALYSIS = sig
 	 (* do merge forward and backward informations *)
        merge_analyses : absval_t -> absval_t -> absval_t;
      }
-  val compute_back_and_forth : compute_bnf_t -> absint_analysis_t
+  val compute_back_and_forth : compute_bnf_t -> unit -> absint_analysis_t
 end
 
 (* very simple dataflow analysis, with fixed characteristics:
@@ -527,6 +535,8 @@ module Make_DataFlowAnalysis
 
   type compute_bnf_t = 
      {
+         (* initial computation before back-and-forth propagation *)
+       compute : unit -> absint_analysis_t;
          (* select nodes on which to propagate backward *)
        backward_select : node_t -> absval_t -> bool;
 	 (* modifier to apply before initiating backward propagation *)
@@ -633,8 +643,10 @@ module Make_DataFlowAnalysis
       if debug_more then Coptions.lprintf 
 	"[propagate] computed value: %a@." params.pretty cur_val;
 
-      (* change value if different *)
-      if not (params.equal cur_val to_val) then
+      (* change value if different in fixpoint case, or in all cases when
+	 doing a one-pass propagation. In the last case, the value of the node
+	 is not modified, but the successors' values are. *)
+      if params.one_pass || not (params.equal cur_val to_val) then
 	begin
 	  change := true;
 
@@ -724,11 +736,13 @@ module Make_DataFlowAnalysis
       change := false;
       if debug then Coptions.lprintf 
 	  "[propagate] one more round of propagation@.";
-      IL.iter_operational params.direction ~roots:roots treat_node
+      IL.iter_operational params.direction ~roots:roots treat_node;
+      (* immediately stop iteration in one-pass propagation *)
+      if params.one_pass then change := false
     done;
     res
 
-  let forward_params ~one_pass =
+  let forward_params ?(one_pass=false) ?(with_assert=false) () =
     { 
         (* direction *)
       direction = Forward;
@@ -740,7 +754,7 @@ module Make_DataFlowAnalysis
       init = NodeMap.empty;
         (* transfer function *)
       transfer = C.transfer 
-	~backward:false ~with_assert:false ~one_pass:one_pass;
+	~backward:false ~with_assert:with_assert ~one_pass:one_pass;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -782,12 +796,27 @@ module Make_DataFlowAnalysis
       action = action;
     }
 
-  let compute () =
-    propagate (forward_params ~one_pass:false)
+  let keep_only_selected keep_select analysis =
+    IL.iter_operational Forward ~roots:[] (fun node ->
+      if not (keep_select node) then
+	NodeHash.remove analysis node
+    )
 
-  let compute_back_and_forth params =
+  let compute () = propagate (forward_params ())
+
+  let compute_with_assert keep_select () =
     (* 1st step: propagate forward information *)
-    let fwd_analysis = propagate (forward_params ~one_pass:false) in
+    let fwd_analysis = compute () in
+
+    (* 2nd step: propagate forward assertions *)
+    keep_only_selected keep_select fwd_analysis;
+    propagate (forward_params ~with_assert:true ~one_pass:true ())
+      ~analysis:fwd_analysis
+
+  let compute_back_and_forth params () =
+    (* 1st step: propagate initial information *)
+    let fwd_analysis = params.compute () in
+
     (* 2nd step: propagate backward/forward again from every selected node *)
     IL.fold_operational Forward ~roots:[] (fun node cur_analysis ->
 
@@ -851,7 +880,9 @@ module Make_DataFlowAnalysis
 	    NodeHash.add mix_analysis node (pre_mix_val,post_mix_val)
 	);
 	(* propagate forward again *)
-	propagate (forward_params ~one_pass:true) ~analysis:mix_analysis
+	keep_only_selected params.keep_select mix_analysis;
+	propagate (forward_params ~with_assert:true ~one_pass:true ())
+	  ~analysis:mix_analysis
 
       else cur_analysis
     ) fwd_analysis
@@ -907,6 +938,7 @@ module type CFG_LANG_INTERNAL = sig
    | InternLogical
    | InternLogicalScope
   type count_t = { mutable count : int }
+  type lvalue_t = Assign | OpAssign | IncrDecr
   type norm_node = 
       (* coding constructs *)
     | Nexpr of nexpr
@@ -921,6 +953,7 @@ module type CFG_LANG_INTERNAL = sig
 	 They can return simply a [Nexpr] node.
        *)
     | Ntest of nexpr 
+    | Nlvalue of nexpr * lvalue_t
     | Nstat of nstatement
     | Ndecl of func_t
 
@@ -1034,7 +1067,7 @@ module type CFG_LANG_EXTERNAL = sig
      for internal use: internal
   *)
   type node_kind = 
-    (* coding *)  | NKexpr | NKtest | NKstat | NKdecl 
+    (* coding *)  | NKexpr | NKtest | NKlvalue | NKstat | NKdecl 
     (* logical *) | NKspec | NKannot | NKterm | NKpred | NKassume | NKassert 
     (* special *) | NKnone
 
@@ -1100,6 +1133,8 @@ module type CFG_LANG_EXTERNAL = sig
   val var_is_integer : ilvar_t -> bool
     (* is the type of this expression an integer type ? *)
   val expr_type_is_int : Node.t -> bool
+    (* is the type of this expression a character type ? *)
+  val expr_type_is_char : Node.t -> bool
     (* is this expression an integer assignment ? *)
   val expr_is_int_assign : Node.t -> bool
     (* is this variable a pointer ? *)
@@ -1146,6 +1181,8 @@ module type CFG_LANG_EXTERNAL = sig
   val make_var_decl : Node.t -> ilvar_t -> Node.t
     (* create a new block statement node *)
   val make_seq_stat : Node.t -> Node.t -> Node.t
+    (* make this node be an integer constant to be added to some pointer *)
+  val change_in_int_offset_cst : Node.t -> int -> Node.t
     (* make this node be an assignment variable = constant *)
   val change_in_int_var_assign_cst : Node.t -> ilvar_t -> int -> Node.t
     (* make this node be an assignment variable = variable *)
@@ -1173,7 +1210,7 @@ end = struct
   type decl_t = func_t
 
   type node_kind = 
-    (* coding *)  | NKexpr | NKtest | NKstat | NKdecl 
+    (* coding *)  | NKexpr | NKtest | NKlvalue | NKstat | NKdecl 
     (* logical *) | NKspec | NKannot | NKterm | NKpred | NKassume | NKassert 
     (* special *) | NKnone
 
@@ -1192,11 +1229,13 @@ end = struct
    | InternLogicalScope
 
   type count_t = { mutable count : int }
+  type lvalue_t = Assign | OpAssign | IncrDecr
 
   type norm_node = 
       (* coding constructs *)
     | Nexpr of nexpr
     | Ntest of nexpr 
+    | Nlvalue of nexpr * lvalue_t
     | Nstat of nstatement
     | Ndecl of func_t
       (* logical constructs *)
@@ -1272,6 +1311,7 @@ end = struct
       match label n with
       | Nexpr e -> Cprint.nexpr fmt e
       | Ntest e -> Cprint.nexpr fmt e
+      | Nlvalue (e,_) -> Cprint.nexpr fmt e
       | Nstat s -> 
 	  begin match s.nst_node with
 	    | NSnop -> Format.fprintf fmt "NSnop"
@@ -1348,6 +1388,7 @@ end = struct
     match Node.label node with
       | Nexpr _   -> NKexpr
       | Ntest _   -> NKtest
+      | Nlvalue _ -> NKlvalue
       | Nstat _   -> NKstat
       | Ndecl _   -> NKdecl
       | Nspec _   -> NKspec
@@ -1370,6 +1411,7 @@ end = struct
     match Node.label node with
       | Nexpr e -> e
       | Ntest e -> e
+      | Nlvalue (e,_) -> e
       | _ -> failwith "[get_e] should be called only on expression or test"
   let get_expr node = (get_e node).nexpr_node
 
@@ -1481,9 +1523,24 @@ end = struct
     | Ctypes.Tstruct _ | Ctypes.Tunion _ ->
 	false
 
+  let is_character_type ctyp = match ctyp.Ctypes.ctype_node with
+    | Ctypes.Tvar _ -> 
+	assert false (* not allowed in code *)
+    | Ctypes.Tint (_,Ctypes.Char) ->
+	true
+    | Ctypes.Tint _ | Ctypes.Tenum _ ->
+	false
+    | Ctypes.Tarray _ | Ctypes.Tpointer _ 
+    | Ctypes.Tvoid | Ctypes.Tfloat _ | Ctypes.Tfun _ 
+    | Ctypes.Tstruct _ | Ctypes.Tunion _ ->
+	false
+
   let var_is_integer var = is_integer_type var.var_type
   let sub_expr_type_is_int e = is_integer_type e.nexpr_type
   let expr_type_is_int node = sub_expr_type_is_int (get_e node)
+
+  let sub_expr_type_is_char e = is_character_type e.nexpr_type
+  let expr_type_is_char node = sub_expr_type_is_char (get_e node)
 
   let is_pointer_type ctyp = match ctyp.Ctypes.ctype_node with
     | Ctypes.Tvar _ -> 
@@ -1500,7 +1557,7 @@ end = struct
 
   let termexpr_is_local_var node =
     match get_node_kind node with
-      | NKexpr | NKtest -> 
+      | NKexpr | NKtest | NKlvalue -> 
 	  begin match get_expr node with
 	    | NEvar (Var_info var) -> var_is_local var
 	    | _ -> false
@@ -1611,7 +1668,7 @@ end = struct
 
   let termexpr_var_get node =
     match get_node_kind node with
-      | NKexpr | NKtest -> 
+      | NKexpr | NKtest | NKlvalue -> 
 	  begin match get_expr node with
 	    | NEvar (Var_info var) -> var
 	    | _ -> assert false
@@ -1649,6 +1706,12 @@ end = struct
 	avalid = pvalid && (atyp = ptyp)
     | _ -> false
 
+  let change_in_int_offset_cst node index =
+    let e = get_e node in
+    let cst_e = NEconstant (IntConstant (string_of_int index)) in
+    let cst_e = { e with nexpr_node = cst_e; nexpr_type = int_offset_type } in
+    create_tmp_node (Nexpr cst_e)
+
   let deref_get_variable_and_offset node = match get_expr node with
     | NEarrow (e1,_,_) | NEunary (Ustar,e1) -> 
 	(* exhaustive case analysis needed here, in order to 
@@ -1664,14 +1727,27 @@ end = struct
 		      Some (v,off)
 		    else None
 	      end
-	  | NEbinary (e1,Badd_pointer_int,e2) ->
+	  | NEbinary (e1,Badd_pointer_int,_) | NEincr (_,e1) ->
+	      let e2opt = match e.nexpr_node with
+		| NEbinary (_,_,e2) -> Some e2
+		| NEincr ((Upostfix_inc | Upostfix_dec),_) -> None
+		| NEincr (Uprefix_inc,_) ->
+		    Some (get_e (change_in_int_offset_cst node 1))
+		| NEincr (Uprefix_dec,_) ->
+		    Some (get_e (change_in_int_offset_cst node (-1)))
+		| _ -> assert false
+	      in		    
 	      begin match destruct e1 with
 	        | None -> None
-		| Some (v,None) -> Some (v,Some e2)
-		| Some (v,Some off) ->
-		    let new_off = NEbinary (off,int_offset_addop,e2) in
-		    let new_off = { off with nexpr_node = new_off } in
-		    Some (v,Some new_off)
+		| Some (v,None) -> Some (v,e2opt)
+		| Some (v,Some off) as e1destr ->
+		    begin match e2opt with
+		      | None -> e1destr
+		      | Some e2 ->
+			  let new_off = NEbinary (off,int_offset_addop,e2) in
+			  let new_off = { off with nexpr_node = new_off } in
+			  Some (v,Some new_off)
+		    end
 	      end
 	    (* not a dereference from a variable *)
 	  | NEarrow _ | NEunary (Ustar,_) -> None
@@ -2030,7 +2106,7 @@ end = struct
 
   let make_int_termexpr_add_termexpr node1 node2 =
     match get_node_kind node1 with
-      | NKexpr | NKtest -> 
+      | NKexpr | NKtest | NKlvalue -> 
 	  let e1 = get_e node1 in
 	  let e2 = get_e node2 in
 	  let typ = e1.nexpr_type in
@@ -2594,7 +2670,7 @@ end = struct
       | NKstat ->
 	  change_sub_components_in_stat node sub_nodes
 	    
-      | NKexpr | NKtest ->
+      | NKexpr | NKtest | NKlvalue ->
 	  change_sub_components_in_expr node sub_nodes
 	    
       | NKterm ->
@@ -2811,8 +2887,13 @@ end = struct
   (* shared code between the creation of a simple expression node and 
      the creation of a test node. The parameter [is_test] tells if the node
      created should be an expression or a test. The parameter [neg_test] is 
-     used to specify the opposite of the test should be created. *)
-  let rec from_expr start_node ?(is_test=false) ?(neg_test=false) (e : nexpr) =
+     used to specify the opposite of the test should be created. 
+     The parameter [is_lvalue] specifies a lvalue is created.
+     [in_incr] is set for an lvalue inside an increment/decrement operation.
+     [in_opassign] is set for an lvalue inside an op-assignment.
+  *)
+  let rec from_expr start_node ?(is_test=false) ?(neg_test=false) 
+      ?(is_lvalue=false) ?(in_incr=false) ?(in_opassign=false) (e : nexpr) =
     let e = 
       if is_test && neg_test then
         { e with nexpr_node = NEunary (Unot, e) }
@@ -2820,6 +2901,10 @@ end = struct
     in
     let enode =
       if is_test then Ntest e
+      else if is_lvalue then
+	if in_incr then Nlvalue (e,IncrDecr)
+	else if in_opassign then Nlvalue (e,OpAssign)
+	else Nlvalue (e,Assign)
       else Nexpr e
     in
     let enode = create_node enode in 
@@ -2827,9 +2912,14 @@ end = struct
       match e.nexpr_node with
 	| NEnop | NEconstant _ | NEstring_literal _ | NEvar _ ->
 	    (* oper *) add_opedge start_node enode
-	| NEarrow (e1,_,_) | NEunary (_,e1) | NEincr (_,e1) 
+	| NEarrow (e1,_,_) | NEunary (_,e1) 
 	| NEcast (_,e1) | NEmalloc (_,e1) ->
 	    let e1node = from_expr start_node e1 in
+	    (* oper *) add_opedge e1node enode;
+	    (* struct *) add_stedge enode [e1node]
+	| NEincr (_,e1) ->
+	    let e1node = 
+	      from_expr ~is_lvalue:true ~in_incr:true start_node e1 in
 	    (* oper *) add_opedge e1node enode;
 	    (* struct *) add_stedge enode [e1node]
 	| NEseq (e1,e2) ->
@@ -2838,15 +2928,20 @@ end = struct
 	    (* oper *) add_opedge e2node enode;
 	    (* struct *) add_stedge enode [e1node; e2node]
 	| NEassign (e1,e2) | NEassign_op (e1,_,e2) ->
+	    let opassign = match e.nexpr_node with 
+	      | NEassign _ -> false | NEassign_op _ -> true | _ -> assert false
+	    in
 	    let e1node,e2node =
 	      if Coptions.evaluation_order.Coptions.assign_left_to_right then
-		let e1node = from_expr start_node e1 in
+		let e1node = from_expr ~is_lvalue:true ~in_opassign:opassign
+		  start_node e1 in
 		let e2node = from_expr e1node e2 in
 		(* oper *) add_opedge e2node enode;
 	        e1node,e2node
     	      else
 		let e2node = from_expr start_node e2 in
-		let e1node = from_expr e2node e1 in
+		let e1node = from_expr ~is_lvalue:true ~in_opassign:opassign
+		  e2node e1 in
 		(* oper *) add_opedge e1node enode;
 	        e1node,e2node
 	    in
@@ -2887,12 +2982,14 @@ end = struct
 	    (* oper *) add_opedge anode enode;
 	    (* struct *) add_stedge enode anodes
 	| NEcond (e1,e2,e3) ->
-	    let e1node = from_expr start_node e1 in
-	    let e2node = from_expr e1node e2 in
-	    let e3node = from_expr e1node e3 in
+	    let true_node = from_expr ~is_test:true start_node e1 in
+	    let false_node =
+	      from_expr ~is_test:true ~neg_test:true start_node e1 in
+	    let e2node = from_expr true_node e2 in
+	    let e3node = from_expr false_node e3 in
 	    (* oper *) add_opedge e2node enode;
 	    (* oper *) add_opedge e3node enode;
-	    (* struct *) add_stedge enode [e1node; e2node; e3node]
+	    (* struct *) add_stedge enode [true_node; e2node; e3node]
     end;
     enode
 
@@ -3327,7 +3424,8 @@ end = struct
     fold_operational Forward ~roots:[]
       (fun node (used_vars,decl_vars) ->
 	 match get_node_kind node with
-	   | NKexpr | NKtest -> (* only on code, not on logical part *)
+	   | NKexpr | NKtest | NKlvalue ->
+	       (* only on code, not on logical part *)
 	       let used_vars =
 		 if expr_is_local_var node then
 		   let var = termexpr_var_get node in
