@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.126 2006-10-05 11:18:44 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.127 2006-10-13 13:32:31 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -111,7 +111,9 @@ and eval_const_expr_noerror (e : texpr) = match e.texpr_node with
   | TEbinary (t1, Cast.Bmul_int _, t2) -> 
       Int64.mul (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEbinary (t1, Cast.Bdiv_int _, t2) -> 
-      Int64.div (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
+      Int64.div (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)  
+  | TEbinary (t1, Cast.Bdiv_float _, t2) -> 
+      invalid_arg "not a constant expression 2"
   | TEcast (_, e) -> eval_const_expr_noerror e
   | TEunary (Uint_conversion, e) -> eval_const_expr_noerror e
   | TEsizeof (t,n) -> n
@@ -1343,7 +1345,12 @@ let type_decl d = match d.node with
 	    set_var_type (Var_info info) ty false;
 	    if ty.ctype_const then begin match ty.ctype_node, i with
 	      | (Tint _ | Tfloat _ | Tenum _), Some (Iexpr e) -> 
-		  set_const_value info (eval_const_expr e)
+		  begin
+		    try
+		      set_const_value info (eval_const_expr_noerror e)
+		    with
+			Invalid_argument msg -> ()	
+		  end
 	      | _ ->
 		  ()
 	    end;
