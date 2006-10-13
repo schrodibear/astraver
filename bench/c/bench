@@ -151,7 +151,7 @@ bench_c_good () {
     ../../../bin/dp.opt -timeout 20 $VCS 2>/dev/null || true
 }
 
-# bench_c_good
+bench_c_good
 bench_c_good -separation -no-zone-type
 
 cd ../../../examples-c
