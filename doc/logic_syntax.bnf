@@ -1,0 +1,167 @@
+
+/* Why logic syntax, as a context-free yacc-ready grammar */
+/* Precedences are given at the end of the file, following yacc conventions */
+
+file ::= 
+| EOF
+| list1_decl EOF
+
+list1_decl ::=
+| decl 
+| decl list1_decl 
+
+decl ::=
+| external_ LOGIC list1_ident_sep_comma COLON logic_type
+| AXIOM ident COLON lexpr
+| PREDICATE ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR EQUAL lexpr
+| FUNCTION ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR COLON 
+  primitive_type EQUAL lexpr
+| GOAL ident COLON lexpr
+| external_ TYPE ident
+| external_ TYPE type_var ident
+| external_ TYPE LEFTPAR list1_type_var_sep_comma RIGHTPAR ident
+
+primitive_type ::=
+| INT 
+| BOOL 
+| REAL 
+| UNIT 
+| type_var 
+| ident 
+| primitive_type ident
+| LEFTPAR primitive_type COMMA list1_primitive_type_sep_comma RIGHTPAR ident
+
+logic_type ::=
+| list0_primitive_type_sep_comma ARROW PROP
+| PROP
+| list0_primitive_type_sep_comma ARROW primitive_type
+| primitive_type
+
+list0_primitive_type_sep_comma ::=
+| /* epsilon */                  
+| list1_primitive_type_sep_comma 
+
+list1_primitive_type_sep_comma ::=
+| primitive_type                                      
+| primitive_type COMMA list1_primitive_type_sep_comma 
+
+list0_logic_binder_sep_comma ::=
+| /* epsilon */               
+| list1_logic_binder_sep_comma
+
+list1_logic_binder_sep_comma ::=
+| logic_binder                                    
+| logic_binder COMMA list1_logic_binder_sep_comma 
+
+logic_binder ::=
+| ident COLON primitive_type       
+| ident COLON primitive_type ARRAY 
+
+external_ ::=
+| /* epsilon */ 
+| EXTERNAL      
+
+lexpr ::=
+| lexpr ARROW lexpr 
+| lexpr LRARROW lexpr 
+| lexpr OR lexpr 
+| lexpr AND lexpr 
+| NOT lexpr 
+| lexpr relation lexpr %prec prec_relation
+| lexpr PLUS lexpr
+| lexpr MINUS lexpr
+| lexpr TIMES lexpr
+| lexpr SLASH lexpr
+| lexpr PERCENT lexpr
+| MINUS lexpr %prec uminus
+| qualid_ident
+| qualid_ident LEFTPAR list1_lexpr_sep_comma RIGHTPAR
+| qualid_ident LEFTSQ lexpr RIGHTSQ
+| IF lexpr THEN lexpr ELSE lexpr %prec prec_if 
+| FORALL list1_ident_sep_comma COLON primitive_type triggers 
+  DOT lexpr %prec prec_forall
+| EXISTS ident COLON primitive_type DOT lexpr %prec prec_exists
+| FPI LEFTPAR lexpr COMMA FLOAT COMMA FLOAT RIGHTPAR
+| INTEGER
+| FLOAT
+| TRUE
+| FALSE
+| VOID
+| LEFTPAR lexpr RIGHTPAR
+| ident_or_string COLON lexpr %prec prec_named
+
+triggers ::=
+| /* epsilon */ 
+| LEFTSQ list1_trigger_sep_bar RIGHTSQ 
+
+list1_trigger_sep_bar ::=
+| trigger 
+| trigger BAR list1_trigger_sep_bar 
+
+trigger ::=
+  list1_lexpr_sep_comma 
+
+list1_lexpr_sep_comma ::=
+| lexpr                             
+| lexpr COMMA list1_lexpr_sep_comma 
+
+relation ::=
+| LT 
+| LE 
+| GT 
+| GE 
+| EQUAL 
+| NOTEQ 
+
+type_var ::=
+| QUOTE ident 
+
+list1_type_var_sep_comma ::=
+| type_var                                
+| type_var COMMA list1_type_var_sep_comma 
+
+ident ::=
+| IDENT 
+
+qualid_ident ::=
+| IDENT          
+| IDENT AT       
+| IDENT AT IDENT 
+
+list1_ident_sep_comma ::=
+| ident                             
+| ident COMMA list1_ident_sep_comma 
+
+ident_or_string ::=
+| IDENT  
+| STRING 
+
+
+
+/* Precedences */
+
+%nonassoc prec_recfun
+%nonassoc prec_fun
+%left LEFTB LEFTBLEFTB
+%left prec_simple
+%left COLON 
+%left prec_letrec
+%left IN
+%right SEMICOLON
+%left prec_no_else
+%left ELSE
+%right prec_named
+%left COLONEQUAL
+%right prec_forall prec_exists
+%right ARROW LRARROW
+%right OR BARBAR
+%right AND AMPAMP
+%right NOT
+%right prec_if
+%left prec_relation EQUAL NOTEQ LT LE GT GE
+%left PLUS MINUS
+%left TIMES SLASH PERCENT
+%right uminus
+%left prec_app
+%left prec_ident
+%left LEFTSQ
