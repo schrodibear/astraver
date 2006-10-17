@@ -984,6 +984,17 @@ ocaml_oct_get_tagged_vars (value m)
   Vnum_val(r)->n = oct_get_tagged_vars (Oct_val(m));;
   CAMLreturn(r);
 }
+
+CAMLprim value
+ocaml_oct_get_untagged_vars (value m)
+{
+  CAMLparam1(m);
+  CAMLlocal1(r);
+  r = alloc_custom(&ocaml_vnum_custom,sizeof(vnum_t),0,1);
+  Vnum_val(r)->nb = Oct_val(m)->n;
+  Vnum_val(r)->n = oct_get_untagged_vars (Oct_val(m));;
+  CAMLreturn(r);
+}
 #endif
 
 CAMLprim value

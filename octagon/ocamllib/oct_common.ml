@@ -86,6 +86,7 @@ external remove_tagged_constraints:   oct -> oct = "ocaml_oct_remove_tagged_cons
 external print_tags:    oct -> unit = "ocaml_oct_print_tags"
 external get_restrained_vars: oct -> vnum = "ocaml_oct_get_restrained_vars"
 external get_tagged_vars: oct -> vnum = "ocaml_oct_get_tagged_vars"
+external get_untagged_vars: oct -> vnum = "ocaml_oct_get_untagged_vars"
 (* END ADDED WHEN OCT_USE_TAG IS DEFINED IN C *)
 
 (* tests *)
