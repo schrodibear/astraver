@@ -3497,6 +3497,9 @@ end = struct
 
   let from_file file =
     internal_graph := Some (Self.create ());
+    (* only return functions that should be verified *)
+    let file = 
+      List.filter (fun func -> Coptions.verify func.f.fun_name) file in
     List.map from_decl file
 
   let to_decl node =
