@@ -33,8 +33,8 @@ open Cast
 open Cutil
 open Cabsint
 
-let debug = true
-let debug_more = true
+let debug = false
+let debug_more = false
 
 
 (*****************************************************************************
@@ -107,6 +107,7 @@ struct
   type dim_t = unit
   let top () = PKcomplex
   let bottom () = PKundefined
+  let init = bottom
 
   (* get underlying variable if any *)
   let get_var_opt p1 = match p1 with
@@ -1175,7 +1176,7 @@ end = struct
      in which case we discriminate on the form of the right-hand side.
   *)
   let transfer ?(backward=false) ?(with_assert=false) ?(one_pass=false) 
-      ?previous_value node cur_val =
+      ?(final=false) ?previous_value node cur_val =
 
     if debug_more then Coptions.lprintf 
       "[transfer] %a@." Node.pretty node;
@@ -2225,7 +2226,7 @@ let local_aliasing_transform () =
   (* build control-flow graph *)
   let decls = PtrLangFromNormalized.from_file file in
   (* perform local pointer analysis *)
-  let raw_analysis = LocalPtrAnalysis.compute () in
+  let raw_analysis = LocalPtrAnalysis.compute decls in
   (* format results of the analysis *)
   let analysis,offset_map = ConnectCFGtoPtr.format raw_analysis in
   (* transform the program using the analysis *)

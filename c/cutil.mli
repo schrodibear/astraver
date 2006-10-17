@@ -4,6 +4,9 @@ module Option : sig
   val some : 'a option -> 'a option -> 'a option
   val app : ('a -> 'b) -> 'a option -> 'b option
   val binapp : ('a -> 'a -> 'b) -> 'a option -> 'a option -> 'b option
+  val transform : ('a -> 'a -> 'a) -> 'a option -> 'a option -> 'a option
+  val pretty :
+    (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a option -> unit
 end
 
 module Pair : sig

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.28 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: ceffect.mli,v 1.29 2006-10-17 12:26:55 moy Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string
@@ -28,6 +28,8 @@ type effect =
       assigns : ZoneSet.t;
       reads_var : HeapVarSet.t;
       assigns_var : HeapVarSet.t;
+      (* useful for generating separation invariants *)
+      assigns_under_pointer : HeapVarSet.t;
     }
 
 val ef_union : effect -> effect -> effect

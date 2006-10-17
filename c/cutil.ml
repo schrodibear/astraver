@@ -13,6 +13,13 @@ module Option = struct
   let binapp f x1 x2 = match x1,x2 with
     | None,_ | _,None -> None
     | Some y1,Some y2 -> Some (f y1 y2)
+  let transform f x1 x2 = match x1,x2 with
+    | None,None -> None
+    | None,Some x | Some x,None -> Some x
+    | Some y1,Some y2 -> Some (f y1 y2)
+  let pretty f fmt x = match x with
+    | None -> ()
+    | Some x -> f fmt x
 end
 
 (* very basic pair *)

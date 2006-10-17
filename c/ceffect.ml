@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.144 2006-10-10 12:23:51 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.145 2006-10-17 12:26:55 moy Exp $ i*)
 
 open Cast
 open Cnorm
@@ -173,15 +173,21 @@ type effect =
       assigns : ZoneSet.t;
       reads_var : HeapVarSet.t;
       assigns_var : HeapVarSet.t;
+      (* useful for generating separation invariants *)
+      assigns_under_pointer : HeapVarSet.t;
     }
 
 let ef_empty = { reads = empty; assigns = empty ; 
-		 reads_var = HeapVarSet.empty ; assigns_var = HeapVarSet.empty }
+		 reads_var = HeapVarSet.empty ; assigns_var = HeapVarSet.empty;
+		 assigns_under_pointer = HeapVarSet.empty; }
+
 let ef_union e1 e2 = 
   { reads = union e1.reads e2.reads;
     assigns = union e1.assigns e2.assigns ;
     reads_var = HeapVarSet.union e1.reads_var e2.reads_var;
-    assigns_var = HeapVarSet.union e1.assigns_var e2.assigns_var }
+    assigns_var = HeapVarSet.union e1.assigns_var e2.assigns_var;
+    assigns_under_pointer = 
+      HeapVarSet.union e1.assigns_under_pointer e2.assigns_under_pointer; }
 
 let reads_add_var v ty e = { e with reads_var = add_var v ty e.reads_var }
 let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
@@ -194,6 +200,9 @@ let reads_add_alloc e =
 
 let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
 				 assigns_var = add_var v ty e.assigns_var }
+
+let assigns_add_under_pointer v ty e = 
+  { e with assigns_under_pointer = add_var v ty e.assigns_under_pointer }
 
 let assigns_add_field_var v ty e = 
   { e with reads = add_field_var v ty e.reads;
@@ -552,7 +561,9 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
 	      f.function_writes empty in
 	    { reads = reads; assigns = writes; 
 	      reads_var = f.function_reads_var; 
-	      assigns_var = f.function_writes_var} 
+	      assigns_var = f.function_writes_var;
+	      (* TODO: consider pointer arguments written by function *)
+	      assigns_under_pointer = HeapVarSet.empty; } 
 	| _ -> expr ~with_local:with_local e
       in
 
@@ -582,12 +593,23 @@ and assign_expr ?(with_local=false) e = match e.nexpr_node with
   | NEarrow (e1,z, f) ->
       let ef = assigns_add_field_var f (type_why e1)
 	  (expr ~with_local:with_local e1) in
+      let ef = ef_union ef (assign_under_pointer e1) in
       (* [alloc] not used with the arithmetic memory model *)
       if arith_memory_model then ef else reads_add_alloc ef
   | NEcast (_, e1) ->
       assign_expr ~with_local:with_local e1
   | _ -> 
       assert false (* not a left value *)
+
+and assign_under_pointer e = match e.nexpr_node with
+  | NEvar (Var_info v) -> 
+      assigns_add_under_pointer v v.var_why_type ef_empty
+  | NEbinary (e1,Badd_pointer_int,_) ->
+      assign_under_pointer e1
+  | NEcast (_, e1) ->
+      assign_under_pointer e1
+  | _ -> ef_empty (* TODO: encode in some way the fact some pointer was
+		     assigned *)
 
 (* effects for [&e] *)
 (*
@@ -1189,7 +1211,9 @@ let functions fun_list  =
 	(ef_union ef { reads = id.function_reads ;
 		       reads_var = id.function_reads_var;
 		       assigns = id.function_writes;
-		       assigns_var = id.function_writes_var; })
+		       assigns_var = id.function_writes_var;
+		       (* TODO: consider pointer params written by function *)
+		       assigns_under_pointer = HeapVarSet.empty; })
     in
     lprintf "effects for function %s: reads %a %a writes %a %a@." id.fun_name 
       print_effects ef.reads_var print_effects2 ef.reads print_effects ef.assigns_var print_effects2 ef.assigns;

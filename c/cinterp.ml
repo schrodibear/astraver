@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.213 2006-10-12 12:52:58 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.214 2006-10-17 12:26:55 moy Exp $ i*)
 
 
 open Format
@@ -2100,7 +2100,9 @@ let interp_function_spec id sp ty pl =
       { Ceffect.reads = id.function_reads; 
 	Ceffect.assigns = id.function_writes;
 	Ceffect.reads_var = id.function_reads_var; 
-	Ceffect.assigns_var = id.function_writes_var } 
+	Ceffect.assigns_var = id.function_writes_var;
+	(* TODO: consider pointer arguments written by function *)
+	Ceffect.assigns_under_pointer = HeapVarSet.empty; } 
       sp 
   in
   let tpl = interp_fun_params id.function_reads pl in   

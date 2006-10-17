@@ -1,6 +1,9 @@
 
 (* TO DO:
 
+   - in [propagate], when doing backward prop, do not propagate on incoming
+   edge with [None] value, control does not flow through this edge !
+
    - add location to the hooks for invariants/preconditions ?
 
    - problem with construction of graph for "do-while", not knowing
@@ -39,8 +42,8 @@ open Clogic
 open Cast
 open Cutil
 
-let debug = true
-let debug_more = true
+let debug = false
+let debug_more = false
 
 
 (*****************************************************************************
@@ -75,6 +78,7 @@ module type SEMI_LATTICE = sig
   type dim_t
   val top : dim_t -> t
   val bottom : dim_t -> t
+  val init : dim_t -> t
   val equal : t -> t -> bool
   val pretty : Format.formatter -> t -> unit
   val join : t -> t -> t    
@@ -134,6 +138,7 @@ struct
 
   let bottom () = L1.bottom (),L2.bottom ()
   let top () = L1.top (),L2.top ()
+  let init () = L1.init (),L2.init ()
 
   let equal p1 p2 = L1.equal (fst p1) (fst p2) && L2.equal (snd p1) (snd p2)
 
@@ -180,6 +185,7 @@ struct
   type dim_t = unit
   let bottom () = PWempty
   let top () = PWall
+  let init () = PWempty
 
   let equal pw1 pw2 = match pw1,pw2 with
     | PWempty,PWempty -> true
@@ -322,6 +328,8 @@ module type INTER_LANG = sig
   module NodeMap : Map.S with type key = Node.t
   module NodeHash : Hashtbl.S with type key = Node.t
 
+    (* is this node the function precondition ? *)
+  val is_function_precondition_node : Node.t -> bool
     (* returns true if the argument is a widening node, i.e. a node where 
        the analysis is expected to perform widening if it does not
        naturally converge *)
@@ -382,7 +390,7 @@ module type CONNECTION = sig
   val widening_threshold : int option
     (* transfer function *)
   val transfer : 
-      ?backward:bool -> ?with_assert:bool -> ?one_pass:bool 
+      ?backward:bool -> ?with_assert:bool -> ?one_pass:bool -> ?final:bool
 	-> ?previous_value:absval_t -> node_t -> absval_t -> absval_t
     (* takes the initial program and the formatted analysis, as well as 
        additional information if necessary.
@@ -445,13 +453,14 @@ module type DATA_FLOW_ANALYSIS = sig
        computes the result of an analysis on the implicit program.
        It is based on [propagate]. 
      *)
-  val compute : unit -> absint_analysis_t
+  val compute : node_t list -> absint_analysis_t
     (*
        same as compute, with additional assertion propagation.
        Takes as input the function that selects nodes to keep before assertion
        propagation.
     *)
-  val compute_with_assert : (node_t -> bool) -> unit -> absint_analysis_t
+  val compute_with_assert : 
+    (node_t -> bool) -> node_t list -> absint_analysis_t
     (* 
        takes a program and computes the result of propagating forward
        the information, and then propagating backward/forward again from
@@ -462,7 +471,7 @@ module type DATA_FLOW_ANALYSIS = sig
   type compute_bnf_t = 
      {
          (* initial computation before back-and-forth propagation *)
-       compute : unit -> absint_analysis_t;
+       compute : node_t list -> absint_analysis_t;
          (* select nodes on which to propagate backward *)
        backward_select : node_t -> absval_t -> bool;
 	 (* modifier to apply before initiating backward propagation *)
@@ -473,8 +482,11 @@ module type DATA_FLOW_ANALYSIS = sig
        merge_select : node_t -> bool;
 	 (* do merge forward and backward informations *)
        merge_analyses : absval_t -> absval_t -> absval_t;
+         (* use final transfer function or not *)
+       final : bool;
      }
-  val compute_back_and_forth : compute_bnf_t -> unit -> absint_analysis_t
+  val compute_back_and_forth :
+    compute_bnf_t -> node_t list -> absint_analysis_t
 end
 
 (* very simple dataflow analysis, with fixed characteristics:
@@ -536,7 +548,7 @@ module Make_DataFlowAnalysis
   type compute_bnf_t = 
      {
          (* initial computation before back-and-forth propagation *)
-       compute : unit -> absint_analysis_t;
+       compute : node_t list -> absint_analysis_t;
          (* select nodes on which to propagate backward *)
        backward_select : node_t -> absval_t -> bool;
 	 (* modifier to apply before initiating backward propagation *)
@@ -547,6 +559,8 @@ module Make_DataFlowAnalysis
        merge_select : node_t -> bool;
 	 (* do merge forward and backward informations *)
        merge_analyses : absval_t -> absval_t -> absval_t;
+         (* use final transfer function or not *)
+       final : bool;
      }
 
   let propagate ?analysis ?(roots=[]) params =
@@ -607,16 +621,17 @@ module Make_DataFlowAnalysis
 
     (* find current values associated to [node] *)
     let res_val node =
-      try NodeHash.find res node
+      try 
+	let pre_val,post_val = NodeHash.find res node in
+	Some pre_val,Some post_val
       with Not_found -> 
 	try 
 	  let init_val = NodeMap.find node params.init in
 	  begin match params.direction with
-	    | Forward -> init_val,params.bottom ()
-	    | Backward -> params.bottom (),init_val
+	    | Forward -> Some init_val,None
+	    | Backward -> None,Some init_val
 	  end
-	with Not_found -> 
-	  params.bottom (),params.bottom ()
+	with Not_found -> None,None
     in
 
     let treat_node cur_node =
@@ -636,18 +651,33 @@ module Make_DataFlowAnalysis
       in
       if debug then Coptions.lprintf 
 	"[propagate] take node in working list %a from val %a@."
-	  Node.pretty cur_node params.pretty from_val;
+	Node.pretty cur_node (Option.pretty params.pretty) from_val;
 
       (* compute next value and replace existing one *)
-      let cur_val = params.transfer ~previous_value:to_val cur_node from_val in
+      let cur_val = match to_val with
+	| None -> 
+	    Option.app (params.transfer cur_node) from_val
+	| Some to_val ->
+	    Option.app (params.transfer ~previous_value:to_val cur_node) 
+	      from_val
+      in
       if debug_more then Coptions.lprintf 
-	"[propagate] computed value: %a@." params.pretty cur_val;
+	"[propagate] computed value: %a@." 
+	(Option.pretty params.pretty) cur_val;
 
       (* change value if different in fixpoint case, or in all cases when
 	 doing a one-pass propagation. In the last case, the value of the node
 	 is not modified, but the successors' values are. *)
-      if params.one_pass || not (params.equal cur_val to_val) then
+      if not (Option.equal params.equal cur_val None) 
+	&& (params.one_pass
+	    || not (Option.equal params.equal cur_val to_val)) then
 	begin
+	  (* [from_val] and [cur_val] are [Some] options here *)
+	  let from_val = 
+	    match from_val with Some v -> v | None -> assert false in
+	  let cur_val = 
+	    match cur_val with Some v -> v | None -> assert false in
+
 	  change := true;
 
 	  if debug then Coptions.lprintf 
@@ -663,7 +693,10 @@ module Make_DataFlowAnalysis
 		| Some threshold ->
 		    if IL.get_widening_count cur_node > threshold then
 		      (* perform widening *)
-		      params.widening C.widening_strategy to_val cur_val
+		      match to_val with
+			| None -> cur_val
+			| Some to_val -> 
+			    params.widening C.widening_strategy to_val cur_val
 		    else 
 		      (* not yet time for widening *)
 		      begin
@@ -675,8 +708,8 @@ module Make_DataFlowAnalysis
 	      cur_val
 	  in
 	  begin match params.direction with
-	    | Forward -> NodeHash.replace res cur_node (pre_val,cur_val);
-	    | Backward -> NodeHash.replace res cur_node (cur_val,post_val)
+	    | Forward -> NodeHash.replace res cur_node (from_val,cur_val);
+	    | Backward -> NodeHash.replace res cur_node (cur_val,from_val)
 	  end;
 
 	  let next_nodes = match params.direction with
@@ -693,20 +726,30 @@ module Make_DataFlowAnalysis
 	    next_nodes;
 	  List.iter (fun nx_node ->
 		       let nx_pre,nx_post = res_val nx_node in
-		       let nx_from = match params.direction with
-			 | Forward -> nx_pre
-			 | Backward -> nx_post
+		       let nx_from,nx_to = match params.direction with
+			 | Forward -> nx_pre,nx_post
+			 | Backward -> nx_post,nx_pre
 		       in
 		       if debug_more then Coptions.lprintf 
 			 "[propagate] succ prev value: %a@." 
-			   params.pretty nx_from;
-		       let nx_val = params.join nx_from cur_val in
+			 (Option.pretty params.pretty) nx_from;
+		       let nx_val = match nx_from with
+			 | None -> cur_val 
+			 | Some nx_from -> 
+			     if is_function_precondition_node nx_node then
+			       (* function precondition is non-empty, use it
+				  rather than propagating initial value *)
+			       nx_from (* ignore [cur_val] *)
+			     else
+			       params.join nx_from cur_val 
+		       in
 		       if debug_more then Coptions.lprintf 
 			 "[propagate] succ cur value: %a@."
 			   params.pretty nx_val;
 
 		       (* change value if different *)
-		       if not (params.equal nx_val nx_from) then
+		       if not (Option.equal 
+				 params.equal (Some nx_val) nx_from) then
 			 begin
 			   if debug then Coptions.lprintf 
 			     "[propagate] new value for successor \
@@ -714,11 +757,15 @@ module Make_DataFlowAnalysis
 			   if debug_more then Coptions.lprintf 
 			     "[propagate] new value: %a@." 
 			       params.pretty nx_val;
+			   let nx_to = match nx_to with
+			     | None -> params.bottom ()
+			     | Some nx_to -> nx_to
+			   in
 			   begin match params.direction with
 			     | Forward ->
-				 NodeHash.replace res nx_node (nx_val,nx_post)
+				 NodeHash.replace res nx_node (nx_val,nx_to)
 			     | Backward ->
-				 NodeHash.replace res nx_node (nx_pre,nx_val)
+				 NodeHash.replace res nx_node (nx_to,nx_val)
 			   end;
 (*
 			   (* add node in working list/set if not present *)
@@ -729,7 +776,9 @@ module Make_DataFlowAnalysis
 	end;
 
       (* perform additional action (if any) *)
-      params.action cur_node cur_val
+      match cur_val with
+	| None -> ()
+	| Some cur_val -> params.action cur_node cur_val
     in
 
     while !change do
@@ -742,7 +791,8 @@ module Make_DataFlowAnalysis
     done;
     res
 
-  let forward_params ?(one_pass=false) ?(with_assert=false) () =
+  let forward_params 
+      ?(one_pass=false) ?(with_assert=false) ?(final=false) init =
     { 
         (* direction *)
       direction = Forward;
@@ -751,10 +801,10 @@ module Make_DataFlowAnalysis
         (* one-pass or until convergence *)
       one_pass = one_pass;
         (* initialization points *)
-      init = NodeMap.empty;
+      init = init;
         (* transfer function *)
-      transfer = C.transfer 
-	~backward:false ~with_assert:with_assert ~one_pass:one_pass;
+      transfer = C.transfer ~backward:false ~with_assert:with_assert
+	~one_pass:one_pass ~final:final;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -769,7 +819,7 @@ module Make_DataFlowAnalysis
       action = fun _ _ -> ();
     }
 
-  let backward_params node cstr action =
+  let backward_params ?(final=false) node cstr action =
     { 
         (* direction *)
       direction = Backward;
@@ -781,7 +831,7 @@ module Make_DataFlowAnalysis
       init = NodeMap.add node cstr NodeMap.empty;
         (* transfer function *)
       transfer = C.transfer
-	~backward:true ~with_assert:false ~one_pass:true;
+	~backward:true ~with_assert:false ~one_pass:true ~final:final;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -802,20 +852,25 @@ module Make_DataFlowAnalysis
 	NodeHash.remove analysis node
     )
 
-  let compute () = propagate (forward_params ())
+  let compute decls =
+    let init = List.fold_left (fun m decl -> NodeMap.add decl (L.init ()) m) 
+      NodeMap.empty decls in
+    propagate (forward_params init)
 
-  let compute_with_assert keep_select () =
+  let compute_with_assert keep_select decls =
     (* 1st step: propagate forward information *)
-    let fwd_analysis = compute () in
+    let fwd_analysis = compute decls in
 
     (* 2nd step: propagate forward assertions *)
     keep_only_selected keep_select fwd_analysis;
-    propagate (forward_params ~with_assert:true ~one_pass:true ())
+    let init = List.fold_left (fun m decl -> NodeMap.add decl (L.init ()) m) 
+      NodeMap.empty decls in
+    propagate (forward_params ~with_assert:true ~one_pass:true init)
       ~analysis:fwd_analysis
 
-  let compute_back_and_forth params () =
+  let compute_back_and_forth params decls =
     (* 1st step: propagate initial information *)
-    let fwd_analysis = params.compute () in
+    let fwd_analysis = params.compute decls in
 
     (* 2nd step: propagate backward/forward again from every selected node *)
     IL.fold_operational Forward ~roots:[] (fun node cur_analysis ->
@@ -867,8 +922,9 @@ module Make_DataFlowAnalysis
 	  else ()
 	in
 	(* propagate backward on the path that leads to this node *)
-	let bwd_analysis = 
-	  propagate (backward_params node pre_val bwd_action) ~roots:[node] in
+	let bwd_params = 
+	  backward_params ~final:params.final node pre_val bwd_action in
+	let bwd_analysis = propagate bwd_params ~roots:[node] in
 	ignore (bwd_analysis);
 	(* add appropriate assume invariant when "forgotten" by last
 	   backward analysis *)
@@ -881,8 +937,12 @@ module Make_DataFlowAnalysis
 	);
 	(* propagate forward again *)
 	keep_only_selected params.keep_select mix_analysis;
-	propagate (forward_params ~with_assert:true ~one_pass:true ())
-	  ~analysis:mix_analysis
+	let init =
+	  List.fold_left (fun m decl -> NodeMap.add decl (L.init ()) m)
+	    NodeMap.empty decls in
+	let fwd_params = forward_params 
+	  ~with_assert:true ~one_pass:true ~final:params.final init in
+	propagate fwd_params ~analysis:mix_analysis
 
       else cur_analysis
     ) fwd_analysis
@@ -939,6 +999,13 @@ module type CFG_LANG_INTERNAL = sig
    | InternLogicalScope
   type count_t = { mutable count : int }
   type lvalue_t = Assign | OpAssign | IncrDecr
+  type write_t = 
+      { 
+	(* list of variables written variables in the loop *)
+	write_vars : var_tt list; 
+	(* list of pointers whose content is modified in the loop *)
+	write_under_pointers : var_tt list; 
+      }
   type norm_node = 
       (* coding constructs *)
     | Nexpr of nexpr
@@ -971,9 +1038,8 @@ module type CFG_LANG_INTERNAL = sig
 	 in the logical or the structural graph, e.g. an [Nspec] node 
 	 in the logical graph for the function precondition. *)
     | Nassume of npredicate
-      (* loop assume invariant is a special kind of assume. The list of 
-	 variables is the list of written variables in the loop. *)
-    | Nassinv of npredicate * (var_tt list)
+      (* loop assume invariant is a special kind of assume *)
+    | Nassinv of npredicate * write_t
       (* function precondition is a special kind of assume *)
     | Npre of npredicate
       (* Various logical constructs act as "assert": assert statement,
@@ -985,9 +1051,8 @@ module type CFG_LANG_INTERNAL = sig
 	 in the logical or the structural graph, e.g. an [Nannot] node 
 	 in the logical graph for the loop invariant. *)
     | Nassert of npredicate
-      (* loop invariant is a special kind of assert. The list of variables
-	  is the list of written variables in the loop. *)
-    | Ninv of npredicate * (var_tt list)
+      (* loop invariant is a special kind of assert *)
+    | Ninv of npredicate * write_t
 
       (* special constructs *)
       (* "forward" node used in both hierarchical graphs (structural + logical)
@@ -1081,8 +1146,8 @@ module type CFG_LANG_EXTERNAL = sig
   val is_assume_invariant_node : Node.t -> bool
     (* get the list of variables modified in this loop *) 
   val get_loop_write_vars : Node.t -> ilvar_t list
-    (* is this node a [Npre] node for a function precondition ? *)
-  val is_function_precondition_node : Node.t -> bool
+    (* get the list of pointers whose content is modified in this loop *) 
+  val get_loop_write_under_pointers : Node.t -> ilvar_t list
     (* returns the function's parameters *)
   val decl_get_params : Node.t -> ilvar_t list
     (* is it a return statement ? *)
@@ -1230,6 +1295,10 @@ end = struct
 
   type count_t = { mutable count : int }
   type lvalue_t = Assign | OpAssign | IncrDecr
+  type write_t = 
+      { write_vars : ILVar.t list; write_under_pointers : ILVar.t list; }
+
+  let w_empty = { write_vars = []; write_under_pointers = []; }
 
   type norm_node = 
       (* coding constructs *)
@@ -1244,10 +1313,10 @@ end = struct
     | Nterm of nterm
     | Npred of npredicate
     | Nassume of npredicate
-    | Nassinv of npredicate * ILVar.t list
+    | Nassinv of npredicate * write_t
     | Npre of npredicate
     | Nassert of npredicate
-    | Ninv of npredicate * ILVar.t list
+    | Ninv of npredicate * write_t
       (* special constructs *)
     | Nintern of intern_t
     | Nwiden of count_t
@@ -1468,7 +1537,11 @@ end = struct
     | _ -> false
 
   let get_loop_write_vars node = match Node.label node with
-    | Ninv (_,vl) | Nassinv (_,vl) -> vl
+    | Ninv (_,w) | Nassinv (_,w) -> w.write_vars
+    | _ -> assert false
+
+  let get_loop_write_under_pointers node = match Node.label node with
+    | Ninv (_,w) | Nassinv (_,w) -> w.write_under_pointers
     | _ -> assert false
 
   let is_function_precondition_node node = match Node.label node with
@@ -2730,11 +2803,12 @@ end = struct
     tnode
 
   let rec from_pred ?(is_assume=false) ?(is_funpre=false)
-   ?(is_assert=false) ?(is_invariant=false) ?(write_vars=[]) (p : npredicate) =
+   ?(is_assert=false) ?(is_invariant=false) ?(writes=w_empty) 
+   (p : npredicate) =
     let pnode = 
       if is_invariant then 
-	if is_assume then Nassinv (p,write_vars)
-	else if is_assert then Ninv (p,write_vars)
+	if is_assume then Nassinv (p,writes)
+	else if is_assert then Ninv (p,writes)
 	else assert false
       else if is_assume then Nassume p
       else if is_funpre then Npre p
@@ -2824,7 +2898,7 @@ end = struct
 				   ensures_node; decreases_node];
     snode,reqnode_opt
 
-  let from_annot (a : nloop_annot) write_vars =
+  let from_annot (a : nloop_annot) writes =
     let assigns_node = create_node (Nintern InternLogical) in
     begin match a.loop_assigns with
       | Some tl ->
@@ -2839,7 +2913,7 @@ end = struct
     let invnode_opt = match a.invariant with
       | Some p ->
 	  let invnode = from_pred 
-	      ~is_invariant:true ~write_vars:write_vars ~is_assert:true p 
+	      ~is_invariant:true ~writes:writes ~is_assert:true p 
 	  in
 	  (* logic *) add_logedge invariant_node [invnode];
 	  Some invnode
@@ -2849,7 +2923,7 @@ end = struct
 	  let ptrue = { npred_node = NPtrue; npred_loc = Loc.dummy_position }
 	  in
 	  let invnode = from_pred 
-	      ~is_invariant:true ~write_vars:write_vars ~is_assert:true ptrue
+	      ~is_invariant:true ~writes:writes ~is_assert:true ptrue
 	  in
 	  (* logic *) add_logedge invariant_node [invnode];
 	  Some invnode
@@ -2858,7 +2932,7 @@ end = struct
     let assinvnode_opt = match a.assume_invariant with
       | Some p ->
 	  let assinvnode = from_pred 
-	      ~is_invariant:true ~write_vars:write_vars ~is_assume:true p in
+	      ~is_invariant:true ~writes:writes ~is_assume:true p in
 	  (* logic *) add_logedge assume_invariant_node [assinvnode];
 	  Some assinvnode
       | None ->
@@ -2867,7 +2941,7 @@ end = struct
 	  let ptrue = { npred_node = NPtrue; npred_loc = Loc.dummy_position }
 	  in
 	  let assinvnode = from_pred 
-	      ~is_invariant:true ~write_vars:write_vars ~is_assume:true ptrue
+	      ~is_invariant:true ~writes:writes ~is_assume:true ptrue
 	  in
 	  (* logic *) add_logedge assume_invariant_node [assinvnode];
 	  Some assinvnode	  
@@ -3064,16 +3138,21 @@ end = struct
 		(Ceffect.expr ~with_local:true e) in
 	    let write_vars =
 	      HeapVarSet.elements (loop_effect.Ceffect.assigns_var) in
-	    let anode,invnode_opt,assinvnode_opt = from_annot a write_vars in
+	    let write_under_pointers =
+	      HeapVarSet.elements (loop_effect.Ceffect.assigns_under_pointer)
+	    in
+	    let writes = { write_vars = write_vars; 
+			   write_under_pointers = write_under_pointers; } in
+	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
 	      | None,None -> bwd_node
 	      | Some inode,None | None,Some inode ->
 		  (* oper *) add_opedge bwd_node inode;
 		  inode
 	      | Some invnode,Some assinvnode ->
-		  (* assume part of invariant before *)
+		  (* assume part of invariant has no successor *)
 		  (* oper *) add_opedge bwd_node assinvnode;
-		  (* oper *) add_opedge assinvnode invnode;
+		  (* oper *) add_opedge bwd_node invnode;
 		  invnode
 	    in
 	    let test_node = from_expr ~is_test:true loop_node e in
@@ -3114,16 +3193,21 @@ end = struct
 		(Ceffect.expr ~with_local:true e) in
 	    let write_vars =
 	      HeapVarSet.elements (loop_effect.Ceffect.assigns_var) in
-	    let anode,invnode_opt,assinvnode_opt = from_annot a write_vars in
+	    let write_under_pointers =
+	      HeapVarSet.elements (loop_effect.Ceffect.assigns_under_pointer)
+	    in
+	    let writes = { write_vars = write_vars; 
+			   write_under_pointers = write_under_pointers; } in
+	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
 	      | None,None -> fwd_node
 	      | Some inode,None | None,Some inode ->
 		  (* oper *) add_opedge fwd_node inode;
 		  inode
 	      | Some invnode,Some assinvnode ->
-		  (* assume part of invariant before *)
+		  (* assume part of invariant has no successor *)
 		  (* oper *) add_opedge fwd_node assinvnode;
-		  (* oper *) add_opedge assinvnode invnode;
+		  (* oper *) add_opedge fwd_node invnode;
 		  invnode
 	    in
 	    let test_node = from_expr ~is_test:true loop_node e in
@@ -3151,16 +3235,21 @@ end = struct
 	    in
 	    let write_vars =
 	      HeapVarSet.elements (loop_effect.Ceffect.assigns_var) in
-	    let anode,invnode_opt,assinvnode_opt = from_annot a write_vars in
+	    let write_under_pointers =
+	      HeapVarSet.elements (loop_effect.Ceffect.assigns_under_pointer)
+	    in
+	    let writes = { write_vars = write_vars; 
+			   write_under_pointers = write_under_pointers; } in
+	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
 	      | None,None -> bwd_node
 	      | Some inode,None | None,Some inode ->
 		  (* oper *) add_opedge bwd_node inode;
 		  inode
 	      | Some invnode,Some assinvnode ->
-		  (* assume part of invariant before *)
+		  (* assume part of invariant has no successor *)
 		  (* oper *) add_opedge bwd_node assinvnode;
-		  (* oper *) add_opedge assinvnode invnode;
+		  (* oper *) add_opedge bwd_node invnode;
 		  invnode
 	    in
 	    let test_node = from_expr ~is_test:true loop_node etest in

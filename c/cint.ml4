@@ -1,5 +1,7 @@
 
 (* TO DO:
+
+   - treat test [p != 0] as constraint on [arrlen(p)]
    
    - take into account remaining pointer arithmetic to invalidate arrlen
 
@@ -51,8 +53,8 @@ open Cutil
 open Cabsint
 open Pp
 
-let debug = true
-let debug_more = true
+let debug = false
+let debug_more = false
 
 
 (*****************************************************************************
@@ -223,11 +225,6 @@ type 'v cluster_dim_t = int * 'v Int31Map.t
 module type CLUSTER_LATTICE_NODIM = sig
   include INT_LATTICE
 
-  (* initializations *)
-
-      (* initial abstract value, to be used for the top declaration *)
-  val init_abstract_value : dim_t -> t
-
   (* transfer functions *)
 
       (* transfer function of assignment *)
@@ -307,6 +304,10 @@ module type CONSTRAINED_LATTICE_NODIM = sig
       (* make the abstract value unconstrained, while retaining all its
 	 constraints. *)
   val make_unconstrained : t -> t
+      (* variables whose domain is restrained by the abstract value on
+	 the left-hand side of the implication (they may be restrained on
+	 the right-hand side too) *)
+  val unconstrained_variables : t -> V.t list
       (* remove in the 1st abstract value the constraints already present in 
 	 the 2nd abstract value *)
   val subtract : t -> t -> t
@@ -372,6 +373,10 @@ module type PACKED_CONTEXTUAL_LATTICE = sig
        returns the original value with more information in some context. *)
   val add_conditional : t -> int * Constr.t -> t
   val add_new_conditional : t -> Constr.t -> t
+    (* allow uniform transformation to be applied *)
+  val transform : (Contxt.t -> Contxt.t) -> (Constr.t -> Constr.t) -> t -> t
+    (* [fold] on context/constraint parts *)
+  val fold : (Contxt.t -> 'a -> 'a) -> (Constr.t -> 'a -> 'a) -> t -> 'a -> 'a
 end
 
 (* interface of a lattice for discribing variable separation *)
@@ -517,6 +522,7 @@ struct
   type dim_t = unit
   let top () = IKfull
   let bottom () = IKempty
+  let init () = IKempty
 
   let has_bounds i = match i with
     | IKfull | IKempty -> false
@@ -780,8 +786,6 @@ struct
   type iterm = V.t int_term
   type ipredicate = V.t int_predicate
 
-  let init_abstract_value = bottom
-
   (* A pointwise lattice is not a relational lattice, therefore the
      evaluation of an assignment is straightforward. We just need to evaluate
      the right-hand side of the assignment and update the map with this new
@@ -991,7 +995,7 @@ struct
     Hashtbl.fold (fun v (dim,pack as d) m -> VMap.add v (L.top d) m) 
       rep_to_dim_and_pack VMap.empty
 
-  let init_abstract_value = top
+  let init = top
 
   (* functions for packing *)
 
@@ -1154,6 +1158,10 @@ struct
 
   let make_unconstrained pack = VMap.map L.make_unconstrained pack
 
+  let unconstrained_variables pack = 
+    VMap.fold (fun _ elt vlist -> L.unconstrained_variables elt @ vlist)
+      pack []
+
   let subtract pack1 pack2 =
     Hashtbl.fold
       (fun v _ m ->
@@ -1209,7 +1217,7 @@ struct
     { dimension = dim; variables = vars; octogon = Oct.universe dim;
       indices = Int31Map.fold (fun i v m -> VMap.add v i m) vars VMap.empty }
 
-  let init_abstract_value = top
+  let init = top
 
   (* special operations on octogons *)
 
@@ -1582,13 +1590,15 @@ struct
   let is_targetted_variable oct v = 
     try ignore(VMap.find v oct.indices); true with Not_found -> false
 
-  let followed_indices ~tagged oct =
+  let followed_indices ?(tagged=false) ?(untagged=false) oct =
     if Oct.is_empty oct.octogon then 
       Int31Set.empty 
     else
       let classify_vars = 
 	if tagged then
 	  Oct.get_tagged_vars oct.octogon
+	else if untagged then
+	  Oct.get_untagged_vars oct.octogon
 	else
 	  Oct.get_restrained_vars oct.octogon
       in
@@ -1609,12 +1619,12 @@ struct
       in
       idx_set
 
-  let followed_variables ~tagged (oct : t) =
-    let idx_set = followed_indices ~tagged:tagged oct in
+  let followed_variables ?(tagged=false) ?(untagged=false) (oct : t) =
+    let idx_set = followed_indices ~tagged:tagged ~untagged:untagged oct in
     Int31Set.fold (fun i varl -> (Int31Map.find i oct.variables) :: varl)
       idx_set []
       
-  let restrained_variables = followed_variables ~tagged:false
+  let restrained_variables oct = followed_variables oct
 
   let is_empty oct = Oct.is_empty oct.octogon
   let is_full oct = Oct.is_universe oct.octogon
@@ -1648,7 +1658,7 @@ module Make_ConstrainedOctogonLattice (V : VARIABLE) (I : INT_VALUE)
 struct
   include Make_InternalOctogonLattice (V) (I)
 
-  let is_constrained oct = 
+  let is_constrained oct =
     assert (Oct.hastags oct.octogon = Oct.hastags2 oct.octogon);
     Oct.hastags oct.octogon
 
@@ -1695,7 +1705,7 @@ struct
   let to_pred oct = internal_to_pred (normalize_only_once oct)
 
   let guarantee_test pred oct = 
-    internal_guarantee_test pred (normalize_only_once oct)
+    internal_guarantee_test pred (get_unconstrained (normalize_only_once oct))
 
   (* noop in forward mode, normal test in backward mode *)
   let eval_test ~backward pred oct = 
@@ -1711,7 +1721,9 @@ struct
     let new_octogon = Oct.subtract oct1.octogon oct2.octogon in
     { oct1 with octogon = new_octogon }
 
-  let constrained_variables = followed_variables ~tagged:true
+  let constrained_variables oct = followed_variables ~tagged:true oct
+
+  let unconstrained_variables oct = followed_variables ~untagged:true oct
 
   let eliminate var_list oct =
     (* keep only minimal relations to increase the chance of finding 
@@ -1799,7 +1811,7 @@ struct
   let top () = { main_context = Contxt.top (); 
 		 conditionals = Int31Map.empty; }
 
-  let init_abstract_value = top
+  let init = top
 
   (* functions for packing *)
 
@@ -1811,7 +1823,9 @@ struct
 
   (* lattice operations *)
 
-  let normalize ctxt =
+  let eliminate_conditionals ctxt = { ctxt with conditionals = Int31Map.empty }
+
+  let normalize_separately ctxt =
     let new_main = Contxt.normalize ctxt.main_context in
     let new_cond = Int31Map.map Constr.normalize ctxt.conditionals in
     let new_cond = Int31Map.fold (fun cid cond m ->
@@ -1820,7 +1834,43 @@ struct
 	Int31Map.add cid cond m
       else m) new_cond Int31Map.empty
     in { ctxt with main_context = new_main; conditionals = new_cond; }
-    
+
+  let normalize ctxt =
+    let ctxt = normalize_separately ctxt in
+    if Contxt.is_empty ctxt.main_context then
+      (* when the main context becomes empty, remove all conditional
+	 information, so that future joins do no take this into account *)
+      eliminate_conditionals ctxt
+    else
+      (* if the left part of a conditional is implied by the main context,
+	 add its right part to the main context *)
+      let new_main,new_cond = 
+	Int31Map.fold (fun cid cond (cur_main,cur_cond) ->
+	  if Constr.is_constrained cond then
+	    let left_cond = Bridge.get_unconstrained cond in
+	    let cur_main = Contxt.normalize cur_main in
+	    if debug then Coptions.lprintf
+		"[eval_test] cur_main %a@." Contxt.pretty cur_main;
+	    let cur_test = Contxt.normalize (Contxt.meet cur_main left_cond) in
+	    if debug then Coptions.lprintf
+		"[eval_test] cur_test %a@." Contxt.pretty cur_test;
+	    if Contxt.equal cur_main cur_test then
+	      (* left part of the conditional is implied by current context *)
+	      let unconstr_cond = Bridge.make_unconstrained cond in
+	      if debug then Coptions.lprintf
+		  "[eval_test] add unconstr_cond %a@." 
+		  Contxt.pretty unconstr_cond;
+	      (* remove conditional, incorporated to main context *)
+	      Contxt.meet cur_main unconstr_cond, cur_cond
+	    else 
+	      (* keep conditional *)
+	      cur_main, Int31Map.add cid cond cur_cond
+	  else 
+	    (* should be forbidden by normalization performed before *)
+	    assert false)
+	  ctxt.conditionals (ctxt.main_context,Int31Map.empty)
+      in { ctxt with main_context = new_main; conditionals = new_cond; }
+
   let equal ctxt1 ctxt2 =
     Contxt.equal ctxt1.main_context ctxt2.main_context
       && Int31Map.equal Constr.equal ctxt1.conditionals ctxt2.conditionals
@@ -1912,7 +1962,7 @@ struct
 
   let eval_test ~backward pred ctxt =
     (* keep only constrained conditionals *)
-    let ctxt = normalize ctxt in
+    let ctxt = normalize_separately ctxt in
     let new_main = Contxt.eval_test ~backward:backward pred ctxt.main_context 
     in
     if backward then
@@ -1968,8 +2018,6 @@ struct
 
   let set_context ctxt main = { ctxt with main_context = main; }
 
-  let eliminate_conditionals ctxt = { ctxt with conditionals = Int31Map.empty }
-
   let has_conditionals ctxt = not (Int31Map.is_empty ctxt.conditionals)
 
   let format_singleton ctxt =
@@ -2002,6 +2050,15 @@ struct
   let add_new_conditional ctxt cond =
     let new_cid = !next_id in incr next_id; 
     add_conditional ctxt (new_cid,cond)
+
+  let transform f g ctxt =
+    let new_main = f ctxt.main_context in
+    let new_cond = Int31Map.map g ctxt.conditionals in
+    { ctxt with main_context = new_main; conditionals = new_cond; }    
+
+  let fold f g ctxt init =
+    Int31Map.fold (fun _ cond acc -> g cond acc) ctxt.conditionals 
+      (f ctxt.main_context init)
 end
 
 module Make_SeparationLattice (V : VARIABLE) (I : INT_VALUE) 
@@ -2022,6 +2079,7 @@ struct
 
   let top () = VPSet.empty
   let bottom () = VPSet.empty
+  let init = bottom
 
   let equal = VPSet.equal
 
@@ -2030,9 +2088,9 @@ struct
     print_list comma (fun fmt sep -> Format.fprintf fmt "separated(%a,%a)"
 	V.pretty (fst sep) V.pretty (snd sep)) fmt sepl
     
-  let join = VPSet.union
+  let join = VPSet.inter
 
-  let meet = VPSet.inter
+  let meet = VPSet.union
 
   let widening ws = join
 
@@ -2040,8 +2098,6 @@ struct
   let pack_variables _ = ()
   let is_packed_variable _ = false
   let guarantee_test _ _ = false
-
-  let init_abstract_value = bottom
 
   let rec eval_test ~backward pred seps = seps
     
@@ -2071,7 +2127,8 @@ struct
 
   let eval_assign ~backward var term seps = remove_variable var seps
 
-  let add_separated_pair v1 v2 seps = VPSet.add (v1,v2) seps
+  let add_separated_pair v1 v2 seps = 
+    if V.equal v1 v2 then seps else VPSet.add (v1,v2) seps
 
   let separated v1 v2 seps =
     VPSet.exists (fun sep -> (V.equal (fst sep) v1 && V.equal (snd sep) v2)
@@ -2103,16 +2160,21 @@ module Var : sig
     | Varrlen of var_info
     | Vstrlen of var_info
   include VARIABLE with type t = var_t
+  val get_variable : t -> var_info
   val is_strlen : t -> bool
   val is_arrlen : t -> bool
   val safe_access_predicate : 
     ?read_string:bool -> var_info -> t int_term -> t int_predicate
+  val string_predicate : var_info -> t int_predicate
+  val pointer_predicate : var_info -> t int_predicate
 end = struct
+
   type var_t = 
     | Vvar of var_info
     | Varrlen of var_info
     | Vstrlen of var_info
   type t = var_t
+
   let pretty fmt v = match v with
     | Vvar v -> Format.fprintf fmt "%s" v.var_name
     | Varrlen v -> Format.fprintf fmt "\\arrlen(%s)" v.var_name
@@ -2137,22 +2199,47 @@ end = struct
   let equal v1 v2 = compare v1 v2 = 0
   let hash = function
     | Vvar v | Varrlen v | Vstrlen v -> v.var_uniq_tag
+
+  let get_variable = function
+    | Vvar v | Varrlen v | Vstrlen v -> v
   let is_strlen = function
     | Vvar _ | Varrlen _ -> false
     | Vstrlen _ -> true
   let is_arrlen = function
     | Vvar _ | Vstrlen _ -> false
     | Varrlen _ -> true
+
   let safe_access_predicate ?(read_string=false) v t_off =
     (* build the safe access predicate *)
     let t_upbound,op_upbound = 
       if read_string then ITvar (Vstrlen v),Clogic.Le
       else ITvar (Varrlen v),Clogic.Lt
     in
+    (* offset <= strlen(v) for strings or offset < arrlen(v) for others *)
     let p_upsafe = IPrel (t_off,op_upbound,t_upbound) in
     let t_downbound = ITconstant (IntConstant "0") in
+    (* offset >= 0 *)
     let p_downsafe = IPrel (t_off,Clogic.Ge,t_downbound) in
     IPand (p_upsafe,p_downsafe) 
+
+  let string_predicate v =
+    (* build the predicate that [v] is a string *)
+    let strlen = ITvar (Vstrlen v) in
+    let arrlen = ITvar (Varrlen v) in
+    let zero = ITconstant (IntConstant "0") in
+    (* 0 <= strlen(v) *)
+    let p_lower = IPrel (zero,Clogic.Le,strlen) in
+    (* strlen(v) < arrlen(v) *)
+    let p_upper = IPrel (strlen,Clogic.Lt,arrlen) in
+    IPand (p_lower,p_upper)
+
+  let pointer_predicate v =
+    (* build the predicate that [v] is a "valid" pointer: either null or
+       pointing to some valid memory block *)
+    let arrlen = ITvar (Varrlen v) in
+    let zero = ITconstant (IntConstant "0") in
+    (* arrlen(v) >= 0 *)
+    IPrel (zero,Clogic.Le,arrlen)
 end
 
 module VarAsVARIABLE : VARIABLE with type t = Var.t = Var
@@ -2261,6 +2348,8 @@ module IntLangFromNormalized : sig
        variable is to be considered or not. *)
   val memory_access_safe_predicate : 
     (Var.t -> bool) -> Node.t -> ipredicate option
+    (* returns [Some v] if reading string [v] *)
+  val string_read_access : (Var.t -> bool) -> Node.t -> Var.t option
     (* change type of dereference expression to make it a safe access *)
   val make_safe_access : Node.t -> Node.t
 
@@ -2720,12 +2809,10 @@ end = struct
     let new_p = { old_p with npred_node = new_p } in
     create_tmp_node (Npred new_p)
 
-  (* create a predicate that expresses a safe access, if [node] targetted by
-     the analysis. [is_packed_var] tells whether a given variable is to be
-     considered or not. *)
-  let memory_access_safe_predicate is_packed_var node =
+  let internal_access 
+      ?string_write ?string_read ?pointer_access is_packed_var node =
     if debug_more then Coptions.lprintf
-	"[memory_access_safe_predicate] %a@." Node.pretty node;
+      "[internal_access] %a@." Node.pretty node;
     match get_node_kind node with
     | NKexpr | NKtest | NKlvalue ->
 	if expr_is_deref node then
@@ -2741,21 +2828,27 @@ end = struct
 		| Some e -> from_expr e
 		in
 		(* build the safe access predicate *)
-		let p_safe =
-		  if expr_type_is_char node then
-		    match get_node_kind node with
-		      | NKlvalue ->  
-			  (* write access to a string *)
-			  Var.safe_access_predicate v t_off
-		      | NKexpr | NKtest ->
-			  (* read access to a string *)
-			  Var.safe_access_predicate ~read_string:true v t_off
-		      | _ -> assert false
-		  else
-		    (* not a string access *)
-		    Var.safe_access_predicate v t_off
-		in
-		Some p_safe
+		if expr_type_is_char node then
+		  match get_node_kind node with
+		    | NKlvalue ->  
+			(* write access to a string *)
+			begin match string_write with
+			  | Some string_write -> Some (string_write v t_off)
+			  | None -> None
+			end
+		    | NKexpr | NKtest ->
+			(* read access to a string *)
+			begin match string_read with
+			  | Some string_read -> Some (string_read v t_off)
+			  | None -> None
+			end
+		    | _ -> assert false
+		else
+		  (* not a string access *)
+		  begin match pointer_access with
+		    | Some pointer_access -> Some (pointer_access v t_off)
+		    | None -> None
+		  end
 	      else
 		(* variable is not packed *)
 		None
@@ -2765,6 +2858,17 @@ end = struct
     | NKassume | NKassert | NKnone | NKdecl | NKstat
     | NKpred | NKterm | NKannot | NKspec -> 
 	None
+
+  (* create a predicate that expresses a safe access, if [node] targetted by
+     the analysis. [is_packed_var] tells whether a given variable is to be
+     considered or not. *)
+  let memory_access_safe_predicate =
+    internal_access ~string_write:Var.safe_access_predicate 
+      ~string_read:(Var.safe_access_predicate ~read_string:true)
+      ~pointer_access:Var.safe_access_predicate
+      
+  let string_read_access is_packed_var =
+    internal_access ~string_read:(fun v _ -> Var.Vvar v) is_packed_var
 
   (* change type of dereference expression to make it a safe access *)
   let make_safe_access node =
@@ -2797,11 +2901,18 @@ type transform_tt =
 module Make_ConnectCFGtoInt 
     (CL : PACKED_CONTEXTUAL_LATTICE with module V = VarAsVARIABLE)
     (SL : SEPARATION_LATTICE with module V = VarAsVARIABLE)
-    : CONNECTION 
+    : 
+sig
+  include CONNECTION 
     with type node_t = IntLangFromNormalized.Node.t 
     and type 'a node_hash_t = 'a IntLangFromNormalized.NodeHash.t 
     and type absval_t = CL.t * SL.t
-    and type transform_t = transform_tt =
+    and type transform_t = transform_tt
+
+  (* set/unset the variable [strlen(s)] followed in backward final 
+     propagation *)
+  val set_strlen_var_followed : Var.t option -> unit
+end = 
 struct
 
   open IntLangFromNormalized
@@ -2862,8 +2973,37 @@ struct
       Hashtbl.add pred_reps node p_rep;
       p_rep
 
-  let internal_transfer ?(with_separation=false) ?(backward=false) 
-      ?(with_assert=false) ?(one_pass=false) ?previous_value node cur_val =
+  let strlen_var_followed = ref None
+  let set_strlen_var_followed v = strlen_var_followed := v
+
+  let keep_invariant_value node previous_value cur_ctxt_val =
+    (* ignore variables written in loop *)
+    let write_vars = get_loop_write_vars node in
+    let write_vars = List.map (fun v -> Var.Vvar v) write_vars in
+    let fwd_val = List.fold_right CL.remove_variable write_vars cur_ctxt_val
+    in
+    match previous_value with
+      | None -> fwd_val
+      | Some (prev_ctxt_val,_) ->
+	  if debug then Coptions.lprintf 
+	    "[transfer] (assume) invariant previous value %a@."
+	    CL.pretty prev_ctxt_val;
+	  if debug then Coptions.lprintf 
+	    "[transfer] (assume) invariant current value %a@."
+	    CL.pretty fwd_val;
+	  (* [meet] justified here because used between
+	     - [prev_ctxt_val] previous value of assumed invariant,
+	     - [fwd_val], result of current propagation, from which
+	     variables that are assigned in the loop are removed
+	  *)
+	  let res = CL.normalize (CL.meet prev_ctxt_val fwd_val) in
+	  if debug then Coptions.lprintf 
+	    "[transfer] (assume) invariant result value %a@."
+	    CL.pretty res;
+	  res
+
+  let transfer ?(backward=false) ?(with_assert=false) ?(one_pass=false) 
+      ?(final=false) ?previous_value node cur_val =
 
     if debug_more then Coptions.lprintf 
 	"[transfer] %a@." Node.pretty node;
@@ -2881,7 +3021,7 @@ struct
 	      (* originally reset the tables for representatives *)
 	      Hashtbl.clear term_reps;
 	      Hashtbl.clear pred_reps;
-	      CL.init_abstract_value (),SL.init_abstract_value ()
+	      CL.init (),SL.init ()
 	    end
 
       | NKexpr | NKtest | NKlvalue | NKassume ->
@@ -2898,8 +3038,6 @@ struct
 		       that are invalidated by an assignment under 
 		       some pointer *)
 		    if forward && expr_is_deref lhs_node then
-		      let restr_vars = CL.restrained_variables cur_ctxt_val in
-		      let strlen_vars = List.filter Var.is_strlen restr_vars in
 		      let new_ctxt_val =
 			match deref_get_local_var lhs_node with
 			| None ->
@@ -2917,7 +3055,7 @@ struct
 					 (Var.Vvar v) cur_sep_val)
 			      | Var.Vvar _ | Var.Varrlen _ -> false
 			    in
-			    if with_separation then
+			    if final then
 			      CL.filter_variables 
 				~remove:not_separated cur_ctxt_val
 			    else cur_ctxt_val
@@ -2942,7 +3080,9 @@ struct
 		| None -> cur_val
 		| Some lhs_var ->
 		    (* TODO: treat allocations *)
-		    cur_val
+		    let new_sep_val = 
+		      SL.remove_variable (Var.Vvar lhs_var) cur_sep_val in
+		    cur_ctxt_val,new_sep_val
 
 	      else cur_val
 	  | _ -> cur_val
@@ -2971,30 +3111,7 @@ struct
 
 	  let expr_ctxt_val =
 	    if forward && one_pass && is_assume_invariant_node node then
-	      (* ignore variables written in loop *)
-	      let write_vars = get_loop_write_vars node in
-	      let write_vars = List.map (fun v -> Var.Vvar v) write_vars in
-	      let fwd_val =
-		List.fold_right CL.remove_variable write_vars expr_ctxt_val in
-	      match previous_value with
-	      | None -> assert false (* should always be called with value *)
-	      | Some (prev_ctxt_val,_) ->
-		  if debug then Coptions.lprintf 
-		      "[transfer] assume invariant previous value %a@."
-		      CL.pretty prev_ctxt_val;
-		  if debug then Coptions.lprintf 
-		      "[transfer] assume invariant current value %a@."
-		      CL.pretty fwd_val;
-		  (* [meet] justified here because used between
-		     - [prev_ctxt_val] previous value of assumed invariant,
-		     - [fwd_val], result of current propagation, from which
-		       variables that are assigned in the loop are removed
-		   *)
-		  let res = CL.meet prev_ctxt_val fwd_val in
-		  if debug then Coptions.lprintf 
-		      "[transfer] assume invariant result value %a@."
-		      CL.pretty res;
-		  res
+	      keep_invariant_value node previous_value expr_ctxt_val
 	    else
 	      expr_ctxt_val
 	  in
@@ -3010,13 +3127,43 @@ struct
 
       | NKassert ->
 	  if backward && is_invariant_node node then
+	    (* eliminate variables written in the loop *)
 	    let write_vars = get_loop_write_vars node in
 	    let write_vars = List.map (fun v -> Var.Vvar v) write_vars in
 	    if debug then Coptions.lprintf 
-		"[transfer] invariant with written vars %a@."
-		(print_list comma Var.pretty) write_vars;
+	      "[transfer] invariant with written vars %a@."
+	      (print_list comma Var.pretty) write_vars;
 	    let new_ctxt_val = CL.eliminate write_vars cur_ctxt_val in
+	    (* when in [final] mode, generate the separation conditions
+	       that should guarantee proper use of [strlen] variables *)
+	    let new_sep_val =
+	      if final then
+		match !strlen_var_followed with
+		  | Some strlen_var ->
+		      let write_under_pointers = 
+			get_loop_write_under_pointers node in
+		      let write_under_pointers = 
+			List.map (fun v -> Var.Vvar v) write_under_pointers in
+		      if debug then Coptions.lprintf 
+			"[transfer] invariant with write under pointers %a@."
+			(print_list comma Var.pretty) write_under_pointers;
+		      let restr_vars = CL.restrained_variables new_ctxt_val in
+		      if List.mem strlen_var restr_vars then
+			let v = Var.get_variable strlen_var in
+			List.fold_right (SL.add_separated_pair (Var.Vvar v))
+			  write_under_pointers cur_sep_val
+		      else cur_sep_val
+		  | None -> cur_sep_val
+	      else cur_sep_val
+	    in
+	    new_ctxt_val,new_sep_val
+
+	  else if forward && one_pass && is_invariant_node node then
+	    let new_ctxt_val =
+	      keep_invariant_value node previous_value cur_ctxt_val
+	    in
 	    new_ctxt_val,cur_sep_val
+
 	  else
 	    begin
 	      if debug_more then Coptions.lprintf 
@@ -3031,8 +3178,6 @@ struct
 	    end
 
       | NKspec | NKannot | NKterm | NKpred -> cur_val
-
-  let transfer = internal_transfer ~with_separation:false
 
   (* exception used to share the default treatment in [sub_transform] *)
   exception Rec_transform
@@ -3054,7 +3199,8 @@ struct
       let post_ctxt_val,post_sep_val = post_val 
       in
       if debug_more then Coptions.lprintf 
-	  "[sub_transform] %a@." CL.pretty post_ctxt_val;
+	  "[sub_transform] %a %a@." 
+	  CL.pretty post_ctxt_val SL.pretty post_sep_val;
 	    
       (* match [node] here, not [new_node], as the additional information of
 	 [NKtest, NKassume, NKassert] will be lost on [new_node].
@@ -3074,18 +3220,21 @@ struct
 	      (* get the result of the analysis as a predicate and append
 		 an assume statement of this predicate after the current 
 		 statement *)
-	      begin match CL.to_pred post_ctxt_val with
+	      let p_assume = Option.transform (fun p1 p2 -> IPand (p1,p2))
+		(CL.to_pred post_ctxt_val) (SL.to_pred post_sep_val) 
+	      in
+	      begin match p_assume with
 	        | None ->
 		    if debug_more then Coptions.lprintf 
-			"[sub_transform] no predicate found with %a@."
-			CL.pretty post_ctxt_val;
+			"[sub_transform] no predicate found with %a %a@."
+			CL.pretty post_ctxt_val SL.pretty post_sep_val;
 		    
 		    (* no useful information here *)
 		    raise Rec_transform
 		| Some pred ->
 		    if debug_more then Coptions.lprintf 
-			"[sub_transform] predicate found with %a@."
-			CL.pretty post_ctxt_val;
+			"[sub_transform] predicate found with %a %a@."
+			CL.pretty post_ctxt_val SL.pretty post_sep_val;
 		    
 		    let assume_s = change_in_assume_stat new_node pred in
 		    make_seq_stat new_node assume_s
@@ -3095,9 +3244,12 @@ struct
 	    if is_function_precondition_node node then
 	      begin 
 		if debug_more then Coptions.lprintf 
-		    "[sub_transform] precondition contextual value %a@."
-		    CL.pretty post_ctxt_val;
-		match CL.to_pred post_ctxt_val with
+		    "[sub_transform] precondition contextual value %a %a@."
+		    CL.pretty post_ctxt_val SL.pretty post_sep_val;
+		let p_assume = Option.transform (fun p1 p2 -> IPand (p1,p2))
+		  (CL.to_pred post_ctxt_val) (SL.to_pred post_sep_val) 
+		in
+		match p_assume with
 	        | None ->
 		    (* no useful information here *)
 		    raise Rec_transform
@@ -3105,7 +3257,10 @@ struct
 		    grow_predicate new_node pred
 	      end
 	    else
-	      begin match CL.to_pred post_ctxt_val with
+	      let p_assume = Option.transform (fun p1 p2 -> IPand (p1,p2))
+		(CL.to_pred post_ctxt_val) (SL.to_pred post_sep_val) 
+	      in
+	      begin match p_assume with
 	        | None ->
 		    (* no useful information here *)
 		    raise Rec_transform
@@ -3117,9 +3272,12 @@ struct
 	    if is_invariant_node node then
 	      begin
 		if debug_more then Coptions.lprintf 
-		    "[sub_transform] precondition contextual value %a@."
-		    CL.pretty post_ctxt_val;
-		match CL.to_pred post_ctxt_val with
+		    "[sub_transform] precondition contextual value %a %a@."
+		    CL.pretty post_ctxt_val SL.pretty post_sep_val;
+		let p_assert = Option.transform (fun p1 p2 -> IPand (p1,p2))
+		  (CL.to_pred post_ctxt_val) (SL.to_pred post_sep_val) 
+		in
+		match p_assert with
 	        | None ->
 		    (* no useful information here *)
 		    raise Rec_transform
@@ -3224,11 +3382,19 @@ struct
   open IntLangFromNormalized
 
   (* select memory accesses that need to be considered in the analysis.
+     There are 2 modes, selected by the optional argument [needing_strlen].
+
+     When [needing_strlen] is false, the memory accesses selected are those
+     for which we want to express a safety property.
      This excludes:
      - memory accesses already analyzed as safe by the forward analysis
      - memory accesses not of the form that can be analyzed
+
+     When [needing_strlen] is true, the memory accesses selected are those
+     that are proved by the current context computed, but not proved by
+     the context from which [strlen] variables were removed.
    *)
-  let memory_access_select node pre_val =
+  let memory_access_select ?(needing_strlen=false) node pre_val =
     if debug_more then Coptions.lprintf
 	"[memory_access_select] %a with value %a@." Node.pretty node
 	ContextSepLattice.pretty pre_val;
@@ -3241,10 +3407,31 @@ struct
 	    "[memory_access_select] safe pred %a@." 
 	    (print_predicate Var.pretty) p_safe;
 	(* is the access already guaranteed to be safe ? *)
-	let res = not (ContextLattice.guarantee_test p_safe pre_ctxt_val) in
-	if debug_more then Coptions.lprintf
-	    "[memory_access_select] select ? %b@." res;
-	res
+	if ContextLattice.guarantee_test p_safe pre_ctxt_val then
+	  needing_strlen
+(*
+	  if needing_strlen then
+	    (* select here tests guaranteed to be true only by using
+	       some [strlen] variables in the context *)
+	    let sub_ctxt_val = ContextLattice.filter_variables
+	      ~remove:Var.is_strlen pre_ctxt_val in
+	    not (ContextLattice.guarantee_test p_safe sub_ctxt_val)
+	  else
+	    (* test already guaranteed to be true. No propagation needed. *)
+	    false
+*)
+	else 
+	  (* select tests to propagate backward *)
+	  not needing_strlen
+
+  let string_access_select node pre_val =
+    if debug_more then Coptions.lprintf
+      "[string_access_select] %a with value %a@." Node.pretty node
+      ContextSepLattice.pretty pre_val;
+    let pre_ctxt_val,_ = pre_val in
+    match string_read_access ContextLattice.is_packed_variable node with
+      | None -> false
+      | Some v -> true
 
   let build_safe_memory_access node pre_val =
     if debug_more then Coptions.lprintf
@@ -3267,17 +3454,97 @@ struct
 	  "[build_safe_memory_access] initial value %a@."
 	  ContextLattice.pretty init_val;
 	init_val,pre_sep_val
-	
+
+  let build_strlen_context node pre_val =
+    if debug_more then Coptions.lprintf
+      "[build_strlen_context] %a with value %a@." Node.pretty node
+      ContextSepLattice.pretty pre_val;
+    let pre_ctxt_val,pre_sep_val = pre_val in
+    let init_val = ContextLattice.eliminate_conditionals pre_ctxt_val in
+    if debug_more then Coptions.lprintf
+      "[build_strlen_context] initial value %a@."
+      ContextLattice.pretty init_val;
+    (* before propagating backward, set the [strlen] variable followed, 
+       if any *)
+    begin match string_read_access ContextLattice.is_packed_variable node with
+      | None ->
+	  ConnectCFGtoOct.set_strlen_var_followed None
+      | Some v ->
+	  ConnectCFGtoOct.set_strlen_var_followed 
+	    (Some (Var.Vstrlen (Var.get_variable v)))
+    end;
+    init_val,pre_sep_val
+    
   let merge_node_select node =
     if debug_more then Coptions.lprintf
-	"[key_node_select] %a@." Node.pretty node;
+      "[merge_node_select] %a@." Node.pretty node;
     let res = is_invariant_node node || is_function_precondition_node node in
     if debug_more then Coptions.lprintf
-	"[key_node_select] selected ? %b@." res;
+      "[merge_node_select] selected ? %b@." res;
     res
-
+      
   let keep_node_select node =
     merge_node_select node || is_assume_invariant_node node
+
+  let normalize_info cur_ctxt_val =
+    let norm_oct ~constrained oct main_oct =
+      let restr_vars = OctLattice.restrained_variables oct in
+      (* identify strings in context *)
+      let strlen_vars = List.filter Var.is_strlen restr_vars in
+      (* identify pointers in context *)
+      let arrlen_vars = List.filter Var.is_arrlen restr_vars in
+      (* add invariant on string [s], that is [0 <= strlen(s) < arrlen(s)]
+	 This is only possible if [strlen(s)] appears on the left-hand side
+	 of an implication (if any), otherwise we could face formulas s.t.
+	     [arrlen(s) > 0 => 0 <= strlen(s) < arrlen(s)]
+	 which expresses the fact [s] is null or a string. In that case we
+	 cannot enforce [0 <= strlen(s) < arrlen(s)] on the lhs.
+      *)
+      let lhs_strlen =
+	if constrained then
+	  let unconstr_vars = ConstrOctLattice.unconstrained_variables oct in
+	  fun strlen_var -> List.mem strlen_var unconstr_vars
+	else
+	  fun strlen_var -> true
+      in
+      let new_main_oct = 
+	List.fold_left (fun oct strlen_var ->
+	  if lhs_strlen strlen_var then
+            let v = Var.get_variable strlen_var in
+	    let p_string = Var.string_predicate v in
+	    OctLattice.eval_test ~backward:false p_string oct
+	  else oct
+        ) main_oct strlen_vars
+      in
+      (* add invariant on pointer [p], that is [arrlen(p) >= 0]
+	 This is done only if [arrlen(p) >= 0] does not already appear
+	 on the lhs of [oct].
+      *)
+      let lhs_pointer v =
+	let p_pointer = Var.pointer_predicate v in
+	if constrained then
+	  ConstrOctLattice.guarantee_test p_pointer oct
+	else 
+	  OctLattice.guarantee_test p_pointer oct
+      in
+      let new_main_oct = 
+	List.fold_left (fun oct arrlen_var ->
+          let v = Var.get_variable arrlen_var in
+	  if lhs_pointer v then
+	    oct (* nullity of pointer is tested *)
+	  else
+	    let p_pointer = Var.pointer_predicate v in
+	    OctLattice.eval_test ~backward:false p_pointer oct
+        ) new_main_oct arrlen_vars
+      in
+      new_main_oct
+    in
+    let new_main_context =
+      ContextLattice.fold
+	(norm_oct ~constrained:false) (norm_oct ~constrained:true) 
+	cur_ctxt_val (ContextLattice.get_context cur_ctxt_val)
+    in
+    ContextLattice.set_context cur_ctxt_val new_main_context
 
   (* [cur_val] is the current contextual abstract value, obtained by repeated
      forward/backward propagation.
@@ -3286,8 +3553,8 @@ struct
    *)
   let store_context_info cur_val new_val =
     if debug_more then Coptions.lprintf
-	"[store_context_info] from %a to %a@."
-	ContextSepLattice.pretty cur_val ContextSepLattice.pretty new_val;
+      "[store_context_info] from %a to %a@."
+      ContextSepLattice.pretty cur_val ContextSepLattice.pretty new_val;
     let cur_ctxt_val,cur_sep_val = cur_val in
     let new_ctxt_val,_ = new_val in
     let new_ctxt_val = 
@@ -3301,26 +3568,61 @@ struct
 	ContextLattice.add_conditional cur_ctxt_val (new_cid,new_cond)
       else cur_ctxt_val
     in
+    (* add invariants on strings and pointers *)
+    let new_ctxt_val = normalize_info new_ctxt_val in
+    (* renormalize resulting contextual value *)
+    let new_ctxt_val = ContextLattice.normalize new_ctxt_val in
+    if debug_more then Coptions.lprintf
+      "[store_context_info] result %a@."
+      ContextLattice.pretty new_ctxt_val;
     new_ctxt_val,cur_sep_val
+
+  let store_strlen_info cur_val new_val =
+    if debug_more then Coptions.lprintf
+      "[store_strlen_info] from %a to %a@."
+      ContextSepLattice.pretty cur_val ContextSepLattice.pretty new_val;
+    let cur_ctxt_val,cur_sep_val = cur_val in
+    let _,new_sep_val = new_val in
+(*
+    (* identify strings in context *)
+    let restr_vars = ContextLattice.restrained_variables new_ctxt_val in
+    let strlen_vars = List.filter Var.is_strlen restr_vars in
+    let new_ctxt_val =
+      List.fold_left (fun ctxt strlen_var ->
+			let v = Var.get_variable strlen_var in
+			let p_string = Var.string_predicate v in
+			ContextLattice.eval_test ~backward:false p_string ctxt
+		     ) cur_ctxt_val strlen_vars
+    in
+*)
+    (* add newly identified separation conditions *)
+    let new_sep_val = SepLattice.meet cur_sep_val new_sep_val 
+    in
+    if debug_more then Coptions.lprintf
+      "[store_strlen_info] result %a %a@."
+      ContextLattice.pretty cur_ctxt_val SepLattice.pretty new_sep_val;
+    cur_ctxt_val,new_sep_val
+
+  let compute_bnf_params_wo_sep =
+    {
+      compute         = compute_with_assert keep_node_select;
+      backward_select = memory_access_select;
+      backward_modify = build_safe_memory_access;
+      merge_select    = merge_node_select;
+      keep_select     = keep_node_select;
+      merge_analyses  = store_context_info;
+      final           = false;
+    }
 
   let compute_bnf_params =
     {
-      compute = compute_with_assert keep_node_select;
-      backward_select = memory_access_select;
-      backward_modify = build_safe_memory_access;
-      merge_select = merge_node_select;
-      keep_select = keep_node_select;
-      merge_analyses = store_context_info;
-    }
-
-  let compute_bnf_params_with_separation =
-    {
-      compute = compute_back_and_forth compute_bnf_params;
-      backward_select = memory_access_select;
-      backward_modify = build_safe_memory_access;
-      merge_select = merge_node_select;
-      keep_select = keep_node_select;
-      merge_analyses = store_context_info;
+      compute         = compute_back_and_forth compute_bnf_params_wo_sep;
+      backward_select = string_access_select;
+      backward_modify = build_strlen_context;
+      merge_select    = merge_node_select;
+      keep_select     = keep_node_select;
+      merge_analyses  = store_strlen_info;
+      final           = true;
     }
 
   exception Rec_format
@@ -3391,12 +3693,15 @@ struct
 	| NKpred | NKterm | NKannot | NKspec -> 
 	    cur_val
     in
+    let init = List.fold_left 
+      (fun m decl -> NodeMap.add decl (ContextSepLattice.init ()) m) 
+      NodeMap.empty decls in
     let params =
       { 
 	direction = Forward;
 	search = DepthFirstSearch;
 	one_pass = false;
-	init = NodeMap.empty;
+	init = init;
 	transfer = record_last_stat;
 	bottom = ContextSepLattice.bottom;
 	equal = ContextSepLattice.equal;
@@ -3436,12 +3741,15 @@ struct
 	    in
 	    post_val
     in
+    let init = List.fold_left 
+      (fun m decl -> NodeMap.add decl (ContextSepLattice.init ()) m) 
+      NodeMap.empty decls in
     let params =
       { 
 	direction = Forward;
 	search = DepthFirstSearch;
 	one_pass = false;
-	init = NodeMap.empty;
+	init = init;
 	transfer = select_diff_stat;
 	bottom = ContextSepLattice.bottom;
 	equal = ContextSepLattice.equal;
@@ -3496,7 +3804,7 @@ let local_int_analysis_attach () =
       let comp_params = 
 	LocalMemoryAnalysis.compute_bnf_params in
       let raw_analysis = 
-	LocalMemoryAnalysis.compute_back_and_forth comp_params () in
+	LocalMemoryAnalysis.compute_back_and_forth comp_params decls in
       (* detect the statements where introducing an assume is useful *)
       let analysis,safe_access_nodes = 
 	LocalMemoryAnalysis.format raw_analysis decls in
@@ -3506,7 +3814,7 @@ let local_int_analysis_attach () =
       ConnectCFGtoOct.transform analysis trans_params decls
     else if Coptions.gen_invariant then
       (* perform local memory analysis *)
-      let raw_analysis = LocalMemoryAnalysis.compute () in
+      let raw_analysis = LocalMemoryAnalysis.compute decls in
       (* detect the statements where introducing an assume is useful *)
       let analysis,_ = 
 	LocalMemoryAnalysis.format raw_analysis decls in
