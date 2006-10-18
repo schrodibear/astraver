@@ -83,6 +83,7 @@ external hastags:       oct -> bool = "ocaml_oct_hastags"
 external hastags2:       oct -> bool = "ocaml_oct_hastags2"
 external remove_tags:   oct -> oct = "ocaml_oct_remove_tags"
 external remove_tagged_constraints:   oct -> oct = "ocaml_oct_remove_tagged_constraints"
+external remove_untagged_constraints:   oct -> oct = "ocaml_oct_remove_untagged_constraints"
 external print_tags:    oct -> unit = "ocaml_oct_print_tags"
 external get_restrained_vars: oct -> vnum = "ocaml_oct_get_restrained_vars"
 external get_tagged_vars: oct -> vnum = "ocaml_oct_get_tagged_vars"
@@ -111,6 +112,7 @@ external widening: oct -> oct -> wident -> oct = "ocaml_oct_widening"
 external narrowing: oct -> oct -> oct = "ocaml_oct_narrowing"
 (* ADDED WHEN OCT_USE_TAG IS DEFINED IN C *)
 external subtract: oct -> oct -> oct = "ocaml_oct_subtract"
+external complete: oct -> oct -> oct = "ocaml_oct_complete"
 (* END ADDED WHEN OCT_USE_TAG IS DEFINED IN C *)
 
 (* transfer function *)

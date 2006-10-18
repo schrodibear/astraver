@@ -42,8 +42,8 @@ open Clogic
 open Cast
 open Cutil
 
-let debug = false
-let debug_more = false
+let debug = Coptions.debug
+let debug_more = Coptions.debug
 
 
 (*****************************************************************************
@@ -696,6 +696,8 @@ module Make_DataFlowAnalysis
 		      match to_val with
 			| None -> cur_val
 			| Some to_val -> 
+			    if debug then Coptions.lprintf 
+			      "[propagate] perform widening@.";
 			    params.widening C.widening_strategy to_val cur_val
 		    else 
 		      (* not yet time for widening *)
@@ -915,9 +917,9 @@ module Make_DataFlowAnalysis
 	      let pre_mix_val = params.merge_analyses pre_cur_val pre_bwd_val
 	      in
 	      let mix_val = pre_mix_val,post_cur_val in
-	      NodeHash.add mix_analysis node mix_val
+	      NodeHash.replace mix_analysis node mix_val
 	    else if params.keep_select node then
-	      NodeHash.add mix_analysis node (pre_cur_val,post_cur_val)
+	      NodeHash.replace mix_analysis node (pre_cur_val,post_cur_val)
 	    else assert false
 	  else ()
 	in
@@ -933,7 +935,7 @@ module Make_DataFlowAnalysis
 	    let pre_mix_val,post_mix_val = 
 	      node_value_in_analysis mix_analysis node
 	    in
-	    NodeHash.add mix_analysis node (pre_mix_val,post_mix_val)
+	    NodeHash.replace mix_analysis node (pre_mix_val,post_mix_val)
 	);
 	(* propagate forward again *)
 	keep_only_selected params.keep_select mix_analysis;
@@ -2971,7 +2973,14 @@ end = struct
     let e = 
       if is_test && neg_test then
         { e with nexpr_node = NEunary (Unot, e) }
-      else e
+      else
+	match e.nexpr_node with
+	  | NEassign_op (e1,op,e2) ->
+	      (* create an expression [e12] for the right-hand side of 
+		 the assignment, in order to get rid of the opassign node *)
+	      let e12 = { e with nexpr_node = NEbinary (e1,op,e2) } in
+	      { e with nexpr_node = NEassign (e1,e12) }
+	  | _ -> e
     in
     let enode =
       if is_test then Ntest e
@@ -3001,25 +3010,22 @@ end = struct
 	    let e2node = from_expr e1node e2 in
 	    (* oper *) add_opedge e2node enode;
 	    (* struct *) add_stedge enode [e1node; e2node]
-	| NEassign (e1,e2) | NEassign_op (e1,_,e2) ->
-	    let opassign = match e.nexpr_node with 
-	      | NEassign _ -> false | NEassign_op _ -> true | _ -> assert false
-	    in
+	| NEassign (e1,e2) ->
 	    let e1node,e2node =
 	      if Coptions.evaluation_order.Coptions.assign_left_to_right then
-		let e1node = from_expr ~is_lvalue:true ~in_opassign:opassign
-		  start_node e1 in
+		let e1node = from_expr ~is_lvalue:true start_node e1 in
 		let e2node = from_expr e1node e2 in
 		(* oper *) add_opedge e2node enode;
 	        e1node,e2node
     	      else
 		let e2node = from_expr start_node e2 in
-		let e1node = from_expr ~is_lvalue:true ~in_opassign:opassign
-		  e2node e1 in
+		let e1node = from_expr ~is_lvalue:true e2node e1 in
 		(* oper *) add_opedge e1node enode;
 	        e1node,e2node
 	    in
 	    (* struct *) add_stedge enode [e1node; e2node]
+	| NEassign_op (e1,op,e2) ->
+	    assert false (* expression should have been modified above *)
 	| NEbinary (e1,_,e2) ->
 	    let e1node,e2node =
 	      if Coptions.evaluation_order.Coptions.binary_left_to_right then

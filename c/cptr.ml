@@ -33,8 +33,8 @@ open Cast
 open Cutil
 open Cabsint
 
-let debug = false
-let debug_more = false
+let debug = Coptions.debug
+let debug_more = Coptions.debug
 
 
 (*****************************************************************************
@@ -742,9 +742,9 @@ end = struct
 	  let new_einit,new_etest,new_eincr,new_s1,new_a
 	    = get_e new_einit,get_e new_etest,
 	    get_e new_eincr,get_s new_s1,get_annot new_a in
-	  let new_einit = simplify_expr new_einit in
+	  let new_einit = simplify_expr_under_stat new_einit in
 	  let new_etest = simplify_expr new_etest in
-	  let new_eincr = simplify_expr new_eincr in
+	  let new_eincr = simplify_expr_under_stat new_eincr in
 	  NSfor (new_a,new_einit,new_etest,new_eincr,new_s1)
       | NSblock sl ->
 	  let new_sl = filter_nop (List.map get_s sub_nodes) in
@@ -1367,7 +1367,7 @@ end = struct
 	with Not_found ->
 	  VarSet.add var VarSet.empty 
       in
-      Hashtbl.add rep_to_based rep_var var_set
+      Hashtbl.replace rep_to_based rep_var var_set
     in
 
     (* collect variables in the sets they match *)
@@ -1540,7 +1540,7 @@ end = struct
 		    pval
 	       ) pwval
 	   in
-	   NodeHash.add new_analysis node 
+	   NodeHash.replace new_analysis node 
 	     (PointWisePtrLattice.bottom (),new_pwval);
 	   new_analysis
 	) analysis (NodeHash.create 0)
@@ -1762,6 +1762,9 @@ end = struct
     let sub_nodes = local_nodes.sub_nodes in
     let new_sub_nodes = local_nodes.new_sub_nodes in
 
+    if debug_more then Coptions.lprintf
+      "[sub_transform_on_expr] node %a@." Node.pretty node;
+
     (* transformation is possible only if analysis provides some information. 
        Otherwise raise Not_found. *)
     let _,aval = 
@@ -1911,7 +1914,7 @@ end = struct
 		(* The rhs can be:
 		   - the sum of an integer/pointer variable 
 		   and an integer expression
-		   - or any other integre/pointer expression.
+		   - or any other integer/pointer expression.
 		   The former case can be the original source code or 
 		   due to the transformation of an offset pointer 
 		   or an index pointer.
@@ -2258,3 +2261,7 @@ let local_aliasing_transform () =
   List.iter (fun { name = name; spec = spec; typ = typ; 
 		   f = f; s = s; loc = loc } ->
 	       Cenv.add_c_fun name (spec,typ,f,s,loc)) file
+
+(* Local Variables: *)
+(* compile-command: "make -C .." *)
+(* End: *)

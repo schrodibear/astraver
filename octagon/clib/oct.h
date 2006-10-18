@@ -59,6 +59,7 @@
 #define oct_print_tags           OCT_PROTO(print_tags)
 #define oct_remove_tags          OCT_PROTO(remove_tags)
 #define oct_remove_tagged_constraints    OCT_PROTO(remove_tagged_constraints)
+#define oct_remove_untagged_constraints    OCT_PROTO(remove_untagged_constraints)
 #define oct_get_restrained_vars  OCT_PROTO(get_restrained_vars)
 #define oct_get_tagged_vars      OCT_PROTO(get_tagged_vars)
 #define oct_get_untagged_vars      OCT_PROTO(get_untagged_vars)
@@ -83,6 +84,7 @@
 #define oct_narrowing            OCT_PROTO(narrowing)
 
 #ifdef OCT_USE_TAG
+#define oct_complete               OCT_PROTO(complete)
 #define oct_subtract               OCT_PROTO(subtract)
 #endif
 
@@ -337,6 +339,7 @@ bool OCT_PROTO(hastags) (oct_t* m);          /* presence of tags */
 bool OCT_PROTO(hastags2) (oct_t* m);          /* presence of tags */
 oct_t* OCT_PROTO(remove_tags) (oct_t* m);    /* remove tags */
 oct_t* OCT_PROTO(remove_tagged_constraints) (oct_t* m);    /* remove tagged constraints */
+oct_t* OCT_PROTO(remove_untagged_constraints) (oct_t* m);    /* remove untagged constraints */
 void OCT_PROTO(print_tags) (oct_t* m);       /* print tags */
 num_t* OCT_PROTO(get_restrained_vars) (oct_t* m); /* restrained variables */
 num_t* OCT_PROTO(get_tagged_vars) (oct_t* m);/* tagged variables */

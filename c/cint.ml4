@@ -1,6 +1,9 @@
 
 (* TO DO:
 
+   - document that inequalities like [x > 1 => x > 2] are not representable
+   with constrained octogons
+
    - treat test [p != 0] as constraint on [arrlen(p)]
    
    - take into account remaining pointer arithmetic to invalidate arrlen
@@ -53,8 +56,8 @@ open Cutil
 open Cabsint
 open Pp
 
-let debug = false
-let debug_more = false
+let debug = Coptions.debug
+let debug_more = Coptions.debug
 
 
 (*****************************************************************************
@@ -238,6 +241,8 @@ module type CLUSTER_LATTICE_NODIM = sig
   val remove_variable : V.t -> t -> t
       (* returns the normal form of the abstract value *)
   val normalize : t -> t
+      (* returns a possibly more aggressive normalization than [normalize] *)
+(*  val finalize : t -> t*)
       
   (* interfacing and queries *)
     
@@ -1006,11 +1011,11 @@ struct
 	  List.fold_left 
 	    (fun (c,m) v -> 
 	      variables := VSet.add v (!variables);
-	      Hashtbl.add variable_to_rep v rep_var;
+	      Hashtbl.replace variable_to_rep v rep_var;
 	      c+1,Int31Map.add c v m
 	    ) (0,Int31Map.empty) var_list
 	in
-	Hashtbl.add rep_to_dim_and_pack rep_var (dim,var_map)
+	Hashtbl.replace rep_to_dim_and_pack rep_var (dim,var_map)
 
   let is_packed_variable var = VSet.mem var (!variables)
 
@@ -1219,21 +1224,12 @@ struct
 
   let init = top
 
-  (* special operations on octogons *)
-
-  (* minimal form of an octogon *)
-  let minimize oct = 
-    { oct with octogon = Oct.m_to_oct (Oct.m_from_oct oct.octogon) }
+  let is_empty oct = Oct.is_empty oct.octogon
+  let is_full oct = Oct.is_universe oct.octogon
 
   (* lattice operations *)
 
   let equal oct1 oct2 = Oct.is_equal oct1.octogon oct2.octogon
-
-  let join oct1 oct2 =
-    { oct1 with octogon = Oct.union oct1.octogon oct2.octogon }
-
-  let meet oct1 oct2 =
-    { oct1 with octogon = Oct.inter oct1.octogon oct2.octogon }
 
   let pretty fmt oct =
     let var_name i = V.to_string (Int31Map.find i oct.variables) in
@@ -1255,9 +1251,9 @@ struct
 
   (* interfacing *)
 
-  let internal_to_pred oct = 
+  let internal_to_pred minimize oct = 
     (* take care of special empty case separately *)
-    if Oct.is_empty oct.octogon || Oct.is_universe oct.octogon then
+    if is_empty oct || Oct.is_universe oct.octogon then
       None
     else
       let v_name i = "v" ^ (string_of_int i) in
@@ -1435,7 +1431,7 @@ struct
       | ITany -> FIrand
     in randup t
 
-  let flatify_predicate p oct =
+  let flatify_predicate ?(guarantee=false) p oct =
     let n = oct.dimension in
     let p = explicit_pred p in
     let rec simpl = function
@@ -1505,8 +1501,14 @@ struct
    *)
 
   exception No_guarantee
-    
-  let eval_flat ?(guarantee=false) ?(tagging=false) orig_oct pred =
+
+  type or_collect_t =
+    | Join of (t -> t -> t)
+    | Meet of (t -> t -> t)
+
+  let eval_flat ?(guarantee=false) ?(tagging=false) ~or_collect orig_oct pred =
+    if debug then Coptions.lprintf 
+      "[eval_flat] orig_oct %a@." pretty orig_oct;
     let rec eval oct = function
       | FBrand              -> 
 	  if guarantee then
@@ -1518,9 +1520,16 @@ struct
       | FBfalse             -> bottom (oct.dimension,oct.variables)
       | FBand l             -> List.fold_left eval oct l
       | FBtest f            ->
+	  let num_var = ref 0 in
+	  for i=0 to oct.dimension-1 do if f.(i) <> 0. then incr num_var done;
+	  if guarantee && !num_var > 2 then 
+	    (* The octagon domain cannot take into account exactly tests
+	       with more than 2 variable involved, so we conservatively
+	       consider the test cannot be guaranteed. *)
+	    raise No_guarantee;
 	  let new_octogon =
 	    if tagging then
-	      (* evaluate backward a constraint means tagging it to allow
+	      (* evaluating backward a constraint means tagging it to allow
 		 following its transformation throughout the code *)
 	      Oct.add_tagged_constraint oct.octogon (Oct.vnum_of_float f)
 	    else 
@@ -1561,28 +1570,51 @@ struct
 		) (false,bottom (oct.dimension,oct.variables)) l
 	    in bottom_or_orig
 	  else
-	    List.fold_left (fun acc e -> join (eval oct e) acc) 
-	      (bottom (oct.dimension,oct.variables)) l
+	    match or_collect with
+	      | Join join ->
+		  List.fold_left (fun acc e -> join (eval oct e) acc) 
+		    (bottom (oct.dimension,oct.variables)) l
+	      | Meet meet ->
+		  let list_oct = List.map (eval oct) l in
+		  let acc_oct = match list_oct with
+		    | [] -> assert false (* not expected in code around *)
+		    | fst_oct :: rest_oct ->
+			List.fold_right meet rest_oct fst_oct
+		  in
+		  if is_empty acc_oct then 
+		    (* if all octogons in [l] are empty, return empty, 
+		       otherwise conflict may arise from operating the [meet]
+		       over the or-ed conditions. In that case, return 
+		       the current [oct]. *)
+		    if List.length (List.filter is_empty list_oct) 
+		      = List.length list_oct
+		    then acc_oct else oct
+		  else acc_oct
     in
-    eval orig_oct pred
+    let res = eval orig_oct pred in
+    if debug then Coptions.lprintf 
+      "[eval_flat] result %a@." pretty res;
+    res
 
-  let eval_test_or_constraint ~tagging pred oct =
+  let eval_test_or_constraint ~tagging ~or_collect pred oct =
     let pred = flatify_predicate pred oct in
-    eval_flat ~tagging:tagging oct pred
+    eval_flat ~tagging:tagging ~or_collect:or_collect oct pred
 
-  let internal_guarantee_test pred oct =
+  let internal_guarantee_test ~or_collect pred oct =
     try
-      let pred = flatify_predicate pred oct in
-      let test_oct = eval_flat ~guarantee:true oct pred
-      (* no need to normalize [test_oct], it should already be *)
+      let pred = flatify_predicate ~guarantee:true pred oct in
+      let test_oct = eval_flat ~guarantee:true ~or_collect:or_collect oct pred
+	(* no need to normalize [test_oct], it should already be *)
       in
-      (* if the predicate does not contain random parts, it has been 
-	 taken into account exactly by the octogon domain.
+      (* if the predicate does not contain random parts and no more than
+	 2 variables involved in every test, it has been taken into account
+	 exactly by the octogon domain.
 	 In that case, the test is guaranteed by the original [close_oct]
 	 iff the new octogon [test_oct] is equal to it. *)
       equal oct test_oct
     with No_guarantee ->
-      (* cannot guarantee anything if the predicate contains random parts *)
+      (* cannot guarantee anything if the predicate contains random parts 
+	 or more than 2 variables in some test *)
       false
 
   (* query functions *)
@@ -1591,7 +1623,10 @@ struct
     try ignore(VMap.find v oct.indices); true with Not_found -> false
 
   let followed_indices ?(tagged=false) ?(untagged=false) oct =
-    if Oct.is_empty oct.octogon then 
+    if debug then Coptions.lprintf 
+      "[followed_indices] tagged ? %B untagged ? %B on %a@."
+      tagged untagged pretty oct;
+    if is_empty oct then 
       Int31Set.empty 
     else
       let classify_vars = 
@@ -1626,9 +1661,6 @@ struct
       
   let restrained_variables oct = followed_variables oct
 
-  let is_empty oct = Oct.is_empty oct.octogon
-  let is_full oct = Oct.is_universe oct.octogon
-
   let remove_variable var oct = 
     let idx = VMap.find var oct.indices in
     let new_octogon = Oct.forget oct.octogon idx in
@@ -1641,15 +1673,27 @@ module Make_OctogonLattice (V : VARIABLE) (I : INT_VALUE)
 struct
   include Make_InternalOctogonLattice (V) (I)
 
+  let join oct1 oct2 =
+    { oct1 with octogon = Oct.union oct1.octogon oct2.octogon }
+
+  let meet oct1 oct2 =
+    { oct1 with octogon = Oct.inter oct1.octogon oct2.octogon }
+
   (* same transfer function for forward/backward test *)
-  let eval_test ~backward = eval_test_or_constraint ~tagging:false
+  let eval_test ~backward = 
+    eval_test_or_constraint ~tagging:false ~or_collect:(Join join)
 
   (* normalized form of an octogon: closed octogon *)
   let rec normalize oct = { oct with octogon = Oct.close oct.octogon }
 
-  let to_pred oct = internal_to_pred (normalize oct)
+  (* minimal form of an octogon *)
+  let minimize oct = 
+    { oct with octogon = Oct.m_to_oct (Oct.m_from_oct oct.octogon) }
 
-  let guarantee_test pred oct = internal_guarantee_test pred (normalize oct)
+  let to_pred oct = internal_to_pred minimize (normalize oct)
+
+  let guarantee_test pred oct =
+    internal_guarantee_test ~or_collect:(Join join) pred (normalize oct)
 end
 
 module Make_ConstrainedOctogonLattice (V : VARIABLE) (I : INT_VALUE)
@@ -1666,9 +1710,51 @@ struct
     let new_octogon = Oct.remove_tagged_constraints oct.octogon in
     { oct with octogon = new_octogon }
 
+  let get_constrained oct =
+    let new_octogon = Oct.remove_untagged_constraints oct.octogon in
+    { oct with octogon = new_octogon }
+
   let make_unconstrained oct =
     let new_octogon = Oct.remove_tags oct.octogon in
     { oct with octogon = new_octogon }
+
+  let join oct1 oct2 =
+    let loct1 = get_unconstrained oct1 and roct1 = get_constrained oct1 in
+    if debug then Coptions.lprintf 
+      "[join/meet] loct1 is %a@.roct1 is %a@." pretty loct1 pretty roct1;
+    let loct2 = get_unconstrained oct2 and roct2 = get_constrained oct2 in
+    if debug then Coptions.lprintf 
+      "[join/meet] loct2 is %a@.roct2 is %a@." pretty loct2 pretty roct2;
+    let loct = Oct.close (Oct.inter loct1.octogon loct2.octogon) in
+    if debug then Coptions.lprintf 
+      "[join/meet] loct is %a@." pretty { oct1 with octogon = loct };
+    let roct = Oct.union roct1.octogon roct2.octogon in
+    if debug then Coptions.lprintf 
+      "[join/meet] roct is %a@." pretty { oct1 with octogon = roct };
+    (*
+       now if [loct] contains some inequality, e.g. x <= c or x - y <= c,
+       then the corresponding inequality in [roct] should be ignored, if any.
+       Indeed, constrained octogons cannot represent formulas of the form
+            x > 1 => x > 2
+       therefore the safe approximation in that case is to choose
+            x > 1 => {}
+       rather than 
+            {}    => x > 2
+    *)
+    let res = { oct1 with octogon = Oct.complete loct roct } in
+    if debug then Coptions.lprintf 
+      "[join/meet] result is %a@." pretty res;
+    res
+
+  (* yes, [join] and [meet] are the same function here.
+     On unconstrained octogons, it coincides with the normal octogon [meet].
+  *)
+  let meet = join
+
+  (* equivalent to the normal octogon [meet], used internally to put together
+     some unconstrained part and some constrained part *)
+  let inter oct1 oct2 =
+    { oct1 with octogon = Oct.inter oct1.octogon oct2.octogon }
 
   (* normalized form of a constrained octogon *)
   let internal_normalize ~remove_left_full oct = 
@@ -1702,16 +1788,36 @@ struct
    *)
   let normalize_only_once = internal_normalize ~remove_left_full:true
 
-  let to_pred oct = internal_to_pred (normalize_only_once oct)
+  (* minimal form of an octogon *)
+  let minimize oct = 
+    let unconstr_oct = get_unconstrained oct in
+    let constr_oct = get_constrained oct in
+    (* minimization by switching to hollow form of octogon and back only works
+       on untagged octogons (so that closed octogon has appropriate 
+       properties). This makes it necessary here to separate the tagged and
+       untagged parts of the initial octogon to minimize the first one only. *)
+    let unconstr_moct = 
+      { oct with octogon = Oct.m_to_oct (Oct.m_from_oct unconstr_oct.octogon) }
+    in
+    inter unconstr_moct constr_oct
+
+  let to_pred oct = internal_to_pred minimize (normalize_only_once oct)
 
   let guarantee_test pred oct = 
-    internal_guarantee_test pred (get_unconstrained (normalize_only_once oct))
+    internal_guarantee_test ~or_collect:(Join join) pred
+      (get_unconstrained (normalize_only_once oct))
 
   (* noop in forward mode, normal test in backward mode *)
   let eval_test ~backward pred oct = 
-    if backward then eval_test_or_constraint ~tagging:false pred oct else oct
+    if backward then
+      eval_test_or_constraint ~tagging:false ~or_collect:(Meet meet) pred oct
+    else oct
 
-  let eval_constraint = eval_test_or_constraint ~tagging:true
+  let eval_constraint pred oct =
+    (* current use does not expect constrained [oct] here, although it could
+       be added *)
+    assert not (is_constrained oct);
+    eval_test_or_constraint ~tagging:true ~or_collect:(Join join) pred oct
     
   let subtract oct1 oct2 =
     (* only unconstrained parts can be safely subtracted. Otherwise we would
@@ -1725,48 +1831,101 @@ struct
 
   let unconstrained_variables oct = followed_variables ~untagged:true oct
 
-  let eliminate var_list oct =
+  let eliminate remove_vars oct =
     (* keep only minimal relations to increase the chance of finding 
        the adequate necessary inequality with Fourier-Motzkin *)
+    if debug then Coptions.lprintf 
+	"[eliminate] initial oct %a@." pretty oct;
     let oct = minimize oct in
     if debug then Coptions.lprintf 
 	"[eliminate] minimal oct %a@." pretty oct;
-    (* get those variables from [var_list] that are in the current pack *)
-    let vl = List.filter (fun v -> is_targetted_variable oct v) var_list
+    (* get those variables from [remove_vars] that are in the current pack *)
+    let remove_vars =
+      List.filter (fun v -> is_targetted_variable oct v) remove_vars
     in
-    if Oct.hastags oct.octogon then
-      (* octogon is constrained. Treat specially constrained variables. *)
+    if debug then Coptions.lprintf 
+      "[eliminate] list of written variables %a@."
+      (print_list comma V.pretty) remove_vars;
+    let remove_vars =
+      List.fold_right (fun v s -> VSet.add v s) remove_vars VSet.empty
+    in
+
+    let rec fourier_motzkin oct =
       let cstr_vars = constrained_variables oct in
       if debug then Coptions.lprintf 
-	  "[eliminate] list of written variables %a@."
-	  (print_list comma V.pretty) cstr_vars;
-      let cstr_vars =
-	List.fold_right (fun v s -> VSet.add v s) cstr_vars VSet.empty in
-      let new_octogon =
+	"[eliminate] list of constrained variables %a@."
+	(print_list comma V.pretty) cstr_vars;
+      (* deal with constrained variables only *)
+      let new_oct = List.fold_left (fun cur_oct cstr_var ->
+        if VSet.mem cstr_var remove_vars then
+	  let idx = VMap.find cstr_var cur_oct.indices in
+	  if debug then Coptions.lprintf 
+	    "[eliminate] fourier-motzkin on %a@." V.pretty cstr_var;
+	  (* perform Fourier-Motzkin elimination instead of forget
+	     operation on constrained variables *)
+	  let new_octogon = Oct.fourier_motzkin cur_oct.octogon idx in
+	  { cur_oct with octogon = new_octogon }
+	else cur_oct
+      ) oct cstr_vars 
+      in
+      let new_cstr_vars = constrained_variables new_oct in
+      let new_cstr_vars = 
+	List.filter (fun v -> not (List.mem v cstr_vars)) new_cstr_vars
+      in
+      if List.length new_cstr_vars = 0 then
+	(* no new constrained variables, elimination by Fourier-Motzkin is 
+	   finished *)
+	new_oct
+      else
+	fourier_motzkin new_oct
+    in
+
+    let new_oct =
+      if Oct.hastags oct.octogon then
+	(* octogon is constrained. Treat specially constrained variables. *)
+	fourier_motzkin oct
+      else oct
+    in
+(*      let new_oct =
 	List.fold_left 
 	  (fun cur_oct v ->
-	    let idx = VMap.find v oct.indices in
-	    if VSet.mem v cstr_vars then
-	      (* perform Fourier-Motzkin elimination instead of forget
-		 operation on constrained variables *)
-	      Oct.fourier_motzkin cur_oct idx
-	    else
-	      Oct.forget cur_oct idx
-	  ) oct.octogon vl
+	     let cstr_vars = constrained_variables cur_oct in
+	     if debug then Coptions.lprintf 
+	       "[eliminate] list of constrained variables %a@."
+	       (print_list comma V.pretty) cstr_vars;
+	     let cstr_vars =
+	       List.fold_right (fun v s -> VSet.add v s) cstr_vars VSet.empty
+	     in
+	     let idx = VMap.find v cur_oct.indices in
+	     let new_octogon =
+	       if VSet.mem v cstr_vars then
+		 (* perform Fourier-Motzkin elimination instead of forget
+		    operation on constrained variables *)
+		 begin
+		   if debug then Coptions.lprintf 
+		     "[eliminate] fourier-motzkin on %a@."
+		     V.pretty v;
+		   Oct.fourier_motzkin cur_oct.octogon idx
+		 end
+	       else
+		 Oct.forget cur_oct.octogon idx
+	     in
+	     { cur_oct with octogon = new_octogon }
+	  ) oct vl
       in
-      let res = { oct with octogon = new_octogon } in
       if debug then Coptions.lprintf 
-	  "[eliminate] new octogon %a@." pretty res;
-      res
+	  "[eliminate] new octogon %a@." pretty new_oct;
+      new_oct
     else
-      (* normal octogon. Forget variables. *)
-      let new_octogon =
-	List.fold_left 
-	  (fun cur_oct v -> 
-	    let idx = VMap.find v oct.indices in Oct.forget cur_oct idx
-	  ) oct.octogon vl
-      in
-      { oct with octogon = new_octogon }
+*)
+    (* normal octogon or constrained octogon after Fourier-Motzkin elimination.
+       Forget variables. *)
+    let new_octogon =
+      VSet.fold (fun v cur_oct -> 
+	let idx = VMap.find v oct.indices in Oct.forget cur_oct idx
+      ) remove_vars new_oct.octogon
+    in
+    { oct with octogon = new_octogon }
 end
 
 module Make_ContextualLattice (V : VARIABLE) (I : INT_VALUE) 
@@ -1794,14 +1953,14 @@ struct
 
   type t = 
      {
-      main_context : Contxt.t;
-      (* conditionals are identified by a unique integer.
-	 The conditional may be [Constr.bottom], which means that in 
-	 this branch this conditional cannot give information. 
-	 This is useful when joining conditionals (e.g. after an [if]) to
-	 propagate the fact the conditional cannot be used anymore. 
+       main_context : Contxt.t;
+       (* conditionals are identified by a unique integer.
+	  The conditional may be [Constr.bottom], which means that in 
+	  this branch this conditional cannot give information. 
+	  This is useful when joining conditionals (e.g. after an [if]) to
+	  propagate the fact the conditional cannot be used anymore. 
        *)
-      conditionals : Constr.t Int31Map.t;
+       conditionals : Constr.t Int31Map.t;
      }
 
   type dim_t = unit
@@ -1887,14 +2046,14 @@ struct
   let join ctxt1 ctxt2 =
     let new_main = Contxt.join ctxt1.main_context ctxt2.main_context in
     (* join corresponding conditionals in [ctxt1] and [ctxt2].
-       add simply conditionals that do not have a counterpart. *)
+       remove simply conditionals that do not have a counterpart. *)
     let new_cond = 
       Int31Map.fold (fun cid cond1 m ->
 	try
 	  let cond2 = Int31Map.find cid ctxt2.conditionals in
 	  Int31Map.add cid (Constr.join cond1 cond2) m
-	with Not_found -> Int31Map.add cid cond1 m)
-	ctxt1.conditionals ctxt2.conditionals
+  	with Not_found -> m)
+	ctxt1.conditionals Int31Map.empty
     in
     { main_context = new_main; conditionals = new_cond; }
 
@@ -2831,12 +2990,16 @@ end = struct
 		if expr_type_is_char node then
 		  match get_node_kind node with
 		    | NKlvalue ->  
+			if debug_more then Coptions.lprintf
+			  "[internal_access] string write access@.";
 			(* write access to a string *)
 			begin match string_write with
 			  | Some string_write -> Some (string_write v t_off)
 			  | None -> None
 			end
 		    | NKexpr | NKtest ->
+			if debug_more then Coptions.lprintf
+			  "[internal_access] string read access@.";
 			(* read access to a string *)
 			begin match string_read with
 			  | Some string_read -> Some (string_read v t_off)
@@ -2955,7 +3118,7 @@ struct
       Hashtbl.find term_reps node
     with Not_found ->
       let t_rep = from_expr node in
-      Hashtbl.add term_reps node t_rep;
+      Hashtbl.replace term_reps node t_rep;
       t_rep
 
   let get_pred_rep node =
@@ -2970,7 +3133,7 @@ struct
 	    (* [get_pred_rep] should only be called on test/assume/assert *)
 	    assert false
       in
-      Hashtbl.add pred_reps node p_rep;
+      Hashtbl.replace pred_reps node p_rep;
       p_rep
 
   let strlen_var_followed = ref None
@@ -2982,6 +3145,9 @@ struct
     let write_vars = List.map (fun v -> Var.Vvar v) write_vars in
     let fwd_val = List.fold_right CL.remove_variable write_vars cur_ctxt_val
     in
+    if debug then Coptions.lprintf 
+      "[transfer] (assume) invariant current value %a@."
+      CL.pretty fwd_val;
     match previous_value with
       | None -> fwd_val
       | Some (prev_ctxt_val,_) ->
@@ -3108,7 +3274,7 @@ struct
 		    res
 	    else expr_ctxt_val
 	  in
-
+	  
 	  let expr_ctxt_val =
 	    if forward && one_pass && is_assume_invariant_node node then
 	      keep_invariant_value node previous_value expr_ctxt_val
@@ -3394,7 +3560,7 @@ struct
      that are proved by the current context computed, but not proved by
      the context from which [strlen] variables were removed.
    *)
-  let memory_access_select ?(needing_strlen=false) node pre_val =
+  let memory_access_select node pre_val =
     if debug_more then Coptions.lprintf
 	"[memory_access_select] %a with value %a@." Node.pretty node
 	ContextSepLattice.pretty pre_val;
@@ -3407,8 +3573,8 @@ struct
 	    "[memory_access_select] safe pred %a@." 
 	    (print_predicate Var.pretty) p_safe;
 	(* is the access already guaranteed to be safe ? *)
-	if ContextLattice.guarantee_test p_safe pre_ctxt_val then
-	  needing_strlen
+	let res =
+	  not (ContextLattice.guarantee_test p_safe pre_ctxt_val)
 (*
 	  if needing_strlen then
 	    (* select here tests guaranteed to be true only by using
@@ -3420,9 +3586,10 @@ struct
 	    (* test already guaranteed to be true. No propagation needed. *)
 	    false
 *)
-	else 
-	  (* select tests to propagate backward *)
-	  not needing_strlen
+	in
+	if debug_more then Coptions.lprintf
+	  "[memory_access_select] selected ? %B@." res;
+	res
 
   let string_access_select node pre_val =
     if debug_more then Coptions.lprintf
@@ -3645,7 +3812,8 @@ struct
       in
       let pre_ctxt_val,pre_sep_val = pre_val in
       if debug_more then Coptions.lprintf 
-	  "[sub_format] %a@." ContextLattice.pretty pre_ctxt_val;
+	"[sub_format] %a %a@." 
+	Node.pretty node ContextLattice.pretty pre_ctxt_val;
       match memory_access_safe_predicate ContextLattice.is_packed_variable node
       with
       | None -> ()
@@ -3669,6 +3837,7 @@ struct
   (* remove abstract information on statements that do not change it.
      The analysis returned is only valid for post-analysis. *)
   let format analysis decls =
+
     (* modify [analysis] to take into account constraints, and return
        safe access nodes *)
     let format_params = 
@@ -3678,6 +3847,23 @@ struct
       }
     in
     List.iter (sub_format format_params) decls;
+
+    let inv_analysis = NodeHash.create (NodeHash.length analysis) in
+    NodeHash.iter (fun node (pre_val,post_val as abs_val) ->
+		     if is_function_precondition_node node
+		       || is_assume_invariant_node node
+		       || is_invariant_node node
+		     then 
+		       begin
+			 if debug_more then Coptions.lprintf 
+			   "[format] %a %a@." 
+			   Node.pretty node ContextSepLattice.pretty pre_val;
+			 NodeHash.replace inv_analysis node abs_val
+		       end
+		  ) analysis;
+    inv_analysis,!(format_params.safe_access_nodes)
+
+(* PROBLEM WITH THIS MODE, SEE IF USEFUL, IF YES CORRECT IT
 
     (* propagate information between statements *)
     let record_last_stat ?previous_value node cur_val =
@@ -3761,6 +3947,7 @@ struct
     in
     let new_analysis = propagate params in
     new_analysis,!(format_params.safe_access_nodes)
+*)
 end
 
 

@@ -956,6 +956,13 @@ ocaml_oct_remove_tagged_constraints (value n)
   CAMLreturn(Val_oct(oct_remove_tagged_constraints(Oct_val(n))));
 }
 
+CAMLprim value
+ocaml_oct_remove_untagged_constraints (value n)
+{
+  CAMLparam1(n);
+  CAMLreturn(Val_oct(oct_remove_untagged_constraints(Oct_val(n))));
+}
+
 void
 ocaml_oct_print_tags (value m)
 {
@@ -1084,6 +1091,13 @@ ocaml_oct_subtract (value n, value m)
 {
   CAMLparam2(n,m);
   CAMLreturn(Val_oct(oct_subtract(Oct_val(n),Oct_val(m),false)));
+}
+
+CAMLprim value
+ocaml_oct_complete (value n, value m)
+{
+  CAMLparam2(n,m);
+  CAMLreturn(Val_oct(oct_complete(Oct_val(n),Oct_val(m),false)));
 }
 #endif
 
