@@ -1504,61 +1504,6 @@ OCT_PROTO(is_universe) (oct_t* m)
 /* Operators */
 /*************/
 
-#ifdef OCT_USE_TAG
-oct_t*
-OCT_PROTO(complete) (oct_t* ma, 
-		     oct_t* mb, 
-		     bool   destructive)
-{
-  oct_t* r;
-  TAG_DEBUG("oct_complete enter ma",ma);
-  TAG_DEBUG("oct_complete enter mb",mb);
-  OCT_ENTER("oct_complete",20);
-  OCT_ASSERT(ma->n==mb->n,"oct_complete must be called with two octagons of the same dimension.");
-  if (ma==mb) r = oct_copy(ma);
-  /* ma empty => complete equals ma */
-  else if (oct_is_empty_lazy(ma)==tbool_true) r = oct_copy(ma);
-  /* mb empty => complete equals ma */
-  else if (oct_is_empty_lazy(mb)==tbool_true) r = oct_copy(ma);
-  else {
-    const size_t nn = matsize(ma->n);
-    size_t i;
-    num_t* a = ma->c;
-    num_t* b = mb->c;
-    num_t* c;
-    TAG_INTRO2(ma,mb,result_is_ma,result_is_mb,result_is_new,ta,tb,tc,tagged);
-    /* result is computed in ma, or mb, or a new octagon */  
-    if (destructive) { 
-      if (ma->ref==1) { TAG_UPDATE(result_is_ma); r = oct_copy(ma); }
-      else if (mb->ref==1) { TAG_UPDATE(result_is_mb); r = oct_copy(mb); }
-      else { TAG_UPDATE(result_is_new); r = oct_alloc(ma->n); }
-    }
-    else { TAG_UPDATE(result_is_new); r = oct_alloc(ma->n); }
-    r->state = OCT_NORMAL;
-    if (r->closed) { oct_free(r->closed); r->closed = (oct_t*)NULL; }
-    /* change the result matrix */
-    c = r->c;
-    TAG_DEF_TC(tc,r,result_is_new);
-
-    for (i=0;i<nn;i++,a++,b++,c++) {
-      if (!num_infty(a)) {
-	num_set(c,a);
-	TAG_FROM_A(tagged,result_is_new,result_is_mb,ta,tb,tc,i);
-      }
-      else {
-	num_set(c,b);
-	TAG_FROM_B(tagged,result_is_new,result_is_ma,ta,tb,tc,i);
-      }
-    }
-    TAG_DEF_TAGGED(r,tagged);
-  }
-  if (destructive) { oct_free(ma); oct_free(mb); }
-  OCT_EXIT("oct_complete",20);
-  TAG_DEBUG("oct_complete",r);
-  return r;
-}
-#endif
-
 /* exact intersection 
    O(n^2) time cost
 */
@@ -1912,6 +1857,60 @@ OCT_PROTO(narrowing) (oct_t* ma,
 }
 
 #ifdef OCT_USE_TAG
+oct_t*
+OCT_PROTO(complete) (oct_t* ma, 
+		     oct_t* mb, 
+		     bool   destructive)
+{
+  oct_t* r;
+  TAG_DEBUG("oct_complete enter ma",ma);
+  TAG_DEBUG("oct_complete enter mb",mb);
+  OCT_ENTER("oct_complete",20);
+  OCT_ASSERT(ma->n==mb->n,"oct_complete must be called with two octagons of the same dimension.");
+  if (ma==mb) r = oct_copy(ma);
+  /* ma empty => complete equals ma */
+  else if (oct_is_empty_lazy(ma)==tbool_true) r = oct_copy(ma);
+  /* mb empty => complete equals ma */
+  else if (oct_is_empty_lazy(mb)==tbool_true) r = oct_copy(ma);
+  else {
+    const size_t nn = matsize(ma->n);
+    size_t i;
+    num_t* a = ma->c;
+    num_t* b = mb->c;
+    num_t* c;
+    TAG_INTRO2(ma,mb,result_is_ma,result_is_mb,result_is_new,ta,tb,tc,tagged);
+    /* result is computed in ma, or mb, or a new octagon */  
+    if (destructive) { 
+      if (ma->ref==1) { TAG_UPDATE(result_is_ma); r = oct_copy(ma); }
+      else if (mb->ref==1) { TAG_UPDATE(result_is_mb); r = oct_copy(mb); }
+      else { TAG_UPDATE(result_is_new); r = oct_alloc(ma->n); }
+    }
+    else { TAG_UPDATE(result_is_new); r = oct_alloc(ma->n); }
+    r->state = OCT_NORMAL;
+    if (r->closed) { oct_free(r->closed); r->closed = (oct_t*)NULL; }
+    /* change the result matrix */
+    c = r->c;
+    TAG_DEF_TC(tc,r,result_is_new);
+    for (i=0;i<nn;i++,a++,b++,c++) {
+      if (!num_infty(a)) {
+	num_set(c,a);
+	TAG_FROM_A(tagged,result_is_new,result_is_mb,ta,tb,tc,i);
+      }
+      else {
+	num_set(c,b);
+	TAG_FROM_B(tagged,result_is_new,result_is_ma,ta,tb,tc,i);
+      }
+    }
+    TAG_DEF_TAGGED(r,tagged);
+  }
+  if (destructive) { oct_free(ma); oct_free(mb); }
+  OCT_EXIT("oct_complete",20);
+  TAG_DEBUG("oct_complete",r);
+  return r;
+}
+#endif
+
+#ifdef OCT_USE_TAG
 /* substraction 
    both arguments are closed (but with cache=false)    
    O(n^2) time cost, on behalf of the cost of closure
@@ -1924,47 +1923,40 @@ OCT_PROTO(subtract) (oct_t* ma,
   oct_t* r;
   OCT_ENTER("oct_subtract",21);
   OCT_ASSERT(ma->n==mb->n,"oct_subtract must be called with two octagons of the same dimension.");
-  if (ma==mb) { 
-    if (destructive) { r = ma; oct_free(ma); }
-    else r = oct_copy(ma);
-  }
+  if (ma==mb) r = oct_copy(ma);
+  /* ma empty => substraction equals ma */
+  else if (oct_is_empty_lazy(ma)==tbool_true) r = oct_copy(ma);
+  /* mb empty => substraction equals ma */
+  else if (oct_is_empty_lazy(mb)==tbool_true) r = oct_copy(ma);
   else {
-    oct_t* ca = oct_close(ma, destructive, true);
-    oct_t* cb = oct_close(mb, destructive, true);
-    /* ca empty => substraction equals ca */
-    if (ca->state==OCT_EMPTY) r = oct_copy(ca);
-    /* cb empty => substraction equals ca */
-    else if (cb->state==OCT_EMPTY) r = oct_copy(ca);
-    else {
-      const size_t nn = matsize(ca->n);
-      size_t i;
-      num_t* a = ca->c;
-      num_t* b = cb->c;
-      num_t* c;
-      TAG_INTRO2(ca,cb,result_is_ca,result_is_cb,result_is_new,ta,tb,tc,tagged);
-      /* result is computed in ca, or cb, or a new octagon */  
-      if (destructive) { 
-	if (ca->ref==1) { TAG_UPDATE(result_is_ca); r = oct_copy(ca); }
-	else if (cb->ref==1) { TAG_UPDATE(result_is_cb); r = oct_copy(cb); }
-	else { TAG_UPDATE(result_is_new); r = oct_alloc(ca->n); }
-      }
-      else { TAG_UPDATE(result_is_new); r = oct_alloc(ca->n); }
-      r->state = OCT_CLOSED;
-      /* change the result matrix */
-      c = r->c;
-      TAG_DEF_TC(tc,r,result_is_new);
-      for (i=0;i<nn;i++,a++,b++,c++) {
-	if (num_cmp(a,b)) {
-	  num_set(c,a);
-	  TAG_FROM_A(tagged,result_is_new,result_is_cb,ta,tb,tc,i);
-	}
-	else num_set_infty(c);
-      }
-      TAG_DEF_TAGGED(r,tagged);
+    const size_t nn = matsize(ma->n);
+    size_t i;
+    num_t* a = ma->c;
+    num_t* b = mb->c;
+    num_t* c;
+    TAG_INTRO2(ma,mb,result_is_ma,result_is_mb,result_is_new,ta,tb,tc,tagged);
+    /* result is computed in ma, or mb, or a new octagon */  
+    if (destructive) { 
+      if (ma->ref==1) { TAG_UPDATE(result_is_ma); r = oct_copy(ma); }
+      else if (mb->ref==1) { TAG_UPDATE(result_is_mb); r = oct_copy(mb); }
+      else { TAG_UPDATE(result_is_new); r = oct_alloc(ma->n); }
     }
-    oct_free(ca);
-    oct_free(cb);
+    else { TAG_UPDATE(result_is_new); r = oct_alloc(ma->n); }
+    r->state = OCT_NORMAL;
+    if (r->closed) { oct_free(r->closed); r->closed = (oct_t*)NULL; }
+    /* change the result matrix */
+    c = r->c;
+    TAG_DEF_TC(tc,r,result_is_new);
+    for (i=0;i<nn;i++,a++,b++,c++) {
+      if (num_cmp(a,b)) {
+	num_set(c,a);
+	TAG_FROM_A(tagged,result_is_new,result_is_mb,ta,tb,tc,i);
+      }
+      else num_set_infty(c);
+    }
+    TAG_DEF_TAGGED(r,tagged);
   }
+  if (destructive) { oct_free(ma); oct_free(mb); }
   OCT_EXIT("oct_subtract",21);
   TAG_DEBUG("oct_subtract",r);
   return r;

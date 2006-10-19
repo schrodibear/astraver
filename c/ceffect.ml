@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.145 2006-10-17 12:26:55 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.146 2006-10-19 16:38:01 moy Exp $ i*)
 
 open Cast
 open Cnorm
@@ -517,24 +517,24 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
       let z = repr z in
       assert (same_why_type (type_why e1)  (Pointer z));
       let ef = 
-	reads_add_field_var f (Pointer z) (expr ~with_local:with_local e1) in
+	reads_add_field_var f (Pointer z) (expr ~with_local e1) in
       (* [alloc] not used with the arithmetic memory model *)
       if arith_memory_model then ef else reads_add_alloc ef
   | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
-      ef_union (expr ~with_local:with_local e1) 
-	(expr ~with_local:with_local e2)
+      ef_union (expr ~with_local e1) 
+	(expr ~with_local e2)
   | NEassign (lv, e) | NEassign_op (lv, _, e) ->
-      ef_union (assign_expr ~with_local:with_local lv)
-	(expr ~with_local:with_local e)
+      ef_union (assign_expr ~with_local lv)
+	(expr ~with_local e)
   | NEunary (Ustar , _ ) -> assert false
   | NEunary (Uamp, e) -> assert false (* address_expr e *)
   | NEunary 
       (( Uplus | Uminus | Unot | Utilde 
        | Ufloat_of_int | Uint_of_float 
        | Ufloat_conversion | Uint_conversion), e) ->
-      expr ~with_local:with_local e
+      expr ~with_local e
   | NEincr (_, e) ->
-      assign_expr ~with_local:with_local e
+      assign_expr ~with_local e
   | NEcall {ncall_fun = e; ncall_args = el; ncall_zones_assoc = assoc} ->
       let ef = match e.nexpr_node with
 	| NEvar (Fun_info f) ->    	   
@@ -564,22 +564,22 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
 	      assigns_var = f.function_writes_var;
 	      (* TODO: consider pointer arguments written by function *)
 	      assigns_under_pointer = HeapVarSet.empty; } 
-	| _ -> expr ~with_local:with_local e
+	| _ -> expr ~with_local e
       in
 
       List.fold_left 
-	(fun ef arg -> ef_union (expr ~with_local:with_local arg) ef) ef el
+	(fun ef arg -> ef_union (expr ~with_local arg) ef) ef el
   | NEcond (e1, e2, e3) ->
-      ef_union (ef_union (expr ~with_local:with_local e1) 
-		  (expr ~with_local:with_local e2))
-	(expr ~with_local:with_local e3)
+      ef_union (ef_union (expr ~with_local e1) 
+		  (expr ~with_local e2))
+	(expr ~with_local e3)
   | NEcast (_, e) ->
-      expr ~with_local:with_local e
+      expr ~with_local e
   | NEmalloc (_, e) ->
       if arith_memory_model then
-	expr ~with_local:with_local e
+	expr ~with_local e
       else
-	assigns_add_alloc (expr ~with_local:with_local e)
+	assigns_add_alloc (expr ~with_local e)
 
 (* effects for [e = ...] *)
 and assign_expr ?(with_local=false) e = match e.nexpr_node with
@@ -592,12 +592,12 @@ and assign_expr ?(with_local=false) e = match e.nexpr_node with
   | NEunary (Ustar,_) -> assert false
   | NEarrow (e1,z, f) ->
       let ef = assigns_add_field_var f (type_why e1)
-	  (expr ~with_local:with_local e1) in
+	  (expr ~with_local e1) in
       let ef = ef_union ef (assign_under_pointer e1) in
       (* [alloc] not used with the arithmetic memory model *)
       if arith_memory_model then ef else reads_add_alloc ef
   | NEcast (_, e1) ->
-      assign_expr ~with_local:with_local e1
+      assign_expr ~with_local e1
   | _ -> 
       assert false (* not a left value *)
 
@@ -639,43 +639,43 @@ let rec statement ?(with_local=false) s = match s.nst_node with
   | NSgoto _ ->
       ef_empty
   | NSexpr e -> 
-      expr ~with_local:with_local e
+      expr ~with_local e
   | NSif (e, s1, s2) -> 
-      ef_union (expr ~with_local:with_local e)
-	(ef_union (statement ~with_local:with_local s1)
-	   (statement ~with_local:with_local s2))
+      ef_union (expr ~with_local e)
+	(ef_union (statement ~with_local s1)
+	   (statement ~with_local s2))
   | NSwhile (annot, e, s)
   | NSdowhile (annot, s, e) ->
       ef_union (loop_annot annot) 
-	(ef_union (statement ~with_local:with_local s)
-	   (expr ~with_local:with_local e))
+	(ef_union (statement ~with_local s)
+	   (expr ~with_local e))
   | NSfor (annot, e1, e2, e3, s) ->
       ef_union (loop_annot annot) 
-	(ef_union (ef_union (expr ~with_local:with_local e1)
-		     (expr ~with_local:with_local e2))
-	   (ef_union (expr ~with_local:with_local e3)
-	      (statement ~with_local:with_local s)))
+	(ef_union (ef_union (expr ~with_local e1)
+		     (expr ~with_local e2))
+	   (ef_union (expr ~with_local e3)
+	      (statement ~with_local s)))
   | NSblock bl ->
-      block ~with_local:with_local bl
+      block ~with_local bl
   | NSreturn (Some e) ->
-      expr ~with_local:with_local e
+      expr ~with_local e
   | NSlabel (_, s) ->
-      statement ~with_local:with_local s
+      statement ~with_local s
   | NSswitch (e, used_cases, case_list) -> 
       List.fold_left
 	(fun ef (cases,bl) ->
 	   List.fold_left 
-	     (fun ef i -> ef_union ef (statement ~with_local:with_local i))
+	     (fun ef i -> ef_union ef (statement ~with_local i))
 	     ef bl)
-	(expr ~with_local:with_local e)
+	(expr ~with_local e)
 	case_list
   | NSassert p | NSassume p ->
       predicate p
   | NSspec (sp, s) ->
-      ef_union (spec sp) (statement ~with_local:with_local s)
+      ef_union (spec sp) (statement ~with_local s)
   | NSdecl (_, _, i,rem) -> 
-      ef_union (initializer_option ~with_local:with_local i)
-	(statement ~with_local:with_local rem)
+      ef_union (initializer_option ~with_local i)
+	(statement ~with_local rem)
 
 and block ?(with_local=false) sl =
 (*  let local_decl d = match d.node with
@@ -684,21 +684,21 @@ and block ?(with_local=false) sl =
     | _ -> ef_empty (* unsupported local declaration *)
   in*)
   List.fold_left
-    (fun ef s -> ef_union (statement ~with_local:with_local s) ef)
+    (fun ef s -> ef_union (statement ~with_local s) ef)
 (*    (List.fold_left (fun ef d -> ef_union (local_decl d) ef) ef_empty dl)*)
     ef_empty
     sl
 
 and initializer_ ?(with_local=false) = function
   | Iexpr e -> 
-      expr ~with_local:with_local e
+      expr ~with_local e
   | Ilist il -> 
       List.fold_left (fun ef i -> ef_union
-	  (initializer_ ~with_local:with_local i) ef) ef_empty il
+	  (initializer_ ~with_local i) ef) ef_empty il
 
 and initializer_option ?(with_local=false) = function
   | None -> ef_empty
-  | Some i -> initializer_ ~with_local:with_local i
+  | Some i -> initializer_ ~with_local i
 
 (* first pass: declare invariants and computes effects for logics *)
 

@@ -22,13 +22,9 @@
 
    - implement a real variable packing.
 
-   - why "parse error" if | before 1st case in [parse_atom] ?
-
    - make octogon analysis use result of interval analysis, printing
    result only if more precise than previously known result.
    (use "diff" printing)
-
-   - treat correctly op=, similar to incr/decr
 
    - see if adding +/- infty make things simpler
   
@@ -129,6 +125,7 @@ type 'v int_predicate =
   | IPiff of 'v int_predicate * 'v int_predicate
   | IPnot of 'v int_predicate
   | IPseparated of 'v int_term * 'v int_term
+(*  | IPnotnull of 'v int_term*)
     (* used to translate an predicate that has no counterpart in the small
        predicate language presented here. When computing an abstraction for
        a surrounding predicate, we will translate [IPany] to top. *)
@@ -239,10 +236,16 @@ module type CLUSTER_LATTICE_NODIM = sig
   val guarantee_test : ipredicate -> t -> bool
       (* remove the variable passed as argument from the abstract value *)
   val remove_variable : V.t -> t -> t
+
+  (* formatting functions *)
+
       (* returns the normal form of the abstract value *)
   val normalize : t -> t
       (* returns a possibly more aggressive normalization than [normalize] *)
-(*  val finalize : t -> t*)
+  val finalize : t -> t
+      (* remove in the 1st abstract value the constraints already present in 
+	 the 2nd abstract value *)
+  val subtract : t -> t -> t
       
   (* interfacing and queries *)
     
@@ -306,6 +309,10 @@ module type CONSTRAINED_LATTICE_NODIM = sig
 	 If the abstract value is morally equivalent to [A -> B], this returns
 	 the [A] part only. *)
   val get_unconstrained : t -> t
+      (* get the constrained part of the abstract value. 
+	 If the abstract value is morally equivalent to [A -> B], this returns
+	 the [B] part only. *)
+  val get_constrained : t -> t
       (* make the abstract value unconstrained, while retaining all its
 	 constraints. *)
   val make_unconstrained : t -> t
@@ -313,9 +320,6 @@ module type CONSTRAINED_LATTICE_NODIM = sig
 	 the left-hand side of the implication (they may be restrained on
 	 the right-hand side too) *)
   val unconstrained_variables : t -> V.t list
-      (* remove in the 1st abstract value the constraints already present in 
-	 the 2nd abstract value *)
-  val subtract : t -> t -> t
 end
 
 module type CONSTRAINED_LATTICE = sig
@@ -339,6 +343,7 @@ module type CONTEXTUAL_BRIDGE = sig
   module Constr : PACKED_CONSTRAINED_LATTICE 
 
   val get_unconstrained : Constr.t -> Contxt.t
+  val get_constrained : Constr.t -> Contxt.t
   val make_unconstrained : Constr.t -> Contxt.t
   val subtract : Constr.t -> Contxt.t -> Constr.t
   val eval_constraint : ipredicate -> Contxt.t -> Constr.t
@@ -479,6 +484,8 @@ let rec explicit_pred p = match p with
 	    assert false
 	| IPany -> IPany
 	| IPseparated _ as psep -> psep
+(*	| IPnotnull t ->
+	    IPrel (t,Eq,ITconstant (IntConstant "0"))*)
       end
 
 (* takes as input a term
@@ -957,6 +964,9 @@ struct
     replace var (L.bottom ()) pw
 
   let normalize pw = pw (* implement here switch to PWAll and PWEmpty *)
+  let finalize = normalize
+
+  let subtract pw1 pw2 = pw1 (* minimal implementation *)
 end
 
 (* module created does not have a signature. To be used internally, to share
@@ -1123,6 +1133,15 @@ struct
     else pack
     
   let normalize pack = VMap.mapi (fun _ elt -> L.normalize elt) pack
+  let finalize pack = VMap.mapi (fun _ elt -> L.finalize elt) pack
+
+  let subtract pack1 pack2 =
+    Hashtbl.fold
+      (fun v _ m ->
+	 let elt1 = VMap.find v pack1 and elt2 = VMap.find v pack2 in
+	 let elt = L.subtract elt1 elt2 in
+	 VMap.add v elt m
+      ) rep_to_dim_and_pack VMap.empty
 end
 
 module Make_PackedFromCluster (V : VARIABLE) 
@@ -1160,6 +1179,8 @@ struct
     VMap.fold (fun _ elt is_cstr -> is_cstr || L.is_constrained elt) pack false
 
   let get_unconstrained pack = VMap.map L.get_unconstrained pack
+
+  let get_constrained pack = VMap.map L.get_constrained pack
 
   let make_unconstrained pack = VMap.map L.make_unconstrained pack
 
@@ -1468,6 +1489,9 @@ struct
 		for i=0 to n do a.(i) <- a2.(i) -. a1.(i) done;
 		FBtest a
 	  end
+(*      | IPnotnull t ->
+	  begin match t with
+	    | ITvar v -> *)
     in simpl p
 
   (* transfer functions *)
@@ -1685,10 +1709,16 @@ struct
 
   (* normalized form of an octogon: closed octogon *)
   let rec normalize oct = { oct with octogon = Oct.close oct.octogon }
+  let finalize = normalize
 
   (* minimal form of an octogon *)
   let minimize oct = 
     { oct with octogon = Oct.m_to_oct (Oct.m_from_oct oct.octogon) }
+
+  let subtract oct1 oct2 = 
+    let oct1 = minimize oct1 in
+    let new_octogon = Oct.subtract oct1.octogon oct2.octogon in
+    { oct1 with octogon = new_octogon }
 
   let to_pred oct = internal_to_pred minimize (normalize oct)
 
@@ -1781,6 +1811,7 @@ struct
 
   (* external normalization function *)
   let normalize = internal_normalize ~remove_left_full:false
+  let finalize = normalize
 
   (* function used only once on octogon, because it may remove the constraint
      left part if it is full. If reapplied, it would return the empty octogon.
@@ -1820,13 +1851,17 @@ struct
     eval_test_or_constraint ~tagging:true ~or_collect:(Join join) pred oct
     
   let subtract oct1 oct2 =
-    (* only unconstrained parts can be safely subtracted. Otherwise we would
-       have to tell whether a particular inequality in the octogon is 
-       contrained or not. It could be added if necessary. *)
-    let oct2 = get_unconstrained oct2 in
-    let new_octogon = Oct.subtract oct1.octogon oct2.octogon in
-    { oct1 with octogon = new_octogon }
-
+    if equal oct1 oct2 then
+      top (oct1.dimension,oct1.variables)
+    else
+      (* only unconstrained parts can be safely subtracted. Otherwise we would
+	 have to tell whether a particular inequality in the octogon is 
+	 contrained or not. It could be added if necessary. *)
+      let oct1 = minimize oct1 in
+      let oct2 = get_unconstrained oct2 in
+      let new_octogon = Oct.subtract oct1.octogon oct2.octogon in
+      { oct1 with octogon = new_octogon }
+	
   let constrained_variables oct = followed_variables ~tagged:true oct
 
   let unconstrained_variables oct = followed_variables ~untagged:true oct
@@ -2003,8 +2038,8 @@ struct
     else
       (* if the left part of a conditional is implied by the main context,
 	 add its right part to the main context *)
-      let new_main,new_cond = 
-	Int31Map.fold (fun cid cond (cur_main,cur_cond) ->
+      let new_main =
+	Int31Map.fold (fun cid cond cur_main ->
 	  if Constr.is_constrained cond then
 	    let left_cond = Bridge.get_unconstrained cond in
 	    let cur_main = Contxt.normalize cur_main in
@@ -2020,15 +2055,51 @@ struct
 		  "[eval_test] add unconstr_cond %a@." 
 		  Contxt.pretty unconstr_cond;
 	      (* remove conditional, incorporated to main context *)
-	      Contxt.meet cur_main unconstr_cond, cur_cond
-	    else 
-	      (* keep conditional *)
-	      cur_main, Int31Map.add cid cond cur_cond
+	      Contxt.meet cur_main unconstr_cond
+	    else cur_main
 	  else 
 	    (* should be forbidden by normalization performed before *)
 	    assert false)
-	  ctxt.conditionals (ctxt.main_context,Int31Map.empty)
-      in { ctxt with main_context = new_main; conditionals = new_cond; }
+	  ctxt.conditionals ctxt.main_context
+      in 
+      (* in any case, keep the conditional, for correction of future joins
+	 with information from other paths *)
+      { ctxt with main_context = new_main }
+
+  let finalize ctxt =
+    let ctxt = normalize ctxt in
+    (* further reduce the context by removing conditionals
+       - whose left part is implied by the main context
+       (their right part being pushed into this main context by the call to
+       [normalize] above)
+       - whose right part is implied by the main context, which makes them
+       uninformative
+    *)
+    let cur_main = ctxt.main_context in
+    let new_cond = 
+      Int31Map.fold (fun cid cond cur_cond ->
+	if Constr.is_constrained cond then
+	  let left_cond = Bridge.get_unconstrained cond in
+	  let cur_test = Contxt.normalize (Contxt.meet cur_main left_cond) in
+	  if Contxt.equal cur_main cur_test then
+	    (* left part of the conditional is implied by current context *)
+	    cur_cond
+	  else 
+	    let right_cond = Bridge.get_constrained cond in
+	    let cur_test = Contxt.normalize (Contxt.meet cur_main right_cond)
+	    in
+	    if Contxt.equal cur_main cur_test then
+	      (* right part of the conditional is implied by current context *)
+	      cur_cond
+	    else 
+	      Int31Map.add cid cond cur_cond
+	else
+	  (* should be forbidden by normalization performed before *)
+	  assert false)
+	ctxt.conditionals Int31Map.empty
+    in 
+    (* keep the main context computed by [normalize] *)
+    { ctxt with conditionals = new_cond; }
 
   let equal ctxt1 ctxt2 =
     Contxt.equal ctxt1.main_context ctxt2.main_context
@@ -2218,6 +2289,19 @@ struct
   let fold f g ctxt init =
     Int31Map.fold (fun _ cond acc -> g cond acc) ctxt.conditionals 
       (f ctxt.main_context init)
+
+  let subtract ctxt1 ctxt2 =
+    let new_main = Contxt.subtract ctxt1.main_context ctxt2.main_context in
+    let new_cond =
+      Int31Map.fold (fun cid cond1 m ->
+	try
+	  let cond2 = Int31Map.find cid ctxt2.conditionals in
+	  Int31Map.add cid (Constr.subtract cond1 cond2) m
+  	with Not_found -> Int31Map.add cid cond1 m)
+	ctxt1.conditionals Int31Map.empty
+    in
+    { main_context = new_main; conditionals = new_cond; }
+      
 end
 
 module Make_SeparationLattice (V : VARIABLE) (I : INT_VALUE) 
@@ -2280,6 +2364,9 @@ struct
       (fun sep -> not (V.equal var (fst sep) || V.equal var (snd sep))) seps
 
   let normalize seps = seps
+  let finalize = normalize
+
+  let subtract = VPSet.diff
 
   let is_empty = VPSet.is_empty
   let is_full _ = false
@@ -2323,9 +2410,10 @@ module Var : sig
   val is_strlen : t -> bool
   val is_arrlen : t -> bool
   val safe_access_predicate : 
-    ?read_string:bool -> var_info -> t int_term -> t int_predicate
+    ?read_string:bool -> ?after_read_string:bool 
+    -> var_info -> t int_term -> t int_predicate
   val string_predicate : var_info -> t int_predicate
-  val pointer_predicate : var_info -> t int_predicate
+  val pointer_predicate : ?non_null:bool -> var_info -> t int_predicate
 end = struct
 
   type var_t = 
@@ -2368,13 +2456,18 @@ end = struct
     | Vvar _ | Vstrlen _ -> false
     | Varrlen _ -> true
 
-  let safe_access_predicate ?(read_string=false) v t_off =
+  let safe_access_predicate 
+      ?(read_string=false) ?(after_read_string=false) v t_off =
     (* build the safe access predicate *)
     let t_upbound,op_upbound = 
       if read_string then ITvar (Vstrlen v),Clogic.Le
+      else if after_read_string then ITvar (Vstrlen v),Clogic.Lt
       else ITvar (Varrlen v),Clogic.Lt
     in
-    (* offset <= strlen(v) for strings or offset < arrlen(v) for others *)
+    (* after string read ? offset < strlen(v) 
+       string read ?       offset <= strlen(v) 
+       other ?             offset < arrlen(v)
+    *)
     let p_upsafe = IPrel (t_off,op_upbound,t_upbound) in
     let t_downbound = ITconstant (IntConstant "0") in
     (* offset >= 0 *)
@@ -2392,13 +2485,16 @@ end = struct
     let p_upper = IPrel (strlen,Clogic.Lt,arrlen) in
     IPand (p_lower,p_upper)
 
-  let pointer_predicate v =
+  let pointer_predicate ?(non_null=false) v =
     (* build the predicate that [v] is a "valid" pointer: either null or
        pointing to some valid memory block *)
     let arrlen = ITvar (Varrlen v) in
     let zero = ITconstant (IntConstant "0") in
-    (* arrlen(v) >= 0 *)
-    IPrel (zero,Clogic.Le,arrlen)
+    (* non_null ? arrlen(v) > 0 
+       other ?    arrlen(v) >= 0
+    *)
+    let op = if non_null then Clogic.Lt else Clogic.Le in
+    IPrel (zero,op,arrlen)
 end
 
 module VarAsVARIABLE : VARIABLE with type t = Var.t = Var
@@ -2747,14 +2843,15 @@ end = struct
   (* translates the expression [e] into the closest term (for an expression)
      or the closest predicate (for a test), forgetting any side-effect 
      during the evaluation of [e] *)
-  let rec from_expr_or_test e = match e.nexpr_node with
+  let rec from_expr_or_test ?(test=false) e = match e.nexpr_node with
     | NEnop -> 
 	(* not denoting any value. This should not occur. *)
 	assert false
     | NEconstant c ->
 	Term (ITconstant c)
     | NEvar (Var_info v) ->
-	Term (ITvar (Var.Vvar v))
+(*	if test then Predicate (IPnotnull (Var.Vvar v))
+	else*) Term (ITvar (Var.Vvar v))
     | NEunary (op,e1) ->
 	begin match from_unop op with
 	  | None -> 
@@ -2820,7 +2917,22 @@ end = struct
 	   to its left-hand side, unless it is a post-increment/decrement,
 	   in which case we must reverse the corresponding operation *)
 	Term (from_expr e1)
-    | NEvar (Fun_info _) | NEstring_literal _ | NEarrow _ 
+    | NEarrow (e1,zone,var) ->
+	if test then
+	  let enode = create_tmp_node (Nexpr e) in
+	  match deref_get_variable_and_offset enode with
+	    | None -> Term ITany
+	    | Some (v,off_opt) ->
+		if expr_type_is_char enode then
+		  let t_off = match off_opt with
+		    | None -> ITconstant (IntConstant "0")
+		    | Some off -> from_expr (get_e off)
+		  in
+		  Predicate
+		    (Var.safe_access_predicate ~after_read_string:true v t_off)
+		else Term ITany
+	else Term ITany
+    | NEvar (Fun_info _) | NEstring_literal _ 
     | NEcast _ | NEmalloc _ | NEcall _ | NEcond _ ->
 	Term ITany
 
@@ -2834,7 +2946,7 @@ end = struct
 	  ITany
 
   and from_test e =
-    match from_expr_or_test e with
+    match from_expr_or_test ~test:true e with
       | Predicate p -> p
       | Term t -> IPrel(t,Clogic.Neq,ITconstant (IntConstant "0"))
 
@@ -3488,6 +3600,8 @@ struct
   type ipredicate = Constr.ipredicate
 
   let get_unconstrained = Constr.get_unconstrained
+  let get_constrained cond = 
+    Constr.make_unconstrained (Constr.get_constrained cond)
   let make_unconstrained = Constr.make_unconstrained
   let subtract = Constr.subtract
   let eval_constraint = Constr.eval_constraint
@@ -3548,17 +3662,10 @@ struct
   open IntLangFromNormalized
 
   (* select memory accesses that need to be considered in the analysis.
-     There are 2 modes, selected by the optional argument [needing_strlen].
-
-     When [needing_strlen] is false, the memory accesses selected are those
-     for which we want to express a safety property.
-     This excludes:
+     The memory accesses selected are those for which we want to express
+     a safety property. This excludes:
      - memory accesses already analyzed as safe by the forward analysis
      - memory accesses not of the form that can be analyzed
-
-     When [needing_strlen] is true, the memory accesses selected are those
-     that are proved by the current context computed, but not proved by
-     the context from which [strlen] variables were removed.
    *)
   let memory_access_select node pre_val =
     if debug_more then Coptions.lprintf
@@ -3850,17 +3957,59 @@ struct
 
     let inv_analysis = NodeHash.create (NodeHash.length analysis) in
     NodeHash.iter (fun node (pre_val,post_val as abs_val) ->
-		     if is_function_precondition_node node
-		       || is_assume_invariant_node node
-		       || is_invariant_node node
-		     then 
-		       begin
-			 if debug_more then Coptions.lprintf 
-			   "[format] %a %a@." 
-			   Node.pretty node ContextSepLattice.pretty pre_val;
-			 NodeHash.replace inv_analysis node abs_val
-		       end
-		  ) analysis;
+      if NodeSet.mem node !(format_params.safe_access_nodes) then
+	(* keep analysis value for nodes to transform. This is what
+	   [transform] expects. *)
+	NodeHash.replace inv_analysis node abs_val
+      else if is_function_precondition_node node
+	|| is_assume_invariant_node node
+	|| is_invariant_node node
+      then 
+	let pre_ctxt_val,pre_sep_val = pre_val in
+	let post_ctxt_val,post_sep_val = post_val in
+	(* finalize contextual value *)
+	let pre_ctxt_val = 
+	  ContextLattice.finalize pre_ctxt_val in
+	let post_ctxt_val = 
+	  ContextLattice.finalize post_ctxt_val in
+	(* subtract assume invariant from invariant *)
+	let pre_ctxt_val =
+	  if is_invariant_node node then
+	    match logic_invariant node with
+	      | None -> pre_ctxt_val
+	      | Some assinv ->
+		  try 
+		    let (assinv_val,_),_ =
+		      NodeHash.find analysis assinv in
+		    ContextLattice.subtract pre_ctxt_val
+		      assinv_val
+		  with Not_found -> pre_ctxt_val
+	  else pre_ctxt_val
+	in
+	let post_ctxt_val =
+	  if is_invariant_node node then
+	    match logic_invariant node with
+	      | None -> post_ctxt_val
+	      | Some assinv ->
+		  try 
+		    let _,(assinv_val,_) =
+		      NodeHash.find analysis assinv in
+		    ContextLattice.subtract post_ctxt_val
+		      assinv_val
+		  with Not_found -> post_ctxt_val
+	  else post_ctxt_val
+	in
+	(* rebuild complete abstract value *)
+	let pre_val = pre_ctxt_val,pre_sep_val in
+	let post_val = post_ctxt_val,post_sep_val in
+	let abs_val = pre_val,post_val in
+	begin
+	  if debug_more then Coptions.lprintf 
+	    "[format] %a %a@." 
+	    Node.pretty node ContextSepLattice.pretty pre_val;
+	  NodeHash.replace inv_analysis node abs_val
+	end
+      ) analysis;
     inv_analysis,!(format_params.safe_access_nodes)
 
 (* PROBLEM WITH THIS MODE, SEE IF USEFUL, IF YES CORRECT IT

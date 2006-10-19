@@ -1,6 +1,13 @@
 
 (* TO DO:
 
+   - call to [Ceffect] functions to compute effects of loops expects
+   previous name disambiguation. This is not done, which can lead to
+   errors, e.g.
+
+   declare_heap_var : result ; oldtype = ()double ; newtype = ()global pointer 
+   Anomaly: File "c/ceffect.ml", line 98, characters 6-12: Assertion failed
+
    - in [propagate], when doing backward prop, do not propagate on incoming
    edge with [None] value, control does not flow through this edge !
 
@@ -1127,6 +1134,9 @@ module type CFG_LANG_EXTERNAL = sig
     (* end of logical block
        Used for annotations and specifications. *)
   val logic_end : Node.t -> Node.t
+    (* associated invariant relation, that relates corresponding invariant and
+       assume invariant nodes for a specific loop *)
+  val logic_invariant : Node.t -> Node.t option
   
   (* 11 kinds of nodes: 
      for code: expression/test/statement/declaration
@@ -1334,6 +1344,7 @@ end = struct
       | LogicalSame     (* other edges in the logical graph *)
       | LogicScopeBegin (* edge to first node in logical block *)
       | LogicScopeEnd   (* edge to last node in logical block *)
+      | LogicInvariant  (* edge to relate invariant and assume invariant *)
     (* arbitrary index to provide total ordering *)
     let index r = match r with
       | OperationalFwd  -> 0
@@ -1344,6 +1355,7 @@ end = struct
       | LogicalSame     -> 5
       | LogicScopeBegin -> 6
       | LogicScopeEnd   -> 7
+      | LogicInvariant  -> 8
     let compare r1 r2 = Pervasives.compare (index r1) (index r2)
     (* if not stated otherwise, an edge is a forward operational one *)
     let default = OperationalFwd
@@ -1976,6 +1988,8 @@ end = struct
       | Some ne -> ne
       | None -> failwith "no logical end node found"
 
+  let logic_invariant n =  succ NodeRelation.LogicInvariant n
+
   let add_edge edge v1 v2 =
     let e = Edge.create v1 edge v2 in
     Self.add_edge_e (graph ()) e
@@ -2142,6 +2156,7 @@ end = struct
   (* add logical block edge *)
   let add_begedge = add_edge NodeRelation.LogicScopeBegin
   let add_endedge = add_edge NodeRelation.LogicScopeEnd
+  let add_invedge = add_edge NodeRelation.LogicInvariant
 
   (* constructors *)
 
@@ -2970,17 +2985,18 @@ end = struct
   *)
   let rec from_expr start_node ?(is_test=false) ?(neg_test=false) 
       ?(is_lvalue=false) ?(in_incr=false) ?(in_opassign=false) (e : nexpr) =
+    let e = match e.nexpr_node with
+      | NEassign_op (e1,op,e2) ->
+	  (* create an expression [e12] for the right-hand side of 
+	     the assignment, in order to get rid of the opassign node *)
+	  let e12 = { e with nexpr_node = NEbinary (e1,op,e2) } in
+	  { e with nexpr_node = NEassign (e1,e12) }
+      | _ -> e
+    in
     let e = 
       if is_test && neg_test then
         { e with nexpr_node = NEunary (Unot, e) }
-      else
-	match e.nexpr_node with
-	  | NEassign_op (e1,op,e2) ->
-	      (* create an expression [e12] for the right-hand side of 
-		 the assignment, in order to get rid of the opassign node *)
-	      let e12 = { e with nexpr_node = NEbinary (e1,op,e2) } in
-	      { e with nexpr_node = NEassign (e1,e12) }
-	  | _ -> e
+      else e
     in
     let enode =
       if is_test then Ntest e
@@ -3159,6 +3175,8 @@ end = struct
 		  (* assume part of invariant has no successor *)
 		  (* oper *) add_opedge bwd_node assinvnode;
 		  (* oper *) add_opedge bwd_node invnode;
+		  (* logic *) add_invedge invnode assinvnode;
+		  (* logic *) add_invedge assinvnode invnode;
 		  invnode
 	    in
 	    let test_node = from_expr ~is_test:true loop_node e in
@@ -3214,6 +3232,8 @@ end = struct
 		  (* assume part of invariant has no successor *)
 		  (* oper *) add_opedge fwd_node assinvnode;
 		  (* oper *) add_opedge fwd_node invnode;
+		  (* logic *) add_invedge invnode assinvnode;
+		  (* logic *) add_invedge assinvnode invnode;
 		  invnode
 	    in
 	    let test_node = from_expr ~is_test:true loop_node e in
@@ -3256,6 +3276,8 @@ end = struct
 		  (* assume part of invariant has no successor *)
 		  (* oper *) add_opedge bwd_node assinvnode;
 		  (* oper *) add_opedge bwd_node invnode;
+		  (* logic *) add_invedge invnode assinvnode;
+		  (* logic *) add_invedge assinvnode invnode;
 		  invnode
 	    in
 	    let test_node = from_expr ~is_test:true loop_node etest in
@@ -3312,7 +3334,9 @@ end = struct
 	    (* oper *) force_add_opedge snode (List.hd ctxt.loop_switch_ends);
 	| NScontinue -> 
 	    (* oper *) add_opedge start_node snode;
-	    (* oper *) force_add_opedge snode (List.hd ctxt.loop_starts)
+	    (* beware that this edge is a backward one, crucial to make 
+	       the topological walk work properly *)
+	    (* oper *) add_backedge snode (List.hd ctxt.loop_starts)
 	| NSgoto (_,lab) ->
             (* no problem of widening here since only forward gotos are 
 	       accepted. Otherwise we should add a widening node in the induced

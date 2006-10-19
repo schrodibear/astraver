@@ -487,11 +487,28 @@ end = struct
 	  get_rhs_var e
       | _ -> failwith ("[assign_get_rhs_var] should be called on assignment")
 
-  let get_intptr_add_on_var_opt node =
+  let skip_casts node = 
+    let e = get_e node in
+    let rec skip e = match e.nexpr_node with
+      | NEcast (_,e1) -> skip e1
+      | _ -> e
+    in
+    let new_e = skip e in
+    create_tmp_node (Nexpr new_e)
+
+  let rec get_intptr_add_on_var_opt node =
+    if debug_more then Coptions.lprintf 
+      "[get_intptr_add_on_var_opt] %a@." Node.pretty node;
+    (* a cast may have been introduced for arrays used as pointers *)
+    let node = skip_casts node in
     let e = get_e node in
     match e.nexpr_node with
       | NEvar _ -> None,None
-      | NEbinary (e1,(Badd_pointer_int | Badd_int _),e2) -> 
+      | NEbinary (e1,(Badd_pointer_int | Badd_int _ | Bsub_int _ as op),e2) ->
+	  let e2 = match op with
+	    | Bsub_int _ -> { e2 with nexpr_node = NEunary (Uminus,e2) }
+	    | _ -> e2
+	  in
 	  let add_opt = Some (create_tmp_node (Nexpr e2)) in
 	  let var_opt = match e1.nexpr_node with
 	    | NEvar (Var_info v) -> Some v
