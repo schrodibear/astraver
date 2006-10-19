@@ -916,12 +916,12 @@ struct
       | IPtrue | IPany | IPseparated _ -> 
 	  pw
       | IPand (p1,p2) ->
-          let v1 = eval_test ~backward:backward p1 pw in
-          let v2 = eval_test ~backward:backward p2 pw in
+          let v1 = eval_test ~backward p1 pw in
+          let v2 = eval_test ~backward p2 pw in
           meet v1 v2
       | IPor (p1,p2) ->
-          let v1 = eval_test ~backward:backward p1 pw in
-          let v2 = eval_test ~backward:backward p2 pw in
+          let v1 = eval_test ~backward p1 pw in
+          let v2 = eval_test ~backward p2 pw in
           join v1 v2
       | IPimplies _ | IPiff _ | IPnot _ ->
 	  (* these constructs should have been removed by the call to
@@ -1078,7 +1078,7 @@ struct
     if is_packed_variable var then
       let rep_var = Hashtbl.find variable_to_rep var in
       let elt = VMap.find rep_var pack in
-      let new_elt = L.eval_assign ~backward:backward var term elt in
+      let new_elt = L.eval_assign ~backward var term elt in
       VMap.add rep_var new_elt pack
     else pack
 
@@ -1094,7 +1094,7 @@ struct
 	    (fun rep_var elt ->
 	      if VSet.mem rep_var rep_set then
 		(* some variables in this pack occur in the test *)
-		L.eval_test ~backward:backward pred elt
+		L.eval_test ~backward pred elt
 	      else elt
 	    ) pack
 
@@ -1622,12 +1622,12 @@ struct
 
   let eval_test_or_constraint ~tagging ~or_collect pred oct =
     let pred = flatify_predicate pred oct in
-    eval_flat ~tagging:tagging ~or_collect:or_collect oct pred
+    eval_flat ~tagging ~or_collect oct pred
 
   let internal_guarantee_test ~or_collect pred oct =
     try
       let pred = flatify_predicate ~guarantee:true pred oct in
-      let test_oct = eval_flat ~guarantee:true ~or_collect:or_collect oct pred
+      let test_oct = eval_flat ~guarantee:true ~or_collect oct pred
 	(* no need to normalize [test_oct], it should already be *)
       in
       (* if the predicate does not contain random parts and no more than
@@ -1679,7 +1679,7 @@ struct
       idx_set
 
   let followed_variables ?(tagged=false) ?(untagged=false) (oct : t) =
-    let idx_set = followed_indices ~tagged:tagged ~untagged:untagged oct in
+    let idx_set = followed_indices ~tagged ~untagged oct in
     Int31Set.fold (fun i varl -> (Int31Map.find i oct.variables) :: varl)
       idx_set []
       
@@ -2179,7 +2179,7 @@ struct
 
   let eval_assign ~backward var term ctxt =
     let new_main = 
-      Contxt.eval_assign ~backward:backward var term ctxt.main_context 
+      Contxt.eval_assign ~backward var term ctxt.main_context 
     in
     if Contxt.is_empty new_main then
       (* when the main context becomes empty, remove all conditional
@@ -2187,18 +2187,18 @@ struct
       { ctxt with main_context = new_main; conditionals = Int31Map.empty; }
     else
       let new_cond = Int31Map.map 
-	  (Constr.eval_assign ~backward:backward var term) ctxt.conditionals in
+	  (Constr.eval_assign ~backward var term) ctxt.conditionals in
       { ctxt with main_context = new_main; conditionals = new_cond; }
 
   let eval_test ~backward pred ctxt =
     (* keep only constrained conditionals *)
     let ctxt = normalize_separately ctxt in
-    let new_main = Contxt.eval_test ~backward:backward pred ctxt.main_context 
+    let new_main = Contxt.eval_test ~backward pred ctxt.main_context 
     in
     if backward then
       (* during backward propagation, only dispatch test on conditionals *)
       let new_cond = Int31Map.map
-	  (Constr.eval_test ~backward:backward pred) ctxt.conditionals in
+	  (Constr.eval_test ~backward pred) ctxt.conditionals in
       { ctxt with main_context = new_main; conditionals = new_cond; }
     else if Contxt.is_empty new_main then
       (* when the main context becomes empty, remove all conditional
@@ -2206,7 +2206,7 @@ struct
       { main_context = new_main; conditionals = Int31Map.empty; }
     else
       let new_cond = Int31Map.map
-	  (Constr.eval_test ~backward:backward pred) ctxt.conditionals in
+	  (Constr.eval_test ~backward pred) ctxt.conditionals in
       (* if the left part of a conditional is implied by the main context,
 	 add its right part to the main context *)
       let new_main,new_cond = 
@@ -3349,7 +3349,7 @@ struct
 		    let forget_val = CL.remove_variable
 			(Var.Vstrlen lhs_var) forget_val in
 		    let new_ctxt_val =
-		      CL.eval_assign ~backward:backward 
+		      CL.eval_assign ~backward 
 			(Var.Vvar lhs_var) rhs_rep forget_val
 		    in new_ctxt_val,cur_sep_val
 
@@ -3379,7 +3379,7 @@ struct
 		      (print_predicate Var.pretty) p_safe;
 		    (* access is guaranteed to be safe for the following *)
 		    let res = 
-		      CL.eval_test ~backward:backward p_safe expr_ctxt_val in
+		      CL.eval_test ~backward p_safe expr_ctxt_val in
 		    if debug then Coptions.lprintf 
 		      "[transfer] resulting value with assertion %a@."
 		      CL.pretty res;
@@ -3398,7 +3398,7 @@ struct
 	      (* same transfer for forward and backward propagation *)
 	      let node_rep = get_pred_rep node in
 	      let new_ctxt_val = 
-		CL.eval_test ~backward:backward node_rep expr_ctxt_val in
+		CL.eval_test ~backward node_rep expr_ctxt_val in
 	      new_ctxt_val,expr_sep_val
 	  | _ -> expr_ctxt_val,expr_sep_val
 	  end
@@ -3450,7 +3450,7 @@ struct
 	      if with_assert then 
 		let node_rep = get_pred_rep node in
 		let new_ctxt_val = 
-		  CL.eval_test ~backward:backward node_rep cur_ctxt_val in
+		  CL.eval_test ~backward node_rep cur_ctxt_val in
 		new_ctxt_val,cur_sep_val
 	      else cur_val
 	    end

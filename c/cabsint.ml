@@ -794,7 +794,7 @@ module Make_DataFlowAnalysis
       change := false;
       if debug then Coptions.lprintf 
 	  "[propagate] one more round of propagation@.";
-      IL.iter_operational params.direction ~roots:roots treat_node;
+      IL.iter_operational params.direction ~roots treat_node;
       (* immediately stop iteration in one-pass propagation *)
       if params.one_pass then change := false
     done;
@@ -812,8 +812,7 @@ module Make_DataFlowAnalysis
         (* initialization points *)
       init = init;
         (* transfer function *)
-      transfer = C.transfer ~backward:false ~with_assert:with_assert
-	~one_pass:one_pass ~final:final;
+      transfer = C.transfer ~backward:false ~with_assert ~one_pass ~final;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -840,7 +839,7 @@ module Make_DataFlowAnalysis
       init = NodeMap.add node cstr NodeMap.empty;
         (* transfer function *)
       transfer = C.transfer
-	~backward:true ~with_assert:false ~one_pass:true ~final:final;
+	~backward:true ~with_assert:false ~one_pass:true ~final;
         (* default initial value *)
       bottom = L.bottom;
         (* test of equality *)
@@ -1963,13 +1962,13 @@ end = struct
     else (* no graph was specified, it is an error *)
       assert false
   let rec siblings ?(structural=false) ?(logical=false) n =
-    match sibling ~structural:structural ~logical:logical n with
+    match sibling ~structural ~logical n with
       | None -> []
-      | Some m -> m :: (siblings ~structural:structural ~logical:logical m)
+      | Some m -> m :: (siblings ~structural ~logical m)
   let children ?(structural=false) ?(logical=false) n =
-    match child ~structural:structural ~logical:logical n with
+    match child ~structural ~logical n with
       | None -> []
-      | Some m -> m :: (siblings ~structural:structural ~logical:logical m)
+      | Some m -> m :: (siblings ~structural ~logical m)
 
   (* structural successors. Only [StructuralDown] and [StructuralSame]
      labels should be taken into account. *)
@@ -2930,7 +2929,7 @@ end = struct
     let invnode_opt = match a.invariant with
       | Some p ->
 	  let invnode = from_pred 
-	      ~is_invariant:true ~writes:writes ~is_assert:true p 
+	      ~is_invariant:true ~writes ~is_assert:true p 
 	  in
 	  (* logic *) add_logedge invariant_node [invnode];
 	  Some invnode
@@ -2940,7 +2939,7 @@ end = struct
 	  let ptrue = { npred_node = NPtrue; npred_loc = Loc.dummy_position }
 	  in
 	  let invnode = from_pred 
-	      ~is_invariant:true ~writes:writes ~is_assert:true ptrue
+	      ~is_invariant:true ~writes ~is_assert:true ptrue
 	  in
 	  (* logic *) add_logedge invariant_node [invnode];
 	  Some invnode
@@ -2949,7 +2948,7 @@ end = struct
     let assinvnode_opt = match a.assume_invariant with
       | Some p ->
 	  let assinvnode = from_pred 
-	      ~is_invariant:true ~writes:writes ~is_assume:true p in
+	      ~is_invariant:true ~writes ~is_assume:true p in
 	  (* logic *) add_logedge assume_invariant_node [assinvnode];
 	  Some assinvnode
       | None ->
@@ -2958,7 +2957,7 @@ end = struct
 	  let ptrue = { npred_node = NPtrue; npred_loc = Loc.dummy_position }
 	  in
 	  let assinvnode = from_pred 
-	      ~is_invariant:true ~writes:writes ~is_assume:true ptrue
+	      ~is_invariant:true ~writes ~is_assume:true ptrue
 	  in
 	  (* logic *) add_logedge assume_invariant_node [assinvnode];
 	  Some assinvnode	  
