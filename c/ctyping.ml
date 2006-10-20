@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.127 2006-10-13 13:32:31 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.128 2006-10-20 08:04:40 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -632,10 +632,34 @@ and type_expr_node loc env = function
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    TEbinary (e1, pointer_op op, e2), c_int
-	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _)
+	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _) ->
+	    if e2.texpr_node = TEconstant (IntConstant "0") then
+	      TEbinary(e1, pointer_op op, 
+		       { texpr_node = TEcast(
+			   { ctype_node = Tpointer ( Not_valid, ty1);
+			     ctype_storage = No_storage;
+			     ctype_const = false;
+			     ctype_volatile = false;
+			     ctype_ghost = false;
+			   },e2);
+			 texpr_type = ty1;
+			 texpr_loc  = e2.texpr_loc;}), c_int
+	    else
+	      error loc "comparison between pointer and integer but not 0"
 	| (Tint _ | Tenum _ | Tfloat _), (Tpointer _  | Tarray _) ->
-	    warning loc "comparison between pointer and integer";
-	    TEbinary (e1, pointer_op op, e2), c_int
+	    if e1.texpr_node = TEconstant (IntConstant "0") then
+	      TEbinary({texpr_node = TEcast(
+			  { ctype_node = Tpointer ( Not_valid, ty2);
+			    ctype_storage = No_storage;
+			    ctype_const = false;
+			    ctype_volatile = false;
+			    ctype_ghost = false;
+			  },e1);
+			texpr_type = ty1;
+			texpr_loc  = e1.texpr_loc;
+		       }, pointer_op op,e2), c_int
+	    else
+	      error loc "comparison between pointer and integer but not 0";
 	| Tvar t1, Tvar t2 when t1 = t2 && (op = Beq || op = Bneq) ->
 	    TEbinary (e1, op, e2), c_int
 	| _ ->
