@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.146 2006-10-19 16:38:01 moy Exp $ i*)
+(*i $Id: ceffect.ml,v 1.147 2006-10-24 15:37:50 hubert Exp $ i*)
 
 open Cast
 open Cnorm
@@ -189,7 +189,7 @@ let ef_union e1 e2 =
     assigns_under_pointer = 
       HeapVarSet.union e1.assigns_under_pointer e2.assigns_under_pointer; }
 
-let reads_add_var v ty e = { e with reads_var = add_var v ty e.reads_var }
+let reads_add_var v ty e =   { e with reads_var = add_var v ty e.reads_var }
 let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
 (*let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }*)
 
@@ -202,7 +202,7 @@ let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
 				 assigns_var = add_var v ty e.assigns_var }
 
 let assigns_add_under_pointer v ty e = 
-  { e with assigns_under_pointer = add_var v ty e.assigns_under_pointer }
+  { e with assigns_under_pointer = HeapVarSet.add v e.assigns_under_pointer }
 
 let assigns_add_field_var v ty e = 
   { e with reads = add_field_var v ty e.reads;
@@ -293,7 +293,8 @@ let locations ll =
 let rec assign_location t = match t.nterm_node with 
   | NTvar v ->
       if v.var_is_static
-      then { ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty }
+      then
+	{ ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty } 
       else ef_empty
   | NTarrow (t1,z,f) -> 
       let ef = 
@@ -329,8 +330,7 @@ let rec assign_location t = match t.nterm_node with
       (* [alloc] not used with the arithmetic memory model *)
       if arith_memory_model then ef else reads_add_alloc ef
 
-(***
-let assign_location loc =
+(***let assign_location loc =
   match loc with
     | Lterm t ->
 	 begin 
@@ -602,7 +602,7 @@ and assign_expr ?(with_local=false) e = match e.nexpr_node with
       assert false (* not a left value *)
 
 and assign_under_pointer e = match e.nexpr_node with
-  | NEvar (Var_info v) -> 
+  | NEvar (Var_info v) ->
       assigns_add_under_pointer v v.var_why_type ef_empty
   | NEbinary (e1,Badd_pointer_int,_) ->
       assign_under_pointer e1

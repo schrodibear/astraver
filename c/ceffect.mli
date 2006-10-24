@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.29 2006-10-17 12:26:55 moy Exp $ i*)
+(*i $Id: ceffect.mli,v 1.30 2006-10-24 15:37:50 hubert Exp $ i*)
 
 (*
 val interp_type : Cast.nctype -> string

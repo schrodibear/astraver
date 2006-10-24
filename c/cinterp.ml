@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.214 2006-10-17 12:26:55 moy Exp $ i*)
+(*i $Id: cinterp.ml,v 1.215 2006-10-24 15:37:50 hubert Exp $ i*)
 
 
 open Format
@@ -2281,8 +2281,7 @@ let interp_c_fun fun_name (spec, ctype, id, block, loc)
 	     lprintf "assuming function %s@." f;
 	     (why_code, tspec :: why_spec, prover_decl)
 	   end
-    ) 
-      
+    )    
 let interp l =
   let s = interp_strong_invariants () in
   List.fold_left interp_located_tdecl (s,[]) l
