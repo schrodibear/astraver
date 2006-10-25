@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.79 2006-10-24 15:37:50 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.80 2006-10-25 14:15:47 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -101,15 +101,15 @@ let main () =
     Ceffect.warnings;
   lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
   (* Why interpretation *)
-  let why_specs,prover =
+  let why_specs =
     List.fold_left 
-      (fun (specs,prover) (_,f) -> 
-	 let s,p = Cinterp.interp f in (s @ specs,p @ prover)) 
-      ([],[]) nfiles
+      (fun specs (_,f) -> 
+	 let s = Cinterp.interp f in s @ specs) 
+      [] nfiles
   in
   let why_specs = Cinterp.make_int_ops_decls () @ why_specs in
-  let (why_code,why_specs,_) = 
-    Cinterp.interp_functions (why_specs,prover) 
+  let (why_code,why_specs) = 
+    Cinterp.interp_functions why_specs 
   in
   (* Why specs *)
   let first_file = Filename.chop_extension (List.hd input_files) in

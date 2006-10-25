@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.20 2006-07-20 09:33:03 marche Exp $ i*)
+(*i $Id: output.mli,v 1.1 2006-10-25 14:15:47 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
@@ -52,6 +52,7 @@ type assertion =
 
 val make_or : assertion -> assertion -> assertion
 val make_and : assertion -> assertion -> assertion
+val make_or_list : assertion list -> assertion
 val make_and_list : assertion list -> assertion
 val make_impl : assertion -> assertion -> assertion
 val make_equiv : assertion -> assertion -> assertion
@@ -64,7 +65,7 @@ type why_type =
   | Ref_type of why_type
   | Annot_type of 
       assertion * why_type * 
-      string list * string list * assertion * ((string * assertion) option)
+      string list * string list * assertion * ((string * assertion) list)
 	(*r { P } t reads r writes w raises E { Q | E => R } *)
 ;;
 
@@ -99,9 +100,9 @@ type expr =
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list * 
-      assertion * expr * assertion * ((string * assertion) option)
+      assertion * expr * assertion * ((string * assertion) list)
   | Triple of opaque * 
-      assertion * expr * assertion * ((string * assertion) option)
+      assertion * expr * assertion * ((string * assertion) list)
   | Assert of assertion * expr
   | Label of string * expr
   | BlackBox of why_type
@@ -154,13 +155,14 @@ val append : expr -> expr -> expr
 type why_decl =
   | Param of bool * string * why_type  (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * why_type  (*r logic decl in why *)
+  | Logic of bool * string * (string * base_type) list * base_type  (*r logic decl in why *)
   | Axiom of string * assertion            (*r Axiom *)
   | Predicate of bool * string * (string * base_type) list * assertion  
   | Function of bool * string * (string * base_type) list * base_type * term
   | Type of string * string list
   | Exception of string
 
+(*
 type prover_decl =
   | Parameter  of string * why_type       (*r Parameter *)
   | Definition of string * expr           (*r Definition *) 
@@ -172,6 +174,7 @@ type prover_decl =
   | Axiom of string * assertion            (*r Axiom *)
 *)
   | CoqVerbatim of string                 (*r Verbatim Coq text (hints...) *)
+*)
 
 
 val fprintf_why_decl : Format.formatter -> why_decl -> unit;;

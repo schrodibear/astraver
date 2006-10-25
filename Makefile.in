@@ -35,7 +35,7 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I c -I intf -I tools -I ocamlgraph -I octagon/ocamllib
+INCLUDES = -I src -I jc -I c -I intf -I tools -I ocamlgraph -I octagon/ocamllib
 BFLAGS   = -dtypes -g $(INCLUDES) -I +lablgtk2 -I +threads
 OFLAGS   = -dtypes $(INCLUDES) -I +lablgtk2 -I +threads
 
@@ -140,13 +140,14 @@ bin/top: $(CMO)
 CCMO = ocamlgraph/graph.cmo \
 	src/lib.cmo src/linenum.cmo \
 	src/loc.cmo src/pp.cmo \
-	src/version.cmo c/cversion.cmo c/coptions.cmo c/cutil.cmo \
+	src/version.cmo jc/output.cmo \
+	c/cversion.cmo c/coptions.cmo c/cutil.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
 	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cprint_graph.cmo \
 	c/components.cmo c/cgraph.cmo c/cinit.cmo \
 	c/cast_misc.cmo c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
-	c/output.cmo c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
+	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
 	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cabsint.cmo c/cptr.cmo \
 	c/cint.cmo c/cmain.cmo 

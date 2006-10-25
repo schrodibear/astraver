@@ -14,8 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.215 2006-10-24 15:37:50 hubert Exp $ i*)
-
+(*i $Id: cinterp.ml,v 1.216 2006-10-25 14:15:46 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -679,7 +678,7 @@ let make_int_ops_decls () =
       | _ -> assert false 
     in
     let post = LPred ("eq", [LVar "result"; e]) in
-    let spec = Annot_type (pre, int, [], [], post, None) in
+    let spec = Annot_type (pre, int, [], [], post, []) in
     Param (false, name, Prod_type ("x", int, Prod_type ("y", int, spec)))
   in
   Hashtbl.fold 
@@ -1827,7 +1826,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
       let pre,_,post = interp_spec false eff spec in
-      Triple(true,pre,interp_statement ab may_break s,post,None)
+      Triple(true,pre,interp_statement ab may_break s,post,[])
   | NSdecl(ctype,v,init,rem) -> 
       lprintf 
 	"translating local declaration of %s@." v.var_unique_name;
@@ -1998,14 +1997,14 @@ let cinterp_logic_symbol id ls =
   match ls with
     | NPredicate_reads(args,locs) -> 
 	let args = interp_predicate_args id args in
-	let ty = 
+	let _ty = 
 	  List.fold_right 
 	    (fun (x,t) ty -> 
 	       Prod_type (x, Base_type t, ty)) 
 	    args 
 	    (Base_type ([],"prop"))
 	in
-	Logic(false, id.logic_name, ty)
+	Logic(false, id.logic_name, args, ([],"prop"))
     | NPredicate_def(args,p) -> 
 	let a = interp_predicate None "" p in
 	let args = interp_predicate_args id args in
@@ -2013,31 +2012,31 @@ let cinterp_logic_symbol id ls =
     | NFunction(args,ret,_) ->
 	let ret_type =
 	  match ret.Ctypes.ctype_node with
-	    | Tvar s -> base_type s
-	    | Tint _ -> base_type "int"
-	    | Tfloat fk -> base_type (Cnorm.why_type_for_float_kind fk)
+	    | Tvar s -> s
+	    | Tint _ -> "int"
+	    | Tfloat fk -> Cnorm.why_type_for_float_kind fk
 	    | _ -> assert false
 	in
-	let local_type =
+	let args =
 	  List.fold_right
 	    (fun (id,ty) t -> 
-	       Prod_type(id.var_unique_name,
-			 Base_type (Info.output_why_type id.var_why_type),t))
-	    args ret_type
+	       (id.var_unique_name,
+		Info.output_why_type id.var_why_type)::t)
+	    args []
 	in
-	let final_type =
+	let args =
 	  HeapVarSet.fold
 	    (fun arg t -> 
 	       let ty = arg.var_why_type in 
-	       Prod_type("",Base_type (Info.output_why_type ty),t))
-	    id.logic_heap_args local_type
+	       ("",Info.output_why_type ty)::t)
+	    id.logic_heap_args args
 	in
-        let final_type = 
+        let args = 
           ZoneSet.fold 
             (fun (z,_,ty) t ->
-               Prod_type("",Base_type (Info.output_why_type (Info.Memory(ty,z))),t))
-            id.logic_heap_zone final_type in
-	Logic(false,id.logic_name,final_type)
+               ("",Info.output_why_type (Info.Memory(ty,z)))::t)
+            id.logic_heap_zone args in
+	Logic(false,id.logic_name,args,([],ret_type))
     | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
 	let ret_type = 
@@ -2113,7 +2112,7 @@ let interp_function_spec id sp ty pl =
   let annot_type = 
     Annot_type
       (pre_without, Base_type (Info.output_why_type id.type_why_fun), r, w, 
-       post, None)
+       post, [])
   in
   let ty = 
     List.fold_right 
@@ -2133,7 +2132,7 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
 		    let x = info.var_unique_name in
 		    let v = Int64.to_string v in
 		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
-		    [Logic (false,x,Base_type ([], "int"));
+		    [Logic (false,x,[],([], "int"));
 		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])
 		 el)
 	| _ -> assert false
@@ -2141,44 +2140,42 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
   | _ -> 
       []
 
-let interp_located_tdecl ((why_spec,prover_decl) as why) decl =
+let interp_located_tdecl why_spec decl =
   match decl.node with
   | Nlogic(id,ltype) -> 
       lprintf "translating logic declaration of %s@." id.logic_name;
-      (cinterp_logic_symbol id ltype::why_spec,
-       prover_decl)
+      cinterp_logic_symbol id ltype::why_spec
   | Naxiom(id,p) -> 
       lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
-      (Axiom(id,a)::why_spec, prover_decl)
+      Axiom(id,a)::why_spec
   | Ninvariant(id,p) -> 
       lprintf "translating invariant declaration %s@." id;      
-      why
+      why_spec
   | Ninvariant_strong (id,p) ->
       lprintf "translating invariant declaration %s@." id;      
-      why
+      why_spec
   | Ntypedecl ({ Ctypes.ctype_node = Tenum _ } as ctype)
   | Ntypedef (ctype,_) -> 
       let dl = interp_type decl.loc ctype in 
-      dl @ why_spec, prover_decl
+      dl @ why_spec
   | Ntypedecl { Ctypes.ctype_node = Tstruct _ | Tunion _ } -> 
-      why
+      why_spec
   | Ntypedecl _ ->
       assert false
   | Ntype _ ->
-      why
+      why_spec
   | Ndecl(ctype,v,init) -> 
       (* global initialisations already handled in cinit.ml *)
-      why
+      why_spec
 (*  | Nfunspec(spec,ctype,id) -> 
       let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
-      (why_code, spec :: why_spec,
-       prover_decl)
+      (why_code, spec :: why_spec)
   | Nfundef(spec,ctype,id,block) ->
       if (id = Cinit.invariants_initially_established_info &&  
 	  not !Cinit.user_invariants)
       then
-	(why_code, why_spec, prover_decl)
+	(why_code, why_spec)
       else
 	(reset_tmp_var ();
 	 let tparams,pre,post,tspec = 
@@ -2210,36 +2207,34 @@ let interp_located_tdecl ((why_spec,prover_decl) as why) decl =
 		  Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
 	   printf "generating Why code for function %s@." f;
 	   ((f, Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
-	    tspec :: why_spec,
-	    prover_decl)
+	    tspec :: why_spec)
 	 with Error (_, Cerror.Unsupported s) ->
 	   lprintf "unsupported feature (%s); skipping function %s@." s f;
 	   eprintf "unsupported feature (%s); skipping function %s@." s f;
 	   (why_code,
-	    tspec :: why_spec,
-	    prover_decl)
+	    tspec :: why_spec)
 	 end else begin
 	   lprintf "assuming function %s@." f;
-	   (why_code, tspec :: why_spec, prover_decl)
+	   (why_code, tspec :: why_spec)
 	 end
 	)
 *)
 
 let interp_c_fun fun_name (spec, ctype, id, block, loc) 
-    (why_code,why_spec,prover_decl)   =
+    (why_code,why_spec)   =
 (*      let tparams,_,_,spec = interp_function_spec id spec ctype id.args in
       (why_code, spec :: why_spec,
        prover_decl)*)
   if (id = Cinit.invariants_initially_established_info &&  
       not !Cinit.user_invariants)
   then
-    (why_code, why_spec, prover_decl)
+    (why_code, why_spec)
   else
     (reset_tmp_var ();
      let tparams,pre,post,tspec = 
        interp_function_spec id spec ctype id.args in
      match block with 
-       | None -> (why_code, tspec :: why_spec, prover_decl)
+       | None -> (why_code, tspec :: why_spec)
        | Some block ->
 	   let f = id.fun_unique_name in
 	   if Coptions.verify id.fun_name then begin try
@@ -2268,34 +2263,32 @@ let interp_c_fun fun_name (spec, ctype, id, block, loc)
 		    Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
 	     printf "generating Why code for function %s@." f;
 	     ((f, Def(f ^ "_impl", 
-		      Fun(tparams,pre,tblock,post,None)))::why_code,
-	      tspec :: why_spec,
-	      prover_decl)
+		      Fun(tparams,pre,tblock,post,[])))::why_code,
+	      tspec :: why_spec)
 	   with Error (_, Cerror.Unsupported s) ->
 	     lprintf "unsupported feature (%s); skipping function %s@." s f;
 	     eprintf "unsupported feature (%s); skipping function %s@." s f;
 	     (why_code,
-	      tspec :: why_spec,
-	      prover_decl)
+	      tspec :: why_spec)
 	   end else begin
 	     lprintf "assuming function %s@." f;
-	     (why_code, tspec :: why_spec, prover_decl)
+	     (why_code, tspec :: why_spec)
 	   end
     )    
 let interp l =
   let s = interp_strong_invariants () in
-  List.fold_left interp_located_tdecl (s,[]) l
+  List.fold_left interp_located_tdecl s l
 
-let interp_functions (why,prover) =
-  let (code,spec,prover) = 
-    Hashtbl.fold interp_c_fun Cenv.c_functions ([],why,prover)
+let interp_functions why =
+  let (code,spec) = 
+    Hashtbl.fold interp_c_fun Cenv.c_functions ([],why)
   in
   let code = 
     Hashtbl.fold
       (fun lab () acc ->
 	 (lab,Exception("Goto_"^lab))::acc) labels_table code
   in
-  (code,spec,prover)
+  (code,spec)
 
   
 

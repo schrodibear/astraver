@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.34 2006-07-20 09:33:03 marche Exp $ i*)
+(*i $Id: output.ml,v 1.1 2006-10-25 14:15:47 marche Exp $ i*)
 
 open Format;;
+open Pp;;
 
 type constant =
   | Prim_int of string
@@ -54,7 +55,7 @@ let rec fprintf_term form t =
 	fprintf_term t1
 	fprintf_term t2
   | LApp("ne_pointer",[t1;t2]) ->
-      fprintf form "@[neqv(%a,%a)@]" 
+      fprintf form "@[(%a<>%a)@]" 
 	fprintf_term t1
 	fprintf_term t2
   | LApp(id,t::tl) ->
@@ -106,6 +107,11 @@ let rec make_and_list l =
   match l with
     | [] -> LTrue
     | f::r -> make_and f (make_and_list r)
+
+let rec make_or_list l =
+  match l with
+    | [] -> LFalse
+    | f::r -> make_or f (make_or_list r)
 
 let make_impl a1 a2 =
   match (a1,a2) with
@@ -210,7 +216,7 @@ type why_type =
   | Ref_type of why_type
   | Annot_type of 
       assertion * why_type * 
-      string list * string list * assertion * ((string * assertion) option)
+      string list * string list * assertion * ((string * assertion) list)
 	(*r { P } t reads r writes w { Q | E => R } *)
 ;;
 
@@ -239,7 +245,7 @@ let rec iter_why_type f t =
 	List.iter f reads;
 	List.iter f writes;
 	iter_assertion f post;
-	option_iter (fun (_,a) -> iter_assertion f a) signals
+	List.iter (fun (_,a) -> iter_assertion f a) signals
 ;;
 
 
@@ -284,20 +290,24 @@ let rec fprintf_type anon form t =
 	  end;
 	  begin
 	    match signals with
-	      | None -> 
+	      | [] -> 
 		  fprintf form "@[<hv 2>{ %a }@]@]" fprintf_assertion q
-	      | Some(e,r) ->
+	      | l ->
 		  fprintf form 
-		    "raises %s@ @[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]@]" 
-		    e
+		    "raises%a@ @[<hv 2>{ %a@ | %a }@]@]" 
+		    (print_list comma (fun fmt (e,r) -> fprintf fmt " %s" e))
+		    l
 		    fprintf_assertion q
-		    e 
-		    fprintf_assertion r
+		    (print_list alt (fun fmt (e,r) -> 
+				       fprintf fmt "@[<hv 2>%s =>@ %a@]" e
+					 fprintf_assertion r))
+		    l
 	  end		    
 	  
 	end
 ;;
 
+(*
 let fprint_base_type form b =
   match b with
     | ([],s) -> fprintf form " -> %s" s
@@ -305,16 +315,22 @@ let fprint_base_type form b =
 	fprintf form " -> (%s" t;
 	List.iter (fun t -> fprintf form ",%s" t) tl;
 	fprintf form ") %s" s 
+*)
 
 let rec fprint_logic_type sep form t = 
   match t with
+    | Prod_type(_,Base_type(l,s),t2) ->
+	fprintf form "%s@,%a%a" sep fprintf_base_type (l,s)
+	(fprint_logic_type ", ")  t2
+(*
     | Prod_type(_,Base_type([],s),t2) ->
 	fprintf form "%s@,%s%a" sep s (fprint_logic_type ", ") t2
     | Prod_type(_,Base_type(t::tl,s),t2) ->
 	fprintf form "%s@,(%s" sep t;
 	List.iter (fun t -> fprintf form ",%s" t) tl;
 	fprintf form ") %s %a" s (fprint_logic_type ", ") t2
-    | Base_type b -> fprint_base_type form b 
+*)
+    | Base_type b -> fprintf form " -> %a" fprintf_base_type b 
     | Ref_type _ -> assert false (* should never happen *)
     | Prod_type _ -> assert false (* should never happen *)
     | Annot_type _ -> assert false (* should never happen *)
@@ -351,9 +367,9 @@ type expr =
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list * 
-      assertion * expr * assertion * ((string * assertion) option)
+      assertion * expr * assertion * ((string * assertion) list)
   | Triple of opaque * 
-      assertion * expr * assertion * ((string * assertion) option)
+      assertion * expr * assertion * ((string * assertion) list)
   | Assert of assertion * expr
   | Label of string * expr
   | BlackBox of why_type
@@ -404,7 +420,7 @@ let make_label label e = Label (label, e)
 *)
 ;;
 
-let make_pre pre e =  Triple(false,pre,e,LTrue,None)
+let make_pre pre e =  Triple(false,pre,e,LTrue,[])
 
 let append e1 e2 =
   match e1,e2 with
@@ -444,12 +460,12 @@ let rec iter_expr f e =
 	iter_assertion f pre;
 	iter_expr f body;
 	iter_assertion f post;
-	option_iter (fun (_,a) -> iter_assertion f a) signals
+	List.iter (fun (_,a) -> iter_assertion f a) signals
     | Triple(_,pre,e,post,exceps) ->
 	iter_assertion f pre;
 	iter_expr f e;
 	iter_assertion f post;
-	option_iter (fun (_,a) -> iter_assertion f a) exceps
+	List.iter (fun (_,a) -> iter_assertion f a) exceps
     | Assert(p, e) -> iter_assertion f p; iter_expr f e
     | Label (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
@@ -522,17 +538,19 @@ let rec fprintf_expr form e =
 	fprintf form " }@ %a@]@ " fprintf_expr body;
 	begin
 	  match signals with
-	    | None -> 
+	    | [] -> 
 		fprintf form "@[<hv 2>{ %a }@]@]" fprintf_assertion post
-	    | Some(e,r) ->
-		fprintf form 
-		  "@[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]@]" 
-		  fprintf_assertion post
-		  e 
-		  fprintf_assertion r
+	     | l ->
+		 fprintf form "@[<hv 2>{ %a@ | %a }@]"
+		   fprintf_assertion post
+		   (print_list alt
+		      (fun fmt (e,r) -> 
+			 fprintf fmt "@[<hv 2>%s =>@ %a@]" e
+			   fprintf_assertion r))
+		  l
 	end		    
 
-    | Triple(_,pre,e,LTrue,None) ->
+    | Triple(_,pre,e,LTrue,[]) ->
 	fprintf form "@[<hv 0>(assert { %a };@ (%a))@]" 
 	  fprintf_assertion pre
 	  fprintf_expr e
@@ -542,15 +560,20 @@ let rec fprintf_expr form e =
 	  fprintf_expr e;
 	begin
 	  match exceps with
-	    | None -> 
+	    | [] -> 
 		(if o then fprintf form "{{ %a }}" else fprintf form "{ %a }")
 		  fprintf_assertion post
-	    | Some(e,r) ->
+	    | l ->
 		(if o then 
-		   fprintf form "@[<hv 2>{{ %a@ | @[<hv 2>%s =>@ %a@] }}@]" 
+		   fprintf form "@[<hv 2>{{ %a@ | %a }}@]" 
 		 else
-		   fprintf form "@[<hv 2>{ %a@ | @[<hv 2>%s =>@ %a@] }@]" )
-		fprintf_assertion post e fprintf_assertion r
+		   fprintf form "@[<hv 2>{ %a@ | %a }@]")
+		  fprintf_assertion post
+		  (print_list alt
+		  (fun fmt (e,r) -> 
+		     fprintf fmt "@[<hv 2>%s =>@ %a@]" e
+		       fprintf_assertion r))
+		  l
 	end;
 	fprintf form ")@]"
     | Assert(p, e) ->
@@ -582,7 +605,7 @@ and fprintf_expr_end_list form l =
 type why_decl =
   | Param of bool * string * why_type         (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * why_type         (*r logic decl in why *)
+  | Logic of bool * string * (string * base_type) list * base_type    (*r logic decl in why *)
   | Axiom of string * assertion         (*r Axiom *)
   | Predicate of bool * string * (string * base_type) list * assertion  
   | Function of bool * string * (string * base_type) list * base_type * term
@@ -601,7 +624,7 @@ type prover_decl =
 let get_why_id d =
   match d with
     | Param(_,id,_) -> id
-    | Logic(_,id,_) -> id
+    | Logic(_,id,_,_) -> id
     | Def(id,_) -> id
     | Axiom(id,_) -> id
     | Predicate(_,id,_,_) -> id
@@ -612,8 +635,10 @@ let get_why_id d =
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
-    | Logic(_,id,t) -> iter_why_type f t
     | Def(id,t) -> iter_expr f t
+    | Logic(_,id,args,t) -> 
+	List.iter (fun (_,t) -> iter_base_type f t) args;
+	iter_base_type f t
     | Axiom(id,t) -> iter_assertion f t
     | Predicate(_,id,args,p) -> 
 	List.iter (fun (_,t) -> iter_base_type f t) args;
@@ -652,9 +677,7 @@ let rec do_topo decl_map iter_fun output_fun id d =
   match d.state with
     | `DONE -> ()
     | `RUNNING -> 
-	Creport.warning 
-	  Loc.dummy_position 
-	  ("Recursive definition of " ^ id ^ " in generated file")
+	eprintf "Recursive definition of %s in generated file" id
     | `TODO ->
 	d.state <- `RUNNING;
 	iter_fun
@@ -686,12 +709,13 @@ let fprintf_why_decl form d =
   match d with
     | Param(b,id,t) ->
 	fprintf form "@[<hv 1>%sparameter %s :@ %a@]@.@." 
-	(if b then "external" else "") id 
+	(if b then "external " else "") id 
 	  (fprintf_type false) t
-    | Logic(b,id,t) ->
-	fprintf form "@[<hv 1>%slogic %s :@ %a@]@.@." 
-	(if b then "external" else "") id 
-	  fprint_logic_type t
+    | Logic(b,id,args,t) ->
+	fprintf form "@[<hv 1>%slogic %s: %a -> %a@.@."
+	  (if b then "external " else "") id 
+	  (print_list comma (fun fmt (id,t) -> fprintf_base_type fmt t)) args
+	  fprintf_base_type t 
     | Axiom(id,p) ->
 	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 
 	  fprintf_assertion p
