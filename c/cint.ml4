@@ -1847,7 +1847,7 @@ struct
   let eval_constraint pred oct =
     (* current use does not expect constrained [oct] here, although it could
        be added *)
-    assert not (is_constrained oct);
+    assert (not (is_constrained oct));
     eval_test_or_constraint ~tagging:true ~or_collect:(Join join) pred oct
     
   let subtract oct1 oct2 =
