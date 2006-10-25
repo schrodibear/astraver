@@ -1,3 +1,4 @@
+
 #
 # sample Makefile for Objective Caml
 # Copyright (C) 2001 Jean-Christophe FILLIATRE
@@ -517,7 +518,7 @@ EXPORT=export/$(NAME)
 FTP = $(HOME)/ftp/why
 WWW = $(HOME)/WWW/why
 
-FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
+FILES =src/*.ml* c/*.ml* jc/*.ml* intf/*.ml* tools/*.ml* tools/*.c \
        Version Makefile.in configure.in configure .depend .depend.coq \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
@@ -641,7 +642,7 @@ coq-clean::
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
+	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml > .depend
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \
