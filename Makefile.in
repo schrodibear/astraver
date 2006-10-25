@@ -530,7 +530,21 @@ FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
-	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv
+	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
+	ocamlgraph/Makefile.in ocamlgraph/*.ml* \
+	octagon/aclocal.m4 octagon/AUTHORS octagon/ChangeLog \
+	octagon/clib/Makefile* octagon/clib/*.c octagon/clib/*.h \
+	octagon/clib/README octagon/config* octagon/COPYING octagon/depcomp \
+	octagon/doc/bib_oct.bib octagon/doc/doc_oct.tex octagon/doc/Makefile* \
+	octagon/doc/README octagon/ocamlanal/Makefile* octagon/ocamlanal/*.ml* \
+	octagon/ocamlanal/README octagon/ocamlanal/oct_anal_examples \
+	octagon/INSTALL octagon/install-sh octagon/libtool octagon/ltconfig \
+	octagon/ltmain.sh octagon/missing octagon/mkinstalldirs \
+	octagon/Makefile* octagon/ocamllib/Makefile* \
+	octagon/ocamllib/*.c octagon/ocamllib/*.h octagon/ocamllib/*.ml* \
+	octagon/ocamllib/README octagon/oct-config* octagon/oct_config* \
+	octagon/README octagon/test/Makefile* octagon/test/oct_test.c \
+	octagon/test/README
 
 distrib export: source export-doc export-examples export-examples-c linux
 	make -C $(HOME)/www/why install
