@@ -1166,7 +1166,7 @@ end = struct
   type node_t = Node.t
   type 'a node_hash_t = 'a NodeHash.t
   type absval_t = PointWisePtrLattice.t
-  type 'a analysis_t = ('a * 'a) node_hash_t
+  type 'a analysis_t = 'a pair_t node_hash_t
   type absint_analysis_t = absval_t analysis_t
   type map_t = ILVar.t ILVarMap.t
   type transform_t = map_t
@@ -1388,8 +1388,8 @@ end = struct
     in
 
     (* collect variables in the sets they match *)
-    NodeHash.iter
-	(fun _ (_,pwval) ->
+    NodeHash.iter_post
+	(fun _ pwval ->
 	   PointWisePtrLattice.iter
 	     (fun var pval ->
 		(* if [pval] uses a representative variable, 
@@ -1505,8 +1505,8 @@ end = struct
 
     (* compute the formatted analysis from the information just gathered *)
     let formatted_analysis = 
-      NodeHash.fold 
-	(fun node (_,pwval) new_analysis ->
+      NodeHash.fold_post
+	(fun node pwval new_analysis ->
 	   let new_pwval =
 	     PointWisePtrLattice.mapi
 	       (fun var pval ->
@@ -1557,8 +1557,7 @@ end = struct
 		    pval
 	       ) pwval
 	   in
-	   NodeHash.replace new_analysis node 
-	     (PointWisePtrLattice.bottom (),new_pwval);
+	   NodeHash.replace_post new_analysis node new_pwval;
 	   new_analysis
 	) analysis (NodeHash.create 0)
     in
@@ -1784,9 +1783,9 @@ end = struct
 
     (* transformation is possible only if analysis provides some information. 
        Otherwise raise Not_found. *)
-    let _,aval = 
-      try NodeHash.find analysis node 
-      with Not_found -> raise Rec_transform
+    let aval = match NodeHash.find_post analysis node with
+      | None -> raise Rec_transform
+      | Some v -> v
     in
 
     (* beginning of transformation for expressions *)
@@ -2000,8 +1999,6 @@ end = struct
 
   let sub_transform_on_term analysis params local_nodes =
     let node = local_nodes.node in
-    let sub_nodes = local_nodes.sub_nodes in
-    let new_sub_nodes = local_nodes.new_sub_nodes in
 
     if termexpr_is_local_var node then
       let var = termexpr_var_get node in
@@ -2011,11 +2008,9 @@ end = struct
 	    begin
 	      assert (params.has_at = None);
 	      let begin_val = 
-		try 
-		  let _,begin_val = 
-		    NodeHash.find analysis params.block_begin in
-		  begin_val
-		with Not_found -> PointWisePtrLattice.bottom ()
+		match NodeHash.find_post analysis params.block_begin with
+		  | None -> PointWisePtrLattice.bottom ()
+		  | Some v -> v
 	      in
 	      PointWisePtrLattice.find var begin_val
 	    end
@@ -2024,20 +2019,17 @@ end = struct
 	      begin
 		assert (not params.has_old);
 		let at_node = StringMap.find lab params.label_corresp in
-		let at_val = 
-		  try 
-		    let _,at_val = NodeHash.find analysis at_node in
-		    at_val
-		  with Not_found -> PointWisePtrLattice.bottom ()
+		let at_val = match NodeHash.find_post analysis at_node with
+		  | None -> PointWisePtrLattice.bottom ()
+		  | Some v -> v
 		in
 		PointWisePtrLattice.find var at_val
 	      end
 	  | None ->
 	      let end_val = 
-		try 
-		  let _,end_val = NodeHash.find analysis params.block_end in
-		  end_val
-		with Not_found -> PointWisePtrLattice.bottom ()
+		match NodeHash.find_post analysis params.block_end with
+		  | None -> PointWisePtrLattice.bottom ()
+		  | Some v -> v
 	      in
 	      PointWisePtrLattice.find var end_val
 	in
@@ -2229,22 +2221,13 @@ module LocalPtrAnalysis = Make_DataFlowAnalysis(Var)(PtrLangFromNormalized)
  *                                                                           *
  *****************************************************************************)
 
-let local_aliasing_transform () =
-  (* necessary prefix to translate the hash-table of functions in 
-     the normalized code into a list of function representatives,
-     as defined by type [func_t] in [Cabsint] *)
-  let file = Hashtbl.fold 
-    (fun name (spec,typ,f,s,loc) funcs ->
-       { name = name; spec = spec; typ = typ; f = f; s = s; loc = loc } 
-       :: funcs
-    ) Cenv.c_functions []
-  in
+let local_aliasing fundecl =
 
   if debug then Coptions.lprintf 
-    "[local_aliasing_transform] %i functions to treat@." (List.length file); 
+    "[local_aliasing] treating function %s@." fundecl.f.fun_name; 
 
   (* build control-flow graph *)
-  let decls = PtrLangFromNormalized.from_file file in
+  let decls = PtrLangFromNormalized.from_file [fundecl] in
   (* perform local pointer analysis *)
   let raw_analysis = LocalPtrAnalysis.compute decls in
   (* format results of the analysis *)
@@ -2268,7 +2251,24 @@ let local_aliasing_transform () =
   (* add the necessary declarations *)
   let decls = ConnectCFGtoPtr.cleanup used_vars decl_vars offset_map decls in
   (* return the new program *)
-  let file = PtrLangFromNormalized.to_file decls in
+  PtrLangFromNormalized.to_file decls
+
+let local_aliasing_transform () =
+  (* necessary prefix to translate the hash-table of functions in 
+     the normalized code into a list of function representatives,
+     as defined by type [func_t] in [Cabsint] *)
+  let file = Hashtbl.fold 
+    (fun name (spec,typ,f,s,loc) funcs ->
+       { name = name; spec = spec; typ = typ; f = f; s = s; loc = loc } 
+       :: funcs
+    ) Cenv.c_functions []
+  in
+
+  if debug then Coptions.lprintf 
+    "[local_aliasing_transform] %i functions to treat@." (List.length file); 
+
+  let file = List.fold_right
+    (fun fundecl acc -> (local_aliasing fundecl) @ acc) file [] in
 
   if debug then Coptions.lprintf 
     "[local_aliasing_transform] %i functions treated@." (List.length file);

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.128 2006-10-20 08:04:40 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.129 2006-10-27 14:10:56 moy Exp $ i*)
 
 open Format
 open Coptions
@@ -190,6 +190,11 @@ let is_bitfield ty = match ty.ctype_node with
 let va_list = Ctypes.noattr (Ctypes.Tvar "va_list")
 let _ = add_typedef Loc.dummy_position "__builtin_va_list" va_list
 
+let is_null e = 
+  match e.texpr_node with
+    | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
+    | _ -> false
+
 (* Coercions (ints to floats, floats to int) *)
 
 let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
@@ -205,6 +210,14 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       e
   | Tpointer (_,{ ctype_node = Tvoid }), Tpointer _ ->
       e
+  | _, Tpointer _ when is_null e ->
+      { e with texpr_node = TEcast(
+	  { ctype_node = Tpointer (Not_valid, ty);
+	  ctype_storage = No_storage;
+	  ctype_const = false;
+	  ctype_volatile = false;
+	  ctype_ghost = false;
+	},e) }
   | _ ->
       if verbose || debug then 
 	eprintf 
@@ -258,11 +271,6 @@ let conversion e1 e2 =
 	let ty = noattr (Tfloat (max_float (fk1, fk2))) in
 	coerce ty e1, coerce ty e2, ty
     | _ -> assert false
-
-let is_null e = 
-  match e.texpr_node with
-    | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
-    | _ -> false
 
 let float_constant_type s =
   let n = String.length s in

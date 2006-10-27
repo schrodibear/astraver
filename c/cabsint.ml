@@ -78,6 +78,44 @@ module type VARIABLE = sig
   val hash : t -> int
 end
 
+(* general interface of any module representing integers *)
+
+module type INT_VALUE = sig
+
+  (* same as Int32/Int64 *)
+  type t
+  val compare : t -> t -> int
+  val add : t -> t -> t
+  val sub : t -> t -> t
+  val mul : t -> t -> t
+  val div : t -> t -> t
+  val rem : t -> t -> t
+  val abs : t -> t
+  val zero : t
+  val one : t
+  val minus_one : t
+  val of_int : int -> t
+  val to_int : t -> int
+  val of_string : string -> t
+  val to_string : t -> string
+  val neg : t -> t
+  val succ : t -> t
+  val pred : t -> t
+
+  (* added w.r.t. Int32/Int64 *)
+  val pretty: Format.formatter -> t -> unit
+  val lt : t -> t -> bool
+  val le : t -> t -> bool
+  val gt : t -> t -> bool
+  val ge : t -> t -> bool
+  val eq : t -> t -> bool
+  val is_zero : t -> bool
+  val is_one : t -> bool
+  val min : t -> t -> t
+  val max : t -> t -> t
+  val length : t -> t -> t (* b - a + 1 *) 
+end
+
 module type SEMI_LATTICE = sig
   type t
     (* [top] and [bottom] made functions so that they can depend 
@@ -316,6 +354,9 @@ end
 
 type direction_t = Forward | Backward
 
+(* type of pair that allows a missing part *)
+type 'a pair_t = Fst of 'a | Snd of 'a | Both of 'a * 'a
+
 (* gives operations on a control-flow graph *)
 
 module type INTER_LANG = sig
@@ -333,7 +374,26 @@ module type INTER_LANG = sig
 
   module NodeSet : Set.S with type elt = Node.t
   module NodeMap : Map.S with type key = Node.t
-  module NodeHash : Hashtbl.S with type key = Node.t
+  module NodeHash : sig
+    include Hashtbl.S with type key = Node.t
+    val find_both : 'a pair_t t -> Node.t -> 'a option * 'a option
+    val find_pre : 'a pair_t t -> Node.t -> 'a option
+    val find_post : 'a pair_t t -> Node.t -> 'a option
+    val replace_both : 'a pair_t t -> Node.t -> 'a -> 'a -> unit
+    val replace_pre : 'a pair_t t -> Node.t -> 'a -> unit
+    val replace_post : 'a pair_t t -> Node.t -> 'a -> unit
+    val remove_both : 'a pair_t t -> Node.t -> unit
+    val remove_pre : 'a pair_t t -> Node.t -> unit
+    val remove_post : 'a pair_t t -> Node.t -> unit
+    val iter_both : 
+      (Node.t -> 'a option -> 'a option -> unit) -> 'a pair_t t -> unit
+    val iter_pre : (Node.t -> 'a -> unit) -> 'a pair_t t -> unit
+    val iter_post : (Node.t -> 'a -> unit) -> 'a pair_t t -> unit
+    val fold_both : 
+      (Node.t -> 'a option -> 'a option -> 'b -> 'b) -> 'a pair_t t -> 'b -> 'b
+    val fold_pre : (Node.t -> 'a -> 'b -> 'b) -> 'a pair_t t -> 'b -> 'b
+    val fold_post : (Node.t -> 'a -> 'b -> 'b) -> 'a pair_t t -> 'b -> 'b
+  end
 
     (* is this node the function precondition ? *)
   val is_function_precondition_node : Node.t -> bool
@@ -356,6 +416,10 @@ module type INTER_LANG = sig
     (* list of predecessors in the operational graph.
        order does not matter *)
   val predecessors : ?ignore_looping:bool -> Node.t -> Node.t list
+    (* is this node merging the upward and backward flows in a loop ? *)
+  val is_loop_backward_destination_node : Node.t -> bool
+    (* associates to some looping destination node its source node *)
+  val looping_source : Node.t -> Node.t
     (* iterators *)
   val iter_operational : 
       direction_t -> roots:Node.t list -> (Node.t -> unit) -> unit
@@ -386,7 +450,7 @@ module type CONNECTION = sig
        It is an association from nodes to abstract values.
        First abstract value is the value before the node is entered.
        Second abstract value is the value after the node is exited. *)
-  type 'a analysis_t = ('a * 'a) node_hash_t
+  type 'a analysis_t = 'a pair_t node_hash_t
     (* result of abstract interpretation analysis *)
   type absint_analysis_t = absval_t analysis_t
     (* kind of widening performed, if any *)
@@ -564,7 +628,11 @@ module Make_DataFlowAnalysis
        keep_select : node_t -> bool;
 	 (* select nodes on which to merge forward and backward informations *)
        merge_select : node_t -> bool;
-	 (* do merge forward and backward informations *)
+	 (* do merge forward and backward informations.
+	    Forward is [post] value while backward is [pre] value, which only
+	    makes sense in general if the backward transfer function on
+	    the node is the identity.
+	 *)
        merge_analyses : absval_t -> absval_t -> absval_t;
          (* use final transfer function or not *)
        final : bool;
@@ -628,17 +696,16 @@ module Make_DataFlowAnalysis
 
     (* find current values associated to [node] *)
     let res_val node =
-      try 
-	let pre_val,post_val = NodeHash.find res node in
-	Some pre_val,Some post_val
-      with Not_found -> 
-	try 
-	  let init_val = NodeMap.find node params.init in
-	  begin match params.direction with
+      match NodeHash.find_both res node with
+      | None,None ->
+	  begin try 
+	    let init_val = NodeMap.find node params.init in
+	    begin match params.direction with
 	    | Forward -> Some init_val,None
 	    | Backward -> None,Some init_val
-	  end
-	with Not_found -> None,None
+	    end
+	  with Not_found -> None,None end
+      | pre_val,post_val -> pre_val,post_val
     in
 
     let treat_node cur_node =
@@ -652,6 +719,21 @@ module Make_DataFlowAnalysis
 
       (* find value associated to [cur_node] *)
       let pre_val,post_val = res_val cur_node in
+      let pre_val =
+	if params.one_pass && is_loop_backward_destination_node cur_node then
+	  match params.direction with
+	    | Forward -> 
+		let sce_node = looping_source cur_node in
+		let _,sce_val = res_val sce_node in
+		begin match pre_val,sce_val with
+		  | None,_ -> pre_val
+		  | Some _,None -> pre_val
+		  | Some pre_val,Some sce_val ->
+		      Some (params.join pre_val sce_val)
+		end
+	    | Backward -> pre_val
+	else pre_val
+      in
       let from_val,to_val = match params.direction with
         | Forward -> pre_val,post_val
 	| Backward -> post_val,pre_val
@@ -668,9 +750,43 @@ module Make_DataFlowAnalysis
 	    Option.app (params.transfer ~previous_value:to_val cur_node) 
 	      from_val
       in
+      (* perform widening if necessary *)
+      let cur_val = match cur_val with
+	| None -> None
+	| Some cur_val ->
+	    if IL.is_widening_node cur_node then
+	      match C.widening_threshold with
+		| None -> 
+		    (* analysis does not require widening to converge *)
+		    Some cur_val
+		| Some threshold ->
+		    let cur_count = IL.get_widening_count cur_node in
+		    IL.incr_widening_count cur_node;
+		    if cur_count = threshold then
+		      (* perform widening *)
+		      match to_val with
+			| None -> Some cur_val
+			| Some to_val -> 
+			    if debug then Coptions.lprintf 
+			      "[propagate] perform widening@.";
+			    Some (params.widening C.widening_strategy 
+				    to_val cur_val)
+		    else if cur_count > threshold then
+		      (* needed ???????? *)
+		      to_val
+		    else 
+		      (* not yet time for widening *)
+		      Some cur_val
+	    else 
+	      (* not a widening node *)
+	      Some cur_val
+      in
       if debug_more then Coptions.lprintf 
 	"[propagate] computed value: %a@." 
 	(Option.pretty params.pretty) cur_val;
+      if debug_more then Coptions.lprintf 
+	"[propagate] previous value: %a@." 
+	(Option.pretty params.pretty) to_val;
 
       (* change value if different in fixpoint case, or in all cases when
 	 doing a one-pass propagation. In the last case, the value of the node
@@ -690,35 +806,11 @@ module Make_DataFlowAnalysis
 	  if debug then Coptions.lprintf 
 	    "[propagate] new value is different@.";
 	  
-	  (* perform widening if necessary *)
-	  let cur_val =
-	    if IL.is_widening_node cur_node then
-	      match C.widening_threshold with
-	        | None -> 
-		    (* analysis does not require widening to converge *)
-		    cur_val
-		| Some threshold ->
-		    if IL.get_widening_count cur_node > threshold then
-		      (* perform widening *)
-		      match to_val with
-			| None -> cur_val
-			| Some to_val -> 
-			    if debug then Coptions.lprintf 
-			      "[propagate] perform widening@.";
-			    params.widening C.widening_strategy to_val cur_val
-		    else 
-		      (* not yet time for widening *)
-		      begin
-			IL.incr_widening_count cur_node;
-			cur_val
-		      end
-	    else 
-	      (* not a widening node *)
-	      cur_val
-	  in
 	  begin match params.direction with
-	    | Forward -> NodeHash.replace res cur_node (from_val,cur_val);
-	    | Backward -> NodeHash.replace res cur_node (cur_val,from_val)
+	    | Forward -> 
+		NodeHash.replace_both res cur_node from_val cur_val;
+	    | Backward -> 
+		NodeHash.replace_both res cur_node cur_val from_val
 	  end;
 
 	  let next_nodes = match params.direction with
@@ -772,9 +864,11 @@ module Make_DataFlowAnalysis
 			   in
 			   begin match params.direction with
 			     | Forward ->
-				 NodeHash.replace res nx_node (nx_val,nx_to)
+				 NodeHash.replace_both res nx_node 
+				   nx_val nx_to
 			     | Backward ->
-				 NodeHash.replace res nx_node (nx_to,nx_val)
+				 NodeHash.replace_both res nx_node
+				   nx_to nx_val
 			   end;
 (*
 			   (* add node in working list/set if not present *)
@@ -856,7 +950,9 @@ module Make_DataFlowAnalysis
 
   let keep_only_selected keep_select analysis =
     IL.iter_operational Forward ~roots:[] (fun node ->
-      if not (keep_select node) then
+      if keep_select node then
+	NodeHash.remove_pre analysis node
+      else
 	NodeHash.remove analysis node
     )
 
@@ -865,6 +961,24 @@ module Make_DataFlowAnalysis
       NodeMap.empty decls in
     propagate (forward_params init)
 
+  (* propagation of assertions (e.g. resulting from verification conditions)
+     should be done in one pass, without going through back edges in loops.
+     Indeed, on the following code 
+          int i = 0;
+          int p[10]; // pp1
+          while (i++) { // pp2
+            p[i] = 0; // pp3
+          }
+     At program point 1 (pp1)  : i == 0 && arrlen(p) == 10
+     At pp3 without assertions : i > 0 && arrlen(p) == 10
+     At pp3 with assertions    : 0 < i < arrlen(p) == 10
+     If we join pp1 and pp3 with assertions, we get a buggy assume-invariant
+          0 <= i < arrlen(p) == 10
+     The correct thing to do is to join pp1 and pp3 without assertions, to get
+     the correct assume-invariant
+          0 <= i && arrlen(p) == 10
+     And then to propagate the assertions without going through back edges.
+   *)
   let compute_with_assert keep_select decls =
     (* 1st step: propagate forward information *)
     let fwd_analysis = compute decls in
@@ -884,12 +998,19 @@ module Make_DataFlowAnalysis
     IL.fold_operational Forward ~roots:[] (fun node cur_analysis ->
 
       let node_value_in_analysis analysis node =
-	let pre_cur_val,post_cur_val = 
-	  try NodeHash.find analysis node 
-	  with Not_found -> 
+	let pre_cur_val = match NodeHash.find_pre analysis node with
+	| None -> 
 	    (* use here top value, in order to correctly meet with value
 	       from forward analysis *)
-	    L.top (),L.top ()
+	    L.top ()
+	| Some pre_val -> pre_val
+	in
+	let post_cur_val =  match NodeHash.find_post analysis node with
+	| None -> 
+	    (* use here top value, in order to correctly meet with value
+	       from forward analysis *)
+	    L.top ()
+	| Some post_val -> post_val
 	in
 	(* always refer to [fwd_analysis] to keep initial fixpoint 
 	   results. [analysis] may not have an appropriate value,
@@ -897,10 +1018,16 @@ module Make_DataFlowAnalysis
 	   considered this node, and thus have "forgotten" the initial 
 	   results. *)
 	let pre_fwd_val,post_fwd_val =
-	  try NodeHash.find fwd_analysis node
-	  with Not_found -> 
-	    (* use here bottom value, as usual *)
-	    L.bottom (),L.bottom ()
+	  match NodeHash.find_both fwd_analysis node with
+	  | None,None -> 
+	      (* use here bottom value, as usual *)
+	      L.bottom (),L.bottom ()
+	  | Some pre_val,None ->
+	      pre_val,L.bottom ()
+	  | None,Some post_val ->
+	      L.bottom (),post_val
+	  | Some pre_val,Some post_val ->
+	      pre_val,post_val
 	in
 	let pre_cur_val = L.meet pre_cur_val pre_fwd_val in
 	let post_cur_val = L.meet post_cur_val post_fwd_val in
@@ -920,12 +1047,13 @@ module Make_DataFlowAnalysis
 	      node_value_in_analysis cur_analysis node
 	    in
 	    if params.merge_select node then
-	      let pre_mix_val = params.merge_analyses pre_cur_val pre_bwd_val
+	      (* use [post] value, only one valid for previous analysis *)
+	      let pre_mix_val = params.merge_analyses post_cur_val pre_bwd_val
 	      in
-	      let mix_val = pre_mix_val,post_cur_val in
-	      NodeHash.replace mix_analysis node mix_val
+	      (* for merge nodes, set same value as [pre] and [post] value *)
+	      NodeHash.replace_both mix_analysis node pre_mix_val pre_mix_val
 	    else if params.keep_select node then
-	      NodeHash.replace mix_analysis node (pre_cur_val,post_cur_val)
+	      NodeHash.replace_both mix_analysis node pre_cur_val post_cur_val
 	    else assert false
 	  else ()
 	in
@@ -941,7 +1069,7 @@ module Make_DataFlowAnalysis
 	    let pre_mix_val,post_mix_val = 
 	      node_value_in_analysis mix_analysis node
 	    in
-	    NodeHash.replace mix_analysis node (pre_mix_val,post_mix_val)
+	    NodeHash.replace_both mix_analysis node pre_mix_val post_mix_val
 	);
 	(* propagate forward again *)
 	keep_only_selected params.keep_select mix_analysis;
@@ -1002,6 +1130,8 @@ module type CFG_LANG_INTERNAL = sig
   type var_tt
   type intern_t = 
    | InternOperational
+   | InternOperationalBwdSrc
+   | InternOperationalBwdDest
    | InternStructural
    | InternLogical
    | InternLogicalScope
@@ -1155,6 +1285,13 @@ module type CFG_LANG_EXTERNAL = sig
   val is_invariant_node : Node.t -> bool
     (* is this node a [Nassinv] node for a loop invariant ? *)
   val is_assume_invariant_node : Node.t -> bool
+    (* is this node a [Nintern InternOperationalBwdSrc] node
+       for collecting values on the backward edge of a loop before
+       merging with the upward value ? *)
+  val is_loop_backward_source_node : Node.t -> bool
+    (* is this node a [Nintern InternOperationalBwdDest] node for merging
+       values on upward and backward flows ? *)
+  val is_loop_backward_destination_node : Node.t -> bool
     (* get the list of variables modified in this loop *) 
   val get_loop_write_vars : Node.t -> ilvar_t list
     (* get the list of pointers whose content is modified in this loop *) 
@@ -1300,6 +1437,8 @@ end = struct
   *)
   type intern_t = 
    | InternOperational
+   | InternOperationalBwdSrc
+   | InternOperationalBwdDest
    | InternStructural
    | InternLogical
    | InternLogicalScope
@@ -1431,6 +1570,10 @@ end = struct
           begin match fk with
             | InternOperational -> 
 		Format.fprintf fmt "Nintern(InternOperational)"
+            | InternOperationalBwdSrc -> 
+		Format.fprintf fmt "Nintern(InternOperationalBwdSrc)"
+            | InternOperationalBwdDest -> 
+		Format.fprintf fmt "Nintern(InternOperationalBwdDest)"
             | InternStructural ->
 		Format.fprintf fmt "Nintern(InternStructural)"
             | InternLogical ->
@@ -1447,7 +1590,79 @@ end = struct
     (* It is necessary to make it a hash-table based on [Node.equal] and
        [Node.hash], otherwise mutated nodes (e.g. the invariant node with
        its mutable field) are not recognized equal. *)
-  module NodeHash = Hashtbl.Make (Node)
+  module NodeHash = struct
+
+    include Hashtbl.Make (Node)
+
+    let find_both analysis node =
+      try 
+	match find analysis node with
+	| Fst v -> Some v,None
+	| Snd v -> None,Some v
+	| Both (v1,v2) -> Some v1,Some v2
+      with Not_found -> None,None
+    let find_pre analysis node = fst (find_both analysis node)
+    let find_post analysis node = snd (find_both analysis node)
+
+    let replace_both analysis node v1 v2 = 
+      replace analysis node (Both (v1,v2))
+    let replace_pre analysis node v1 =
+      match find_post analysis node with
+      | None -> replace analysis node (Fst v1)
+      | Some v2 -> replace analysis node (Both (v1,v2))
+    let replace_post analysis node v2 =
+      match find_pre analysis node with
+      | None -> replace analysis node (Snd v2)
+      | Some v1 -> replace analysis node (Both (v1,v2))
+
+    let remove_both = remove
+    let remove_pre analysis node =
+      match find_post analysis node with
+	| None -> remove analysis node
+	| Some v -> remove analysis node; replace_post analysis node v
+    let remove_post analysis node =
+      match find_pre analysis node with
+	| None -> remove analysis node
+	| Some v -> remove analysis node; replace_pre analysis node v
+
+    let iter_both f analysis =
+      iter (fun node v -> match v with
+	      | Fst v -> f node (Some v) None
+	      | Snd v -> f node None (Some v)
+	      | Both (v1,v2) -> f node (Some v1) (Some v2)
+	   ) analysis
+    let iter_pre f analysis =
+      iter (fun node v -> match v with
+	      | Fst v -> f node v
+	      | Snd v -> ()
+	      | Both (v1,v2) -> f node v1
+	   ) analysis
+    let iter_post f analysis =
+      iter (fun node v -> match v with
+	      | Fst v -> ()
+	      | Snd v -> f node v
+	      | Both (v1,v2) -> f node v2
+	   ) analysis
+	
+    let fold_both f analysis init =
+      fold (fun node v acc -> match v with
+	      | Fst v -> f node (Some v) None acc
+	      | Snd v -> f node None (Some v) acc
+	      | Both (v1,v2) -> f node (Some v1) (Some v2) acc
+	   ) analysis init
+    let fold_pre f analysis init =
+      fold (fun node v acc -> match v with
+	      | Fst v -> f node v acc
+	      | Snd v -> acc
+	      | Both (v1,v2) -> f node v1 acc
+	   ) analysis init
+    let fold_post f analysis init =
+      fold (fun node v acc -> match v with
+	      | Fst v -> acc
+	      | Snd v -> f node v acc
+	      | Both (v1,v2) -> f node v2 acc
+	   ) analysis init
+  end
 
   let internal_graph = ref None
   let graph () = match !internal_graph with
@@ -1547,6 +1762,14 @@ end = struct
 
   let is_assume_invariant_node node = match Node.label node with
     | Nassinv _ -> true
+    | _ -> false
+
+  let is_loop_backward_source_node node = match Node.label node with
+    | Nintern InternOperationalBwdSrc -> true
+    | _ -> false
+
+  let is_loop_backward_destination_node node = match Node.label node with
+    | Nintern InternOperationalBwdDest -> true
     | _ -> false
 
   let get_loop_write_vars node = match Node.label node with
@@ -1836,7 +2059,7 @@ end = struct
 		    end
 	      end
 	    (* not a dereference from a variable *)
-	  | NEarrow _ | NEunary (Ustar,_) -> None
+	  | NEarrow _ | NEunary (Ustar,_) | NEcall _ -> None
 	    (* other cases should not be possible *)
 	  | _ -> assert false
 	in
@@ -1928,6 +2151,7 @@ end = struct
               && (Edge.label e = NodeRelation.OperationalBwd))
         ) el in
     List.map Edge.dst el
+
   let predecessors ?(ignore_looping=false) n =
     let el = Self.pred_e (graph ()) n in
     let el = List.filter 
@@ -1937,6 +2161,14 @@ end = struct
               && (Edge.label e = NodeRelation.OperationalBwd))
         ) el in
     List.map Edge.src el
+
+  let looping_source n =
+    assert (is_loop_backward_destination_node n);
+    let pl = predecessors n in
+    let pl = List.filter is_loop_backward_source_node pl in
+    match pl with
+      | [sn] -> sn
+      | _ -> assert false
 
   (* hierarchical successors. Used for structural and logical successors. *)
   let succ edge n = 
@@ -2209,7 +2441,6 @@ end = struct
       | NKterm ->
 	  let t1 = get_t node1 in
 	  let t2 = get_t node2 in
-	  let typ = t1.nterm_type in
 	  let op = Clogic.Badd in
 	  let new_t = NTbinop (t1,op,t2) in
 	  let new_t = { t1 with nterm_node = new_t } in
@@ -2679,8 +2910,8 @@ end = struct
       | [] -> None
       | _ -> assert false (* bad encoding *)
     in
-    let new_a = { a with invariant = new_inv; assume_invariant = new_assinv;
-		    loop_assigns = new_ass; variant = new_var } in
+    let new_a = { invariant = new_inv; assume_invariant = new_assinv;
+		  loop_assigns = new_ass; variant = new_var } in
     create_tmp_node (Nannot new_a)
 
   let change_sub_components_in_spec node sub_nodes =
@@ -2718,8 +2949,8 @@ end = struct
       | [] -> None
       | _ -> assert false (* bad encoding *)
     in
-    let new_s = { s with requires = new_req; assigns = new_ass;
-		    ensures = new_ens; decreases = new_dec } in
+    let new_s = { requires = new_req; assigns = new_ass;
+		  ensures = new_ens; decreases = new_dec } in
     create_tmp_node (Nspec new_s)
 
   let change_sub_components node sub_nodes =
@@ -3150,10 +3381,13 @@ end = struct
 	    (* oper *) add_opedge s2node snode;
 	    (* struct *) add_stedge snode [then_node; s1node; s2node]
 	| NSwhile (a,e,s1) ->
-	    (* target of backward edge in loop *)
-	    let bwd_node = create_node (Nintern InternOperational) in
+	    (* source of backward edge in loop *)
+	    let bwd_node = create_node (Nintern InternOperationalBwdSrc) in
+	    (* node that merges backward and upward flows *)
+	    let mrg_node = create_node (Nintern InternOperationalBwdDest) in
 	    (* connect backward edge *)
-	    (* oper *) add_opedge start_node bwd_node;
+	    (* oper *) add_opedge start_node mrg_node;
+	    (* oper *) add_backedge bwd_node mrg_node;
 	    let loop_effect = 
 	      Ceffect.ef_union (Ceffect.statement ~with_local:true s1)
 		(Ceffect.expr ~with_local:true e) in
@@ -3166,14 +3400,14 @@ end = struct
 			   write_under_pointers = write_under_pointers; } in
 	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
-	      | None,None -> bwd_node
+	      | None,None -> mrg_node
 	      | Some inode,None | None,Some inode ->
-		  (* oper *) add_opedge bwd_node inode;
+		  (* oper *) add_opedge mrg_node inode;
 		  inode
 	      | Some invnode,Some assinvnode ->
 		  (* assume part of invariant has no successor *)
-		  (* oper *) add_opedge bwd_node assinvnode;
-		  (* oper *) add_opedge bwd_node invnode;
+		  (* oper *) add_opedge mrg_node assinvnode;
+		  (* oper *) add_opedge mrg_node invnode;
 		  (* logic *) add_invedge invnode assinvnode;
 		  (* logic *) add_invedge assinvnode invnode;
 		  invnode
@@ -3189,7 +3423,7 @@ end = struct
             let widen_node = create_node (Nwiden { count = 0 }) in 
             (* oper *) add_opedge test_node widen_node;
 	    let s1node = from_stat upd_ctxt widen_node s1 in
-	    (* oper *) add_backedge s1node bwd_node; (* before [e]'s eval *)
+	    (* oper *) add_opedge s1node bwd_node; (* before [e]'s eval *)
 	    (* oper *) add_opedge stop_node snode; (* after [e]'s eval *)
 	    (* struct *) add_stedge snode [test_node; s1node];
 	    (* logic *) add_logedge snode [anode];
@@ -3198,10 +3432,13 @@ end = struct
 	    (* logic *) add_begedge anode ctxt.function_begin;
 	    (* logic *) add_endedge anode bwd_node
 	| NSdowhile (a,s1,e) ->
-	    (* target of backward edge in loop *)
-	    let bwd_node = create_node (Nintern InternOperational) in
+	    (* source of backward edge in loop *)
+	    let bwd_node = create_node (Nintern InternOperationalBwdSrc) in
+	    (* node that merges backward and upward flows *)
+	    let mrg_node = create_node (Nintern InternOperationalBwdDest) in
 	    (* connect backward edge *)
-	    (* oper *) add_opedge start_node bwd_node;
+	    (* oper *) add_opedge start_node mrg_node;
+	    (* oper *) add_backedge bwd_node mrg_node;
 	    let fwd_node = create_node (Nintern InternOperational) in
 	    let upd_ctxt =
 	      { ctxt with 
@@ -3209,7 +3446,7 @@ end = struct
 		  loop_switch_ends = snode :: ctxt.loop_switch_ends } in
             (* widening node is first node -in- the loop *)
             let widen_node = create_node (Nwiden { count = 0 }) in 
-            (* oper *) add_opedge bwd_node widen_node;
+            (* oper *) add_opedge mrg_node widen_node;
 	    let s1node = from_stat upd_ctxt widen_node s1 in
 	    let loop_effect = 
 	      Ceffect.ef_union (Ceffect.statement ~with_local:true s1)
@@ -3239,7 +3476,7 @@ end = struct
 	    let stop_node = 
 	      from_expr ~is_test:true ~neg_test:true loop_node e in
 	    (* oper *) add_opedge s1node fwd_node;
-	    (* oper *) add_backedge test_node bwd_node;(* before [s1]'s eval *)
+	    (* oper *) add_opedge test_node bwd_node;(* before [s1]'s eval *)
 	    (* oper *) add_opedge stop_node snode;
 	    (* struct *) add_stedge snode [s1node; test_node];
 	    (* logic *) add_logedge snode [anode];
@@ -3248,11 +3485,14 @@ end = struct
 	    (* logic *) add_begedge anode ctxt.function_begin;
 	    (* logic *) add_endedge anode bwd_node
 	| NSfor (a,einit,etest,eincr,s1) ->
-	    (* target of backward edge in loop *)
-	    let bwd_node = create_node (Nintern InternOperational) in
-	    let einit_node = from_expr start_node einit in
+	    (* source of backward edge in loop *)
+	    let bwd_node = create_node (Nintern InternOperationalBwdSrc) in
+	    (* node that merges backward and upward flows *)
+	    let mrg_node = create_node (Nintern InternOperationalBwdDest) in
 	    (* connect backward edge *)
-	    (* oper *) add_opedge einit_node bwd_node;
+	    let einit_node = from_expr start_node einit in
+	    (* oper *) add_opedge einit_node mrg_node;
+	    (* oper *) add_backedge bwd_node mrg_node;
 	    let loop_effect = 
 	      Ceffect.ef_union (Ceffect.expr ~with_local:true etest)
 		(Ceffect.ef_union (Ceffect.statement ~with_local:true s1)
@@ -3267,14 +3507,14 @@ end = struct
 			   write_under_pointers = write_under_pointers; } in
 	    let anode,invnode_opt,assinvnode_opt = from_annot a writes in
 	    let loop_node = match invnode_opt,assinvnode_opt with
-	      | None,None -> bwd_node
+	      | None,None -> mrg_node
 	      | Some inode,None | None,Some inode ->
-		  (* oper *) add_opedge bwd_node inode;
+		  (* oper *) add_opedge mrg_node inode;
 		  inode
 	      | Some invnode,Some assinvnode ->
 		  (* assume part of invariant has no successor *)
-		  (* oper *) add_opedge bwd_node assinvnode;
-		  (* oper *) add_opedge bwd_node invnode;
+		  (* oper *) add_opedge mrg_node assinvnode;
+		  (* oper *) add_opedge mrg_node invnode;
 		  (* logic *) add_invedge invnode assinvnode;
 		  (* logic *) add_invedge assinvnode invnode;
 		  invnode
@@ -3293,7 +3533,7 @@ end = struct
 	    let s1node = from_stat upd_ctxt widen_node s1 in
 	    let eincr_node = from_expr fwd_node eincr in
 	    (* oper *) add_opedge s1node fwd_node;
-	    (* oper *) add_backedge eincr_node bwd_node; (* before [etest] *)
+	    (* oper *) add_opedge eincr_node bwd_node; (* before [etest] *)
 	    (* oper *) add_opedge stop_node snode; (* after [etest]'s eval *)
 	    (* struct *) add_stedge snode [einit_node; test_node;
 					   eincr_node; s1node];
@@ -3333,9 +3573,10 @@ end = struct
 	    (* oper *) force_add_opedge snode (List.hd ctxt.loop_switch_ends);
 	| NScontinue -> 
 	    (* oper *) add_opedge start_node snode;
-	    (* beware that this edge is a backward one, crucial to make 
-	       the topological walk work properly *)
-	    (* oper *) add_backedge snode (List.hd ctxt.loop_starts)
+	    (* Originally this edge was a backward one, crucial to make 
+	       the topological walk work properly. Not the case anymore since
+	       loops have 2 special nodes for the back edge. *)
+	    (* oper *) add_opedge snode (List.hd ctxt.loop_starts)
 	| NSgoto (_,lab) ->
             (* no problem of widening here since only forward gotos are 
 	       accepted. Otherwise we should add a widening node in the induced

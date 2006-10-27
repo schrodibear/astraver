@@ -152,7 +152,7 @@ CCMO = ocamlgraph/graph.cmo \
 	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
 	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cabsint.cmo c/cptr.cmo \
-	c/cint.cmo c/cmain.cmo 
+	c/csymbol.cmo c/cint.cmo c/cmain.cmo 
 CCMA = @OCTAGONLIB@
 CCMX = $(CCMO:.cmo=.cmx)
 CCMXA = $(CCMA:.cma=.cmxa)
