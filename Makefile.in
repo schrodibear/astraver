@@ -14,6 +14,12 @@
 # See the GNU Library General Public License version 2 for more details
 # (enclosed in the file LGPL).
 
+ifeq ($(VERBOSEMAKE),yes)
+ QUIET = 
+else    
+ QUIET = yes
+endif
+
 # where to install the binaries
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -125,14 +131,14 @@ CMO = src/lib.cmo \
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking why.opt' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 #	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
+	$(if $(QUIET),@echo 'Linking why.byte' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking why.static' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/top: $(CMO)
@@ -158,12 +164,12 @@ CCMX = $(CCMO:.cmo=.cmx)
 CCMXA = $(CCMA:.cma=.cmxa)
 
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
-	$(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
+	$(if $(QUIET),@echo 'Linking caduceus.opt' &&) $(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
 	      @STATIC@ $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
-	$(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
+	$(if $(QUIET),@echo 'Linking caduceus.byte' &&) $(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
 	      @STATIC@ $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
@@ -209,11 +215,11 @@ gwhy-no:
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
+	$(if $(QUIET),@echo 'Linking gwhy.opt' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
 	strip $@
 
 bin/gwhy.byte: $(GCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma threads.cma gtkThread.cmo $^
+	$(if $(QUIET),@echo 'Linking caduceus.byte' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
 # tools
 bin/why2html.byte: tools/why2html.ml
@@ -456,16 +462,16 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 .SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo .ml4
 
 .mli.cmi:
-	$(OCAMLC) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) -c $(BFLAGS) $<
 
 .ml.cmo:
-	$(OCAMLC) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) -c $(BFLAGS) $<
 
 .ml.o:
 	$(OCAMLOPT) -c $(OFLAGS) $<
 
 .ml.cmx:
-	$(OCAMLOPT) -c $(OFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) -c $(OFLAGS) $<
 
 .mll.ml:
 	$(OCAMLLEX) $<

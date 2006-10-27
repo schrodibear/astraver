@@ -272,7 +272,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
 ac_unique_file="src/monad.mli"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB CAMLP4O CAMLP4OOPT COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB enable_octagon OCTAGONLIB STATIC COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB CAMLP4O CAMLP4OOPT COQC COQDEP PVSC MIZF VERBOSEMAKE EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB enable_octagon OCTAGONLIB STATIC COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -783,6 +783,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-verbosemake    verbose makefile commands
   --enable-octagon=no/yes  using abstract interpretation default=$default_octagon
 
 _ACEOF
@@ -1219,6 +1220,21 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
+
+# verbosemake feature
+
+# Check whether --enable-verbosemake or --disable-verbosemake was given.
+if test "${enable_verbosemake+set}" = set; then
+  enableval="$enable_verbosemake"
+  VERBOSEMAKE=yes
+else
+  VERBOSEMAKE=no
+fi;
+if test "$VERBOSEMAKE" = yes ; then
+	echo "$as_me:$LINENO: result: Make will be verbose." >&5
+echo "${ECHO_T}Make will be verbose." >&6
+fi
 
 
 # Check for arch/OS
@@ -2092,6 +2108,7 @@ fi
 
 
 
+
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
 
@@ -2772,6 +2789,7 @@ s,@COQC@,$COQC,;t t
 s,@COQDEP@,$COQDEP,;t t
 s,@PVSC@,$PVSC,;t t
 s,@MIZF@,$MIZF,;t t
+s,@VERBOSEMAKE@,$VERBOSEMAKE,;t t
 s,@EXE@,$EXE,;t t
 s,@OCAMLBEST@,$OCAMLBEST,;t t
 s,@OCAMLVERSION@,$OCAMLVERSION,;t t
@@ -3060,3 +3078,22 @@ fi
 
 chmod a-w Makefile bench/bench ocamlgraph/Makefile
 chmod a+x bench/bench
+
+# Summary
+
+echo
+echo "                 Summary"
+echo "-----------------------------------------"
+echo "Verbose make            : $VERBOSEMAKE"
+echo "Abstract interpretation : $enable_octagon"
+echo "GWhy                    : $LABLGTK2"
+echo "Coq support             : $COQ"
+if test "$COQ" = "yes" ; then
+   echo "    Version             : $COQVER ($COQVERSION)"
+   echo "    Floats              : ${WHYFLOATS:-no}"
+fi
+echo "PVS support             : $PVS"
+if test "$PVS" = "yes" ; then
+   echo "    Lib                 : $PVSLIB"
+fi
+echo "Mizar support           : $MIZAR"
