@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.80 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: misc.mli,v 1.81 2006-10-27 14:15:22 couchot Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -155,6 +155,8 @@ val tsubst_in_predicate : substitution -> predicate -> predicate
 
 val subst_in_pattern : var_substitution -> pattern -> pattern
 val tsubst_in_pattern : substitution -> pattern -> pattern
+
+val subst_in_triggers : var_substitution -> triggers -> triggers
 
 val subst_one : Ident.t -> term -> substitution
 val subst_onev : Ident.t -> Ident.t -> var_substitution

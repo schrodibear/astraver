@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.50 2006-06-28 14:31:57 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.51 2006-10-27 14:15:22 couchot Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -23,6 +23,8 @@ type t
 val create : string -> t
 
 val string : t -> string
+
+val completeString : t -> string 
 
 module Idset : Set.S with type elt = t
 type set = Idset.t

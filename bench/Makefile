@@ -1,4 +1,4 @@
-
+ 
 WHY=WHYLIB=../lib/why ../bin/why.opt
 BWHY=WHYLIB=../lib/why ../bin/why.byte
 
@@ -45,7 +45,7 @@ simplify:
 	../bin/dp.opt test_why.sx
 
 yices:
-	../bin/why.opt --smtlib -d --encoding mono -V test.mlw
+	../bin/why.opt --smtlib -d --encoding sstrat --prune -V test.mlw
 	../bin/dp.opt test_why.smt
 
 ergo:

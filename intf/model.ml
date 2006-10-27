@@ -120,6 +120,13 @@ let yices = {
   pr_id = Dispatcher.Yices;
   pr_enc = Monomorph;
   }
+let yicesSSTrat = {
+  pr_name = "Yices";
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_id = Dispatcher.Yices;
+  pr_enc = SortedStratified;
+  }
 let ergo = {
   pr_name = "ergo";
   pr_result = cols#add int;
@@ -128,7 +135,7 @@ let ergo = {
   pr_enc = Monomorph;
   }
 
-let provers = [simplify; yices; ergo; rvsat; simplify_rec;
+let provers = [simplify; yices; yicesSSTrat ; ergo; rvsat; simplify_strat;
 	       zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
 	       harvey; cvcl]
 let provers_selected = ref provers

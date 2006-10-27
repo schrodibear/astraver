@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.109 2006-10-02 09:08:37 couchot Exp $ i*)
+(*i $Id: main.ml,v 1.110 2006-10-27 14:15:22 couchot Exp $ i*)
 
 open Options
 open Ptree
@@ -238,6 +238,7 @@ let interp_decl ?(prelude=false) d =
 	if Env.is_global id then raise_located p.ploc (Clash id);
 	(try interp_program id p with Exit -> ())
     | Parameter (loc, ext, ids, v) ->
+	(*List.iter (fun p -> Printf.printf " %s " (Ident.string p)) ids;*)
 	let env = Env.empty_progs () in
 	let v = Ltyping.type_v loc lab env v in
 	if ext && is_mutable v then raise_located loc MutableExternal;
@@ -258,14 +259,21 @@ let interp_decl ?(prelude=false) d =
 	add_exception id v
     | Logic (loc, ext, ids, t) ->
 	let add id =
+	  (*Printf.printf  "%s " (Ident.string id);*)
 	  if is_global_logic id then raise_located loc (Clash id);
 	  let t = Ltyping.logic_type t in
 	  let t = generalize_logic_type t in
 	  add_global_logic id t;
 	  if ext then 
-	    Monomorph.add_external id
+	    begin 
+	      Monomorph.add_external id ;
+	      (*Printf.printf  " : no \n"*)
+	    end
 	  else
-	    push_decl (Dlogic (loc, Ident.string id, t))
+	    begin
+	      push_decl (Dlogic (loc, Ident.string id, t));
+	      (*Printf.printf  " : yes \n"*)
+	    end 
 	in
 	List.iter add ids
     | Predicate_def (loc, id, pl, p) ->
@@ -302,11 +310,16 @@ let interp_decl ?(prelude=false) d =
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = generalize_sequent ([], p) in
+	(*if pruning then 
+	  Printf.printf "Theory size %d" (Queue.length declarationQueue) ;*)
 	push_decl (Dgoal (loc, Ident.string id, s))
     | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
-	if not ext then push_decl (Dtype (loc, vl, Ident.string id))
+	if not ext then 
+	  begin
+	    push_decl (Dtype (loc, vl, Ident.string id))
+	  end
 
 (*s Prelude *)
 

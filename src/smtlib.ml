@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: smtlib.ml,v 1.21 2006-10-12 12:20:24 couchot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.22 2006-10-27 14:15:22 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -30,6 +30,10 @@ open Format
 open Pp
 
 (*s Pretty print *)
+
+let int2U = "int2U"
+let u2Int = "u2Int" 
+
 
 let prefix id =
   if id == t_lt then assert false
@@ -93,7 +97,7 @@ let rec print_term fmt = function
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool b) -> 
-      fprintf fmt "Boolean_%b" b
+      fprintf fmt "c_Boolean_%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat (i,f,e)) ->
@@ -103,8 +107,13 @@ let rec print_term fmt = function
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
-      fprintf fmt "@[(ite@ (= %a Boolean_true) @ %a@ %a)@]" 
-	print_term a print_term b print_term c
+      if (Options.get_types_encoding() = SortedStratified) then
+	fprintf fmt 
+	  "@[(ite@ (= %a (c_sort c_bool (bool2U c_Boolean_true))) @ %a@ %a)@]" 
+	  print_term a print_term b print_term c 
+      else
+	fprintf fmt "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 
+	  print_term a print_term b print_term c
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, [], i) -> 
@@ -118,7 +127,7 @@ and print_terms fmt tl =
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "Int"
-  | PTbool -> fprintf fmt "Boolean"
+  | PTbool -> fprintf fmt "c_Boolean"
   | PTreal -> fprintf fmt "Real"
   | PTunit -> fprintf fmt "Unit"
   | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
@@ -130,9 +139,8 @@ and instance fmt = function
   | [] -> ()
   | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
 
-let bound_variable =
-  let x = ref 0 in
-  fun () -> incr x; Ident.create ("bv" ^ string_of_int !x)
+let bound_variable n =
+  Ident.create (completeString n)
 
 let rec print_predicate fmt = function
   | Ptrue ->
@@ -154,20 +162,20 @@ let rec print_predicate fmt = function
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       (** TODO : DIRTY WAY TO translatate suxh predicate;
 	  may be previously dispached into to inequality **)
-      if ( get_types_encoding() =SortedStratified) then 
-	fprintf fmt "@[(and (le_int_c (sortInt 0) %a)@ (lt_int_c %a %a))@]" 
-	  print_term b print_term a print_term b 
-      else 
-	fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
-	  print_term b print_term a print_term b
+      fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
+	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
       fprintf fmt "@[(%a@ %a)@]" 
 	idents (Encoding.symbol (id, i)) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
-      fprintf fmt "@[(if_then_else@ (= %a Boolean_true)@ %a@ %a)@]" 
+      if (Options.get_types_encoding() = SortedStratified) then
+      fprintf fmt "@[(if_then_else@ (= %a (c_sort c_bool (bool2U c_Boolean_true)))@ %a@ %a)@]" 
 	print_term a print_predicate b print_predicate c
+      else
+	fprintf fmt "@[(if_then_else@ (= %a c_Boolean_true)@ %a@ %a)@]" 
+	  print_term a print_predicate b print_predicate c
   | Pand (_, _, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(and@ %a@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
@@ -177,14 +185,19 @@ let rec print_predicate fmt = function
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
   | Forall (_,id,n,t,_,p) -> 
+      (*Printf.printf "Forall : %s\n" (Ident.string id);  *)
       (*let id' = next_away id (predicate_vars p) in*)
-      let id' = bound_variable () in
+      let id' = (bound_variable n) in
+      (***Format.printf 
+	" Forall : %a , " Ident.dbprint n ;
+      Format.printf 
+	" %a" Ident.dbprint id' ;**)
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall (%a %a)@ %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
   | Exists (id,n,t,p) -> 
       (*let id' = next_away id (predicate_vars p) in*)
-      let id' = bound_variable () in
+      let id' = bound_variable n in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(exists (%a %a) %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
@@ -270,10 +283,11 @@ let output_elem fmt = function
   | Dlogic (_, _, _) -> fprintf fmt "" 
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
-  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type 
   | Dgoal (loc, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 
 
+   
 
 let output_file f = 
   let fname = f ^ "_why.smt" in
@@ -281,22 +295,21 @@ let output_file f =
   let fmt = formatter_of_out_channel cout in
   fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
   fprintf fmt "  :status unknown@\n";
-  fprintf fmt "  :extrasorts (Boolean)@\n";
-  fprintf fmt "  :extrafuns ((Boolean_true Boolean))@\n";
-  fprintf fmt "  :extrafuns ((Boolean_false Boolean))@\n";
-  fprintf fmt "  :assumption
-                   (forall (?bcd Boolean) (or (= ?bcd Boolean_true) 
-                                            (= ?bcd Boolean_false)))@\n";
-  fprintf fmt "  :assumption
+  if (Options.get_types_encoding() != SortedStratified) then  
+    begin
+      fprintf fmt "  :extrasorts (c_Boolean)@\n";
+      fprintf fmt "  :extrafuns ((c_Boolean_true c_Boolean))@\n";
+      fprintf fmt "  :extrafuns ((c_Boolean_false c_Boolean))@\n";
+      fprintf fmt "  :assumption
+                   (forall (?bcd c_Boolean) (or (= ?bcd c_Boolean_true) 
+                                            (= ?bcd c_Boolean_false)))@\n";
+      fprintf fmt "  :assumption
                    (not 
-                      (= Boolean_true  Boolean_false))@\n";
+                      (= c_Boolean_true  c_Boolean_false))@\n";
+    end;
   fprintf fmt "  :extrasorts (Unit)@\n";
-  (*
-    fprintf fmt "  :extrafuns ((int_div Int Int Int))@\n";
-    fprintf fmt "  :extrafuns ((int_mod Int Int Int))@\n";*)
-  
   iter (output_elem fmt);
-
+  
   (* end of smtlib file *)
   fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();

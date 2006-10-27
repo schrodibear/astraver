@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dispatcher.ml,v 1.11 2006-10-11 08:44:28 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.12 2006-10-27 14:15:21 couchot Exp $ i*)
 
 open Options
 open Vcg
@@ -32,7 +32,7 @@ let oblig_h = Hashtbl.create 97
 
 let add_oblig ((_,id,_) as o) =
   let so = (List.rev !stack, o) in
-  Queue.add so oblig;
+  Queue.add so oblig ;
   Hashtbl.add oblig_h id so
 
 let push_decl = function
@@ -46,7 +46,8 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo
 
 let push_elem p e = 
-  assert (match e with Dgoal _ -> false | _ -> true);
+  if not pruning then 
+    assert (match e with Dgoal _ -> false | _ -> true);  
   match p with
   | Simplify -> Simplify.push_decl e
   | Harvey -> Harvey.push_decl e
@@ -55,6 +56,7 @@ let push_elem p e =
   | Rvsat -> Smtlib.push_decl e
   | Yices -> Smtlib.push_decl e
   | Ergo -> Pretty.push_decl e
+
 
 let push_obligation p (loc, id, s) = 
   let g = Dgoal (loc, id, s) in
@@ -68,8 +70,14 @@ let push_obligation p (loc, id, s) =
   | Ergo -> Pretty.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
+(** @parama elems is the List that stores the theory
+    @parama o is the proof obligation
+**)
+
 let output_file ?encoding p (elems,o) =
-  begin match encoding with Some e -> set_types_encoding e | None -> () end;
+  begin match encoding with 
+      Some e -> set_types_encoding e 
+    | None -> () end;
   begin match p with
     | Simplify -> Simplify.reset () 
     | Harvey -> Harvey.reset () 
@@ -80,8 +88,28 @@ let output_file ?encoding p (elems,o) =
     | Ergo -> Pretty.reset ()
 
   end;
-  List.iter (push_elem p) elems;
-  push_obligation p o;
+  if pruning then 
+    begin  
+      (**stores into the declarationQueue 
+	 all the elements of the elems list and th obligation**)  
+      let declQ = Queue.create () in
+      List.iter (fun p -> Queue.add p declQ) elems ;
+      begin 
+	match o with 
+	    (loc, id, s) -> let g = Dgoal (loc, id, s) in
+	    Queue.add g  declQ
+      end;
+      (*Printf.printf "Before the pruning dedicated to the PO: %d \n" (Queue.length declQ);*)
+      (** reduce the theorie **)
+      let q =  (Theoryreducer.reduce declQ) in 
+      (*Printf.printf "After the pruning dedicated to the PO: %d \n" (Queue.length q);*)
+      Queue.iter (push_elem p) q
+    end
+  else
+    begin
+      List.iter (push_elem p) elems;
+      push_obligation p o
+    end;
   let f = Filename.temp_file "gwhy" "" in
   match p with
     | Simplify -> Simplify.output_file f; f ^ "_why.sx"

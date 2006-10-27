@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: theoryreducer.ml,v 1.1 2006-10-02 09:08:38 couchot Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.2 2006-10-27 14:15:22 couchot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -57,6 +57,9 @@ struct
     let n  = uniqueNumberGenerator () in 
     Hashtbl.add fContainer n f ;
     n
+  let reset ()=
+    Hashtbl.clear fContainer
+
 end 
   
 module  SymbolContainer = 
@@ -95,11 +98,16 @@ struct
   let addSymbol e n= 
     Hashtbl.add sContainer e n
 
+
+  let reset ()=
+    Hashtbl.clear sContainer
+
+
   module StringSet = Set.Make(struct type t=string let compare= compare end)
 
 
   (**
-     collects the functionnal ore predicative symbols
+     collects the functionnal  symbols
      of the term given in parameter 
      @paramater f : the formula we are parsing   
      @returns the StringSet that contains all the symbols 
@@ -120,7 +128,7 @@ struct
 	| Tconst (ConstBool b) -> () 
 	| Tconst ConstUnit -> ()
 	| Tconst (ConstFloat (i,f,e)) ->
-	    symbolsSet  :=  StringSet.add  ("const_real_"^i^"_"^f^"_"^e) !symbolsSet
+	    symbolsSet  :=  StringSet.add  (""^i^"."^f^"E"^e) !symbolsSet
 	| Tderef _ -> ()
 	| Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	    collect a; 
@@ -160,7 +168,7 @@ struct
      @returns the String set that contains all the symbols 
      of the formula
   **)	
-  let predicativeSymbolsCollect  f  =
+  let getAllSymbols  f  =
     (** symbols the result **)
     let symbolsSet  = ref StringSet.empty  in 
     let rec collect formula  = 
@@ -170,9 +178,6 @@ struct
 	     collect p ;
 	     collectIntoAList r in 
       match formula with 
-	  (* TODO update this 
-	     | Papp (id, [t], _) when id == well_founded ->
-	     symbolsSet  := StringSet.add (functionalSymbolsCollect id) !symbolsSet  *)
 	| Papp (id, [a; b], _) when is_eq id || is_neq id || id == t_zwf_zero->
 	    symbolsSet  := StringSet.union (functionalSymbolsCollect a) 
 	      !symbolsSet ;
@@ -182,9 +187,9 @@ struct
 	      Pimplies (_, a, b) ->
 	    collect a;
 		collect b
-	| Papp (id, tl, _) when is_relation id || is_arith id ->
+(*	| Papp (id, tl, _) when is_relation id || is_arith id ->
 	    symbolsSet  := StringSet.union (functionalSymbolsCollectFromList tl)
-	      !symbolsSet   
+	      !symbolsSet  *) 
 	| Papp (id, tl, i) -> 
 	    symbolsSet  := StringSet.union (functionalSymbolsCollectFromList tl) 
 	      !symbolsSet ;   
@@ -207,6 +212,7 @@ struct
     collect f ; 
     !symbolsSet
       
+ 
 
 end
 
@@ -217,14 +223,13 @@ end
 
 module  EquivClass = 
 struct 
-
+  
   module IntSet = Set.Make(struct type t=int let compare= compare end)
+  let firstGoalNumber = ref 0 
+  let firstTypeDefinitionNumber = ref 0
 
-  let formulaeClassesNumber = ref IntSet.empty
     
-    
-
-
+  
   (** the union find module for using classes **)
   module UnionFindInt = Unionfind.Make (struct 
 					  type t = int let 
@@ -245,93 +250,76 @@ struct
       !temp in
     UnionFindInt.init (fill 1000)
 
-  let addFormula n =
-    formulaeClassesNumber := IntSet.add 
-      n
-      !formulaeClassesNumber 
-      
 
+(** 
+    @param m, n : class number that are equivalent.    
+**)
   let merge (m:int)  (n:int) = 
     UnionFindInt.union m n partition 
+    (*Printf.printf  " merge %d ,  %d \n" m n *)
 
-
+      (**
+	 @param n is the number of the goal
+	If there are many goal in the same file, 
+	such goals has to be equivalent. To do so, we store 
+	the number of the first formula and each time we 
+	add a goal, we say it is equivalent to this one. **) 
+  let addFormula n =
+    let mergeFormulaNumber num =  
+      if !firstGoalNumber = 0 then
+	firstGoalNumber := num 
+      else merge !firstGoalNumber num in
+    mergeFormulaNumber n
+	
+  
+  let addTypeDefinition n =
+    let mergeTypeDefinitionNumber num =  
+      if !firstTypeDefinitionNumber = 0 then
+	begin
+	  firstTypeDefinitionNumber := num ;
+	end
+      else 
+	begin 
+	  merge !firstTypeDefinitionNumber num ;
+	end
+    in 
+    mergeTypeDefinitionNumber n
+  
 
   let getReducedTheory t=
     let localSet = ref IntSet.empty in 
-    if IntSet.is_empty !formulaeClassesNumber  then 
+    if !firstGoalNumber = 0  then 
       Queue.create () 
     else
-      (** computes the set of remaining elements number **)
-      let n = List.hd (IntSet.elements !formulaeClassesNumber)  in
-      let goalClassNumber = UnionFindInt.find n partition in 
-      let addToSet k v = 
-	if ((UnionFindInt.find k partition) = goalClassNumber) then
-	  localSet := IntSet.add k !localSet
-      in
-      Hashtbl.iter addToSet FormulaContainer.fContainer ;
-      (** computes the ordered queue of elements **)
-      let axiomQueue = Queue.create() in 
-      let rec addToQueue l = match l with  
-	  [] -> ()
-	| q :: t -> 
-	    Queue.push (Hashtbl.find  FormulaContainer.fContainer q)  axiomQueue ;
-	    addToQueue t
-      in 
-      addToQueue  (IntSet.elements !localSet) ;
-      axiomQueue
-
-
-  let mergeFormulaeClasses s =
-    let rec recursiveMerge n l = match (n,l) with 
-	(_,[]) -> ()
-      | (0,t::q) -> recursiveMerge t q 
-      | (n,t::q) -> merge n t 
-    in
-    recursiveMerge 0 (IntSet.elements !formulaeClassesNumber)
-      
-
+      begin
+      (**the type declarations, if they exist, 
+	 are pushed into the formula classe **)
+	if !firstTypeDefinitionNumber <> 0  then
+	  merge !firstTypeDefinitionNumber !firstGoalNumber ;
 	
+      (** computes the declarations corresponding to the formula classe**)
+	let goalClassNumber = UnionFindInt.find !firstGoalNumber partition in 
+	let addToSet k v = 
+	  if ((UnionFindInt.find k partition) = goalClassNumber) then
+	    localSet := IntSet.add k !localSet
+	in
+	Hashtbl.iter addToSet FormulaContainer.fContainer ;
+
+
+	(** computes the ordered queue of elements **)
+	let axiomQueue = Queue.create() in 
+	let rec addToQueue l = match l with  
+	    [] -> ()
+	  | q :: t -> 
+	      Queue.push (Hashtbl.find  FormulaContainer.fContainer q)  axiomQueue ;
+	      addToQueue t
+	in 
+	addToQueue  (IntSet.elements !localSet) ;
+	axiomQueue
+      end
 	
 end
   
-
-
-
-
-let prefix id =
-  if id == t_lt then assert false
-  else if id == t_le then assert false
-  else if id == t_gt then assert false
-  else if id == t_ge then assert false
-    (* int cmp *)
-  else if id == t_lt_int then "<"
-  else if id == t_le_int then "<="
-  else if id == t_gt_int then ">"
-  else if id == t_ge_int then ">="
-    (* int ops *)
-  else if id == t_add_int then "+"
-  else if id == t_sub_int then "-"
-  else if id == t_mul_int then "*"
-  else if id == t_div_int then "int_div"
-  else if id == t_mod_int then "int_mod"
-  else if id == t_neg_int then "-"
-    (* real ops *)
-  else if id == t_add_real 
-    || id == t_sub_real 
-    || id == t_mul_real 
-    || id == t_div_real 
-    || id == t_neg_real 
-    || id == t_sqrt_real 
-    || id == t_real_of_int 
-    || id == t_lt_real
-    || id == t_le_real
-    || id == t_gt_real
-    || id == t_ge_real
-  then
-    Ident.string id
-  else (eprintf "%a@." Ident.print id; assert false)
-
-
 
 
 
@@ -343,8 +331,8 @@ let prefix id =
    @param n : the class number (that is the number of the formula)
    @returns Unit
 **)
-let rec manageSymbols symbolsList n = 
-  match symbolsList  with 
+let manageSymbols symbolsList n = 
+  let rec manageS  l = match l  with 
       []     -> ()
     | s ::l  -> 
 	(**Check wether s is already  present in the table **)
@@ -362,22 +350,26 @@ let rec manageSymbols symbolsList n =
 	    EquivClass.merge m n 
 	end ;
 	(** recursive call over the reduced lsit **) 
-	manageSymbols l n
+	manageS l in
+  manageS symbolsList 
+  
 	  
 
-let managesGoal ax (hyps,concl) = 
+let managesGoal id ax (hyps,concl) = 
   let n = FormulaContainer.add  ax in
   (* Retrieve the list symbolList of symbols in hyps *)
   let rec managesHypotheses = function
-    | [] -> SymbolContainer.predicativeSymbolsCollect  concl
+    | [] -> SymbolContainer.getAllSymbols  concl
     | Svar (id, v) :: q ->  managesHypotheses  q 
     | Spred (_,p) :: q -> 
 	SymbolContainer.StringSet.union 
-	  (SymbolContainer.predicativeSymbolsCollect p) 
+	  (SymbolContainer.getAllSymbols p) 
 	  (managesHypotheses q)
   in
   let symbolList =  SymbolContainer.StringSet.elements 
     (managesHypotheses hyps) in 
+  (*Printf.printf "Formula %s :" id ;
+  List.iter (fun x-> Printf.printf "%s " x) symbolList; *)
   manageSymbols symbolList n ;
   (** add the formula number into the list of known goal **)
   EquivClass.addFormula n 
@@ -395,12 +387,14 @@ let managesGoal ax (hyps,concl) =
     @p is is the predicative part of the definition of 
     the predicate
 **) 
-let managesAxiom ax p =
+let managesAxiom id ax p =
   let n = FormulaContainer.add  ax in 
   (* Retrieve the list symbolList of symbols in such predicate
      and we add into it the symbol id *)
   let symbolList =  SymbolContainer.StringSet.elements 
-    (SymbolContainer.predicativeSymbolsCollect p) in 
+    (SymbolContainer.getAllSymbols p) in 
+  (*Printf.printf "Axiom %s :" id ;
+  List.iter (fun x-> Printf.printf "%s " x) symbolList; *)
   manageSymbols symbolList n
     
 
@@ -419,7 +413,10 @@ let managesPredicate id ax (_,p) =
   (* Retrieve the list symbolList of symbols in such predicate
      and we add into it the symbol id *)
   let symbolList =  SymbolContainer.StringSet.elements 
-    (SymbolContainer.StringSet.add id (SymbolContainer.predicativeSymbolsCollect p)) in 
+    (SymbolContainer.StringSet.add id (SymbolContainer.getAllSymbols p)) in 
+(*  Printf.printf "Predicate %s :" id ;
+    List.iter (fun x-> Printf.printf "%s " x) symbolList; 
+  Printf.printf "\n"; *)
   manageSymbols symbolList n
 
 
@@ -437,6 +434,9 @@ let managesFunction id ax (_,_,e) =
      and we add into it the symbol id *)
   let symbolList =  SymbolContainer.StringSet.elements 
     (SymbolContainer.StringSet.add id (SymbolContainer.functionalSymbolsCollect e)) in 
+(*  Printf.printf "Function %s :" id ;
+  List.iter (fun x-> Printf.printf "%s " x) symbolList; 
+  Printf.printf "\n"  ; *)
   manageSymbols symbolList n
 
 
@@ -449,32 +449,57 @@ let managesFunction id ax (_,_,e) =
     
 let typingPredicate id ax = 
   let n = FormulaContainer.add  ax in 
+  (*Printf.printf  " %s : %d \n" id n ;*)
   (*Retrieve the list l of symbols in such predicate *)
   let symbolList =  SymbolContainer.StringSet.elements 
     (SymbolContainer.StringSet.add 
        id 
-       SymbolContainer.StringSet.empty) in 
-  manageSymbols symbolList n
+       SymbolContainer.StringSet.empty) in   
+  manageSymbols symbolList n  
+  
     
-    
-    
-    
+(**
+   such function treats the  definition of  new types
+   @param id it the type name 
+   @param ax is the complete node**)
+let declareType id ax = 
+  let n = FormulaContainer.add ax in 
+    EquivClass.addTypeDefinition n 
+  
 
     
     
 let launcher decl = match decl with   
-  | Dlogic (loc, id, t) as ax -> typingPredicate  id ax
-  | Dpredicate_def (loc, id, d) as ax -> managesPredicate id ax d.scheme_type
-  | Dfunction_def (loc, id, d)  as ax -> managesFunction  id ax d.scheme_type
-  | Daxiom (_, id, p) as ax         -> managesAxiom  ax p.scheme_type
-  | Dgoal (_, id, s)  as ax -> managesGoal ax s.Env.scheme_type 
-  | _ -> ()   
+  | Dtype (_, _, id) as ax -> (*Printf.printf  "Dtype %s \n"  id ;*) declareType id ax 
+  | Dlogic (_, id, t) as ax -> (* Printf.printf  "Dlogic %s \n"  id ;*) typingPredicate  id ax
+  | Dpredicate_def (_, id, d) as ax -> (*Printf.printf  "Dpredicate_def %s \n"  id ; *)managesPredicate id ax d.scheme_type
+  | Dfunction_def (_, id, d)  as ax -> (*Printf.printf  "Dfunction_def %s \n"  id ; *)managesFunction  id ax d.scheme_type
+  | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)managesAxiom  id ax p.scheme_type
+  | Dgoal (_, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)managesGoal id ax s.Env.scheme_type 
+
+
+
+let display q = 
+  let displayMatch e  = match e with   
+  | Dtype (_, _, id) -> Printf.printf  "%s \n"  id  
+  | Dlogic (_, id, t) -> Printf.printf  "%s \n" id   
+  | Dpredicate_def (_, id, d) -> Printf.printf  "%s \n" id
+  | Dfunction_def (_, id, d) -> Printf.printf  "%s \n" id
+  | Daxiom (_, id, p)          -> Printf.printf  "%s \n"  id
+  | Dgoal (_, id, s)   -> Printf.printf  "%s \n"  id
+  in
+  Queue.iter displayMatch q 
+
 
 (**
    @param q is a logic_decl Queue 
    @returns the pruned theory 
 **)
 let reduce q     = 
+  (*Printf.printf " PENDANT \n"; 
+  display q ;*)
+  FormulaContainer.reset ();
+  SymbolContainer.reset();
   Queue.iter launcher q ;
   EquivClass.getReducedTheory ""
     

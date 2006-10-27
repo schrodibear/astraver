@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.42 2006-10-27 09:15:54 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.43 2006-10-27 14:15:21 couchot Exp $ i*)
 
 open Printf
 open Options
@@ -189,9 +189,9 @@ let build_statistics (model:GTree.tree_store) f =
     and children = string_of_int !children in
     model#set 
       ~row ~column:Model.name (f^" "^" "^total^"/"^children^" "^statistics)
-  with Not_found -> 
+  with e -> 
     begin 
-      print_endline ("     [...] Error : function \""^f^"\" not found !"); 
+      print_endline ("     [...] Error: unexcepted exception: " ^ Printexc.to_string e);
       flush stdout 
     end  
 
@@ -221,7 +221,13 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
   let (_, oblig, seq) = o in
   if bench or (try_proof seq) then
     try 
-      let row = Hashtbl.find Model.orows oblig in
+      let row = 
+	try Hashtbl.find Model.orows oblig 
+	with Not_found -> 
+	  print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
+	  flush stdout;
+	  raise Exit
+      in
       model#set ~row ~column:column_p `EXECUTE;
       let r = 
 	Dispatcher.call_prover 
@@ -258,11 +264,8 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
 	build_statistics model (model#get ~row ~column:Model.parent)
       end;
       result
-    with Not_found -> begin
-      print_endline ("     [...] Error : obligation \""^oblig^"\" not found !"); 
-      flush stdout;
+    with Exit ->
       0
-    end
   else begin
     !flash_info "No need to prove these obligations";
     1

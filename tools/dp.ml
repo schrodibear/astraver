@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.24 2006-10-27 09:15:55 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.25 2006-10-27 14:15:23 couchot Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -46,7 +46,10 @@ let tmaxvalid = ref 0.0
 let ninvalid = ref 0
 let tinvalid = ref 0.0
 let tmaxinvalid = ref 0.0
+let tmaxunknown = ref 0.0
 let ntimeout = ref 0
+let nunknown = ref 0
+let tunknown = ref 0.0
 let ttimeout = ref 0.0
 
 let is_valid t = 
@@ -59,14 +62,22 @@ let is_invalid t =
   tinvalid := !tinvalid +. t;
   tmaxinvalid := max !tmaxinvalid t
 
+let is_unknown t = 
+  printf "?"; incr nunknown; 
+  tunknown := !tunknown +. t;
+  tmaxunknown := max !tmaxunknown t
+
 let is_timeout t = 
   printf "#"; incr ntimeout;
   ttimeout := !ttimeout +. t
 
+
 let wrapper r = 
   begin match r with
+
     | Valid t -> is_valid t
-    | Invalid(t,_) | CannotDecide t -> is_invalid t
+    | Invalid(t,_) -> is_invalid t
+    | CannotDecide t -> is_unknown t
     | Timeout t -> is_timeout t
     | ProverFailure _ -> printf "!"
   end;
@@ -93,6 +104,7 @@ let split f =
   let oldv = !nvalid in
   let oldi = !ninvalid in
   let oldt = !ntimeout in
+  let oldu = !nunknown in
   if Filename.check_suffix f ".smt"  || Filename.check_suffix f ".smt.all" then
     begin
       Smtlib_split.iter call_yices f 
@@ -112,35 +124,42 @@ let split f =
   else 
     begin Arg.usage spec usage; exit 1 end;
   printf 
-    " (%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!ntimeout - oldt)
+    " (%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt)
     
 let main () = 
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
-  printf "(. = valid * = invalid # = timeout ! = failure)@."; 
+  printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
   Queue.iter split files;
-  let n = !nvalid + !ninvalid + !ntimeout in
+  let n = !nvalid + !ninvalid + !ntimeout + !nunknown in
   if n = 0 then exit 0;
   let pvalid = 100. *. float !nvalid /. float n in
   let pinvalid = 100. *. float !ninvalid /. float n in
   let ptimeout = 100. *. float !ntimeout /. float n in
+  let punknown = 100. *. float !nunknown /. float n in
   printf 
 "total           : %3d
 valid           : %3d (%3.0f%%)
 invalid         : %3d (%3.0f%%)
+unknown         : %3d (%3.0f%%)
 timeout/failure : %3d (%3.0f%%)\n" 
-    (!nvalid + !ninvalid + !ntimeout)
-    !nvalid pvalid !ninvalid pinvalid !ntimeout ptimeout;
+    (!nvalid + !ninvalid + !nunknown + !ntimeout)
+    !nvalid pvalid !ninvalid pinvalid !nunknown punknown !ntimeout ptimeout;
   printf
 "total time           : %3.2f
 valid average time   : %3.2f
 valid max time       : %3.2f
 invalid average time : %3.2f
-invalid max time     : %3.2f\n"
+invalid max time     : %3.2f
+unknown average time : %3.2f
+unknown max time     : %3.2f\n"
     (!tvalid +. !tinvalid +. !ttimeout)
     (!tvalid /. float !nvalid)
     !tmaxvalid
     (!tinvalid /. float !ninvalid)
-    !tmaxinvalid;
+    !tmaxinvalid
+      (!unknown /. float !nunknown)
+    !tmaxunknown;
+
 
   try Sys.remove "out" with _ -> ()
 

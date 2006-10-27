@@ -2,11 +2,11 @@
 
 TIMEOUT ?= 10
 
-WHY=why 
+WHY=why --no-arrays 
 
-GWHY=gwhy 
+GWHY=gwhy --no-arrays 
 
-CADULIB=/usr/local/lib/caduceus
+CADULIB=/users/demons/couchot/why/examples-c/g4/../../lib
 
 CADULIBFILE=caduceus.why
 
@@ -47,7 +47,7 @@ isabelle/%_spec_why.thy: why/%_spec.why
 
 isabelle/%_why.thy: isabelle/g4_spec_why.thy why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory g4_spec_why $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
-	cp -f /usr/local/lib/caduceus/isabelle/caduceus_why.thy isabelle/
+	cp -f /users/demons/couchot/why/examples-c/g4/../../lib/isabelle/caduceus_why.thy isabelle/
 
 simplify: simplify/g4_why.sx
 	@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)
@@ -80,9 +80,10 @@ zenon/%_why.znn: why/g4_spec.why why/%.why
 	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
 
 smtlib: smtlib/g4_why.smt
+	@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)
 
 smtlib/%_why.smt: why/g4_spec.why why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib --encoding pred $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding mono -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/g4_spec.why why/$*.why
 
 gui stat: g4.stat
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.ml,v 1.16 2006-10-27 09:15:55 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.17 2006-10-27 14:15:23 couchot Exp $ i*)
 
 open Printf
 
@@ -85,6 +85,7 @@ let simplify ?debug ?(timeout=10) ~filename:f () =
 
 let rvsat ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
+  (*let cmd = sprintf "rv-sat %s > %s 2>&1" f out in*)
   let cmd = sprintf "cpulimit %d rv-sat %s > %s 2>&1" timeout f out in
   let t,c = timed_sys_command cmd in
   if c = 152 then 
@@ -106,13 +107,32 @@ let rvsat ?debug ?(timeout=10) ~filename:f () =
       if c = 0 then Valid t else Invalid(t,None)
 
 let yices ?debug ?(timeout=10) ~filename:f () =
-  (* select-and-past from rvsat *)
   let out = Filename.temp_file "out" "" in
   let cmd = sprintf "cpulimit %d yices -tc -smt < %s > %s 2>&1" timeout f out in
   let t,c = timed_sys_command cmd in
   if c = 152 then
     Timeout t
   else 
+    let c =  (Sys.command (sprintf "grep -q -w Unexpected %s" out)) *
+	      (Sys.command (sprintf "grep -q -w Error %s" out)) in
+    if c = 0 then 
+      begin
+	remove_file ?debug out; 
+	ProverFailure ("command failed: " ^ cmd)
+      end 
+    else begin
+	let c = Sys.command (sprintf "grep -q -w unsat %s" out) in
+	if c = 0 then 
+	  begin
+	    remove_file ?debug out;
+	    Valid t
+	  end
+	else 
+	  let c = Sys.command (sprintf "grep -q -w unknown %s" out) in
+	  remove_file ?debug out;
+	  if c= 0 then CannotDecide t else
+	  Invalid (t, None)
+(*=======
     let c = Sys.command (sprintf "grep -q -w Error %s" out) in
     if c = 0 then begin 
       remove_file ?debug out; 
@@ -121,8 +141,9 @@ let yices ?debug ?(timeout=10) ~filename:f () =
       let c = Sys.command (sprintf "grep -q -w unsat %s" out) in
       remove_file ?debug out;
       if c = 0 then Valid t else Invalid(t, None)
+>>>>>>> 1.16 *)
     end
-
+      
 let ergo ?debug ?(timeout=10) ~filename:f () =
   let out = Filename.temp_file "out" "" in
   let cmd = sprintf "cpulimit %d ergo %s > %s 2>&1" timeout f out in

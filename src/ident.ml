@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.58 2006-06-28 14:31:56 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.59 2006-10-27 14:15:22 couchot Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -24,6 +24,9 @@ let hashcons =
 
 let create s = hashcons { stamp = 0; name = s; label = None }
 let string s = s.name
+
+
+let completeString s = s.name^"_"^(string_of_int s.stamp)
 
 module I = struct type t_ = t type t = t_ let compare = compare end
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.107 2006-06-15 09:58:30 lescuyer Exp $ i*)
+(*i $Id: misc.ml,v 1.108 2006-10-27 14:15:22 couchot Exp $ i*)
 
 open Options
 open Ident
@@ -287,7 +287,9 @@ let apost_vars = gen_post_vars assertion_vars
 
 let rec tsubst_in_term s = function
   | Tvar x as t -> 
-      (try Idmap.find x s with Not_found -> t)
+      (try Idmap.find x s 
+       with Not_found -> 
+	 t)
   | Tderef x as t ->
       (try Idmap.find x s with Not_found -> t)
   | Tapp (x,l,i) -> 
@@ -335,6 +337,9 @@ let subst_in_predicate s =
 
 let subst_in_pattern s =
   tsubst_in_pattern (Idmap.map (fun id -> Tvar id) s)
+
+let subst_in_triggers s =
+  List.map (List.map (subst_in_pattern s))
 
 let subst_in_assertion s = asst_app (subst_in_predicate s)
 
