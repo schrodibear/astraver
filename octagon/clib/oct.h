@@ -396,6 +396,7 @@ oct_t* OCT_PROTO(narrowing)       (oct_t* ma, oct_t* mb, bool destructive);
 
 #ifdef OCT_USE_TAG
 oct_t* OCT_PROTO(subtract)       (oct_t* ma, oct_t* mb, bool destructive);
+oct_t* OCT_PROTO(complete)       (oct_t* ma, oct_t* mb, bool destructive);
 #endif
 
 /* transfer functions */
