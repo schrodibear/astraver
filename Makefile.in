@@ -151,19 +151,19 @@ CCMO = ocamlgraph/graph.cmo \
 	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
 	c/invariant.cmo c/ceffect.cmo \
 	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cabsint.cmo c/cptr.cmo \
-	c/cint.cmo c/cmain.cmo 
-CCMA = octagon/ocamllib/oct.cma
+	c/csymbol.cmo c/cint.cmo c/cmain.cmo 
+CCMA = @OCTAGONLIB@
 CCMX = $(CCMO:.cmo=.cmx)
 CCMXA = $(CCMA:.cma=.cmxa)
 
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
 	$(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
-	      -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	      @STATIC@ $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
 	$(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
-	      -cclib -static $(BFLAGS) -o $@ unix.cma str.cma $^
+	      @STATIC@ $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
@@ -483,6 +483,14 @@ lib/coq/%.vo: lib/coq/%.v
 
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -I lib/coq-v7 $<
+
+c/cint.ml: c/cint.ml4 Makefile
+	if test "@enable_octagon@" = "yes" ; then \
+	  $(CAMLP4) -impl c/cint.ml4 > c/cint.ml; \
+	else \
+	  echo "let local_int_analysis_attach () = failwith " > c/cint.ml; \
+	  echo "\"Not compiled with --enable-octagon.\"" >> c/cint.ml; \
+	fi
 
 # %_why.v: %.mlw $(BINARY)
 # 	$(BINARY) -coq $*.mlw

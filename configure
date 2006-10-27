@@ -272,7 +272,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
 ac_unique_file="src/monad.mli"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB CAMLP4O CAMLP4OOPT COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS OCAMLC OCAMLOPT OCAMLCDOTOPT OCAMLOPTDOTOPT OCAMLDEP OCAMLLEX OCAMLLEXDOTOPT OCAMLYACC LABLGTK2 OCAMLWEB CAMLP4O CAMLP4OOPT COQC COQDEP PVSC MIZF EXE OCAMLBEST OCAMLVERSION OCAMLV OCAMLLIB enable_octagon OCTAGONLIB STATIC COQ COQC7 COQC8 COQLIB COQVER WHYLIBCOQ WHYFLOATS PVS PVSLIB MIZAR MIZARLIB FORPACK LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -779,6 +779,11 @@ fi
 if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
+
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-octagon=no/yes  using abstract interpretation default=$default_octagon
 
 _ACEOF
 fi
@@ -1701,15 +1706,32 @@ fi
 
 
 # Octagon library
-cd octagon
-./configure --with-num=float --with-ocaml=$OCAMLLIB
-if test $? -ne 0 ; then
-   { { echo "$as_me:$LINENO: error: problem with octagon configuration (did you install g++ ?)" >&5
-echo "$as_me: error: problem with octagon configuration (did you install g++ ?)" >&2;}
+default_octagon=no
+# Check whether --enable-octagon or --disable-octagon was given.
+if test "${enable_octagon+set}" = set; then
+  enableval="$enable_octagon"
+
+else
+  enable_octagon=$default_octagon
+fi;
+
+if test "$enable_octagon" = "yes" ; then
+  cd octagon
+  ./configure --with-num=float --with-ocaml=$OCAMLLIB
+  if test $? -ne 0; then
+    { { echo "$as_me:$LINENO: error: Problem with octagon configuration (did you install g++ ?)" >&5
+echo "$as_me: error: Problem with octagon configuration (did you install g++ ?)" >&2;}
    { (exit 1); exit 1; }; }
+  fi
+  chmod 755 oct-config
+  cd ..
+  OCTAGONLIB=octagon/ocamllib/oct.cma
+  STATIC="-cclib -static"
+else
+  OCTAGONLIB=
+  STATIC=
 fi
-chmod 755 oct-config
-cd ..
+
 
 # camlp4
 # Extract the first word of "camlp4o", so it can be a program name with args.
@@ -2072,6 +2094,10 @@ fi
 
 # AC_SUBST(CAMLP4O)
 # AC_SUBST(CAMLP4LIB)
+
+
+
+
 
 
 
@@ -2751,6 +2777,9 @@ s,@OCAMLBEST@,$OCAMLBEST,;t t
 s,@OCAMLVERSION@,$OCAMLVERSION,;t t
 s,@OCAMLV@,$OCAMLV,;t t
 s,@OCAMLLIB@,$OCAMLLIB,;t t
+s,@enable_octagon@,$enable_octagon,;t t
+s,@OCTAGONLIB@,$OCTAGONLIB,;t t
+s,@STATIC@,$STATIC,;t t
 s,@COQ@,$COQ,;t t
 s,@COQC7@,$COQC7,;t t
 s,@COQC8@,$COQC8,;t t
