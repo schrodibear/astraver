@@ -145,8 +145,13 @@ AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no)
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 # Octagon library
-(cd octagon; ./configure --with-num=float --with-ocaml=$OCAMLLIB;
- chmod 755 oct-config)
+cd octagon
+./configure --with-num=float --with-ocaml=$OCAMLLIB
+if test $? -ne 0 ; then
+   AC_MSG_ERROR(Problem with octagon configuration (did you install g++ ?))
+fi
+chmod 755 oct-config
+cd ..
 
 # camlp4 
 AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
