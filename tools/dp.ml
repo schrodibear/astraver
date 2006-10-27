@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.25 2006-10-27 14:15:23 couchot Exp $ i*)
+(*i $Id: dp.ml,v 1.26 2006-10-27 14:26:02 couchot Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -157,7 +157,7 @@ unknown max time     : %3.2f\n"
     !tmaxvalid
     (!tinvalid /. float !ninvalid)
     !tmaxinvalid
-      (!unknown /. float !nunknown)
+      (!tunknown /. float !nunknown)
     !tmaxunknown;
 
 
