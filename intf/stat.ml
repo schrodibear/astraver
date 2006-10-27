@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: stat.ml,v 1.41 2006-10-05 08:39:16 conchon Exp $ i*)
+(*i $Id: stat.ml,v 1.42 2006-10-27 09:15:54 marche Exp $ i*)
 
 open Printf
 open Options
@@ -229,12 +229,12 @@ let run_prover_child p (view:GTree.view) (model:GTree.tree_store) o bench alone 
 	  ~obligation:oblig ~timeout:(Tools.get_timeout ())  p.Model.pr_id
       in
       let get_result = function
-	| Calldp.Valid -> 
+	| Calldp.Valid _ -> 
 	    Cache.add seq p.Model.pr_name;
 	    model#set ~row ~column:column_p `YES ; 1
-	| Calldp.Timeout -> model#set ~row ~column:column_p `CUT; 0
-	| Calldp.CannotDecide -> model#set ~row ~column:column_p `MISSING_IMAGE; 0
-	| Calldp.Invalid so -> 
+	| Calldp.Timeout _ -> model#set ~row ~column:column_p `CUT; 0
+	| Calldp.CannotDecide _ -> model#set ~row ~column:column_p `MISSING_IMAGE; 0
+	| Calldp.Invalid(_,so) -> 
 	    begin
 	      (match so with
 		| None -> ()

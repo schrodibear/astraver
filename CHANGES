@@ -1,3 +1,5 @@
+
+  o dp now displays times for searching proofs
   o no using anymore the external command 'timeout', but use our own
     command 'cpulimit' for the same purpose. Time limit is now user
     CPU time instead of wall clock time.

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: calldp.mli,v 1.8 2006-10-11 08:44:29 filliatr Exp $ i*)
+(*i $Id: calldp.mli,v 1.9 2006-10-27 09:15:55 marche Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -22,10 +22,10 @@
    harvey where it may contain several proof obligations (used in dp) *)
 
 type prover_result = 
-  | Valid 
-  | Invalid of string option 
-  | CannotDecide 
-  | Timeout 
+  | Valid of float
+  | Invalid of float * string option 
+  | CannotDecide of float
+  | Timeout of float
   | ProverFailure of string
 
 val simplify : 

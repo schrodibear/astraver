@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.23 2006-10-02 14:06:05 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.24 2006-10-27 09:15:55 marche Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -41,18 +41,33 @@ let () =
 
 (* stats *)
 let nvalid = ref 0
+let tvalid = ref 0.0
+let tmaxvalid = ref 0.0
 let ninvalid = ref 0
+let tinvalid = ref 0.0
+let tmaxinvalid = ref 0.0
 let ntimeout = ref 0
+let ttimeout = ref 0.0
 
-let is_valid () = printf "."; incr nvalid
-let is_invalid () = printf "*"; incr ninvalid
-let is_timeout () = printf "#"; incr ntimeout
+let is_valid t = 
+  printf "."; incr nvalid; 
+  tvalid := !tvalid +. t;
+  tmaxvalid := max !tmaxvalid t
+
+let is_invalid t = 
+  printf "*"; incr ninvalid; 
+  tinvalid := !tinvalid +. t;
+  tmaxinvalid := max !tmaxinvalid t
+
+let is_timeout t = 
+  printf "#"; incr ntimeout;
+  ttimeout := !ttimeout +. t
 
 let wrapper r = 
   begin match r with
-    | Valid -> is_valid ()
-    | Invalid _ | CannotDecide -> is_invalid ()
-    | Timeout -> is_timeout ()
+    | Valid t -> is_valid t
+    | Invalid(t,_) | CannotDecide t -> is_invalid t
+    | Timeout t -> is_timeout t
     | ProverFailure _ -> printf "!"
   end;
   flush stdout
@@ -115,6 +130,18 @@ invalid         : %3d (%3.0f%%)
 timeout/failure : %3d (%3.0f%%)\n" 
     (!nvalid + !ninvalid + !ntimeout)
     !nvalid pvalid !ninvalid pinvalid !ntimeout ptimeout;
+  printf
+"total time           : %3.2f
+valid average time   : %3.2f
+valid max time       : %3.2f
+invalid average time : %3.2f
+invalid max time     : %3.2f\n"
+    (!tvalid +. !tinvalid +. !ttimeout)
+    (!tvalid /. float !nvalid)
+    !tmaxvalid
+    (!tinvalid /. float !ninvalid)
+    !tmaxinvalid;
+
   try Sys.remove "out" with _ -> ()
 
 let () = Printexc.catch main ()
