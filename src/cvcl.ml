@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.44 2006-09-25 11:02:23 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.45 2006-10-30 15:58:07 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -66,14 +66,14 @@ let external_type = function
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "INT"
-  | PTbool -> fprintf fmt "BOOLEAN"
+  | PTbool -> fprintf fmt "BOOL"
   | PTreal -> fprintf fmt "REAL"
   | PTunit -> fprintf fmt "UNIT"
   | PTexternal ([pt], id) when id == farray -> 
       fprintf fmt "(ARRAY INT OF %a)" print_pure_type pt
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (i ,id) -> fprintf fmt "%s" (Monomorph.symbol (id, i))
+  | PTexternal (i ,id) -> fprintf fmt "%s" (Encoding.symbol (id, i))
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -81,9 +81,9 @@ let rec print_term fmt = function
   | Tconst (ConstInt n) -> 
       fprintf fmt "%s" n
   | Tconst (ConstBool true) -> 
-      fprintf fmt "TRUE"
+      fprintf fmt "true"
   | Tconst (ConstBool false) -> 
-      fprintf fmt "FALSE"
+      fprintf fmt "false"
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
   | Tconst (ConstFloat (i,f,e)) ->
@@ -115,9 +115,9 @@ let rec print_term fmt = function
   | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
   | Tapp (id, [], i) ->
-      fprintf fmt "%s" (Monomorph.symbol (id, i))
+      fprintf fmt "%s" (Encoding.symbol (id, i))
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[%s(%a)@]" (Monomorph.symbol (id, i)) print_terms tl
+      fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl
 
 and print_terms fmt tl = 
   print_list comma print_term fmt tl
@@ -133,10 +133,6 @@ let rec print_predicate fmt = function
       fprintf fmt "%a" Ident.print id
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE %% was well_founded@\n"
-  | Papp (id, [a; b], _) when id == t_eq_bool ->
-      fprintf fmt "@[(%a <=>@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b], _) when id == t_neq_bool ->
-      fprintf fmt "@[(NOT (%a <=>@ %a))@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->
@@ -147,7 +143,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, i) -> 
-      fprintf fmt "@[%s(%a)@]" (Monomorph.symbol (id, i)) print_terms tl
+      fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(%a =>@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -243,11 +239,11 @@ let print_obligation fmt loc o s =
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation_position loc;
   fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 
-let push_decl d = Monomorph.push_decl d
+let push_decl d = Encoding.push d
 
-let iter = Monomorph.iter
+let iter = Encoding.iter
 
-let reset () = Monomorph.reset ()
+let reset () = Encoding.reset ()
 
 let output_elem fmt = function
   | Dtype (loc, [], id) -> declare_type fmt id
@@ -265,7 +261,11 @@ let prelude fmt =
     fprintf fmt "
 UNIT: TYPE;
 tt: UNIT;
-
+BOOL: TYPE;
+true: BOOL;
+false: BOOL;
+ASSERT (FORALL (b:BOOL): (b=true OR b=false));
+ASSERT (true /= false);
 "
   end
 
