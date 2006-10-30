@@ -1,11 +1,10 @@
 
+  o fixed bug in CVC Lite output (BOOLEAN now reserved for predicates;
+    new type BOOL introduced for term booleans)
   o dp now displays times for searching proofs
   o no using anymore the external command 'timeout', but use our own
     command 'cpulimit' for the same purpose. Time limit is now user
     CPU time instead of wall clock time.
-  o the  bench-c-yices rule of the main Makefile launches the yices prover 
-    thanks to the tool/smtlib_split module 
-    that splits the verification conditions
   o fixed bugs into smtlib output : 
     all variables are "?" prefixed, 
     brackets around constants are removed, 
