@@ -19,8 +19,8 @@ type var_info =
 
 type fun_info =
     {
-      jc_function_info_name : string;
-      jc_function_info_return_type : jc_type;
+      jc_fun_info_name : string;
+      jc_fun_info_return_type : jc_type;
     }
 
 type field_info =

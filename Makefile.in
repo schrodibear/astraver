@@ -73,6 +73,7 @@ PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
+            jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    c/cint.ml \
@@ -178,9 +179,9 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCMO = src/pp.cmo \
-	jc/output.cmo \
+JCCMO = src/pp.cmo jc/output.cmo \
 	jc/jc_interp.cmo \
+	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 

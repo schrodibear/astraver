@@ -1,3 +1,6 @@
 *.output
 *.annot
+jc_lexer.ml
+jc_parser.mli
+jc_parser.ml
 
