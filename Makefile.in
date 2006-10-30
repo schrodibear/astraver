@@ -610,6 +610,7 @@ export-examples-c:
 
 export-doc: doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html
 	cp doc/manual.ps doc/manual.html $(WWW)/manual
+	cp doc/logic_syntax.bnf $(WWW)/manual
 	(cd $(WWW)/manual; hacha manual.html)
 	cp doc/caduceus.ps doc/caduceus.html $(WWW)/caduceus/manual
 	(cd $(WWW)/caduceus/manual; hacha caduceus.html)

@@ -1,113 +1,255 @@
 
 UNIT: TYPE;
 tt: UNIT;
-array_length_INT: [ARRAY INT OF INT -> INT];
-sqrt_real: [REAL -> REAL];
-int_of_real: [REAL -> INT];
-mod_int: [[INT, INT] -> INT];
-
+BOOL: TYPE;
+true: BOOL;
+false: BOOL;
+ASSERT (FORALL (b:BOOL): (b=true OR b=false));
+ASSERT (true /= false);
 
 %%%% DO NOT EDIT BELOW THIS LINE
 
+%% Why logic add_int
+add_int: ((INT, INT) -> INT);
+
+%% Why logic sub_int
+sub_int: ((INT, INT) -> INT);
+
+%% Why logic mul_int
+mul_int: ((INT, INT) -> INT);
+
+%% Why logic div_int
+div_int: ((INT, INT) -> INT);
+
+%% Why logic mod_int
+mod_int: ((INT, INT) -> INT);
+
+%% Why logic neg_int
+neg_int: (INT -> INT);
+
+%% Why logic lt_int
+lt_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic le_int
+le_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic gt_int
+gt_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic ge_int
+ge_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic eq_int
+eq_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic neq_int
+neq_int: ((INT, INT) -> BOOLEAN);
+
+%% Why logic lt_int_bool
+lt_int_bool: ((INT, INT) -> BOOL);
+
+%% Why logic le_int_bool
+le_int_bool: ((INT, INT) -> BOOL);
+
+%% Why logic gt_int_bool
+gt_int_bool: ((INT, INT) -> BOOL);
+
+%% Why logic ge_int_bool
+ge_int_bool: ((INT, INT) -> BOOL);
+
+%% Why logic eq_int_bool
+eq_int_bool: ((INT, INT) -> BOOL);
+
+%% Why logic neq_int_bool
+neq_int_bool: ((INT, INT) -> BOOL);
+
+%% Why axiom lt_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((lt_int_bool(x, y) = true) <=> (x < y))));
+
+%% Why axiom le_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((le_int_bool(x, y) = true) <=> (x <= y))));
+
+%% Why axiom gt_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((gt_int_bool(x, y) = true) <=> (x > y))));
+
+%% Why axiom ge_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((ge_int_bool(x, y) = true) <=> (x >= y))));
+
+%% Why axiom eq_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((eq_int_bool(x, y) = true) <=> (x = y))));
+
+%% Why axiom neq_int_bool_axiom
+ASSERT (FORALL (x:INT):
+       (FORALL (y:INT): ((neq_int_bool(x, y) = true) <=> (x /= y))));
+
+%% Why logic add_real
+add_real: ((REAL, REAL) -> REAL);
+
+%% Why logic sub_real
+sub_real: ((REAL, REAL) -> REAL);
+
+%% Why logic mul_real
+mul_real: ((REAL, REAL) -> REAL);
+
+%% Why logic div_real
+div_real: ((REAL, REAL) -> REAL);
+
+%% Why logic pow_real
+pow_real: ((REAL, REAL) -> REAL);
+
+%% Why logic neg_real
+neg_real: (REAL -> REAL);
+
+%% Why logic abs_real
+abs_real: (REAL -> REAL);
+
+%% Why logic sqrt_real
+sqrt_real: (REAL -> REAL);
+
+%% Why logic real_of_int
+real_of_int: (INT -> REAL);
+
+%% Why logic int_of_real
+int_of_real: (REAL -> INT);
+
+%% Why logic lt_real
+lt_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic le_real
+le_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic gt_real
+gt_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic ge_real
+ge_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic eq_real
+eq_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic neq_real
+neq_real: ((REAL, REAL) -> BOOLEAN);
+
+%% Why logic eq_bool
+eq_bool: ((BOOL, BOOL) -> BOOLEAN);
+
+%% Why logic neq_bool
+neq_bool: ((BOOL, BOOL) -> BOOLEAN);
+
+%% Why logic eq_unit
+eq_unit: ((UNIT, UNIT) -> BOOLEAN);
+
+%% Why logic neq_unit
+neq_unit: ((UNIT, UNIT) -> BOOLEAN);
+
+farray_int: TYPE;
+
 %% Why logic sorted_array
-sorted_array: [[ARRAY INT OF INT, INT, INT] -> BOOLEAN];
+sorted_array: (((ARRAY INT OF INT), INT, INT) -> BOOLEAN);
 
-%% Why logic exchange
-exchange: [[ARRAY INT OF INT, ARRAY INT OF INT, INT, INT] -> BOOLEAN];
+%% Why logic access_int
+access_int: (((ARRAY INT OF INT), INT) -> INT);
 
-%% Why logic sub_permut
-sub_permut: [[INT, INT, ARRAY INT OF INT, ARRAY INT OF INT] -> BOOLEAN];
-
-%% Why logic permut
-permut: [[ARRAY INT OF INT, ARRAY INT OF INT] -> BOOLEAN];
+%% Why axiom sorted_array_def
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (j:INT):
+       (sorted_array(t, i, j) <=>
+       (FORALL (k:INT):
+       (((i <= k) AND (k < j)) =>
+       (access_int(t, k) <= access_int(t, (k + 1)))))))));
 
 %% Why logic array_le
-array_le: [[ARRAY INT OF INT, INT, INT, INT] -> BOOLEAN];
+array_le: (((ARRAY INT OF INT), INT, INT, INT) -> BOOLEAN);
 
 %% Why logic array_ge
-array_ge: [[ARRAY INT OF INT, INT, INT, INT] -> BOOLEAN];
+array_ge: (((ARRAY INT OF INT), INT, INT, INT) -> BOOLEAN);
 
-%% Why logic array_length
-array_length_INT: [ARRAY INT OF INT -> INT];
+%% Why logic exchange
+exchange: (((ARRAY INT OF INT), (ARRAY INT OF INT), INT, INT) -> BOOLEAN);
 
-%% Why logic store
-store_INT: [[ARRAY INT OF INT, INT, INT] -> UNIT];
-
-%% Why axiom array_length_store
-ASSERT (FORALL (t:ARRAY INT OF INT):
-       (FORALL (i:INT):
-       (FORALL (v:INT):
-       (array_length_INT((t WITH [i] := v)) = array_length_INT(t)))));
-
-%% Why logic access
-access_INT: [[ARRAY INT OF INT, INT] -> INT];
+%% Why logic array_length_int
+array_length_int: ((ARRAY INT OF INT) -> INT);
 
 %% Why axiom exchange_def
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (i:INT):
        (FORALL (j:INT):
        (exchange(t1, t2, i, j) <=>
-       ((array_length_INT(t1) = array_length_INT(t2)) AND
-       ((t1[i] = t2[j]) AND
-       ((t2[i] = t1[j]) AND
-       (FORALL (k:INT): (((k /= i) AND (k /= j)) => (t1[k] = t2[k])))))))))));
+       ((array_length_int(t1) = array_length_int(t2)) AND
+       ((access_int(t1, i) = access_int(t2, j)) AND
+       ((access_int(t2, i) = access_int(t1, j)) AND
+       (FORALL (k:INT):
+       (((k /= i) AND (k /= j)) => (access_int(t1, k) = access_int(t2, k))))))))))));
+
+%% Why logic permut
+permut: (((ARRAY INT OF INT), (ARRAY INT OF INT)) -> BOOLEAN);
 
 %% Why axiom permut_refl
-ASSERT (FORALL (t:ARRAY INT OF INT): permut(t, t));
+ASSERT (FORALL (t:(ARRAY INT OF INT)): permut(t, t));
 
 %% Why axiom permut_sym
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT): (permut(t1, t2) => permut(t2, t1))));
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)): (permut(t1, t2) => permut(t2, t1))));
 
 %% Why axiom permut_trans
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
-       (FORALL (t3:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
+       (FORALL (t3:(ARRAY INT OF INT)):
        ((permut(t1, t2) AND permut(t2, t3)) => permut(t1, t3)))));
 
-%% Why axiom permut_exchange
-ASSERT (FORALL (t:ARRAY INT OF INT):
-       (FORALL (i:INT):
-       (FORALL (j:INT): permut(t, ((t WITH [i] := t[j]) WITH [j] := t[i])))));
+%% Why logic update_int
+update_int: (((ARRAY INT OF INT), INT, INT) -> (ARRAY INT OF INT));
 
-%% Why axiom permut_array_length
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
-       (permut(t1, t2) => (array_length_INT(t1) = array_length_INT(t2)))));
+%% Why axiom permut_exchange
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (j:INT):
+       permut(t,
+       update_int(update_int(t, i, access_int(t, j)), j, access_int(t, i))))));
+
+%% Why logic sub_permut
+sub_permut: ((INT, INT, (ARRAY INT OF INT), (ARRAY INT OF INT)) -> BOOLEAN);
 
 %% Why axiom sub_permut_refl
-ASSERT (FORALL (t:ARRAY INT OF INT):
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
        (FORALL (g:INT): (FORALL (d:INT): sub_permut(g, d, t, t))));
 
 %% Why axiom sub_permut_sym
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (sub_permut(g, d, t1, t2) => sub_permut(g, d, t2, t1))))));
 
 %% Why axiom sub_permut_trans
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
-       (FORALL (t3:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
+       (FORALL (t3:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (sub_permut(g, d, t1, t2) =>
        (sub_permut(g, d, t2, t3) => sub_permut(g, d, t1, t3))))))));
 
 %% Why axiom sub_permut_exchange_1
-ASSERT (FORALL (t:ARRAY INT OF INT):
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (FORALL (i:INT):
        (FORALL (j:INT):
        (((g <= i) AND ((i <= d) AND ((g <= j) AND (j <= d)))) =>
-       sub_permut(g, d, t, ((t WITH [i] := t[j]) WITH [j] := t[i]))))))));
+       sub_permut(g, d, t,
+       update_int(update_int(t, i, access_int(t, j)), j, access_int(t, i)))))))));
 
 %% Why axiom sub_permut_exchange_2
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (FORALL (i:INT):
@@ -117,144 +259,142 @@ ASSERT (FORALL (t1:ARRAY INT OF INT):
        sub_permut(g, d, t1, t2))))))));
 
 %% Why axiom sub_permut_permut
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT): (sub_permut(g, d, t1, t2) => permut(t1, t2))))));
 
+%% Why axiom array_length_update
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (v:INT):
+       (array_length_int(update_int(t, i, v)) = array_length_int(t)))));
+
 %% Why axiom sub_permut_array_length
-ASSERT (FORALL (t1:ARRAY INT OF INT):
-       (FORALL (t2:ARRAY INT OF INT):
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
        (FORALL (g:INT):
        (FORALL (d:INT):
        (sub_permut(g, d, t1, t2) =>
-       (array_length_INT(t1) = array_length_INT(t2)))))));
+       (array_length_int(t1) = array_length_int(t2)))))));
 
-%% Why axiom sorted_array_def
-ASSERT (FORALL (t:ARRAY INT OF INT):
+%% Why axiom permut_array_length
+ASSERT (FORALL (t1:(ARRAY INT OF INT)):
+       (FORALL (t2:(ARRAY INT OF INT)):
+       (permut(t1, t2) => (array_length_int(t1) = array_length_int(t2)))));
+
+%% Why axiom access_update_neq_int
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
        (FORALL (i:INT):
        (FORALL (j:INT):
-       (sorted_array(t, i, j) <=>
-       (FORALL (k:INT): (((i <= k) AND (k < j)) => (t[k] <= t[(k + 1)])))))));
+       (FORALL (v:INT):
+       ((i /= j) => (access_int(update_int(t, i, v), j) = access_int(t, j)))))));
 
-%% mult_po_1, Why obligation from file "arith.mlw", characters 358-368
+%% Why axiom access_update_eq_int
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (j:INT):
+       (FORALL (v:INT):
+       ((i = j) => (access_int(update_int(t, i, v), j) = v))))));
+
+%% Why axiom access_update_int
+ASSERT (FORALL (t:(ARRAY INT OF INT)):
+       (FORALL (i:INT):
+       (FORALL (v:INT): (access_int(update_int(t, i, v), i) = v))));
+
+%% mult_po_1, Why obligation from file "", line 0, characters 0-0:
+PUSH;
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) => ((x >= 0) AND ((0 + (x * y)) = (x * y))))));
+POP;
+
+%% mult_po_2, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (x:INT):
       (FORALL (y:INT):
       (((x >= 0) AND (y >= 0)) =>
+      (((x >= 0) AND ((0 + (x * y)) = (x * y))) =>
       (FORALL (a:INT):
-      ((a = x) =>
       (FORALL (b:INT):
-      ((b = y) =>
       (FORALL (p:INT):
-      ((p = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (a1:INT):
-      (FORALL (b1:INT):
-      (FORALL (p1:INT):
-      ((Variant1 = a1) =>
-      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
-      ((a1 /= 0) => (2 /= 0)))))))))))))))));
+      (((a >= 0) AND ((p + (a * b)) = (x * y))) =>
+      ((a /= 0) =>
+      ((mod_int(a, 2) = 1) =>
+      (FORALL (p0:INT): ((p0 = (p + b)) => (2 /= 0)))))))))))));
+POP;
 
-%% mult_po_2, Why obligation from file "arith.mlw", characters 374-386
+%% mult_po_3, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (x:INT):
       (FORALL (y:INT):
       (((x >= 0) AND (y >= 0)) =>
+      (((x >= 0) AND ((0 + (x * y)) = (x * y))) =>
       (FORALL (a:INT):
-      ((a = x) =>
       (FORALL (b:INT):
-      ((b = y) =>
       (FORALL (p:INT):
-      ((p = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (a1:INT):
-      (FORALL (b1:INT):
-      (FORALL (p1:INT):
-      ((Variant1 = a1) =>
-      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
-      ((a1 /= 0) =>
+      (((a >= 0) AND ((p + (a * b)) = (x * y))) =>
+      ((a /= 0) =>
+      ((mod_int(a, 2) = 1) =>
+      (FORALL (p0:INT):
+      ((p0 = (p + b)) =>
       ((2 /= 0) =>
-      ((mod_int(a1, 2) = 1) =>
-      (FORALL (p2:INT):
-      ((p2 = (p1 + b1)) =>
-      (FORALL (a:INT):
-      ((a = (a1 / 2)) =>
-      (FORALL (b:INT):
-      ((b = (2 * b1)) =>
-      (((a >= 0) AND ((p2 + (a * b)) = (x * y))) AND
-      ((0 <= a1) AND (a < a1)))))))))))))))))))))))))));
+      (FORALL (result:INT):
+      ((result = (a / 2)) =>
+      (FORALL (a0:INT):
+      ((a0 = result) =>
+      (FORALL (b0:INT):
+      ((b0 = (2 * b)) =>
+      (((a0 >= 0) AND ((p0 + (a0 * b0)) = (x * y))) AND
+      ((0 <= a) AND (a0 < a))))))))))))))))))))));
+POP;
 
-%% mult_po_3, Why obligation from file "arith.mlw", characters 386-386
+%% mult_po_4, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (x:INT):
       (FORALL (y:INT):
       (((x >= 0) AND (y >= 0)) =>
+      (((x >= 0) AND ((0 + (x * y)) = (x * y))) =>
       (FORALL (a:INT):
-      ((a = x) =>
       (FORALL (b:INT):
-      ((b = y) =>
       (FORALL (p:INT):
-      ((p = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (a1:INT):
-      (FORALL (b1:INT):
-      (FORALL (p1:INT):
-      ((Variant1 = a1) =>
-      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
-      ((a1 /= 0) =>
+      (((a >= 0) AND ((p + (a * b)) = (x * y))) =>
+      ((a /= 0) => ((mod_int(a, 2) /= 1) => (2 /= 0)))))))))));
+POP;
+
+%% mult_po_5, Why obligation from file "", line 0, characters 0-0:
+PUSH;
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (((x >= 0) AND ((0 + (x * y)) = (x * y))) =>
+      (FORALL (a:INT):
+      (FORALL (b:INT):
+      (FORALL (p:INT):
+      (((a >= 0) AND ((p + (a * b)) = (x * y))) =>
+      ((a /= 0) =>
+      ((mod_int(a, 2) /= 1) =>
       ((2 /= 0) =>
-      ((mod_int(a1, 2) /= 1) =>
-      (FORALL (result1:UNIT):
-      ((result1 = tt) =>
-      (FORALL (a:INT):
-      ((a = (a1 / 2)) =>
-      (FORALL (b:INT):
-      ((b = (2 * b1)) =>
-      (((a >= 0) AND ((p1 + (a * b)) = (x * y))) AND
-      ((0 <= a1) AND (a < a1)))))))))))))))))))))))))));
+      (FORALL (result:INT):
+      ((result = (a / 2)) =>
+      (FORALL (a0:INT):
+      ((a0 = result) =>
+      (FORALL (b0:INT):
+      ((b0 = (2 * b)) =>
+      (((a0 >= 0) AND ((p + (a0 * b0)) = (x * y))) AND
+      ((0 <= a) AND (a0 < a))))))))))))))))))));
+POP;
 
-%% mult_po_4, Why obligation from file "arith.mlw", characters 400-406
+%% mult_po_6, Why obligation from file "", line 0, characters 0-0:
+PUSH;
 QUERY (FORALL (x:INT):
       (FORALL (y:INT):
       (((x >= 0) AND (y >= 0)) =>
+      (((x >= 0) AND ((0 + (x * y)) = (x * y))) =>
       (FORALL (a:INT):
-      ((a = x) =>
       (FORALL (b:INT):
-      ((b = y) =>
       (FORALL (p:INT):
-      ((p = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (a1:INT):
-      (FORALL (b1:INT):
-      (FORALL (p1:INT):
-      ((Variant1 = a1) =>
-      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
-      ((a1 /= 0) => (FORALL (p2:INT): (2 /= 0))))))))))))))))));
-
-%% mult_po_5, Why obligation from file "arith.mlw", characters 268-436
-QUERY (FORALL (x:INT):
-      (FORALL (y:INT):
-      (((x >= 0) AND (y >= 0)) =>
-      (FORALL (a:INT):
-      ((a = x) =>
-      (FORALL (b:INT):
-      ((b = y) =>
-      (FORALL (p:INT):
-      ((p = 0) =>
-      (FORALL (Variant1:INT):
-      (FORALL (a1:INT):
-      (FORALL (b1:INT):
-      (FORALL (p1:INT):
-      ((Variant1 = a1) =>
-      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
-      ((a1 = 0) =>
-      (FORALL (result:INT): ((result = p1) => (result = (x * y))))))))))))))))))));
-
-%% mult_po_6, Why obligation from file "arith.mlw", characters 304-333
-QUERY (FORALL (x:INT):
-      (FORALL (y:INT):
-      (((x >= 0) AND (y >= 0)) =>
-      (FORALL (a:INT):
-      ((a = x) =>
-      (FORALL (b:INT):
-      ((b = y) =>
-      (FORALL (p:INT): ((p = 0) => ((a >= 0) AND ((p + (a * b)) = (x * y))))))))))));
+      (((a >= 0) AND ((p + (a * b)) = (x * y))) =>
+      ((a = 0) => (p = (x * y)))))))))));
+POP;
 

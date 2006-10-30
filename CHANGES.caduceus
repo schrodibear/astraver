@@ -1,6 +1,9 @@
 
 Note: These are the changes for Caduceus.
 
+ o the  bench-c-yices rule of the main Makefile launches the yices prover 
+   thanks to the tool/smtlib_split module 
+   that splits the verification conditions
  o support for simple gotos (going forward only and not to inner blocks)
  o fixed bug with enum assignment
  o support for calloc, under similar conditions as malloc
