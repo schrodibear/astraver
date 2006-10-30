@@ -131,14 +131,14 @@ CMO = src/lib.cmo \
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
-	$(if $(QUIET),@echo 'Linking why.opt' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 #	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
-	$(if $(QUIET),@echo 'Linking why.byte' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
-	$(if $(QUIET),@echo 'Linking why.static' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
 bin/top: $(CMO)
@@ -164,17 +164,17 @@ CCMX = $(CCMO:.cmo=.cmx)
 CCMXA = $(CCMA:.cma=.cmxa)
 
 bin/caduceus.opt: $(CCMXA) $(CCMX) 
-	$(if $(QUIET),@echo 'Linking caduceus.opt' &&) $(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
 	      @STATIC@ $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
-	strip $@
+	strip    $@
 
 bin/caduceus.byte: $(CCMA) $(CCMO) 
-	$(if $(QUIET),@echo 'Linking caduceus.byte' &&) $(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) -I octagon/ocamllib/.libs -I octagon/clib/.libs \
 	      @STATIC@ $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/caduceus.static: $(CCMXA) $(CCMX) 
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
-	strip $@
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	strip    $@
 
 
 # jessie
@@ -185,9 +185,9 @@ JCCMO = src/pp.cmo \
 JCCMX = $(JCCMO:.cmo=.cmx)
 
 bin/jessie.opt: $(JCCMX) 
-	$(if $(QUIET),@echo 'Linking jessie.opt' &&) $(OCAMLOPT) \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
 	      $(OFLAGS) -o $@ $^
-	strip $@
+	strip    $@
 
 
 # ocamlgraph
@@ -229,8 +229,8 @@ gwhy-no:
 gwhy: bin/gwhy.$(OCAMLBEST)
 
 bin/gwhy.opt: $(GCMX)
-	$(if $(QUIET),@echo 'Linking gwhy.opt' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
-	strip $@
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa str.cmxa lablgtk.cmxa gtkThread.cmx $^
+	strip    $@
 
 bin/gwhy.byte: $(GCMO)
 	$(if $(QUIET),@echo 'Linking caduceus.byte' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma lablgtk.cma threads.cma gtkThread.cmo $^
