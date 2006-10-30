@@ -251,7 +251,7 @@ else
 fi
 
 # PVS
-AC_CHECK_PROG(PVSC,pvs,pvs,no)
+AC_CHECK_PROG(PVSC,pvs,pvs,no,,/sbin/pvs)
 if test "$PVSC" = no ; then
     PVS=no
     AC_MSG_WARN(Cannot find PVS.)
