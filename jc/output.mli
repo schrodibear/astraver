@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.1 2006-10-25 14:15:47 marche Exp $ i*)
+(*i $Id: output.mli,v 1.2 2006-10-30 14:01:17 marche Exp $ i*)
 
 type constant =
   | Prim_int of string
@@ -146,8 +146,6 @@ val make_label : string -> expr -> expr;;
 *)
 val make_while : expr -> assertion -> variant option -> expr -> expr;;
 
-
-
 val make_pre : assertion -> expr -> expr;;
 
 val append : expr -> expr -> expr
@@ -161,21 +159,6 @@ type why_decl =
   | Function of bool * string * (string * base_type) list * base_type * term
   | Type of string * string list
   | Exception of string
-
-(*
-type prover_decl =
-  | Parameter  of string * why_type       (*r Parameter *)
-  | Definition of string * expr           (*r Definition *) 
-(*
-  | Predicate of string * (string * why_type) list * assertion  
-                                          (*r Predicate *) 
-*)
-(*
-  | Axiom of string * assertion            (*r Axiom *)
-*)
-  | CoqVerbatim of string                 (*r Verbatim Coq text (hints...) *)
-*)
-
 
 val fprintf_why_decl : Format.formatter -> why_decl -> unit;;
 

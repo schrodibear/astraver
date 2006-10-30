@@ -176,6 +176,20 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 	strip $@
 
+
+# jessie
+JCCMO = src/pp.cmo \
+	jc/output.cmo \
+	jc/jc_interp.cmo \
+	jc/jc_main.cmo
+JCCMX = $(JCCMO:.cmo=.cmx)
+
+bin/jessie.opt: $(JCCMX) 
+	$(if $(QUIET),@echo 'Linking jessie.opt' &&) $(OCAMLOPT) \
+	      $(OFLAGS) -o $@ $^
+	strip $@
+
+
 # ocamlgraph
 
 ocamlgraph/graph.cmx: ocamlgraph/*.ml*
