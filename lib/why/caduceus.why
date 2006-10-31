@@ -690,7 +690,7 @@ axiom free_stack_stack :
       (forall p : 'z pointer. valid(a1, p) -> on_stack(a1,p) -> valid(a3, p))
 
 parameter alloca_parameter : n:int -> 
-	{ n >= 1 }
+	{ n >= 0 }
 	'z pointer writes alloc
 	{ valid(alloc,result) and offset(result) = 0 and 	
 	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)
@@ -698,7 +698,7 @@ parameter alloca_parameter : n:int ->
 	  and alloc_extends (alloc@,alloc) }
 
 parameter malloc_parameter : n:int -> 
-	{ n >= 1 }
+	{ n >= 0 }
 	'z pointer writes alloc
 	{ valid(alloc,result) and offset(result) = 0 and 	
 	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)

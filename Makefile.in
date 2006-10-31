@@ -179,16 +179,20 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCMO = src/pp.cmo jc/output.cmo \
-	jc/jc_interp.cmo \
+JCCMO = src/loc.cmo src/pp.cmo \
+	jc/jc_version.cmo jc/jc_options.cmo \
+	jc/output.cmo jc/jc_interp.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 
 bin/jessie.opt: $(JCCMX) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
-	      $(OFLAGS) -o $@ $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ $^
 	strip    $@
+
+bin/jessie.byte: $(JCCMO) 
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
+
 
 
 # ocamlgraph
@@ -289,6 +293,11 @@ src/version.ml: Version Makefile
 	echo "let version = \""$(VERSION)"\"" >> $@
 	echo "let date = \""`date`"\"" >> $@
 	echo "let libdir = \""$(LIBDIR)/why"\"" >> $@
+
+jc/jc_version.ml: Version Makefile
+	echo "let version = \""$(JCVERSION)"\"" > $@
+	echo "let date = \""`date`"\"" >> $@
+	echo "let libdir = \""$(LIBDIR)/jessie"\"" >> $@
 
 c/cversion.ml: Version Makefile
 	echo "let version = \""$(CVERSION)"\"" > $@

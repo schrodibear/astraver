@@ -17,12 +17,15 @@
   let with_loc l x = { node = x; loc = l }
 *)
 
+(*
   let error s = 
     Report.raise_located (loc ()) (AnyMessage ("Syntax error: " ^ s))
+*)
 
 %}
 
 %token <string> IDENTIFIER STRING_LITERAL 
+%token <Jc_ast.const> CONSTANT
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
 %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
@@ -597,28 +600,22 @@ translation_unit
 */
 
 decl: 
-/*
 | function_definition { [$1] }
+/*
 | declaration { $1 }
 */
-| LBRACE RBRACE { JCDfun({jc_fun_info_name = ""; jc_fun_info_return_type = JCTlogic "unit" },[],JCSskip) }
 ;
 
-/*
-function_definition
-        : function_prototype compound_statement
-            { Ctypes.pop (); (* pushed by function_prototype *)
-	      let ty,id,pl = $1 in
-	      let bl = locate_i 2 (CSblock $2) in
-	      locate (Cfundef (None, ty, id, pl, bl)) }
-        | SPEC function_prototype compound_statement
-            { Ctypes.pop (); (* pushed by function_prototype *)
-	      let ty,id,pl = $2 in
-	      let bl = locate_i 3 (CSblock $3) in
-	      locate (Cfundef (Some $1, ty, id, pl, bl)) }
-        ;
+function_definition: 
+| function_prototype compound_statement
+    { let bl = locate_i 2 (JCSblock $2) in
+      locate (JCDfun($1, bl)) }
+;
 	      
-function_prototype
+function_prototype:
+| type_expr IDENTIFIER LBRACE RBRACE { JCDfun({jc_fun_info_name = ""; jc_fun_info_return_type = JCTlogic "unit" },[],JCSskip) }
+*/
+/*
         : declaration_specifiers declarator declaration_list 
             { Ctypes.push (); function_declaration $1 $2 $3 }
         | declaration_specifiers declarator 
@@ -627,8 +624,8 @@ function_prototype
 	    { Ctypes.push (); function_declaration [] $1 $2 }
         | declarator
 	    { Ctypes.push (); function_declaration [] $1 [] }
-        ;
 
 */
+;
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.33 2006-10-12 12:52:58 moy Exp $ i*)
+(*i $Id: coptions.ml,v 1.34 2006-10-31 08:25:16 marche Exp $ i*)
 
 open Format
 
@@ -113,7 +113,7 @@ let files () = List.rev !files_
 
 let version () = 
   Printf.printf "This is Caduceus version %s, compiled on %s
-Copyright (c) 2003-2005 - Jean-Christophe Filliâtre, Thierry Hubert and Claude Marché
+Copyright (c) 2003-2006 - Jean-Christophe Filliâtre, Thierry Hubert and Claude Marché
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Cversion.version Cversion.date;
   exit 0

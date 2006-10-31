@@ -1,5 +1,7 @@
 # Why version
 VERSION=2.00
+# Jessie version
+JCVERSION=0.10
 # Caduceus version
 CVERSION=1.00
 

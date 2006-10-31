@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.14 2006-03-15 08:57:08 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.15 2006-10-31 08:25:17 marche Exp $ i*)
 
 open Format
 
@@ -32,6 +32,7 @@ val string : position -> string
 
 val dummy_position : position
 
+val gen_report_position : formatter -> position -> unit
 val report_position : formatter -> position -> unit
 val report_obligation_position : formatter -> position -> unit
 

@@ -49,3 +49,10 @@ let statement s =
 let decl d =
   match d with
     | JCDfun(f,args,e) -> assert false
+
+let rec decls d =
+  match d with
+    | [] -> []
+    | d::r -> 
+	let w = decl d in w@(decls r)
+  

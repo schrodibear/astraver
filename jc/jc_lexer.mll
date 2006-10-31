@@ -1,14 +1,19 @@
-(*i $Id: jc_lexer.mll,v 1.1 2006-10-30 16:47:50 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.2 2006-10-31 08:25:16 marche Exp $ i*)
 
 {
-
+  open Jc_ast
   open Jc_parser
   open Lexing
 
-  let loc lexbuf = (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
+  type location = Lexing.position * Lexing.position
+
+  let loc lexbuf : location = (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
+
+  exception Lexical_error of location * string
+  exception Syntax_error of location
 
   let lex_error lexbuf s =
-    Report.raise_located (loc lexbuf) (Error.AnyMessage ("lexical error: " ^ s))
+    raise (Lexical_error(loc lexbuf,s))
 
   let buf = Buffer.create 1024
 
@@ -78,17 +83,16 @@ rule token = parse
         token lexbuf }
   | '#' [^'\n']* '\n'       { newline lexbuf; token lexbuf }
 
-  | rL (rL | rD)*       { let s = lexeme lexbuf in
-			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
+  | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
 
-  | '0'['x''X'] rH+ rIS?    { CONSTANT (IntConstant (lexeme lexbuf)) }
-  | '0' rD+ rIS?            { CONSTANT (IntConstant (lexeme lexbuf)) }
-  | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
-  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | '0'['x''X'] rH+ rIS?    { CONSTANT (JCCinteger (lexeme lexbuf)) }
+  | '0' rD+ rIS?            { CONSTANT (JCCinteger (lexeme lexbuf)) }
+  | rD+ rIS?                { CONSTANT (JCCinteger (lexeme lexbuf)) }
+  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (JCCinteger (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (RealConstant (lexeme lexbuf)) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
+  | rD+ rE rFS?             { CONSTANT (JCCreal (lexeme lexbuf)) }
+  | rD* "." rD+ (rE)? rFS?  { CONSTANT (JCCreal (lexeme lexbuf)) }
+  | rD+ "." rD* (rE)? rFS?  { CONSTANT (JCCreal (lexeme lexbuf)) }
 
   | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 
@@ -150,11 +154,12 @@ and comment = parse
 
 {
 
-  let parse c =
+  let parse f c =
     let lb = from_channel c in
+    lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = f };
     try
-      Cparser.file token lb
+      Jc_parser.file token lb
     with Parsing.Parse_error ->
-      Creport.raise_located (loc lb) (AnyMessage "Syntax error")
+      raise (Syntax_error(loc lb))
 
 }
