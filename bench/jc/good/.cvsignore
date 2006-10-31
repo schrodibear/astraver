@@ -1,0 +1,4 @@
+*.makefile
+jessie.log
+gwhy.cache
+why
