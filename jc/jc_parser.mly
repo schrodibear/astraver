@@ -527,20 +527,19 @@ labeled_statement
         | CASE constant_expression COLON statement { locate (CScase ($2, $4)) }
         | DEFAULT COLON statement { locate (CSdefault($3)) }
         ;
+*/
 
-compound_statement
-        : compound_statement_LBRACE RBRACE 
-            { Ctypes.pop (); [], [] }
+compound_statement:
+| LBRACE RBRACE 
+            { [] }
+/*
         | compound_statement_LBRACE statement_list RBRACE 
 	    { Ctypes.pop (); [], $2 }
         | compound_statement_LBRACE declaration_list RBRACE 
 	    { Ctypes.pop (); $2, [] }
         | compound_statement_LBRACE declaration_list statement_list RBRACE 
 	    { Ctypes.pop (); $2, $3 }
-        ;
-
-compound_statement_LBRACE:
-  LBRACE { Ctypes.push () }
+/*
 ;
 
 declaration_list
@@ -613,8 +612,7 @@ function_definition:
 ;
 	      
 function_prototype:
-| type_expr IDENTIFIER LBRACE RBRACE { JCDfun({jc_fun_info_name = ""; jc_fun_info_return_type = JCTlogic "unit" },[],JCSskip) }
-*/
+| /*type_expr*/ IDENTIFIER LBRACE RBRACE { JCDfun({jc_fun_info_name = ""; jc_fun_info_return_type = JCTlogic "unit" },[],JCSskip) }
 /*
         : declaration_specifiers declarator declaration_list 
             { Ctypes.push (); function_declaration $1 $2 $3 }
