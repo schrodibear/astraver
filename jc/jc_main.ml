@@ -19,16 +19,27 @@ let parse_file f =
 
 let main () =
   let files = Jc_options.files () in
-  if files = [] then Jc_options.usage ();
-  let ast = 
-     List.fold_right
-       (fun f acc -> (parse_file f)@acc)
-       files []
-  in
-  let d = Jc_interp.decls ast in
-  Pp.print_in_file 
-    (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d)
-    "jc/jessie.why"
+  match files with
+    | [f] ->
+	let ast = parse_file f in
+	List.iter Jc_typing.decl ast;
+	let d = 
+	  Hashtbl.fold 
+	    (fun id (f,b) acc ->
+	       Jc_interp.tr_fun f b acc)
+	    Jc_typing.functions_table
+	    []
+	in	       
+	let f = Filename.chop_extension f in
+	Pp.print_in_file 
+	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls [])
+	  (Lib.file "why" (f ^ "_spec.why"));
+	Pp.print_in_file 
+	  (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls d)
+	  (Lib.file "why" (f ^ ".why"));
+	Jc_make.makefile f
+    | _ -> Jc_options.usage ()
+    
 
 
 let _ = Printexc.catch main ()

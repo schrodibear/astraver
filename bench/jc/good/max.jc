@@ -1,10 +1,10 @@
 
 int max(int x, int y) 
-     (*
   ensures result_ge_x: \result >= x 
+(*
   ensures result_ge_y: \result >= y 
   ensures result_is_lub: \forall int z ; z >= x && z >= y => z >= \result
-      *)
+*)
 {
   if (x >= y) return x; else return y;
 } 

@@ -21,6 +21,7 @@ type fun_info =
     {
       jc_fun_info_name : string;
       jc_fun_info_return_type : jc_type;
+      jc_fun_info_parameters : var_info list;
     }
 
 type field_info =

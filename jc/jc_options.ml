@@ -1,4 +1,4 @@
-(*i $Id: jc_options.ml,v 1.1 2006-10-31 08:25:16 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.2 2006-10-31 13:18:29 marche Exp $ i*)
 
 open Format
 
@@ -28,6 +28,8 @@ let libdir =
     let p = Jc_version.libdir in
     lprintf "JESSIELIB is not set, using %s as default@." p;
     p
+
+let libfile = "jessie.why"
 
 (*s command-line options *)
 

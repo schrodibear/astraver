@@ -179,19 +179,21 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCMO = src/loc.cmo src/pp.cmo \
+JCCMO = src/lib.cmo src/loc.cmo src/pp.cmo \
 	jc/jc_version.cmo jc/jc_options.cmo \
 	jc/output.cmo jc/jc_interp.cmo \
-	jc/jc_parser.cmo jc/jc_lexer.cmo \
-	jc/jc_main.cmo
+	jc/jc_parser.cmo jc/jc_lexer.cmo jc/jc_typing.cmo \
+	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 
 bin/jessie.opt: $(JCCMX) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
+		unix.cmxa $^
 	strip    $@
 
 bin/jessie.byte: $(JCCMO) 
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
+		unix.cma $^
 
 
 

@@ -1,4 +1,4 @@
-(*i $Id: jc_lexer.mll,v 1.2 2006-10-31 08:25:16 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.3 2006-10-31 13:18:29 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -52,6 +52,7 @@ rule token = parse
   | [' ' '\t' '\012' '\r']+ { token lexbuf }
   | '\n'                    { newline lexbuf; token lexbuf }
   | "(*"                    { comment lexbuf; token lexbuf }
+(*
   | "break"                 { BREAK }
   | "case"                  { CASE }
   | "char"                  { CHAR }
@@ -59,15 +60,22 @@ rule token = parse
   | "default"               { DEFAULT }
   | "do"                    { DO }
   | "double"                { DOUBLE }
+*)
   | "else"                  { ELSE }
+(*
   | "enum"                  { ENUM }
   | "float"                 { FLOAT }
   | "for"                   { FOR }
   | "goto"                  { GOTO }
+*)
   | "if"                    { IF }
+
   | "int"                   { INT }
+(*
   | "long"                  { LONG }
+*)
   | "return"                { RETURN }
+(*
   | "short"                 { SHORT }
   | "signed"                { SIGNED }
   | "struct"                { STRUCT }
@@ -75,7 +83,7 @@ rule token = parse
   | "unsigned"              { UNSIGNED }
   | "void"                  { VOID }
   | "while"                 { WHILE }
-
+*)
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?
         [^ '\010' '\013'] * '\n'
@@ -96,6 +104,7 @@ rule token = parse
 
   | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 
+(*
   | ">>="                   { RIGHT_ASSIGN }
   | "<<="                   { LEFT_ASSIGN }
   | "+="                    { ADD_ASSIGN }
@@ -113,18 +122,24 @@ rule token = parse
   | "->"                    { PTR_OP }
   | "&&"                    { AND_OP }
   | "||"                    { OR_OP }
-  | "<="                    { LE_OP }
-  | ">="                    { GE_OP }
+*)
+  | "<="                    { LTEQ }
+  | ">="                    { GTEQ }
+(*
   | "=="                    { EQ_OP }
   | "!="                    { NE_OP }
+*)
   | ";"                     { SEMICOLON }
   | "{"                     { LBRACE }
   | "}"                     { RBRACE }
   | ","                     { COMMA }
+(*
   | ":"                     { COLON }
-  | "="                     { EQUAL }
+*)
+  | "="                     { EQ }
   | "("                     { LPAR }
   | ")"                     { RPAR }
+(*
   | "["                     { LSQUARE }
   | "]"                     { RSQUARE }
   | "."                     { DOT }
@@ -141,13 +156,14 @@ rule token = parse
   | "^"                     { HAT }
   | "|"                     { PIPE }
   | "?"                     { QUESTION }
-
+*)
   | eof { EOF }
   | '"' { lex_error lexbuf "Unterminated string" }
   | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
 
 and comment = parse
-  | "*/" { () }
+  | "*)" { () }
+  | "(*" { comment lexbuf ; comment lexbuf }
   | eof  { lex_error lexbuf "Unterminated_comment" }
   | '\n' { newline lexbuf; comment lexbuf }
   | _    { comment lexbuf }

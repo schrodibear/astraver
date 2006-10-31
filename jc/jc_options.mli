@@ -4,6 +4,7 @@
 (*s environment variables *)
 
 val libdir : string
+val libfile : string
 
 (*s command-line options *)
 
